@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:sample:record-mapping:v1",
+  "title": "Sample Record Mapping",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recordKeyField", "titleField", "bodyField"],
+  "properties": {
+    "recordKeyField": { "const": "recordKey" },
+    "titleField": { "const": "title" },
+    "bodyField": { "const": "body" }
+  }
+}

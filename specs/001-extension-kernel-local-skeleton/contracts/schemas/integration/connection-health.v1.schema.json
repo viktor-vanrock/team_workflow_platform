@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:integration:connection-health:v1",
+  "title": "Connection Version Health",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "workspaceId",
+    "connectionRef",
+    "healthState",
+    "checkedAt",
+    "resourceVersion"
+  ],
+  "properties": {
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "connectionRef": {
+      "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef"
+    },
+    "healthState": {
+      "type": "string",
+      "enum": ["UNKNOWN", "HEALTHY", "DEGRADED", "UNAVAILABLE"]
+    },
+    "checkedAt": { "type": "string", "format": "date-time" },
+    "diagnosticCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{2,127}$"
+    },
+    "resourceVersion": { "type": "integer", "minimum": 1 }
+  }
+}

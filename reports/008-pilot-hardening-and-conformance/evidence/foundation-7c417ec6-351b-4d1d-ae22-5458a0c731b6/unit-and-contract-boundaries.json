@@ -1,0 +1,12 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/unit/008",
+    "tests/contract/008",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 0,
+  "durationMs": 8415,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  27 passed (27)\n      Tests  127 passed (127)\n   Start at  20:32:06\n   Duration  7.87s (transform 2.89s, setup 0ms, import 12.04s, tests 1.25s, environment 1ms)\n\n"
+}

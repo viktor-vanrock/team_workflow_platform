@@ -1,0 +1,17 @@
+{
+  "name": "competency-ui-sdk",
+  "root": "packages/competency-ui-sdk",
+  "sourceRoot": "packages/competency-ui-sdk/src",
+  "projectType": "library",
+  "tags": ["type:sdk", "runtime:browser", "domain:platform"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/competency-ui-sdk/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/competency-ui-sdk/tsconfig.json --noEmit" }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:integration:binding-publication-target:v1",
+  "title": "Project Integration Binding Publication Target",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bindingRef", "contentHash"],
+  "properties": {
+    "bindingRef": {
+      "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef"
+    },
+    "contentHash": {
+      "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest"
+    }
+  }
+}

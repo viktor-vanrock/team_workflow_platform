@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "feature": "001-extension-kernel-local-skeleton",
+  "gate": "smoke-001",
+  "cleanBootstrap": true,
+  "startedAt": "2026-08-30T22:52:23.486Z",
+  "finishedAt": "2026-08-30T22:54:27.917Z",
+  "status": "PASS",
+  "stages": [
+    {
+      "name": "clean local reset",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/local/reset.mts",
+        "--yes"
+      ],
+      "durationMs": 393,
+      "exitCode": 0
+    },
+    {
+      "name": "local bootstrap/readiness",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/local/cli.mts",
+        "up"
+      ],
+      "durationMs": 38819,
+      "exitCode": 0
+    },
+    {
+      "name": "walking skeleton first pass",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/smoke/feature-001.mts"
+      ],
+      "durationMs": 19514,
+      "exitCode": 0
+    },
+    {
+      "name": "walking skeleton repeat/idempotency pass",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/smoke/feature-001.mts"
+      ],
+      "durationMs": 17510,
+      "exitCode": 0
+    },
+    {
+      "name": "worker restart",
+      "status": "PASS",
+      "command": [
+        "docker",
+        "compose",
+        "--project-name",
+        "awp-local-f002-gate",
+        "--file",
+        "./infra/compose/docker-compose.local.yml",
+        "restart",
+        "worker"
+      ],
+      "durationMs": 547,
+      "exitCode": 0
+    },
+    {
+      "name": "worker readiness after restart",
+      "status": "PASS",
+      "command": [
+        "docker",
+        "compose",
+        "--project-name",
+        "awp-local-f002-gate",
+        "--file",
+        "./infra/compose/docker-compose.local.yml",
+        "up",
+        "--detach",
+        "--wait",
+        "worker"
+      ],
+      "durationMs": 12785,
+      "exitCode": 0
+    },
+    {
+      "name": "post-restart walking skeleton",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/smoke/feature-001.mts"
+      ],
+      "durationMs": 17230,
+      "exitCode": 0
+    },
+    {
+      "name": "Redis state loss",
+      "status": "PASS",
+      "command": [
+        "docker",
+        "compose",
+        "--project-name",
+        "awp-local-f002-gate",
+        "--file",
+        "./infra/compose/docker-compose.local.yml",
+        "exec",
+        "-T",
+        "redis",
+        "redis-cli",
+        "FLUSHALL"
+      ],
+      "durationMs": 302,
+      "exitCode": 0
+    },
+    {
+      "name": "post-Redis-loss artifact and effect pass",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/smoke/feature-001.mts"
+      ],
+      "durationMs": 17324,
+      "exitCode": 0
+    }
+  ]
+}

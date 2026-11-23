@@ -1,0 +1,8 @@
+{
+  "status": "BLOCKED_INPUT",
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/review-b2fa92c8-bb71-4bbe-a467-1979f4032fe0.json",
+    "sha256": "sha256:fda2639eca50c082e663d58214822a00592ee62dc841790be31ae61745341a8f"
+  },
+  "actualObservedPilot": false
+}

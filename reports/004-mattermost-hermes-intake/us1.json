@@ -1,0 +1,37 @@
+{
+  "feature": "004-mattermost-hermes-intake",
+  "checkpoint": "US1",
+  "status": "PASS",
+  "generatedAt": "2026-09-03T10:21:53.879Z",
+  "taskSourceHash": "sha256:898061c3ce6c367812c7b11520f6888d641012d3cd50f0d67357e8eb740040f8",
+  "results": [
+    {
+      "key": "US1_CONTRACT_INTEGRATION_E2E",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 9677,
+      "outputHash": "sha256:1775b22056ed1fa72ffdf41fef0054fb2ff484bae77c5b11d74eec69a42575f8"
+    },
+    {
+      "key": "API_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4964,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "WEB_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2412,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "BROWSER_PROCESS_PLAN",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 62,
+      "outputHash": "sha256:546b88089593f8a4218520edfcd0d933f275b7b3488fd3b3928310b74ad1f56d"
+    }
+  ]
+}

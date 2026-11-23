@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "foundation",
+  "startedAt": "2026-09-03T10:20:25.617Z",
+  "finishedAt": "2026-09-03T10:21:36.688Z",
+  "status": "PASS",
+  "invariants": {
+    "capabilityOwnedWorkerClaims": true,
+    "markedMattermostWritesLookupOnly": true,
+    "callbackRawBodyNotPersisted": true,
+    "providerNeutralCore": true,
+    "schemaVersions": {
+      "core": 120,
+      "packQa": 2040,
+      "mock": 52
+    }
+  },
+  "hashes": {
+    "specs/004-mattermost-hermes-intake/spec.md": "sha256:15893a899c4eda464699b558639bd6458b394cb7c7ce07b389a0570abfbe44d2",
+    "specs/004-mattermost-hermes-intake/plan.md": "sha256:4d1170955c98d9cc81d2da1990123b1d476538f65350f3ca046fe38366ad4cbe",
+    "specs/004-mattermost-hermes-intake/tasks.md": "sha256:898061c3ce6c367812c7b11520f6888d641012d3cd50f0d67357e8eb740040f8",
+    "config/local/mattermost-pilot-metadata.v1.json": "sha256:0404bb1d02683400e56288637e183924a593b16ff6aea304c5193ab35cc75e3f",
+    "packages/platform-persistence-typeorm/src/migrations/core/0100-action-candidate-draft.ts": "sha256:484ca6ddcbc9a1adbc04180b9ce0717dc1a82c54fe3335899d54c6245d7f772f",
+    "packages/platform-persistence-typeorm/src/migrations/core/0105-interaction-intents.ts": "sha256:d6e6e14d9477ca535439edc788f4e4d36fdc7e3194974a74cb29cf2164630e0d",
+    "packages/platform-persistence-typeorm/src/migrations/core/0110-agent-runtime.ts": "sha256:9be10b66b42df8258213c7cf67d9edebe38e4033d46ce739045abd5e79419e47",
+    "packages/platform-persistence-typeorm/src/migrations/core/0120-notification-intents.ts": "sha256:a5dfa30691f3e5eeb3520a9124641e934169bee095ba03ccd73fe0eb753e1d3a",
+    "packages/competency-qa/src/persistence/migrations/2040-hermes-proposals.ts": "sha256:9dc9a52ca90e80e2698d27fef1c9560369cc2c5fd3b43a6f5a7e1ace1dfbbc04"
+  },
+  "stages": [
+    {
+      "id": "contracts-unit-architecture",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/unit/004",
+        "tests/contract/004",
+        "tests/architecture/004-mattermost-boundaries.spec.ts",
+        "tests/architecture/004-mattermost-runtime-wiring.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/unit/004",
+        "tests/contract/004",
+        "tests/architecture/004-mattermost-boundaries.spec.ts",
+        "tests/architecture/004-mattermost-runtime-wiring.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 15142
+    },
+    {
+      "id": "foundation-integration-security",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/004",
+        "tests/integration/security/004",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/004",
+        "tests/integration/security/004",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 27005
+    },
+    {
+      "id": "postgres-migrations",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/migrations/004-mattermost-hermes-intake.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/migrations/004-mattermost-hermes-intake.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 8432
+    },
+    {
+      "id": "typecheck",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "-p",
+        "connector-sdk",
+        "platform-core",
+        "platform-persistence-typeorm",
+        "competency-qa",
+        "connector-mattermost",
+        "runtime-composition",
+        "platform-runtime-nest",
+        "api",
+        "worker",
+        "mock-hub"
+      ],
+      "timeoutMs": 240000,
+      "command": [
+        "node",
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "-p",
+        "connector-sdk",
+        "platform-core",
+        "platform-persistence-typeorm",
+        "competency-qa",
+        "connector-mattermost",
+        "runtime-composition",
+        "platform-runtime-nest",
+        "api",
+        "worker",
+        "mock-hub"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 583
+    },
+    {
+      "id": "eslint",
+      "args": [
+        "node_modules/eslint/bin/eslint.js",
+        "packages/connector-sdk/src",
+        "packages/platform-core/src",
+        "packages/platform-persistence-typeorm/src",
+        "packages/competency-qa/src",
+        "packages/connector-mattermost/src",
+        "packages/runtime-composition/src",
+        "packages/platform-runtime-nest/src",
+        "apps/api/src",
+        "apps/worker/src",
+        "apps/mock-hub/src/mattermost",
+        "tests/unit/004",
+        "tests/contract/004",
+        "tests/integration/004",
+        "tests/integration/security/004"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "packages/connector-sdk/src",
+        "packages/platform-core/src",
+        "packages/platform-persistence-typeorm/src",
+        "packages/competency-qa/src",
+        "packages/connector-mattermost/src",
+        "packages/runtime-composition/src",
+        "packages/platform-runtime-nest/src",
+        "apps/api/src",
+        "apps/worker/src",
+        "apps/mock-hub/src/mattermost",
+        "tests/unit/004",
+        "tests/contract/004",
+        "tests/integration/004",
+        "tests/integration/security/004"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 19902
+    }
+  ]
+}

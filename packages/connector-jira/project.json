@@ -1,0 +1,17 @@
+{
+  "name": "connector-jira",
+  "root": "packages/connector-jira",
+  "sourceRoot": "packages/connector-jira/src",
+  "projectType": "library",
+  "tags": ["type:connector", "runtime:node", "domain:jira"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-jira/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-jira/tsconfig.json --noEmit" }
+    }
+  }
+}

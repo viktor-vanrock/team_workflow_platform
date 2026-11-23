@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-work-item:error:v1.1",
+  "title": "Operational Work Item 1.1 Sanitized Error",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "category", "retryDisposition", "code", "correlationId"],
+  "properties": {
+    "schemaVersion": { "const": "1.1" },
+    "category": { "enum": ["AUTHENTICATION", "PERMISSION", "CONFLICT", "RATE_LIMIT", "TRANSIENT", "VALIDATION", "NOT_FOUND", "MAPPING_DRIFT", "AMBIGUOUS", "SECURITY_SCOPE"] },
+    "retryDisposition": { "enum": ["DO_NOT_RETRY", "RETRY_AFTER", "RECONCILE_BEFORE_RETRY", "OPERATOR_DECISION"] },
+    "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,127}$" },
+    "retryAfterSeconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "safeDetail": { "type": "string", "maxLength": 2000 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "retryDisposition": { "const": "RETRY_AFTER" } }, "required": ["retryDisposition"] },
+      "then": { "required": ["retryAfterSeconds"] }
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:intake-draft-assistance:v1",
+  "title": "IntakeDraftAssistance v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "draftId",
+    "revision",
+    "contentHash",
+    "state",
+    "missingFields",
+    "invalidFields",
+    "questions",
+    "proposedPatch",
+    "inputFingerprint",
+    "rulesRef",
+    "skillRef",
+    "actionProvenanceRef",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "intake-draft-assistance@1.0.0" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "draftId": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "contentHash": { "$ref": "#/$defs/hash" },
+    "state": { "enum": ["QUESTIONS_REQUIRED", "PATCH_PROPOSED", "READY"] },
+    "missingFields": { "$ref": "#/$defs/fieldList" },
+    "invalidFields": { "$ref": "#/$defs/fieldList" },
+    "questions": {
+      "type": "array",
+      "maxItems": 18,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["fieldKey", "reasonCode", "prompt", "inputKind", "order"],
+        "properties": {
+          "fieldKey": { "$ref": "#/$defs/fieldKey" },
+          "reasonCode": { "enum": ["MISSING", "INVALID", "CONFLICTING"] },
+          "prompt": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "inputKind": { "enum": ["SHORT_TEXT", "LONG_TEXT", "STRING_LIST", "CLASSIFICATION", "ENVIRONMENT"] },
+          "order": { "type": "integer", "minimum": 0, "maximum": 99 }
+        }
+      }
+    },
+    "proposedPatch": {
+      "type": "array",
+      "maxItems": 18,
+      "items": { "$ref": "#/$defs/patchOperation" }
+    },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+    "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+    "modelRef": { "$ref": "#/$defs/versionedHashRef" },
+    "actionProvenanceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "QUESTIONS_REQUIRED" } } },
+      "then": { "properties": { "questions": { "type": "array", "minItems": 1 } } }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "PATCH_PROPOSED" } } },
+      "then": { "properties": { "proposedPatch": { "type": "array", "minItems": 1 } } }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "READY" } } },
+      "then": {
+        "properties": {
+          "missingFields": { "type": "array", "maxItems": 0 },
+          "invalidFields": { "type": "array", "maxItems": 0 },
+          "questions": { "type": "array", "maxItems": 0 },
+          "proposedPatch": { "type": "array", "maxItems": 0 }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "fieldKey": {
+      "enum": [
+        "title",
+        "requestKind",
+        "goal",
+        "scope",
+        "acceptanceOutcome",
+        "sourceRefs",
+        "blockers",
+        "dependencies",
+        "requestedTarget",
+        "requestRisk",
+        "businessImpact",
+        "desiredDate",
+        "checklistRefs",
+        "roleMetadataRefs",
+        "requestedClassificationKey",
+        "defectRef",
+        "previousSessionRef",
+        "sourceBuildRef"
+      ]
+    },
+    "fieldList": { "type": "array", "maxItems": 18, "uniqueItems": true, "items": { "$ref": "#/$defs/fieldKey" } },
+    "patchOperation": {
+      "oneOf": [
+        { "$ref": "#/$defs/patchTitle" },
+        { "$ref": "#/$defs/patchRequestKind" },
+        { "$ref": "#/$defs/patchGoal" },
+        { "$ref": "#/$defs/patchScope" },
+        { "$ref": "#/$defs/patchAcceptanceOutcome" },
+        { "$ref": "#/$defs/patchSourceRefs" },
+        { "$ref": "#/$defs/patchBlockers" },
+        { "$ref": "#/$defs/patchDependencies" },
+        { "$ref": "#/$defs/patchRequestedTarget" },
+        { "$ref": "#/$defs/patchRequestRisk" },
+        { "$ref": "#/$defs/patchBusinessImpact" },
+        { "$ref": "#/$defs/patchDesiredDate" },
+        { "$ref": "#/$defs/patchChecklistRefs" },
+        { "$ref": "#/$defs/patchRoleMetadataRefs" },
+        { "$ref": "#/$defs/patchRequestedClassificationKey" },
+        { "$ref": "#/$defs/patchDefectRef" },
+        { "$ref": "#/$defs/patchPreviousSessionRef" },
+        { "$ref": "#/$defs/patchSourceBuildRef" }
+      ]
+    },
+    "patchTitle": { "$ref": "#/$defs/patchTitleShape" },
+    "patchTitleShape": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "title" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/title" } }
+    },
+    "patchRequestKind": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "requestKind" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/requestKind" } }
+    },
+    "patchGoal": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "goal" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/goal" } }
+    },
+    "patchScope": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "scope" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/scope" } }
+    },
+    "patchAcceptanceOutcome": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "acceptanceOutcome" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/acceptanceOutcome" } }
+    },
+    "patchSourceRefs": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "sourceRefs" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/sourceRefs" } }
+    },
+    "patchBlockers": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "blockers" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/blockers" } }
+    },
+    "patchDependencies": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "dependencies" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/dependencies" } }
+    },
+    "patchRequestedTarget": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "requestedTarget" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/requestedTarget" } }
+    },
+    "patchRequestRisk": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "requestRisk" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/requestRisk" } }
+    },
+    "patchBusinessImpact": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "businessImpact" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/businessImpact" } }
+    },
+    "patchDesiredDate": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "desiredDate" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/desiredDate" } }
+    },
+    "patchChecklistRefs": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "checklistRefs" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/checklistRefs" } }
+    },
+    "patchRoleMetadataRefs": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "roleMetadataRefs" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/roleMetadataRefs" } }
+    },
+    "patchRequestedClassificationKey": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "requestedClassificationKey" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/requestedClassificationKey" } }
+    },
+    "patchDefectRef": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "defectRef" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/defectRef" } }
+    },
+    "patchPreviousSessionRef": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "previousSessionRef" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/previousSessionRef" } }
+    },
+    "patchSourceBuildRef": {
+      "type": "object", "additionalProperties": false, "required": ["fieldKey", "value"],
+      "properties": { "fieldKey": { "const": "sourceBuildRef" }, "value": { "$ref": "urn:awp:schemas:004:qa-intake-partial-content:v1#/properties/sourceBuildRef" } }
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

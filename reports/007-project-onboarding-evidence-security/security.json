@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "gate": "security",
+  "status": "PASS",
+  "startedAt": "2026-09-03T18:38:03.827Z",
+  "finishedAt": "2026-09-03T18:38:07.438Z",
+  "taskSourceHash": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62",
+  "invariants": {
+    "defaultDeny": true,
+    "crossScopeSubstitutionDenied": true,
+    "hiddenDataSideChannelDenied": true,
+    "revocationImmediate": true,
+    "secretLeakageDenied": true,
+    "exactStepUpSeparationOfDuties": true,
+    "productionEgressDenied": true
+  },
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/integration/security/007/production-and-scope-boundary.spec.ts",
+        "sha256": "sha256:10afbef9a3fe316916ec09114b865416253befa67f211713342f773c70c33731"
+      },
+      {
+        "path": "tests/integration/security/007/us3-repository-prefilter.spec.ts",
+        "sha256": "sha256:90b567dffbba08a2eb0e61f60cac2ebc9faf0bf6174fe73fc63276cad05a3750"
+      },
+      {
+        "path": "tests/integration/security/007/us3-read-surface-isolation.spec.ts",
+        "sha256": "sha256:5503912b9498b8c4e0a798fe26af545aa32cf9f77820f6cc391add088e437c1b"
+      },
+      {
+        "path": "tests/integration/security/007/us3-event-isolation.spec.ts",
+        "sha256": "sha256:d1d4fb7a6f1c41bc968ff9d81c029e8bc5851ffa1e3e2134be5feb32d62e7e6e"
+      },
+      {
+        "path": "tests/integration/security/007/us3-evidence-artifact-isolation.spec.ts",
+        "sha256": "sha256:c3154e2980ae692d09f043ab727dc12c98760d68fcca5ae43076804c9a662706"
+      },
+      {
+        "path": "tests/integration/security/007/us3-background-reauthorization.spec.ts",
+        "sha256": "sha256:41c7d1d5c1cd72782c6e200d6bdcd37db7fd93ecbc1eafa685a5765a92aaa6b9"
+      },
+      {
+        "path": "tests/integration/security/007/us3-cross-scope-substitution.spec.ts",
+        "sha256": "sha256:15cfa013be6453610323d4015b6a25bfc24684d406d29bd20db7c9a5e54865f4"
+      },
+      {
+        "path": "tests/integration/security/007/us3-side-channel.spec.ts",
+        "sha256": "sha256:061d7326a081586bae8b96f07a87d7570c086e97379b290064d0ae5d78abd88b"
+      },
+      {
+        "path": "tests/integration/security/007/us4-evidence-export.spec.ts",
+        "sha256": "sha256:21b2619c6903bdfd48ee871c32174351080ed1f98e000ae587479ad9650cfbf9"
+      },
+      {
+        "path": "tests/integration/security/007/us5-effect-guard-race.spec.ts",
+        "sha256": "sha256:de2a211fc6446cbff34aab1d573a8cfb9fc09be06f3f235f863080b61e479dfd"
+      },
+      {
+        "path": "tests/integration/security/007/us5-investigation-access.spec.ts",
+        "sha256": "sha256:cc2e0700ed81c17912fbb0dedceb148f3a9575de343ba92f6196ba8efbe569a7"
+      },
+      {
+        "path": "tests/integration/007/us1-project-resources.spec.ts",
+        "sha256": "sha256:0c24e31e38049fd1888116f47c7fcdd87a83060a93bf23e8f756d17c3c9a4b8b"
+      },
+      {
+        "path": "tests/integration/007/us5-resume-approval.spec.ts",
+        "sha256": "sha256:9dabba5ba524e8693f507b87e6387f9d0afc42957c70b45605b2c861f07e3d58"
+      }
+    ],
+    "aggregateSha256": "sha256:bb6ed4df6bf26800b2ff664acb62787617d21cfa955c7f6ad59c8e5325e73564"
+  },
+  "exitCode": 0,
+  "outputHash": "sha256:79f85d201a9d357879b2f1e0a75ad96b49f10c57cd41a35576013f72870ec834"
+}

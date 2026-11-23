@@ -1,0 +1,13 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/008/published-runtime-configuration.spec.ts",
+    "tests/integration/008/published-deployment-startup.spec.ts",
+    "tests/integration/008/automation-availability.spec.ts",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 0,
+  "durationMs": 23583,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  3 passed (3)\n      Tests  11 passed (11)\n   Start at  23:20:34\n   Duration  23.03s (transform 3.45s, setup 0ms, import 9.20s, tests 31.95s, environment 0ms)\n\n"
+}

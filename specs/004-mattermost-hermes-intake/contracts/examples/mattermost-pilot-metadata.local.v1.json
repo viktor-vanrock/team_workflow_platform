@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "mattermost-pilot-metadata@1.0.0",
+  "contourKey": "qa-jira-mattermost-local",
+  "environmentClass": "LOCAL",
+  "workspaceId": "00000000-0000-4000-8000-000000004110",
+  "projectId": "00000000-0000-4000-8000-000000004120",
+  "server": {
+    "baseUrl": "http://127.0.0.1:4010",
+    "buildVersion": "mock-hub-mattermost-v1",
+    "apiFamily": "v4",
+    "tlsOwner": "local-loopback-exception",
+    "networkOwner": "awp-local-compose"
+  },
+  "bootstrapContinuationRef": {
+    "key": "mattermost.oidc-bootstrap-continuation",
+    "version": "1.0.0",
+    "hash": "sha256:1010101010101010101010101010101010101010101010101010101010101010"
+  },
+  "bootstrapValidationEvidenceRef": {
+    "key": "mattermost.static-bootstrap-validation",
+    "version": "1.0.0",
+    "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "projectConnectionRef": {
+    "id": "00000000-0000-4000-8000-000000004003",
+    "version": 1,
+    "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  "profileRef": {
+    "id": "00000000-0000-4000-8000-000000004002",
+    "version": 1,
+    "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "profileValidationReportRef": {
+    "id": "00000000-0000-4000-8000-000000004004",
+    "version": 1,
+    "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  "ingressContractRefs": [
+    {
+      "key": "mattermost.ingress.dialog-submission",
+      "version": "1.0.0",
+      "hash": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    {
+      "key": "mattermost.ingress.post-action",
+      "version": "1.0.0",
+      "hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+    }
+  ],
+  "projectCredentialSecretRefs": [
+    "secret-ref:local/mattermost/project-alpha/bot-token"
+  ],
+  "presentationTokenEncryptionKeyRef": {
+    "keyId": "interaction-token-envelope-project-alpha-local",
+    "version": 1,
+    "purpose": "INTERACTION_PRESENTATION_AEAD",
+    "workspaceId": "00000000-0000-4000-8000-000000004110",
+    "projectId": "00000000-0000-4000-8000-000000004120",
+    "environmentClass": "LOCAL",
+    "keyIdentityFingerprint": "sha256:abababababababababababababababababababababababababababababababab",
+    "metadataHash": "sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+    "decryptUntil": "2026-12-31T23:59:59Z"
+  },
+  "presentationTokenRetention": {
+    "policyRef": {
+      "key": "mattermost.interaction-token-retention",
+      "version": "1.0.0",
+      "hash": "sha256:1515151515151515151515151515151515151515151515151515151515151515"
+    },
+    "validationEvidenceRef": {
+      "key": "mattermost.interaction-token-retention-validation",
+      "version": "1.0.0",
+      "hash": "sha256:1616161616161616161616161616161616161616161616161616161616161616"
+    },
+    "maxCapsuleLifetimeSeconds": 900,
+    "expirySweepIntervalSeconds": 30,
+    "expiryPurgeSlaSeconds": 60,
+    "terminalPurgeSlaSeconds": 0,
+    "walRetentionMaxSeconds": 86400,
+    "backupRetentionMaxSeconds": 604800,
+    "keyDisableSlaSeconds": 3600
+  },
+  "secretRotationOwner": "awp-local-compose",
+  "secretRevocationProcedureRef": {
+    "key": "mattermost.project-credential-revocation",
+    "version": "1.0.0",
+    "hash": "sha256:1212121212121212121212121212121212121212121212121212121212121212"
+  },
+  "identityBindingSourceRef": {
+    "key": "mattermost.oidc-bindings",
+    "version": "1.0.0",
+    "hash": "sha256:1313131313131313131313131313131313131313131313131313131313131313"
+  },
+  "membershipSourceRef": {
+    "key": "mattermost.project-alpha-membership",
+    "version": "1.0.0",
+    "hash": "sha256:1414141414141414141414141414141414141414141414141414141414141414"
+  },
+  "callbackAuthentication": "AWP_OPAQUE_INTENT",
+  "teamId": "mm-team-qa-local",
+  "botUserId": "mm-bot-hermes-project-alpha-local",
+  "credentialIdentityFingerprint": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "channelIds": [
+    "mm-channel-project-alpha"
+  ],
+  "membershipEvidenceHash": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+  "templateCatalogRef": {
+    "key": "qa.mattermost-template-catalog",
+    "version": "1.0.0",
+    "hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "redactionPolicyRef": {
+    "key": "qa.mattermost-redaction",
+    "version": "1.0.0",
+    "hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "validatedServerLimits": {
+    "requestTimeoutMs": 5000,
+    "maxRequestsPerMinute": 120,
+    "maxMessageCharacters": 16383,
+    "retryAfterSupported": true,
+    "maxRetryAfterSeconds": 300,
+    "mentionsSupported": true,
+    "directMessagesSupported": true,
+    "interactiveDialogsSupported": true,
+    "interactiveMessagesSupported": true,
+    "pendingPostIdLookupSupported": true,
+    "effectMarkerLookupSupported": true
+  },
+  "policyValidationEvidence": {
+    "callbackIngress": {
+      "key": "mattermost.callback-ingress-validation",
+      "version": "1.0.0",
+      "hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "membership": {
+      "key": "mattermost.membership-validation",
+      "version": "1.0.0",
+      "hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    "notification": {
+      "key": "mattermost.notification-validation",
+      "version": "1.0.0",
+      "hash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    "redaction": {
+      "key": "mattermost.redaction-validation",
+      "version": "1.0.0",
+      "hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    "reconciliation": {
+      "key": "mattermost.reconciliation-validation",
+      "version": "1.0.0",
+      "hash": "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    }
+  },
+  "operatorOptIn": true,
+  "productionDenied": true
+}

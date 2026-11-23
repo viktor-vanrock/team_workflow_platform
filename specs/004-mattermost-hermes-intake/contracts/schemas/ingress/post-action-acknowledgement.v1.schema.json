@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:mattermost:post-action-ack:v1",
+  "title": "Mattermost Post Action Acknowledgement v1",
+  "$comment": "The immutable $id carries the contract version; the provider wire body intentionally has no schemaVersion field.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ephemeral_text"],
+  "properties": {
+    "ephemeral_text": { "type": "string", "minLength": 1, "maxLength": 512 }
+  }
+}

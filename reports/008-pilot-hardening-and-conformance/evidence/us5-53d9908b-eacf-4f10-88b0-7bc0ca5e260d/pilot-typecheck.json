@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node_modules/typescript/bin/tsc",
+    "-p",
+    "tests/008.tsconfig.json",
+    "--pretty",
+    "false"
+  ],
+  "exitCode": 0,
+  "output": ""
+}

@@ -1,0 +1,248 @@
+asyncapi: 3.0.0
+info:
+  title: AWP GitLab Automated Validation Events
+  version: 1.0.0
+  description: >-
+    Project-scoped automation facts carried by the existing durable outbox and
+    inbox envelope. GitLab webhook bodies, credentials, arbitrary variables and
+    raw artifact content are never event payloads. Technical completion is not a
+    QA outcome or verdict.
+defaultContentType: application/json
+channels:
+  automationAttemptEvents:
+    address: awp.qa.automation-attempt.events.v1
+    messages:
+      created:
+        $ref: '#/components/messages/AutomationAttemptCreated'
+      statusObserved:
+        $ref: '#/components/messages/AutomationAttemptStatusObserved'
+      completed:
+        $ref: '#/components/messages/AutomationAttemptCompleted'
+  automationPolicyEvents:
+    address: awp.qa.automation-policy.events.v1
+    messages:
+      retryDecided:
+        $ref: '#/components/messages/AutomationRetryDecided'
+      quarantineChanged:
+        $ref: '#/components/messages/AutomationQuarantineChanged'
+  automationArtifactEvents:
+    address: awp.qa.automation-artifact.events.v1
+    messages:
+      registered:
+        $ref: '#/components/messages/AutomationArtifactRegistered'
+operations:
+  publishAutomationAttemptEvents:
+    action: send
+    channel:
+      $ref: '#/channels/automationAttemptEvents'
+  publishAutomationPolicyEvents:
+    action: send
+    channel:
+      $ref: '#/channels/automationPolicyEvents'
+  publishAutomationArtifactEvents:
+    action: send
+    channel:
+      $ref: '#/channels/automationArtifactEvents'
+components:
+  messages:
+    AutomationAttemptCreated:
+      name: qa.automation-attempt.created
+      title: Immutable AutomationAttempt created
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope'
+          - type: object
+            required:
+              - eventType
+              - entityType
+              - payloadVersion
+              - payloadSchemaRef
+              - payload
+            properties:
+              eventType:
+                const: qa.automation-attempt.created
+              entityType:
+                const: automation-attempt
+              payloadVersion:
+                const: 1
+              payloadSchemaRef:
+                type: object
+                additionalProperties: false
+                required: [id, version, digest]
+                properties:
+                  id:
+                    const: 'urn:awp:schemas:005:events:automation-attempt-created:v1'
+                  version:
+                    const: 1
+                  digest:
+                    const: 'sha256:07101908cc07a63d2194ea3f3df52cccb4738835ea0b4fd2ad41b7a8dafb1faa'
+              payload:
+                $ref: '../schemas/events/automation-attempt-created.v1.schema.json'
+    AutomationAttemptStatusObserved:
+      name: qa.automation-attempt.status-observed
+      title: Monotonic provider status observation recorded
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope'
+          - type: object
+            required:
+              - eventType
+              - entityType
+              - payloadVersion
+              - payloadSchemaRef
+              - payload
+            properties:
+              eventType:
+                const: qa.automation-attempt.status-observed
+              entityType:
+                const: automation-attempt
+              payloadVersion:
+                const: 1
+              payloadSchemaRef:
+                type: object
+                additionalProperties: false
+                required: [id, version, digest]
+                properties:
+                  id:
+                    const: 'urn:awp:schemas:005:events:automation-attempt-status-observed:v1'
+                  version:
+                    const: 1
+                  digest:
+                    const: 'sha256:f239157329bf9ec812c482866c1e0276c3bbab58826b58a78cacc829a304ba82'
+              payload:
+                $ref: '../schemas/events/automation-attempt-status-observed.v1.schema.json'
+    AutomationAttemptCompleted:
+      name: qa.automation-attempt.completed
+      title: Immutable technical result recorded
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope'
+          - type: object
+            required:
+              - eventType
+              - entityType
+              - payloadVersion
+              - payloadSchemaRef
+              - payload
+            properties:
+              eventType:
+                const: qa.automation-attempt.completed
+              entityType:
+                const: automation-attempt
+              payloadVersion:
+                const: 1
+              payloadSchemaRef:
+                type: object
+                additionalProperties: false
+                required: [id, version, digest]
+                properties:
+                  id:
+                    const: 'urn:awp:schemas:005:events:automation-attempt-completed:v1'
+                  version:
+                    const: 1
+                  digest:
+                    const: 'sha256:2a451d898d26a0c07e7de186531cd76623e2727591977d9ce81ab60c873d6d5c'
+              payload:
+                $ref: '../schemas/events/automation-attempt-completed.v1.schema.json'
+    AutomationRetryDecided:
+      name: qa.automation-retry.decided
+      title: Deterministic QA retry decision recorded
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope'
+          - type: object
+            required:
+              - eventType
+              - entityType
+              - payloadVersion
+              - payloadSchemaRef
+              - payload
+            properties:
+              eventType:
+                const: qa.automation-retry.decided
+              entityType:
+                const: automation-attempt
+              payloadVersion:
+                const: 1
+              payloadSchemaRef:
+                type: object
+                additionalProperties: false
+                required: [id, version, digest]
+                properties:
+                  id:
+                    const: 'urn:awp:schemas:005:events:automation-retry-decided:v1'
+                  version:
+                    const: 1
+                  digest:
+                    const: 'sha256:8873dbc4628de33dd5c5e4a6dff3a8fdeb87a3cde27d0623cb8981c41aea2f0b'
+              payload:
+                $ref: '../schemas/events/automation-retry-decided.v1.schema.json'
+    AutomationArtifactRegistered:
+      name: qa.automation-artifact.registered
+      title: Authorized external artifact reference registered
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope'
+          - type: object
+            required:
+              - eventType
+              - entityType
+              - payloadVersion
+              - payloadSchemaRef
+              - payload
+            properties:
+              eventType:
+                const: qa.automation-artifact.registered
+              entityType:
+                const: artifact-reference
+              payloadVersion:
+                const: 1
+              payloadSchemaRef:
+                type: object
+                additionalProperties: false
+                required: [id, version, digest]
+                properties:
+                  id:
+                    const: 'urn:awp:schemas:005:events:automation-artifact-registered:v1'
+                  version:
+                    const: 1
+                  digest:
+                    const: 'sha256:94f6ac23995addb0d3fa5dd669382e1ae0dc9507c62580d04f6d86905d9f8dc6'
+              payload:
+                $ref: '../schemas/events/automation-artifact-registered.v1.schema.json'
+    AutomationQuarantineChanged:
+      name: qa.automation-quarantine.changed
+      title: Automation quarantine lifecycle fact recorded
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope'
+          - type: object
+            required:
+              - eventType
+              - entityType
+              - payloadVersion
+              - payloadSchemaRef
+              - payload
+            properties:
+              eventType:
+                const: qa.automation-quarantine.changed
+              entityType:
+                const: automation-quarantine
+              payloadVersion:
+                const: 1
+              payloadSchemaRef:
+                type: object
+                additionalProperties: false
+                required: [id, version, digest]
+                properties:
+                  id:
+                    const: 'urn:awp:schemas:005:events:automation-quarantine-changed:v1'
+                  version:
+                    const: 1
+                  digest:
+                    const: 'sha256:cac8ae1b67aac952be1123b4cf1c331ab469c2e9aa0099742ecfaaffa09717b4'
+              payload:
+                $ref: '../schemas/events/automation-quarantine-changed.v1.schema.json'
+  schemas:
+    ProjectEnvelope:
+      $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/events/event-envelope.v1.schema.json'

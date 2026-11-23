@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:hermes-agent-run:v1",
+  "title": "HermesAgentRun v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "runId",
+    "workspaceId",
+    "projectId",
+    "subject",
+    "initiatorPrincipalId",
+    "servicePrincipalId",
+    "agentDefinitionRef",
+    "skillRef",
+    "rulesRef",
+    "policyRef",
+    "promptTemplateRef",
+    "promptManifestRef",
+    "inputFingerprint",
+    "classification",
+    "classificationDecisionHash",
+    "serviceAuthorizationBasisHash",
+    "humanAuthorizationBasisHash",
+    "grantSetHash",
+    "actionProvenanceRef",
+    "state",
+    "attempt",
+    "rowVersion",
+    "createdAt",
+    "correlationId",
+    "causationId"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "hermes-agent-run@1.0.0" },
+    "runId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "subject": {
+      "oneOf": [
+        { "$ref": "#/$defs/draftSubject" },
+        { "$ref": "#/$defs/candidateSubject" },
+        { "$ref": "#/$defs/workItemSubject" }
+      ]
+    },
+    "initiatorPrincipalId": { "$ref": "#/$defs/id" },
+    "servicePrincipalId": { "$ref": "#/$defs/id" },
+    "agentDefinitionRef": { "$ref": "#/$defs/versionedHashRef" },
+    "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+    "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+    "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+    "promptTemplateRef": { "$ref": "#/$defs/versionedHashRef" },
+    "promptManifestRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "modelRef": { "$ref": "#/$defs/versionedHashRef" },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "classification": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+    "classificationDecisionHash": { "$ref": "#/$defs/hash" },
+    "serviceAuthorizationBasisHash": { "$ref": "#/$defs/hash" },
+    "humanAuthorizationBasisHash": { "$ref": "#/$defs/hash" },
+    "grantSetHash": { "$ref": "#/$defs/hash" },
+    "actionProvenanceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "state": { "enum": ["CREATED", "VALIDATING_INPUT", "PLANNING", "EXECUTING", "WAITING_FOR_APPROVAL", "RETRY_SCHEDULED", "COMPLETED", "FAILED", "CANCELLED"] },
+    "fallbackReasonCode": { "enum": ["MODEL_DISABLED", "MODEL_UNAVAILABLE", "MODEL_TIMEOUT", "MODEL_RATE_LIMITED", "MODEL_INVALID_OUTPUT", "MODEL_POLICY_DENIED", "LOW_CONFIDENCE", "CONTRADICTORY_EVIDENCE"] },
+    "outputSchemaRef": { "$ref": "#/$defs/schemaRef" },
+    "outputHash": { "$ref": "#/$defs/hash" },
+    "resultRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "attempt": { "type": "integer", "minimum": 1, "maximum": 20 },
+    "rowVersion": { "type": "integer", "minimum": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "completedAt": { "type": "string", "format": "date-time" },
+    "correlationId": { "$ref": "#/$defs/id" },
+    "causationId": { "$ref": "#/$defs/id" }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "COMPLETED" } } },
+      "then": {
+        "required": ["outputSchemaRef", "outputHash", "resultRef", "completedAt"],
+        "properties": {
+          "outputSchemaRef": true,
+          "outputHash": true,
+          "resultRef": true,
+          "completedAt": true
+        }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "enum": ["FAILED", "CANCELLED"] } } },
+      "then": {
+        "required": ["completedAt"],
+        "properties": {
+          "completedAt": true,
+          "outputSchemaRef": false,
+          "outputHash": false,
+          "resultRef": false
+        }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "enum": ["CREATED", "VALIDATING_INPUT", "PLANNING", "EXECUTING", "WAITING_FOR_APPROVAL", "RETRY_SCHEDULED"] } } },
+      "then": { "properties": { "completedAt": false } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^urn:awp:schemas:[A-Za-z0-9:._-]+$", "maxLength": 512 },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "subjectBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version", "contentHash"],
+      "properties": {
+        "kind": { "type": "string" },
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "draftSubject": {
+      "allOf": [
+        { "$ref": "#/$defs/subjectBase" },
+        { "type": "object", "properties": { "kind": { "const": "DRAFT" } } }
+      ]
+    },
+    "candidateSubject": {
+      "allOf": [
+        { "$ref": "#/$defs/subjectBase" },
+        { "type": "object", "properties": { "kind": { "const": "CANDIDATE" } } }
+      ]
+    },
+    "workItemSubject": {
+      "allOf": [
+        { "$ref": "#/$defs/subjectBase" },
+        { "type": "object", "properties": { "kind": { "const": "WORK_ITEM" } } }
+      ]
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

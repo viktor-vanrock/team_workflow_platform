@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:sample:work-item-extension:v1",
+  "title": "Sample Pack Work Item Extension",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["workItemId", "workspaceId", "projectId", "message", "publishStatus", "version"],
+  "properties": {
+    "workItemId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "message": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "publishStatus": { "type": "string", "enum": ["NOT_REQUESTED", "PENDING", "CONFIRMED", "FAILED"] },
+    "lastCommandId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 }
+  }
+}

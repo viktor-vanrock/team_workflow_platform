@@ -1,0 +1,109 @@
+replicaCount: 1
+image:
+  repository: registry.sberdevices.ru/rndbtoc/team-workflow-platform/workspace
+  pullPolicy: IfNotPresent
+  command: [pnpm, --filter, "@awp/api", "start:workspace"]
+imagePullSecrets:
+  - name: gitlab-registry-secret-rndbtoc
+serviceAccount:
+  create: false
+  automount: true
+  name: vault
+podAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/agent-pre-populate-only: "true"
+  vault.hashicorp.com/role: p-rndml
+  vault.hashicorp.com/agent-inject-secret-hermes_token: rndml/team-workflow-platform/hermes
+  vault.hashicorp.com/agent-inject-template-hermes_token: |
+    {{- with secret "rndml/team-workflow-platform/hermes" -}}
+    {{ .Data.data.HERMES_TOKEN }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-database_url: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-database_url: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.DATABASE_URL }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-workspace_config: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-workspace_config: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.WORKSPACE_CONFIG }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-session_keys: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-session_keys: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.SESSION_KEYS }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-oidc_client_secret: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-oidc_client_secret: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.OIDC_CLIENT_SECRET }}
+    {{- end -}}
+bootstrapPodAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/agent-pre-populate-only: "true"
+  vault.hashicorp.com/role: p-rndml
+  vault.hashicorp.com/agent-inject-secret-database_url: rndml/team-workflow-platform/migrator
+  vault.hashicorp.com/agent-inject-template-database_url: |
+    {{- with secret "rndml/team-workflow-platform/migrator" -}}
+    {{ .Data.data.DATABASE_URL }}
+    {{- end -}}
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+service:
+  enabled: true
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
+ingress:
+  enabled: true
+  openshift: true
+  route:
+    path: /
+    annotations:
+      haproxy.router.openshift.io/rewrite-target: /
+      openshift.io/host.generated: "true"
+configMap:
+  enabled: true
+  config:
+    PORT: "3000"
+    npm_config_verify_deps_before_run: "false"
+    AWP_HERMES_URL: http://hermes:3020
+    AWP_HERMES_TOKEN_PATH: /vault/secrets/hermes_token
+    AWP_WORKSPACE_CONFIG_PATH: /vault/secrets/workspace_config
+    AWP_WORKSPACE_DATABASE_URL_FILE: /vault/secrets/database_url
+    AWP_WORKSPACE_DATABASE_TLS: disable
+    AWP_SESSION_KEYS_PATH: /vault/secrets/session_keys
+    AWP_OIDC_CLIENT_SECRET_PATH: /vault/secrets/oidc_client_secret
+    AWP_WORKSPACE_WEB_ROOT: /workspace/dist/apps/web
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  initialDelaySeconds: 60
+  timeoutSeconds: 5
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  initialDelaySeconds: 15
+  timeoutSeconds: 5
+volumes:
+  - name: tmp
+    emptyDir: {}
+volumeMounts:
+  - name: tmp
+    mountPath: /tmp
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "2"
+    memory: 2Gi

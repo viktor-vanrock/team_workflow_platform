@@ -1,0 +1,17 @@
+{
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "requiredSessionPlanRef": {
+    "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    "revision": 1,
+    "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "verdictId": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+  "version": 1,
+  "verdict": "FAIL",
+  "effectiveRisk": "HIGH",
+  "contentHash": "sha256:2828282828282828282828282828282828282828282828282828282828282828",
+  "signatureIds": [
+    "85858585-8585-4585-8585-858585858585"
+  ]
+}
+

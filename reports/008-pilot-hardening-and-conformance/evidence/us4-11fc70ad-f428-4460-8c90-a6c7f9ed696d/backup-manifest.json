@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "backup-manifest@1.0.0",
+  "backupId": "backup-us4-11fc70ad-f428-4460-8c90-a6c7f9ed696d",
+  "sourceDeploymentRef": "fixture:development-deployment",
+  "workspaceId": "fixture-workspace-alpha",
+  "projectIds": [
+    "fixture-project-web"
+  ],
+  "databaseIdentity": "awp_test",
+  "databaseMajor": 18,
+  "backupKind": "LOGICAL",
+  "backupStartedAt": "2026-09-04T22:41:35.113Z",
+  "completedAt": "2026-09-04T22:41:45.096Z",
+  "consistentRecoveryPoint": "2026-09-04T22:41:35.113Z",
+  "schemaPins": {
+    "core": 185,
+    "qa": 2100,
+    "jira": 3050,
+    "gitlab": 4020
+  },
+  "inventory": {
+    "canonical": 1,
+    "audit": 2,
+    "delivery": 2,
+    "configuration": 4,
+    "publicKeys": 1,
+    "artifacts": 2
+  },
+  "auditWatermark": "audit-2",
+  "effectWatermark": "effect-uncertain",
+  "protectedLocationRef": "fixture:isolated-memory-dump",
+  "retentionPolicyRef": "fixture:development-retention",
+  "dumpDigest": "sha256:fcb55d19970e67f7c91a5984c243b39881f272e42768832f3e58eea02ae25dbb",
+  "dumpBytes": 3992,
+  "inventoryHashes": {
+    "canonical": "sha256:2c8af53c63f2159eaa088f19cc59df9eb4ca30f8d035f73aeda1dd806b62ab50",
+    "audit": "sha256:60eaeb7b80e0bb21fb1a75a91842c3a45924a40884a78bff29644e3f80d9173d",
+    "delivery": "sha256:e1223136dd0954ab67a546fe003b11d3a8043cb4f76b3b30aa4525f841e40c86",
+    "configuration": "sha256:4aaf9af9dd75159c0c53e5c954d34afa32fa91f194428bf38950407269143fd9",
+    "publicKeys": "sha256:6aea6dfe6561984cdc5c54ead84d47d2cf29e48253ae282aef237404adad4661",
+    "artifacts": "sha256:57413ce83ee1d989e384dfd3a82c6e2d9052a23c4204706bd2d7df11aa4c2d7c"
+  },
+  "contentHash": "sha256:e55b1a7b3aa7ba748abc6859b2b5ab30b3a2e272f7e5d98fd11861e6764ada10"
+}

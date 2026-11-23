@@ -1,0 +1,2629 @@
+openapi: 3.1.0
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+info:
+  title: Agentic Workspace Platform QA Pack API
+  version: 1.0.0
+  description: >-
+    Project-scoped API for qa.validation manual workflow. Actor, role, entitlement and authoritative
+    Workspace/Project scope are derived by the server. External writes return generic command/
+    approval links and never accept Connector/Profile/Connection or provider fields. Every
+    adjudicative mutation acquires the QaRequestExtension aggregate CAS guard; while completion is
+    DISPATCHED/in-flight it fails with a sanitized COMPLETION_IN_FLIGHT conflict. Post-DONE clerical
+    correction is explicitly non-adjudicative and uses its separate append-only contract.
+servers:
+  - url: http://localhost:3000
+    description: Local composition
+security:
+  - bearerAuth: []
+tags:
+  - name: QA Intake
+  - name: QA Readiness
+  - name: QA Sessions
+  - name: QA Execution
+  - name: QA Evidence
+  - name: QA Findings
+  - name: QA Verdict
+  - name: QA Completion
+paths:
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/intake-drafts/{draftId}/qa-confirmation:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/DraftId'
+    post:
+      operationId: confirmQaIntakeDraft
+      tags: [QA Intake]
+      description: >-
+        Revalidates the complete provider-neutral QA intake (declared blockers/dependencies, target and
+        role/test-data facts, and RETEST defect/prior-session/source-build lineage when applicable).
+        The server resolves and confirms the 002-only PLATFORM_WEB response channel; the client cannot
+        select a messaging provider. Only then is the typed request.create command authorized.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpectedResourceVersion'
+      responses:
+        '202':
+          description: Typed request.create command accepted; no Work Item exists before confirmation.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperation'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: getQaRequestExtension
+      tags: [QA Intake]
+      responses:
+        '200':
+          description: Pack-owned QA request extension for a confirmed Work Item.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/qa-request-extension.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/detail:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: getQaWorkItemDetailHistory
+      tags: [QA Intake]
+      description: Reload-safe composite read model covering readiness/waiver/plan, execution histories, Findings/drafts/links, Verdict/signatures/DoD and completion. Same-scope filtering occurs before child traversal.
+      responses:
+        '200':
+          description: Full scoped QA detail and append-only history projection.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/qa-work-item-detail.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/request-input-revisions:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: getQaRequestInputHistory
+      tags: [QA Intake]
+      description: Reload-safe append-only request-input history and stable current pointer.
+      responses:
+        '200':
+          description: Same-scope history with the header CAS version.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/qa-request-input-history.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: reviseQaRequestInputs
+      tags: [QA Intake]
+      description: >-
+        HUMAN Requester/Executor DoR-semantic full-replacement revision before confirmed operational READY
+        and before any Session exists. The body cannot carry frozen scope/definition/draft/external-request/
+        Binding/original-requester/title/request-kind/classification identity. The server copies that tuple
+        from revision 1, resolves responseChannelResolution from the original requester, compares the tuple
+        in the application and insert-time DB guard, advances the pointer by CAS, and atomically invalidates
+        exact current assessment/waiver/pending READY command refs.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/qa/qa-request-input-revision.v1.schema.json#/$defs/RevisionCommand'
+      responses:
+        '201':
+          description: Append-only revision inserted, invalidations recorded and stable pointer advanced by CAS.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/qa-request-input-revision.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/request-input-revisions/current:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: getCurrentQaRequestInputRevision
+      tags: [QA Intake]
+      responses:
+        '200':
+          description: Exact current append-only input revision.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/qa-request-input-revision.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/backlog:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listConfirmedQaBacklog
+      tags: [QA Intake]
+      description: Lists only confirmed qa.validation Work Items in the verified Workspace/Project scope.
+      responses:
+        '200':
+          description: Scoped Confirmed Backlog projection.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../schemas/qa/qa-backlog-item.v1.schema.json'
+                  nextCursor:
+                    type: string
+                    minLength: 1
+                    maxLength: 512
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/backlog/{workItemId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: getConfirmedQaBacklogItem
+      tags: [QA Intake]
+      description: Reads one confirmed QA request by a fully scoped lookup without child traversal on denial.
+      responses:
+        '200':
+          description: Scoped Confirmed Backlog detail.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/qa-backlog-item.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/readiness-assessments:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    post:
+      operationId: evaluateQaReadiness
+      tags: [QA Readiness]
+      description: >-
+        Creates an append-only canonical DoR assessment over an exact request-extension snapshot and
+        server-resolved Project ACTIVE/verification, accepted-request confirmation, requester entitlement,
+        response-channel, RETEST lineage and Binding/Profile mapping-health input bundle. It does not
+        fabricate a RequiredSessionPlan or store the derived external sync stage.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [expectedResourceVersion, requestExtensionSnapshotRef, requestInputRevisionRef]
+              properties:
+                expectedResourceVersion:
+                  type: integer
+                  minimum: 1
+                requestExtensionSnapshotRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/QaRequestExtensionSnapshotRef'
+                requestInputRevisionRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef'
+      responses:
+        '201':
+          description: Append-only deterministic readiness assessment.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/readiness-assessment.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/readiness-confirmations:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    post:
+      operationId: confirmQaReadiness
+      tags: [QA Readiness]
+      description: >-
+        Requests the generic request.transition(READY) effect for one exact canonical assessment.
+        The server revalidates the entire input fingerprint and any same-scope DOR waiver, including
+        exact subject/rule/input fingerprint, distinct live-authorized QA Lead, approval state and expiry,
+        both at confirmation and immediately before effect authorization/dispatch.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [assessmentRef, expectedResourceVersion]
+              properties:
+                assessmentRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef'
+                expectedResourceVersion:
+                  type: integer
+                  minimum: 1
+      responses:
+        '202':
+          description: Generic exact Approval/command path for request.transition(READY).
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperation'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/waivers:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    post:
+      operationId: requestQaWaiver
+      tags: [QA Readiness]
+      description: >-
+        Creates an immutable exact waiver candidate from a closed typed selector. PLAN_ITEM and SESSION
+        accept IDs only; the server resolves their current same-scope resourceVersion and aggregate
+        snapshot under CAS. REQUIRED_SESSION pins an exact RequirementRef. A caller-authored generic
+        immutable subject is never accepted.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [waiverKind, subjectSelector, ruleRef, inputFingerprint, reason, expiresAt, riskReviewPolicyRef]
+              properties:
+                waiverKind:
+                  type: string
+                  enum: [DOR, PLAN_ITEM, SESSION, REQUIRED_SESSION, FINDING]
+                waivedRuleCode:
+                  description: Required only for DOR and hardcoded by feature 002 to the sole waivable rule.
+                  const: PROJECT_REGISTRY_NEEDS_REVIEW
+                subjectSelector:
+                  $ref: '../schemas/qa/qa-waiver.v1.schema.json#/$defs/WaiverSubjectSelector'
+                ruleRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/SemanticRef'
+                inputFingerprint:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                reason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+                expiresAt:
+                  type: string
+                  format: date-time
+                riskReviewPolicyRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef'
+              allOf:
+                - if:
+                    properties:
+                      waiverKind:
+                        const: DOR
+                    required: [waiverKind]
+                  then:
+                    required: [waivedRuleCode]
+                    properties:
+                      subjectSelector:
+                        properties:
+                          kind:
+                            const: DOR
+                  else:
+                    not:
+                      required: [waivedRuleCode]
+                - if:
+                    properties:
+                      waiverKind:
+                        const: PLAN_ITEM
+                    required: [waiverKind]
+                  then:
+                    properties:
+                      subjectSelector:
+                        properties:
+                          kind:
+                            const: PLAN_ITEM
+                - if:
+                    properties:
+                      waiverKind:
+                        const: SESSION
+                    required: [waiverKind]
+                  then:
+                    properties:
+                      subjectSelector:
+                        properties:
+                          kind:
+                            const: SESSION
+                - if:
+                    properties:
+                      waiverKind:
+                        const: REQUIRED_SESSION
+                    required: [waiverKind]
+                  then:
+                    properties:
+                      subjectSelector:
+                        properties:
+                          kind:
+                            const: REQUIRED_SESSION
+                - if:
+                    properties:
+                      waiverKind:
+                        const: FINDING
+                    required: [waiverKind]
+                  then:
+                    properties:
+                      subjectSelector:
+                        properties:
+                          kind:
+                            const: FINDING
+      responses:
+        '202':
+          description: Generic PLATFORM_ACTION created; decision uses Core approval API.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformActionOperation'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/required-session-plans:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: getRequiredSessionPlanHistory
+      tags: [QA Readiness]
+      description: Returns the stable plan header. Before first publication currentRevisionRef is null and revisions is empty; its resourceVersion/ETag is the mandatory INITIAL publication CAS token.
+      responses:
+        '200':
+          description: Complete immutable revision history and the explicit current-published pointer.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/required-session-plan-history.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: publishRequiredSessionPlanRevision
+      tags: [QA Readiness]
+      description: Human publication command. INITIAL uses If-Match on the stable empty header and expectedCurrentPlanRef=null; revisions use the current header ETag and exact non-null predecessor. Readiness does not fabricate a plan; server verifies same-scope request/context/readiness/policy inputs and atomically advances the pointer by CAS.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/qa/required-session-plan.v1.schema.json#/$defs/PublicationCommand'
+      responses:
+        '201':
+          description: New immutable plan revision published and current pointer advanced atomically.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [planRevision, planHeaderResourceVersion]
+                properties:
+                  planRevision:
+                    $ref: '../schemas/qa/required-session-plan.v1.schema.json'
+                  planHeaderResourceVersion:
+                    description: New stable plan-header CAS version represented by the response ETag.
+                    type: integer
+                    minimum: 1
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/required-session-plans/current:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: getCurrentRequiredSessionPlanRevision
+      tags: [QA Readiness]
+      description: Resolves the current-published pointer once and returns an exact id/revision/contentHash resource; downstream decisions must pin that exact ref.
+      responses:
+        '200':
+          description: Current immutable Required Session Plan revision.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/required-session-plan.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/required-session-plans/{requiredSessionPlanId}/revisions/{requiredSessionPlanRevision}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/RequiredSessionPlanId'
+      - $ref: '#/components/parameters/RequiredSessionPlanRevision'
+    get:
+      operationId: getRequiredSessionPlanRevision
+      tags: [QA Readiness]
+      responses:
+        '200':
+          description: Exact immutable Required Session Plan revision selected by id and revision.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/required-session-plan.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: listQaSessions
+      tags: [QA Sessions]
+      responses:
+        '200':
+          description: Scoped Sessions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/qa/test-session.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: createQaSession
+      tags: [QA Sessions]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [requiredSessionRequirementRef]
+              properties:
+                requiredSessionRequirementRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/RequiredSessionRequirementRef'
+                parentSessionId:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: MANUAL Session created for one exact requirement of the pinned plan; purpose, capabilities and target/scope/checklist policies are server-derived from that requirement.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/test-session.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: getQaSession
+      tags: [QA Sessions]
+      responses:
+        '200':
+          description: Scoped Session detail.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/test-session.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/transitions:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: transitionQaSession
+      tags: [QA Sessions]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [requestedState]
+              properties:
+                requestedState:
+                  type: string
+                  enum: [READY, RUNNING, REVIEW_REQUIRED, BLOCKED, CANCELLED]
+                reason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+                targetInputFingerprint:
+                  description: Hash of server-resolved target inputs; body cannot choose authoritative scope, Binding or Profile.
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                scopeInputFingerprint:
+                  description: Hash of confirmed request scope and pinned checklist inputs used to materialize ScopeSnapshot.
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                expectedStructureHash:
+                  description: Exact current Session structureHash. RUNNING rejects if it differs from readyAgainstStructureHash or if either changed since the caller loaded the Session.
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+              allOf:
+                - if:
+                    properties:
+                      requestedState:
+                        const: RUNNING
+                    required: [requestedState]
+                  then:
+                    required: [targetInputFingerprint, scopeInputFingerprint, expectedStructureHash]
+                - if:
+                    properties:
+                      requestedState:
+                        enum: [BLOCKED, CANCELLED]
+                    required: [requestedState]
+                  then:
+                    required: [reason]
+      responses:
+        '200':
+          description: Session transitioned after state/snapshot/human guard validation.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/test-session.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/plan-items:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: listQaPlanItems
+      tags: [QA Execution]
+      responses:
+        '200':
+          description: Ordered scoped Plan Items including latest result pointers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/qa/plan-item.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: createQaPlanItem
+      tags: [QA Execution]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [title, expectedOutcome, definition]
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                instructions:
+                  type: string
+                  maxLength: 10000
+                expectedOutcome:
+                  type: string
+                  minLength: 1
+                  maxLength: 4000
+                definition:
+                  oneOf:
+                    - $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef'
+                    - type: object
+                      additionalProperties: false
+                      required: [kind, snapshotHash]
+                      properties:
+                        kind:
+                          const: session-plan-item-snapshot
+                        snapshotHash:
+                          $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+      responses:
+        '201':
+          description: Plan Item created before Session freeze; response returns the advanced Session structure revision/hash. If the Session had been READY, the same aggregate transaction returns it to PLANNED with STRUCTURE_CHANGED provenance and clears readyAgainstStructureHash.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/test-session.v1.schema.json#/$defs/StructureMutationResult'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/plan-items/{planItemId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/PlanItemId'
+    get:
+      operationId: getQaPlanItem
+      tags: [QA Execution]
+      responses:
+        '200':
+          description: Scoped Plan Item with immutable definition and latest result pointer.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/plan-item.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    patch:
+      operationId: updateQaPlanItemBeforeSessionStart
+      tags: [QA Execution]
+      description: Pre-start edit only. The aggregate transaction advances Session structureRevision/hash; a READY Session atomically returns to PLANNED with STRUCTURE_CHANGED provenance and a new ETag. Once Session is RUNNING or later, this operation rejects the mutation and a linked replacement Session is required.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                instructions:
+                  type: string
+                  maxLength: 10000
+                expectedOutcome:
+                  type: string
+                  minLength: 1
+                  maxLength: 4000
+                definition:
+                  oneOf:
+                    - $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef'
+                    - type: object
+                      additionalProperties: false
+                      required: [kind, snapshotHash]
+                      properties:
+                        kind:
+                          const: session-plan-item-snapshot
+                        snapshotHash:
+                          $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+      responses:
+        '200':
+          description: Plan Item and owning Session structure updated before freeze; body and ETag hand off the new exact structure state.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/test-session.v1.schema.json#/$defs/StructureMutationResult'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/plan-items/{planItemId}/attempts:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/PlanItemId'
+    get:
+      operationId: listManualAttempts
+      tags: [QA Execution]
+      responses:
+        '200':
+          description: Complete append-only attempt history ordered by attemptNo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/qa/manual-attempt.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: startManualAttempt
+      tags: [QA Execution]
+      description: Starts the next contiguous append-only Attempt only while the Plan Item has no committed terminal result. Result-first wins the aggregate CAS and rejects a late repeat with zero writes.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [targetSnapshotHash]
+              properties:
+                targetSnapshotHash:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+      responses:
+        '201':
+          description: New append-only ManualAttempt started.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/manual-attempt.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/attempts/{attemptId}/completion:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/AttemptId'
+    post:
+      operationId: completeManualAttempt
+      tags: [QA Execution]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [result]
+              properties:
+                result:
+                  type: string
+                  enum: [PASS, ASSERTION_FAILED, INFRA_FAILED, TIMEOUT, CANCELLED, INCOMPLETE]
+                notes:
+                  type: string
+                  maxLength: 4000
+                cancellationReason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+              allOf:
+                - if:
+                    properties:
+                      result:
+                        const: CANCELLED
+                    required: [result]
+                  then:
+                    required: [cancellationReason]
+                  else:
+                    not:
+                      required: [cancellationReason]
+      responses:
+        '200':
+          description: ManualAttempt completed without overwriting prior attempts.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/manual-attempt.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/attempts/{attemptId}/observations:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/AttemptId'
+    get:
+      operationId: listQaObservationsForAttempt
+      tags: [QA Execution]
+      responses:
+        '200':
+          description: Append-only Observation history, including audited correction refs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/qa/observation.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: recordQaObservation
+      tags: [QA Execution]
+      description: >-
+        Creates an initial current-leaf Observation only before a terminal Plan Item result. A pre-review
+        correction creates a new leaf and atomically stales the current result revision/set hash; an initial
+        Observation after result commit or any correction after Session review is rejected.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [planItemId, kind, expectedOutcome, actualOutcome, severity]
+              properties:
+                planItemId:
+                  type: string
+                  format: uuid
+                kind:
+                  type: string
+                  enum: [POSITIVE, NEGATIVE, AMBIGUOUS, INFORMATIONAL]
+                expectedOutcome:
+                  type: string
+                  minLength: 1
+                  maxLength: 4000
+                actualOutcome:
+                  type: string
+                  minLength: 1
+                  maxLength: 10000
+                severity:
+                  type: string
+                  enum: [INFO, LOW, MEDIUM, HIGH, CRITICAL]
+                artifactIds:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    type: string
+                    format: uuid
+                correctsObservationRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableContentRef'
+                correctionReason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+              dependentRequired:
+                correctsObservationRef: [correctionReason]
+                correctionReason: [correctsObservationRef]
+      responses:
+        '201':
+          description: Append-only Observation created.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/observation.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/plan-items/{planItemId}/result-revisions:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/PlanItemId'
+    get:
+      operationId: listQaPlanItemResultRevisions
+      tags: [QA Execution]
+      responses:
+        '200':
+          description: Complete append-only human result history.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/qa/plan-item-result-revision.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: recordQaPlanItemResultRevision
+      tags: [QA Execution]
+      description: >-
+        Creates or supersedes a human result revision before Session review. The body carries only expected
+        complete-set hashes/counts; the service derives every finalized contiguous Attempt and every current-leaf
+        Observation, rejects stale/omitted/late membership, and atomically writes the revision plus Plan Item
+        TERMINAL state. Every executed result requires a nonempty Observation set; clean PASS requires an exact
+        POSITIVE Observation on a PASS Attempt. PASS + FLAKY_SUSPECTED pins an exact current DISPOSED Finding/review membership and
+        policy basis, never a future FROZEN review. FLAKY_SUSPECTED is legal only for PASS or
+        INCONCLUSIVE; INCONCLUSIVE forbids that basis, while FAIL/BLOCKED/NOT_RUN forbid the flag.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionCommand'
+      responses:
+        '201':
+          description: Append-only result revision recorded with complete server-derived memberships; Plan Item latest pointer and TERMINAL state advanced atomically by CAS.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/plan-item-result-revision.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/evidence-attachments:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: initiateQaEvidenceAttachment
+      tags: [QA Evidence]
+      description: Authorizes a same-scope, classification-allowed proxy upload and returns only an opaque contentUploadRef; provider locator, credentials and presigned URLs are never exposed.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [owner, mediaType, sizeBytes, dataClassificationKey, captureMethod]
+              properties:
+                owner:
+                  type: object
+                  additionalProperties: false
+                  required: [ownerType, ownerId]
+                  properties:
+                    ownerType:
+                      type: string
+                      enum: [SESSION, PLAN_ITEM, ATTEMPT, OBSERVATION, FINDING]
+                    ownerId:
+                      type: string
+                      format: uuid
+                displayLabel:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                mediaType:
+                  type: string
+                  pattern: '^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$'
+                sizeBytes:
+                  type: integer
+                  minimum: 1
+                dataClassificationKey:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ClassificationKey'
+                captureMethod:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+      responses:
+        '201':
+          description: Authorized opaque proxy-upload session.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/evidence-attachment-session.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/evidence-attachments/{attachmentSessionId}/content:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/AttachmentSessionId'
+    put:
+      operationId: uploadQaEvidenceContent
+      tags: [QA Evidence]
+      description: Streams bytes through the authenticated platform proxy identified by the opaque attachment session; no object-store locator is accepted.
+      parameters:
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              contentMediaType: application/octet-stream
+      responses:
+        '204':
+          description: Bytes accepted for checksum verification; attachment is not canonical evidence until finalize.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/evidence-attachments/{attachmentSessionId}/finalize:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/AttachmentSessionId'
+    post:
+      operationId: finalizeQaEvidenceAttachment
+      tags: [QA Evidence]
+      description: Verifies bytes, SHA-256 checksum, media type, size, classification and same-scope ownership before atomically creating the Core Artifact reference and QA EvidenceArtifactLink.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [contentUploadRef, checksum, mediaType, sizeBytes, dataClassificationKey]
+              properties:
+                contentUploadRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/UuidRef'
+                checksum:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                mediaType:
+                  type: string
+                  pattern: '^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$'
+                sizeBytes:
+                  type: integer
+                  minimum: 1
+                dataClassificationKey:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ClassificationKey'
+      responses:
+        '201':
+          description: Finalized same-scope evidence link; negative evidence rules may now consume this immutable artifact metadata.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/evidence-artifact-link.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/evidence-links:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: listQaEvidenceArtifactLinks
+      tags: [QA Evidence]
+      description: Returns the current availability projection. EXPIRED does not mutate any signed EvidenceManifestMember snapshot or manifest contentHash.
+      responses:
+        '200':
+          description: Same-scope current evidence links.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/qa/evidence-artifact-link.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/evidence-links/{evidenceArtifactLinkId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/EvidenceArtifactLinkId'
+    get:
+      operationId: getQaEvidenceArtifactLink
+      tags: [QA Evidence]
+      responses:
+        '200':
+          description: Current availability projection plus immutable checksum/media/size/classification metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/evidence-artifact-link.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/evidence-manifests:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+    get:
+      operationId: listQaEvidenceManifests
+      tags: [QA Evidence]
+      responses:
+        '200':
+          description: Scoped manifest headers with latest and adjudicative pointers kept distinct.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/qa/evidence-manifest-history.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: reviewQaSessionAndPublishEvidence
+      tags: [QA Evidence]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [reviewKind, sessionOutcome, outcomeSummary, expectedExecutionSetHash, expectedFlakyDispositionBases]
+              properties:
+                reviewKind:
+                  type: string
+                  enum: [INITIAL, SUBSTANTIVE_CORRECTION]
+                sessionOutcome:
+                  type: string
+                  enum: [PASSED, FAILED, BLOCKED, INCONCLUSIVE]
+                outcomeSummary:
+                  description: Exact bounded HUMAN-attested summary hashed into SessionReview and the signed manifest revision.
+                  type: string
+                  minLength: 1
+                  maxLength: 10000
+                expectedExecutionSetHash:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                expectedFlakyDispositionBases:
+                  description: >-
+                    Exact DISPOSED bases already pinned by PASS + FLAKY_SUSPECTED result revisions.
+                    The review UoW rechecks current same-scope refs/membership/policy and atomically
+                    writes each FROZEN successor plus SessionReview and signed manifest.
+                  type: array
+                  uniqueItems: true
+                  items:
+                    $ref: '../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/FlakyDispositionBasis'
+                previousManifestRevisionRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                correctionReason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+              allOf:
+                - if:
+                    properties:
+                      reviewKind:
+                        const: SUBSTANTIVE_CORRECTION
+                    required: [reviewKind]
+                  then:
+                    required: [previousManifestRevisionRef, correctionReason]
+                  else:
+                    not:
+                      anyOf:
+                        - required: [previousManifestRevisionRef]
+                        - required: [correctionReason]
+      responses:
+        '201':
+          description: Session review, DISPOSED-to-FROZEN Finding successors, signed manifest revision and COMPLETED transition committed atomically.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [session, sessionReview, manifestRevision, manifestHeaderResourceVersion]
+                properties:
+                  session:
+                    $ref: '../schemas/qa/test-session.v1.schema.json'
+                  sessionReview:
+                    $ref: '../schemas/qa/session-review.v1.schema.json'
+                  manifestRevision:
+                    $ref: '../schemas/qa/evidence-manifest-revision.v1.schema.json'
+                  manifestHeaderResourceVersion:
+                    description: Stable manifest-header CAS version represented by the response ETag.
+                    type: integer
+                    minimum: 1
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/evidence-manifests/{manifestId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/ManifestId'
+    get:
+      operationId: getQaEvidenceManifestHistory
+      tags: [QA Evidence]
+      responses:
+        '200':
+          description: Complete linear revision history with a separately labelled adjudicative pointer.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/evidence-manifest-history.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/evidence-manifests/{manifestId}/revisions/{manifestRevision}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/ManifestId'
+      - $ref: '#/components/parameters/ManifestRevision'
+    get:
+      operationId: getQaEvidenceManifestRevision
+      tags: [QA Evidence]
+      responses:
+        '200':
+          description: One exact signed manifest revision.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/evidence-manifest-revision.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/findings:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    post:
+      operationId: createQaFinding
+      tags: [QA Findings]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [sessionId, observationIds, severity, summary]
+              properties:
+                sessionId:
+                  type: string
+                  format: uuid
+                observationIds:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items:
+                    type: string
+                    format: uuid
+                severity:
+                  type: string
+                  enum: [LOW, MEDIUM, HIGH, CRITICAL]
+                summary:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+      responses:
+        '201':
+          description: Unclassified Finding created without external effect.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/finding.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/findings/{findingId}/memberships:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/FindingId'
+    get:
+      operationId: listQaFindingObservationMemberships
+      tags: [QA Findings]
+      description: Returns the complete append-only assignment/release history and the current active-set hash used by the next CAS command.
+      responses:
+        '200':
+          description: Scoped membership history and current active membership-set hash.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindingMembershipCollection'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: assignQaObservationToFinding
+      tags: [QA Findings]
+      description: >-
+        Assigns one same-Session Observation to this non-frozen Finding. Actor and scope are
+        server-derived; an Observation may have only one active Finding membership and reassignment
+        requires releasing the prior row before a new append-only assignment.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [observationId, expectedMembershipSetHash]
+              properties:
+                observationId:
+                  type: string
+                  format: uuid
+                expectedMembershipSetHash:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+      responses:
+        '201':
+          description: Append-only active membership created and active-set hash advanced atomically.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindingMembershipCollection'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/findings/{findingId}/memberships/{membershipId}/release:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/FindingId'
+      - $ref: '#/components/parameters/MembershipId'
+    post:
+      operationId: releaseQaObservationFromFinding
+      tags: [QA Findings]
+      description: >-
+        One-way audited release before Finding freeze. The command cannot reactivate a row or set
+        arbitrary membership state; reassignment is a later assign command creating a new row.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [expectedMembershipSetHash, reason]
+              properties:
+                expectedMembershipSetHash:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                reason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+      responses:
+        '200':
+          description: Membership released and active-set hash advanced atomically.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindingMembershipCollection'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/findings/{findingId}/classification:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/FindingId'
+    put:
+      operationId: classifyQaFinding
+      tags: [QA Findings]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [classification, reason, expectedCurrentReviewRef, expectedMembershipSetHash]
+              properties:
+                classification:
+                  type: string
+                  enum: [PRODUCT, INFRA, INCONCLUSIVE, DUPLICATE, ACCEPTED_RISK]
+                reason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+                expectedCurrentReviewRef:
+                  oneOf:
+                    - type: 'null'
+                    - $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                expectedMembershipSetHash:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+      responses:
+        '200':
+          description: Human classification-only revision recorded; disposition remains a later explicit step.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [finding, reviewRevision]
+                properties:
+                  finding:
+                    $ref: '../schemas/qa/finding.v1.schema.json'
+                  reviewRevision:
+                    $ref: '../schemas/qa/finding-review-revision.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/findings/{findingId}/disposition:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/FindingId'
+    put:
+      operationId: disposeQaFinding
+      tags: [QA Findings]
+      description: Records a human disposition revision. DUPLICATE always normalizes to the inseparable pair of an exact existing defect ref and the human disposition reason. ACCEPTED_RISK and WAIVED return a generic platform-action ref and remain ineffective until its distinct-QA-Lead decision is confirmed.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [dispositionDecision, dispositionReason, expectedReviewContentHash, expectedMembershipSetHash]
+              properties:
+                dispositionDecision:
+                  type: string
+                  enum: [CREATE_DEFECT, DUPLICATE, NOT_A_BUG, ACCEPTED_RISK, DEFERRED, WAIVED]
+                dispositionReason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+                expectedReviewContentHash:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                expectedMembershipSetHash:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                duplicateDefectRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef'
+              allOf:
+                - if:
+                    properties:
+                      dispositionDecision:
+                        const: DUPLICATE
+                    required: [dispositionDecision]
+                  then:
+                    required: [duplicateDefectRef, dispositionReason]
+                  else:
+                    not:
+                      required: [duplicateDefectRef]
+      responses:
+        '200':
+          description: Disposed Finding projection or pending generic exact platform action.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '../schemas/qa/finding.v1.schema.json'
+                  - $ref: '#/components/schemas/PlatformActionOperation'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/findings/{findingId}/defect-draft-proposals:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/FindingId'
+    post:
+      operationId: requestQaDefectDraftWordingProposal
+      tags: [QA Findings]
+      description: >-
+        Optional wording-only assistant route. The response has no decision or publication authority and
+        creates no DefectDraft; a human must explicitly accept the exact unexpired proposalHash through
+        createQaDefectDraft.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [frozenFindingReviewRef]
+              properties:
+                frozenFindingReviewRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+      responses:
+        '201':
+          description: Non-authoritative wording proposal over the exact frozen Finding review.
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/defect-draft-proposal.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/findings/{findingId}/defect-draft-proposals/{proposalId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/FindingId'
+      - $ref: '#/components/parameters/ProposalId'
+    get:
+      operationId: getQaDefectDraftWordingProposal
+      tags: [QA Findings]
+      description: Reads one same-scope proposal so the UI can show the exact wording diff before human acceptance.
+      responses:
+        '200':
+          description: Exact non-authoritative proposal and proposalHash.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/defect-draft-proposal.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/findings/{findingId}/defect-drafts:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/FindingId'
+    post:
+      operationId: createQaDefectDraft
+      tags: [QA Findings]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [source]
+              properties:
+                source:
+                  type: string
+                  enum: [DETERMINISTIC_TEMPLATE, MODEL_PROPOSAL, DETERMINISTIC_FALLBACK]
+                acceptedProposalRef:
+                  description: Exact same-scope unexpired proposal identity and proposalHash; required for either assistant/fallback proposal acceptance.
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableContentRef'
+              allOf:
+                - if:
+                    properties:
+                      source:
+                        enum: [MODEL_PROPOSAL, DETERMINISTIC_FALLBACK]
+                    required: [source]
+                  then:
+                    required: [acceptedProposalRef]
+                  else:
+                    not:
+                      required: [acceptedProposalRef]
+      responses:
+        '201':
+          description: Immutable candidate created; no Connector call.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/defect-draft.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/defect-drafts/{defectDraftId}/publication:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/DefectDraftId'
+    post:
+      operationId: publishQaDefectDraft
+      tags: [QA Findings]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpectedResourceVersion'
+      responses:
+        '202':
+          description: Exact Approval plus typed defect.create command created.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperation'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/defect-drafts/{defectDraftId}/rejection:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/DefectDraftId'
+    post:
+      operationId: rejectQaDefectDraft
+      tags: [QA Findings]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [expectedContentHash, reason]
+              properties:
+                expectedContentHash:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                reason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+      responses:
+        '201':
+          description: Immutable REJECTED draft revision recorded; zero approval, command or Connector calls.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/defect-draft.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/defect-links:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: listQaDefectLinks
+      tags: [QA Findings]
+      responses:
+        '200':
+          description: Scoped immutable DefectLinks created only after confirmed defect.create.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/qa/defect-link.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/defect-links/{defectLinkId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/DefectLinkId'
+    get:
+      operationId: getQaDefectLink
+      tags: [QA Findings]
+      responses:
+        '200':
+          description: Immutable link with exact frozen Finding review, draft, generic approval/command/result/receipt and actor-basis traversal refs.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/defect-link.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/verdicts:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    post:
+      operationId: createQaVerdict
+      tags: [QA Verdict]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [verdict, residualRisk, requiredSessionPlanRef, sessionReviewRefs, adjudicativeManifestRevisionRefs, findingReviewRefs, defectDraftRefs, defectLinkIds]
+              properties:
+                verdict:
+                  type: string
+                  enum: [PASS, FAIL, BLOCKED, INCONCLUSIVE]
+                residualRisk:
+                  type: string
+                  minLength: 1
+                  maxLength: 10000
+                requiredSessionPlanRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef'
+                sessionReviewRefs:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items:
+                    $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                adjudicativeManifestRevisionRefs:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items:
+                    $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                findingReviewRefs:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                defectDraftRefs:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                defectLinkIds:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    type: string
+                    format: uuid
+      responses:
+        '201':
+          description: Unsigned immutable verdict candidate.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/qa-verdict.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/verdicts/{verdictId}/supersessions:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/VerdictId'
+    post:
+      operationId: supersedeQaVerdictBeforeDone
+      tags: [QA Verdict]
+      description: Creates a new DRAFT Verdict revision and marks the exact prior Verdict SUPERSEDED only before confirmed operational DONE. Post-DONE requests are rejected; semantic correction requires a new linked QA request.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [priorVerdictRef, revisionReason, expectedAggregateSnapshotHash, expectedResourceVersion, verdict, residualRisk, requiredSessionPlanRef, sessionReviewRefs, adjudicativeManifestRevisionRefs, findingReviewRefs, defectDraftRefs, defectLinkIds]
+              properties:
+                priorVerdictRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                revisionReason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+                expectedAggregateSnapshotHash:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+                expectedResourceVersion:
+                  type: integer
+                  minimum: 1
+                verdict:
+                  type: string
+                  enum: [PASS, FAIL, BLOCKED, INCONCLUSIVE]
+                residualRisk:
+                  type: string
+                  minLength: 1
+                  maxLength: 10000
+                requiredSessionPlanRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef'
+                sessionReviewRefs:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items:
+                    $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                adjudicativeManifestRevisionRefs:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items:
+                    $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                findingReviewRefs:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                defectDraftRefs:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                defectLinkIds:
+                  type: array
+                  uniqueItems: true
+                  items:
+                    type: string
+                    format: uuid
+      responses:
+        '201':
+          description: New DRAFT Verdict revision with exact supersedesVerdictRef; previous signed content remains queryable.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/qa-verdict.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/verdicts/{verdictId}/signatures:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/VerdictId'
+    post:
+      operationId: signQaVerdict
+      tags: [QA Verdict]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpectedContentHash'
+      responses:
+        '201':
+          description: Ordinary human signature, or primary signature awaiting a generic risk co-sign platform action.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '../schemas/qa/verdict-signature.v1.schema.json'
+                  - $ref: '#/components/schemas/PlatformActionOperation'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/dod-assessments:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    post:
+      operationId: evaluateQaDefinitionOfDone
+      tags: [QA Verdict]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/qa/dod-assessment.v1.schema.json#/$defs/EvaluationCommand'
+      responses:
+        '201':
+          description: Append-only deterministic DoD assessment.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/dod-assessment.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/completion-candidates:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    post:
+      operationId: createQaCompletionCandidate
+      tags: [QA Completion]
+      description: >-
+        Under the QaRequestExtension aggregate CAS, derives and pins the current
+        adjudicativeAggregateHash into immutable close content. This creates no Connector call.
+        Any later adjudicative mutation advances the extension hash and makes this pre-dispatch
+        candidate stale/INVALIDATED.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [dodAssessmentRef, requiredSessionPlanRef, expectedResourceVersion]
+              properties:
+                dodAssessmentRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                requiredSessionPlanRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef'
+                expectedResourceVersion:
+                  type: integer
+                  minimum: 1
+      responses:
+        '201':
+          description: Immutable completion content built from the exact READY_TO_CLOSE DoD, plan, verdict, evidence, defect refs, current adjudicative aggregate hash, resolved Binding/Profile chain and hashed typed request.transition(DONE); initial CAS delivery projection makes no Connector call.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/completion-candidate.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/completion-candidates/{completionCandidateId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/CompletionCandidateId'
+    get:
+      operationId: getQaCompletionCandidate
+      tags: [QA Completion]
+      responses:
+        '200':
+          description: Immutable hashed candidate content plus its guarded approval/command/confirmation lifecycle projection. REJECTED means the exact generic Approval rejected an AWAITING_APPROVAL candidate; a pre-approval stale candidate is INVALIDATED instead.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/completion-candidate.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/completion-candidates/{completionCandidateId}/final-close:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/CompletionCandidateId'
+    get:
+      operationId: getQaFinalCloseConfirmation
+      tags: [QA Completion]
+      responses:
+        '200':
+          description: Append-only confirmation record available only after generic confirmation derives DONE.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/qa/final-close-confirmation.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: requestQaFinalClose
+      tags: [QA Completion]
+      description: >-
+        Only the currently authorized HUMAN Executor may call this initiation route; QA Lead initiation
+        is forbidden. The server persists the Executor identity, role/permission projection and
+        authorization-basis hash. Approval must be made by a distinct, currently authorized QA Lead.
+        A HUMAN rejection can occur only through that exact generic Approval while the candidate is
+        AWAITING_APPROVAL; a CANDIDATE is never rejected and aggregate drift invalidates it instead.
+        Approval/dispatch does not close the request; only generic confirmation
+        deriving normalizedStatus=DONE emits qa.dod.satisfied. The pinned typed transition includes
+        the hash-covered provider-neutral completion summary; the same external effect must materialize
+        its scope, Verdict, residual risk and evidence/defect links and return a matching sanitized receipt.
+        Immediately before dispatch the server atomically rechecks the candidate-pinned
+        adjudicativeAggregateHash against the extension aggregate under its resourceVersion CAS,
+        advances both Candidate and extension guard to DISPATCHED, persists command/effect, and only
+        then appends the outbox row. Drift invalidates only a pre-dispatch candidate with zero Connector
+        call for CANDIDATE, AWAITING_APPROVAL or AUTHORIZED; an already DISPATCHED guard rejects every
+        adjudicative mutation and can advance only to CONFIRMED or FAILED reconciliation.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpectedContentHash'
+      responses:
+        '202':
+          description: Generic Approval/typed request.transition(DONE) workflow accepted; response contains generic refs only.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperation'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/qa/sessions/{sessionId}/evidence-manifests/{manifestId}/post-close-corrections:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/ManifestId'
+    post:
+      operationId: createQaPostCloseManifestRevision
+      tags: [QA Evidence]
+      description: >-
+        After confirmed DONE, creates a new CLERICAL_CORRECTION Evidence Manifest revision with
+        evaluationStatus=POST_CLOSE_NOT_EVALUATED and isAdjudicative=false. It also records an audit
+        marker, but never updates the existing adjudicative pointer, Verdict or DoD. A semantic
+        conclusion change is rejected and requires a new linked QA request.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [previousManifestRevisionRef, adjudicativeManifestRevisionRef, correctionReason, clericalChanges]
+              properties:
+                previousManifestRevisionRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                adjudicativeManifestRevisionRef:
+                  $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                correctionReason:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+                clericalChanges:
+                  description: Ordered annotations copied verbatim into manifest.clericalAnnotations before its contentHash is computed and signed.
+                  type: array
+                  minItems: 1
+                  maxItems: 8
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required: [ordinal, kind, text]
+                    properties:
+                      ordinal:
+                        type: integer
+                        minimum: 1
+                      kind:
+                        type: string
+                        enum: [CORRECTION_NOTE, ARTIFACT_DISPLAY_LABEL]
+                      artifactId:
+                        type: string
+                        format: uuid
+                      text:
+                        type: string
+                        minLength: 1
+                        maxLength: 2000
+                    allOf:
+                      - if:
+                          properties:
+                            kind:
+                              const: ARTIFACT_DISPLAY_LABEL
+                          required: [kind]
+                        then:
+                          required: [artifactId]
+                        else:
+                          not:
+                            required: [artifactId]
+      responses:
+        '201':
+          description: New non-adjudicative manifest revision plus marker; adjudicative pointer is unchanged.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [manifestRevision, postCloseCorrectionMarker, manifestHeaderResourceVersion, adjudicativeManifestRevisionRef, adjudicativePointerChanged]
+                properties:
+                  manifestRevision:
+                    $ref: '../schemas/qa/evidence-manifest-revision.v1.schema.json'
+                  postCloseCorrectionMarker:
+                    $ref: '../schemas/qa/post-close-correction-marker.v1.schema.json'
+                  manifestHeaderResourceVersion:
+                    description: New stable manifest-header CAS version represented by the response ETag.
+                    type: integer
+                    minimum: 1
+                  adjudicativeManifestRevisionRef:
+                    $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef'
+                  adjudicativePointerChanged:
+                    const: false
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    DraftId:
+      name: draftId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    WorkItemId:
+      name: workItemId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SessionId:
+      name: sessionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    PlanItemId:
+      name: planItemId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    AttemptId:
+      name: attemptId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    FindingId:
+      name: findingId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    MembershipId:
+      name: membershipId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProposalId:
+      name: proposalId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    DefectDraftId:
+      name: defectDraftId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    VerdictId:
+      name: verdictId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ManifestId:
+      name: manifestId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ManifestRevision:
+      name: manifestRevision
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    RequiredSessionPlanId:
+      name: requiredSessionPlanId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    RequiredSessionPlanRevision:
+      name: requiredSessionPlanRevision
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    CompletionCandidateId:
+      name: completionCandidateId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    AttachmentSessionId:
+      name: attachmentSessionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    EvidenceArtifactLinkId:
+      name: evidenceArtifactLinkId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    DefectLinkId:
+      name: defectLinkId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$'
+    CorrelationId:
+      name: X-Correlation-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+  headers:
+    ETag:
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+    Location:
+      schema:
+        type: string
+        format: uri-reference
+  responses:
+    Problem:
+      description: >-
+        RFC 9457 Problem Details; scope denial does not disclose resource existence. An
+        adjudicative mutation racing a DISPATCHED completion returns the sanitized stable code
+        COMPLETION_IN_FLIGHT and performs zero mutation/effect.
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [type, title, status, code, correlationId]
+            properties:
+              type:
+                type: string
+                format: uri
+              title:
+                type: string
+              status:
+                type: integer
+                minimum: 400
+                maximum: 599
+              detail:
+                type: string
+              instance:
+                type: string
+                format: uri-reference
+              code:
+                $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/ErrorCode'
+              correlationId:
+                type: string
+                format: uuid
+  schemas:
+    FindingMembershipCollection:
+      description: Reload-safe append-only membership history plus the exact current active-set hash. The response ETag is the Finding aggregate CAS token for the next command.
+      type: object
+      additionalProperties: false
+      required: [findingId, activeMembershipSetHash, memberships]
+      properties:
+        findingId:
+          type: string
+          format: uuid
+        activeMembershipSetHash:
+          $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+        memberships:
+          type: array
+          items:
+            $ref: '../schemas/qa/finding-observation-membership.v1.schema.json'
+    ExpectedResourceVersion:
+      type: object
+      additionalProperties: false
+      required: [expectedResourceVersion]
+      properties:
+        expectedResourceVersion:
+          type: integer
+          minimum: 1
+    ExpectedContentHash:
+      type: object
+      additionalProperties: false
+      required: [expectedContentHash]
+      properties:
+        expectedContentHash:
+          $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/Digest'
+    AsyncOperation:
+      type: object
+      additionalProperties: false
+      required: [commandId, status, location]
+      properties:
+        commandId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [AWAITING_APPROVAL, QUEUED]
+        approvalRef:
+          $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/GenericApprovalRef'
+        location:
+          type: string
+          format: uri-reference
+    PlatformActionOperation:
+      type: object
+      additionalProperties: false
+      required: [platformActionRef, status, location]
+      properties:
+        platformActionRef:
+          $ref: '../schemas/common/qa-common.v1.schema.json#/$defs/GenericPlatformActionRef'
+        status:
+          type: string
+          enum: [AWAITING_APPROVAL, COMPLETED, INVALIDATED]
+        location:
+          type: string
+          format: uri-reference

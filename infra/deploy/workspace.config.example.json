@@ -1,0 +1,73 @@
+{
+  "tokens": {
+    "mode": "CORPORATE",
+    "issuer": "https://keycloak.example.org/realms/awp",
+    "audience": "awp-api",
+    "jwksUri": "https://keycloak.example.org/realms/awp/protocol/openid-connect/certs",
+    "algorithms": ["RS256"],
+    "discriminator": { "kind": "VENDOR_JWT", "typ": "JWT", "claim": "typ", "value": "Bearer" },
+    "allowedClientIds": ["awp-browser"],
+    "clockToleranceSeconds": 5,
+    "maximumTokenAgeSeconds": 600,
+    "maximumTokenLifetimeSeconds": 600,
+    "keyCacheMs": 60000,
+    "groupsClaim": "groups",
+    "deadlineMs": 5000,
+    "maximumResponseBytes": 65536
+  },
+  "session": {
+    "policyRef": {
+      "id": "qa-workspace-session",
+      "version": 1,
+      "contentHash": "RECALCULATE_WITH_CONFIGURE_COMMAND"
+    },
+    "namespace": "qa-workspace-v1",
+    "browserOrigin": "https://qa.example.org",
+    "authorizationEndpoint": "https://keycloak.example.org/realms/awp/protocol/openid-connect/auth",
+    "tokenEndpoint": "https://keycloak.example.org/realms/awp/protocol/openid-connect/token",
+    "callbackUrl": "https://qa.example.org/api/v1/auth/callback",
+    "clientId": "awp-browser",
+    "scopes": ["openid", "profile"],
+    "returnPaths": ["/access", "/admin/users", "/projects", "/projects/new", "/projects/hermes"],
+    "loginLifetimeMs": 180000,
+    "sessionLifetimeMs": 600000,
+    "stepUp": {
+      "acrValues": ["REPLACE_WITH_CONFIGURED_MFA_ACR"],
+      "amrValues": ["otp"],
+      "maximumAgeSeconds": 300
+    }
+  },
+  "network": {
+    "ref": {
+      "id": "qa-workspace-oidc-network",
+      "version": 1,
+      "contentHash": "RECALCULATE_WITH_CONFIGURE_COMMAND"
+    },
+    "mode": "CORPORATE",
+    "validUntil": "REPLACE_WITH_POLICY_EXPIRY_UTC",
+    "deadlineMs": 5000,
+    "maximumRequestBytes": 65536,
+    "maximumResponseBytes": 65536,
+    "endpoints": [
+      {
+        "origin": "https://keycloak.example.org",
+        "addressRanges": ["REPLACE_WITH_KEYCLOAK_IP_CIDR"],
+        "routes": [
+          {
+            "path": "/realms/awp/protocol/openid-connect/certs",
+            "match": "EXACT",
+            "methods": ["GET"],
+            "queryKeys": []
+          },
+          {
+            "path": "/realms/awp/protocol/openid-connect/token",
+            "match": "EXACT",
+            "methods": ["POST"],
+            "queryKeys": []
+          }
+        ]
+      }
+    ]
+  },
+  "encryptionKeyId": "qa-session-1"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "hermes",
+  "root": "apps/hermes",
+  "sourceRoot": "apps/hermes/src",
+  "projectType": "application",
+  "tags": ["type:app", "runtime:node", "domain:platform"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p apps/hermes/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p apps/hermes/tsconfig.json --noEmit" }
+    }
+  }
+}

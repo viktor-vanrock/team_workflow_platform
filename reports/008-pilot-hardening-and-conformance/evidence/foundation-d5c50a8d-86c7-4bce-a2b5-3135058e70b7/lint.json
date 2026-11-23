@@ -1,0 +1,21 @@
+{
+  "args": [
+    "node_modules/eslint/bin/eslint.js",
+    "packages/platform-core/src/pilot",
+    "packages/runtime-composition/src/pilot",
+    "packages/platform-persistence-typeorm/src/pilot.repository.ts",
+    "packages/platform-persistence-typeorm/src/entities/pilot.entities.ts",
+    "packages/platform-persistence-typeorm/src/migrations/core/0165-pilot-hardening.ts",
+    "packages/platform-runtime-nest/src/auth/pilot-authorization.ts",
+    "packages/platform-contracts/src/pilot",
+    "tests/unit/008",
+    "tests/integration/008",
+    "tests/support/008-pilot-fixture.ts",
+    "tests/contract/008",
+    "tools/verification/feature-008-entry-proof.mts",
+    "tools/verification/008-foundation-checkpoint.mts"
+  ],
+  "exitCode": 0,
+  "durationMs": 13245,
+  "output": ""
+}

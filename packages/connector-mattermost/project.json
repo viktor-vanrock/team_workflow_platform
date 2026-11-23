@@ -1,0 +1,17 @@
+{
+  "name": "connector-mattermost",
+  "root": "packages/connector-mattermost",
+  "sourceRoot": "packages/connector-mattermost/src",
+  "projectType": "library",
+  "tags": ["type:connector", "runtime:node", "domain:mattermost"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-mattermost/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-mattermost/tsconfig.json --noEmit" }
+    }
+  }
+}

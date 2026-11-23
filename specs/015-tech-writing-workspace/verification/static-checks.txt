@@ -1,0 +1,4 @@
+Full eslint . --max-warnings=0: exit 0 (empty stdout/stderr).
+After final HTTP boundary changes: API tsc and targeted ESLint exit 0 (empty stdout/stderr).
+Full typecheck/build succeeded before these final HTTP boundary changes; final Docker image rebuilt afterwards.
+After T019: tsc --noEmit -p packages/competency-tech-writing/tsconfig.json and eslint packages/competency-tech-writing/src/workspace.tsx tools/smoke/feature-015.mts --max-warnings=0: exit 0.

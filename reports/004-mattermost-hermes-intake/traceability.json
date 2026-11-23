@@ -1,0 +1,666 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "traceability",
+  "generatedAt": "2026-09-03T10:35:49.436Z",
+  "status": "PASS",
+  "scenario": null,
+  "summary": {
+    "required": 32,
+    "declared": 32,
+    "passed": 32,
+    "failed": 0,
+    "missingDeclared": [],
+    "unexpectedDeclared": []
+  },
+  "taskSource": {
+    "path": "specs/004-mattermost-hermes-intake/tasks.md",
+    "declaredTasks": 215,
+    "completedTasks": 215,
+    "pendingTasks": 0
+  },
+  "entries": [
+    {
+      "id": "FR-001",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T094"
+      ],
+      "evidence": [
+        "tests/contract/004/mattermost-connector-conformance.spec.ts",
+        "tests/integration/security/004/connector-hardening.spec.ts",
+        "tests/integration/security/004/isolation-hardening.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-002",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T094"
+      ],
+      "evidence": [
+        "tests/contract/004/mattermost-connector-conformance.spec.ts",
+        "tests/integration/security/004/connector-hardening.spec.ts",
+        "tests/integration/security/004/isolation-hardening.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-003",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T094"
+      ],
+      "evidence": [
+        "tests/contract/004/mattermost-connector-conformance.spec.ts",
+        "tests/integration/security/004/connector-hardening.spec.ts",
+        "tests/integration/security/004/isolation-hardening.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-004",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T094"
+      ],
+      "evidence": [
+        "tests/contract/004/mattermost-connector-conformance.spec.ts",
+        "tests/integration/security/004/connector-hardening.spec.ts",
+        "tests/integration/security/004/isolation-hardening.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-005",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T094"
+      ],
+      "evidence": [
+        "tests/contract/004/mattermost-connector-conformance.spec.ts",
+        "tests/integration/security/004/connector-hardening.spec.ts",
+        "tests/integration/security/004/isolation-hardening.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-006",
+      "kind": "requirement",
+      "tasks": [
+        "T095",
+        "T119"
+      ],
+      "evidence": [
+        "tests/contract/004/us1-bootstrap-project-selection.spec.ts",
+        "tests/integration/security/004/us1-bootstrap-authorization.spec.ts",
+        "tests/e2e/004-us1-guided-intake.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-007",
+      "kind": "requirement",
+      "tasks": [
+        "T095",
+        "T119"
+      ],
+      "evidence": [
+        "tests/contract/004/us1-bootstrap-project-selection.spec.ts",
+        "tests/integration/security/004/us1-bootstrap-authorization.spec.ts",
+        "tests/e2e/004-us1-guided-intake.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-008",
+      "kind": "requirement",
+      "tasks": [
+        "T095",
+        "T119"
+      ],
+      "evidence": [
+        "tests/contract/004/us1-bootstrap-project-selection.spec.ts",
+        "tests/integration/security/004/us1-bootstrap-authorization.spec.ts",
+        "tests/e2e/004-us1-guided-intake.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-009",
+      "kind": "requirement",
+      "tasks": [
+        "T095",
+        "T119"
+      ],
+      "evidence": [
+        "tests/contract/004/us1-bootstrap-project-selection.spec.ts",
+        "tests/integration/security/004/us1-bootstrap-authorization.spec.ts",
+        "tests/e2e/004-us1-guided-intake.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-010",
+      "kind": "requirement",
+      "tasks": [
+        "T095",
+        "T119"
+      ],
+      "evidence": [
+        "tests/contract/004/us1-bootstrap-project-selection.spec.ts",
+        "tests/integration/security/004/us1-bootstrap-authorization.spec.ts",
+        "tests/e2e/004-us1-guided-intake.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-011",
+      "kind": "requirement",
+      "tasks": [
+        "T120",
+        "T140"
+      ],
+      "evidence": [
+        "tests/contract/004/us2-candidate.spec.ts",
+        "tests/integration/004/us2-candidate-decisions.spec.ts",
+        "tests/e2e/004-us2-candidate-decisions.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-012",
+      "kind": "requirement",
+      "tasks": [
+        "T120",
+        "T140"
+      ],
+      "evidence": [
+        "tests/contract/004/us2-candidate.spec.ts",
+        "tests/integration/004/us2-candidate-decisions.spec.ts",
+        "tests/e2e/004-us2-candidate-decisions.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-013",
+      "kind": "requirement",
+      "tasks": [
+        "T120",
+        "T140"
+      ],
+      "evidence": [
+        "tests/contract/004/us2-candidate.spec.ts",
+        "tests/integration/004/us2-candidate-decisions.spec.ts",
+        "tests/e2e/004-us2-candidate-decisions.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-014",
+      "kind": "requirement",
+      "tasks": [
+        "T120",
+        "T140"
+      ],
+      "evidence": [
+        "tests/contract/004/us2-candidate.spec.ts",
+        "tests/integration/004/us2-candidate-decisions.spec.ts",
+        "tests/e2e/004-us2-candidate-decisions.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-015",
+      "kind": "requirement",
+      "tasks": [
+        "T120",
+        "T140"
+      ],
+      "evidence": [
+        "tests/contract/004/us2-candidate.spec.ts",
+        "tests/integration/004/us2-candidate-decisions.spec.ts",
+        "tests/e2e/004-us2-candidate-decisions.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-016",
+      "kind": "requirement",
+      "tasks": [
+        "T141",
+        "T169"
+      ],
+      "evidence": [
+        "tests/contract/004/us3-hermes-skills.spec.ts",
+        "tests/integration/004/us3-agent-run.spec.ts",
+        "tests/integration/security/004/us3-prompt-boundary.spec.ts",
+        "tests/e2e/004-us3-hermes-proposals.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-017",
+      "kind": "requirement",
+      "tasks": [
+        "T141",
+        "T169"
+      ],
+      "evidence": [
+        "tests/contract/004/us3-hermes-skills.spec.ts",
+        "tests/integration/004/us3-agent-run.spec.ts",
+        "tests/integration/security/004/us3-prompt-boundary.spec.ts",
+        "tests/e2e/004-us3-hermes-proposals.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-018",
+      "kind": "requirement",
+      "tasks": [
+        "T141",
+        "T169"
+      ],
+      "evidence": [
+        "tests/contract/004/us3-hermes-skills.spec.ts",
+        "tests/integration/004/us3-agent-run.spec.ts",
+        "tests/integration/security/004/us3-prompt-boundary.spec.ts",
+        "tests/e2e/004-us3-hermes-proposals.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-019",
+      "kind": "requirement",
+      "tasks": [
+        "T141",
+        "T169"
+      ],
+      "evidence": [
+        "tests/contract/004/us3-hermes-skills.spec.ts",
+        "tests/integration/004/us3-agent-run.spec.ts",
+        "tests/integration/security/004/us3-prompt-boundary.spec.ts",
+        "tests/e2e/004-us3-hermes-proposals.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-020",
+      "kind": "requirement",
+      "tasks": [
+        "T141",
+        "T169"
+      ],
+      "evidence": [
+        "tests/contract/004/us3-hermes-skills.spec.ts",
+        "tests/integration/004/us3-agent-run.spec.ts",
+        "tests/integration/security/004/us3-prompt-boundary.spec.ts",
+        "tests/e2e/004-us3-hermes-proposals.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-021",
+      "kind": "requirement",
+      "tasks": [
+        "T141",
+        "T169"
+      ],
+      "evidence": [
+        "tests/contract/004/us3-hermes-skills.spec.ts",
+        "tests/integration/004/us3-agent-run.spec.ts",
+        "tests/integration/security/004/us3-prompt-boundary.spec.ts",
+        "tests/e2e/004-us3-hermes-proposals.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-022",
+      "kind": "requirement",
+      "tasks": [
+        "T170",
+        "T192"
+      ],
+      "evidence": [
+        "tests/contract/004/us4-notification-delivery.spec.ts",
+        "tests/integration/004/us4-notification-recovery.spec.ts",
+        "tests/integration/security/004/us4-no-blind-resend.spec.ts",
+        "tests/e2e/004-us4-notification-outage.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-023",
+      "kind": "requirement",
+      "tasks": [
+        "T170",
+        "T192"
+      ],
+      "evidence": [
+        "tests/contract/004/us4-notification-delivery.spec.ts",
+        "tests/integration/004/us4-notification-recovery.spec.ts",
+        "tests/integration/security/004/us4-no-blind-resend.spec.ts",
+        "tests/e2e/004-us4-notification-outage.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-024",
+      "kind": "requirement",
+      "tasks": [
+        "T170",
+        "T192"
+      ],
+      "evidence": [
+        "tests/contract/004/us4-notification-delivery.spec.ts",
+        "tests/integration/004/us4-notification-recovery.spec.ts",
+        "tests/integration/security/004/us4-no-blind-resend.spec.ts",
+        "tests/e2e/004-us4-notification-outage.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "FR-025",
+      "kind": "requirement",
+      "tasks": [
+        "T170",
+        "T192"
+      ],
+      "evidence": [
+        "tests/contract/004/us4-notification-delivery.spec.ts",
+        "tests/integration/004/us4-notification-recovery.spec.ts",
+        "tests/integration/security/004/us4-no-blind-resend.spec.ts",
+        "tests/e2e/004-us4-notification-outage.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "SC-001",
+      "kind": "success-criterion",
+      "tasks": [
+        "T095",
+        "T119"
+      ],
+      "evidence": [
+        "tests/contract/004/us2-candidate.spec.ts",
+        "tests/integration/004/us2-candidate-decisions.spec.ts",
+        "tests/e2e/004-us2-candidate-decisions.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "SC-002",
+      "kind": "success-criterion",
+      "tasks": [
+        "T095",
+        "T119"
+      ],
+      "evidence": [
+        "tests/contract/004/us2-candidate.spec.ts",
+        "tests/integration/004/us2-candidate-decisions.spec.ts",
+        "tests/e2e/004-us2-candidate-decisions.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "SC-003",
+      "kind": "success-criterion",
+      "tasks": [
+        "T120",
+        "T140"
+      ],
+      "evidence": [
+        "tests/contract/004/us2-candidate.spec.ts",
+        "tests/integration/004/us2-candidate-decisions.spec.ts",
+        "tests/e2e/004-us2-candidate-decisions.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "SC-004",
+      "kind": "success-criterion",
+      "tasks": [
+        "T146",
+        "T169"
+      ],
+      "evidence": [
+        "tests/contract/004/us4-notification-delivery.spec.ts",
+        "tests/integration/004/us4-notification-recovery.spec.ts",
+        "tests/integration/security/004/us4-no-blind-resend.spec.ts",
+        "tests/e2e/004-us4-notification-outage.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "SC-005",
+      "kind": "success-criterion",
+      "tasks": [
+        "T170",
+        "T192"
+      ],
+      "evidence": [
+        "tests/contract/004/us4-notification-delivery.spec.ts",
+        "tests/integration/004/us4-notification-recovery.spec.ts",
+        "tests/integration/security/004/us4-no-blind-resend.spec.ts",
+        "tests/e2e/004-us4-notification-outage.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "SC-006",
+      "kind": "success-criterion",
+      "tasks": [
+        "T193",
+        "T215"
+      ],
+      "evidence": [
+        "tests/integration/security/004/audit-lineage.spec.ts",
+        "tests/e2e/004-mattermost-hermes-intake.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    },
+    {
+      "id": "SC-007",
+      "kind": "success-criterion",
+      "tasks": [
+        "T193",
+        "T215"
+      ],
+      "evidence": [
+        "tests/contract/004/us3-hermes-skills.spec.ts",
+        "tests/integration/004/us3-agent-run.spec.ts",
+        "tests/integration/security/004/us3-prompt-boundary.spec.ts",
+        "tests/e2e/004-us3-hermes-proposals.spec.ts"
+      ],
+      "status": "PASS",
+      "missingEvidence": [],
+      "missingTasks": [],
+      "pendingTasks": []
+    }
+  ],
+  "evidenceReports": [
+    {
+      "name": "prerequisites.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:20:23.384Z"
+    },
+    {
+      "name": "setup-gate.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:20:25.550Z"
+    },
+    {
+      "name": "foundation.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:21:36.688Z"
+    },
+    {
+      "name": "us1.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:21:53.879Z"
+    },
+    {
+      "name": "us2.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:22:12.459Z"
+    },
+    {
+      "name": "us3.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:22:42.970Z"
+    },
+    {
+      "name": "us4.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:23:12.610Z"
+    },
+    {
+      "name": "migrations.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:24:18.983Z"
+    },
+    {
+      "name": "smoke.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:34:58.264Z"
+    },
+    {
+      "name": "quickstart.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:34:58.278Z"
+    },
+    {
+      "name": "nonprod-metadata.json",
+      "status": "PASS",
+      "evidenceStatus": "SKIPPED_GATED",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:35:49.363Z"
+    },
+    {
+      "name": "nonprod.json",
+      "status": "PASS",
+      "evidenceStatus": "SKIPPED_GATED",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:35:49.371Z"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+node_modules/
+.node_modules-*/
+dist/
+build/
+coverage/
+.git/
+.nx/
+.pnpm-store/
+Dockerfile*
+.dockerignore
+*.log*
+.env*
+!.env.example
+playwright-report/
+test-results/
+.pipeline-inputs/
+.local/evidence-public-keys/
+
+# Generated audit/smoke output must not enter runtime images.
+reports/
+**/.local/evidence-public-keys/
+.workspace-secrets/

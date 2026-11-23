@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": { "noEmit": true },
+  "include": [
+    "../tools/verification/*008*.mts",
+    "contract/008/**/*.ts",
+    "unit/008/**/*.ts",
+    "integration/008/**/*.ts",
+    "integration/security/008/**/*.ts",
+    "support/008*.ts",
+    "e2e/008/*-browser.spec.ts",
+    "e2e/008/corporate-bindings.spec.ts",
+    "e2e/008/pilot-operation.spec.ts"
+  ]
+}

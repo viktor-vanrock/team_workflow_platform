@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "business-calendar@1.0.0",
+  "calendarId": "10000000-0000-4000-8000-000000000001",
+  "calendarKey": "qa-utc-standard",
+  "workspaceId": "10000000-0000-4000-8000-000000000002",
+  "revision": 1,
+  "timeZone": "UTC",
+  "validFrom": "2026-01-01",
+  "validThrough": "2026-12-31",
+  "weeklyIntervals": [
+    {
+      "dayOfWeek": "MONDAY",
+      "startLocalTime": "09:00:00",
+      "endLocalTime": "24:00:00"
+    }
+  ],
+  "dateOverrides": [],
+  "dstAlgorithmRef": {
+    "key": "business-calendar-dst",
+    "version": "1.0.0",
+    "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "dstRules": {
+    "nonexistentBoundary": "SHIFT_TO_FIRST_VALID_INSTANT_AFTER_GAP",
+    "ambiguousStart": "EARLIEST_MATCHING_INSTANT",
+    "ambiguousEnd": "LATEST_MATCHING_INSTANT"
+  },
+  "sourceKind": "MANUAL",
+  "sourceRef": "config://workspace/10000000-0000-4000-8000-000000000002/calendars/qa-utc-standard/1",
+  "sourceHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+  "ownerPrincipalId": "10000000-0000-4000-8000-000000000003",
+  "effectiveFrom": "2026-01-01T00:00:00Z",
+  "publishedAt": "2025-12-15T12:00:00Z",
+  "publishedByPrincipalId": "10000000-0000-4000-8000-000000000003",
+  "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

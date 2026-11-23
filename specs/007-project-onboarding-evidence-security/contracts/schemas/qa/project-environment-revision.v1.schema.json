@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:project-environment-revision:v1",
+  "title": "QA Project environment revision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "revisionId", "environmentId", "version", "workspaceId", "projectId", "key", "name", "scope", "ownerPrincipalId", "dataClassificationKey", "status", "configurationRef", "allowedTestDataPolicyRefs", "contentHash", "createdBy", "createdAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "revisionId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "environmentId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "key": { "$ref": "../common.v1.schema.json#/$defs/stableKey" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "scope": { "$ref": "../common.v1.schema.json#/$defs/environmentScope" },
+    "ownerPrincipalId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "dataClassificationKey": { "$ref": "../common.v1.schema.json#/$defs/classificationKey" },
+    "status": { "enum": ["DRAFT", "PUBLISHED", "RETIRED"] },
+    "configurationRef": { "$ref": "../common.v1.schema.json#/$defs/schemaBoundResourceRef" },
+    "allowedTestDataPolicyRefs": { "$ref": "#/$defs/refSet" },
+    "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" },
+    "createdBy": { "$ref": "../common.v1.schema.json#/$defs/humanActor" },
+    "createdAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "publishedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "retiredAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" }
+  },
+  "$defs": {
+    "refSet": {
+      "type": "array",
+      "items": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+      "uniqueItems": true
+    }
+  }
+}

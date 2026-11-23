@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "workspaceId": "10000000-0000-4000-8000-000000000001",
+  "projectId": "20000000-0000-4000-8000-000000000001",
+  "version": 3,
+  "stage": "SHADOW",
+  "qaCapabilityMode": "MANUAL_ONLY",
+  "operationalState": "ACTIVE",
+  "intendedCapabilityMode": "MANUAL_ONLY",
+  "projectRegistryRef": { "id": "registry-1", "version": 1, "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+  "bindingRef": { "id": "binding-1", "version": 1, "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+  "qaProjectContextRef": { "id": "qa-context-1", "version": 2, "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+  "starterEntitlementSetHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "gateResultRefs": [
+    { "id": "gate-l0-1", "version": 1, "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }
+  ],
+  "ownerSetHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "actor": {
+    "principalId": "30000000-0000-4000-8000-000000000001",
+    "kind": "HUMAN",
+    "roleKey": "integration.admin",
+    "authorizationBasisHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "authenticationContextRef": "local:acr:step-up",
+    "stepUpAt": "2026-09-03T12:00:00.000Z"
+  },
+  "reasonCode": "L0_READY",
+  "reason": "Local manual-only onboarding passed.",
+  "correlationId": "corr-007-manual-001",
+  "createdAt": "2026-09-03T12:00:00.000Z",
+  "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

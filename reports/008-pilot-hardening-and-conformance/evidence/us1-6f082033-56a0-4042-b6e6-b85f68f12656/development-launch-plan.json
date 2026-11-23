@@ -1,0 +1,9 @@
+{
+  "command": [
+    "tools/local/pilot-cli.mts",
+    "up",
+    "--plan"
+  ],
+  "exitCode": 0,
+  "output": "{\n  \"command\": \"up\",\n  \"environment\": {\n    \"AWP_LOCAL_PROJECT_NAME\": \"awp-local-pilot-dev\",\n    \"AWP_ENVIRONMENT\": \"LOCAL\",\n    \"AWP_RUNTIME_PROFILE\": \"local\",\n    \"AWP_COMPOSITION\": \"qa-jira-gitlab-mattermost-local\",\n    \"AWP_EXTERNAL_NETWORK_MODE\": \"deny\",\n    \"AWP_QUEUE_STATIC_CONTOUR\": \"true\",\n    \"AWP_ONBOARDING_STATIC_CONTOUR\": \"true\",\n    \"AWP_PILOT_ADAPTER_MODE\": \"development\",\n    \"AWP_API_HOST_PORT\": \"5300\",\n    \"AWP_WORKER_HOST_PORT\": \"5310\",\n    \"AWP_WEB_HOST_PORT\": \"55173\",\n    \"AWP_MOCK_HUB_HOST_PORT\": \"54010\",\n    \"AWP_IDP_HOST_PORT\": \"54443\",\n    \"AWP_S3_HOST_PORT\": \"59090\",\n    \"AWP_WEB_ORIGIN\": \"http://localhost:55173\",\n    \"AWP_PUBLIC_API_URL\": \"http://localhost:5300\",\n    \"AWP_EVIDENCE_SIGNER\": \"local-ed25519\",\n    \"COMPOSE_PROFILES\": \"observability\",\n    \"AWP_OTEL_COLLECTOR_ORIGIN\": \"http://otel-collector:4318\",\n    \"AWP_OTEL_GRPC_HOST_PORT\": \"54317\",\n    \"AWP_OTEL_HTTP_HOST_PORT\": \"54318\"\n  },\n  \"adapters\": \"DEVELOPMENT_MOCKS\",\n  \"corporateConformance\": \"NOT_RUN\"\n}\n"
+}

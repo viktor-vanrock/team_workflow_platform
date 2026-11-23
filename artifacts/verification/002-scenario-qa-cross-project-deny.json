@@ -1,0 +1,12 @@
+{
+  "feature": "002",
+  "scenario": "qa-cross-project-deny",
+  "composition": "qa-local",
+  "tests": [
+    "tests/integration/security/acceptance/002-at-012-cross-project-isolation.spec.ts"
+  ],
+  "startedAt": "2026-08-30T23:02:15.223Z",
+  "finishedAt": "2026-08-30T23:02:16.415Z",
+  "status": "PASS",
+  "exitCode": 0
+}

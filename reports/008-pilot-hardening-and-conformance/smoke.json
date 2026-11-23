@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "gate": "full-stack-local-smoke",
+  "startedAt": "2026-09-05T21:04:15.805Z",
+  "finishedAt": "2026-09-05T21:05:53.635Z",
+  "status": "PASS",
+  "mode": "DEVELOPMENT_MOCKS",
+  "corporateReady": false,
+  "coverage": {
+    "api": true,
+    "worker": true,
+    "browser": true,
+    "manual": true,
+    "automation": true,
+    "evidence": true,
+    "notification": true,
+    "restore": true,
+    "collector": true,
+    "providerIndependentCount": true
+  },
+  "results": [
+    {
+      "id": "development-up",
+      "status": "PASS",
+      "command": [
+        "pnpm",
+        "dev:pilot:up"
+      ],
+      "exitCode": 0,
+      "outputSha256": "sha256:b2e69b91eace2e9807ae9f2a04238369c7f3a69a8ce4deb70cfe9132496bf3a0"
+    },
+    {
+      "id": "api-worker-browser-provider-collector",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/smoke/008-development.mts"
+      ],
+      "exitCode": 0,
+      "outputSha256": "sha256:a3eb118af67c4a697741103bf1b0e24c33ec2c467fecbac59094a0dedccd11b3"
+    },
+    {
+      "id": "manual-evidence-notification-restore",
+      "status": "PASS",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/008/manual-session-runtime.spec.ts",
+        "tests/integration/008/evidence-upload-restart.spec.ts",
+        "tests/integration/008/notification-delivery.spec.ts",
+        "tests/integration/008/isolated-restore.spec.ts",
+        "--maxWorkers=1",
+        "--reporter=dot"
+      ],
+      "exitCode": 0,
+      "outputSha256": "sha256:498215c98fc89906e5e1f1bfb48326d5472a2aaa56cef9ed8444a99f67f33059"
+    },
+    {
+      "id": "development-down",
+      "status": "PASS",
+      "command": [
+        "pnpm",
+        "dev:pilot:down"
+      ],
+      "exitCode": 0,
+      "outputSha256": "sha256:3e42518cd4133c5670267db3f37d48e2d3e1e1bb7cf5dd2ffb1808ac5f327462"
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tools/smoke/feature-008.mts",
+        "sha256": "sha256:6b844ed67f441e1c71d0cc3299ea97da3999ed9c6d0735836b69569e0d073f10"
+      },
+      {
+        "path": "tools/smoke/008-development.mts",
+        "sha256": "sha256:665fb1dd844b8c569d79a18fbf79f0b05f91bf7a8d5f102279ea53db105aea13"
+      },
+      {
+        "path": "tests/integration/008/manual-session-runtime.spec.ts",
+        "sha256": "sha256:0ac5814abe3c6e18fa42acd3d6dc77ef159f7c4b019ef136509ebdd486ea870b"
+      },
+      {
+        "path": "tests/integration/008/evidence-upload-restart.spec.ts",
+        "sha256": "sha256:310740b6791222ec1a29687b4849f9d93e9ab294a6aa95dfcf2bfeccf41c420e"
+      },
+      {
+        "path": "tests/integration/008/notification-delivery.spec.ts",
+        "sha256": "sha256:f19e43e3a7cf1af458add37db9ca96555de0d98307e46c3af9afe77fec0a6a56"
+      },
+      {
+        "path": "tests/integration/008/isolated-restore.spec.ts",
+        "sha256": "sha256:5916c1c428d65eb5085aa3fd6b56f4a84a7c3007856a4970d863809a9e21d01c"
+      },
+      {
+        "path": "infra/compose/docker-compose.local.yml",
+        "sha256": "sha256:c5a1ce089c7a4dd9175f811b9473937f52a5db8cace19449a54b96d96747c157"
+      },
+      {
+        "path": "infra/observability/otel-collector.yaml",
+        "sha256": "sha256:07a009f718f77957372af7cf855421c35a5963d19f8ace70596e08b44597755b"
+      }
+    ],
+    "aggregateSha256": "sha256:f6e4616790de59dd3bc4163349142c392894465784188ac664d058870d6c6666"
+  }
+}

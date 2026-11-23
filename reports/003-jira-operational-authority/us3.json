@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "feature": "003-jira-operational-authority",
+  "gate": "us3",
+  "startedAt": "2026-09-03T10:03:31.528Z",
+  "finishedAt": "2026-09-03T10:03:34.099Z",
+  "status": "PASS",
+  "hashes": {
+    "tests/integration/003/us3-webhook-projection.spec.ts": "sha256:a57ffc14a0939872a962d2718caff20860b725db02faf174e95256dd1d1b00ca",
+    "tests/integration/003/us3-projection-ordering.spec.ts": "sha256:62088fd903b3353e12f56677bee069bc69faadb08870158ebd07166196702984",
+    "tests/integration/003/us3-reconciliation.spec.ts": "sha256:ec1588f15be20a616f34ae9b83cb1dab04618b838ee584aef97a384668243889",
+    "tests/integration/003/us3-freshness-drift.spec.ts": "sha256:f693757063b1499d4f7f3a16ff8d6017eaa3988ccd10d58e89fd1e74afde2315",
+    "tests/contract/003/us3-operational-actions.spec.ts": "sha256:21cdbdfe102617ec3b74f568c3aa8b18c44750b63194f62689709a52ad1b6997",
+    "tests/integration/security/003/us3-command-approvals.spec.ts": "sha256:05d789a5f6dbc544ae920972032deadbe7894c3af93d43596cf80f4482ed6935",
+    "tests/integration/003/us3-stale-command.spec.ts": "sha256:01a1e31298c73198643a5797dc7cb6b07b2262f801f30a88ea72135c9ce322f2",
+    "tests/integration/003/us3-post-write-conflict.spec.ts": "sha256:1e93c414bfe94a397b23795d394b3b886c7dc47b97f2801845b9a5559da7f131",
+    "tests/integration/003/us3-command-concurrency.spec.ts": "sha256:84a9d42620c023a4355e5177d0fb547fb6695ec1ef34196309c2ef8f6a186706",
+    "tests/contract/003/us3-jira-command-conformance.spec.ts": "sha256:5ef345c694b431a85f77d9c6cd9f45daa9611bc5a2751586d017d6ae7b6349e0",
+    "tests/integration/003/us3-command-errors.spec.ts": "sha256:259d847bd200afa03e028ea2864426ce1dd8ab397c174dcf95641bb73943460f",
+    "tests/integration/security/003/us3-assignment-identity.spec.ts": "sha256:822f7bafd313aa60e21259910fe924cdaef7f7cbdb89a4cc07c88f2ac32b9e20",
+    "tests/e2e/003-us3-sync-conflict.spec.ts": "sha256:31f12089927327bff8e5cf5f4efa8890fca606a0141a48f7a6ed7c2d1156fcfd"
+  }
+}

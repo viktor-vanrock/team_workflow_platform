@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:mattermost:dialog-submission-ack:v1",
+  "title": "Mattermost Dialog Submission Acknowledgement v1",
+  "$comment": "The immutable $id carries the contract version; the provider wire body intentionally has no schemaVersion field.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type"],
+  "properties": {
+    "type": { "const": "ok" }
+  }
+}

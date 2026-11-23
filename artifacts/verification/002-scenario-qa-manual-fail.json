@@ -1,0 +1,12 @@
+{
+  "feature": "002",
+  "scenario": "qa-manual-fail",
+  "composition": "qa-local",
+  "tests": [
+    "tests/integration/002-manual-vertical-flow.spec.ts"
+  ],
+  "startedAt": "2026-08-30T23:23:00.063Z",
+  "finishedAt": "2026-08-30T23:23:01.132Z",
+  "status": "PASS",
+  "exitCode": 0
+}

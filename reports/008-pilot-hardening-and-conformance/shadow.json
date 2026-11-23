@@ -1,0 +1,8 @@
+{
+  "status": "BLOCKED_INPUT",
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/shadow-aee8c36c-2ec6-445a-b259-99b04a6e8f0c.json",
+    "sha256": "sha256:0b187b025bde22b58bb92dea1b15e9438c35e01ca0bc163b13b828efb1b61ad6"
+  },
+  "actualCorporateShadow": false
+}

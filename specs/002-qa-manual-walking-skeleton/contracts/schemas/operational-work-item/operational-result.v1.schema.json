@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-work-item:result:v1",
+  "title": "Normalized Operational Work Item Result",
+  "description": "Typed confirmed value embedded in the generic ExternalCommandResult receipt. Generic read-back/reconciliation is a confirmation strategy, not an operation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "entityKind", "externalEntityId", "externalDisplayKey", "externalVersion", "rawExternalState", "normalizedStatus", "naturalKey", "effectId", "observedAt"],
+  "properties": {
+    "operation": { "type": "string", "enum": ["request.create", "request.transition", "defect.create"] },
+    "entityKind": { "type": "string", "enum": ["REQUEST", "DEFECT"] },
+    "externalEntityId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "externalDisplayKey": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "rawExternalState": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "normalizedStatus": { "type": "string", "enum": ["NEW", "NEEDS_INFO", "READY", "PLANNED", "IN_PROGRESS", "REVIEW", "BLOCKED", "DONE", "CANCELLED"] },
+    "naturalKey": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$" },
+    "effectId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "completionSummaryReceipt": { "$ref": "./completion-summary.v1.schema.json#/$defs/Receipt" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "operation": { "const": "request.transition" } }, "required": ["operation"] },
+      "then": { "properties": { "entityKind": { "const": "REQUEST" }, "normalizedStatus": { "enum": ["READY", "DONE"] } } }
+    },
+    {
+      "if": { "properties": { "operation": { "const": "request.transition" }, "normalizedStatus": { "const": "DONE" } }, "required": ["operation", "normalizedStatus"] },
+      "then": { "required": ["completionSummaryReceipt"] },
+      "else": { "not": { "required": ["completionSummaryReceipt"] } }
+    },
+    {
+      "if": { "properties": { "operation": { "const": "request.create" } }, "required": ["operation"] },
+      "then": { "properties": { "entityKind": { "const": "REQUEST" }, "normalizedStatus": { "const": "NEW" } } }
+    },
+    {
+      "if": { "properties": { "operation": { "const": "defect.create" } }, "required": ["operation"] },
+      "then": { "properties": { "entityKind": { "const": "DEFECT" }, "normalizedStatus": { "const": "NEW" } } }
+    }
+  ]
+}

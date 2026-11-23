@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "recovery-66480b66-927c-46fa-8ab7-bb23ce63bb68",
+  "gate": "recovery",
+  "status": "BLOCKED_INPUT",
+  "deploymentProfile": "pilot",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": [
+      "fixture-project-web"
+    ]
+  },
+  "startedAt": "2026-09-04T21:00:57.339Z",
+  "finishedAt": "2026-09-04T21:00:57.672Z",
+  "fingerprints": {
+    "source": "sha256:508a9c9f3d27ab13dc7f019f4cb7cd51b60a34f494ed42b7dbe34b892d1389c1",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:472a062dab5a3312dcdd07919cce521ca55d72996dc28c4530a50cd0226b3974",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:8293e0efd3265f86301a8bf4339c71cff572bc5c6661e16f329ab86699e5c3c6"
+  },
+  "executorIdentity": "local-cli",
+  "checks": [
+    {
+      "id": "approved-recovery-inputs",
+      "status": "BLOCKED_INPUT",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/recovery-66480b66-927c-46fa-8ab7-bb23ce63bb68/corporate-recovery-inputs.json",
+          "sha256": "sha256:9e765449dfd5480bd5a33f19a39f4d5542ec6ae64ba4d500413390b748b48e63"
+        }
+      ],
+      "reasonCodes": [
+        "RECOVERY_INPUT_PACKAGE_MISSING"
+      ]
+    }
+  ],
+  "prerequisites": [],
+  "reasonCodes": [
+    "RECOVERY_INPUT_PACKAGE_MISSING"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "documented-scenarios-process",
+  "composition": "qa-jira-mattermost-local",
+  "startedAt": "2026-09-03T10:29:55.295Z",
+  "finishedAt": "2026-09-03T10:30:43.120Z",
+  "status": "PASS",
+  "results": [
+    {
+      "name": "us1-guided-intake",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us1-repeat-callback",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us1-valid-fields-not-reasked",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us2-jira-candidate-create",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us2-jira-candidate-snooze",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us2-jira-candidate-ignore",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us2-source-version-update",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us3-triage-valid",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us3-source-drift-stale",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us3-model-invalid-json",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us3-model-timeout",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us3-prompt-injection",
+      "fault": "NORMAL",
+      "status": "PASS"
+    },
+    {
+      "name": "us4-outage-before-send",
+      "fault": "NETWORK_LOSS",
+      "status": "PASS"
+    },
+    {
+      "name": "us4-rate-limit-recovery",
+      "fault": "RATE_LIMIT_429",
+      "status": "PASS"
+    },
+    {
+      "name": "us4-timeout-after-effect",
+      "fault": "TIMEOUT_AFTER_EFFECT",
+      "status": "PASS"
+    },
+    {
+      "name": "us4-permanent-auth-failure",
+      "fault": "AUTHENTICATION_401",
+      "status": "PASS"
+    }
+  ],
+  "unexecutedScenarios": []
+}

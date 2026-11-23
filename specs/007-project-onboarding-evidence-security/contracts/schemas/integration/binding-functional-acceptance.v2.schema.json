@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:binding-functional-acceptance:v2",
+  "title": "Binding functional acceptance wire projection v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "acceptanceId",
+    "version",
+    "workspaceId",
+    "projectId",
+    "bindingRef",
+    "validationReportRef",
+    "qaProjectContextRef",
+    "acceptedResourceRefs",
+    "checklistRef",
+    "outcome",
+    "actor",
+    "reason",
+    "acceptedAt",
+    "contentHash",
+    "safeIssueCodes"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "acceptanceId": {
+      "$ref": "../common.v1.schema.json#/$defs/uuid"
+    },
+    "version": {
+      "const": 1
+    },
+    "workspaceId": {
+      "$ref": "../common.v1.schema.json#/$defs/uuid"
+    },
+    "projectId": {
+      "$ref": "../common.v1.schema.json#/$defs/uuid"
+    },
+    "bindingRef": {
+      "$ref": "../common.v1.schema.json#/$defs/exactRef"
+    },
+    "validationReportRef": {
+      "$ref": "../common.v1.schema.json#/$defs/exactRef"
+    },
+    "qaProjectContextRef": {
+      "$ref": "../common.v1.schema.json#/$defs/exactRef"
+    },
+    "acceptedResourceRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "../common.v1.schema.json#/$defs/exactRef"
+      },
+      "uniqueItems": true
+    },
+    "checklistRef": {
+      "$ref": "../common.v1.schema.json#/$defs/exactRef"
+    },
+    "outcome": {
+      "enum": [
+        "ACCEPTED",
+        "REJECTED"
+      ]
+    },
+    "actor": {
+      "$ref": "../common.v1.schema.json#/$defs/humanActor"
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "acceptedAt": {
+      "$ref": "../common.v1.schema.json#/$defs/timestamp"
+    },
+    "contentHash": {
+      "$ref": "../common.v1.schema.json#/$defs/hash"
+    },
+    "safeIssueCodes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_]{0,95}$"
+      },
+      "uniqueItems": true
+    }
+  },
+  "$comment": "Explicit successor to the unimplemented v1 response: preserve exact accepted resource pins from the command and Core acceptance. No schema metadata is invented for externally owned policies. contentHash covers this wire projection without contentHash; AWP-Resource-Ref identifies the unchanged canonical Core record."
+}

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "gitlab-connection-configuration@1.0.0",
+  "identityReferences": {
+    "read": {
+      "identityKind": "NON_HUMAN_PROJECT",
+      "scope": "read_api",
+      "nonHumanIdentityEvidenceRef": "evidence:gitlab:project-5001:read-non-human:v1",
+      "reference": "secretref://local/gitlab/project-5001/read",
+      "referenceFingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "ownerRef": "team:qa-platform",
+      "rotationPolicyRef": "policy:credentials:local-30d:v1",
+      "revocationRunbookRef": "runbook:gitlab-credential-revoke:v1"
+    },
+    "trigger": {
+      "identityKind": "NON_HUMAN_PROJECT",
+      "scope": "pipeline_trigger",
+      "nonHumanIdentityEvidenceRef": "evidence:gitlab:project-5001:trigger-non-human:v1",
+      "reference": "secretref://local/gitlab/project-5001/trigger",
+      "referenceFingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "ownerRef": "team:qa-platform",
+      "rotationPolicyRef": "policy:credentials:local-30d:v1",
+      "revocationRunbookRef": "runbook:gitlab-trigger-revoke:v1"
+    },
+    "webhook": {
+      "identityMaterialKind": "STANDARD_WEBHOOK_HMAC_KEY",
+      "keyVersionRef": "key-version:gitlab-webhook:project-5001:v1",
+      "reference": "secretref://local/gitlab/project-5001/webhook",
+      "referenceFingerprint": "sha256:1515151515151515151515151515151515151515151515151515151515151515",
+      "ownerRef": "team:qa-platform",
+      "rotationPolicyRef": "policy:credentials:local-30d:v1",
+      "revocationRunbookRef": "runbook:gitlab-webhook-revoke:v1"
+    }
+  },
+  "operationIdentityRouting": {
+    "mergeRequestRead": "READ",
+    "commitRead": "READ",
+    "buildRead": "READ",
+    "pipelineTrigger": "TRIGGER",
+    "pipelineRead": "READ",
+    "pipelineLookup": "READ",
+    "artifactMetadata": "READ",
+    "artifactStream": "READ",
+    "webhookVerify": "WEBHOOK"
+  },
+  "identitySeparationEvidenceHash": "sha256:1414141414141414141414141414141414141414141414141414141414141414"
+}

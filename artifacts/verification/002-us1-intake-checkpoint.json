@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "checkpoint": "US1-confirmed-intake",
+  "status": "PASS",
+  "startedAt": "2026-08-30T22:54:47.845Z",
+  "finishedAt": "2026-08-30T22:55:27.979Z",
+  "invariants": {
+    "defaultComposition": "foundation",
+    "qaCompositionSelector": "qa-local",
+    "unconfirmedDraftExternalEffects": 0,
+    "concurrentConfirmationUniqueEffects": 1,
+    "initialRequestInputRevision": 1,
+    "futureDetailCollectionsExplicitlyEmpty": true,
+    "qaEnabledOutsideIntendedWorkspace": false,
+    "coreImportsQaSemantics": false,
+    "qaImportsConnectorRuntime": false
+  },
+  "evidence": {
+    "nonContainerSuites": 8,
+    "nonContainerTests": 24,
+    "postgresSuites": 3,
+    "postgresTests": 4,
+    "openApiOperations": {
+      "api": 49,
+      "mockHub": 9
+    }
+  },
+  "stages": [
+    {
+      "id": "typecheck:packages/connector-sdk",
+      "status": "PASS",
+      "durationMs": 854,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/connector-sdk/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/connector-mock",
+      "status": "PASS",
+      "durationMs": 914,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/connector-mock/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/competency-qa",
+      "status": "PASS",
+      "durationMs": 2419,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/runtime-composition",
+      "status": "PASS",
+      "durationMs": 2207,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/mock-hub",
+      "status": "PASS",
+      "durationMs": 802,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/mock-hub/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/api",
+      "status": "PASS",
+      "durationMs": 3570,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/worker",
+      "status": "PASS",
+      "durationMs": 3397,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/worker/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/web",
+      "status": "PASS",
+      "durationMs": 2074,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "us1-eslint",
+      "status": "PASS",
+      "durationMs": 8378,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "packages/connector-sdk/src/operational-work-item.ts",
+        "packages/connector-mock/src/operational-work-item.connector.ts",
+        "packages/connector-mock/src/operational-work-item-confirmation.ts",
+        "packages/competency-qa/src",
+        "packages/runtime-composition/src/qa",
+        "packages/runtime-composition/src/seed/qa-local-seed.ts",
+        "apps/mock-hub/src",
+        "apps/api/src/extensions/qa-pack.controller.ts",
+        "apps/web/src/App.tsx"
+      ]
+    },
+    {
+      "id": "openapi-current",
+      "status": "PASS",
+      "durationMs": 211,
+      "command": [
+        "node",
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ]
+    },
+    {
+      "id": "web-production-build",
+      "status": "PASS",
+      "durationMs": 353,
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "apps/web/vite.config.ts"
+      ]
+    },
+    {
+      "id": "us1-contract-recovery-security",
+      "status": "PASS",
+      "durationMs": 2823,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/acceptance/002-at-002-confirmed-intake.spec.ts",
+        "tests/integration/002-intake-command-recovery.spec.ts",
+        "tests/contract/002-operational-work-item-conformance.spec.ts",
+        "tests/integration/002-intake-connector-failures.spec.ts",
+        "tests/integration/security/002-intake-confirmation-scope.spec.ts",
+        "tests/integration/002-qa-foundation-composition.spec.ts",
+        "tests/architecture/002-qa-pack-boundaries.spec.ts",
+        "tests/contract/openapi-drift.spec.ts"
+      ]
+    },
+    {
+      "id": "us1-postgres-api-seed",
+      "status": "PASS",
+      "durationMs": 11972,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/002-qa-us1-persistence.spec.ts",
+        "tests/integration/002-qa-local-seed.spec.ts",
+        "tests/integration/002-qa-api-us1.spec.ts"
+      ]
+    },
+    {
+      "id": "architecture",
+      "status": "PASS",
+      "durationMs": 158,
+      "command": [
+        "node",
+        "tools/architecture/check-import-graph.mts",
+        "--core-only"
+      ]
+    }
+  ]
+}

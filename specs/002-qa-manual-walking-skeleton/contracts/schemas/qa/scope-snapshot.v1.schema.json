@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:scope-snapshot:v1",
+  "title": "Immutable QA Scope Snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "scopeSnapshotId", "workspaceId", "projectId", "purpose", "agreedScope", "acceptanceOutcome", "inclusions", "exclusions", "checklistDefinition", "contentHash", "capturedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "scopeSnapshotId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "purpose": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "agreedScope": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "acceptanceOutcome": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "inclusions": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 500 } },
+    "exclusions": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 500 } },
+    "checklistDefinition": {
+      "oneOf": [
+        { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "snapshotHash"],
+          "properties": {
+            "kind": { "const": "session-checklist-snapshot" },
+            "snapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+          }
+        }
+      ]
+    },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "capturedAt": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "commandType": "sample.record.publish",
+  "commandPayloadVersion": 1,
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "intakeDraftId": "33333333-3333-4333-8333-333333333333",
+  "actor": {
+    "type": "HUMAN",
+    "principalId": "99999999-9999-4999-8999-999999999999",
+    "issuer": "https://fake-idp:4443/oidc",
+    "subject": "developer-one"
+  },
+  "requirementRef": {
+    "packKey": "dummy",
+    "packVersion": "1.0.0",
+    "workTypeKey": "dummy.request",
+    "workTypeDefinitionVersion": "1.0.0",
+    "requirementKey": "primary-record-publisher"
+  },
+  "operation": "record.publish",
+  "target": {
+    "schemaRef": {
+      "id": "urn:awp:schemas:sample:record-target:v1",
+      "version": 1,
+      "digest": "sha256:7c41ac1a56e06a8bdb45648c5ad725dc0fc2ca18c38bcb1e09e5d36d00346b8d"
+    },
+    "value": {
+      "recordKey": "phase1-demo"
+    }
+  },
+  "expectedExternalState": {
+    "mode": "MUST_NOT_EXIST"
+  },
+  "payload": {
+    "schemaRef": {
+      "id": "urn:awp:schemas:sample:record-publish-input:v1",
+      "version": 1,
+      "digest": "sha256:bae7056e53491527d857350ecc5073069e7e99cb9a515ce3b9e72f2cec9f40cc"
+    },
+    "value": {
+      "sourceDraftId": "33333333-3333-4333-8333-333333333333",
+      "title": "Phase 1 demo",
+      "body": "Typed external write from the Dummy Pack."
+    }
+  },
+  "correlationId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "causationId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+  "idempotencyKey": "sample-publish-0001"
+}

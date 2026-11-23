@@ -1,0 +1,49 @@
+{
+  "reportId": "71717171-7171-4171-8171-717171717171",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "requestedBy": {
+    "type": "HUMAN",
+    "principalId": "13131313-1313-4313-8313-131313131313",
+    "issuer": "https://fake-idp:4443/oidc",
+    "subject": "integration-admin.alpha"
+  },
+  "authorizationBasis": {
+    "policyRef": { "id": "phase1-connection-validation-policy", "version": 1 },
+    "membershipRef": { "id": "15151515-1515-4515-8515-151515151515", "version": 3 },
+    "entitlementRefs": [],
+    "roleAssignmentRefs": [
+      { "id": "17171717-1717-4717-8717-171717171717", "version": 1 }
+    ],
+    "skillContext": { "kind": "NOT_APPLICABLE" },
+    "evaluatedAt": "2026-08-27T10:01:00Z"
+  },
+  "authorizationBasisHash": "sha256:c2adb9738d95cf820291d2b72b56ed96a2e0911f2e1fb17c9526fcb569fe1549",
+  "correlationId": "71717170-7170-4170-8170-717071707170",
+  "dataClassificationKey": "INTERNAL",
+  "subject": {
+    "type": "CONNECTION",
+    "id": "66666666-6666-4666-8666-666666666666",
+    "version": 1
+  },
+  "contentHash": "sha256:3998df41c7f6582b96b8a195dbc0af9f387ef04704e240992845c6b323029121",
+  "status": "VALID",
+  "checks": [
+    {
+      "code": "LOCAL_ENDPOINT_ALLOWED",
+      "severity": "ERROR",
+      "status": "PASSED",
+      "path": "/endpoint",
+      "message": "The endpoint resolves only to the local Mock Hub allowlist."
+    },
+    {
+      "code": "SECRET_REFERENCE_RESOLVABLE",
+      "severity": "ERROR",
+      "status": "PASSED",
+      "path": "/serviceIdentitySecretRef",
+      "message": "The opaque local secret reference resolves without exposing its value."
+    }
+  ],
+  "capabilityAvailability": [],
+  "validatedAt": "2026-08-27T10:01:00Z",
+  "createdAt": "2026-08-27T10:01:00Z"
+}

@@ -1,0 +1,41 @@
+{
+  "bindingId": "44444444-4444-4444-8444-444444444444",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "dataClassificationKey": "INTERNAL",
+  "version": 1,
+  "state": "PUBLISHED",
+  "entries": [
+    {
+      "logicalRole": "PRIMARY",
+      "capabilityKey": "sample.record",
+      "exactContractVersion": "1.0.0",
+      "environmentScope": "LOCAL",
+      "classificationCeilingKey": "INTERNAL",
+      "profileRef": {
+        "id": "55555555-5555-4555-8555-555555555555",
+        "version": 1
+      },
+      "externalScope": {
+        "schemaRef": {
+          "id": "urn:awp:schemas:sample:record-external-scope:v1",
+          "version": 1,
+          "digest": "sha256:8d22db38aa2b6fcef661afb8785bc0e20cb739a8023ebcab6076893d12638ea3"
+        },
+        "value": {
+          "namespace": "phase1",
+          "allowedRecordPrefix": "phase1-"
+        }
+      }
+    }
+  ],
+  "configurationRefs": [],
+  "resourceRefs": [],
+  "schemaVersion": 1,
+  "contentHash": "sha256:13624be205a70870fd98da3b80a293ef44da684c0d735b1ceb64729fd48b3dd8",
+  "resourceVersion": 3,
+  "validationReportId": "74747474-7474-4474-8474-747474747474",
+  "createdAt": "2026-08-27T10:10:00Z",
+  "validatedAt": "2026-08-27T10:11:00Z",
+  "publishedAt": "2026-08-27T10:12:00Z"
+}

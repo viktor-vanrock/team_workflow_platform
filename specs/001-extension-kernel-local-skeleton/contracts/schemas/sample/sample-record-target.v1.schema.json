@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:sample:record-target:v1",
+  "title": "Sample Record Target",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recordKey"],
+  "properties": {
+    "recordKey": { "type": "string", "pattern": "^phase1-[a-z0-9-]{1,64}$" }
+  }
+}

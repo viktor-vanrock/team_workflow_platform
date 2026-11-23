@@ -1,0 +1,60 @@
+{
+  "snapshots": [
+    {
+      "name": "login-1440",
+      "url": "http://localhost:55173/",
+      "overflow": false
+    },
+    {
+      "name": "home-1440",
+      "url": "http://localhost:55173/",
+      "overflow": false
+    },
+    {
+      "name": "intake-1440",
+      "url": "http://localhost:55173/qa/new",
+      "overflow": false
+    },
+    {
+      "name": "intake-360",
+      "url": "http://localhost:55173/qa/new",
+      "overflow": false
+    },
+    {
+      "name": "requests-1440",
+      "url": "http://localhost:55173/qa/requests",
+      "overflow": false
+    },
+    {
+      "name": "request-1440",
+      "url": "http://localhost:55173/qa/requests?request=30ccd70b-f0d2-448c-98ec-3273770b71ba",
+      "overflow": false
+    },
+    {
+      "name": "request-360",
+      "url": "http://localhost:55173/qa/requests?request=30ccd70b-f0d2-448c-98ec-3273770b71ba",
+      "overflow": false
+    },
+    {
+      "name": "queue-1440",
+      "url": "http://localhost:55173/qa/queue",
+      "overflow": false
+    },
+    {
+      "name": "hermes-1440",
+      "url": "http://localhost:55173/qa/hermes-proposals",
+      "overflow": false
+    },
+    {
+      "name": "projects-1440",
+      "url": "http://localhost:55173/projects",
+      "overflow": false
+    },
+    {
+      "name": "pilot-recovery-1440",
+      "url": "http://localhost:55173/pilot/recovery",
+      "overflow": false
+    }
+  ],
+  "errors": []
+}

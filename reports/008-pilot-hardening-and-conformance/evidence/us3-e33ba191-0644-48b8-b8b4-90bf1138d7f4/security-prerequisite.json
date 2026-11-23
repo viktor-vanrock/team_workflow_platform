@@ -1,0 +1,8 @@
+{
+  "gate": "security",
+  "status": "PASS",
+  "requiredChecks": [
+    "scan-adapter-binding",
+    "local-adversarial-suite"
+  ]
+}

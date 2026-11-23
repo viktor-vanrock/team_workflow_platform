@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "task": "LOCAL-AUDIT",
+  "reviewedAt": "2026-09-05T20:07:10.907Z",
+  "rationale": "Preserve the reviewed OpenTelemetry additions. Update qs 6.15.3 to 6.16.0 to close both reported advisories; declare existing React DOM and TypeORM dependencies directly for root test compilation. Feature 010 additionally removes the retired BullMQ package and its exclusive transitive dependencies. Feature 011 adds pinned formatting and lint-only development tooling. Features 015/016 retain the local technical-writing workspace via explicitly pinned internal importer additions. External package and snapshot sections are byte-equivalent as parsed; the existing external dependency audit remains applicable to this unchanged package set.",
+  "baselineLockHash": "sha256:5700320e475e7c8e7b6c298bd51ca5f267d37935954fddeeda014e55e17811af",
+  "lockHash": "sha256:be451170b1cafa1915f432b02b59e1274c52d4ce73ee35be2312ceea1ec48395",
+  "importer": "packages/platform-runtime-nest",
+  "qualityDevDependencies": {
+    "@eslint/js": {
+      "specifier": "9.39.5",
+      "version": "9.39.5"
+    },
+    "eslint-plugin-import": {
+      "specifier": "2.32.0",
+      "version": "2.32.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)"
+    },
+    "eslint-plugin-jsx-a11y": {
+      "specifier": "6.10.2",
+      "version": "6.10.2(eslint@9.39.5(supports-color@7.2.0))"
+    },
+    "eslint-plugin-react-hooks": {
+      "specifier": "7.1.1",
+      "version": "7.1.1(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)"
+    },
+    "eslint-plugin-simple-import-sort": {
+      "specifier": "14.0.0",
+      "version": "14.0.0(eslint@9.39.5(supports-color@7.2.0))"
+    },
+    "prettier": {
+      "specifier": "3.9.6",
+      "version": "3.9.6"
+    }
+  },
+  "qualityAddedPackagesHash": "sha256:1be462daef236aed0ffa533e58cd203c5ce9492f6d2b6f490f427993c9be1cdb",
+  "qualityAddedSnapshotsHash": "sha256:0e6767e15fc9cb05ac38bc04ab5599aba8bcea56423dce407ba000bb65fec0d0",
+  "directDependencies": {
+    "@opentelemetry/context-async-hooks": {
+      "specifier": "2.11.0",
+      "version": "2.11.0(@opentelemetry/api@1.9.1)"
+    },
+    "@opentelemetry/core": {
+      "specifier": "2.11.0",
+      "version": "2.11.0(@opentelemetry/api@1.9.1)"
+    },
+    "@opentelemetry/exporter-metrics-otlp-http": {
+      "specifier": "0.222.0",
+      "version": "0.222.0(@opentelemetry/api@1.9.1)"
+    },
+    "@opentelemetry/exporter-trace-otlp-http": {
+      "specifier": "0.222.0",
+      "version": "0.222.0(@opentelemetry/api@1.9.1)"
+    },
+    "@opentelemetry/resources": {
+      "specifier": "2.11.0",
+      "version": "2.11.0(@opentelemetry/api@1.9.1)"
+    },
+    "@opentelemetry/sdk-metrics": {
+      "specifier": "2.11.0",
+      "version": "2.11.0(@opentelemetry/api@1.9.1)"
+    },
+    "@opentelemetry/sdk-trace-base": {
+      "specifier": "2.11.0",
+      "version": "2.11.0(@opentelemetry/api@1.9.1)"
+    },
+    "@opentelemetry/sdk-trace-node": {
+      "specifier": "2.11.0",
+      "version": "2.11.0(@opentelemetry/api@1.9.1)"
+    }
+  },
+  "addedPackages": [
+    "@opentelemetry/api-logs@0.222.0",
+    "@opentelemetry/context-async-hooks@2.11.0",
+    "@opentelemetry/core@2.11.0",
+    "@opentelemetry/exporter-metrics-otlp-http@0.222.0",
+    "@opentelemetry/exporter-trace-otlp-http@0.222.0",
+    "@opentelemetry/otlp-exporter-base@0.222.0",
+    "@opentelemetry/otlp-transformer@0.222.0",
+    "@opentelemetry/resources@2.11.0",
+    "@opentelemetry/sdk-logs@0.222.0",
+    "@opentelemetry/sdk-metrics@2.11.0",
+    "@opentelemetry/sdk-trace-base@2.11.0",
+    "@opentelemetry/sdk-trace-node@2.11.0",
+    "@opentelemetry/sdk-trace@2.11.0",
+    "@opentelemetry/semantic-conventions@1.43.0"
+  ],
+  "addedSnapshots": [
+    "@opentelemetry/api-logs@0.222.0",
+    "@opentelemetry/context-async-hooks@2.11.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/exporter-metrics-otlp-http@0.222.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/exporter-trace-otlp-http@0.222.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/otlp-exporter-base@0.222.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/otlp-transformer@0.222.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/resources@2.11.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/sdk-logs@0.222.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/sdk-metrics@2.11.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/sdk-trace-node@2.11.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/sdk-trace@2.11.0(@opentelemetry/api@1.9.1)",
+    "@opentelemetry/semantic-conventions@1.43.0"
+  ],
+  "audit": {
+    "path": "reports/008-pilot-hardening-and-conformance/dependency-audit-959f2faa8424.json",
+    "sha256": "sha256:959f2faa842443124f9be098c13aa7e27ddceb0b0d68e25d215a2f0003e58bee"
+  },
+  "sources": [
+    "https://opentelemetry.io/docs/languages/js/exporters/",
+    "https://github.com/open-telemetry/opentelemetry-js/releases/tag/v2.11.0"
+  ],
+  "findings": {
+    "newDependencies": [],
+    "existing": [
+      {
+        "package": "qs",
+        "severity": "moderate",
+        "advisory": "GHSA-x5fp-wj9c-mxmx"
+      },
+      {
+        "package": "qs",
+        "severity": "moderate",
+        "advisory": "GHSA-4mjr-xmp4-gh2g"
+      }
+    ],
+    "releaseScanComplete": false
+  },
+  "remediations": [
+    {
+      "path": ["overrides", "qs"],
+      "after": "6.16.0"
+    },
+    {
+      "path": ["importers", ".", "devDependencies", "react-dom"],
+      "after": {
+        "specifier": "catalog:",
+        "version": "19.2.8(react@19.2.8)"
+      }
+    },
+    {
+      "path": ["importers", ".", "devDependencies", "typeorm"],
+      "after": {
+        "specifier": "catalog:",
+        "version": "1.1.0(babel-plugin-macros@3.1.0)(pg@8.23.0)(supports-color@7.2.0)"
+      }
+    },
+    {
+      "path": ["packages", "qs@6.15.3"],
+      "before": {
+        "resolution": {
+          "integrity": "sha512-O9gl3zCl5h5blw1KGUzQKhA5oUXSl8rwUIM5o0S3nCXMliSvy5Dzx7/DJcI+SwgICv+IneSZwhBh1oSyEHA71A=="
+        },
+        "engines": {
+          "node": ">=0.6"
+        }
+      }
+    },
+    {
+      "path": ["packages", "qs@6.16.0"],
+      "after": {
+        "resolution": {
+          "integrity": "sha512-h6fhOIaRrID2CbEY2fqs+7t+UXZo+MLAnU5gRIq85uFtdiUPCdsApMlHhXogKVM4HM2DVbIjGNTTYH2OcmP1vA=="
+        },
+        "engines": {
+          "node": ">=0.6"
+        }
+      }
+    },
+    {
+      "path": ["snapshots", "body-parser@2.3.0(supports-color@7.2.0)", "dependencies", "qs"],
+      "before": "6.15.3",
+      "after": "6.16.0"
+    },
+    {
+      "path": ["snapshots", "express@5.2.1(supports-color@7.2.0)", "dependencies", "qs"],
+      "before": "6.15.3",
+      "after": "6.16.0"
+    },
+    {
+      "path": ["snapshots", "qs@6.15.3"],
+      "before": {
+        "dependencies": {
+          "es-define-property": "1.0.1",
+          "side-channel": "1.1.1"
+        }
+      }
+    },
+    {
+      "path": ["snapshots", "qs@6.16.0"],
+      "after": {
+        "dependencies": {
+          "es-define-property": "1.0.1",
+          "side-channel": "1.1.1"
+        }
+      }
+    }
+  ],
+  "v1DependencyRemovals": {
+    "catalogs": ["@nestjs/bullmq", "bullmq"],
+    "importers": ["packages/platform-queue-bullmq"],
+    "packages": [
+      "@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-darwin-x64@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-linux-arm64@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-linux-arm@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-linux-x64@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-win32-x64@3.0.4",
+      "@nestjs/bull-shared@11.0.5",
+      "@nestjs/bullmq@11.0.5",
+      "bullmq@6.3.1",
+      "cron-parser@5.10.0",
+      "luxon@3.7.2",
+      "msgpackr-extract@3.0.4",
+      "msgpackr@2.0.5",
+      "node-abort-controller@3.1.1",
+      "node-gyp-build-optional-packages@5.2.2"
+    ],
+    "snapshots": [
+      "@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-darwin-x64@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-linux-arm64@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-linux-arm@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-linux-x64@3.0.4",
+      "@msgpackr-extract/msgpackr-extract-win32-x64@3.0.4",
+      "@nestjs/bull-shared@11.0.5(@nestjs/common@11.2.3(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@7.2.0))(@nestjs/core@11.2.3)",
+      "@nestjs/bullmq@11.0.5(@nestjs/common@11.2.3(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@7.2.0))(@nestjs/core@11.2.3)(bullmq@6.3.1(pg@8.23.0))",
+      "bullmq@6.3.1(pg@8.23.0)",
+      "cron-parser@5.10.0",
+      "luxon@3.7.2",
+      "msgpackr-extract@3.0.4",
+      "msgpackr@2.0.5",
+      "node-abort-controller@3.1.1",
+      "node-gyp-build-optional-packages@5.2.2"
+    ]
+  },
+  "workspaceImporterAdditions": {
+    "apps/api": {
+      "dependencies": {
+        "@awp/competency-tech-writing": {
+          "specifier": "workspace:*",
+          "version": "link:../../packages/competency-tech-writing"
+        }
+      }
+    },
+    "apps/web": {
+      "dependencies": {
+        "@awp/competency-tech-writing": {
+          "specifier": "workspace:*",
+          "version": "link:../../packages/competency-tech-writing"
+        },
+        "@awp/competency-ui-sdk": {
+          "specifier": "workspace:*",
+          "version": "link:../../packages/competency-ui-sdk"
+        }
+      }
+    },
+    "packages/competency-tech-writing": {
+      "dependencies": {
+        "@awp/competency-sdk": {
+          "specifier": "workspace:*",
+          "version": "link:../competency-sdk"
+        },
+        "@awp/competency-ui-sdk": {
+          "specifier": "workspace:*",
+          "version": "link:../competency-ui-sdk"
+        },
+        "@awp/platform-ui": {
+          "specifier": "workspace:*",
+          "version": "link:../platform-ui"
+        },
+        "react": {
+          "specifier": "catalog:",
+          "version": "19.2.8"
+        },
+        "typeorm": {
+          "specifier": "catalog:",
+          "version": "1.1.0(babel-plugin-macros@3.1.0)(pg@8.23.0)(supports-color@7.2.0)"
+        }
+      }
+    },
+    "packages/runtime-composition": {
+      "dependencies": {
+        "@awp/competency-tech-writing": {
+          "specifier": "workspace:*",
+          "version": "link:../competency-tech-writing"
+        }
+      }
+    }
+  }
+}

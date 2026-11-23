@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:risk-review-policy:v1",
+  "title": "Immutable QA Risk Review Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "policyId", "version", "workspaceId", "projectId", "permissionKeys", "ordinaryVerdict", "elevatedVerdict", "waiverReview", "acceptedRiskReview", "finalCloseReview", "contentHash", "createdBy", "publishedBy", "publishedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "policyId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "permissionKeys": {
+      "description": "Exact permission semantics included in the immutable policy content hash.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdictSign", "verdictCosign", "waiverApprove", "acceptedRiskApprove", "finalCloseApprove"],
+      "properties": {
+        "verdictSign": { "const": "qa.verdict.sign" },
+        "verdictCosign": { "const": "qa.verdict.cosign" },
+        "waiverApprove": { "const": "qa.waiver.approve" },
+        "acceptedRiskApprove": { "const": "qa.finding.accept-risk" },
+        "finalCloseApprove": { "const": "qa.completion.approve" }
+      }
+    },
+    "ordinaryVerdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requiredSignerRole", "minimumSignatures"],
+      "properties": {
+        "requiredSignerRole": { "const": "QA_EXECUTOR" },
+        "minimumSignatures": { "const": 1 }
+      }
+    },
+    "elevatedVerdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["riskLevels", "primarySignerRole", "coSignerRole", "distinctActorRequired"],
+      "properties": {
+        "riskLevels": { "type": "array", "const": ["HIGH", "CRITICAL"] },
+        "primarySignerRole": { "const": "QA_EXECUTOR" },
+        "coSignerRole": { "const": "QA_LEAD" },
+        "distinctActorRequired": { "const": true }
+      }
+    },
+    "waiverReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approverRole", "distinctActorRequired", "reasonRequired", "expiryRequired"],
+      "properties": {
+        "approverRole": { "const": "QA_LEAD" },
+        "distinctActorRequired": { "const": true },
+        "reasonRequired": { "const": true },
+        "expiryRequired": { "const": true }
+      }
+    },
+    "acceptedRiskReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approverRole", "distinctActorRequired"],
+      "properties": {
+        "approverRole": { "const": "QA_LEAD" },
+        "distinctActorRequired": { "const": true }
+      }
+    },
+    "finalCloseReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approverRole", "distinctActorRequired", "liveAuthorizationRecheck"],
+      "properties": {
+        "approverRole": { "const": "QA_LEAD" },
+        "distinctActorRequired": { "const": true },
+        "liveAuthorizationRecheck": { "const": true }
+      }
+    },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "publishedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "publishedAt": { "type": "string", "format": "date-time" }
+  }
+}

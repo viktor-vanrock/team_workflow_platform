@@ -1,0 +1,30 @@
+{
+  "status": "BLOCKED",
+  "actions": [
+    {
+      "commandId": "command-1",
+      "effectKey": "effect-before-backup",
+      "action": "CONFIRM",
+      "reasonCode": "DURABLE_RESULT_CONFIRMED"
+    },
+    {
+      "commandId": "command-2",
+      "effectKey": "effect-uncertain",
+      "action": "CONFIRM",
+      "reasonCode": "PROVIDER_EFFECT_MATCHED"
+    },
+    {
+      "commandId": null,
+      "effectKey": "effect-after-backup",
+      "action": "QUARANTINE",
+      "reasonCode": "POST_BACKUP_PROVIDER_EFFECT_WITHOUT_LOCAL_MARKER"
+    }
+  ],
+  "rebuiltQueue": [],
+  "unresolvedEffects": [
+    "effect-after-backup"
+  ],
+  "providerReadCount": 1,
+  "providerWriteCount": 0,
+  "jiraAuthorityPreserved": true
+}

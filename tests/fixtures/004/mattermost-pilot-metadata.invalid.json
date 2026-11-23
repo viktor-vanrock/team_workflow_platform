@@ -1,0 +1,52 @@
+{
+  "cases": [
+    {
+      "id": "unknown root property",
+      "patch": { "unexpectedField": true },
+      "expectedCode": "MATTERMOST_PILOT_SHAPE_INVALID"
+    },
+    {
+      "id": "presentation key crosses project scope",
+      "patch": {
+        "presentationTokenEncryptionKeyRef": {
+          "projectId": "00000000-0000-4000-8000-000000004999"
+        }
+      },
+      "expectedCode": "MATTERMOST_PILOT_SCOPE_MISMATCH"
+    },
+    {
+      "id": "presentation key aliases bot credential identity",
+      "patch": {
+        "presentationTokenEncryptionKeyRef": {
+          "keyIdentityFingerprint": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+        }
+      },
+      "expectedCode": "MATTERMOST_PILOT_PRESENTATION_KEY_ALIAS"
+    },
+    {
+      "id": "expiry sweep exceeds purge SLA",
+      "patch": {
+        "presentationTokenRetention": {
+          "expirySweepIntervalSeconds": 61,
+          "expiryPurgeSlaSeconds": 60
+        }
+      },
+      "expectedCode": "MATTERMOST_PILOT_RETENTION_INVALID"
+    },
+    {
+      "id": "callback profile has no supported reconciliation selector",
+      "patch": {
+        "validatedServerLimits": {
+          "pendingPostIdLookupSupported": false,
+          "effectMarkerLookupSupported": false
+        }
+      },
+      "expectedCode": "MATTERMOST_PILOT_RECONCILIATION_UNSUPPORTED"
+    },
+    {
+      "id": "production is denied before any network use",
+      "patch": { "environmentClass": "PRODUCTION" },
+      "expectedCode": "MATTERMOST_PILOT_PRODUCTION_FORBIDDEN"
+    }
+  ]
+}

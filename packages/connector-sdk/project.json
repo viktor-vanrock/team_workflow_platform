@@ -1,0 +1,17 @@
+{
+  "name": "connector-sdk",
+  "root": "packages/connector-sdk",
+  "sourceRoot": "packages/connector-sdk/src",
+  "projectType": "library",
+  "tags": ["type:sdk", "runtime:universal", "domain:platform"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-sdk/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-sdk/tsconfig.json --noEmit" }
+    }
+  }
+}

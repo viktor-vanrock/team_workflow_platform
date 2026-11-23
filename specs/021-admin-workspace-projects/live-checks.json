@@ -1,0 +1,167 @@
+{
+  "checkedAt": "2026-09-09T20:57:50.765Z",
+  "results": [
+    {
+      "persona": "Администратор · 1",
+      "registrationOptions": [
+        {
+          "workspace": "Local Functional",
+          "status": 200
+        },
+        {
+          "workspace": "Local Isolated",
+          "status": 200
+        },
+        {
+          "workspace": "Техническая документация",
+          "status": 200
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Администратор · 2",
+      "registrationOptions": [
+        {
+          "workspace": "Local Functional",
+          "status": 200
+        },
+        {
+          "workspace": "Local Isolated",
+          "status": 404
+        },
+        {
+          "workspace": "Техническая документация",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Requester",
+      "registrationOptions": [
+        {
+          "workspace": "Local Functional",
+          "status": 404
+        },
+        {
+          "workspace": "Local Isolated",
+          "status": 404
+        },
+        {
+          "workspace": "Техническая документация",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "QA Executor · QA 1",
+      "registrationOptions": [
+        {
+          "workspace": "Local Functional",
+          "status": 404
+        },
+        {
+          "workspace": "Local Isolated",
+          "status": 404
+        },
+        {
+          "workspace": "Техническая документация",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "QA Executor · QA 2",
+      "registrationOptions": [
+        {
+          "workspace": "Local Functional",
+          "status": 404
+        },
+        {
+          "workspace": "Local Isolated",
+          "status": 404
+        },
+        {
+          "workspace": "Техническая документация",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "QA Lead",
+      "registrationOptions": [
+        {
+          "workspace": "Local Functional",
+          "status": 404
+        },
+        {
+          "workspace": "Local Isolated",
+          "status": 404
+        },
+        {
+          "workspace": "Техническая документация",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Читатель",
+      "registrationOptions": [
+        {
+          "workspace": "Local Functional",
+          "status": 404
+        },
+        {
+          "workspace": "Local Isolated",
+          "status": 404
+        },
+        {
+          "workspace": "Техническая документация",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Технический писатель",
+      "registrationOptions": [
+        {
+          "workspace": "Local Functional",
+          "status": 404
+        },
+        {
+          "workspace": "Local Isolated",
+          "status": 404
+        },
+        {
+          "workspace": "Техническая документация",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Лид технических писателей",
+      "registrationOptions": [
+        {
+          "workspace": "Local Functional",
+          "status": 404
+        },
+        {
+          "workspace": "Local Isolated",
+          "status": 404
+        },
+        {
+          "workspace": "Техническая документация",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    }
+  ]
+}

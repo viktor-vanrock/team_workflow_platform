@@ -1,0 +1,37 @@
+{
+  "externalEntityId": "mock-request-42",
+  "expectedExternalVersion": "1",
+  "expectedNormalizedStatus": "NEW",
+  "requestedNormalizedStatus": "READY",
+  "reason": "Readiness transition must not carry terminal completion content",
+  "sourceWorkItemId": "33333333-3333-4333-8333-333333333333",
+  "completionSummary": {
+    "scopeSummary": "Manual checkout smoke scope",
+    "scopeSnapshotRefs": [
+      {
+        "id": "21212121-2121-4121-8121-212121212121",
+        "contentHash": "sha256:2121212121212121212121212121212121212121212121212121212121212121"
+      }
+    ],
+    "verdict": "FAIL",
+    "verdictRef": {
+      "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+      "version": 1,
+      "contentHash": "sha256:2828282828282828282828282828282828282828282828282828282828282828"
+    },
+    "residualRisk": "Known defect remains",
+    "evidenceReferences": [
+      {
+        "manifestRevisionRef": {
+          "id": "31313131-3131-4131-8131-313131313131",
+          "version": 1,
+          "contentHash": "sha256:2323232323232323232323232323232323232323232323232323232323232323"
+        },
+        "displayLabel": "Signed evidence",
+        "platformPath": "/qa/evidence/31313131-3131-4131-8131-313131313131"
+      }
+    ],
+    "defectReferences": []
+  },
+  "completionSummaryHash": "sha256:2626262626262626262626262626262626262626262626262626262626262626"
+}

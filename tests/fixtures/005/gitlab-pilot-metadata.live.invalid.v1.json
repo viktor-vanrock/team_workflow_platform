@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "gitlab-pilot-metadata-invalid-fixtures@1.0.0",
+  "baseMetadataRef": "config/local/gitlab-pilot-metadata.v1.json",
+  "cases": [
+    {
+      "id": "live-http-denied",
+      "patch": { "contourKey": "qa-jira-gitlab-development", "environmentClass": "DEVELOPMENT", "server": { "baseUrl": "http://gitlab.dev.example.invalid" } },
+      "expectedCode": "NONPROD_TLS_REQUIRED"
+    },
+    {
+      "id": "purpose-contour-mismatch",
+      "patch": { "deploymentPurpose": "CONFORMANCE_VALIDATION", "contourKey": "qa-jira-gitlab-mattermost-local" },
+      "expectedCode": "GITLAB_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "production-host-denied",
+      "patch": { "contourKey": "qa-jira-gitlab-test", "environmentClass": "TEST", "server": { "baseUrl": "https://gitlab.prod.example.invalid" } },
+      "expectedCode": "PRODUCTION_TARGET_DENIED"
+    },
+    {
+      "id": "rehearsal-evidence-missing",
+      "patch": { "deploymentPurpose": "PILOT_REHEARSAL", "contourKey": "qa-jira-gitlab-mattermost-local" },
+      "expectedCode": "GITLAB_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "release-evidence-missing",
+      "patch": { "deploymentPurpose": "PILOT_DEPLOYMENT", "contourKey": "qa-jira-gitlab-mattermost-test", "environmentClass": "TEST", "server": { "baseUrl": "https://gitlab.test.example.invalid" } },
+      "expectedCode": "GITLAB_PILOT_SCHEMA_INVALID"
+    }
+  ]
+}

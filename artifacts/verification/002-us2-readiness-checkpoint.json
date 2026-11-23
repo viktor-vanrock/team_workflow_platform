@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "checkpoint": "US2-readiness",
+  "status": "PASS",
+  "startedAt": "2026-08-30T22:55:28.052Z",
+  "finishedAt": "2026-08-30T22:55:52.297Z",
+  "invariants": {
+    "deterministicWithoutModel": true,
+    "soleDorWaiver": "PROJECT_REGISTRY_NEEDS_REVIEW",
+    "inputHistoryAppendOnly": true,
+    "confirmedReadyFreezesInput": true,
+    "planBeforeConfirmedReady": false,
+    "requiredSlotsMinimum": 1,
+    "queueModelIntroduced": false,
+    "coreImportsQaSemantics": false
+  },
+  "evidence": {
+    "focusedSuites": 6,
+    "focusedTests": 20,
+    "profileRevisions": 2,
+    "bindingRevisions": 2
+  },
+  "stages": [
+    {
+      "id": "typecheck:packages/competency-qa",
+      "status": "PASS",
+      "durationMs": 3187,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/connector-sdk",
+      "status": "PASS",
+      "durationMs": 927,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/connector-sdk/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/connector-mock",
+      "status": "PASS",
+      "durationMs": 974,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/connector-mock/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/runtime-composition",
+      "status": "PASS",
+      "durationMs": 2505,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/mock-hub",
+      "status": "PASS",
+      "durationMs": 888,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/mock-hub/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/api",
+      "status": "PASS",
+      "durationMs": 3573,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/web",
+      "status": "PASS",
+      "durationMs": 2829,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "readiness-domain-contract-security",
+      "status": "PASS",
+      "durationMs": 1549,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "packages/competency-qa/src/application/readiness-evaluator.spec.ts",
+        "tests/contract/002-readiness-model-independence.spec.ts",
+        "tests/integration/002-readiness-staleness.spec.ts",
+        "tests/integration/002-required-session-plan-revisions.spec.ts",
+        "tests/integration/security/002-readiness-authorization.spec.ts",
+        "tests/integration/acceptance/002-readiness-operational-sync.spec.ts"
+      ]
+    },
+    {
+      "id": "readiness-postgres-seed",
+      "status": "PASS",
+      "durationMs": 7443,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/002-qa-us1-persistence.spec.ts",
+        "tests/integration/002-qa-local-seed.spec.ts"
+      ]
+    },
+    {
+      "id": "openapi",
+      "status": "PASS",
+      "durationMs": 235,
+      "command": [
+        "node",
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ]
+    },
+    {
+      "id": "architecture",
+      "status": "PASS",
+      "durationMs": 133,
+      "command": [
+        "node",
+        "tools/architecture/check-import-graph.mts",
+        "--core-only"
+      ]
+    }
+  ]
+}

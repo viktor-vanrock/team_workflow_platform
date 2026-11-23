@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "membershipId": "54545454-5454-4454-8454-545454545454",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "findingId": "58585858-5858-4858-8858-585858585858",
+  "observationId": "51515151-5151-4151-8151-515151515151",
+  "state": "ACTIVE",
+  "assignedBy": {
+    "type": "HUMAN",
+    "principalId": "77777777-7777-4777-8777-777777777777",
+    "issuer": "https://id.example.test",
+    "subject": "qa-executor-1"
+  },
+  "assignedAt": "2026-08-27T12:16:00Z",
+  "resourceVersion": 1
+}

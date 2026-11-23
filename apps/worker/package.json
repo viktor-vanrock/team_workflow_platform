@@ -1,0 +1,20 @@
+{
+  "name": "@awp/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx --tsconfig ../../tsconfig.base.json src/main.ts"
+  },
+  "dependencies": {
+    "@awp/platform-persistence-typeorm": "workspace:*",
+    "@awp/platform-runtime-nest": "workspace:*",
+    "@awp/runtime-composition": "workspace:*",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-express": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "typeorm": "catalog:"
+  }
+}

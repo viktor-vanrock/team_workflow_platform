@@ -1,0 +1,47 @@
+{
+  "apiVersion": "awp.platform/v1",
+  "kind": "Connector",
+  "metadata": {
+    "key": "sample.mock",
+    "version": "1.0.0",
+    "displayName": "Sample Stateful Mock Connector"
+  },
+  "requires": {
+    "coreContracts": ">=1.0.0 <2.0.0",
+    "connectorSdk": ">=1.0.0 <2.0.0"
+  },
+  "connectorType": "sample.mock",
+  "runtimeComponentRef": "sample.mock.runtime",
+  "connectionSchemaRef": {
+    "id": "urn:awp:schemas:sample:connection-config:v1",
+    "version": 1,
+    "digest": "sha256:3a47ffc7a93f2e4dcfc699c4091642c29ff620615f70b6e041adc79bd0992b0f"
+  },
+  "profileSchemaRef": {
+    "id": "urn:awp:schemas:sample:profile-config:v1",
+    "version": 1,
+    "digest": "sha256:be2e35b4733379ddb970e3329c831c7e945cf974ec70f074baba98d1ca169c62"
+  },
+  "implements": [
+    {
+      "capabilityKey": "sample.record",
+      "exactContractVersions": ["1.0.0"],
+      "operations": ["record.publish"],
+      "supportedIdempotencyStrategies": ["NATIVE_KEY"],
+      "supportedConfirmationModes": ["SYNC_RECEIPT", "READ_BACK"],
+      "handlerComponentRef": "sample.mock.record-handler"
+    }
+  ],
+  "webhookContracts": [
+    {
+      "eventType": "sample.record.published",
+      "payloadVersion": 1,
+      "payloadSchemaRef": {
+        "id": "urn:awp:schemas:sample:record-published-event:v1",
+        "version": 1,
+        "digest": "sha256:c33d8953fff5dc52c2dd5d39d000eb18fc2db10e46f59c5efdf23bf07e41d6ec"
+      }
+    }
+  ],
+  "conformanceSuiteRefs": ["sample.record.conformance"]
+}

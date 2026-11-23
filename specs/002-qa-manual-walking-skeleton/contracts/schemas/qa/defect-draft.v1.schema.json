@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:defect-draft:v1",
+  "title": "QA Defect Draft with Immutable Payload and CAS Delivery Projection",
+  "description": "Candidate payload and contentHash are immutable. Human decision and generic approval/command/link lifecycle fields are a guarded CAS projection. Wording replacement first INVALIDATES the current pre-dispatch head; an exact successor version is accepted only from the current FAILED or INVALIDATED head. REJECTED and LINKED are chain-terminal, and a confirmed one-per-Finding DefectLink forbids any later candidate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "defectDraftId", "version", "workspaceId", "projectId", "workItemId", "sessionId", "findingId", "frozenFindingReviewRef", "state", "title", "description", "stepsToReproduce", "expectedOutcome", "actualOutcome", "severity", "target", "evidenceRefs", "provenance", "contentHash", "resourceVersion", "createdBy", "createdAt", "updatedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "defectDraftId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "predecessorDraftRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "predecessorTerminalState": { "type": "string", "enum": ["FAILED", "INVALIDATED"] },
+    "replacementReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "findingId": { "type": "string", "format": "uuid" },
+    "frozenFindingReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "state": { "type": "string", "enum": ["DRAFT", "READY_FOR_APPROVAL", "AWAITING_APPROVAL", "AUTHORIZED", "DISPATCHED", "LINKED", "REJECTED", "INVALIDATED", "FAILED"] },
+    "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 20000 },
+    "stepsToReproduce": { "type": "array", "minItems": 1, "maxItems": 100, "items": { "type": "string", "minLength": 1, "maxLength": 2000 } },
+    "expectedOutcome": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "actualOutcome": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "severity": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "target": { "$ref": "./target-snapshot.v1.schema.json" },
+    "evidenceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ArtifactRef" } },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "templateVersion"],
+      "properties": {
+        "source": { "type": "string", "enum": ["DETERMINISTIC_TEMPLATE", "MODEL_PROPOSAL_ACCEPTED", "DETERMINISTIC_FALLBACK_ACCEPTED"] },
+        "templateVersion": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemVer" },
+        "acceptedProposalRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" }
+      }
+    },
+    "acceptedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "acceptedAt": { "type": "string", "format": "date-time" },
+    "rejectionReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "rejectedFromState": { "type": "string", "enum": ["DRAFT", "READY_FOR_APPROVAL"] },
+    "rejectedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "rejectedAt": { "type": "string", "format": "date-time" },
+    "bindingRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/BindingRef" },
+    "profileRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ProfileRef" } },
+    "effectKeyHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "approvalRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericApprovalRef" },
+    "commandRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" },
+    "defectLinkId": { "type": "string", "format": "uuid" },
+    "invalidationReason": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" },
+    "failureCode": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" },
+    "terminalReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "terminalFromState": {
+      "description": "Exact last nonterminal lifecycle state whose delivery projection is preserved by INVALIDATED or FAILED.",
+      "type": "string",
+      "enum": ["DRAFT", "READY_FOR_APPROVAL", "AWAITING_APPROVAL", "AUTHORIZED", "DISPATCHED"]
+    },
+    "contentHash": {
+      "description": "Hash of immutable candidate payload fields; excludes CAS delivery projection fields.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "version": { "minimum": 2 } }, "required": ["version"] },
+      "then": { "required": ["predecessorDraftRef", "predecessorTerminalState", "replacementReason"] },
+      "else": { "not": { "anyOf": [
+        { "required": ["predecessorDraftRef"] },
+        { "required": ["predecessorTerminalState"] },
+        { "required": ["replacementReason"] }
+      ] } }
+    },
+    {
+      "if": {
+        "properties": { "provenance": { "type": "object", "properties": { "source": { "enum": ["MODEL_PROPOSAL_ACCEPTED", "DETERMINISTIC_FALLBACK_ACCEPTED"] } }, "required": ["source"] } },
+        "required": ["provenance"]
+      },
+      "then": { "properties": { "provenance": { "required": ["acceptedProposalRef"] } } },
+      "else": { "properties": { "provenance": { "not": { "required": ["acceptedProposalRef"] } } } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["READY_FOR_APPROVAL", "AWAITING_APPROVAL", "AUTHORIZED", "DISPATCHED", "LINKED"] } }, "required": ["state"] },
+      "then": { "required": ["acceptedBy", "acceptedAt"] }
+    },
+    {
+      "if": { "required": ["acceptedBy"] },
+      "then": { "required": ["acceptedAt"] },
+      "else": { "not": { "required": ["acceptedAt"] } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["AWAITING_APPROVAL", "AUTHORIZED", "DISPATCHED", "LINKED"] } }, "required": ["state"] },
+      "then": { "required": ["bindingRef", "profileRefs", "approvalRef"] }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["DISPATCHED", "LINKED"] } }, "required": ["state"] },
+      "then": { "required": ["effectKeyHash", "commandRef"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "LINKED" } }, "required": ["state"] },
+      "then": { "required": ["defectLinkId"] },
+      "else": { "not": { "required": ["defectLinkId"] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "REJECTED" } }, "required": ["state"] },
+      "then": {
+        "required": ["rejectedFromState", "rejectionReason", "rejectedBy", "rejectedAt"],
+        "not": { "anyOf": [
+          { "required": ["bindingRef"] }, { "required": ["profileRefs"] },
+          { "required": ["approvalRef"] }, { "required": ["commandRef"] },
+          { "required": ["effectKeyHash"] }, { "required": ["defectLinkId"] },
+          { "required": ["invalidationReason"] }, { "required": ["failureCode"] },
+          { "required": ["terminalReason"] }
+        ] }
+      },
+      "else": { "not": { "anyOf": [
+        { "required": ["rejectedFromState"] }, { "required": ["rejectionReason"] },
+        { "required": ["rejectedBy"] }, { "required": ["rejectedAt"] }
+      ] } }
+    },
+    {
+      "if": {
+        "properties": { "state": { "const": "REJECTED" }, "rejectedFromState": { "const": "DRAFT" } },
+        "required": ["state", "rejectedFromState"]
+      },
+      "then": { "not": { "anyOf": [{ "required": ["acceptedBy"] }, { "required": ["acceptedAt"] }] } }
+    },
+    {
+      "if": {
+        "properties": { "state": { "const": "REJECTED" }, "rejectedFromState": { "const": "READY_FOR_APPROVAL" } },
+        "required": ["state", "rejectedFromState"]
+      },
+      "then": { "required": ["acceptedBy", "acceptedAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "INVALIDATED" } }, "required": ["state"] },
+      "then": {
+        "required": ["invalidationReason", "terminalFromState"],
+        "properties": { "terminalFromState": { "enum": ["DRAFT", "READY_FOR_APPROVAL", "AWAITING_APPROVAL", "AUTHORIZED"] } },
+        "not": { "anyOf": [{ "required": ["failureCode"] }, { "required": ["terminalReason"] }] }
+      },
+      "else": { "not": { "required": ["invalidationReason"] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "FAILED" } }, "required": ["state"] },
+      "then": {
+        "required": ["failureCode", "terminalReason", "terminalFromState"],
+        "not": { "required": ["invalidationReason"] }
+      },
+      "else": { "not": { "anyOf": [{ "required": ["failureCode"] }, { "required": ["terminalReason"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["INVALIDATED", "FAILED"] } }, "required": ["state"] },
+      "then": true,
+      "else": { "not": { "required": ["terminalFromState"] } }
+    },
+    {
+      "if": { "properties": { "terminalFromState": { "const": "DRAFT" } }, "required": ["terminalFromState"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["acceptedBy"] }, { "required": ["acceptedAt"] },
+        { "required": ["bindingRef"] }, { "required": ["profileRefs"] },
+        { "required": ["approvalRef"] }, { "required": ["commandRef"] },
+        { "required": ["effectKeyHash"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "terminalFromState": { "const": "READY_FOR_APPROVAL" } }, "required": ["terminalFromState"] },
+      "then": {
+        "required": ["acceptedBy", "acceptedAt"],
+        "not": { "anyOf": [
+          { "required": ["bindingRef"] }, { "required": ["profileRefs"] },
+          { "required": ["approvalRef"] }, { "required": ["commandRef"] },
+          { "required": ["effectKeyHash"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "terminalFromState": { "enum": ["AWAITING_APPROVAL", "AUTHORIZED"] } }, "required": ["terminalFromState"] },
+      "then": {
+        "required": ["acceptedBy", "acceptedAt", "bindingRef", "profileRefs", "approvalRef"],
+        "not": { "anyOf": [{ "required": ["commandRef"] }, { "required": ["effectKeyHash"] }] }
+      }
+    },
+    {
+      "if": { "properties": { "terminalFromState": { "const": "DISPATCHED" } }, "required": ["terminalFromState"] },
+      "then": { "required": ["acceptedBy", "acceptedAt", "bindingRef", "profileRefs", "approvalRef", "commandRef", "effectKeyHash"] }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["DRAFT", "READY_FOR_APPROVAL"] } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["bindingRef"] }, { "required": ["profileRefs"] }, { "required": ["approvalRef"] },
+        { "required": ["commandRef"] }, { "required": ["effectKeyHash"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "DRAFT" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["acceptedBy"] }, { "required": ["acceptedAt"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["AWAITING_APPROVAL", "AUTHORIZED"] } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["commandRef"] }, { "required": ["effectKeyHash"] }] } }
+    }
+  ]
+}

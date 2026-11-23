@@ -1,0 +1,21 @@
+{
+  "name": "platform-persistence-typeorm",
+  "root": "packages/platform-persistence-typeorm",
+  "sourceRoot": "packages/platform-persistence-typeorm/src",
+  "projectType": "library",
+  "tags": ["type:adapter", "runtime:node", "domain:platform"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/platform-persistence-typeorm/tsconfig.json --noEmit"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/platform-persistence-typeorm/tsconfig.json --noEmit"
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "findingReviewRevisionId": "60606060-6060-4060-8060-606060606060",
+  "version": 1,
+  "stage": "DISPOSED",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "findingId": "61616161-6161-4161-8161-616161616161",
+  "classification": "DUPLICATE",
+  "severity": "MEDIUM",
+  "summary": "Disposition cannot be the first review revision",
+  "affectedTargetHash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "classificationActor": {
+    "type": "HUMAN",
+    "principalId": "77777777-7777-4777-8777-777777777777",
+    "issuer": "https://id.example.test",
+    "subject": "qa-executor-1"
+  },
+  "classificationReason": "Classification fact is present but no prior classified revision exists",
+  "classificationAt": "2026-08-27T12:17:00Z",
+  "dispositionDecision": "DUPLICATE",
+  "dispositionActor": {
+    "type": "HUMAN",
+    "principalId": "77777777-7777-4777-8777-777777777777",
+    "issuer": "https://id.example.test",
+    "subject": "qa-executor-1"
+  },
+  "dispositionReason": "This otherwise complete disposition deliberately omits the required predecessor",
+  "dispositionAt": "2026-08-27T12:18:00Z",
+  "duplicateDefectRef": {
+    "kind": "defect",
+    "id": "DEF-41",
+    "version": "7",
+    "contentHash": "sha256:5959595959595959595959595959595959595959595959595959595959595959"
+  },
+  "activeMembershipSetHash": "sha256:5353535353535353535353535353535353535353535353535353535353535353",
+  "observationMembershipIds": [
+    "54545454-5454-4454-8454-545454545454"
+  ],
+  "evidenceRefHash": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+  "policyRef": {
+    "key": "qa.finding-review",
+    "version": "1.0.0",
+    "contentHash": "sha256:5656565656565656565656565656565656565656565656565656565656565656"
+  },
+  "contentHash": "sha256:6060606060606060606060606060606060606060606060606060606060606060"
+}

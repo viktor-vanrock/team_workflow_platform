@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:jira:pilot-metadata-package:v1",
+  "title": "Jira Pilot Metadata Package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packageId",
+    "version",
+    "environment",
+    "adapter",
+    "endpoint",
+    "auth",
+    "centralRequestProfileRef",
+    "sourceContextProfileRefs",
+    "defectProfileRefs",
+    "webhook",
+    "reconciliation",
+    "rateBudget",
+    "concurrency",
+    "networkEvidenceRef",
+    "generatedAt",
+    "contentHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "packageId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "environment": { "enum": ["LOCAL", "NON_PROD"] },
+    "adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edition", "family", "contractVersion", "exactBuild", "apiFlavor", "capabilityEvidenceRef"],
+      "properties": {
+        "edition": { "enum": ["CLOUD", "DATA_CENTER"] },
+        "family": { "enum": ["jira-cloud-v3", "jira-dc-9-v2", "jira-dc-10-v2", "jira-dc-11-v2"] },
+        "contractVersion": { "$ref": "#/$defs/SemVer" },
+        "exactBuild": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "apiFlavor": { "enum": ["CLOUD_REST_V3", "DC_REST_V2"] },
+        "capabilityEvidenceRef": { "$ref": "#/$defs/ContentRef" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "edition": { "const": "CLOUD" } }, "required": ["edition"] },
+          "then": { "properties": { "family": { "const": "jira-cloud-v3" }, "apiFlavor": { "const": "CLOUD_REST_V3" } } },
+          "else": { "properties": { "family": { "enum": ["jira-dc-9-v2", "jira-dc-10-v2", "jira-dc-11-v2"] }, "apiFlavor": { "const": "DC_REST_V2" } } }
+        }
+      ]
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseUrl", "tenantKey", "tlsPolicyRef"],
+      "properties": {
+        "baseUrl": { "type": "string", "format": "uri" },
+        "tenantKey": { "type": "string", "pattern": "^[A-Za-z0-9._-]{1,128}$" },
+        "cloudId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "contextPath": { "type": "string", "pattern": "^/[^?#]*$", "maxLength": 256 },
+        "tlsPolicyRef": { "$ref": "#/$defs/ContentRef" }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "secretRef", "credentialOwner", "rotationPolicyRef", "revocationRunbookRef", "leastPrivilegeEvidenceRef"],
+      "properties": {
+        "kind": { "enum": ["CLOUD_SERVICE_OAUTH2_CLIENT", "CLOUD_SERVICE_API_TOKEN", "DC_SERVICE_2LO", "DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] },
+        "secretRef": { "type": "string", "pattern": "^secretref://[A-Za-z0-9._/-]+$", "maxLength": 512 },
+        "credentialOwner": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "rotationPolicyRef": { "$ref": "#/$defs/ContentRef" },
+        "revocationRunbookRef": { "$ref": "#/$defs/ContentRef" },
+        "leastPrivilegeEvidenceRef": { "$ref": "#/$defs/ContentRef" }
+      }
+    },
+    "centralRequestProfileRef": { "$ref": "#/$defs/ContentRef" },
+    "sourceContextProfileRefs": { "type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": { "$ref": "#/$defs/ContentRef" } },
+    "defectProfileRefs": { "type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": { "$ref": "#/$defs/ContentRef" } },
+    "webhook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registrationKind", "verificationMode", "deliveryIdentityMode", "retryHorizonSeconds", "dedupeHorizonSeconds", "evidenceRef"],
+      "properties": {
+        "registrationKind": { "enum": ["ADMIN_STATIC", "DYNAMIC_REFRESHED", "LOCAL_FAKE"] },
+        "verificationMode": { "enum": ["HMAC", "OPAQUE_PATH_SECRET_AND_DEDUPE", "LOCAL_HMAC"] },
+        "deliveryIdentityMode": { "enum": ["CLOUD_HEADER", "CHANGELOG_TUPLE", "CANONICAL_PAYLOAD_HASH"] },
+        "retryHorizonSeconds": { "type": "integer", "minimum": 60, "maximum": 1209600 },
+        "dedupeHorizonSeconds": { "type": "integer", "minimum": 60, "maximum": 2592000 },
+        "expirySeconds": { "type": "integer", "minimum": 300, "maximum": 2592000 },
+        "renewalLeadSeconds": { "type": "integer", "minimum": 60, "maximum": 604800 },
+        "bootstrapCredentialRef": { "$ref": "#/$defs/ContentRef" },
+        "evidenceRef": { "$ref": "#/$defs/ContentRef" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "registrationKind": { "const": "DYNAMIC_REFRESHED" } }, "required": ["registrationKind"] },
+          "then": { "required": ["expirySeconds", "renewalLeadSeconds", "bootstrapCredentialRef"] }
+        }
+      ]
+    },
+    "reconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["freshnessTargetSeconds", "webhookGraceSeconds", "pollIntervalSeconds", "fullSweepIntervalSeconds", "overlapSeconds", "pageSize", "maxConcurrency"],
+      "properties": {
+        "freshnessTargetSeconds": { "type": "integer", "minimum": 30, "maximum": 86400 },
+        "webhookGraceSeconds": { "type": "integer", "minimum": 0, "maximum": 86400 },
+        "pollIntervalSeconds": { "type": "integer", "minimum": 30, "maximum": 86400 },
+        "fullSweepIntervalSeconds": { "type": "integer", "minimum": 300, "maximum": 604800 },
+        "overlapSeconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+        "pageSize": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "maxConcurrency": { "type": "integer", "minimum": 1, "maximum": 16 }
+      }
+    },
+    "rateBudget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["windowSeconds", "maxRequests", "burst", "maxInFlight", "maxRetryAfterSeconds"],
+      "properties": {
+        "windowSeconds": { "type": "integer", "minimum": 1, "maximum": 3600 },
+        "maxRequests": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "burst": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "maxInFlight": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "maxRetryAfterSeconds": { "type": "integer", "minimum": 1, "maximum": 86400 }
+      }
+    },
+    "concurrency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "safetyEvidenceRef"],
+      "properties": {
+        "mode": { "enum": ["JIRA_SIDE_CAS", "COMPARE_AND_VERIFY"] },
+        "safetyEvidenceRef": { "$ref": "#/$defs/ContentRef" },
+        "conditionalMutationCapabilityRef": { "$ref": "#/$defs/ContentRef" },
+        "riskAcceptanceRef": { "$ref": "#/$defs/ContentRef" }
+      },
+      "allOf": [
+        { "if": { "properties": { "mode": { "const": "JIRA_SIDE_CAS" } }, "required": ["mode"] }, "then": { "required": ["conditionalMutationCapabilityRef"] } },
+        { "if": { "properties": { "mode": { "const": "COMPARE_AND_VERIFY" } }, "required": ["mode"] }, "then": { "required": ["riskAcceptanceRef"] } }
+      ]
+    },
+    "networkEvidenceRef": { "$ref": "#/$defs/ContentRef" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "contentHash": { "$ref": "#/$defs/Digest" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "environment": { "const": "LOCAL" } }, "required": ["environment"] },
+      "then": { "properties": { "endpoint": { "properties": { "baseUrl": { "pattern": "^https?://(?:127\\.0\\.0\\.1|localhost)(?::[0-9]{1,5})?(?:/|$)" } } }, "auth": { "properties": { "kind": { "const": "LOCAL_FAKE" } } } } },
+      "else": { "properties": { "endpoint": { "properties": { "baseUrl": { "pattern": "^https://" } } }, "auth": { "properties": { "kind": { "not": { "const": "LOCAL_FAKE" } } } } } }
+    },
+    {
+      "if": { "properties": { "adapter": { "properties": { "edition": { "const": "CLOUD" } }, "required": ["edition"] } } },
+      "then": { "properties": { "endpoint": { "required": ["cloudId"] }, "auth": { "properties": { "kind": { "enum": ["CLOUD_SERVICE_OAUTH2_CLIENT", "CLOUD_SERVICE_API_TOKEN", "LOCAL_FAKE"] } } } } },
+      "else": { "properties": { "endpoint": { "required": ["contextPath"] }, "auth": { "properties": { "kind": { "enum": ["DC_SERVICE_2LO", "DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] } } } } }
+    },
+    {
+      "if": { "properties": { "adapter": { "properties": { "family": { "const": "jira-dc-9-v2" } }, "required": ["family"] } } },
+      "then": { "properties": { "adapter": { "properties": { "exactBuild": { "pattern": "^9(?:\\.|$)" } } }, "auth": { "properties": { "kind": { "enum": ["DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] } } } } }
+    },
+    {
+      "if": { "properties": { "adapter": { "properties": { "family": { "const": "jira-dc-10-v2" } }, "required": ["family"] } } },
+      "then": { "properties": { "adapter": { "properties": { "exactBuild": { "pattern": "^10(?:\\.|$)" } } }, "auth": { "properties": { "kind": { "enum": ["DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] } } } } }
+    },
+    {
+      "if": { "properties": { "adapter": { "properties": { "family": { "const": "jira-dc-11-v2" } }, "required": ["family"] } } },
+      "then": { "properties": { "adapter": { "properties": { "exactBuild": { "pattern": "^11(?:\\.|$)" } } }, "auth": { "properties": { "kind": { "enum": ["DC_SERVICE_2LO", "DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] } } } } }
+    }
+  ],
+  "$defs": {
+    "SemVer": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
+    "Digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "ContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "contentHash"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "mode": "DEVELOPMENT_MOCKS",
+  "commandIds": [
+    "801406ec-577a-4468-9a72-d1ba6c8ee795",
+    "a0bae799-9966-4ff0-9f9e-3721360a3a92"
+  ],
+  "observationSources": [
+    "awp_mock.mock_effects",
+    "awp.connector_commands",
+    "awp.audit_events"
+  ],
+  "coverage": {
+    "schemaVersion": "audit-coverage@1.0.0",
+    "status": "PASS",
+    "measurements": {
+      "observedEffects": 2,
+      "expectedEffects": 2,
+      "coveredEffects": 2,
+      "duplicateEffects": 0,
+      "unmatchedAuditEvents": 0
+    },
+    "results": [
+      {
+        "effectKey": "local:10000000-0000-4000-8000-000000000001:20000000-0000-4000-8000-000000000001:audit-direct-43d8cf6f-2bb8-4d44-a99d-1c5928620f87",
+        "status": "PASS",
+        "providerRows": 1,
+        "providerEffectCount": 1,
+        "commandRows": 1,
+        "intentAuditRows": 1,
+        "resultAuditRows": 1,
+        "approvalAuditRows": 0,
+        "exactScope": true,
+        "exactCorrelation": true
+      },
+      {
+        "effectKey": "local:10000000-0000-4000-8000-000000000001:20000000-0000-4000-8000-000000000001:audit-approved-43d8cf6f-2bb8-4d44-a99d-1c5928620f87",
+        "status": "PASS",
+        "providerRows": 1,
+        "providerEffectCount": 1,
+        "commandRows": 1,
+        "intentAuditRows": 1,
+        "resultAuditRows": 1,
+        "approvalAuditRows": 1,
+        "exactScope": true,
+        "exactCorrelation": true
+      }
+    ],
+    "reasonCodes": []
+  }
+}

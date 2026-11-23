@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "proposalId": "27272727-2727-4727-8727-272727272727",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "findingId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "frozenFindingReviewRef": {
+    "id": "42424242-4242-4242-8242-424242424242",
+    "version": 3,
+    "contentHash": "sha256:4242424242424242424242424242424242424242424242424242424242424242"
+  },
+  "source": "MODEL_PROPOSAL",
+  "title": "Checkout validation returns an unstructured server error",
+  "description": "A wording-only assistant proposal based on the exact frozen Finding review.",
+  "stepsToReproduce": ["Open the checkout form", "Submit an invalid checkout payload"],
+  "expectedOutcome": "A structured validation error is returned",
+  "actualOutcome": "An unstructured server error is returned",
+  "modelRef": {
+    "kind": "model-release",
+    "id": "draft-assistant",
+    "version": "2026-08-27",
+    "contentHash": "sha256:2727272727272727272727272727272727272727272727272727272727272727"
+  },
+  "promptTemplateRef": {
+    "key": "qa.defect-draft.wording",
+    "version": "1.0.0",
+    "contentHash": "sha256:2828282828282828282828282828282828282828282828282828282828282828"
+  },
+  "proposalHash": "sha256:2929292929292929292929292929292929292929292929292929292929292929",
+  "generatedAt": "2026-08-27T12:30:00Z",
+  "expiresAt": "2026-08-27T13:30:00Z"
+}

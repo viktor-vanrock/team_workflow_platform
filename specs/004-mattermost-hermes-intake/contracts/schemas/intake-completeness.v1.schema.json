@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:intake-completeness:v1",
+  "title": "IntakeCompleteness v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "draftId",
+    "revision",
+    "contentHash",
+    "state",
+    "missingFields",
+    "invalidFields",
+    "blockers",
+    "inputFingerprint",
+    "rulesRef",
+    "skillRef",
+    "actionProvenanceRef",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "intake-completeness@1.0.0" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "draftId": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "contentHash": { "$ref": "#/$defs/hash" },
+    "state": { "enum": ["VALID", "INCOMPLETE", "INVALID"] },
+    "missingFields": { "$ref": "#/$defs/fieldList" },
+    "invalidFields": { "$ref": "#/$defs/fieldList" },
+    "blockers": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "fieldKey"],
+        "properties": {
+          "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,127}$" },
+          "fieldKey": { "$ref": "#/$defs/fieldKey" },
+          "detail": { "type": "string", "maxLength": 512 }
+        }
+      }
+    },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+    "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+    "actionProvenanceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "required": ["state"], "properties": { "state": { "const": "VALID" } } },
+      "then": {
+        "type": "object",
+        "properties": {
+          "missingFields": { "type": "array", "maxItems": 0 },
+          "invalidFields": { "type": "array", "maxItems": 0 },
+          "blockers": { "type": "array", "maxItems": 0 }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "required": ["state"], "properties": { "state": { "const": "INCOMPLETE" } } },
+      "then": { "type": "object", "properties": { "missingFields": { "type": "array", "minItems": 1 } } }
+    },
+    {
+      "if": { "type": "object", "required": ["state"], "properties": { "state": { "const": "INVALID" } } },
+      "then": { "type": "object", "properties": { "invalidFields": { "type": "array", "minItems": 1 } } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "fieldKey": {
+      "enum": [
+        "title",
+        "requestKind",
+        "goal",
+        "scope",
+        "acceptanceOutcome",
+        "sourceRefs",
+        "blockers",
+        "dependencies",
+        "requestedTarget",
+        "requestRisk",
+        "businessImpact",
+        "desiredDate",
+        "checklistRefs",
+        "roleMetadataRefs",
+        "requestedClassificationKey",
+        "defectRef",
+        "previousSessionRef",
+        "sourceBuildRef"
+      ]
+    },
+    "fieldList": { "type": "array", "maxItems": 18, "uniqueItems": true, "items": { "$ref": "#/$defs/fieldKey" } },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

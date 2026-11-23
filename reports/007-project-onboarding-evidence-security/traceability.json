@@ -1,0 +1,1757 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "checkpoint": "TRACEABILITY",
+  "status": "PASS",
+  "generatedAt": "2026-09-03T18:41:07.465Z",
+  "summary": {
+    "required": 40,
+    "declared": 40,
+    "passed": 40,
+    "failed": 0,
+    "missingDeclared": [],
+    "unexpectedDeclared": [],
+    "counts": {
+      "fr": 30,
+      "sec": 5,
+      "sc": 5
+    }
+  },
+  "entries": [
+    {
+      "id": "FR-007-001",
+      "kind": "requirement",
+      "tasks": [
+        "T027",
+        "T030",
+        "T062",
+        "T119"
+      ],
+      "evidence": [
+        "tests/unit/007/us3-authorization-policy.spec.ts",
+        "tests/integration/security/007/us3-read-surface-isolation.spec.ts",
+        "tests/integration/security/007/us3-side-channel.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-002",
+      "kind": "requirement",
+      "tasks": [
+        "T027",
+        "T030",
+        "T062",
+        "T119"
+      ],
+      "evidence": [
+        "tests/unit/007/us3-authorization-policy.spec.ts",
+        "tests/integration/security/007/us3-read-surface-isolation.spec.ts",
+        "tests/integration/security/007/us3-side-channel.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-003",
+      "kind": "requirement",
+      "tasks": [
+        "T027",
+        "T030",
+        "T062",
+        "T119"
+      ],
+      "evidence": [
+        "tests/unit/007/us3-authorization-policy.spec.ts",
+        "tests/integration/security/007/us3-read-surface-isolation.spec.ts",
+        "tests/integration/security/007/us3-side-channel.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-004",
+      "kind": "requirement",
+      "tasks": [
+        "T027",
+        "T030",
+        "T062",
+        "T119"
+      ],
+      "evidence": [
+        "tests/unit/007/us3-authorization-policy.spec.ts",
+        "tests/integration/security/007/us3-read-surface-isolation.spec.ts",
+        "tests/integration/security/007/us3-side-channel.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-005",
+      "kind": "requirement",
+      "tasks": [
+        "T027",
+        "T030",
+        "T062",
+        "T119"
+      ],
+      "evidence": [
+        "tests/unit/007/us3-authorization-policy.spec.ts",
+        "tests/integration/security/007/us3-read-surface-isolation.spec.ts",
+        "tests/integration/security/007/us3-side-channel.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-006",
+      "kind": "requirement",
+      "tasks": [
+        "T031",
+        "T043",
+        "T056",
+        "T088"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us2-binding-version-history.spec.ts",
+        "tests/contract/007/platform-actions.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-007",
+      "kind": "requirement",
+      "tasks": [
+        "T031",
+        "T043",
+        "T056",
+        "T088"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us2-binding-version-history.spec.ts",
+        "tests/contract/007/platform-actions.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-008",
+      "kind": "requirement",
+      "tasks": [
+        "T031",
+        "T043",
+        "T056",
+        "T088"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us2-binding-version-history.spec.ts",
+        "tests/contract/007/platform-actions.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-009",
+      "kind": "requirement",
+      "tasks": [
+        "T031",
+        "T043",
+        "T056",
+        "T088"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us2-binding-version-history.spec.ts",
+        "tests/contract/007/platform-actions.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-010",
+      "kind": "requirement",
+      "tasks": [
+        "T031",
+        "T043",
+        "T056",
+        "T088"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us2-binding-version-history.spec.ts",
+        "tests/contract/007/platform-actions.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-011",
+      "kind": "requirement",
+      "tasks": [
+        "T031",
+        "T043",
+        "T056",
+        "T088"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us2-binding-version-history.spec.ts",
+        "tests/contract/007/platform-actions.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-012",
+      "kind": "requirement",
+      "tasks": [
+        "T034",
+        "T048",
+        "T054",
+        "T104"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-project-resources.spec.ts",
+        "tests/integration/007/us1-account-leases.spec.ts",
+        "tests/integration/security/007/us3-evidence-artifact-isolation.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-013",
+      "kind": "requirement",
+      "tasks": [
+        "T034",
+        "T048",
+        "T054",
+        "T104"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-project-resources.spec.ts",
+        "tests/integration/007/us1-account-leases.spec.ts",
+        "tests/integration/security/007/us3-evidence-artifact-isolation.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-014",
+      "kind": "requirement",
+      "tasks": [
+        "T034",
+        "T048",
+        "T054",
+        "T104"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-project-resources.spec.ts",
+        "tests/integration/007/us1-account-leases.spec.ts",
+        "tests/integration/security/007/us3-evidence-artifact-isolation.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-015",
+      "kind": "requirement",
+      "tasks": [
+        "T034",
+        "T048",
+        "T054",
+        "T104"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-project-resources.spec.ts",
+        "tests/integration/007/us1-account-leases.spec.ts",
+        "tests/integration/security/007/us3-evidence-artifact-isolation.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-016",
+      "kind": "requirement",
+      "tasks": [
+        "T034",
+        "T048",
+        "T054",
+        "T104"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-project-resources.spec.ts",
+        "tests/integration/007/us1-account-leases.spec.ts",
+        "tests/integration/security/007/us3-evidence-artifact-isolation.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-017",
+      "kind": "requirement",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-018",
+      "kind": "requirement",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-019",
+      "kind": "requirement",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-020",
+      "kind": "requirement",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-021",
+      "kind": "requirement",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-022",
+      "kind": "requirement",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-023",
+      "kind": "requirement",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-024",
+      "kind": "requirement",
+      "tasks": [
+        "T057",
+        "T074",
+        "T088"
+      ],
+      "evidence": [
+        "tests/unit/007/us1-capability-mode.spec.ts",
+        "tests/unit/007/us2-full-qa-mode.spec.ts",
+        "tests/integration/007/us2-automated-session-guards.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-025",
+      "kind": "requirement",
+      "tasks": [
+        "T057",
+        "T074",
+        "T088"
+      ],
+      "evidence": [
+        "tests/unit/007/us1-capability-mode.spec.ts",
+        "tests/unit/007/us2-full-qa-mode.spec.ts",
+        "tests/integration/007/us2-automated-session-guards.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-026",
+      "kind": "requirement",
+      "tasks": [
+        "T146",
+        "T158",
+        "T162",
+        "T167"
+      ],
+      "evidence": [
+        "tests/integration/security/007/us5-effect-guard-race.spec.ts",
+        "tests/integration/security/007/us5-investigation-access.spec.ts",
+        "tests/integration/007/us5-resume-approval.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us5.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:66cd775938e801e3d363d0b1e359a7f3ad94f9f6fc0b629eeae1cefd30788407"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "recovery.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f648959b4854e83dd31ee317cbeae88774e1f49dc64220960effa9d1898e1509"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-027",
+      "kind": "requirement",
+      "tasks": [
+        "T146",
+        "T158",
+        "T162",
+        "T167"
+      ],
+      "evidence": [
+        "tests/integration/security/007/us5-effect-guard-race.spec.ts",
+        "tests/integration/security/007/us5-investigation-access.spec.ts",
+        "tests/integration/007/us5-resume-approval.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us5.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:66cd775938e801e3d363d0b1e359a7f3ad94f9f6fc0b629eeae1cefd30788407"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "recovery.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f648959b4854e83dd31ee317cbeae88774e1f49dc64220960effa9d1898e1509"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-028",
+      "kind": "requirement",
+      "tasks": [
+        "T146",
+        "T158",
+        "T162",
+        "T167"
+      ],
+      "evidence": [
+        "tests/integration/security/007/us5-effect-guard-race.spec.ts",
+        "tests/integration/security/007/us5-investigation-access.spec.ts",
+        "tests/integration/007/us5-resume-approval.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us5.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:66cd775938e801e3d363d0b1e359a7f3ad94f9f6fc0b629eeae1cefd30788407"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "recovery.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f648959b4854e83dd31ee317cbeae88774e1f49dc64220960effa9d1898e1509"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-006A",
+      "kind": "requirement",
+      "tasks": [
+        "T031",
+        "T043",
+        "T056",
+        "T088"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us2-binding-version-history.spec.ts",
+        "tests/contract/007/platform-actions.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007-006B",
+      "kind": "requirement",
+      "tasks": [
+        "T031",
+        "T043",
+        "T056",
+        "T088"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us2-binding-version-history.spec.ts",
+        "tests/contract/007/platform-actions.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SEC-007-001",
+      "kind": "security-requirement",
+      "tasks": [
+        "T168",
+        "T169",
+        "T170",
+        "T171",
+        "T175",
+        "T176",
+        "T180"
+      ],
+      "evidence": [
+        "tests/integration/007/migration-matrix.spec.ts",
+        "tests/e2e/007/project-onboarding-browser.spec.ts",
+        "tools/smoke/feature-007.mts"
+      ],
+      "reports": [
+        {
+          "name": "migrations-postgres-17.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f5476dcccddb33f3148796f3c3e1d4902d39e9d02045e435cc0dd011ed587d38"
+        },
+        {
+          "name": "migrations-postgres-18.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:dd2a23e981648e609b5c33abadc6991d4beb419a0fe9b1ca62f09278aaa609dd"
+        },
+        {
+          "name": "integration.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:64991175814335eb9e886ae587a3deb3b7faaa7dd777385218c33686622f4909"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "recovery.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f648959b4854e83dd31ee317cbeae88774e1f49dc64220960effa9d1898e1509"
+        },
+        {
+          "name": "browser.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:2a57a9c8bfc5fcdfc731370dacc8a7f152a41bda8e863dce5b7c2868fe6052c6"
+        },
+        {
+          "name": "smoke.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:942e74d110dc3ae8916e3feb7d9aa708902b3f438d7232fab3c18cc5d5a16c10"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SEC-007-002",
+      "kind": "security-requirement",
+      "tasks": [
+        "T168",
+        "T169",
+        "T170",
+        "T171",
+        "T175",
+        "T176",
+        "T180"
+      ],
+      "evidence": [
+        "tests/integration/007/migration-matrix.spec.ts",
+        "tests/e2e/007/project-onboarding-browser.spec.ts",
+        "tools/smoke/feature-007.mts"
+      ],
+      "reports": [
+        {
+          "name": "migrations-postgres-17.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f5476dcccddb33f3148796f3c3e1d4902d39e9d02045e435cc0dd011ed587d38"
+        },
+        {
+          "name": "migrations-postgres-18.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:dd2a23e981648e609b5c33abadc6991d4beb419a0fe9b1ca62f09278aaa609dd"
+        },
+        {
+          "name": "integration.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:64991175814335eb9e886ae587a3deb3b7faaa7dd777385218c33686622f4909"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "recovery.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f648959b4854e83dd31ee317cbeae88774e1f49dc64220960effa9d1898e1509"
+        },
+        {
+          "name": "browser.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:2a57a9c8bfc5fcdfc731370dacc8a7f152a41bda8e863dce5b7c2868fe6052c6"
+        },
+        {
+          "name": "smoke.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:942e74d110dc3ae8916e3feb7d9aa708902b3f438d7232fab3c18cc5d5a16c10"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SEC-007-003",
+      "kind": "security-requirement",
+      "tasks": [
+        "T168",
+        "T169",
+        "T170",
+        "T171",
+        "T175",
+        "T176",
+        "T180"
+      ],
+      "evidence": [
+        "tests/integration/007/migration-matrix.spec.ts",
+        "tests/e2e/007/project-onboarding-browser.spec.ts",
+        "tools/smoke/feature-007.mts"
+      ],
+      "reports": [
+        {
+          "name": "migrations-postgres-17.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f5476dcccddb33f3148796f3c3e1d4902d39e9d02045e435cc0dd011ed587d38"
+        },
+        {
+          "name": "migrations-postgres-18.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:dd2a23e981648e609b5c33abadc6991d4beb419a0fe9b1ca62f09278aaa609dd"
+        },
+        {
+          "name": "integration.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:64991175814335eb9e886ae587a3deb3b7faaa7dd777385218c33686622f4909"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "recovery.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f648959b4854e83dd31ee317cbeae88774e1f49dc64220960effa9d1898e1509"
+        },
+        {
+          "name": "browser.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:2a57a9c8bfc5fcdfc731370dacc8a7f152a41bda8e863dce5b7c2868fe6052c6"
+        },
+        {
+          "name": "smoke.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:942e74d110dc3ae8916e3feb7d9aa708902b3f438d7232fab3c18cc5d5a16c10"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SEC-007-004",
+      "kind": "security-requirement",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SEC-007-005",
+      "kind": "security-requirement",
+      "tasks": [
+        "T027",
+        "T030",
+        "T062",
+        "T119"
+      ],
+      "evidence": [
+        "tests/unit/007/us3-authorization-policy.spec.ts",
+        "tests/integration/security/007/us3-read-surface-isolation.spec.ts",
+        "tests/integration/security/007/us3-side-channel.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-007-001",
+      "kind": "success-criterion",
+      "tasks": [
+        "T031",
+        "T043",
+        "T056",
+        "T088"
+      ],
+      "evidence": [
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us2-binding-version-history.spec.ts",
+        "tests/contract/007/platform-actions.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+        },
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-007-002",
+      "kind": "success-criterion",
+      "tasks": [
+        "T027",
+        "T030",
+        "T062",
+        "T119"
+      ],
+      "evidence": [
+        "tests/unit/007/us3-authorization-policy.spec.ts",
+        "tests/integration/security/007/us3-read-surface-isolation.spec.ts",
+        "tests/integration/security/007/us3-side-channel.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "foundation.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+        },
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-007-003",
+      "kind": "success-criterion",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-007-004",
+      "kind": "success-criterion",
+      "tasks": [
+        "T035",
+        "T049",
+        "T120",
+        "T145"
+      ],
+      "evidence": [
+        "tests/contract/007/us4-evidence-manifest.spec.ts",
+        "tests/unit/007/us4-evidence-signature.spec.ts",
+        "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "tests/integration/security/007/us4-evidence-export.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-007-005",
+      "kind": "success-criterion",
+      "tasks": [
+        "T146",
+        "T158",
+        "T162",
+        "T167"
+      ],
+      "evidence": [
+        "tests/integration/security/007/us5-effect-guard-race.spec.ts",
+        "tests/integration/security/007/us5-investigation-access.spec.ts",
+        "tests/integration/007/us5-resume-approval.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us5.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:66cd775938e801e3d363d0b1e359a7f3ad94f9f6fc0b629eeae1cefd30788407"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+        },
+        {
+          "name": "recovery.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:f648959b4854e83dd31ee317cbeae88774e1f49dc64220960effa9d1898e1509"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    }
+  ],
+  "sourceBinding": {
+    "spec": "sha256:12231f328fddada9e7e5e41d45a70d2473eebbff0048eef145882968129a062f",
+    "tasks": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/scans-5e1d9dd4-e385-46b3-941c-c4e31e86a143.json",
+    "sha256": "sha256:d54a513650301ba711374e6013aef9325eeae90e78d3414db89b5d1261dbd8ed"
+  },
+  "mode": "DEVELOPMENT_MOCKS",
+  "releaseEligibility": "BLOCKED_INPUT",
+  "imageDigest": "sha256:1fc7299087840989157a59db05bca2eaf2c860cf1ed805dc1cce40c6bd888382",
+  "scannerDatabase": "sha256:5ab91473dd8470ca7ef506314a8f424e861c4fc41445742a790953d1b259027e"
+}

@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/hermes-d3c2e4d3-4251-4004-a74a-816ee0e7d38d.json",
+    "sha256": "sha256:ac3b74b55fd51924ba4fbe598a9d722f18599647044284ee133b5b449c04c20f"
+  },
+  "mode": "DEVELOPMENT_MOCKS",
+  "corporateModelQuality": "NOT_EVALUATED",
+  "cases": 21,
+  "passRate": 1,
+  "unauthorizedOperations": 0,
+  "leakageCount": 0,
+  "fallbackCount": 12
+}

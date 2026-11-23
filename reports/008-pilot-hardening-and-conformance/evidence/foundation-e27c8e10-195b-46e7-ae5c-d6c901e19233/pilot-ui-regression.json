@@ -1,0 +1,12 @@
+{
+  "args": [
+    "node_modules/@playwright/test/cli.js",
+    "test",
+    "tests/e2e/008/pilot-readiness-browser.spec.ts",
+    "--project=chromium",
+    "--workers=1"
+  ],
+  "exitCode": 1,
+  "durationMs": 997,
+  "output": "\nRunning 6 tests using 1 worker\nF°°°°°\n\n  1) [chromium] › tests/e2e/008/pilot-readiness-browser.spec.ts:41:1 › corporate entry uses BFF login and never loads the local persona catalog \n\n    Error: listen EPERM: operation not permitted 127.0.0.1\n\n    Error Context: test-results/008-pilot-readiness-browse-fae11-s-the-local-persona-catalog-chromium/error-context.md\n\n    Error Context: test-results/008-pilot-readiness-browse-fae11-s-the-local-persona-catalog-chromium/error-context.md\n\n    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────\n    test-results/008-pilot-readiness-browse-fae11-s-the-local-persona-catalog-chromium/trace.zip\n    Usage:\n\n        pnpm exec playwright show-trace test-results/008-pilot-readiness-browse-fae11-s-the-local-persona-catalog-chromium/trace.zip\n\n    ────────────────────────────────────────────────────────────────────────────────────────────────\n\n  1 failed\n    [chromium] › tests/e2e/008/pilot-readiness-browser.spec.ts:41:1 › corporate entry uses BFF login and never loads the local persona catalog \n  5 did not run\n(node:32602) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

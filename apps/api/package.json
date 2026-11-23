@@ -1,0 +1,28 @@
+{
+  "name": "@awp/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start:workspace": "tsx --tsconfig ../../tsconfig.base.json src/workspace-main.ts",
+    "start": "tsx --tsconfig ../../tsconfig.base.json src/main.ts"
+  },
+  "dependencies": {
+    "@awp/competency-dummy": "workspace:*",
+    "@awp/competency-qa": "workspace:*",
+    "@awp/platform-contracts": "workspace:*",
+    "@awp/platform-core": "workspace:*",
+    "@awp/platform-persistence-typeorm": "workspace:*",
+    "@awp/platform-runtime-nest": "workspace:*",
+    "@awp/runtime-composition": "workspace:*",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-express": "catalog:",
+    "jose": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "typeorm": "catalog:",
+    "@awp/competency-tech-writing": "workspace:*",
+    "@awp/competency-ui-sdk": "workspace:*"
+  }
+}

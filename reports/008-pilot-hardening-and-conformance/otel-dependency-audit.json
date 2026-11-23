@@ -1,0 +1,103 @@
+{
+  "advisories": {
+    "1158506": {
+      "findings": [
+        {
+          "version": "6.15.3",
+          "paths": [
+            "apps__api>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "apps__api>@nestjs/core>@nestjs/platform-express>express>qs",
+            "apps__api>@nestjs/platform-express>express>body-parser>qs",
+            "apps__api>@nestjs/platform-express>express>qs",
+            "apps__fake-idp>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "apps__fake-idp>@nestjs/core>@nestjs/platform-express>express>qs",
+            "apps__fake-idp>@nestjs/platform-express>express>body-parser>qs",
+            "apps__fake-idp>@nestjs/platform-express>express>qs",
+            "apps__mock-hub>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "apps__mock-hub>@nestjs/core>@nestjs/platform-express>express>qs",
+            "apps__mock-hub>@nestjs/platform-express>express>body-parser>qs",
+            "apps__mock-hub>@nestjs/platform-express>express>qs",
+            "apps__worker>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "apps__worker>@nestjs/core>@nestjs/platform-express>express>qs",
+            "apps__worker>@nestjs/platform-express>express>body-parser>qs",
+            "apps__worker>@nestjs/platform-express>express>qs",
+            "packages__platform-queue-bullmq>@nestjs/bullmq>@nestjs/bull-shared>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "packages__platform-queue-bullmq>@nestjs/bullmq>@nestjs/bull-shared>@nestjs/core>@nestjs/platform-express>express>qs",
+            "packages__platform-queue-bullmq>@nestjs/bullmq>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "packages__platform-queue-bullmq>@nestjs/bullmq>@nestjs/core>@nestjs/platform-express>express>qs",
+            "packages__platform-runtime-nest>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "packages__platform-runtime-nest>@nestjs/core>@nestjs/platform-express>express>qs"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1158506,
+      "title": "qs array-limit bypass via bracket-key comma parsing",
+      "module_name": "qs",
+      "vulnerable_versions": ">=6.14.2 <=6.15.3",
+      "patched_versions": ">=6.15.4",
+      "severity": "moderate",
+      "cwe": "CWE-770",
+      "github_advisory_id": "GHSA-x5fp-wj9c-mxmx",
+      "url": "https://github.com/advisories/GHSA-x5fp-wj9c-mxmx"
+    },
+    "1158507": {
+      "findings": [
+        {
+          "version": "6.15.3",
+          "paths": [
+            "apps__api>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "apps__api>@nestjs/core>@nestjs/platform-express>express>qs",
+            "apps__api>@nestjs/platform-express>express>body-parser>qs",
+            "apps__api>@nestjs/platform-express>express>qs",
+            "apps__fake-idp>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "apps__fake-idp>@nestjs/core>@nestjs/platform-express>express>qs",
+            "apps__fake-idp>@nestjs/platform-express>express>body-parser>qs",
+            "apps__fake-idp>@nestjs/platform-express>express>qs",
+            "apps__mock-hub>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "apps__mock-hub>@nestjs/core>@nestjs/platform-express>express>qs",
+            "apps__mock-hub>@nestjs/platform-express>express>body-parser>qs",
+            "apps__mock-hub>@nestjs/platform-express>express>qs",
+            "apps__worker>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "apps__worker>@nestjs/core>@nestjs/platform-express>express>qs",
+            "apps__worker>@nestjs/platform-express>express>body-parser>qs",
+            "apps__worker>@nestjs/platform-express>express>qs",
+            "packages__platform-queue-bullmq>@nestjs/bullmq>@nestjs/bull-shared>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "packages__platform-queue-bullmq>@nestjs/bullmq>@nestjs/bull-shared>@nestjs/core>@nestjs/platform-express>express>qs",
+            "packages__platform-queue-bullmq>@nestjs/bullmq>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "packages__platform-queue-bullmq>@nestjs/bullmq>@nestjs/core>@nestjs/platform-express>express>qs",
+            "packages__platform-runtime-nest>@nestjs/core>@nestjs/platform-express>express>body-parser>qs",
+            "packages__platform-runtime-nest>@nestjs/core>@nestjs/platform-express>express>qs"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1158507,
+      "title": "qs: Denial of Service via Attacker Controlled isBuffer",
+      "module_name": "qs",
+      "vulnerable_versions": ">=2.2.5 <6.16.0",
+      "patched_versions": ">=6.16.0",
+      "severity": "moderate",
+      "cwe": "CWE-248, CWE-703",
+      "github_advisory_id": "GHSA-4mjr-xmp4-gh2g",
+      "url": "https://github.com/advisories/GHSA-4mjr-xmp4-gh2g"
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 2,
+      "high": 0,
+      "critical": 0
+    },
+    "dependencies": 378,
+    "devDependencies": 0,
+    "optionalDependencies": 16,
+    "totalDependencies": 394
+  }
+}

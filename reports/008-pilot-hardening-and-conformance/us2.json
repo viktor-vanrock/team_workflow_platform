@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/us2-94ee2f39-892c-458e-a54f-83ab5c6be3ef.json",
+    "sha256": "sha256:cd7ee3786440f7d54f1a03ec8d94403a8c1f0e0aa38eb96f7895a21de293bbd2"
+  },
+  "mode": "DEVELOPMENT_MOCKS",
+  "corporateN2": "BLOCKED_INPUT"
+}

@@ -1,0 +1,13 @@
+{
+  "kind": "REQUIRED_SESSION",
+  "requirementRef": {
+    "planRef": {
+      "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "revision": 1,
+      "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "requirementKey": "manual-smoke",
+    "ordinal": 1,
+    "contentHash": "sha256:8080808080808080808080808080808080808080808080808080808080808080"
+  }
+}

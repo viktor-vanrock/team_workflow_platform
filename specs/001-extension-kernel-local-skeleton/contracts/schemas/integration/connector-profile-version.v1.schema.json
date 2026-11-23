@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:integration:connector-profile-version:v1",
+  "title": "Connector Profile Version",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profileId",
+    "workspaceId",
+    "key",
+    "dataClassificationKey",
+    "version",
+    "state",
+    "connectorRef",
+    "connectionRef",
+    "capabilityConfigurations",
+    "schemaVersion",
+    "contentHash",
+    "resourceVersion",
+    "createdAt"
+  ],
+  "properties": {
+    "profileId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "key": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "dataClassificationKey": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "version": { "type": "integer", "minimum": 1 },
+    "state": { "type": "string", "enum": ["DRAFT", "VALIDATED", "PUBLISHED", "RETIRED"] },
+    "connectorRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemanticVersionRef" },
+    "connectionRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef" },
+    "connectorConfiguration": { "$ref": "../common/schema-bound-value.v1.schema.json" },
+    "capabilityConfigurations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/CapabilityConfiguration" }
+    },
+    "schemaVersion": { "const": 1 },
+    "contentHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "validationReportId": {
+      "description": "Exact successful immutable Validation Report that authorized the transition out of DRAFT; excluded from contentHash to avoid a circular fingerprint.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "validatedAt": { "type": "string", "format": "date-time" },
+    "publishedAt": { "type": "string", "format": "date-time" },
+    "retiredAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "VALIDATED" } }, "required": ["state"] },
+      "then": { "required": ["validationReportId", "validatedAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "PUBLISHED" } }, "required": ["state"] },
+      "then": { "required": ["validationReportId", "validatedAt", "publishedAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "RETIRED" } }, "required": ["state"] },
+      "then": { "required": ["validationReportId", "validatedAt", "publishedAt", "retiredAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "DRAFT" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["validationReportId"] }, { "required": ["validatedAt"] }, { "required": ["publishedAt"] }, { "required": ["retiredAt"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "VALIDATED" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["publishedAt"] }, { "required": ["retiredAt"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "PUBLISHED" } }, "required": ["state"] },
+      "then": { "not": { "required": ["retiredAt"] } }
+    }
+  ],
+  "$defs": {
+    "CapabilityConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capabilityKey",
+        "exactContractVersion",
+        "operationConfigurations",
+        "environmentScopes",
+        "allowedDataClassifications",
+        "externalScope"
+      ],
+      "properties": {
+        "capabilityKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "exactContractVersion": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+        "operationConfigurations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/OperationConfiguration" }
+        },
+        "environmentScopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/EnvironmentScope" }
+        },
+        "allowedDataClassifications": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,63}$" }
+        },
+        "externalScope": { "$ref": "../common/schema-bound-value.v1.schema.json" },
+        "mappingRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef" },
+        "mappingContentHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["mappingRef"] },
+          "then": { "required": ["mappingContentHash"] },
+          "else": { "not": { "required": ["mappingContentHash"] } }
+        }
+      ]
+    },
+    "OperationConfiguration": {
+      "description": "Effect is copied from and must equal the exact Capability Contract operation; it enables local conditional validation.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "effect", "confirmationMode"],
+      "properties": {
+        "operation": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "effect": { "type": "string", "enum": ["READ", "WRITE"] },
+        "idempotencyStrategy": {
+          "type": "string",
+          "enum": ["NATIVE_KEY", "NATURAL_KEY_LOOKUP", "RECONCILIATION"]
+        },
+        "confirmationMode": {
+          "type": "string",
+          "enum": ["SYNC_RECEIPT", "READ_BACK", "WEBHOOK", "RECONCILIATION"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "effect": { "const": "WRITE" } },
+            "required": ["effect"]
+          },
+          "then": { "required": ["idempotencyStrategy"] },
+          "else": { "not": { "required": ["idempotencyStrategy"] } }
+        }
+      ]
+    }
+  }
+}

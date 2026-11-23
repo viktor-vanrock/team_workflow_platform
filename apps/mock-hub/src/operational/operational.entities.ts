@@ -1,0 +1,111 @@
+import { EntitySchema } from "typeorm";
+
+export const OperationalRequestEntity = new EntitySchema({
+  name: "OperationalRequest",
+  tableName: "operational_requests",
+  columns: {
+    externalEntityId: { name: "external_entity_id", type: String, primary: true },
+    workspaceId: { name: "workspace_id", type: "uuid" },
+    projectId: { name: "project_id", type: "uuid" },
+    authorityScopeKey: { name: "authority_scope_key", type: String },
+    naturalKey: { name: "natural_key", type: String },
+    sourceDraftId: { name: "source_draft_id", type: "uuid" },
+    requestKind: { name: "request_kind", type: String },
+    summary: { type: String },
+    description: { type: String, nullable: true },
+    acceptanceOutcome: { name: "acceptance_outcome", type: String, nullable: true },
+    dataClassificationKey: { name: "data_classification_key", type: String },
+    externalVersion: { name: "external_version", type: Number },
+    rawExternalState: { name: "raw_external_state", type: String },
+    normalizedStatus: { name: "normalized_status", type: String },
+    profileId: { name: "profile_id", type: "uuid" },
+    profileVersion: { name: "profile_version", type: Number },
+    createdAt: { name: "created_at", type: "timestamptz" },
+    updatedAt: { name: "updated_at", type: "timestamptz" },
+    completionSummary: { name: "completion_summary", type: "jsonb", nullable: true },
+    completionSummaryDigest: { name: "completion_summary_digest", type: String, nullable: true },
+    completionSummaryReceipt: { name: "completion_summary_receipt", type: "jsonb", nullable: true },
+  },
+  uniques: [{ columns: ["workspaceId", "projectId", "naturalKey"] }],
+});
+
+export const OperationalRequestEffectEntity = new EntitySchema({
+  name: "OperationalRequestEffect",
+  tableName: "operational_request_effects",
+  columns: {
+    effectIdempotencyKey: { name: "effect_idempotency_key", type: String, primary: true },
+    requestHash: { name: "request_hash", type: String },
+    workspaceId: { name: "workspace_id", type: "uuid" },
+    projectId: { name: "project_id", type: "uuid" },
+    profileId: { name: "profile_id", type: "uuid" },
+    profileVersion: { name: "profile_version", type: Number },
+    externalEntityId: { name: "external_entity_id", type: String },
+    result: { type: "jsonb" },
+    effectCount: { name: "effect_count", type: Number },
+    recordedAt: { name: "recorded_at", type: "timestamptz" },
+  },
+});
+export const OperationalDefectEntity = new EntitySchema({
+  name: "OperationalDefect",
+  tableName: "operational_defects",
+  columns: {
+    externalEntityId: { name: "external_entity_id", type: String, primary: true },
+    workspaceId: { name: "workspace_id", type: "uuid" },
+    projectId: { name: "project_id", type: "uuid" },
+    authorityScopeKey: { name: "authority_scope_key", type: String },
+    naturalKey: { name: "natural_key", type: String },
+    sourceWorkItemId: { name: "source_work_item_id", type: "uuid" },
+    summary: { type: String },
+    description: { type: String },
+    dataClassificationKey: { name: "data_classification_key", type: String },
+    sourceRefs: { name: "source_refs", type: "jsonb" },
+    externalVersion: { name: "external_version", type: Number },
+    rawExternalState: { name: "raw_external_state", type: String },
+    normalizedStatus: { name: "normalized_status", type: String },
+    profileId: { name: "profile_id", type: "uuid" },
+    profileVersion: { name: "profile_version", type: Number },
+    createdAt: { name: "created_at", type: "timestamptz" },
+  },
+});
+export const OperationalDefectEffectEntity = new EntitySchema({
+  name: "OperationalDefectEffect",
+  tableName: "operational_defect_effects",
+  columns: {
+    effectIdempotencyKey: { name: "effect_idempotency_key", type: String, primary: true },
+    requestHash: { name: "request_hash", type: String },
+    workspaceId: { name: "workspace_id", type: "uuid" },
+    projectId: { name: "project_id", type: "uuid" },
+    profileId: { name: "profile_id", type: "uuid" },
+    profileVersion: { name: "profile_version", type: Number },
+    externalEntityId: { name: "external_entity_id", type: String },
+    result: { type: "jsonb" },
+    effectCount: { name: "effect_count", type: Number },
+    recordedAt: { name: "recorded_at", type: "timestamptz" },
+  },
+});
+export const OperationalCompletionEffectEntity = new EntitySchema({
+  name: "OperationalCompletionEffect",
+  tableName: "operational_completion_effects",
+  columns: {
+    effectIdempotencyKey: { name: "effect_idempotency_key", type: String, primary: true },
+    requestHash: { name: "request_hash", type: String },
+    workspaceId: { name: "workspace_id", type: "uuid" },
+    projectId: { name: "project_id", type: "uuid" },
+    externalEntityId: { name: "external_entity_id", type: String },
+    summary: { type: "jsonb" },
+    summaryDigest: { name: "summary_digest", type: String },
+    commentReceipt: { name: "comment_receipt", type: "jsonb" },
+    expectedExternalVersion: { name: "expected_external_version", type: String },
+    confirmedExternalVersion: { name: "confirmed_external_version", type: String },
+    partialEffectLedger: { name: "partial_effect_ledger", type: "jsonb" },
+    recordedAt: { name: "recorded_at", type: "timestamptz" },
+  },
+});
+
+export const operationalEntities = Object.freeze([
+  OperationalRequestEntity,
+  OperationalRequestEffectEntity,
+  OperationalDefectEntity,
+  OperationalDefectEffectEntity,
+  OperationalCompletionEffectEntity,
+]);

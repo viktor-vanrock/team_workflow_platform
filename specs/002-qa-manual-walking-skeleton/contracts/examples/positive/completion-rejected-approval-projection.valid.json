@@ -1,0 +1,8 @@
+{
+  "state": "REJECTED",
+  "closeApprovalRef": {
+    "approvalId": "30303030-3030-4030-8030-303030303030",
+    "subjectHash": "sha256:7474747474747474747474747474747474747474747474747474747474747474"
+  },
+  "terminalReason": "The distinct QA Lead rejected the exact final-close subject."
+}

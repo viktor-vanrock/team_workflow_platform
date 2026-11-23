@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "checkpoint": "SETUP_CONTOUR",
+  "status": "PASS",
+  "startedAt": "2026-09-03T11:09:37.934Z",
+  "finishedAt": "2026-09-03T11:09:38.321Z",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "externalNetwork": "DENIED",
+  "production": "DENIED",
+  "fixture": {
+    "fixtureHash": "sha256:b831873e9c6cd24edb1d8e2fa79fc0dcfa2e37b3483c422eea74da7f7bd6977b",
+    "visibleProjects": [
+      "A",
+      "B"
+    ],
+    "forbiddenProjects": [
+      "C"
+    ],
+    "policyModes": [
+      "MEASURE_ONLY",
+      "ENFORCED"
+    ],
+    "sessionCount": 2,
+    "attemptCount": 2,
+    "productionEndpoints": 0,
+    "realProviderCredentials": 0
+  },
+  "compose": {
+    "internalNetwork": true,
+    "queueStaticContourForwarded": true,
+    "queueServiceCount": 0,
+    "queueDatabaseOwnerCount": 0
+  },
+  "scenarios": [
+    {
+      "id": "setup-portfolio",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "contour": "qa-jira-gitlab-mattermost-local",
+        "projects": [
+          {
+            "key": "A",
+            "projectId": "20000000-0000-4000-8000-000000000001",
+            "entitledToLead": true,
+            "interleavedRank": 2
+          },
+          {
+            "key": "B",
+            "projectId": "20000000-0000-4000-8000-000000000002",
+            "entitledToLead": true,
+            "interleavedRank": 1
+          },
+          {
+            "key": "C",
+            "projectId": "20000000-0000-4000-8000-000000000003",
+            "entitledToLead": false,
+            "interleavedRank": 0
+          }
+        ],
+        "policyRef": {
+          "id": "96000000-0000-4000-8000-000000000003",
+          "version": 1,
+          "semanticHash": "sha256:34eba3fa637bc39d26c2b767ade789ca8708ee1b3cd08ac86cf885ffe6c24eeb"
+        },
+        "calendarRef": {
+          "id": "96000000-0000-4000-8000-000000000001",
+          "version": 1,
+          "semanticHash": "sha256:c01f4d435b929e06eadda8888bcdbf3ad44dfe1cc0058c6c13d612e8315a8171"
+        },
+        "sessions": [
+          {
+            "sessionId": "queue-local-session-alpha",
+            "projectId": "20000000-0000-4000-8000-000000000001",
+            "mode": "MANUAL",
+            "state": "RUNNING"
+          },
+          {
+            "sessionId": "queue-local-session-beta",
+            "projectId": "20000000-0000-4000-8000-000000000002",
+            "mode": "AUTOMATED",
+            "state": "REVIEW_REQUIRED"
+          }
+        ],
+        "attempts": [
+          {
+            "attemptId": "queue-local-attempt-alpha-1",
+            "sessionId": "queue-local-session-alpha",
+            "state": "TERMINAL",
+            "outcome": "PASSED"
+          },
+          {
+            "attemptId": "queue-local-attempt-beta-1",
+            "sessionId": "queue-local-session-beta",
+            "state": "TERMINAL",
+            "outcome": "FAILED"
+          }
+        ],
+        "virtualClock": {
+          "initialNow": "2026-09-03T08:00:00.000Z",
+          "tickSeconds": 300
+        },
+        "fixtureHash": "sha256:b831873e9c6cd24edb1d8e2fa79fc0dcfa2e37b3483c422eea74da7f7bd6977b"
+      }
+    },
+    {
+      "id": "external-network-denied",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "externalNetworkMode": "deny",
+        "productionEndpointInvocations": 0,
+        "credentialResolutions": 0,
+        "reasonCode": "LOCAL_EFFECT_ENDPOINT_FORBIDDEN"
+      }
+    }
+  ],
+  "commandResults": [
+    {
+      "command": "up",
+      "status": "PASS",
+      "exitCode": 0,
+      "outputHash": "sha256:119354da9a0a7abc90fab34d95e009b142b51905ed88cf7f9faad462e26f0a64"
+    },
+    {
+      "command": "status",
+      "status": "PASS",
+      "exitCode": 0,
+      "outputHash": "sha256:3a0c09bda4f0ea8520e467e958e86b346f6e2723cf9dd371dd636cd794e30fb6"
+    },
+    {
+      "command": "migrate",
+      "status": "PASS",
+      "exitCode": 0,
+      "outputHash": "sha256:22b4afea1de5066c9f045e1ece5998cde9475d137b09be32e420f62aade278b7"
+    },
+    {
+      "command": "seed",
+      "status": "PASS",
+      "exitCode": 0,
+      "outputHash": "sha256:c1ecc495d692aa9d940bd2105769aea36fa69fff1bf43cdb172ec968b6500439"
+    },
+    {
+      "command": "down",
+      "status": "PASS",
+      "exitCode": 0,
+      "outputHash": "sha256:611e2a5506849c58c311dec288235e9b10cc4ab3759f3003986889843a7e777b"
+    },
+    {
+      "command": "reset",
+      "status": "PASS",
+      "exitCode": 0,
+      "outputHash": "sha256:ed4f75a78e0f8a748176ffee8a1e47c59227fde627264b189ba7bb18c2351251"
+    }
+  ]
+}

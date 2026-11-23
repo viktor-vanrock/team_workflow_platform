@@ -1,0 +1,1116 @@
+{
+  "schemaVersion": 1,
+  "description": "Offline conformance vectors. Paths are relative to this manifest.",
+  "cases": [
+    {
+      "fixture": "positive/qa-intake.valid.json",
+      "schema": "../schemas/intake/qa-intake.v1.schema.json",
+      "valid": true,
+      "purpose": "Confirmed intake contains no authoritative scope or actor."
+    },
+    {
+      "fixture": "positive/qa-intake-retest.valid.json",
+      "schema": "../schemas/intake/qa-intake.v1.schema.json",
+      "valid": true,
+      "purpose": "RETEST pins defect, source build and an immutable EXTERNAL_HISTORICAL prior Session before US2 QA Session tables exist."
+    },
+    {
+      "fixture": "positive/qa-project-context.valid.json",
+      "schema": "../schemas/qa/qa-project-context.v1.schema.json",
+      "valid": true,
+      "purpose": "Published project context pins an exact risk policy and human publication provenance."
+    },
+    {
+      "fixture": "positive/risk-review-policy.valid.json",
+      "schema": "../schemas/qa/risk-review-policy.v1.schema.json",
+      "valid": true,
+      "purpose": "Hashed scoped risk policy declares exact verdict, waiver, accepted-risk and final-close permission keys."
+    },
+    {
+      "fixture": "positive/required-session-plan.valid.json",
+      "schema": "../schemas/qa/required-session-plan.v1.schema.json",
+      "valid": true,
+      "purpose": "Immutable Required Session Plan revision."
+    },
+    {
+      "fixture": "positive/qa-request-extension.valid.json",
+      "schema": "../schemas/qa/qa-request-extension.v1.schema.json",
+      "valid": true,
+      "purpose": "US1 request extension is valid before US2 publishes its optional exact plan pointer."
+    },
+    {
+      "fixture": "positive/qa-request-input-revision-incomplete.valid.json",
+      "schema": "../schemas/qa/qa-request-input-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "Initial append-only input revision may omit DoR semantics and record MISSING server-derived response channel so post-confirmation NEEDS_INFO remains reachable."
+    },
+    {
+      "fixture": "positive/request-input-revised-event.valid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/RequestInputRevisedEvent",
+      "valid": true,
+      "purpose": "Pointer advance event exposes exact prior/new revisions and atomically invalidated assessment/waiver/pending READY refs."
+    },
+    {
+      "fixture": "positive/readiness-assessment-ready.valid.json",
+      "schema": "../schemas/qa/readiness-assessment.v1.schema.json",
+      "valid": true,
+      "purpose": "Immutable readiness revision carries exact version and content hash."
+    },
+    {
+      "fixture": "positive/readiness-assessment-needs-info.valid.json",
+      "schema": "../schemas/qa/readiness-assessment.v1.schema.json",
+      "valid": true,
+      "purpose": "Sparse confirmed input revision yields structured NEEDS_INFO for missing original-requester channel, declarations and Binding rather than failing structural confirmation."
+    },
+    {
+      "fixture": "positive/operational-readiness-confirmed-later-state.valid.json",
+      "schema": "../schemas/qa/qa-work-item-detail.v1.schema.json#/$defs/OperationalReadinessProjection",
+      "valid": true,
+      "purpose": "Confirmed readiness remains a fact after Core advances from READY to DONE and retains exact command/result provenance."
+    },
+    {
+      "fixture": "positive/dor-waiver.valid.json",
+      "schema": "../schemas/qa/qa-waiver.v1.schema.json",
+      "valid": true,
+      "purpose": "DOR waiver pins exact subject, qa.dor rule, input fingerprint, expiry, scoped risk policy and distinct QA Lead decision."
+    },
+    {
+      "fixture": "positive/plan-item-waiver-selector.valid.json",
+      "schema": "../schemas/qa/qa-waiver.v1.schema.json#/$defs/WaiverSubjectSelector",
+      "valid": true,
+      "purpose": "Public PLAN_ITEM waiver selection accepts only a same-scope ID; the server resolves its current resource version and snapshot."
+    },
+    {
+      "fixture": "positive/required-session-waiver-selector.valid.json",
+      "schema": "../schemas/qa/qa-waiver.v1.schema.json#/$defs/WaiverSubjectSelector",
+      "valid": true,
+      "purpose": "REQUIRED_SESSION waiver selection pins one exact requirement inside one immutable Required Session Plan revision."
+    },
+    {
+      "fixture": "positive/test-session-completed.valid.json",
+      "schema": "../schemas/qa/test-session.v1.schema.json",
+      "valid": true,
+      "purpose": "Manual Session pins the exact Required Session Plan requirement and complete human state provenance."
+    },
+    {
+      "fixture": "positive/session-review.valid.json",
+      "schema": "../schemas/qa/session-review.v1.schema.json",
+      "valid": true,
+      "purpose": "Append-only human Session review pins the adjudicative manifest revision."
+    },
+    {
+      "fixture": "positive/manual-attempt.valid.json",
+      "schema": "../schemas/qa/manual-attempt.v1.schema.json",
+      "valid": true,
+      "purpose": "Append-only ManualAttempt uses canonical attempt result."
+    },
+    {
+      "fixture": "positive/manual-attempt-clean-pass.valid.json",
+      "schema": "../schemas/qa/manual-attempt.v1.schema.json",
+      "valid": true,
+      "purpose": "A clean PASS starts with one exact finalized PASS Attempt in contiguous server-derived history."
+    },
+    {
+      "fixture": "positive/observation-clean-pass.valid.json",
+      "schema": "../schemas/qa/observation.v1.schema.json",
+      "valid": true,
+      "purpose": "Clean PASS has a current-leaf POSITIVE Observation with structured expected and actual outcomes on that exact PASS Attempt."
+    },
+    {
+      "fixture": "positive/observation-clean-pass-correction.valid.json",
+      "schema": "../schemas/qa/observation.v1.schema.json",
+      "valid": true,
+      "purpose": "Before review, an audited correction creates a new Observation leaf and makes the exact predecessor stale for result CAS."
+    },
+    {
+      "fixture": "positive/manual-attempt-cancelled.valid.json",
+      "schema": "../schemas/qa/manual-attempt.v1.schema.json",
+      "valid": true,
+      "purpose": "CANCELLED remains a terminal ManualAttempt result and carries a bounded human cancellation reason."
+    },
+    {
+      "fixture": "positive/plan-item-result-fail-with-evidence.valid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "FAIL carries unconditional attachment evidence."
+    },
+    {
+      "fixture": "positive/plan-item-result-clean-pass.valid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "Persisted clean PASS exposes the complete server-derived finalized Attempt and current-leaf Observation memberships."
+    },
+    {
+      "fixture": "positive/plan-item-result-clean-pass-command.valid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": true,
+      "purpose": "The public result command carries only expected complete-set CAS fingerprints/counts, never caller-selected Attempt or Observation refs."
+    },
+    {
+      "fixture": "negative/plan-item-result-clean-pass-zero-observations.invalid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": false,
+      "purpose": "Every executed result, including clean PASS, requires a nonempty exact current-leaf Observation set."
+    },
+    {
+      "fixture": "positive/plan-item-result-not-run-waived.valid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "PLAN_ITEM waiver produces an honest NOT_RUN result over the exact approved waiver and an empty Attempt set."
+    },
+    {
+      "fixture": "positive/evidence-attachment-session.valid.json",
+      "schema": "../schemas/qa/evidence-attachment-session.v1.schema.json",
+      "valid": true,
+      "purpose": "Scoped attachment initiation records declared checksum, media type, size and classification without a provider locator."
+    },
+    {
+      "fixture": "positive/evidence-artifact-link.valid.json",
+      "schema": "../schemas/qa/evidence-artifact-link.v1.schema.json",
+      "valid": true,
+      "purpose": "Current EvidenceArtifactLink reports AVAILABLE after authenticated finalize."
+    },
+    {
+      "fixture": "positive/evidence-manifest-member.valid.json",
+      "schema": "../schemas/qa/evidence-manifest-member.v1.schema.json",
+      "valid": true,
+      "purpose": "Signed manifest member freezes checksum and availability-at-signing in immutable hashed bytes."
+    },
+    {
+      "fixture": "positive/evidence-artifact-link-expired.valid.json",
+      "schema": "../schemas/qa/evidence-artifact-link.v1.schema.json",
+      "valid": true,
+      "purpose": "Later live projection reports EXPIRED and still points to the same immutable manifest-member content hash validated by the preceding fixture."
+    },
+    {
+      "fixture": "positive/evidence-manifest-product-defect-required.valid.json",
+      "schema": "../schemas/qa/evidence-manifest.v1.schema.json",
+      "valid": true,
+      "purpose": "Frozen PRODUCT review records CREATE_DEFECT intent; a later DefectLink is not part of the signed manifest."
+    },
+    {
+      "fixture": "positive/evidence-manifest-clerical-correction.valid.json",
+      "schema": "../schemas/qa/evidence-manifest-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "Post-DONE clerical revision is explicitly non-adjudicative and changes only display text."
+    },
+    {
+      "fixture": "positive/post-close-correction-marker.valid.json",
+      "schema": "../schemas/qa/post-close-correction-marker.v1.schema.json",
+      "valid": true,
+      "purpose": "Marker points to the new revision and unchanged adjudicative revision."
+    },
+    {
+      "fixture": "positive/finding-review-classified.valid.json",
+      "schema": "../schemas/qa/finding-review-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "Classification-only Finding review exists before any disposition fields."
+    },
+    {
+      "fixture": "positive/finding-review-duplicate.valid.json",
+      "schema": "../schemas/qa/finding-review-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "DUPLICATE is normalized to one exact existing defect ref plus the human disposition reason."
+    },
+    {
+      "fixture": "positive/finding-waiver.valid.json",
+      "schema": "../schemas/qa/qa-waiver.v1.schema.json",
+      "valid": true,
+      "purpose": "FINDING waiver pins exact scoped risk policy and distinct-Lead generic action provenance."
+    },
+    {
+      "fixture": "positive/finding-review-waived.valid.json",
+      "schema": "../schemas/qa/finding-review-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "WAIVED Finding review requires the exact generic waiver action while retaining evidence membership."
+    },
+    {
+      "fixture": "positive/finding-header-waived.valid.json",
+      "schema": "../schemas/qa/finding.v1.schema.json",
+      "valid": true,
+      "purpose": "Frozen Finding header projects the same exact waived review and waiver action."
+    },
+    {
+      "fixture": "positive/defect-draft-proposal.valid.json",
+      "schema": "../schemas/qa/defect-draft-proposal.v1.schema.json",
+      "valid": true,
+      "purpose": "Optional wording-only proposal is non-authoritative and pins one exact frozen Finding review before human acceptance."
+    },
+    {
+      "fixture": "positive/defect-draft-rejected.valid.json",
+      "schema": "../schemas/qa/defect-draft.v1.schema.json",
+      "valid": true,
+      "purpose": "Human rejection is immutable and requires reason/actor/time with zero external call."
+    },
+    {
+      "fixture": "positive/defect-draft-invalidated-draft.valid.json",
+      "schema": "../schemas/qa/defect-draft.v1.schema.json",
+      "valid": true,
+      "purpose": "Wording replacement may invalidate a DRAFT head while preserving its exact zero-acceptance projection."
+    },
+    {
+      "fixture": "positive/defect-draft-invalidated-ready.valid.json",
+      "schema": "../schemas/qa/defect-draft.v1.schema.json",
+      "valid": true,
+      "purpose": "Wording replacement may invalidate a READY_FOR_APPROVAL head and preserves human acceptance provenance."
+    },
+    {
+      "fixture": "negative/defect-draft-invalidated-ready-without-acceptance.invalid.json",
+      "schema": "../schemas/qa/defect-draft.v1.schema.json",
+      "valid": false,
+      "purpose": "INVALIDATED from READY_FOR_APPROVAL cannot erase predecessor-owned acceptance provenance."
+    },
+    {
+      "fixture": "positive/defect-draft-rejected-from-ready.valid.json",
+      "schema": "../schemas/qa/defect-draft.v1.schema.json",
+      "valid": true,
+      "purpose": "REJECTED from READY_FOR_APPROVAL preserves exact acceptance provenance and has zero delivery side effects."
+    },
+    {
+      "fixture": "negative/defect-draft-rejected-from-ready-without-acceptance.invalid.json",
+      "schema": "../schemas/qa/defect-draft.v1.schema.json",
+      "valid": false,
+      "purpose": "REJECTED from READY_FOR_APPROVAL cannot omit predecessor-owned acceptedBy/acceptedAt."
+    },
+    {
+      "fixture": "positive/defect-link.valid.json",
+      "schema": "../schemas/qa/defect-link.v1.schema.json",
+      "valid": true,
+      "purpose": "Late immutable DefectLink pins the frozen review, generic approval/command/receipt traversal and human confirmation basis."
+    },
+    {
+      "fixture": "positive/request-create.valid.json",
+      "schema": "../schemas/operational-work-item/request-create.v1.schema.json",
+      "valid": true,
+      "purpose": "request.create asks for canonical NEW."
+    },
+    {
+      "fixture": "positive/request-create-sparse.valid.json",
+      "schema": "../schemas/operational-work-item/request-create.v1.schema.json",
+      "valid": true,
+      "purpose": "Structurally confirmed request maps the non-empty human title to summary while absent goal/outcome remain omitted, never fabricated."
+    },
+    {
+      "fixture": "positive/request-transition-done.valid.json",
+      "schema": "../schemas/operational-work-item/request-transition.v1.schema.json",
+      "valid": true,
+      "purpose": "DONE transition pins exact plan, verdict and DoD refs."
+    },
+    {
+      "fixture": "positive/defect-create.valid.json",
+      "schema": "../schemas/operational-work-item/defect-create.v1.schema.json",
+      "valid": true,
+      "purpose": "Vendor-neutral defect.create input."
+    },
+    {
+      "fixture": "positive/operational-result-request-created.valid.json",
+      "schema": "../schemas/operational-work-item/operational-result.v1.schema.json",
+      "valid": true,
+      "purpose": "Declared mock BACKLOG raw state maps to canonical NEW."
+    },
+    {
+      "fixture": "positive/operational-result-done.valid.json",
+      "schema": "../schemas/operational-work-item/operational-result.v1.schema.json",
+      "valid": true,
+      "purpose": "Generic confirmation derives canonical DONE from raw CLOSED."
+    },
+    {
+      "fixture": "positive/qa-verdict-signed.valid.json",
+      "schema": "../schemas/qa/qa-verdict.v1.schema.json",
+      "valid": true,
+      "purpose": "Signed Verdict pins all reviewed sessions, adjudicative manifests, frozen Findings and exact policy versions."
+    },
+    {
+      "fixture": "negative/qa-verdict-invalidated-state.invalid.json",
+      "schema": "../schemas/qa/qa-verdict.v1.schema.json",
+      "valid": false,
+      "purpose": "Verdict has no INVALIDATED state; upstream drift leaves historical SIGNED content and stales only the current selector."
+    },
+    {
+      "fixture": "positive/dod-assessment-ready-to-close.valid.json",
+      "schema": "../schemas/qa/dod-assessment.v1.schema.json",
+      "valid": true,
+      "purpose": "READY_TO_CLOSE is evaluated before candidate creation and therefore forbids a completion candidate pin."
+    },
+    {
+      "fixture": "positive/dod-assessment-blocked-missing-inputs.valid.json",
+      "schema": "../schemas/qa/dod-assessment.v1.schema.json",
+      "valid": true,
+      "purpose": "BLOCKED can honestly inventory missing Verdict, required Session reviews and adjudicative evidence instead of requiring the inputs whose absence it reports."
+    },
+    {
+      "fixture": "positive/completion-candidate-confirmed.valid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json",
+      "valid": true,
+      "purpose": "Candidate lifecycle reaches CONFIRMED only after its separate final-close confirmation exists."
+    },
+    {
+      "fixture": "positive/final-close-confirmation.valid.json",
+      "schema": "../schemas/qa/final-close-confirmation.v1.schema.json",
+      "valid": true,
+      "purpose": "Generic confirmation records raw state and derives canonical DONE without mutating the candidate payload."
+    },
+    {
+      "fixture": "positive/dod-assessment-satisfied.valid.json",
+      "schema": "../schemas/qa/dod-assessment.v1.schema.json",
+      "valid": true,
+      "purpose": "Final append-only DoD SATISFIED pins the confirmed candidate, command, result and external version."
+    },
+    {
+      "fixture": "positive/dod-satisfied-event.valid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/DodSatisfiedEvent",
+      "valid": true,
+      "purpose": "Final event carries generic approval ref and derived DONE."
+    },
+    {
+      "fixture": "negative/intake-authoritative-scope.invalid.json",
+      "schema": "../schemas/intake/qa-intake.v1.schema.json",
+      "valid": false,
+      "purpose": "Client-supplied Workspace scope is forbidden."
+    },
+    {
+      "fixture": "negative/intake-response-channel-authority.invalid.json",
+      "schema": "../schemas/intake/qa-intake.v1.schema.json",
+      "valid": false,
+      "purpose": "Client cannot forge or select the authoritative exact response-channel ref; the server resolves PLATFORM_WEB."
+    },
+    {
+      "fixture": "negative/request-input-revision-dispatched-ready.invalid.json",
+      "schema": "../schemas/qa/qa-request-input-revision.v1.schema.json",
+      "valid": false,
+      "purpose": "Input revision cannot be committed after READY dispatch/in-flight wins the shared aggregate CAS."
+    },
+    {
+      "fixture": "negative/automated-session.invalid.json",
+      "schema": "../schemas/qa/test-session.v1.schema.json",
+      "valid": false,
+      "purpose": "Feature 002 accepts MANUAL sessions only."
+    },
+    {
+      "fixture": "negative/test-session-planned-with-review-projection.invalid.json",
+      "schema": "../schemas/qa/test-session.v1.schema.json",
+      "valid": false,
+      "purpose": "A non-COMPLETED Session cannot expose outcome or signed review/evidence projection fields."
+    },
+    {
+      "fixture": "negative/test-session-ready-without-snapshots.invalid.json",
+      "schema": "../schemas/qa/test-session.v1.schema.json",
+      "valid": false,
+      "purpose": "READY requires complete target/scope snapshot refs and hashes before RUNNING freezes them."
+    },
+    {
+      "fixture": "negative/target-snapshot-missing-test-data.invalid.json",
+      "schema": "../schemas/qa/target-snapshot.v1.schema.json",
+      "valid": false,
+      "purpose": "Session start guard cannot use a TargetSnapshot without exact test-data and account-lease inputs."
+    },
+    {
+      "fixture": "negative/manual-attempt-plan-result.invalid.json",
+      "schema": "../schemas/qa/manual-attempt.v1.schema.json",
+      "valid": false,
+      "purpose": "Plan Item FAIL cannot be used as a ManualAttempt result."
+    },
+    {
+      "fixture": "negative/manual-attempt-cancelled-without-reason.invalid.json",
+      "schema": "../schemas/qa/manual-attempt.v1.schema.json",
+      "valid": false,
+      "purpose": "A terminal CANCELLED attempt cannot omit its reason."
+    },
+    {
+      "fixture": "negative/plan-item-negative-without-evidence.invalid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json",
+      "valid": false,
+      "purpose": "FR-014 rejects negative outcomes without evidence and has no waiver escape."
+    },
+    {
+      "fixture": "negative/plan-item-planned-with-result.invalid.json",
+      "schema": "../schemas/qa/plan-item.v1.schema.json",
+      "valid": false,
+      "purpose": "PLANNED or RUNNING Plan Items cannot expose an adjudicative result revision."
+    },
+    {
+      "fixture": "negative/plan-item-terminal-with-waiver.invalid.json",
+      "schema": "../schemas/qa/plan-item.v1.schema.json",
+      "valid": false,
+      "purpose": "An executed TERMINAL item requires its result and forbids waiver projection; only WAIVED carries both."
+    },
+    {
+      "fixture": "negative/flaky-attempt-without-evidence.invalid.json",
+      "schema": "../schemas/qa/evidence-manifest.v1.schema.json#/$defs/AttemptLineageSet",
+      "valid": false,
+      "purpose": "A later passing retry never erases the per-attempt evidence obligation for an earlier executed negative attempt."
+    },
+    {
+      "fixture": "negative/finding-review-duplicate-without-reason.invalid.json",
+      "schema": "../schemas/qa/finding-review-revision.v1.schema.json",
+      "valid": false,
+      "purpose": "A DUPLICATE disposition cannot retain only an existing defect ref while omitting the human normalization reason."
+    },
+    {
+      "fixture": "negative/evidence-provider-locator.invalid.json",
+      "schema": "../schemas/qa/evidence-artifact-link.v1.schema.json",
+      "valid": false,
+      "purpose": "Provider locator is forbidden in canonical evidence metadata."
+    },
+    {
+      "fixture": "negative/evidence-waiver.invalid.json",
+      "schema": "../schemas/qa/qa-waiver.v1.schema.json",
+      "valid": false,
+      "purpose": "EVIDENCE is not a legal waiver kind."
+    },
+    {
+      "fixture": "negative/waiver-selector-kind-shape-mismatch.invalid.json",
+      "schema": "../schemas/qa/qa-waiver.v1.schema.json#/$defs/WaiverSubjectSelector",
+      "valid": false,
+      "purpose": "A REQUIRED_SESSION selector cannot masquerade as the PLAN_ITEM ID selector branch."
+    },
+    {
+      "fixture": "negative/dod-waiver.invalid.json",
+      "schema": "../schemas/qa/qa-waiver.v1.schema.json#/$defs/WaiverKind",
+      "valid": false,
+      "purpose": "Feature 002 has no DOD waiver; every pre-close DoD blocker is non-waivable."
+    },
+    {
+      "fixture": "negative/dod-ready-missing-verdict-and-evidence.invalid.json",
+      "schema": "../schemas/qa/dod-assessment.v1.schema.json",
+      "valid": false,
+      "purpose": "READY_TO_CLOSE requires a signed Verdict and nonempty exact Session-review and adjudicative-manifest inputs."
+    },
+    {
+      "fixture": "negative/dod-platform-action-as-waiver-ref.invalid.json",
+      "schema": "../schemas/common/qa-common.v1.schema.json#/$defs/QaWaiverRef",
+      "valid": false,
+      "purpose": "DoD pins an exact immutable QaWaiver decision; a generic platform action is only transitive provenance and cannot replace it."
+    },
+    {
+      "fixture": "negative/dor-nonregistry-waiver.invalid.json",
+      "schema": "../schemas/qa/readiness-assessment.v1.schema.json#/$defs/WaivableReadinessBlockerCode",
+      "valid": false,
+      "purpose": "Only PROJECT_REGISTRY_NEEDS_REVIEW is waivable in DoR; content, declaration, target, security, entitlement, channel, RETEST and mapping blockers are not."
+    },
+    {
+      "fixture": "negative/readiness-waived-registry-without-waiver.invalid.json",
+      "schema": "../schemas/qa/readiness-assessment.v1.schema.json#/$defs/ReadyWithWaiverProjectRegistryInput",
+      "valid": false,
+      "purpose": "Pre-waiver NEEDS_INFO may report NEEDS_REVIEW without a ref, but READY_WITH_WAIVER requires the exact approved DoR waiver."
+    },
+    {
+      "fixture": "negative/operational-readiness-needs-info-core-status.invalid.json",
+      "schema": "../schemas/qa/qa-work-item-detail.v1.schema.json#/$defs/OperationalReadinessProjection",
+      "valid": false,
+      "purpose": "NEEDS_INFO is a QA assessment state, not a Core normalized status in feature 002."
+    },
+    {
+      "fixture": "negative/operational-readiness-pending-without-command.invalid.json",
+      "schema": "../schemas/qa/qa-work-item-detail.v1.schema.json#/$defs/OperationalReadinessProjection",
+      "valid": false,
+      "purpose": "READY_PENDING_SYNC requires the exact READY command and remains Core NEW."
+    },
+    {
+      "fixture": "negative/operational-readiness-sync-error-with-result.invalid.json",
+      "schema": "../schemas/qa/qa-work-item-detail.v1.schema.json#/$defs/OperationalReadinessProjection",
+      "valid": false,
+      "purpose": "The explicit 002 SYNC_ERROR projection retains command+error but does not expose an unconfirmed result."
+    },
+    {
+      "fixture": "negative/request-extension-embedded-plan.invalid.json",
+      "schema": "../schemas/qa/qa-request-extension.v1.schema.json",
+      "valid": false,
+      "purpose": "Mutable embedded session plan cannot replace the exact revision ref."
+    },
+    {
+      "fixture": "negative/operational-read-back-operation.invalid.json",
+      "schema": "../schemas/operational-work-item/operational-result.v1.schema.json",
+      "valid": false,
+      "purpose": "read-back is a generic confirmation strategy, not a fourth operation."
+    },
+    {
+      "fixture": "negative/operational-backlog-as-normalized.invalid.json",
+      "schema": "../schemas/operational-work-item/operational-result.v1.schema.json",
+      "valid": false,
+      "purpose": "BACKLOG may appear only as rawExternalState, never canonical normalizedStatus."
+    },
+    {
+      "fixture": "negative/request-transition-done-summary-hash-only.invalid.json",
+      "schema": "../schemas/operational-work-item/request-transition.v1.schema.json",
+      "valid": false,
+      "purpose": "DONE transition must carry the closed structured completion summary, not only its digest."
+    },
+    {
+      "fixture": "negative/request-transition-ready-with-summary.invalid.json",
+      "schema": "../schemas/operational-work-item/request-transition.v1.schema.json",
+      "valid": false,
+      "purpose": "READY transition must not carry terminal completion-summary content."
+    },
+    {
+      "fixture": "negative/request-transition-done-without-plan.invalid.json",
+      "schema": "../schemas/operational-work-item/request-transition.v1.schema.json",
+      "valid": false,
+      "purpose": "DONE cannot omit the exact Required Session Plan revision."
+    },
+    {
+      "fixture": "negative/completion-confirmed-with-terminal-reason.invalid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/$defs/ConfirmedDeliveryProjection",
+      "valid": false,
+      "purpose": "CONFIRMED is a successful generic close and therefore forbids terminalReason."
+    },
+    {
+      "fixture": "negative/completion-failed-without-dispatch-provenance.invalid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/$defs/FailedDeliveryProjection",
+      "valid": false,
+      "purpose": "FAILED is post-dispatch and must preserve approval, actor/time, command and effect-key provenance."
+    },
+    {
+      "fixture": "negative/defect-create-jira-field.invalid.json",
+      "schema": "../schemas/operational-work-item/defect-create.v1.schema.json",
+      "valid": false,
+      "purpose": "Jira-specific field is forbidden in the vendor-neutral capability."
+    },
+    {
+      "fixture": "negative/event-missing-project.invalid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/DodSatisfiedEvent",
+      "valid": false,
+      "purpose": "Project-scoped envelope cannot omit projectId."
+    },
+    {
+      "fixture": "positive/required-session-plan-bootstrap-history.valid.json",
+      "schema": "../schemas/qa/required-session-plan-history.v1.schema.json",
+      "valid": true,
+      "purpose": "Stable empty plan header exposes the INITIAL publication CAS state."
+    },
+    {
+      "fixture": "positive/required-session-plan-v2-carry-forward-and-waiver.valid.json",
+      "schema": "../schemas/qa/required-session-plan.v1.schema.json",
+      "valid": true,
+      "purpose": "Revision two carries unchanged requirement lineage and separately waives another requirement."
+    },
+    {
+      "fixture": "positive/request-input-revision-reason.valid.json",
+      "schema": "../schemas/qa/qa-request-input-revision.v1.schema.json#/$defs/RevisionReason",
+      "valid": true,
+      "purpose": "Public human input revision includes code and bounded free text."
+    },
+    {
+      "fixture": "negative/request-input-revision-reason-missing-text.invalid.json",
+      "schema": "../schemas/qa/qa-request-input-revision.v1.schema.json#/$defs/RevisionReason",
+      "valid": false,
+      "purpose": "Public revision cannot omit its human reason."
+    },
+    {
+      "fixture": "negative/request-input-revision-v2-without-reason.invalid.json",
+      "schema": "../schemas/qa/qa-request-input-revision.v1.schema.json",
+      "valid": false,
+      "purpose": "Persisted revision two requires changeReason."
+    },
+    {
+      "fixture": "positive/required-session-plan-initial-predecessor.valid.json",
+      "schema": "../schemas/qa/required-session-plan.v1.schema.json#/$defs/PublicationPredecessorDecision",
+      "valid": true,
+      "purpose": "INITIAL publication has a null predecessor."
+    },
+    {
+      "fixture": "positive/required-session-plan-revision-predecessor.valid.json",
+      "schema": "../schemas/qa/required-session-plan.v1.schema.json#/$defs/PublicationPredecessorDecision",
+      "valid": true,
+      "purpose": "Revision publication pins the current plan."
+    },
+    {
+      "fixture": "negative/required-session-plan-initial-with-predecessor.invalid.json",
+      "schema": "../schemas/qa/required-session-plan.v1.schema.json#/$defs/PublicationPredecessorDecision",
+      "valid": false,
+      "purpose": "INITIAL forbids an existing current plan."
+    },
+    {
+      "fixture": "negative/required-session-plan-revision-without-predecessor.invalid.json",
+      "schema": "../schemas/qa/required-session-plan.v1.schema.json#/$defs/PublicationPredecessorDecision",
+      "valid": false,
+      "purpose": "Non-initial publication requires its predecessor."
+    },
+    {
+      "fixture": "positive/plan-item-result-initial-predecessor.valid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionPredecessorDecision",
+      "valid": true,
+      "purpose": "Initial result has null predecessor and no correction reason."
+    },
+    {
+      "fixture": "negative/plan-item-result-initial-with-correction-reason.invalid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionPredecessorDecision",
+      "valid": false,
+      "purpose": "Initial result forbids orphan correction reason."
+    },
+    {
+      "fixture": "negative/plan-item-result-correction-without-reason.invalid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionPredecessorDecision",
+      "valid": false,
+      "purpose": "Correction requires a reason."
+    },
+    {
+      "fixture": "positive/dod-evaluation-discover-blockers.valid.json",
+      "schema": "../schemas/qa/dod-assessment.v1.schema.json#/$defs/EvaluationCommand",
+      "valid": true,
+      "purpose": "DoD can derive blockers before plan or Verdict exists."
+    },
+    {
+      "fixture": "positive/dod-evaluation-assert-ready.valid.json",
+      "schema": "../schemas/qa/dod-assessment.v1.schema.json#/$defs/EvaluationCommand",
+      "valid": true,
+      "purpose": "READY assertion pins exact closure hints."
+    },
+    {
+      "fixture": "negative/dod-evaluation-assert-ready-missing-hints.invalid.json",
+      "schema": "../schemas/qa/dod-assessment.v1.schema.json#/$defs/EvaluationCommand",
+      "valid": false,
+      "purpose": "READY assertion cannot omit closure hints."
+    },
+    {
+      "fixture": "positive/test-session-blocked-from-running.valid.json",
+      "schema": "../schemas/qa/test-session.v1.schema.json",
+      "valid": true,
+      "purpose": "BLOCKED preserves RUNNING milestones."
+    },
+    {
+      "fixture": "positive/test-session-structure-changed-from-ready.valid.json",
+      "schema": "../schemas/qa/test-session.v1.schema.json",
+      "valid": true,
+      "purpose": "A pre-start edit advances structureRevision/hash and atomically resets READY to PLANNED with STRUCTURE_CHANGED provenance."
+    },
+    {
+      "fixture": "negative/test-session-planned-with-ready-against.invalid.json",
+      "schema": "../schemas/qa/test-session.v1.schema.json",
+      "valid": false,
+      "purpose": "PLANNED cannot retain a non-null readyAgainstStructureHash after a structural edit."
+    },
+    {
+      "fixture": "negative/test-session-blocked-planned-with-future-milestones.invalid.json",
+      "schema": "../schemas/qa/test-session.v1.schema.json",
+      "valid": false,
+      "purpose": "PLANNED interruption forbids future milestones."
+    },
+    {
+      "fixture": "negative/evidence-attachment-pending-with-upload-projection.invalid.json",
+      "schema": "../schemas/qa/evidence-attachment-session.v1.schema.json",
+      "valid": false,
+      "purpose": "UPLOAD_PENDING forbids upload projection."
+    },
+    {
+      "fixture": "negative/evidence-manifest-stray-accepted-risk-action.invalid.json",
+      "schema": "../schemas/qa/evidence-manifest.v1.schema.json",
+      "valid": false,
+      "purpose": "Accepted-risk action exists iff its disposition applies."
+    },
+    {
+      "fixture": "positive/evidence-manifest-clerical-note-only.valid.json",
+      "schema": "../schemas/qa/evidence-manifest-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "Note-only clerical annotation is signed and hash-covered."
+    },
+    {
+      "fixture": "negative/evidence-manifest-initial-with-clerical-annotations.invalid.json",
+      "schema": "../schemas/qa/evidence-manifest-revision.v1.schema.json",
+      "valid": false,
+      "purpose": "INITIAL forbids clerical annotations."
+    },
+    {
+      "fixture": "negative/evidence-manifest-display-annotation-without-target.invalid.json",
+      "schema": "../schemas/qa/evidence-manifest-revision.v1.schema.json",
+      "valid": false,
+      "purpose": "Display annotation requires an artifact target."
+    },
+    {
+      "fixture": "negative/defect-draft-draft-with-acceptance.invalid.json",
+      "schema": "../schemas/qa/defect-draft.v1.schema.json",
+      "valid": false,
+      "purpose": "DRAFT forbids acceptance projection."
+    },
+    {
+      "fixture": "negative/defect-draft-rejected-with-delivery-projection.invalid.json",
+      "schema": "../schemas/qa/defect-draft.v1.schema.json",
+      "valid": false,
+      "purpose": "REJECTED forbids delivery refs."
+    },
+    {
+      "fixture": "negative/defect-draft-failed-without-effect-key.invalid.json",
+      "schema": "../schemas/qa/defect-draft.v1.schema.json",
+      "valid": false,
+      "purpose": "Post-dispatch FAILED preserves effect key."
+    },
+    {
+      "fixture": "positive/verdict-signature-primary.valid.json",
+      "schema": "../schemas/qa/verdict-signature.v1.schema.json",
+      "valid": true,
+      "purpose": "Primary signature matches the signed Verdict."
+    },
+    {
+      "fixture": "negative/verdict-medium-partially-signed.invalid.json",
+      "schema": "../schemas/qa/qa-verdict.v1.schema.json",
+      "valid": false,
+      "purpose": "Ordinary risk forbids partial signature state."
+    },
+    {
+      "fixture": "negative/verdict-high-signed-one-signature.invalid.json",
+      "schema": "../schemas/qa/qa-verdict.v1.schema.json",
+      "valid": false,
+      "purpose": "Elevated risk SIGNED requires two signatures."
+    },
+    {
+      "fixture": "negative/verdict-superseded-without-preserved-signature.invalid.json",
+      "schema": "../schemas/qa/qa-verdict.v1.schema.json",
+      "valid": false,
+      "purpose": "SUPERSEDED preserves signed provenance."
+    },
+    {
+      "fixture": "negative/verdict-v1-with-incoming-lineage.invalid.json",
+      "schema": "../schemas/qa/qa-verdict.v1.schema.json",
+      "valid": false,
+      "purpose": "Verdict v1 forbids incoming lineage."
+    },
+    {
+      "fixture": "negative/verdict-signed-with-orphan-supersession-reason.invalid.json",
+      "schema": "../schemas/qa/qa-verdict.v1.schema.json",
+      "valid": false,
+      "purpose": "Supersession reason exists only on SUPERSEDED."
+    },
+    {
+      "fixture": "negative/waiver-pending-with-decision-provenance.invalid.json",
+      "schema": "../schemas/qa/qa-waiver.v1.schema.json",
+      "valid": false,
+      "purpose": "PENDING waiver forbids decision provenance."
+    },
+    {
+      "fixture": "positive/session-state-blocked-from-running-event-payload.valid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/SessionStateChangedPayload",
+      "valid": true,
+      "purpose": "Session event preserves RUNNING to BLOCKED provenance."
+    },
+    {
+      "fixture": "negative/session-state-illegal-planned-to-completed-event.invalid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/SessionStateChangedPayload",
+      "valid": false,
+      "purpose": "Session event rejects illegal state jump."
+    },
+    {
+      "fixture": "negative/session-state-running-blocked-with-planned-milestone.invalid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/SessionStateChangedPayload",
+      "valid": false,
+      "purpose": "Terminal event milestone equals predecessor."
+    },
+    {
+      "fixture": "negative/request-input-revised-event-missing-reason.invalid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/RequestInputRevisedEvent",
+      "valid": false,
+      "purpose": "Input revision event carries reason."
+    },
+    {
+      "fixture": "negative/required-session-plan-published-initial-with-previous-event.invalid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/RequiredSessionPlanPublishedPayload",
+      "valid": false,
+      "purpose": "INITIAL plan event forbids previous ref."
+    },
+    {
+      "fixture": "negative/verdict-signed-high-one-signature-event.invalid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/VerdictSignedPayload",
+      "valid": false,
+      "purpose": "Elevated-risk event carries two signatures."
+    },
+    {
+      "fixture": "negative/finding-disposed-accepted-risk-without-action-event.invalid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/FindingDisposedPayload",
+      "valid": false,
+      "purpose": "Accepted-risk event requires action."
+    },
+    {
+      "fixture": "positive/dod-assessed-blocked-event-payload.valid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/DodAssessedPayload",
+      "valid": true,
+      "purpose": "BLOCKED DoD event may omit missing plan."
+    },
+    {
+      "fixture": "negative/dod-assessed-ready-missing-plan-event.invalid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/DodAssessedPayload",
+      "valid": false,
+      "purpose": "READY DoD event requires plan."
+    },
+    {
+      "fixture": "positive/post-close-correction-recorded-event.valid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/PostCloseCorrectionRecordedEvent",
+      "valid": true,
+      "purpose": "Post-close event carries annotations and authority."
+    },
+    {
+      "fixture": "positive/completion-invalidated-authorized-projection.valid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/$defs/InvalidatedDeliveryProjection",
+      "valid": true,
+      "purpose": "AUTHORIZED invalidation preserves approval provenance."
+    },
+    {
+      "fixture": "negative/completion-invalidated-authorized-missing-approval-provenance.invalid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/$defs/InvalidatedDeliveryProjection",
+      "valid": false,
+      "purpose": "AUTHORIZED invalidation cannot drop actor/time."
+    },
+    {
+      "fixture": "negative/completion-invalidated-from-dispatched.invalid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/$defs/InvalidatedDeliveryProjection",
+      "valid": false,
+      "purpose": "Invalidation after dispatch is forbidden."
+    },
+    {
+      "fixture": "positive/completion-summary-defect-linked.valid.json",
+      "schema": "../schemas/operational-work-item/completion-summary.v1.schema.json#/$defs/DefectReference",
+      "valid": true,
+      "purpose": "LINKED defect pins draft and link."
+    },
+    {
+      "fixture": "positive/completion-summary-defect-rejected.valid.json",
+      "schema": "../schemas/operational-work-item/completion-summary.v1.schema.json#/$defs/DefectReference",
+      "valid": true,
+      "purpose": "Rejected publication pins rejection."
+    },
+    {
+      "fixture": "negative/completion-summary-create-defect-linked-without-link.invalid.json",
+      "schema": "../schemas/operational-work-item/completion-summary.v1.schema.json#/$defs/DefectReference",
+      "valid": false,
+      "purpose": "LINKED cannot omit link."
+    },
+    {
+      "fixture": "negative/completion-summary-noncreate-with-draft.invalid.json",
+      "schema": "../schemas/operational-work-item/completion-summary.v1.schema.json#/$defs/DefectReference",
+      "valid": false,
+      "purpose": "Non-create disposition forbids draft/link."
+    },
+    {
+      "fixture": "negative/completion-summary-duplicate-without-exact-existing-defect.invalid.json",
+      "schema": "../schemas/operational-work-item/completion-summary.v1.schema.json#/$defs/DefectReference",
+      "valid": false,
+      "purpose": "DUPLICATE requires existing defect ref."
+    },
+    {
+      "fixture": "negative/required-session-plan-all-waived.invalid.json",
+      "schema": "../schemas/qa/required-session-plan.v1.schema.json",
+      "valid": false,
+      "purpose": "A published plan must retain at least one REQUIRED slot; last-required waiver is rejected."
+    },
+    {
+      "fixture": "negative/required-session-plan-revision-current-done.invalid.json",
+      "schema": "../schemas/qa/required-session-plan.v1.schema.json",
+      "valid": false,
+      "purpose": "A later plan revision retains the historical READY proof but cannot publish against a current DONE/frozen operational projection."
+    },
+    {
+      "fixture": "positive/completion-dispatch-guard-open.valid.json",
+      "schema": "../schemas/qa/qa-request-extension.v1.schema.json#/$defs/CompletionDispatchGuard",
+      "valid": true,
+      "purpose": "OPEN extension guard permits a same-CAS adjudicative mutation."
+    },
+    {
+      "fixture": "positive/completion-dispatch-guard-in-flight.valid.json",
+      "schema": "../schemas/qa/qa-request-extension.v1.schema.json#/$defs/CompletionDispatchGuard",
+      "valid": true,
+      "purpose": "DISPATCHED guard pins exact candidate, command, aggregate hash and lock time before outbox publication."
+    },
+    {
+      "fixture": "positive/completion-dispatch-guard-done-frozen.valid.json",
+      "schema": "../schemas/qa/qa-request-extension.v1.schema.json#/$defs/CompletionDispatchGuard",
+      "valid": true,
+      "purpose": "Confirmed external DONE preserves dispatch provenance and freezes the aggregate."
+    },
+    {
+      "fixture": "negative/completion-dispatch-guard-in-flight-missing-lock.invalid.json",
+      "schema": "../schemas/qa/qa-request-extension.v1.schema.json#/$defs/CompletionDispatchGuard",
+      "valid": false,
+      "purpose": "An in-flight completion guard cannot omit the locked aggregate hash."
+    },
+    {
+      "fixture": "positive/completion-dispatched-projection.valid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/$defs/DispatchedDeliveryProjection",
+      "valid": true,
+      "purpose": "DISPATCHED candidate preserves exact approval, command and effect provenance."
+    },
+    {
+      "fixture": "positive/completion-failed-dispatch-provenance.valid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/$defs/FailedDeliveryProjection",
+      "valid": true,
+      "purpose": "FAILED preserves dispatched provenance while the extension guard is released back to OPEN."
+    },
+    {
+      "fixture": "positive/completion-executor-initiator.valid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/properties/initiatorRole",
+      "valid": true,
+      "purpose": "Only the server-derived current Executor role may initiate final close."
+    },
+    {
+      "fixture": "negative/completion-lead-initiator.invalid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/properties/initiatorRole",
+      "valid": false,
+      "purpose": "A QA Lead may approve final close but cannot initiate it."
+    },
+    {
+      "fixture": "positive/finding-review-duplicate-disposed.valid.json",
+      "schema": "../schemas/qa/finding-review-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "Fail-to-pass result pins the current DISPOSED review before Session review freezes its successor."
+    },
+    {
+      "fixture": "positive/plan-item-result-flaky-pass.valid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "PASS + FLAKY_SUSPECTED result revision pins exact current DISPOSED Finding basis and negative evidence."
+    },
+    {
+      "fixture": "positive/plan-item-result-flaky-pass-command.valid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": true,
+      "purpose": "The result command pins the same exact DISPOSED basis as its durable revision."
+    },
+    {
+      "fixture": "negative/plan-item-result-flaky-pass-without-disposition-basis.invalid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": false,
+      "purpose": "PASS + FLAKY_SUSPECTED cannot omit the exact current DISPOSED basis."
+    },
+    {
+      "fixture": "positive/plan-item-result-inconclusive-without-flaky-basis.valid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": true,
+      "purpose": "US3 INCONCLUSIVE remains recordable without a future Finding freeze dependency."
+    },
+    {
+      "fixture": "negative/plan-item-result-inconclusive-with-flaky-basis.invalid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": false,
+      "purpose": "INCONCLUSIVE forbids a flaky disposition basis."
+    },
+    {
+      "fixture": "positive/session-review-flaky-disposition-confirmation.valid.json",
+      "schema": "../schemas/qa/session-review.v1.schema.json#/$defs/FlakyDispositionConfirmation",
+      "valid": true,
+      "purpose": "Session review pins the unchanged DISPOSED review and its atomically created FROZEN successor."
+    },
+    {
+      "fixture": "positive/finding-review-duplicate-classified.valid.json",
+      "schema": "../schemas/qa/finding-review-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "The duplicate review chain starts with a classification-only version 1."
+    },
+    {
+      "fixture": "positive/finding-review-waived-disposed.valid.json",
+      "schema": "../schemas/qa/finding-review-revision.v1.schema.json",
+      "valid": true,
+      "purpose": "The exact Finding waiver is first recorded on a DISPOSED successor before a separate FROZEN revision."
+    },
+    {
+      "fixture": "negative/finding-review-disposed-v1.invalid.json",
+      "schema": "../schemas/qa/finding-review-revision.v1.schema.json",
+      "valid": false,
+      "purpose": "A DISPOSED review cannot be version 1 or omit its exact CLASSIFIED predecessor."
+    },
+    {
+      "fixture": "negative/plan-item-result-fail-with-flaky-flag.invalid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": false,
+      "purpose": "FLAKY_SUSPECTED is not legal on FAIL, BLOCKED or NOT_RUN results."
+    },
+    {
+      "fixture": "negative/plan-item-result-fail-without-observation.invalid.json",
+      "schema": "../schemas/qa/plan-item-result-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": false,
+      "purpose": "FAIL, BLOCKED and INCONCLUSIVE require at least one exact considered Observation."
+    },
+    {
+      "fixture": "positive/plan-item-result-recorded-payload-flaky.valid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/PlanItemResultRecordedPayload",
+      "valid": true,
+      "purpose": "The result event serializes the complete server-derived Attempt membership plus exact current-leaf Observation and flaky-disposition lineage."
+    },
+    {
+      "fixture": "positive/evidence-attempt-lineage-cancelled.valid.json",
+      "schema": "../schemas/qa/evidence-manifest.v1.schema.json#/$defs/AttemptLineage",
+      "valid": true,
+      "purpose": "The signed manifest preserves the bounded reason for a cancelled ManualAttempt."
+    },
+    {
+      "fixture": "negative/evidence-attempt-lineage-cancelled-without-reason.invalid.json",
+      "schema": "../schemas/qa/evidence-manifest.v1.schema.json#/$defs/AttemptLineage",
+      "valid": false,
+      "purpose": "A CANCELLED attempt lineage cannot omit its durable cancellation reason."
+    },
+    {
+      "fixture": "negative/evidence-attempt-lineage-pass-with-cancellation-reason.invalid.json",
+      "schema": "../schemas/qa/evidence-manifest.v1.schema.json#/$defs/AttemptLineage",
+      "valid": false,
+      "purpose": "Non-cancelled attempt lineage forbids a stray cancellation reason."
+    },
+    {
+      "fixture": "positive/finding-observation-membership-active.valid.json",
+      "schema": "../schemas/qa/finding-observation-membership.v1.schema.json",
+      "valid": true,
+      "purpose": "An active same-Session Observation assignment has server-derived human provenance and no release projection."
+    },
+    {
+      "fixture": "positive/observation-negative-attempt.valid.json",
+      "schema": "../schemas/qa/observation.v1.schema.json",
+      "valid": true,
+      "purpose": "A considered negative Observation is an immutable same-PlanItem leaf that names the exact failed Attempt."
+    },
+    {
+      "fixture": "positive/observation-positive-retry.valid.json",
+      "schema": "../schemas/qa/observation.v1.schema.json",
+      "valid": true,
+      "purpose": "A later positive Observation remains distinct and cannot erase the earlier negative Attempt lineage."
+    },
+    {
+      "fixture": "positive/finding-observation-membership-flaky-active.valid.json",
+      "schema": "../schemas/qa/finding-observation-membership.v1.schema.json",
+      "valid": true,
+      "purpose": "The exact negative Observation is actively assigned to the disposed Finding pinned by a flaky PASS basis."
+    },
+    {
+      "fixture": "positive/finding-observation-membership-released.valid.json",
+      "schema": "../schemas/qa/finding-observation-membership.v1.schema.json",
+      "valid": true,
+      "purpose": "Release is a one-way audited projection; reassignment creates a new row."
+    },
+    {
+      "fixture": "negative/finding-observation-membership-released-without-reason.invalid.json",
+      "schema": "../schemas/qa/finding-observation-membership.v1.schema.json",
+      "valid": false,
+      "purpose": "A released membership cannot omit its bounded human release reason."
+    },
+    {
+      "fixture": "positive/session-reviewed-payload-with-frozen-findings.valid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/SessionReviewedPayload",
+      "valid": true,
+      "purpose": "One atomic Session-reviewed event carries the complete exact set of Finding reviews frozen with the manifest."
+    },
+    {
+      "fixture": "negative/session-reviewed-payload-missing-frozen-set.invalid.json",
+      "schema": "../schemas/events/qa-events.v1.schema.json#/$defs/SessionReviewedPayload",
+      "valid": false,
+      "purpose": "Session-reviewed events cannot omit the complete frozen-Finding set; clean US3 emits an explicit empty array."
+    },
+    {
+      "fixture": "positive/request-input-revision-command-semantic-only.valid.json",
+      "schema": "../schemas/qa/qa-request-input-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": true,
+      "purpose": "A later HUMAN revision command carries only mutable DoR semantics plus CAS and reason."
+    },
+    {
+      "fixture": "negative/request-input-revision-command-structural-identity-drift.invalid.json",
+      "schema": "../schemas/qa/qa-request-input-revision.v1.schema.json#/$defs/RevisionCommand",
+      "valid": false,
+      "purpose": "Client attempts to rewrite frozen title, request kind or classification are structurally rejected."
+    },
+    {
+      "fixture": "positive/completion-rejected-approval-projection.valid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/$defs/RejectedDeliveryProjection",
+      "valid": true,
+      "purpose": "HUMAN REJECTED is solely the exact generic Approval rejection of an AWAITING_APPROVAL candidate."
+    },
+    {
+      "fixture": "negative/completion-rejected-without-approval.invalid.json",
+      "schema": "../schemas/qa/completion-candidate.v1.schema.json#/$defs/RejectedDeliveryProjection",
+      "valid": false,
+      "purpose": "CANDIDATE has no human discard route and cannot become REJECTED without an exact generic Approval."
+    }
+  ]
+}

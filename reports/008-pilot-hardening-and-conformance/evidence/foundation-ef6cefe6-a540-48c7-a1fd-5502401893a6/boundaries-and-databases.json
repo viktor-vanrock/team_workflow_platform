@@ -1,0 +1,24 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/unit/008",
+    "tests/integration/008",
+    "tests/integration/security/008",
+    "tests/contract/008",
+    "--exclude",
+    "tests/integration/008/published-runtime-configuration.spec.ts",
+    "--exclude",
+    "tests/integration/008/published-deployment-startup.spec.ts",
+    "--exclude",
+    "tests/integration/008/automation-availability.spec.ts",
+    "--exclude",
+    "tests/integration/008/runtime-composition.spec.ts",
+    "--exclude",
+    "tests/integration/008/development-probes.spec.ts",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 143,
+  "durationMs": 240038,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n{\"timestamp\":\"2026-09-04T13:32:37.561Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"7e9e2445-5ecc-45dc-87fa-245ab3f42896\",\"projectId\":\"a670ccd1-0f8c-49f1-b711-38140f899745\",\"correlationId\":\"85928a62-57e3-49da-b39a-6cc9d7d4650f\",\"causationId\":\"5a8e898a-dfd7-471b-ac79-ec8fab3492ef\",\"operation\":\"http.request\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":13}\n{\"timestamp\":\"2026-09-04T13:32:37.631Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"worker\",\"workspaceId\":\"7e9e2445-5ecc-45dc-87fa-245ab3f42896\",\"projectId\":\"a670ccd1-0f8c-49f1-b711-38140f899745\",\"correlationId\":\"85928a62-57e3-49da-b39a-6cc9d7d4650f\",\"causationId\":\"5a8e898a-dfd7-471b-ac79-ec8fab3492ef\",\"operation\":\"worker.commands\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":0}\n"
+}

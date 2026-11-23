@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "actionId": "80000000-0000-4000-8000-000000000001",
+  "workspaceId": "10000000-0000-4000-8000-000000000001",
+  "projectId": "20000000-0000-4000-8000-000000000001",
+  "action": "RESUME",
+  "expectedOnboardingVersion": 4,
+  "incidentRef": "incident:SEC-007-1",
+  "incidentDispositionRef": { "id": "incident-disposition-1", "version": 1, "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+  "freshProbeRefs": [{ "id": "probe-1", "version": 1, "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }],
+  "approvalRef": { "id": "approval-1", "version": 1, "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+  "reason": "Resume after investigation.",
+  "initiator": {
+    "principalId": "30000000-0000-4000-8000-000000000001",
+    "kind": "HUMAN",
+    "roleKey": "integration.admin",
+    "authorizationBasisHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "authenticationContextRef": "local:acr:step-up"
+  },
+  "approvalActorId": "30000000-0000-4000-8000-000000000001",
+  "correlationId": "corr-007-resume-001",
+  "createdAt": "2026-09-03T14:00:00.000Z",
+  "expiresAt": "2026-09-03T14:15:00.000Z",
+  "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}

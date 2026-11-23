@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:jira:discovery-snapshot:v1",
+  "title": "Sanitized Immutable Jira Discovery Snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "snapshotId", "version", "workspaceId", "connectionRef", "adapterFamily", "adapterContractVersion", "edition", "exactBuild", "apiFlavor", "projects", "issueTypes", "fields", "statuses", "transitions", "priorities", "linkTypes", "capabilities", "collectedAt", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "snapshotId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "connectionRef": { "$ref": "#/$defs/Ref" },
+    "adapterFamily": { "enum": ["jira-cloud-v3", "jira-dc-9-v2", "jira-dc-10-v2", "jira-dc-11-v2"] },
+    "adapterContractVersion": { "type": "string", "minLength": 1 },
+    "edition": { "enum": ["CLOUD", "DATA_CENTER"] },
+    "exactBuild": { "type": "string", "minLength": 1 },
+    "apiFlavor": { "enum": ["CLOUD_REST_V3", "DC_REST_V2"] },
+    "projects": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/IdName" } },
+    "issueTypes": { "type": "array", "maxItems": 512, "items": { "$ref": "#/$defs/ScopedIdName" } },
+    "fields": { "type": "array", "maxItems": 4096, "items": { "type": "object", "additionalProperties": false, "required": ["id", "name", "schemaType", "projectIds", "issueTypeIds"], "properties": { "id": { "type": "string", "minLength": 1 }, "name": { "type": "string", "minLength": 1 }, "schemaType": { "type": "string", "minLength": 1 }, "projectIds": { "type": "array", "items": { "type": "string" } }, "issueTypeIds": { "type": "array", "items": { "type": "string" } } } } },
+    "statuses": { "type": "array", "maxItems": 512, "items": { "$ref": "#/$defs/IdName" } },
+    "transitions": { "type": "array", "maxItems": 2048, "items": { "type": "object", "additionalProperties": false, "required": ["id", "name", "fromStatusIds", "toStatusId"], "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "fromStatusIds": { "type": "array", "items": { "type": "string" } }, "toStatusId": { "type": "string" } } } },
+    "priorities": { "type": "array", "maxItems": 128, "items": { "$ref": "#/$defs/IdName" } },
+    "linkTypes": { "type": "array", "maxItems": 128, "items": { "type": "object", "additionalProperties": false, "required": ["id", "name", "inward", "outward"], "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "inward": { "type": "string" }, "outward": { "type": "string" } } } },
+    "capabilities": { "type": "object", "additionalProperties": { "type": "boolean" }, "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$" } },
+    "collectedAt": { "type": "string", "format": "date-time" },
+    "contentHash": { "$ref": "#/$defs/Digest" }
+  },
+  "$defs": {
+    "Digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "Ref": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "integer", "minimum": 1 } } },
+    "IdName": { "type": "object", "additionalProperties": false, "required": ["id", "name"], "properties": { "id": { "type": "string", "minLength": 1 }, "name": { "type": "string", "minLength": 1 } } },
+    "ScopedIdName": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "projectIds"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "projectIds": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    }
+  }
+}

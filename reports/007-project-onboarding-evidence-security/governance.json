@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "gate": "governance",
+  "startedAt": "2026-09-03T18:34:31.755Z",
+  "finishedAt": "2026-09-03T18:34:31.760Z",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "production": "DENIED",
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "constitution",
+      "status": "PASS",
+      "code": "CONSTITUTION_2_0_ACCEPTED",
+      "detail": ".specify/memory/constitution.md"
+    },
+    {
+      "id": "ownership",
+      "status": "PASS",
+      "code": "OWNERSHIP_BOUNDARIES_ACCEPTED",
+      "detail": "Core/QA/Connector/Hermes authority is separated"
+    },
+    {
+      "id": "jira-authority",
+      "status": "PASS",
+      "code": "JIRA_OPERATIONAL_AUTHORITY_ACCEPTED",
+      "detail": "Jira remains the external operational authority"
+    },
+    {
+      "id": "project-scope",
+      "status": "PASS",
+      "code": "PROJECT_SCOPE_BEFORE_AGGREGATION_ACCEPTED",
+      "detail": "authorization precedes lookup and aggregation"
+    },
+    {
+      "id": "approval-evidence",
+      "status": "PASS",
+      "code": "EXACT_APPROVAL_HUMAN_EVIDENCE_ACCEPTED",
+      "detail": "separation of duties and human verdict are mandatory"
+    },
+    {
+      "id": "secret-storage",
+      "status": "PASS",
+      "code": "SECRET_STORAGE_BOUNDARY_ACCEPTED",
+      "detail": "business state stores opaque refs only"
+    },
+    {
+      "id": "local-production",
+      "status": "PASS",
+      "code": "LOCAL_INPUT_PRODUCTION_BOUNDARY_ACCEPTED",
+      "detail": "qa-jira-gitlab-mattermost-local; corporate=FEATURE_008"
+    }
+  ],
+  "gatedInputs": [
+    {
+      "id": "corporate-identifiers-and-mappings",
+      "status": "BLOCKED_INPUT",
+      "owner": "FEATURE_008"
+    },
+    {
+      "id": "corporate-connectivity-and-credentials",
+      "status": "SKIPPED_GATED",
+      "owner": "FEATURE_008"
+    }
+  ]
+}

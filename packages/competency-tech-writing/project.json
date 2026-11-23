@@ -1,0 +1,21 @@
+{
+  "name": "competency-tech-writing",
+  "root": "packages/competency-tech-writing",
+  "sourceRoot": "packages/competency-tech-writing/src",
+  "projectType": "library",
+  "tags": ["type:pack", "runtime:universal", "domain:tech-writing"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/competency-tech-writing/tsconfig.json --noEmit"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/competency-tech-writing/tsconfig.json --noEmit"
+      }
+    }
+  }
+}

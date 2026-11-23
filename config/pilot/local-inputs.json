@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 1,
+  "id": "local-engineering-inputs",
+  "version": 1,
+  "profile": "local",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": ["fixture-project-web"]
+  },
+  "entries": [
+    {
+      "id": "IN-01",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "workspaceRef": "fixture:workspaceRef",
+        "projectRefs": ["fixture:projectRefs"],
+        "workflowRef": "fixture:workflowRef",
+        "suiteRef": "fixture:suiteRef",
+        "environmentRef": "fixture:environmentRef",
+        "channelRefs": ["fixture:channelRefs"]
+      },
+      "contentHash": "sha256:50c5e2d8f92b6bd9a9c3cf1370769808c241f5f787de41ccb740a44bc381a938"
+    },
+    {
+      "id": "IN-02",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "providers": [
+          {
+            "type": "JIRA",
+            "edition": "STATEFUL_MOCK",
+            "version": "fixture-v1",
+            "apiDialect": "fixture-v1",
+            "authStrategy": "fixture-scoped-lease",
+            "documentRef": "fixture:protocol-contract",
+            "permissionsRef": "fixture:scoped-permissions"
+          },
+          {
+            "type": "GITLAB",
+            "edition": "STATEFUL_MOCK",
+            "version": "fixture-v1",
+            "apiDialect": "fixture-v1",
+            "authStrategy": "fixture-scoped-lease",
+            "documentRef": "fixture:protocol-contract",
+            "permissionsRef": "fixture:scoped-permissions"
+          },
+          {
+            "type": "MATTERMOST",
+            "edition": "STATEFUL_MOCK",
+            "version": "fixture-v1",
+            "apiDialect": "fixture-v1",
+            "authStrategy": "fixture-scoped-lease",
+            "documentRef": "fixture:protocol-contract",
+            "permissionsRef": "fixture:scoped-permissions"
+          }
+        ]
+      },
+      "contentHash": "sha256:bc5c386897f9a46fb03533acec8a2c6f3fd583090eb039ce65bf13414127905d"
+    },
+    {
+      "id": "IN-03",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "issuer": "https://idp.fixture.invalid",
+        "audience": "fixture:audience",
+        "tokenDialect": "fixture:tokenDialect",
+        "groupMappingRef": "fixture:groupMappingRef",
+        "sessionPolicyRef": "fixture:sessionPolicyRef",
+        "stepUpPolicyRef": "fixture:stepUpPolicyRef"
+      },
+      "contentHash": "sha256:09860cd2ef1138858e27593e139cb2ee08b5560400bec178160de00b4814f8f8"
+    },
+    {
+      "id": "IN-04",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "authMethod": "fixture:authMethod",
+        "resolverPolicyRef": "fixture:resolverPolicyRef",
+        "secretRefs": [
+          "secretref://fixture/jira",
+          "secretref://fixture/gitlab/read",
+          "secretref://fixture/gitlab/trigger"
+        ],
+        "signingPolicyRef": "fixture:signingPolicyRef",
+        "rotationPolicyRef": "fixture:rotationPolicyRef",
+        "breakGlassRef": "fixture:breakGlassRef"
+      },
+      "contentHash": "sha256:f9209067bf592182ef09813dac3ce3dc1d721651e3d0e91038cdd360fba91507"
+    },
+    {
+      "id": "IN-05",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "origins": ["fixture:origins"],
+        "trustPolicyRef": "fixture:trustPolicyRef",
+        "egressPolicyRef": "fixture:egressPolicyRef",
+        "callbackRoutes": ["fixture:callbackRoutes"],
+        "ingressPolicyRef": "fixture:ingressPolicyRef"
+      },
+      "contentHash": "sha256:6dcc965a034613e6c4cbe150486ae6ad90691d0a6c1e86adf716e1a60c24a6dd"
+    },
+    {
+      "id": "IN-06",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "telemetryPolicyRef": "fixture:telemetryPolicyRef",
+        "retentionPolicyRef": "fixture:retentionPolicyRef",
+        "alertRouteRef": "fixture:alertRouteRef",
+        "onCallOwner": "fixture:onCallOwner"
+      },
+      "contentHash": "sha256:9f94d257827ad9aa088c943aac6a6b0c2509494ba9de14b032849947e51408c9"
+    },
+    {
+      "id": "IN-07",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "artifactMode": "GITLAB_ONLY",
+        "retentionPolicyRef": "fixture:retentionPolicyRef",
+        "verificationPolicyRef": "fixture:verificationPolicyRef",
+        "exportPolicyRef": "fixture:exportPolicyRef"
+      },
+      "contentHash": "sha256:9f5aabb0640ca9c56da71dea022a3c9c582d900bd2efd405f82921ee4469a02b"
+    },
+    {
+      "id": "IN-08",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "backupMethod": "LOGICAL",
+        "destinationRef": "fixture:destinationRef",
+        "recoveryPolicyRef": "fixture:recoveryPolicyRef",
+        "fencePolicyRef": "fixture:fencePolicyRef",
+        "restoreOwner": "fixture:restoreOwner"
+      },
+      "contentHash": "sha256:a7464b7b66cb4898558a3c37ddaae01ba45141ac5f8a87f01a3f7784d60ef094"
+    },
+    {
+      "id": "IN-09",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "scanPolicyRef": "fixture:scanPolicyRef",
+        "scannerRef": "fixture:scannerRef",
+        "freshnessPolicyRef": "fixture:freshnessPolicyRef",
+        "findingOwner": "fixture:findingOwner"
+      },
+      "contentHash": "sha256:dec6595077502e0a9ddd413e2f5e3b6e7dca83c88e7b02f66f3ab24171b228e1"
+    },
+    {
+      "id": "IN-10",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "cohortRef": "fixture:cohortRef",
+        "humanRefs": ["fixture:humanRefs"],
+        "sponsorRef": "fixture:sponsorRef",
+        "qaLeadRef": "fixture:qaLeadRef",
+        "windowPolicyRef": "fixture:windowPolicyRef"
+      },
+      "contentHash": "sha256:20fc5c97b24e0f9a711e84c10ae28295ac0192a562209ce7e68219a9b1fe8c85"
+    },
+    {
+      "id": "IN-11",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "baselineMethod": "fixture:baselineMethod",
+        "sourceRefs": ["fixture:sourceRefs"],
+        "measurementProtocolRef": "fixture:measurementProtocolRef",
+        "spotCheckPolicyRef": "fixture:spotCheckPolicyRef"
+      },
+      "contentHash": "sha256:5128f64d3dc3755bdf4999ec28ec3198ebf45db7eee06fa191bb0051af01af08"
+    },
+    {
+      "id": "IN-12",
+      "version": 1,
+      "workspaceId": "fixture-workspace-alpha",
+      "projectIds": ["fixture-project-web"],
+      "synthetic": true,
+      "suppliedBy": "fixture-owner",
+      "reviewedBy": "fixture-reviewer",
+      "reviewedAt": "2026-09-03T00:00:00Z",
+      "evidenceRef": "fixture:metadata-review",
+      "metadata": {
+        "incidentRunbookRef": "fixture:incidentRunbookRef",
+        "rollbackRunbookRef": "fixture:rollbackRunbookRef",
+        "resumePolicyRef": "fixture:resumePolicyRef",
+        "onCallOwner": "fixture:onCallOwner"
+      },
+      "contentHash": "sha256:8e51dd7ea57c071bd5822feb8ac22b869dd4378fcb04076952619b90a73935d4"
+    }
+  ]
+}

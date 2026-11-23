@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automated-required-session:v1",
+  "title": "Automated Required Session Requirement v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "requiredSessionPlanId",
+    "planVersion",
+    "requirementId",
+    "mode",
+    "suiteBindingKey",
+    "suiteSelectionPolicy",
+    "allowedTargetTypes",
+    "allowedEnvironmentRefs",
+    "capabilityRequirements",
+    "contentHash",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automated-required-session@1.0.0" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workItemId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "requiredSessionPlanId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "planVersion": { "type": "integer", "minimum": 1 },
+    "requirementId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "mode": { "const": "AUTOMATED" },
+    "suiteBindingKey": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+    },
+    "suiteSelectionPolicy": { "const": "CURRENT_PUBLISHED_AT_SESSION_CREATION" },
+    "allowedTargetTypes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "enum": ["MERGE_REQUEST", "COMMIT", "BUILD"] }
+    },
+    "allowedEnvironmentRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+    },
+    "capabilityRequirements": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "source-context.read@1.0.0",
+          "test-executor.trigger-status@1.0.0",
+          "artifact.ci-read@1.0.0"
+        ]
+      }
+    },
+    "contentHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "createdAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+  }
+}

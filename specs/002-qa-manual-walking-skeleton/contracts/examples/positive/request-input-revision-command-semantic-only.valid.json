@@ -1,0 +1,22 @@
+{
+  "expectedCurrentInputRevisionRef": {
+    "id": "35353535-3535-4535-8535-353535353536",
+    "version": 1,
+    "contentHash": "sha256:3535353535353535353535353535353535353535353535353535353535353536"
+  },
+  "reasonCode": "MISSING_INFO_SUPPLIED",
+  "reason": "Requester supplied the missing agreed validation scope and outcome.",
+  "input": {
+    "goal": "Validate checkout error handling",
+    "scope": "Checkout payment-decline behavior on the pinned target",
+    "acceptanceOutcome": "A declined payment is explained and no order is created",
+    "sourceRefs": [],
+    "blockersDeclared": true,
+    "blockers": [],
+    "dependenciesDeclared": true,
+    "dependencies": [],
+    "requestRisk": "HIGH",
+    "desiredDate": "2026-08-29",
+    "checklistRefs": []
+  }
+}

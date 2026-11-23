@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:intake-candidate:v1",
+  "title": "IntakeCandidate v1",
+  "$comment": "Every Candidate has expiresAt. Semantic validation requires snoozedUntil < expiresAt for SNOOZED. Effective state evaluates expiry first: now >= expiresAt is EXPIRED; otherwise a SNOOZED candidate with now >= snoozedUntil is PENDING_CONFIRMATION.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateId",
+    "workspaceId",
+    "projectId",
+    "workTypeRef",
+    "source",
+    "triggerRef",
+    "deduplicationKey",
+    "currentSourceObservation",
+    "minimalSummary",
+    "classification",
+    "state",
+    "expiresAt",
+    "rowVersion",
+    "creationActionProvenanceRef",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "intake-candidate@1.0.0" },
+    "candidateId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "workTypeRef": { "$ref": "#/$defs/versionedHashRef" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "authorityNamespace", "entityType", "entityId"],
+      "properties": {
+        "kind": { "enum": ["MATTERMOST_TRIGGER", "JIRA_TRIGGER", "GITLAB_TRIGGER", "PLATFORM_WEB_DISCOVERY"] },
+        "authorityNamespace": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "connectionHeaderId": { "$ref": "#/$defs/id" },
+        "entityType": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "entityId": { "$ref": "#/$defs/id" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {
+              "kind": { "enum": ["MATTERMOST_TRIGGER", "JIRA_TRIGGER", "GITLAB_TRIGGER"] }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": ["connectionHeaderId"],
+            "properties": {
+              "connectionHeaderId": { "$ref": "#/$defs/id" }
+            }
+          },
+          "else": {
+            "type": "object",
+            "properties": {
+              "connectionHeaderId": false
+            }
+          }
+        }
+      ]
+    },
+    "triggerRef": { "$ref": "#/$defs/versionedHashRef" },
+    "deduplicationKey": { "$ref": "#/$defs/hash" },
+    "currentSourceObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "sourceEntityVersion", "sourceFingerprint", "observedAt"],
+      "properties": {
+        "version": { "type": "integer", "minimum": 1 },
+        "sourceEntityVersion": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "sourceFingerprint": { "$ref": "#/$defs/hash" },
+        "observedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "minimalSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "sourceRef"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "sourceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "reason": { "type": "string", "maxLength": 1024 }
+      }
+    },
+    "classification": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+    "requesterPrincipalId": { "$ref": "#/$defs/id" },
+    "state": { "enum": ["PENDING_CONFIRMATION", "SNOOZED", "CONVERTED", "IGNORED", "EXPIRED"] },
+    "currentDecisionVersion": {
+      "description": "Required after a human decision; optional in PENDING_CONFIRMATION and EXPIRED because both states are reachable without a decision.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "convertedDraftId": { "$ref": "#/$defs/id" },
+    "snoozedUntil": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "rowVersion": { "type": "integer", "minimum": 1 },
+    "creationActionProvenanceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "required": ["state"],
+        "properties": { "state": { "const": "SNOOZED" } }
+      },
+      "then": {
+        "type": "object",
+        "required": ["snoozedUntil"],
+        "properties": {
+          "snoozedUntil": { "type": "string", "format": "date-time" }
+        }
+      },
+      "else": {
+        "type": "object",
+        "properties": { "snoozedUntil": false }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["state"],
+        "properties": { "state": { "const": "CONVERTED" } }
+      },
+      "then": {
+        "type": "object",
+        "required": ["convertedDraftId"],
+        "properties": {
+          "convertedDraftId": { "$ref": "#/$defs/id" }
+        }
+      },
+      "else": {
+        "type": "object",
+        "properties": { "convertedDraftId": false }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["state"],
+        "properties": { "state": { "enum": ["SNOOZED", "CONVERTED", "IGNORED"] } }
+      },
+      "then": {
+        "type": "object",
+        "required": ["currentDecisionVersion"],
+        "properties": {
+          "currentDecisionVersion": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["state"],
+        "properties": { "state": { "const": "EXPIRED" } }
+      },
+      "then": {
+        "type": "object",
+        "required": ["expiresAt"],
+        "properties": {
+          "expiresAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-authority:import-intent:v1",
+  "title": "Operational Import Intent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "importIntentId", "workspaceId", "connectionRef", "profileRef", "externalEntityId", "externalDisplayKey", "discoverySource", "discoveryPayloadHash", "authoritativeReadHash", "externalRevisionToken", "externalCreatorId", "projectDiscriminator", "state", "createdAt", "resourceVersion"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "importIntentId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "connectionRef": { "$ref": "#/$defs/Ref" },
+    "profileRef": { "$ref": "#/$defs/Ref" },
+    "projectIntegrationBindingRef": { "$ref": "#/$defs/Ref" },
+    "externalEntityId": { "type": "string", "minLength": 1 },
+    "externalDisplayKey": { "type": "string", "minLength": 1 },
+    "discoverySource": { "enum": ["WEBHOOK", "IMPORT_RECONCILIATION", "OPERATOR_REPLAY"] },
+    "discoveryPayloadHash": { "$ref": "#/$defs/Digest" },
+    "authoritativeReadHash": { "$ref": "#/$defs/Digest" },
+    "externalRevisionToken": { "$ref": "#/$defs/Digest" },
+    "externalCreatorId": { "type": "string", "minLength": 1 },
+    "externalPrincipalBindingRef": { "$ref": "#/$defs/Ref" },
+    "projectDiscriminator": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "state": { "enum": ["DISCOVERED", "ROUTED", "IDENTITY_VERIFIED", "ADOPTED", "AWAITING_CONFIRMATION", "BLOCKED_MAPPING", "FAILED_RETRYABLE", "IGNORED_OUT_OF_SCOPE", "REJECTED_SECURITY"] },
+    "reasonCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,127}$" },
+    "resultWorkItemId": { "type": "string", "format": "uuid" },
+    "resultOperationalBindingRef": { "$ref": "#/$defs/Ref" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "adoptedAt": { "type": "string", "format": "date-time" },
+    "resourceVersion": { "type": "integer", "minimum": 1 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "ADOPTED" } }, "required": ["state"] },
+      "then": { "required": ["projectId", "projectIntegrationBindingRef", "externalPrincipalBindingRef", "resultWorkItemId", "resultOperationalBindingRef", "adoptedAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["IGNORED_OUT_OF_SCOPE", "REJECTED_SECURITY", "BLOCKED_MAPPING", "FAILED_RETRYABLE"] } }, "required": ["state"] },
+      "then": { "required": ["reasonCode"], "not": { "anyOf": [{ "required": ["resultWorkItemId"] }, { "required": ["resultOperationalBindingRef"] }] } }
+    }
+  ],
+  "$defs": {
+    "Digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "Ref": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "integer", "minimum": 1 } } }
+  }
+}

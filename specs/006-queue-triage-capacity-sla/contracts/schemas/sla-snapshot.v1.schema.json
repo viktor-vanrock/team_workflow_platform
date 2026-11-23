@@ -1,0 +1,544 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:sla-snapshot:v1",
+  "title": "SlaSnapshot v1",
+  "$comment": "Read-time SLA evaluation. clockRevisionRef resolves the durable sla-clock-transition@1.0.0 projection and excludes dynamic evaluation fields; evaluationHash covers the full response except itself. For every started clock, composed validation requires exact field-for-field equality with that resolved transition for workspaceId, projectId, workItemId, goal, slaClockId, clockCycle, clockRevisionRef, policyFacetRef, calendarRef, mappingRef, algorithmRef, startSourceRef, startedAt, effectiveAt and inputFingerprint; clockState equals currentClockState and lastTransition equals transition. providerStartObservedAt is present iff the resolved start authority carries a provider observedAt (directly for Jira or through the rollout-verification receipt) and is equal to it. For STOP, stoppedAt and stopSourceRef equal transition effectiveAt and transitionSourceRef; for PAUSE, the pause reason/mapping/source/time equal mappedPauseReasonCode, mappingRef, transitionSourceRef and effectiveAt. targetConfiguration state, targetBusinessSeconds and the ordered warningThresholds equal the selected goal entry in the resolved policyFacetRef; remainingBusinessSeconds, computedTargetAt and targetState are derived only from that exact configuration, elapsedBusinessSeconds and the pinned calendar/algorithm. Composed validation calculates business seconds using the pinned open-ended calendar/algorithm, verifies the closed property-specific mapping/start/pause/segment/stop source families, enforces the goal-specific stop family, verifies segment lineage and requires every PAUSED boundary to resolve through the pinned closed mapping. Unknown reasons leave the clock RUNNING.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "goal",
+    "clockState",
+    "targetState",
+    "targetConfiguration",
+    "pause",
+    "elapsedBusinessSeconds",
+    "freshness",
+    "asOf",
+    "evaluationHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "sla-snapshot@1.0.0" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "workItemId": { "$ref": "#/$defs/id" },
+    "goal": { "enum": ["READY_TO_FIRST_QA_START", "READY_TO_SIGNED_VERDICT"] },
+    "clockState": { "enum": ["NOT_STARTED", "RUNNING", "PAUSED", "STOPPED"] },
+    "targetState": { "enum": ["NOT_STARTED", "NOT_CONFIGURED", "ON_TRACK", "AT_RISK", "BREACHED", "COMPLETED"] },
+    "targetConfiguration": { "$ref": "#/$defs/targetConfiguration" },
+    "notStartedReason": {
+      "enum": [
+        "NO_CONFIRMED_START_EVENT",
+        "ROLLOUT_CONFIRMATION_REQUIRED",
+        "POLICY_NOT_PUBLISHED",
+        "SOURCE_STALE",
+        "SOURCE_CONFLICT"
+      ]
+    },
+    "slaClockId": { "$ref": "#/$defs/id" },
+    "clockCycle": { "type": "integer", "minimum": 1 },
+    "clockRevisionRef": {
+      "description": "Exact immutable clock transition revision. Its semanticHash excludes read-time asOf, elapsed/remaining evaluation and evaluationHash.",
+      "$ref": "#/$defs/versionedContentRef"
+    },
+    "policyFacetRef": {
+      "description": "Project-scoped public policy facet; the internal clock retains the full source policy revision separately.",
+      "$ref": "#/$defs/versionedContentRef"
+    },
+    "calendarRef": { "$ref": "#/$defs/versionedContentRef" },
+    "mappingRef": { "$ref": "#/$defs/statusMappingRevisionRef" },
+    "algorithmRef": { "$ref": "#/$defs/algorithmRef" },
+    "startSourceRef": { "$ref": "#/$defs/startSourceRef" },
+    "startedAt": { "$ref": "#/$defs/timestamp" },
+    "providerStartObservedAt": { "$ref": "#/$defs/timestamp" },
+    "lastTransition": { "enum": ["START", "PAUSE", "RESUME", "STOP"] },
+    "effectiveAt": { "$ref": "#/$defs/timestamp" },
+    "pause": { "$ref": "#/$defs/pauseState" },
+    "openSegment": { "$ref": "#/$defs/openSegment" },
+    "stoppedAt": { "$ref": "#/$defs/timestamp" },
+    "stopSourceRef": { "$ref": "#/$defs/stopSourceRef" },
+    "elapsedBusinessSeconds": { "type": "integer", "minimum": 0 },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "freshness": { "enum": ["CURRENT", "STALE", "ERROR", "REBUILDING"] },
+    "asOf": { "$ref": "#/$defs/timestamp" },
+    "evaluationHash": {
+      "description": "SHA-256 of RFC 8785 canonical response fields excluding evaluationHash itself. It changes with server-selected asOf or any derived elapsed/remaining value without mutating clockRevisionRef.",
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["clockState"],
+        "properties": { "clockState": { "const": "NOT_STARTED" } }
+      },
+      "then": {
+        "required": ["notStartedReason"],
+        "properties": {
+          "targetState": { "const": "NOT_STARTED" },
+          "targetConfiguration": {
+            "oneOf": [
+              { "$ref": "#/$defs/notConfiguredTargetConfiguration" },
+              { "$ref": "#/$defs/configuredPreStartTargetConfiguration" }
+            ]
+          },
+          "elapsedBusinessSeconds": { "const": 0 },
+          "slaClockId": false,
+          "clockCycle": false,
+          "clockRevisionRef": false,
+          "startSourceRef": false,
+          "startedAt": false,
+          "providerStartObservedAt": false,
+          "lastTransition": false,
+          "effectiveAt": false,
+          "openSegment": false,
+          "stoppedAt": false,
+          "stopSourceRef": false,
+          "pause": {
+            "properties": { "state": { "const": "NOT_PAUSED" } },
+            "required": ["state"]
+          }
+        }
+      },
+      "else": {
+        "required": [
+          "slaClockId",
+          "clockCycle",
+          "clockRevisionRef",
+          "policyFacetRef",
+          "calendarRef",
+          "mappingRef",
+          "algorithmRef",
+          "startSourceRef",
+          "startedAt",
+          "lastTransition",
+          "effectiveAt",
+          "inputFingerprint"
+        ],
+        "properties": { "notStartedReason": false }
+      }
+    },
+    {
+      "if": {
+        "required": ["clockState", "goal"],
+        "properties": {
+          "clockState": { "const": "STOPPED" },
+          "goal": { "const": "READY_TO_FIRST_QA_START" }
+        }
+      },
+      "then": { "properties": { "stopSourceRef": { "$ref": "#/$defs/sessionStopSourceRef" } } }
+    },
+    {
+      "if": {
+        "required": ["clockState", "goal"],
+        "properties": {
+          "clockState": { "const": "STOPPED" },
+          "goal": { "const": "READY_TO_SIGNED_VERDICT" }
+        }
+      },
+      "then": { "properties": { "stopSourceRef": { "$ref": "#/$defs/verdictStopSourceRef" } } }
+    },
+    {
+      "if": {
+        "required": ["clockState", "targetConfiguration"],
+        "properties": {
+          "clockState": { "const": "NOT_STARTED" },
+          "targetConfiguration": {
+            "required": ["state"],
+            "properties": { "state": { "const": "CONFIGURED" } }
+          }
+        }
+      },
+      "then": {
+        "required": ["policyFacetRef", "calendarRef", "mappingRef", "algorithmRef", "inputFingerprint"],
+        "properties": {
+          "targetConfiguration": { "$ref": "#/$defs/configuredPreStartTargetConfiguration" }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["clockState", "targetConfiguration", "notStartedReason"],
+        "properties": {
+          "clockState": { "const": "NOT_STARTED" },
+          "notStartedReason": { "const": "POLICY_NOT_PUBLISHED" },
+          "targetConfiguration": {
+            "required": ["state"],
+            "properties": { "state": { "const": "NOT_CONFIGURED" } }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "policyFacetRef": false,
+          "calendarRef": false,
+          "mappingRef": false,
+          "algorithmRef": false,
+          "inputFingerprint": false
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["clockState", "notStartedReason"],
+        "properties": {
+          "clockState": { "const": "NOT_STARTED" },
+          "notStartedReason": {
+            "enum": [
+              "NO_CONFIRMED_START_EVENT",
+              "ROLLOUT_CONFIRMATION_REQUIRED",
+              "SOURCE_STALE",
+              "SOURCE_CONFLICT"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": ["policyFacetRef", "calendarRef", "mappingRef", "algorithmRef", "inputFingerprint"]
+      }
+    },
+    {
+      "if": {
+        "required": ["clockState"],
+        "properties": { "clockState": { "const": "RUNNING" } }
+      },
+      "then": {
+        "required": ["openSegment"],
+        "properties": {
+          "lastTransition": { "enum": ["START", "RESUME"] },
+          "pause": {
+            "properties": { "state": { "const": "NOT_PAUSED" } },
+            "required": ["state"]
+          },
+          "openSegment": {
+            "properties": { "state": { "const": "RUNNING" } },
+            "required": ["state"]
+          },
+          "stoppedAt": false,
+          "stopSourceRef": false
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["clockState"],
+        "properties": { "clockState": { "const": "PAUSED" } }
+      },
+      "then": {
+        "required": ["openSegment"],
+        "properties": {
+          "lastTransition": { "const": "PAUSE" },
+          "pause": {
+            "properties": { "state": { "const": "PAUSED" } },
+            "required": ["state"]
+          },
+          "openSegment": {
+            "properties": { "state": { "const": "PAUSED" } },
+            "required": ["state"]
+          },
+          "stoppedAt": false,
+          "stopSourceRef": false
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["clockState"],
+        "properties": { "clockState": { "const": "STOPPED" } }
+      },
+      "then": {
+        "required": ["stoppedAt", "stopSourceRef"],
+        "properties": {
+          "lastTransition": { "const": "STOP" },
+          "openSegment": false,
+          "pause": {
+            "properties": { "state": { "const": "NOT_PAUSED" } },
+            "required": ["state"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["clockState", "targetConfiguration"],
+        "properties": {
+          "clockState": { "enum": ["RUNNING", "PAUSED"] },
+          "targetConfiguration": {
+            "properties": { "state": { "const": "NOT_CONFIGURED" } },
+            "required": ["state"]
+          }
+        }
+      },
+      "then": { "properties": { "targetState": { "const": "NOT_CONFIGURED" } } }
+    },
+    {
+      "if": {
+        "required": ["clockState", "targetConfiguration"],
+        "properties": {
+          "clockState": { "enum": ["RUNNING", "PAUSED"] },
+          "targetConfiguration": {
+            "properties": { "state": { "const": "CONFIGURED" } },
+            "required": ["state"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "targetState": { "enum": ["ON_TRACK", "AT_RISK", "BREACHED"] },
+          "targetConfiguration": { "$ref": "#/$defs/configuredActiveTargetConfiguration" }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["clockState", "notStartedReason"],
+        "properties": {
+          "clockState": { "const": "NOT_STARTED" },
+          "notStartedReason": { "const": "POLICY_NOT_PUBLISHED" }
+        }
+      },
+      "then": {
+        "properties": {
+          "targetConfiguration": { "$ref": "#/$defs/notConfiguredTargetConfiguration" }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["clockState", "targetConfiguration"],
+        "properties": {
+          "clockState": { "const": "STOPPED" },
+          "targetConfiguration": {
+            "properties": { "state": { "const": "NOT_CONFIGURED" } },
+            "required": ["state"]
+          }
+        }
+      },
+      "then": { "properties": { "targetState": { "const": "NOT_CONFIGURED" } } }
+    },
+    {
+      "if": {
+        "required": ["clockState", "targetConfiguration"],
+        "properties": {
+          "clockState": { "const": "STOPPED" },
+          "targetConfiguration": {
+            "properties": { "state": { "const": "CONFIGURED" } },
+            "required": ["state"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "targetState": { "const": "COMPLETED" },
+          "targetConfiguration": { "$ref": "#/$defs/configuredActiveTargetConfiguration" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "format": "uuid" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+    },
+    "reasonCode": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "statusMappingRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "JIRA_STATUS_MAPPING_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "jiraConfirmedProjectionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash", "confirmedAt"],
+      "properties": {
+        "sourceType": { "const": "JIRA_OPERATIONAL_PROJECTION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "observedAt": { "$ref": "#/$defs/timestamp" },
+        "confirmedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "rolloutVerificationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash", "confirmedAt"],
+      "properties": {
+        "sourceType": { "const": "SLA_ROLLOUT_AUTHORITY_VERIFICATION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "const": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "confirmedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "startSourceRef": {
+      "oneOf": [
+        { "$ref": "#/$defs/jiraConfirmedProjectionRef" },
+        { "$ref": "#/$defs/rolloutVerificationRef" }
+      ]
+    },
+    "sessionStopSourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QA_TEST_SESSION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "verdictStopSourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QA_VERDICT_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "stopSourceRef": {
+      "oneOf": [
+        { "$ref": "#/$defs/sessionStopSourceRef" },
+        { "$ref": "#/$defs/verdictStopSourceRef" }
+      ]
+    },
+    "clockSegmentRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "SLA_CLOCK_SEGMENT_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "algorithmRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "semanticHash"],
+      "properties": {
+        "key": { "$ref": "#/$defs/key" },
+        "version": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "targetConfiguration": {
+      "oneOf": [
+        { "$ref": "#/$defs/notConfiguredTargetConfiguration" },
+        { "$ref": "#/$defs/configuredPreStartTargetConfiguration" },
+        { "$ref": "#/$defs/configuredActiveTargetConfiguration" }
+      ]
+    },
+    "notConfiguredTargetConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": { "state": { "const": "NOT_CONFIGURED" } }
+    },
+    "configuredPreStartTargetConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "targetBusinessSeconds", "warningThresholds"],
+      "properties": {
+        "state": { "const": "CONFIGURED" },
+        "targetBusinessSeconds": { "type": "integer", "minimum": 1 },
+        "warningThresholds": { "$ref": "#/$defs/warningThresholds" }
+      }
+    },
+    "configuredActiveTargetConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "targetBusinessSeconds", "warningThresholds", "computedTargetAt", "remainingBusinessSeconds"],
+      "properties": {
+        "state": { "const": "CONFIGURED" },
+        "targetBusinessSeconds": { "type": "integer", "minimum": 1 },
+        "warningThresholds": { "$ref": "#/$defs/warningThresholds" },
+        "computedTargetAt": { "$ref": "#/$defs/timestamp" },
+        "remainingBusinessSeconds": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "warningThresholds": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "elapsedBusinessSeconds"],
+        "properties": {
+          "key": { "$ref": "#/$defs/key" },
+          "elapsedBusinessSeconds": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "pauseState": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NOT_PAUSED" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "mappedReasonCode", "mappingRef", "sourceRef", "pausedAt"],
+          "properties": {
+            "state": { "const": "PAUSED" },
+            "mappedReasonCode": { "$ref": "#/$defs/reasonCode" },
+            "mappingRef": { "$ref": "#/$defs/statusMappingRevisionRef" },
+            "sourceRef": { "$ref": "#/$defs/jiraConfirmedProjectionRef" },
+            "pausedAt": { "$ref": "#/$defs/timestamp" }
+          }
+        }
+      ]
+    },
+    "openSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["segmentRef", "state", "startedAt"],
+      "properties": {
+        "segmentRef": { "$ref": "#/$defs/clockSegmentRevisionRef" },
+        "state": { "enum": ["RUNNING", "PAUSED"] },
+        "startedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    }
+  }
+}

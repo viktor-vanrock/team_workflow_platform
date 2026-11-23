@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "gate": "combined-regression",
+  "startedAt": "2026-08-30T22:52:23.420Z",
+  "finishedAt": "2026-08-30T22:58:39.217Z",
+  "status": "PASS",
+  "feature001Report": "artifacts/verification/feature-001-gate.json",
+  "results": [
+    {
+      "id": "feature-001-final-report",
+      "validation": "status=PASS; acceptance=19",
+      "status": "PASS",
+      "durationMs": 1,
+      "detail": "status=PASS; acceptance=19"
+    },
+    {
+      "id": "feature-001-smoke-unchanged",
+      "command": [
+        "node",
+        "tools/verification/smoke-001-gate.mts",
+        "--clean"
+      ],
+      "runtime": true,
+      "status": "PASS",
+      "durationMs": 124506,
+      "detail": "node tools/verification/smoke-001-gate.mts --clean"
+    },
+    {
+      "id": "002-foundation",
+      "command": [
+        "node",
+        "tools/verification/002-foundation-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 19852,
+      "detail": "node tools/verification/002-foundation-checkpoint.mts"
+    },
+    {
+      "id": "002-intake",
+      "command": [
+        "node",
+        "tools/verification/002-us1-intake-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 40209,
+      "detail": "node tools/verification/002-us1-intake-checkpoint.mts"
+    },
+    {
+      "id": "002-readiness",
+      "command": [
+        "node",
+        "tools/verification/002-us2-readiness-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 24317,
+      "detail": "node tools/verification/002-us2-readiness-checkpoint.mts"
+    },
+    {
+      "id": "002-session",
+      "command": [
+        "node",
+        "tools/verification/002-us2-session-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 27907,
+      "detail": "node tools/verification/002-us2-session-checkpoint.mts"
+    },
+    {
+      "id": "002-evidence",
+      "command": [
+        "node",
+        "tools/verification/002-us3-evidence-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 41768,
+      "detail": "node tools/verification/002-us3-evidence-checkpoint.mts"
+    },
+    {
+      "id": "002-defect",
+      "command": [
+        "node",
+        "tools/verification/002-us4-defect-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 36464,
+      "detail": "node tools/verification/002-us4-defect-checkpoint.mts"
+    },
+    {
+      "id": "002-completion",
+      "command": [
+        "node",
+        "tools/verification/002-us5-completion-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 45364,
+      "detail": "node tools/verification/002-us5-completion-checkpoint.mts"
+    },
+    {
+      "id": "002-final-focused",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/security/acceptance/002-at-012-cross-project-isolation.spec.ts",
+        "tests/e2e/acceptance/002-at-013-model-degraded-mode.spec.ts",
+        "tests/integration/acceptance/002-at-015-resilience.spec.ts",
+        "tests/contract/002-contract-registry-and-api-drift.spec.ts",
+        "tests/architecture/002-hard-boundaries.spec.ts",
+        "tests/architecture/002-non-local-composition-barrier.spec.ts",
+        "tests/integration/security/002-secret-redaction-scan.spec.ts",
+        "tests/integration/002-migration-matrix.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "durationMs": 15406,
+      "detail": "node node_modules/vitest/vitest.mjs run tests/integration/security/acceptance/002-at-012-cross-project-isolation.spec.ts tests/e2e/acceptance/002-at-013-model-degraded-mode.spec.ts tests/integration/acceptance/002-at-015-resilience.spec.ts tests/contract/002-contract-registry-and-api-drift.spec.ts tests/architecture/002-hard-boundaries.spec.ts tests/architecture/002-non-local-composition-barrier.spec.ts tests/integration/security/002-secret-redaction-scan.spec.ts tests/integration/002-migration-matrix.spec.ts --maxWorkers=1"
+    }
+  ]
+}

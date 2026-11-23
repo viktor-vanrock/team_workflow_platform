@@ -1,0 +1,17 @@
+{
+  "name": "connector-gitlab",
+  "root": "packages/connector-gitlab",
+  "sourceRoot": "packages/connector-gitlab/src",
+  "projectType": "library",
+  "tags": ["type:connector", "runtime:node", "domain:gitlab"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-gitlab/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-gitlab/tsconfig.json --noEmit" }
+    }
+  }
+}

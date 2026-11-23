@@ -1,0 +1,10 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/unit/005/automation-result-sync.spec.ts"
+  ],
+  "exitCode": 0,
+  "durationMs": 2059,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  1 passed (1)\n      Tests  8 passed (8)\n   Start at  03:39:00\n   Duration  1.46s (transform 958ms, setup 0ms, import 1.32s, tests 25ms, environment 0ms)\n\n"
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:project-entitlement-revision:v1",
+  "title": "Project entitlement revision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "revisionId", "entitlementId", "version", "workspaceId", "projectId", "principalId", "operation", "effect", "permissions", "classificationCeilingKey", "validFrom", "actor", "reason", "correlationId", "createdAt", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "revisionId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "entitlementId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "principalId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "operation": { "enum": ["GRANT", "REPLACE", "REVOKE"] },
+    "effect": { "enum": ["ALLOW", "DENY"] },
+    "permissions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "../common.v1.schema.json#/$defs/stableKey" }
+    },
+    "classificationCeilingKey": { "$ref": "../common.v1.schema.json#/$defs/classificationKey" },
+    "validFrom": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "validUntil": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "revokedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "previousRevisionRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "actor": { "$ref": "../common.v1.schema.json#/$defs/humanActor" },
+    "reason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "correlationId": { "$ref": "../common.v1.schema.json#/$defs/correlationId" },
+    "createdAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "operation": { "const": "REVOKE" } }, "required": ["operation"] },
+      "then": { "required": ["revokedAt", "previousRevisionRef"] }
+    }
+  ]
+}

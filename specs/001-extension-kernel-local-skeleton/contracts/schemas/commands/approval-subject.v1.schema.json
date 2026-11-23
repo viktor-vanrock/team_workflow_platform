@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:commands:approval-subject:v1",
+  "title": "Exact Approval Resource",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "approvalId",
+    "schemaVersion",
+    "subjectSchemaId",
+    "subjectSchemaVersion",
+    "workspaceId",
+    "projectId",
+    "initiator",
+    "initiatorAuthorizationBasis",
+    "action",
+    "target",
+    "targetHash",
+    "payloadHash",
+    "bindingRef",
+    "profileRefs",
+    "requiredPermission",
+    "separationOfDutyPolicy",
+    "effectIdempotencyKey",
+    "dataClassificationKey",
+    "expiresAt",
+    "subjectHash",
+    "decisionStatus",
+    "effectAuthorizationStatus",
+    "resourceVersion",
+    "createdAt"
+  ],
+  "properties": {
+    "approvalId": { "type": "string", "format": "uuid" },
+    "schemaVersion": { "const": 1 },
+    "subjectSchemaId": { "const": "urn:awp:contracts:commands:approval-subject:v1" },
+    "subjectSchemaVersion": { "const": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "initiator": { "$ref": "../common/actor-ref.v1.schema.json" },
+    "initiatorAuthorizationBasis": {
+      "$ref": "./external-command-envelope.v1.schema.json#/$defs/ProjectAuthorizationBasis"
+    },
+    "action": { "$ref": "#/$defs/Action" },
+    "target": { "$ref": "../common/schema-bound-value.v1.schema.json" },
+    "targetHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+    "payloadHash": {
+      "description": "EXTERNAL_COMMAND: digest of the full payload SchemaBoundValue. PLATFORM_ACTION: exact semantic contentHash of the immutable candidate revision; that branch has no arbitrary payload.",
+      "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest"
+    },
+    "expectedExternalState": {
+      "$ref": "./capability-command-intent.v1.schema.json#/$defs/ExpectedExternalState"
+    },
+    "expectedLocalState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resourceRef", "resourceVersion", "contentHash", "aggregateResourceVersion", "currentPublishedVersion"],
+      "properties": {
+        "resourceRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef" },
+        "resourceVersion": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+        "aggregateResourceVersion": { "type": "integer", "minimum": 1 },
+        "currentPublishedVersion": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "0 means that no version is currently published; otherwise exact current version."
+        }
+      }
+    },
+    "bindingRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef" },
+    "profileRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef" }
+    },
+    "requiredPermission": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.:_-][a-z0-9][a-z0-9_-]*)+$",
+      "maxLength": 128
+    },
+    "separationOfDutyPolicy": {
+      "type": "string",
+      "enum": ["SELF_APPROVAL_FORBIDDEN", "SELF_APPROVAL_ALLOWED"]
+    },
+    "effectIdempotencyKey": {
+      "$ref": "./capability-command-intent.v1.schema.json#/$defs/IdempotencyKey"
+    },
+    "dataClassificationKey": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "subjectHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+    "decisionStatus": {
+      "type": "string",
+      "enum": ["PENDING", "APPROVED", "REJECTED", "EXPIRED", "CANCELLED"]
+    },
+    "effectAuthorizationStatus": {
+      "type": "string",
+      "enum": ["NOT_AUTHORIZED", "AUTHORIZED", "INVALIDATED", "CONSUMED"]
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approver", "approverRole", "authorizationBasis", "decidedAt"],
+      "properties": {
+        "approver": { "$ref": "../common/actor-ref.v1.schema.json#/$defs/HumanActorRef" },
+        "approverRole": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/LogicalRoleKey" },
+        "authorizationBasis": {
+          "$ref": "./external-command-envelope.v1.schema.json#/$defs/ProjectAuthorizationBasis"
+        },
+        "decidedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "invalidationReason": {
+      "type": "string",
+      "enum": [
+        "SUBJECT_CHANGED",
+        "TARGET_CHANGED",
+        "PAYLOAD_CHANGED",
+        "EXPECTED_STATE_CHANGED",
+        "BINDING_CHANGED",
+        "PROFILE_CHANGED",
+        "APPROVER_AUTH_REVOKED",
+        "APPROVER_ROLE_CHANGED",
+        "SCOPE_REVOKED",
+        "EXPIRED",
+        "COMMAND_CANCELLED"
+      ]
+    },
+    "invalidatedAt": { "type": "string", "format": "date-time" },
+    "consumedAt": { "type": "string", "format": "date-time" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "properties": { "actionKind": { "const": "EXTERNAL_COMMAND" } },
+            "required": ["actionKind"]
+          }
+        },
+        "required": ["action"]
+      },
+      "then": {
+        "required": ["expectedExternalState"],
+        "not": { "required": ["expectedLocalState"] }
+      },
+      "else": {
+        "required": ["expectedLocalState"],
+        "not": { "required": ["expectedExternalState"] }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "decisionStatus": { "enum": ["APPROVED", "REJECTED"] }
+        },
+        "required": ["decisionStatus"]
+      },
+      "then": { "required": ["decision"] },
+      "else": { "not": { "required": ["decision"] } }
+    },
+    {
+      "if": {
+        "properties": { "effectAuthorizationStatus": { "const": "INVALIDATED" } },
+        "required": ["effectAuthorizationStatus"]
+      },
+      "then": { "required": ["invalidationReason", "invalidatedAt"] },
+      "else": {
+        "allOf": [
+          { "not": { "required": ["invalidationReason"] } },
+          { "not": { "required": ["invalidatedAt"] } }
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": { "decisionStatus": { "const": "APPROVED" } },
+        "required": ["decisionStatus"]
+      },
+      "then": {
+        "properties": {
+          "effectAuthorizationStatus": {
+            "enum": ["AUTHORIZED", "INVALIDATED", "CONSUMED"]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "effectAuthorizationStatus": { "const": "NOT_AUTHORIZED" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "effectAuthorizationStatus": { "const": "CONSUMED" } },
+        "required": ["effectAuthorizationStatus"]
+      },
+      "then": { "required": ["consumedAt"] },
+      "else": {
+        "not": { "required": ["consumedAt"] }
+      }
+    }
+  ],
+  "$defs": {
+    "Action": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["actionKind", "actionId", "commandType", "capabilityKey", "capabilityVersion", "operation"],
+          "properties": {
+            "actionKind": { "const": "EXTERNAL_COMMAND" },
+            "actionId": { "type": "string", "format": "uuid" },
+            "commandType": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+            "capabilityKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+            "capabilityVersion": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+            "operation": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["actionKind", "commandType", "actionId"],
+          "properties": {
+            "actionKind": { "const": "PLATFORM_ACTION" },
+            "commandType": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+            "actionId": { "type": "string", "format": "uuid" }
+          }
+        }
+      ]
+    }
+  }
+}

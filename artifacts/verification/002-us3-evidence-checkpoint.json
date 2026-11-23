@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "checkpoint": "US3-execution-evidence-review",
+  "status": "PASS",
+  "startedAt": "2026-08-30T22:56:20.272Z",
+  "finishedAt": "2026-08-30T22:57:01.971Z",
+  "invariants": {
+    "lifecycle": "RUNNING→REVIEW_REQUIRED→COMPLETED",
+    "appendOnlyAttemptsObservationsResults": true,
+    "serverDerivedCompleteMemberships": true,
+    "cleanPassPositiveExactAttemptSource": true,
+    "negativeFlowBlockedWithFindingRequired": true,
+    "flakyBeforeUs4": "INCONCLUSIVE_ONLY",
+    "planItemWaiverLiveAtSigning": true,
+    "evidenceAttachmentCasHandoff": true,
+    "evidenceAvailabilitySeparateFromSignedSnapshot": true,
+    "signedManifestAndReviewAtomic": true,
+    "substantiveCorrectionAtomic": true,
+    "crashRecoveryExactlyOnce": true,
+    "nativeQaRetestLineageAvailable": true,
+    "findingOrDefectDependency": false,
+    "mainComposeStarted": false,
+    "coreImportsQaSemantics": false
+  },
+  "evidence": {
+    "focusedNonContainerSuites": 8,
+    "focusedNonContainerTests": 13,
+    "postgresSuites": 4,
+    "postgresTests": 6,
+    "typecheckedProjects": 4,
+    "migrationsThrough": 2020
+  },
+  "stages": [
+    {
+      "id": "typecheck:packages/competency-qa",
+      "status": "PASS",
+      "durationMs": 2958,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/runtime-composition",
+      "status": "PASS",
+      "durationMs": 3053,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/api",
+      "status": "PASS",
+      "durationMs": 3380,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/web",
+      "status": "PASS",
+      "durationMs": 2143,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "us3-eslint",
+      "status": "PASS",
+      "durationMs": 5825,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "packages/competency-qa/src/domain/manual-attempt.ts",
+        "packages/competency-qa/src/domain/observation.ts",
+        "packages/competency-qa/src/domain/plan-item-result.ts",
+        "packages/competency-qa/src/domain/evidence-manifest.ts",
+        "packages/competency-qa/src/domain/session-review.ts",
+        "packages/competency-qa/src/application/transition-session.ts",
+        "packages/competency-qa/src/application/manual-attempt-service.ts",
+        "packages/competency-qa/src/application/record-observation.ts",
+        "packages/competency-qa/src/application/record-plan-item-result.ts",
+        "packages/competency-qa/src/application/evidence-artifact-service.ts",
+        "packages/competency-qa/src/application/evidence-authorization-contribution.ts",
+        "packages/competency-qa/src/application/evidence-manifest-builder.ts",
+        "packages/competency-qa/src/application/review-manual-session.ts",
+        "packages/competency-qa/src/application/correct-session-review.ts",
+        "packages/competency-qa/src/application/manual-review-events.ts",
+        "packages/competency-qa/src/application/execution-evidence-detail-section.ts",
+        "packages/competency-qa/src/persistence/manual-execution.uow.ts",
+        "packages/competency-qa/src/persistence/manual-execution.repository.ts",
+        "packages/competency-qa/src/persistence/evidence-review.repository.ts",
+        "packages/competency-qa/src/persistence/session-review.uow.ts",
+        "apps/api/src/extensions/qa-sessions.controller.ts",
+        "apps/api/src/extensions/qa-manual-execution.controller.ts",
+        "apps/api/src/extensions/qa-evidence.controller.ts",
+        "apps/api/src/extensions/qa-session-review.controller.ts",
+        "packages/competency-qa/src/ui/manual-session-executor.tsx",
+        "packages/competency-qa/src/ui/evidence-review.tsx",
+        "packages/competency-qa/src/ui/contribution.tsx"
+      ]
+    },
+    {
+      "id": "us3-domain-contract-security",
+      "status": "PASS",
+      "durationMs": 4735,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/002-manual-attempt-lineage.spec.ts",
+        "tests/integration/acceptance/002-at-005-manual-review.spec.ts",
+        "tests/contract/acceptance/002-at-006-evidence-manifest.spec.ts",
+        "tests/integration/security/acceptance/002-at-007-evidence-access.spec.ts",
+        "tests/integration/002-evidence-integrity.spec.ts",
+        "tests/integration/002-negative-session-review-blocker.spec.ts",
+        "tests/integration/002-manual-execution-concurrency.spec.ts",
+        "tests/integration/002-evidence-storage-persistence.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "us3-postgres-vertical-append-recovery-authorization",
+      "status": "PASS",
+      "durationMs": 17040,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/002-manual-session-vertical-flow.spec.ts",
+        "tests/integration/security/002-evidence-append-only.spec.ts",
+        "tests/integration/002-session-review-recovery.spec.ts",
+        "tests/integration/security/002-session-review-authorization.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "us2-regression",
+      "status": "PASS",
+      "durationMs": 1333,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "packages/competency-qa/src/domain/test-session.spec.ts",
+        "tests/integration/002-session-snapshot-immutability.spec.ts",
+        "tests/integration/security/002-session-start-guards.spec.ts",
+        "tests/integration/002-required-session-plan-session-coverage.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "openapi-current",
+      "status": "PASS",
+      "durationMs": 189,
+      "command": [
+        "node",
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ]
+    },
+    {
+      "id": "openapi-drift",
+      "status": "PASS",
+      "durationMs": 598,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/openapi-drift.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "web-production-build",
+      "status": "PASS",
+      "durationMs": 287,
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "apps/web/vite.config.ts"
+      ]
+    },
+    {
+      "id": "architecture",
+      "status": "PASS",
+      "durationMs": 157,
+      "command": [
+        "node",
+        "tools/architecture/check-import-graph.mts",
+        "--core-only"
+      ]
+    }
+  ]
+}

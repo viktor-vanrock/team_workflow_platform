@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:qa-triage-assessment-stale:v1",
+  "title": "QA Triage Assessment Stale Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "inputFingerprint",
+    "staleReasonCode",
+    "staleAt",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "const": "STALE"
+    },
+    "inputFingerprint": {
+      "$ref": "#/$defs/digest"
+    },
+    "staleReasonCode": {
+      "enum": [
+        "SOURCE_CHANGED",
+        "SOURCE_REVOKED",
+        "PROFILE_CHANGED",
+        "BINDING_CHANGED",
+        "EXPIRED"
+      ]
+    },
+    "staleAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

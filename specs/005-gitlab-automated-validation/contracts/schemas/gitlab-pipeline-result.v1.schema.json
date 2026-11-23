@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:gitlab-pipeline-result:v1",
+  "title": "GitLab machine-readable pipeline result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestMarkerHash",
+    "pipelineId",
+    "jobId",
+    "commitSha",
+    "buildRef",
+    "suiteKey",
+    "environmentRef",
+    "startedAt",
+    "finishedAt",
+    "durationMs",
+    "outcome",
+    "artifacts"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "gitlab-pipeline-result@1.0.0" },
+    "requestMarkerHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "pipelineId": { "type": "integer", "minimum": 1 },
+    "jobId": { "type": "integer", "minimum": 1 },
+    "commitSha": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "buildRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "suiteKey": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$" },
+    "environmentRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "startedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "finishedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "durationMs": { "type": "integer", "minimum": 0 },
+    "outcome": {
+      "enum": ["PASS", "ASSERTION_FAILED", "INFRA_FAILED", "TIMEOUT", "CANCELLED", "INCOMPLETE"]
+    },
+    "infrastructureCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "cancellationReasonCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "passed", "failed", "skipped"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "mediaType", "byteSize", "checksum", "classification", "expiresAt"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9._/-]{1,512}$"
+          },
+          "mediaType": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "byteSize": { "type": "integer", "minimum": 0, "maximum": 104857600 },
+          "checksum": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+          "classification": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/classification" },
+          "expiresAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "enum": ["PASS", "ASSERTION_FAILED", "TIMEOUT", "CANCELLED"]
+          }
+        },
+        "required": ["outcome"]
+      },
+      "then": { "properties": { "infrastructureCode": false } }
+    },
+    {
+      "if": {
+        "properties": { "outcome": { "const": "CANCELLED" } },
+        "required": ["outcome"]
+      },
+      "then": { "required": ["cancellationReasonCode"] },
+      "else": { "properties": { "cancellationReasonCode": false } }
+    }
+  ]
+}

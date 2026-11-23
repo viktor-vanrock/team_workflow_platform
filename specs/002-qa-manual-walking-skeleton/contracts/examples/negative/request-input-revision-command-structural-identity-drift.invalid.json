@@ -1,0 +1,18 @@
+{
+  "expectedCurrentInputRevisionRef": {
+    "id": "35353535-3535-4535-8535-353535353536",
+    "version": 1,
+    "contentHash": "sha256:3535353535353535353535353535353535353535353535353535353535353536"
+  },
+  "reasonCode": "REQUESTER_CORRECTION",
+  "reason": "This malicious command attempts to rewrite frozen structural identity.",
+  "input": {
+    "title": "Replacement title",
+    "requestKind": "retest",
+    "dataClassificationKey": "PUBLIC",
+    "blockersDeclared": true,
+    "blockers": [],
+    "dependenciesDeclared": true,
+    "dependencies": []
+  }
+}

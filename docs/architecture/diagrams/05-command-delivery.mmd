@@ -1,0 +1,34 @@
+sequenceDiagram
+  actor Human as Авторизованный человек
+  participant API as API / application
+  participant DB as PostgreSQL
+  participant W as Worker
+  participant C as Typed Connector
+  participant P as Provider
+  Human->>API: Действие + request key + expected revision
+  API->>API: Identity, project scope, policy, classification
+  opt Для действия требуется exact approval
+    API->>DB: Candidate / command AWAITING_APPROVAL + HELD outbox
+    Human->>API: Approve exact action, target, payload hash, pins
+    API->>DB: One-time approval и разрешение доставки
+  end
+  API->>DB: Транзакция: command + outbox + idempotency / audit
+  API-->>Human: Command reference / pending result
+  W->>DB: Claim outbox с lease и fencing
+  DB-->>W: Авторитетная command + pinned configuration
+  W->>W: Повторная проверка прав, approval, state, project gate
+  W->>DB: DISPATCHED / invocation marker / execution lease
+  W->>C: Invoke exact typed operation + effect key
+  C->>P: HTTP effect
+  alt Ответ и результат подтверждены
+    P-->>C: Receipt / external identity и version
+    C-->>W: Normalized result
+  else Результат отправки неизвестен
+    W->>C: Read-only lookup по исходному marker
+    C->>P: Exact readback / reconciliation
+    P-->>W: Подтверждение либо AMBIGUOUS / conflict
+  end
+  W->>DB: Транзакция: outcome + domain confirmation + audit/events
+  Human->>API: Чтение состояния
+  API->>DB: Scoped query / projection freshness
+  API-->>Human: Подтверждённый результат или причина остановки

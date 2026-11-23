@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:sample:record-published-event:v1",
+  "title": "Sample Record Published Event Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["commandId", "effectId", "externalVersion"],
+  "properties": {
+    "commandId": { "type": "string", "format": "uuid" },
+    "effectId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 }
+  }
+}

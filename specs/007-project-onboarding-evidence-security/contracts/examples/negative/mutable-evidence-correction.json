@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "qa-evidence-manifest@2.0.0",
+  "manifestRevisionId": "60000000-0000-4000-8000-000000000001",
+  "manifestId": "60000000-0000-4000-8000-000000000002",
+  "version": 2,
+  "kind": "SUBSTANTIVE_CORRECTION",
+  "workspaceId": "10000000-0000-4000-8000-000000000001",
+  "projectId": "20000000-0000-4000-8000-000000000001",
+  "workItemId": "work-item-007-001",
+  "sessionId": "70000000-0000-4000-8000-000000000001",
+  "mutationOfCompletedRevision": true
+}

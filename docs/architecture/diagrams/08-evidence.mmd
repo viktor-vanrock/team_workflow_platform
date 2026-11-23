@@ -1,0 +1,16 @@
+flowchart TB
+  manual["Manual observations / results<br/>без binary attachments"] --> manifest
+  capture["Approved GitLab CI artifact"] --> ingest["Scoped metadata/read<br/>size · media type · checksum · provenance"]
+  ingest --> bytes[("Pinned GitLab artifact bytes")]
+  ingest --> refs["Artifact reference + availability<br/>Workspace / Project / owner / checksum"]
+  refs --> manifest["Immutable Evidence Manifest revision<br/>session / attempt / target / result<br/>artifact memberships + hashes"]
+  human["QA reviewer + current authorization"] --> sign["Signing policy + canonical bytes"]
+  manifest --> sign
+  sign --> signer["Signer port<br/>LOCAL: Ed25519<br/>Corporate: Vault Transit adapter"]
+  signer --> envelope["Detached JWS / EdDSA<br/>manifest hash + key version"]
+  envelope --> db[("PostgreSQL<br/>manifest / envelope / review / audit")]
+  history[("Public key history<br/>file-backed adapter")] --> verify["Verify signature + current access"]
+  db --> verify
+  verify --> export["Scoped export<br/>JSON metadata / artifact references<br/>export record + audit"]
+  retention["Retention policy / legal hold"] --> availability["AVAILABLE / EXPIRED / other lifecycle state<br/>metadata и audit сохраняются"]
+  refs --> availability

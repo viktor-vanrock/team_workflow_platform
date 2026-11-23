@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:common:schema-bound-value:v1",
+  "title": "Schema Bound Value",
+  "description": "The wrapper is generic; value MUST be validated against the registered exact schemaRef before use.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaRef", "value"],
+  "properties": {
+    "schemaRef": {
+      "$ref": "./versioned-ref.v1.schema.json#/$defs/SchemaRef"
+    },
+    "value": true
+  }
+}

@@ -1,0 +1,1181 @@
+{
+  "feature": "008-pilot-hardening-and-conformance",
+  "registryStatus": "PLANNED",
+  "verificationStatus": "NOT_VERIFIED",
+  "errors": [],
+  "required": 45,
+  "entries": [
+    {
+      "id": "FR-008-001",
+      "tasks": [
+        "T011",
+        "T026",
+        "T028",
+        "T033"
+      ],
+      "plannedFiles": [
+        "infra/observability/otel-collector.yaml",
+        "packages/platform-runtime-nest/src/auth/oidc-auth.guard.ts",
+        "packages/platform-runtime-nest/src/observability/bootstrap.ts",
+        "packages/runtime-composition/src/config/environment.ts",
+        "packages/runtime-composition/src/pilot/deployment-config.ts",
+        "packages/runtime-composition/src/security/corporate-identity.ts",
+        "packages/runtime-composition/src/security/vault-secret-resolver.ts"
+      ],
+      "assertionId": "FR-008-001",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T011",
+        "T026",
+        "T028",
+        "T033"
+      ],
+      "missingFiles": [
+        "packages/platform-runtime-nest/src/observability/bootstrap.ts",
+        "packages/runtime-composition/src/pilot/deployment-config.ts",
+        "packages/runtime-composition/src/security/corporate-identity.ts",
+        "packages/runtime-composition/src/security/vault-secret-resolver.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-002",
+      "tasks": [
+        "T030",
+        "T045",
+        "T057"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/connector-factories.ts",
+        "packages/runtime-composition/src/pilot/provider-conformance.ts",
+        "tools/verification/feature-008-integration.mts"
+      ],
+      "assertionId": "FR-008-002",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T030",
+        "T045",
+        "T057"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/connector-factories.ts",
+        "packages/runtime-composition/src/pilot/provider-conformance.ts",
+        "tools/verification/feature-008-integration.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-003",
+      "tasks": [
+        "T031",
+        "T052",
+        "T065"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "packages/runtime-composition/src/pilot/artifact-source-policy.ts",
+        "packages/runtime-composition/src/pilot/degradation-policy.ts",
+        "packages/runtime-composition/src/storage/corporate-object-storage.ts",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionId": "FR-008-003",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T031",
+        "T052",
+        "T065"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "packages/runtime-composition/src/pilot/artifact-source-policy.ts",
+        "packages/runtime-composition/src/pilot/degradation-policy.ts",
+        "packages/runtime-composition/src/storage/corporate-object-storage.ts",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-004",
+      "tasks": [
+        "T008",
+        "T011",
+        "T004",
+        "T037"
+      ],
+      "plannedFiles": [
+        "config/pilot/local-inputs.json",
+        "packages/runtime-composition/src/config/environment.ts",
+        "packages/runtime-composition/src/pilot/deployment-config.ts",
+        "packages/runtime-composition/src/pilot/startup.ts",
+        "tests/unit/008/deployment-policy.spec.ts",
+        "tools/verification/feature-008-inputs.mts"
+      ],
+      "assertionId": "FR-008-004",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T008",
+        "T011",
+        "T004",
+        "T037"
+      ],
+      "missingFiles": [
+        "config/pilot/local-inputs.json",
+        "packages/runtime-composition/src/pilot/deployment-config.ts",
+        "packages/runtime-composition/src/pilot/startup.ts",
+        "tests/unit/008/deployment-policy.spec.ts",
+        "tools/verification/feature-008-inputs.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-005",
+      "tasks": [
+        "T008",
+        "T037",
+        "T061"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/startup.ts",
+        "tests/integration/security/008/network-policy.spec.ts",
+        "tests/unit/008/deployment-policy.spec.ts"
+      ],
+      "assertionId": "FR-008-005",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T008",
+        "T037",
+        "T061"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/startup.ts",
+        "tests/integration/security/008/network-policy.spec.ts",
+        "tests/unit/008/deployment-policy.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-006",
+      "tasks": [
+        "T045",
+        "T042",
+        "T043",
+        "T057"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/provider-conformance.ts",
+        "tests/integration/008/degradation-matrix.spec.ts",
+        "tests/integration/008/uncertain-effects.spec.ts",
+        "tools/verification/feature-008-integration.mts"
+      ],
+      "assertionId": "FR-008-006",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T045",
+        "T042",
+        "T043",
+        "T057"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/provider-conformance.ts",
+        "tests/integration/008/degradation-matrix.spec.ts",
+        "tests/integration/008/uncertain-effects.spec.ts",
+        "tools/verification/feature-008-integration.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-007",
+      "tasks": [
+        "T041",
+        "T046",
+        "T047",
+        "T048",
+        "T049"
+      ],
+      "plannedFiles": [
+        "config/pilot/ingress-policy.example.json",
+        "packages/connector-gitlab/src/webhooks/gitlab-webhook-normalizer.ts",
+        "packages/connector-jira/src/webhooks/jira-webhook-normalizer.ts",
+        "packages/connector-mattermost/src/ingress/callback-auth.ts",
+        "packages/runtime-composition/src/gitlab/corporate-ingress.ts",
+        "packages/runtime-composition/src/jira/corporate-ingress.ts",
+        "packages/runtime-composition/src/mattermost/corporate-ingress.ts",
+        "packages/runtime-composition/src/pilot/trusted-ingress.ts",
+        "tests/contract/008/provider-ingress.spec.ts"
+      ],
+      "assertionId": "FR-008-007",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T041",
+        "T046",
+        "T047",
+        "T048",
+        "T049"
+      ],
+      "missingFiles": [
+        "config/pilot/ingress-policy.example.json",
+        "packages/runtime-composition/src/gitlab/corporate-ingress.ts",
+        "packages/runtime-composition/src/jira/corporate-ingress.ts",
+        "packages/runtime-composition/src/mattermost/corporate-ingress.ts",
+        "packages/runtime-composition/src/pilot/trusted-ingress.ts",
+        "tests/contract/008/provider-ingress.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-008",
+      "tasks": [
+        "T050",
+        "T051",
+        "T059"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/effect-confirmation.ts",
+        "packages/runtime-composition/src/pilot/retry-policy.ts",
+        "tests/integration/security/008/exact-approvals.spec.ts"
+      ],
+      "assertionId": "FR-008-008",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T050",
+        "T051",
+        "T059"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/effect-confirmation.ts",
+        "packages/runtime-composition/src/pilot/retry-policy.ts",
+        "tests/integration/security/008/exact-approvals.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-009",
+      "tasks": [
+        "T050",
+        "T078",
+        "T072"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/effect-confirmation.ts",
+        "packages/runtime-composition/src/recovery/reconcile.ts",
+        "tests/integration/008/post-backup-effects.spec.ts"
+      ],
+      "assertionId": "FR-008-009",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T050",
+        "T078",
+        "T072"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/effect-confirmation.ts",
+        "packages/runtime-composition/src/recovery/reconcile.ts",
+        "tests/integration/008/post-backup-effects.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-010",
+      "tasks": [
+        "T032",
+        "T035",
+        "T036"
+      ],
+      "plannedFiles": [
+        "apps/api/src/extensions/pilot/pilot.controller.ts",
+        "apps/web/src/routes/pilot/readiness.tsx",
+        "apps/worker/src/app.module.ts",
+        "packages/runtime-composition/src/pilot/maintenance-workers.ts",
+        "packages/runtime-composition/src/pilot/readiness-query.ts"
+      ],
+      "assertionId": "FR-008-010",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T032",
+        "T035",
+        "T036"
+      ],
+      "missingFiles": [
+        "apps/api/src/extensions/pilot/pilot.controller.ts",
+        "apps/web/src/routes/pilot/readiness.tsx",
+        "packages/runtime-composition/src/pilot/maintenance-workers.ts",
+        "packages/runtime-composition/src/pilot/readiness-query.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-011",
+      "tasks": [
+        "T058",
+        "T059",
+        "T060",
+        "T061"
+      ],
+      "plannedFiles": [
+        "tests/integration/security/008/access-boundaries.spec.ts",
+        "tests/integration/security/008/exact-approvals.spec.ts",
+        "tests/integration/security/008/network-policy.spec.ts",
+        "tests/integration/security/008/secret-canaries.spec.ts"
+      ],
+      "assertionId": "FR-008-011",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T058",
+        "T059",
+        "T060",
+        "T061"
+      ],
+      "missingFiles": [
+        "tests/integration/security/008/access-boundaries.spec.ts",
+        "tests/integration/security/008/exact-approvals.spec.ts",
+        "tests/integration/security/008/network-policy.spec.ts",
+        "tests/integration/security/008/secret-canaries.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-012",
+      "tasks": [
+        "T016",
+        "T067",
+        "T094"
+      ],
+      "plannedFiles": [
+        "packages/platform-runtime-nest/src/auth/pilot-authorization.ts",
+        "packages/runtime-composition/src/onboarding/action-consumers.ts",
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionId": "FR-008-012",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T016",
+        "T067",
+        "T094"
+      ],
+      "missingFiles": [
+        "packages/platform-runtime-nest/src/auth/pilot-authorization.ts",
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-013",
+      "tasks": [
+        "T059",
+        "T086",
+        "T094",
+        "T044"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/onboarding/action-consumers.ts",
+        "tests/integration/008/dead-letter-replay.spec.ts",
+        "tests/integration/008/pilot-activation.spec.ts",
+        "tests/integration/security/008/exact-approvals.spec.ts"
+      ],
+      "assertionId": "FR-008-013",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T059",
+        "T086",
+        "T094",
+        "T044"
+      ],
+      "missingFiles": [
+        "tests/integration/008/dead-letter-replay.spec.ts",
+        "tests/integration/008/pilot-activation.spec.ts",
+        "tests/integration/security/008/exact-approvals.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-014",
+      "tasks": [
+        "T024",
+        "T034",
+        "T060"
+      ],
+      "plannedFiles": [
+        "packages/platform-runtime-nest/src/observability/telemetry.ts",
+        "tests/integration/008/telemetry-export.spec.ts",
+        "tests/integration/security/008/secret-canaries.spec.ts"
+      ],
+      "assertionId": "FR-008-014",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T024",
+        "T034",
+        "T060"
+      ],
+      "missingFiles": [
+        "tests/integration/008/telemetry-export.spec.ts",
+        "tests/integration/security/008/secret-canaries.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-015",
+      "tasks": [
+        "T068",
+        "T069"
+      ],
+      "plannedFiles": [
+        "tools/verification/008-security-scans.mts",
+        "tools/verification/feature-008-security.mts"
+      ],
+      "assertionId": "FR-008-015",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T068",
+        "T069"
+      ],
+      "missingFiles": [
+        "tools/verification/008-security-scans.mts",
+        "tools/verification/feature-008-security.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-016",
+      "tasks": [
+        "T042",
+        "T072",
+        "T078"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/recovery/reconcile.ts",
+        "tests/integration/008/post-backup-effects.spec.ts",
+        "tests/integration/008/uncertain-effects.spec.ts"
+      ],
+      "assertionId": "FR-008-016",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T042",
+        "T072",
+        "T078"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/recovery/reconcile.ts",
+        "tests/integration/008/post-backup-effects.spec.ts",
+        "tests/integration/008/uncertain-effects.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-017",
+      "tasks": [
+        "T051",
+        "T043"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/retry-policy.ts",
+        "tests/integration/008/degradation-matrix.spec.ts"
+      ],
+      "assertionId": "FR-008-017",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T051",
+        "T043"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/retry-policy.ts",
+        "tests/integration/008/degradation-matrix.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-018",
+      "tasks": [
+        "T053",
+        "T044",
+        "T054"
+      ],
+      "plannedFiles": [
+        "apps/api/src/extensions/pilot/pilot.controller.ts",
+        "apps/web/src/routes/pilot/dead-letters.tsx",
+        "packages/runtime-composition/src/pilot/dead-letter-service.ts",
+        "tests/integration/008/dead-letter-replay.spec.ts"
+      ],
+      "assertionId": "FR-008-018",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T053",
+        "T044",
+        "T054"
+      ],
+      "missingFiles": [
+        "apps/api/src/extensions/pilot/pilot.controller.ts",
+        "apps/web/src/routes/pilot/dead-letters.tsx",
+        "packages/runtime-composition/src/pilot/dead-letter-service.ts",
+        "tests/integration/008/dead-letter-replay.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-019",
+      "tasks": [
+        "T074",
+        "T079"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/recovery/verify.ts",
+        "tools/recovery/008-backup.mts"
+      ],
+      "assertionId": "FR-008-019",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T074",
+        "T079"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/recovery/verify.ts",
+        "tools/recovery/008-backup.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-020",
+      "tasks": [
+        "T071",
+        "T073",
+        "T080",
+        "T084"
+      ],
+      "plannedFiles": [
+        "tests/integration/008/isolated-restore.spec.ts",
+        "tests/integration/008/restored-evidence.spec.ts",
+        "tools/recovery/008-measurements.mts",
+        "tools/verification/feature-008-recovery.mts"
+      ],
+      "assertionId": "FR-008-020",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T071",
+        "T073",
+        "T080",
+        "T084"
+      ],
+      "missingFiles": [
+        "tests/integration/008/isolated-restore.spec.ts",
+        "tests/integration/008/restored-evidence.spec.ts",
+        "tools/recovery/008-measurements.mts",
+        "tools/verification/feature-008-recovery.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-021",
+      "tasks": [
+        "T077",
+        "T078",
+        "T072"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/recovery/fence.ts",
+        "packages/runtime-composition/src/recovery/reconcile.ts",
+        "tests/integration/008/post-backup-effects.spec.ts"
+      ],
+      "assertionId": "FR-008-021",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T077",
+        "T078",
+        "T072"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/recovery/fence.ts",
+        "packages/runtime-composition/src/recovery/reconcile.ts",
+        "tests/integration/008/post-backup-effects.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-022",
+      "tasks": [
+        "T062",
+        "T065"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "tests/fixtures/008/hermes-corpus.json",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionId": "FR-008-022",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T062",
+        "T065"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "tests/fixtures/008/hermes-corpus.json",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-023",
+      "tasks": [
+        "T062",
+        "T065",
+        "T070"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "tests/fixtures/008/hermes-corpus.json",
+        "tools/verification/008-hermes-evaluation.mts",
+        "tools/verification/008-us3-checkpoint.mts"
+      ],
+      "assertionId": "FR-008-023",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T062",
+        "T065",
+        "T070"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "tests/fixtures/008/hermes-corpus.json",
+        "tools/verification/008-hermes-evaluation.mts",
+        "tools/verification/008-us3-checkpoint.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-024",
+      "tasks": [
+        "T062",
+        "T058",
+        "T063",
+        "T065"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "packages/runtime-composition/src/pilot/effect-guard.ts",
+        "tests/fixtures/008/hermes-corpus.json",
+        "tests/integration/security/008/access-boundaries.spec.ts",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionId": "FR-008-024",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T062",
+        "T058",
+        "T063",
+        "T065"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "packages/runtime-composition/src/pilot/effect-guard.ts",
+        "tests/fixtures/008/hermes-corpus.json",
+        "tests/integration/security/008/access-boundaries.spec.ts",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-025",
+      "tasks": [
+        "T066",
+        "T065"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/hermes/evaluation-policy.ts",
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionId": "FR-008-025",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T066",
+        "T065"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/hermes/evaluation-policy.ts",
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-026",
+      "tasks": [
+        "T065",
+        "T052",
+        "T043"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "packages/runtime-composition/src/pilot/degradation-policy.ts",
+        "tests/integration/008/degradation-matrix.spec.ts",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionId": "FR-008-026",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T065",
+        "T052",
+        "T043"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "packages/runtime-composition/src/pilot/degradation-policy.ts",
+        "tests/integration/008/degradation-matrix.spec.ts",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-027",
+      "tasks": [
+        "T091",
+        "T092",
+        "T085"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/baseline-service.ts",
+        "packages/runtime-composition/src/pilot/measurement-protocol.ts",
+        "tests/unit/008/pilot-measurements.spec.ts"
+      ],
+      "assertionId": "FR-008-027",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T091",
+        "T092",
+        "T085"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/baseline-service.ts",
+        "packages/runtime-composition/src/pilot/measurement-protocol.ts",
+        "tests/unit/008/pilot-measurements.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-028",
+      "tasks": [
+        "T095",
+        "T088",
+        "T094"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/onboarding/action-consumers.ts",
+        "packages/runtime-composition/src/pilot/cohort-service.ts",
+        "tests/integration/008/pilot-cohort.spec.ts"
+      ],
+      "assertionId": "FR-008-028",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T095",
+        "T088",
+        "T094"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/cohort-service.ts",
+        "tests/integration/008/pilot-cohort.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-029",
+      "tasks": [
+        "T090",
+        "T099",
+        "T100"
+      ],
+      "plannedFiles": [
+        "apps/api/src/extensions/pilot/pilot.controller.ts",
+        "apps/web/src/routes/pilot/pilot-run.tsx",
+        "packages/competency-qa/src/application/pilot-metrics.ts",
+        "packages/runtime-composition/src/pilot/metric-sources.ts"
+      ],
+      "assertionId": "FR-008-029",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T090",
+        "T099",
+        "T100"
+      ],
+      "missingFiles": [
+        "apps/api/src/extensions/pilot/pilot.controller.ts",
+        "apps/web/src/routes/pilot/pilot-run.tsx",
+        "packages/competency-qa/src/application/pilot-metrics.ts",
+        "packages/runtime-composition/src/pilot/metric-sources.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-030",
+      "tasks": [
+        "T097",
+        "T067",
+        "T089"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/guardrail-service.ts",
+        "tests/integration/008/pilot-review.spec.ts",
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionId": "FR-008-030",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T097",
+        "T067",
+        "T089"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/guardrail-service.ts",
+        "tests/integration/008/pilot-review.spec.ts",
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "FR-008-031",
+      "tasks": [
+        "T098",
+        "T106",
+        "T102"
+      ],
+      "plannedFiles": [
+        "docs/runbooks/pilot-operation.md",
+        "packages/runtime-composition/src/pilot/review-service.ts",
+        "tools/verification/feature-008-review.mts"
+      ],
+      "assertionId": "FR-008-031",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T098",
+        "T106",
+        "T102"
+      ],
+      "missingFiles": [
+        "docs/runbooks/pilot-operation.md",
+        "packages/runtime-composition/src/pilot/review-service.ts",
+        "tools/verification/feature-008-review.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "SC-008-001",
+      "tasks": [
+        "T057",
+        "T040",
+        "T114"
+      ],
+      "plannedFiles": [
+        "config/pilot/provider-capabilities.json",
+        "reports/008-pilot-hardening-and-conformance/readiness.json",
+        "tools/verification/feature-008-integration.mts"
+      ],
+      "assertionId": "SC-008-001",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T057",
+        "T040",
+        "T114"
+      ],
+      "missingFiles": [
+        "config/pilot/provider-capabilities.json",
+        "reports/008-pilot-hardening-and-conformance/readiness.json",
+        "tools/verification/feature-008-integration.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "SC-008-002",
+      "tasks": [
+        "T056",
+        "T043"
+      ],
+      "plannedFiles": [
+        "tests/integration/008/degradation-matrix.spec.ts",
+        "tools/verification/008-us2-checkpoint.mts"
+      ],
+      "assertionId": "SC-008-002",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T056",
+        "T043"
+      ],
+      "missingFiles": [
+        "tests/integration/008/degradation-matrix.spec.ts",
+        "tools/verification/008-us2-checkpoint.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "SC-008-003",
+      "tasks": [
+        "T070",
+        "T058"
+      ],
+      "plannedFiles": [
+        "tests/integration/security/008/access-boundaries.spec.ts",
+        "tools/verification/008-us3-checkpoint.mts"
+      ],
+      "assertionId": "SC-008-003",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T070",
+        "T058"
+      ],
+      "missingFiles": [
+        "tests/integration/security/008/access-boundaries.spec.ts",
+        "tools/verification/008-us3-checkpoint.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "SC-008-004",
+      "tasks": [
+        "T084",
+        "T072"
+      ],
+      "plannedFiles": [
+        "tests/integration/008/post-backup-effects.spec.ts",
+        "tools/verification/feature-008-recovery.mts"
+      ],
+      "assertionId": "SC-008-004",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T084",
+        "T072"
+      ],
+      "missingFiles": [
+        "tests/integration/008/post-backup-effects.spec.ts",
+        "tools/verification/feature-008-recovery.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "SC-008-005",
+      "tasks": [
+        "T024",
+        "T067",
+        "T105"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/observation-worker.ts",
+        "reports/008-pilot-hardening-and-conformance/limited-pilot.json",
+        "tests/integration/008/telemetry-export.spec.ts",
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionId": "SC-008-005",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T024",
+        "T067",
+        "T105"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/observation-worker.ts",
+        "reports/008-pilot-hardening-and-conformance/limited-pilot.json",
+        "tests/integration/008/telemetry-export.spec.ts",
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "SC-008-006",
+      "tasks": [
+        "T097",
+        "T105",
+        "T106"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/guardrail-service.ts",
+        "packages/runtime-composition/src/pilot/observation-worker.ts",
+        "reports/008-pilot-hardening-and-conformance/limited-pilot.json",
+        "tools/verification/feature-008-review.mts"
+      ],
+      "assertionId": "SC-008-006",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T097",
+        "T105",
+        "T106"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/guardrail-service.ts",
+        "packages/runtime-composition/src/pilot/observation-worker.ts",
+        "reports/008-pilot-hardening-and-conformance/limited-pilot.json",
+        "tools/verification/feature-008-review.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "SC-008-007",
+      "tasks": [
+        "T098",
+        "T106"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/review-service.ts",
+        "tools/verification/feature-008-review.mts"
+      ],
+      "assertionId": "SC-008-007",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T098",
+        "T106"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/review-service.ts",
+        "tools/verification/feature-008-review.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "GR-008-001",
+      "tasks": [
+        "T058",
+        "T095"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/cohort-service.ts",
+        "tests/integration/security/008/access-boundaries.spec.ts"
+      ],
+      "assertionId": "GR-008-001",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T058",
+        "T095"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/cohort-service.ts",
+        "tests/integration/security/008/access-boundaries.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "GR-008-002",
+      "tasks": [
+        "T059",
+        "T067"
+      ],
+      "plannedFiles": [
+        "tests/integration/security/008/exact-approvals.spec.ts",
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionId": "GR-008-002",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T059",
+        "T067"
+      ],
+      "missingFiles": [
+        "tests/integration/security/008/exact-approvals.spec.ts",
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "GR-008-003",
+      "tasks": [
+        "T042",
+        "T072"
+      ],
+      "plannedFiles": [
+        "tests/integration/008/post-backup-effects.spec.ts",
+        "tests/integration/008/uncertain-effects.spec.ts"
+      ],
+      "assertionId": "GR-008-003",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T042",
+        "T072"
+      ],
+      "missingFiles": [
+        "tests/integration/008/post-backup-effects.spec.ts",
+        "tests/integration/008/uncertain-effects.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "GR-008-004",
+      "tasks": [
+        "T067"
+      ],
+      "plannedFiles": [
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionId": "GR-008-004",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T067"
+      ],
+      "missingFiles": [
+        "tools/verification/008-audit-coverage.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "GR-008-005",
+      "tasks": [
+        "T073",
+        "T095"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/pilot/cohort-service.ts",
+        "tests/integration/008/restored-evidence.spec.ts"
+      ],
+      "assertionId": "GR-008-005",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T073",
+        "T095"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/pilot/cohort-service.ts",
+        "tests/integration/008/restored-evidence.spec.ts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "GR-008-006",
+      "tasks": [
+        "T062",
+        "T063",
+        "T065"
+      ],
+      "plannedFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "packages/runtime-composition/src/pilot/effect-guard.ts",
+        "tests/fixtures/008/hermes-corpus.json",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionId": "GR-008-006",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T062",
+        "T063",
+        "T065"
+      ],
+      "missingFiles": [
+        "packages/runtime-composition/src/hermes/evaluation.ts",
+        "packages/runtime-composition/src/pilot/effect-guard.ts",
+        "tests/fixtures/008/hermes-corpus.json",
+        "tools/verification/008-hermes-evaluation.mts"
+      ],
+      "assertionObserved": false
+    },
+    {
+      "id": "GR-008-007",
+      "tasks": [
+        "T060"
+      ],
+      "plannedFiles": [
+        "tests/integration/security/008/secret-canaries.spec.ts"
+      ],
+      "assertionId": "GR-008-007",
+      "status": "NOT_VERIFIED",
+      "pendingTasks": [
+        "T060"
+      ],
+      "missingFiles": [
+        "tests/integration/security/008/secret-canaries.spec.ts"
+      ],
+      "assertionObserved": false
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:messaging-notification-expired:v1",
+  "title": "Messaging Notification Expired Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "effectKey",
+    "expiresAt",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "const": "EXPIRED"
+    },
+    "effectKey": {
+      "description": "SHA-256 commitment to the exact bounded Connector effect-idempotency-key string.",
+      "$ref": "#/$defs/digest"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

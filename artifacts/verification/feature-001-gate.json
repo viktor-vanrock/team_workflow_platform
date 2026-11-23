@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "feature": "001-extension-kernel-local-skeleton",
+  "gate": "feature-001-final",
+  "startedAt": "2026-08-30T00:01:38.437Z",
+  "finishedAt": "2026-08-30T00:01:45.161Z",
+  "status": "PASS",
+  "cleanBootstrapEvidence": "./artifacts/verification/smoke-001-gate.json",
+  "providerNeutralCiEvidence": "./artifacts/verification/feature-001-ci.json",
+  "traceEvidence": "./artifacts/verification/feature-001-trace.json",
+  "stages": [
+    {
+      "id": "reuse-provider-neutral-ci",
+      "status": "PASS",
+      "durationMs": 2,
+      "detail": "ci=PASS; cleanSmoke=PASS; cleanBootstrap=true"
+    },
+    {
+      "id": "post-clean-playwright",
+      "status": "PASS",
+      "durationMs": 6645,
+      "detail": "pnpm test:e2e:001"
+    },
+    {
+      "id": "requirements-trace",
+      "status": "PASS",
+      "durationMs": 76,
+      "detail": "node tools/verification/feature-001-trace.mts"
+    }
+  ],
+  "acceptance": [
+    {
+      "id": "AT-001",
+      "status": "PASS",
+      "tests": [
+        "tests/e2e/acceptance/at-001-local-bootstrap.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-002",
+      "status": "PASS",
+      "tests": [
+        "tests/e2e/acceptance/at-002-model-fallback.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-003",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/security/acceptance/at-003-local-security.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-004",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/acceptance/at-004-extension-registration.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-005",
+      "status": "PASS",
+      "tests": [
+        "tests/architecture/acceptance/at-005-extension-boundaries.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-006",
+      "status": "PASS",
+      "tests": [
+        "tests/contract/acceptance/at-006-typed-capabilities.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-007",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/acceptance/at-007-capability-availability.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-008",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/acceptance/at-008-command-recovery.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-009",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/security/acceptance/at-009-webhook-security.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-010",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/security/acceptance/at-010-scope-isolation.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-011",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/security/acceptance/at-011-audit-completeness.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-012",
+      "status": "PASS",
+      "tests": [
+        "tests/contract/acceptance/at-012-mock-hub.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-013",
+      "status": "PASS",
+      "tests": [
+        "tests/contract/acceptance/at-013-connector-substitution.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-014",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/acceptance/at-014-configuration-versioning.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-015",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/security/acceptance/at-015-approval-effect-gate.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-016",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/acceptance/at-016-resilience.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-017",
+      "status": "PASS",
+      "tests": [
+        "tests/contract/acceptance/at-017-command-state-matrix.spec.ts",
+        "tests/contract/command-state-public-boundary.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-018",
+      "status": "PASS",
+      "tests": [
+        "tests/contract/acceptance/at-018-strategy-intersection.spec.ts"
+      ]
+    },
+    {
+      "id": "AT-019",
+      "status": "PASS",
+      "tests": [
+        "tests/integration/security/acceptance/at-019-binding-publication.spec.ts"
+      ]
+    }
+  ]
+}

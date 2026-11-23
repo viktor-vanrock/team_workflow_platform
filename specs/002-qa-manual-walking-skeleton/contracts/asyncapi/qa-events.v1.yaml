@@ -1,0 +1,191 @@
+asyncapi: 3.0.0
+info:
+  title: Agentic Workspace Platform QA Pack Events
+  version: 1.0.0
+  description: >-
+    Project-scoped, versioned QA domain events. Producers use the durable event outbox from
+    feature 001; consumers use a transactional inbox. This document does not define a second
+    command bus or a QA-specific transport envelope.
+defaultContentType: application/json
+channels:
+  qaEvents:
+    address: awp.qa.events.v1
+    description: Full feature-001 Event Envelope specialized by QA event type and payload schema.
+    messages:
+      requestAccepted:
+        $ref: '#/components/messages/RequestAccepted'
+      requestInputRevised:
+        $ref: '#/components/messages/RequestInputRevised'
+      readinessAssessed:
+        $ref: '#/components/messages/ReadinessAssessed'
+      readinessConfirmed:
+        $ref: '#/components/messages/ReadinessConfirmed'
+      requiredSessionPlanPublished:
+        $ref: '#/components/messages/RequiredSessionPlanPublished'
+      sessionStateChanged:
+        $ref: '#/components/messages/SessionStateChanged'
+      sessionReviewed:
+        $ref: '#/components/messages/SessionReviewed'
+      planItemResultRecorded:
+        $ref: '#/components/messages/PlanItemResultRecorded'
+      findingClassified:
+        $ref: '#/components/messages/FindingClassified'
+      findingDisposed:
+        $ref: '#/components/messages/FindingDisposed'
+      defectLinked:
+        $ref: '#/components/messages/DefectLinked'
+      evidenceManifestSigned:
+        $ref: '#/components/messages/EvidenceManifestSigned'
+      verdictSigned:
+        $ref: '#/components/messages/VerdictSigned'
+      dodAssessed:
+        $ref: '#/components/messages/DodAssessed'
+      dodSatisfied:
+        $ref: '#/components/messages/DodSatisfied'
+      postCloseCorrectionRecorded:
+        $ref: '#/components/messages/PostCloseCorrectionRecorded'
+operations:
+  publishQaEvents:
+    action: send
+    channel:
+      $ref: '#/channels/qaEvents'
+    messages:
+      - $ref: '#/channels/qaEvents/messages/requestAccepted'
+      - $ref: '#/channels/qaEvents/messages/requestInputRevised'
+      - $ref: '#/channels/qaEvents/messages/readinessAssessed'
+      - $ref: '#/channels/qaEvents/messages/readinessConfirmed'
+      - $ref: '#/channels/qaEvents/messages/requiredSessionPlanPublished'
+      - $ref: '#/channels/qaEvents/messages/sessionStateChanged'
+      - $ref: '#/channels/qaEvents/messages/sessionReviewed'
+      - $ref: '#/channels/qaEvents/messages/planItemResultRecorded'
+      - $ref: '#/channels/qaEvents/messages/findingClassified'
+      - $ref: '#/channels/qaEvents/messages/findingDisposed'
+      - $ref: '#/channels/qaEvents/messages/defectLinked'
+      - $ref: '#/channels/qaEvents/messages/evidenceManifestSigned'
+      - $ref: '#/channels/qaEvents/messages/verdictSigned'
+      - $ref: '#/channels/qaEvents/messages/dodAssessed'
+      - $ref: '#/channels/qaEvents/messages/dodSatisfied'
+      - $ref: '#/channels/qaEvents/messages/postCloseCorrectionRecorded'
+  consumeQaEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/qaEvents'
+    messages:
+      - $ref: '#/channels/qaEvents/messages/requestAccepted'
+      - $ref: '#/channels/qaEvents/messages/requestInputRevised'
+      - $ref: '#/channels/qaEvents/messages/readinessAssessed'
+      - $ref: '#/channels/qaEvents/messages/readinessConfirmed'
+      - $ref: '#/channels/qaEvents/messages/requiredSessionPlanPublished'
+      - $ref: '#/channels/qaEvents/messages/sessionStateChanged'
+      - $ref: '#/channels/qaEvents/messages/sessionReviewed'
+      - $ref: '#/channels/qaEvents/messages/planItemResultRecorded'
+      - $ref: '#/channels/qaEvents/messages/findingClassified'
+      - $ref: '#/channels/qaEvents/messages/findingDisposed'
+      - $ref: '#/channels/qaEvents/messages/defectLinked'
+      - $ref: '#/channels/qaEvents/messages/evidenceManifestSigned'
+      - $ref: '#/channels/qaEvents/messages/verdictSigned'
+      - $ref: '#/channels/qaEvents/messages/dodAssessed'
+      - $ref: '#/channels/qaEvents/messages/dodSatisfied'
+      - $ref: '#/channels/qaEvents/messages/postCloseCorrectionRecorded'
+components:
+  messages:
+    RequestAccepted:
+      name: qa.request.accepted
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/RequestAcceptedEvent'
+    RequestInputRevised:
+      name: qa.request.input-revised
+      description: Stable current-input pointer advanced by CAS; stale assessment, waiver and pending READY refs are invalidated atomically.
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/RequestInputRevisedEvent'
+    ReadinessAssessed:
+      name: qa.readiness.assessed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/ReadinessAssessedEvent'
+    ReadinessConfirmed:
+      name: qa.readiness.confirmed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/ReadinessConfirmedEvent'
+    RequiredSessionPlanPublished:
+      name: qa.required-session-plan.published
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/RequiredSessionPlanPublishedEvent'
+    SessionStateChanged:
+      name: qa.test-session.state-changed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/SessionStateChangedEvent'
+    SessionReviewed:
+      name: qa.test-session.reviewed
+      description: One atomic review event carries the complete ordered exact FROZEN Finding-review set; no partial per-Finding freeze event is emitted.
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/SessionReviewedEvent'
+    PlanItemResultRecorded:
+      name: qa.plan-item.result-recorded
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/PlanItemResultRecordedEvent'
+    FindingClassified:
+      name: qa.finding.classified
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/FindingClassifiedEvent'
+    FindingDisposed:
+      name: qa.finding.disposed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/FindingDisposedEvent'
+    DefectLinked:
+      name: qa.defect.linked
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/DefectLinkedEvent'
+    EvidenceManifestSigned:
+      name: qa.evidence.manifest-signed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/EvidenceManifestSignedEvent'
+    VerdictSigned:
+      name: qa.verdict.signed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/VerdictSignedEvent'
+    DodAssessed:
+      name: qa.dod.assessed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/DodAssessedEvent'
+    DodSatisfied:
+      name: qa.dod.satisfied
+      description: Emitted only after generic confirmation derives normalizedStatus=DONE for the distinct-QA-Lead-approved transition.
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/DodSatisfiedEvent'
+    PostCloseCorrectionRecorded:
+      name: qa.post-close-correction.recorded
+      description: Append-only marker pinned to the exact final-close confirmation proving external DONE; the original signed Verdict and DoD remain unchanged.
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/qa-events.v1.schema.json#/$defs/PostCloseCorrectionRecordedEvent'

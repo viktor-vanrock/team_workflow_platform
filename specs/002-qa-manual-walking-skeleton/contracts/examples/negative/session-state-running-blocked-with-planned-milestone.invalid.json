@@ -1,0 +1,25 @@
+{
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "requiredSessionPlanRef": {
+    "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    "revision": 1,
+    "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "previousState": "RUNNING",
+  "state": "BLOCKED",
+  "reachedMilestone": "PLANNED",
+  "reason": "Environment became unavailable",
+  "targetSnapshotRef": {
+    "id": "20202020-2020-4020-8020-202020202020",
+    "contentHash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "scopeSnapshotRef": {
+    "id": "30303030-3030-4030-8030-303030303030",
+    "contentHash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  },
+  "targetSnapshotHash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "scopeSnapshotHash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "authorizationBasisHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+}
+

@@ -1,0 +1,8 @@
+{
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/scans-e6044152-d1a3-4ad5-bfe0-5d89f98d5c39.json",
+    "sha256": "sha256:cad857ae139904d438ec67b8e5c7538b6c2ffc461326b900bb2f868283d245a9"
+  },
+  "imageDigest": "sha256:a5af4805757d6ea93a5d37b2c5faa708489ae9820a59a6d5a9b33ec46563e90b",
+  "scannerDatabase": "sha256:5ab91473dd8470ca7ef506314a8f424e861c4fc41445742a790953d1b259027e"
+}

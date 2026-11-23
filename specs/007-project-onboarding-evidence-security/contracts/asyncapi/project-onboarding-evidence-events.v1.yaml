@@ -1,0 +1,110 @@
+asyncapi: 3.0.0
+info:
+  title: Project Onboarding and Evidence Events
+  version: 1.0.0
+  description: >-
+    Feature 007 at-least-once event boundary. Producers persist domain state,
+    redacted audit and outbox in one transaction. Consumers deduplicate by eventId,
+    validate exact references and reauthorize before reading Project data.
+defaultContentType: application/json
+servers:
+  local:
+    host: localhost:6379
+    protocol: redis
+    description: Existing local durable transport adapter; Redis is not business state.
+  deployment:
+    host: events.invalid
+    protocol: kafka-secure
+    description: Deployment-owned placeholder, resolved only by Feature 008 inputs.
+channels:
+  projectEvents:
+    address: awp.{workspaceId}.{projectId}.project-onboarding.v1
+    parameters:
+      workspaceId:
+        description: Owning Workspace UUID
+      projectId:
+        description: Owning Project UUID
+    messages:
+      projectEvent:
+        $ref: '#/components/messages/ProjectEvent'
+  qaEvidenceEvents:
+    address: awp.{workspaceId}.{projectId}.qa-evidence.v1
+    parameters:
+      workspaceId:
+        description: Owning Workspace UUID
+      projectId:
+        description: Owning Project UUID
+    messages:
+      qaEvidenceEvent:
+        $ref: '#/components/messages/ProjectEvent'
+  artifactEvents:
+    address: awp.{workspaceId}.{projectId}.artifact-retention.v1
+    parameters:
+      workspaceId:
+        description: Owning Workspace UUID
+      projectId:
+        description: Owning Project UUID
+    messages:
+      artifactEvent:
+        $ref: '#/components/messages/ProjectEvent'
+operations:
+  publishProjectEvents:
+    action: send
+    channel:
+      $ref: '#/channels/projectEvents'
+    summary: Publish registry, entitlement, Binding, mode, stage and operational-state changes.
+    messages:
+      - $ref: '#/channels/projectEvents/messages/projectEvent'
+  consumeProjectEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/projectEvents'
+    summary: Build authorized projections and notifications idempotently.
+    messages:
+      - $ref: '#/channels/projectEvents/messages/projectEvent'
+  publishQaEvidenceEvents:
+    action: send
+    channel:
+      $ref: '#/channels/qaEvidenceEvents'
+    summary: Publish lease changes and signed evidence-manifest facts.
+    messages:
+      - $ref: '#/channels/qaEvidenceEvents/messages/qaEvidenceEvent'
+  consumeQaEvidenceEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/qaEvidenceEvents'
+    summary: Drive Project-scoped QA projections with current authorization checks.
+    messages:
+      - $ref: '#/channels/qaEvidenceEvents/messages/qaEvidenceEvent'
+  publishArtifactEvents:
+    action: send
+    channel:
+      $ref: '#/channels/artifactEvents'
+    summary: Publish artifact availability and retention decision changes.
+    messages:
+      - $ref: '#/channels/artifactEvents/messages/artifactEvent'
+components:
+  messages:
+    ProjectEvent:
+      name: ProjectOnboardingEventV1
+      title: Immutable Project-scoped domain event
+      contentType: application/json
+      correlationId:
+        location: $message.payload#/correlationId
+      headers:
+        type: object
+        additionalProperties: false
+        required: [messageId, idempotencyKey, emittedAt]
+        properties:
+          messageId:
+            type: string
+            format: uuid
+          idempotencyKey:
+            type: string
+            minLength: 8
+            maxLength: 256
+          emittedAt:
+            type: string
+            format: date-time
+      payload:
+        $ref: '../schemas/events/project-onboarding-events.v1.schema.json'

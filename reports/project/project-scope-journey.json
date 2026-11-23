@@ -1,0 +1,499 @@
+{
+  "status": "PASS",
+  "generatedAt": "2026-09-06T19:09:36.167468+00:00",
+  "closedTasks": [
+    "007/T106"
+  ],
+  "scope": "Independent local multi-principal HTTP/PostgreSQL scope journey, with controlled IAM/queue/evidence/file prerequisites and a stricter verified session of the same reader.",
+  "sourceBinding": [
+    {
+      "path": "apps/api/openapi.generated.json",
+      "sha256": "sha256:b0edae47774f2a5a4885477389d878330a97bdf7dbffb6faa9bcbc3d15321435"
+    },
+    {
+      "path": "apps/api/src/app.module.ts",
+      "sha256": "sha256:ddb628872ea5768c7ec49fe208b4b0b2d150b4943bb8baab9c95f0ccf1d191bf"
+    },
+    {
+      "path": "apps/api/src/extensions/gitlab-automation/qa-automated-sessions.controller.ts",
+      "sha256": "sha256:2f0d3189b6e20075787f5d6e9efdd119a9ab1c81b7e3bfa2f8addcbcc71c6e00"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/automation-facts.ts",
+      "sha256": "sha256:ec171bdd7205dc214f1a4d2f33fb94ec74a18d656f720a28e192690b2b9cb951"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/binding-facts.ts",
+      "sha256": "sha256:062907276b69fcdc5b1e8a66644c88b891bbb86d56640670a866948c47efee2a"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.application.ts",
+      "sha256": "sha256:36b33e7288663b680e959272ba4e39f23a492562e513a34a2c40bc4fce1c617c"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.controller.ts",
+      "sha256": "sha256:1130518cd775aef4351c21a9d7320537304b3d89a7d95e3fa61a336efba40629"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/durable-http.ts",
+      "sha256": "sha256:b489f0ef1f168bb9169e4a99c7094c8e57c9b2db9c5a89f73c64a269533fb033"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/evidence.application.ts",
+      "sha256": "sha256:e0cc781fccfc93b64f8b5185ae783a46dea76ba2da254483690c2d66fb55d9e6"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/evidence.controller.ts",
+      "sha256": "sha256:7f132aa6c9fa5142d0a0d850b6bd915e0fb7917c53c359efec7e20f733d19ec1"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/onboarding.controller.ts",
+      "sha256": "sha256:dff52ab44c4b284fc8c3f3baaa3e3d2e9c25439945cb3de6f84c13d4562a1388"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.application.ts",
+      "sha256": "sha256:f39777d9bdecbac8b9c44b49abb95fd68b1a394ab83a60ae87c1d52a7f0c5ad7"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.controller.ts",
+      "sha256": "sha256:58a97079d4c293663792a28c7edf691d13eab7990f531e01719ca679239d02b7"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-reads.application.ts",
+      "sha256": "sha256:f78dc99e4621d721d59fddb35885145932019190393b01c342a6361455955836"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-reads.controller.ts",
+      "sha256": "sha256:6edb08c7e13f00e1e2eb892a05827417d2bb92ac22311d5a272ac7b25ebab817"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-http-context.ts",
+      "sha256": "sha256:7ca2aff2fd15e197f335e200d6e27c841c5871cb68f188c2f89964d1742f3409"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-http.ts",
+      "sha256": "sha256:211a3e1bda26d837bbd3e849a696d3d12367b3ebb4eaa760e245ec54bc260ae8"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-validation.ts",
+      "sha256": "sha256:7e004b0688a16a7f38481c78fdb6184d03649546eaf2bbce23d42e09928fc5b1"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published.controllers.ts",
+      "sha256": "sha256:b4c026331cff03e564c09e75cb7b56cfff532e6f95889d96c985b9af12554973"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/registry.application.ts",
+      "sha256": "sha256:3f96a80c3d225b0d163240eb877ac7db0ebb49003cdf626c33d25d9d01860423"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/resources.application.ts",
+      "sha256": "sha256:acb5bc0eefd14c8168e0e53272a0fe3afe1e372645bc40ca76ba8aa1bb6bd02d"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/session-facts.ts",
+      "sha256": "sha256:717b08af09ae7848219b52e25879909948a20558b25d7909ac377b8dc70c8ddc"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/validation.application.ts",
+      "sha256": "sha256:ae9cb486c3cb41238c7ab04de7e4bb1936c63efd4590b20951999f4ab6d07e09"
+    },
+    {
+      "path": "apps/api/src/extensions/qa-artifacts.controller.ts",
+      "sha256": "sha256:a75b888298061357e14699ad2e33e987183b22742d7b0c68a71b55fc5d0d47ed"
+    },
+    {
+      "path": "apps/api/src/extensions/qa-sessions.controller.ts",
+      "sha256": "sha256:5af2f0b68ed9bddf269e857047efb501b9083a635b8e2c907d1ed9a5f7bec3f7"
+    },
+    {
+      "path": "apps/api/src/extensions/queue/queue.controller.ts",
+      "sha256": "sha256:5e6e5547f06c2689bd2eb582a40ab1a7327f983dc3706cb5c2ae0d852e28b8e3"
+    },
+    {
+      "path": "apps/api/src/local/local-qa-authorization.ts",
+      "sha256": "sha256:06291ed53d3f4c1c2c4a0e265bc93dc7bf4ee8c6960aec9a2505dcaf4b4b6a14"
+    },
+    {
+      "path": "apps/api/src/local/local-qa-session-runtime.ts",
+      "sha256": "sha256:7744592c3b55a2a5abac36fc05adf3356027cdd46b4675cdece48d1eb6ea9860"
+    },
+    {
+      "path": "apps/mock-hub/openapi.generated.json",
+      "sha256": "sha256:95403841624e77b32c151d707a24efc270571263d9eabd87bcce98a403edba5b"
+    },
+    {
+      "path": "docs/audits/2026-09-06-local-audit.md",
+      "sha256": "sha256:7543c2ebcb0f7d797e2ea47c8ae094d3d86d256b15930ae3077139926168fb58"
+    },
+    {
+      "path": "docs/runbooks/manual-onboarding-journey.md",
+      "sha256": "sha256:f6022fdd0cf2c24d2c91d77040d003256aced321098b908355adf7bb4e9eeb22"
+    },
+    {
+      "path": "docs/runbooks/onboarding-openapi-convergence.md",
+      "sha256": "sha256:03402916275ef5dc9cecd614469314ba757a1ce1d821be750cc9f58f423f3d69"
+    },
+    {
+      "path": "docs/runbooks/pilot-deployment-checklist.md",
+      "sha256": "sha256:f7d5dc17033288d388be683f97165703e6bcebcfc606d80dded9c9aaebaccc4d"
+    },
+    {
+      "path": "docs/runbooks/project-scope-journey.md",
+      "sha256": "sha256:44f9ff9612617f90579a4f455955c11d997c589056b0dd6a481e9169e1a4613a"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/automated-session.uow.ts",
+      "sha256": "sha256:9f3603d6a74e46e00aebdd517823cfcab01823c450b2308c6f015f8fcaf44945"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/manual-execution.uow.ts",
+      "sha256": "sha256:9ebb678f6e836d8d68166b7d4e0fbd783b5d5f0a94d1f02ecd3555a4d513780d"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/project-resource.repository.ts",
+      "sha256": "sha256:384debaf1e689e4d2b3676cdee3ba4d187708506effabf29695e4311365e3bd8"
+    },
+    {
+      "path": "packages/platform-contracts/src/generated/schema-documents.ts",
+      "sha256": "sha256:75866c716b828e65bc1b045d287a272f979dc5c77bf4f09a1c9de96d565cba95"
+    },
+    {
+      "path": "packages/platform-contracts/src/schema-contributions.ts",
+      "sha256": "sha256:234ee9f51412a32131d47c7b74e723b33e44016a39c50a011916acb4cf530787"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/configuration-hash.ts",
+      "sha256": "sha256:62cbeb30eade441ff68f56c9ca8a0a5582eb3976703dda8494b517b69da5f77a"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/requested-probe-worker.ts",
+      "sha256": "sha256:3641452bf695479dc30d43756b796fd77d80d586e2258c1846cff83890758194"
+    },
+    {
+      "path": "packages/runtime-composition/src/pilot/automation-availability.ts",
+      "sha256": "sha256:a17e4d773edc5c297bf5c6020c7fc6f82146caad410e44b0a2b8ccf8178ff3d4"
+    },
+    {
+      "path": "packages/runtime-composition/src/qa/composition.ts",
+      "sha256": "sha256:269af7ee171691af7b0ba0df5aa7b92968245b79d6a8517794a5ced460eb4cd7"
+    },
+    {
+      "path": "packages/runtime-composition/src/queue/approval-api.ts",
+      "sha256": "sha256:d21da50d1510d0f0eb6203a745bcedd31ea0ae3a33baa5b3710d8ccccafe5b0c"
+    },
+    {
+      "path": "packages/runtime-composition/src/queue/portfolio-query.ts",
+      "sha256": "sha256:0b01aee08a0f7b1c908c45d9b0ad171a668d6a1128f56f2683538602bce40d22"
+    },
+    {
+      "path": "packages/runtime-composition/src/queue/query-api.ts",
+      "sha256": "sha256:1659338f8338243475b2e74392296d3af5361205bd626e0f2f2fc8be667c270d"
+    },
+    {
+      "path": "packages/runtime-composition/src/security/local-queue-authority.ts",
+      "sha256": "sha256:3535b3fc5cdff8d6163fac4275af7dc4667d4283bd690ab9689e37ebfb20fd60"
+    },
+    {
+      "path": "packages/runtime-composition/src/seed/qa-local-seed.ts",
+      "sha256": "sha256:c3ff6abec6db1dd3597527ba08bdf72dec5623d59501a346ab2c82818ee8f26f"
+    },
+    {
+      "path": "reports/project/task-status.json",
+      "sha256": "sha256:e7ac35e0da67cfeb1b6c241e4c88e161c3c3e03d9bc4722f3310e63cf81be78c"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/contracts/openapi/project-reads-api.v1.yaml",
+      "sha256": "sha256:cdca2d71e54c016e2d84babdbc5711be829ede83d6f7e6119e523d40e6e7349b"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/plan.md",
+      "sha256": "sha256:d68d524ed727cdfda160ed3a8132a729d9f4efb2282cfad8ed1a3fa661fa4290"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+      "sha256": "sha256:5eb2e326bfb5a56ea380f1539e720bc5fdda842d58c54bb970856bfdba768ffb"
+    },
+    {
+      "path": "tests/contract/007/design-contracts.spec.ts",
+      "sha256": "sha256:ad66c6d938ee25d687b5fcd3e36f95c64369d88fc0b8e3d83c7accd7092c0f79"
+    },
+    {
+      "path": "tests/contract/openapi-drift.spec.ts",
+      "sha256": "sha256:5d8c23ca9ba034125fdb3d5ab31afedf795aa98c9ed62254350ff84cce821541"
+    },
+    {
+      "path": "tests/e2e/007/us1-manual-onboarding.spec.ts",
+      "sha256": "sha256:307860928172503a58b80bd47d7ae80d48d8a6a691aa3e714356ca0a608c7dd2"
+    },
+    {
+      "path": "tests/e2e/007/us3-project-scope.spec.ts",
+      "sha256": "sha256:1f1c69a3fad4c374b2db37971d08a50cf8007c71fc2e5e2574f5619fb35c1275"
+    },
+    {
+      "path": "tests/integration/005/us1-automated-session.spec.ts",
+      "sha256": "sha256:b8043be51dc6ce2e4a4f11b6243d9b546d2a1c1e70a119608b31468d6cb1cd7d"
+    },
+    {
+      "path": "tests/integration/005/us2-launch-idempotency.spec.ts",
+      "sha256": "sha256:b575bc532e57b99d1951663ff51fb3a930ddf257fc4e1048557c039d0824df9d"
+    },
+    {
+      "path": "tests/integration/007/us1-full-qa-http.spec.ts",
+      "sha256": "sha256:b18048505d32bc07d145c076424d9ad77961a10c67231fec902e1bd2d80cedec"
+    },
+    {
+      "path": "tests/integration/007/us1-published-http.spec.ts",
+      "sha256": "sha256:2bc07104553fe7ab407ec36ba68694e9a67bb6d4b4f684f9a16c28622a9ba2c5"
+    },
+    {
+      "path": "tests/integration/007/us3-local-authority.spec.ts",
+      "sha256": "sha256:e934707ffbf579e074877ec75825cc83aa5aa3442bd93e779aea3c145f84bc5d"
+    },
+    {
+      "path": "tests/integration/007/us4-evidence-http.spec.ts",
+      "sha256": "sha256:99360e6f7449d96466380aacf50180c39bdcede8cda74c184df93ddba9fdde26"
+    },
+    {
+      "path": "tests/integration/008/foundation-persistence.spec.ts",
+      "sha256": "sha256:1fdb5d073f38d6d9cf6c3917939ea349c99faee231e01245d79ac5a13a78f054"
+    },
+    {
+      "path": "tests/integration/008/project-scope-migration.spec.ts",
+      "sha256": "sha256:8e8c21403d94a474f2ccdb9174554946c6a6e1376b69cebe05a4925d14e6b545"
+    },
+    {
+      "path": "tests/support/005-us2-automation.ts",
+      "sha256": "sha256:9b0eb2d20a9cb2bcd7758f6dcac9777ef110b48dad9065565879f8f860399ed3"
+    },
+    {
+      "path": "tests/support/007-binding-http-fixture.ts",
+      "sha256": "sha256:0b106ae395479762de44c6d9aef022cd1dee77c33f8e55f83b53f3dbd6317695"
+    },
+    {
+      "path": "tests/support/007-evidence-http-fixture.ts",
+      "sha256": "sha256:3a55ce3c46e9920f1cf7b92967a5ef76680ed3ab29ed26f57d3c838b2c24c1a6"
+    },
+    {
+      "path": "tests/support/007-full-qa-http.ts",
+      "sha256": "sha256:928e4a2a4a3d4dfe8be1a7aa9c87de939be8321e2e442c4589c3719fd521ad98"
+    },
+    {
+      "path": "tests/support/007-manual-binding.ts",
+      "sha256": "sha256:8b7c7e25274325d1b3818e4365b1806a315843967b02bdcb0abdea5ba58eb63d"
+    },
+    {
+      "path": "tests/support/007-manual-request.ts",
+      "sha256": "sha256:fd0f4d88d18bd1fbd5b599817da67817f480e648954368d066fe83de0cfe6471"
+    },
+    {
+      "path": "tests/support/007-onboarding-child.ts",
+      "sha256": "sha256:0a14f39ab3172515ba81d91cce6091766d3b0cd34ff8ac71af6aaf969e416b07"
+    },
+    {
+      "path": "tests/support/007-onboarding-process.ts",
+      "sha256": "sha256:b9658f87d5d65e9cdfef6c23b8aed931bdf548bd704ef261197d96ef0391a73e"
+    },
+    {
+      "path": "tests/support/007-openapi.ts",
+      "sha256": "sha256:c6020c8aaa3727e13bf37026c3d2dee9c8e77b8aa27305caea2b5f29aea96a2f"
+    },
+    {
+      "path": "tests/support/007-scope-child.ts",
+      "sha256": "sha256:198268383255fb379650bccf0b6375b5c26e7a8c3715d2626baa290a12d7a439"
+    },
+    {
+      "path": "tests/support/007-scope-fixture.ts",
+      "sha256": "sha256:b566a3572dff963c0cf06c92d69a8e255deb5a573b1496aa1c156d9717c6bf56"
+    },
+    {
+      "path": "tests/support/007-scope-openapi.ts",
+      "sha256": "sha256:b9388c5932f273ddf0accd55eb7e7c730172eda75bb0d96ccb915bb6403f2851"
+    },
+    {
+      "path": "tests/support/007-scope-process.ts",
+      "sha256": "sha256:7f837f5c64447b0bf8be920b1f402209a13fcf29db1468f00564105df870c7f0"
+    },
+    {
+      "path": "tests/testcontainers.config.ts",
+      "sha256": "sha256:b7ab739d29c38d4374f7c28c14f697035c67ddd712a695de15cbca41702f8ca4"
+    },
+    {
+      "path": "tools/contracts/build-openapi-snapshots.mts",
+      "sha256": "sha256:33397122ea27b6ee7c5b5275cbcd93dfcc925602901bebbc1029c0c2b0c61ea0"
+    },
+    {
+      "path": "tools/contracts/build-registry.mts",
+      "sha256": "sha256:5e5af9f26362f4aeae33995fcff6723f734c39cdf8861325998514e4c053d46d"
+    },
+    {
+      "path": "tools/contracts/verify-007-contracts.mts",
+      "sha256": "sha256:090206ca5a21b2f1da0e9162bcd51111ac35ac3106a39dab513476ae2ebdceac"
+    }
+  ],
+  "evidenceBinding": [
+    {
+      "path": "reports/project/project-scope-journey/contract-registry.log",
+      "sha256": "sha256:60d92cd92bdb657ce7ca61c5ea8d92cceaadf8a3a8bafbf1acc41fa3a044bd5e"
+    },
+    {
+      "path": "reports/project/project-scope-journey/discovery-vitest.json",
+      "sha256": "sha256:c9fa49f942b54cb3059e85f0704922b631378d6484670be9edd1df62eb195af1"
+    },
+    {
+      "path": "reports/project/project-scope-journey/discovery.log",
+      "sha256": "sha256:d765652dd3766e691f5538a0e2f15c77db68ad5a9b3ec722ba13986312df7a85"
+    },
+    {
+      "path": "reports/project/project-scope-journey/focused-http.log",
+      "sha256": "sha256:fcbf90815bfc1b5e135021bdf5e39e77f9bf26f4b384c70864917ce9f1472043"
+    },
+    {
+      "path": "reports/project/project-scope-journey/focused-session-queue.log",
+      "sha256": "sha256:638b223346c49570ac0a1313bf75ed7b91e79942add47518aa6362cc3aa12c91"
+    },
+    {
+      "path": "reports/project/project-scope-journey/git-diff-check.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/project-scope-journey/initial-deny-red.log",
+      "sha256": "sha256:2d1efaf0cd48c47d15ab5b954ae1b1472c33cb61a9a4f8e178b48495d8181a96"
+    },
+    {
+      "path": "reports/project/project-scope-journey/initial-missing-route-red.log",
+      "sha256": "sha256:83e70e4c47ac8943479baac5e6130c3f47aa03671c3f75ecc20941edcfa62877"
+    },
+    {
+      "path": "reports/project/project-scope-journey/initial-queue-sql-red.log",
+      "sha256": "sha256:93d1ab595ad7a3027d182bccf6062908b4609b4cdbbe7c8084cbc14cab960839"
+    },
+    {
+      "path": "reports/project/project-scope-journey/intermediate-vitest.json",
+      "sha256": "sha256:f117537753bcfb030d71945a561333513a19d81140ca62c47f6e564d7b6cd6a4"
+    },
+    {
+      "path": "reports/project/project-scope-journey/intermediate.log",
+      "sha256": "sha256:37ae497664ebee2624b8d001989491fb94a5b40d4de4105799a2838d3f06374b"
+    },
+    {
+      "path": "reports/project/project-scope-journey/openapi-check.log",
+      "sha256": "sha256:93461c784a657ce34c6c76cb631fcfdf638c5f508c806cbb92e244b933d9abe1"
+    },
+    {
+      "path": "reports/project/project-scope-journey/regression-vitest.json",
+      "sha256": "sha256:3871d670ce3aeccc920d7f462e060dbfd2399b9f50a087dc6ec611c7247b669c"
+    },
+    {
+      "path": "reports/project/project-scope-journey/regression.log",
+      "sha256": "sha256:b90344dd66f803501e3a1b1a05cb9bd671b2713dd8163a286149264891058037"
+    },
+    {
+      "path": "reports/project/project-scope-journey/root-typecheck.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/project-scope-journey/session-ceiling-red.log",
+      "sha256": "sha256:d8e0e15acce7faf0e6acc72bd2c0648aee42ab57d9a5ed26585036f86f1ba49f"
+    },
+    {
+      "path": "reports/project/project-scope-journey/targeted-eslint.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/project-scope-journey/upgrade-focused.log",
+      "sha256": "sha256:076de862083aa36a40de4ddbe4def2d40e68e6a860a16aa3d3f543073466c6ed"
+    }
+  ],
+  "runtime": {
+    "node": "24.20.0",
+    "vitest": "4.1.11",
+    "processes": "Parent and independent Nest API have distinct PIDs and DataSources. IPC only controls readiness/shutdown; HTTP carries all assertions. API restarts before and after revocation."
+  },
+  "postgresImages": [
+    "postgres:17.7-bookworm",
+    "postgres:18.6-bookworm"
+  ],
+  "schemaVersions": {
+    "core": 200,
+    "pack:qa": 2110
+  },
+  "contracts": {
+    "schemas": 204,
+    "yamlDocuments": 19,
+    "newReadOperations": 3
+  },
+  "regression": {
+    "report": "reports/project/project-scope-journey/regression-vitest.json",
+    "tests": 723,
+    "passed": 723,
+    "files": 197,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "sourceUnchangedDuringRun": true
+  },
+  "discovery": {
+    "report": "reports/project/project-scope-journey/discovery-vitest.json",
+    "status": "FAILED_DIAGNOSTIC_BEFORE_CORRECTIONS",
+    "tests": 829,
+    "passed": 806,
+    "failed": 23,
+    "files": 206,
+    "note": "All discovered failures and later session-ceiling regression are corrected and covered by the final clean regression. The diagnostic result is retained unchanged."
+  },
+  "quality": {
+    "rootTypecheck": "PASS",
+    "targetedEslint": "PASS",
+    "contractRegistry": "PASS",
+    "openapiSnapshots": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "commands": {
+    "regression": "CI=true AWP_RUN_CONTAINER_TESTS=true node node_modules/vitest/vitest.mjs run tests/integration/007 tests/integration/security/007 tests/e2e/007 tests/unit/007 tests/contract/007 tests/architecture/007 tests/integration/006 tests/unit/006 tests/contract/006 tests/integration/005 tests/integration/security/005 tests/contract/005 tests/architecture/onboarding-operation-ownership.spec.ts tests/integration/002-manual-session-vertical-flow.spec.ts tests/integration/002-session-snapshot-immutability.spec.ts tests/contract/002-manual-session-schemas.spec.ts tests/integration/008/uncertain-effects.spec.ts tests/integration/008/foundation-persistence.spec.ts tests/integration/008/project-scope-migration.spec.ts tests/integration/008/manual-session-runtime.spec.ts tests/integration/008/automation-availability.spec.ts tests/integration/security/008 tests/contract/008/backward-compatibility.spec.ts tests/contract/openapi-drift.spec.ts tests/contract/002-contract-registry-and-api-drift.spec.ts --maxWorkers=1 --reporter=default --reporter=json --outputFile.json=/private/tmp/007-scope-closure-regression.json",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit --project tsconfig.json",
+    "eslint": "node node_modules/eslint/bin/eslint.js apps/api/src/extensions/onboarding/project-reads.application.ts apps/api/src/extensions/onboarding/project-reads.controller.ts apps/api/src/extensions/onboarding/registry.application.ts apps/api/src/extensions/onboarding/durable-http.ts apps/api/src/extensions/onboarding/published-http.ts apps/api/src/extensions/onboarding/evidence.controller.ts apps/api/src/extensions/qa-artifacts.controller.ts apps/api/src/extensions/queue/queue.controller.ts apps/api/src/app.module.ts apps/api/src/local/local-qa-authorization.ts packages/runtime-composition/src/queue/portfolio-query.ts packages/runtime-composition/src/queue/query-api.ts packages/runtime-composition/src/queue/approval-api.ts packages/runtime-composition/src/security/local-queue-authority.ts packages/platform-contracts/src/schema-contributions.ts tools/contracts/build-openapi-snapshots.mts tests/e2e/007/us3-project-scope.spec.ts tests/support/007-scope-child.ts tests/support/007-scope-fixture.ts tests/support/007-scope-openapi.ts tests/support/007-scope-process.ts tests/support/007-evidence-http-fixture.ts tests/support/005-us2-automation.ts tests/integration/007/us3-local-authority.spec.ts tests/integration/007/us4-evidence-http.spec.ts tests/integration/005/us2-launch-idempotency.spec.ts tests/integration/008/foundation-persistence.spec.ts tests/integration/008/project-scope-migration.spec.ts tests/contract/openapi-drift.spec.ts",
+    "registry": "node tools/contracts/build-registry.mts --check",
+    "openapi": "node tools/contracts/build-openapi-snapshots.mts --check",
+    "whitespace": "git diff --check"
+  },
+  "proven": [
+    "HTTP registers three new projects and grants two readers different roles, ALLOW/DENY entitlements and classification ceilings. A restricted resource is independently present inside an otherwise readable project.",
+    "Catalog, direct onboarding URL, actual SQL search/event outbox, Work Item summary, queue rows/counts/cursors, real artifact metadata/content/checksum, signature verification, package and export are called independently.",
+    "A stricter verified session of the same principal remains INTERNAL despite a broader persisted grant. API reads invoke identity authorization and Core policy; queue item/lane/portfolio apply the session ceiling before SQL selection and pagination.",
+    "Persisted entitlement DENY, role DENY, expired membership/entitlement and reduced classification are denied by local QA authorization. Portfolio membership applies the required permissions and persona constraints.",
+    "HTTP revocation denies subsequent reads, old export download and export idempotency replay. API restarts preserve denial, four Work Items remain, exactly one export/audit exists and zero connector commands are created for journey projects.",
+    "Foreign-principal and stale cursors are rejected. A hidden project metadata change leaves visible search/event/queue replay pages unchanged; forbidden and missing resources have equivalent safe problem shapes.",
+    "Cross-project artifact/package substitutions and higher-classification Work Items/artifacts/evidence are denied. Artifact content matches actual bytes and checksum; signed manifest integrity/signature are PASS for allowed readers.",
+    "New read operations are validated against published OpenAPI, including content type, cache headers, body and error shape. The registry and generated snapshots include the additive contract.",
+    "Broader queue/onboarding/automation/security/migration regressions pass. FULL_QA is an explicit prerequisite in downstream automation fixtures; the production MANUAL_ONLY guard remains. Historical migration tests pin 190 while current upgrade tests assert 200."
+  ],
+  "limits": [
+    "IAM identities/roles, queue rows, initial evidence/signatures/files and provider metadata are controlled test prerequisites. This is not real Jira intake or corporate IAM/provider conformance.",
+    "Event notifications expose a safe polling/replay subset, not a raw outbox endpoint or SSE/WebSocket subscription. Constant-time/timing noninterference and a complete delayed-worker journey are not claimed by this test.",
+    "007/T176 full API/worker/web/PostgreSQL/Redis/Mock Hub smoke and 008/T025 complete corporate composition remain open.",
+    "No corporate C1/N2/P3, approved recovery/shadow/pilot/review, deployment, external business write or full ci:project/ci:008 run is claimed.",
+    "Legacy evidence scope denial now returns 404; step-up remains 403. New clients must restart pagination after 409 and must not share cached pages across users.",
+    "Earlier closure reports remain historical snapshots and were not regenerated to conceal changes."
+  ],
+  "deploymentGuide": "docs/runbooks/project-scope-journey.md",
+  "taskStatus": {
+    "total": 1349,
+    "complete": 1341
+  },
+  "remaining": {
+    "all": 8,
+    "local": [
+      "007/T176",
+      "008/T025"
+    ],
+    "corporate": [
+      "008/T040",
+      "008/T057",
+      "008/T084",
+      "008/T104",
+      "008/T105",
+      "008/T106"
+    ]
+  }
+}

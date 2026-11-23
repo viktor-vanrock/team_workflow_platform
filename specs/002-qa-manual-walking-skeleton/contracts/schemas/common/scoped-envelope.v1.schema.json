@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:scoped-envelope:v1",
+  "title": "Project-scoped QA Resource Envelope",
+  "description": "Server-produced envelope. Actor and authoritative scope are never accepted from a mutation body.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "resourceType",
+    "resourceId",
+    "resourceVersion",
+    "dataClassificationKey",
+    "correlationId",
+    "causationId",
+    "actor",
+    "payloadSchemaId",
+    "payload"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "resourceType": { "$ref": "./qa-common.v1.schema.json#/$defs/StableKey" },
+    "resourceId": { "type": "string", "format": "uuid" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "dataClassificationKey": { "$ref": "./qa-common.v1.schema.json#/$defs/ClassificationKey" },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "causationId": { "type": "string", "format": "uuid" },
+    "actor": { "$ref": "./qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "payloadSchemaId": { "type": "string", "pattern": "^urn:awp:schemas:qa:[A-Za-z0-9:._-]+:v[1-9][0-9]*$" },
+    "payload": true
+  }
+}
+

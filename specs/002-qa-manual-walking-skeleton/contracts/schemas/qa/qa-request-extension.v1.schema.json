@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:request-extension:v1",
+  "title": "Stable QA Request Extension Header",
+  "description": "Pack-owned header for a confirmed generic Work Item and the single CAS owner for adjudicative mutations. Mutable pre-READY semantics live only in append-only QaRequestInputRevision rows selected by currentRequestInputRevisionRef; this header contains no external authority-owned status. completionDispatchGuard is the authoritative aggregate lock projection exposed by detail reads, never a second completion authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "extensionId", "workspaceId", "projectId", "workItemId", "definitionRef", "currentRequestInputRevisionRef", "projectContextRef", "dorRuleSetRef", "dodRuleSetRef", "evidencePolicyRef", "riskReviewPolicyRef", "adjudicativeAggregateHash", "completionDispatchGuard", "resourceVersion", "contentHash", "createdBy", "createdAt", "updatedAt", "correlationId"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "extensionId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "definitionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version"],
+      "properties": {
+        "key": { "const": "qa.validation" },
+        "version": { "const": "1.0.0" }
+      }
+    },
+    "currentRequestInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+    "projectContextRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "dorRuleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "dodRuleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "evidencePolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "riskReviewPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef" },
+    "latestReadinessAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+    "latestDodAssessmentId": { "type": "string", "format": "uuid" },
+    "requiredSessionPlanRef": {
+      "description": "Absent during US1. US2 publishes the first immutable plan revision and atomically sets this exact latest pointer.",
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" }
+      ]
+    },
+    "adjudicativeAggregateHash": {
+      "description": "Server-derived canonical digest of the exact current adjudicative input/readiness/plan/session/evidence/Finding/defect/Verdict/DoD pointers. Every adjudicative mutation advances this digest under the extension resourceVersion CAS; clients cannot supply it as authority.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "completionDispatchGuard": { "$ref": "#/$defs/CompletionDispatchGuard" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "contentHash": {
+      "description": "Canonical hash of this stable header/pointer, adjudicativeAggregateHash and completionDispatchGuard snapshot at resourceVersion; semantic request content has its own immutable revision hash.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "correlationId": { "type": "string", "format": "uuid" }
+  },
+  "$defs": {
+    "CompletionDispatchGuard": {
+      "description": "Closed extension-owned completion race guard. OPEN permits an adjudicative mutation under the same extension CAS. DISPATCHED means the exact candidate and command were atomically locked before the outbox write, so every adjudicative mutation is rejected. FAILED reconciliation releases the extension back to OPEN; confirmed external DONE advances it to DONE_FROZEN.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": { "type": "string", "enum": ["OPEN", "DISPATCHED", "DONE_FROZEN"] },
+        "activeCompletionCandidateRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "dispatchCommandRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" },
+        "lockedAdjudicativeAggregateHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "lockedAt": { "type": "string", "format": "date-time" },
+        "finalCloseConfirmationRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+        "frozenAt": { "type": "string", "format": "date-time" }
+      },
+      "oneOf": [
+        {
+          "properties": { "state": { "const": "OPEN" } },
+          "not": {
+            "anyOf": [
+              { "required": ["activeCompletionCandidateRef"] },
+              { "required": ["dispatchCommandRef"] },
+              { "required": ["lockedAdjudicativeAggregateHash"] },
+              { "required": ["lockedAt"] },
+              { "required": ["finalCloseConfirmationRef"] },
+              { "required": ["frozenAt"] }
+            ]
+          }
+        },
+        {
+          "properties": { "state": { "const": "DISPATCHED" } },
+          "required": ["activeCompletionCandidateRef", "dispatchCommandRef", "lockedAdjudicativeAggregateHash", "lockedAt"],
+          "not": {
+            "anyOf": [
+              { "required": ["finalCloseConfirmationRef"] },
+              { "required": ["frozenAt"] }
+            ]
+          }
+        },
+        {
+          "properties": { "state": { "const": "DONE_FROZEN" } },
+          "required": ["activeCompletionCandidateRef", "dispatchCommandRef", "lockedAdjudicativeAggregateHash", "lockedAt", "finalCloseConfirmationRef", "frozenAt"]
+        }
+      ]
+    }
+  }
+}

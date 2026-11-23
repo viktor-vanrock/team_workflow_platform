@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "gitlab-pipeline-result@1.0.0",
+  "requestMarkerHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "pipelineId": 12001,
+  "jobId": 22001,
+  "commitSha": "0123456789abcdef0123456789abcdef01234567",
+  "buildRef": "build:qa-api:2026.09.01.1",
+  "suiteKey": "qa.api.smoke",
+  "environmentRef": "environment:test:qa-1@17",
+  "startedAt": "2026-09-01T08:01:00.000Z",
+  "finishedAt": "2026-09-01T08:02:12.345Z",
+  "durationMs": 72345,
+  "outcome": "PASS",
+  "infrastructureCode": "RUNNER_UNAVAILABLE",
+  "summary": {
+    "total": 24,
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0
+  },
+  "artifacts": []
+}

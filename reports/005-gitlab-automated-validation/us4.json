@@ -1,0 +1,434 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-us4",
+  "contour": "qa-jira-gitlab-local",
+  "startedAt": "2026-09-03T10:45:07.476Z",
+  "finishedAt": "2026-09-03T10:47:18.565Z",
+  "status": "PASS",
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts",
+        "sha256": "sha256:b5a79517e87d227a77c7bd010efdb4e2e6162aef0f34e8d23a4c3c6f8e537355"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/api/gitlab.controller.ts",
+        "sha256": "sha256:7c41aef582b0d650fc47960742d906c0926de2ca2a401ac5614742581b3d2554"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/control/gitlab-control.controller.ts",
+        "sha256": "sha256:e8c47ff69a0a74e8f3312fc92db98dae5409e7883c2e384e8a5f5d4c480c789c"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/scenarios/gitlab-scenarios.ts",
+        "sha256": "sha256:c8cf27b1c751bbcb729f7198ffeb219bcb1a6a188221bf258f02df2e8239fec0"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/state/gitlab.repository.ts",
+        "sha256": "sha256:90d023402144df5dc01ffdb9546a311732b2438baffb166d2ae37458f42e4bad"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/webhooks/gitlab-webhook-emitter.ts",
+        "sha256": "sha256:ea287802d1946b3cec613f03ca7c79103d635ce8e4bec917be23d39aed133686"
+      },
+      {
+        "path": "apps/web/src/routes/qa/automated-session.tsx",
+        "sha256": "sha256:90cb1f4d9b5ed8aa2ce95ebbad10518f20fa889ac430d36198e89ff1126e199e"
+      },
+      {
+        "path": "packages/competency-qa/src/ui/automated-session-executor.tsx",
+        "sha256": "sha256:8e5484a78d9a4336a56eda1f766baa4e338ef329ee69d86f9674cc7558e09b83"
+      },
+      {
+        "path": "packages/connector-gitlab/src/reconciliation/gitlab-rate-health.ts",
+        "sha256": "sha256:3e6a620fd9b2d9cfa0aab81fbae12642ea3ebe0e3432af1be7f6c17d69a4acae"
+      },
+      {
+        "path": "packages/connector-gitlab/src/webhooks/gitlab-webhook-normalizer.ts",
+        "sha256": "sha256:83d169d34e7305ac7e44e062d308084ad4c03a98e7ccc6e9e1b85a8d37870894"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/repositories/gitlab-reconciliation.repository.ts",
+        "sha256": "sha256:115a3050f0dd5cbbdf467da3f471242eb7c63c9e84f3c3d5c92895098145978a"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/operational-health.ts",
+        "sha256": "sha256:76da176789d9d0a3c519692fd74e6d87e6d183d4504c3bd554eaf57cdd1b3415"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/reconciliation-worker.ts",
+        "sha256": "sha256:4cb643a2ddbdc671de9c8b4a5f7d1d2ea31bcb6996bd04849eac42d9f26b983d"
+      },
+      {
+        "path": "tests/e2e/005-us4-outage-recovery.spec.ts",
+        "sha256": "sha256:5f94018f6d0eac7adc0e246ddb098298bb6ebda4324fa2fade523936305cf7cc"
+      },
+      {
+        "path": "tests/integration/005/mock-hub-gitlab.spec.ts",
+        "sha256": "sha256:1767919cc651ac81a2d87a6140a8a9b601769046580ad4af9a44b51db680445e"
+      },
+      {
+        "path": "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "sha256": "sha256:c48a1ff6ab9969455025895e5c5e0aa0e1b04466b2ab1fa8173da3dc34880087"
+      },
+      {
+        "path": "tests/integration/security/005/webhook-ingress.spec.ts",
+        "sha256": "sha256:16db7385a19b080c7427e2d0a98271ee6c8541fcdf0701aa08a542c14e8df100"
+      },
+      {
+        "path": "tools/local/gitlab-scenario-catalog.mts",
+        "sha256": "sha256:adf11894da837d42701d28d51e3728b5e5f682d72a3ac1f6ac85f61991a14ec3"
+      }
+    ],
+    "aggregateSha256": "sha256:ef34bf690d7661d729918f8ad30a90b86bc928a2cde9447a793fe13e6a6dd1b8"
+  },
+  "scenarios": [
+    {
+      "id": "us4-lost-webhook-reconciliation",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us4-lost-webhook-reconciliation",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "WEBHOOK_DROP",
+        "expectedDeliveryAttempts": 0,
+        "expectedAuthoritativeRecovery": "BOUNDED_RECONCILIATION",
+        "expectedReadFault": "NORMAL",
+        "expectedConnectionHealth": "HEALTHY"
+      },
+      "requiredStages": [
+        "mock-hub",
+        "reconciliation",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/integration/005/mock-hub-gitlab.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "authorityEvidence": {
+        "automaticSignedVerdicts": 0,
+        "automaticJiraTransitions": 0,
+        "manualFlowPreserved": true
+      }
+    },
+    {
+      "id": "us4-duplicate-webhook",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us4-duplicate-webhook",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "WEBHOOK_DUPLICATE",
+        "expectedDeliveryAttempts": 2,
+        "expectedAuthoritativeRecovery": "ONE_EFFECT",
+        "expectedReadFault": "NORMAL",
+        "expectedConnectionHealth": "HEALTHY"
+      },
+      "requiredStages": [
+        "mock-hub",
+        "webhook-security",
+        "reconciliation"
+      ],
+      "behaviorEvidence": [
+        "tests/integration/005/mock-hub-gitlab.spec.ts",
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts"
+      ],
+      "authorityEvidence": {
+        "automaticSignedVerdicts": 0,
+        "automaticJiraTransitions": 0,
+        "manualFlowPreserved": true
+      }
+    },
+    {
+      "id": "us4-out-of-order-webhook",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us4-out-of-order-webhook",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "WEBHOOK_OUT_OF_ORDER",
+        "expectedDeliveryAttempts": 2,
+        "expectedAuthoritativeRecovery": "MONOTONIC_HEAD",
+        "expectedReadFault": "NORMAL",
+        "expectedConnectionHealth": "HEALTHY"
+      },
+      "requiredStages": [
+        "mock-hub",
+        "reconciliation"
+      ],
+      "behaviorEvidence": [
+        "tests/integration/005/mock-hub-gitlab.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts"
+      ],
+      "authorityEvidence": {
+        "automaticSignedVerdicts": 0,
+        "automaticJiraTransitions": 0,
+        "manualFlowPreserved": true
+      }
+    },
+    {
+      "id": "us4-gitlab-outage-manual-flow",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us4-gitlab-outage-manual-flow",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "NORMAL",
+        "expectedDeliveryAttempts": 1,
+        "expectedAuthoritativeRecovery": "BOUNDED_RECONCILIATION",
+        "expectedReadFault": "SERVER_500",
+        "expectedConnectionHealth": "BACKOFF"
+      },
+      "requiredStages": [
+        "mock-hub",
+        "reconciliation",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/integration/005/mock-hub-gitlab.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "authorityEvidence": {
+        "automaticSignedVerdicts": 0,
+        "automaticJiraTransitions": 0,
+        "manualFlowPreserved": true
+      }
+    },
+    {
+      "id": "us4-auth-revoked",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us4-auth-revoked",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "NORMAL",
+        "expectedDeliveryAttempts": 1,
+        "expectedAuthoritativeRecovery": "RETRY_STOPPED",
+        "expectedReadFault": "AUTHENTICATION_401",
+        "expectedConnectionHealth": "AUTH_DEGRADED"
+      },
+      "requiredStages": [
+        "mock-hub",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/integration/005/mock-hub-gitlab.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "authorityEvidence": {
+        "automaticSignedVerdicts": 0,
+        "automaticJiraTransitions": 0,
+        "manualFlowPreserved": true
+      }
+    },
+    {
+      "id": "us4-rate-limit-recovery",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us4-rate-limit-recovery",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "NORMAL",
+        "expectedDeliveryAttempts": 1,
+        "expectedAuthoritativeRecovery": "RETRY_AFTER_11_SECONDS",
+        "expectedReadFault": "RATE_LIMIT_429",
+        "expectedConnectionHealth": "BACKOFF"
+      },
+      "requiredStages": [
+        "mock-hub",
+        "reconciliation",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/integration/005/mock-hub-gitlab.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "authorityEvidence": {
+        "automaticSignedVerdicts": 0,
+        "automaticJiraTransitions": 0,
+        "manualFlowPreserved": true
+      }
+    }
+  ],
+  "assertions": {
+    "webhook": {
+      "status": "PASS",
+      "signatureDialect": "STANDARD_WEBHOOKS_HMAC_SHA256",
+      "exactRawBytes": true,
+      "duplicateEffectMaximum": 1,
+      "changedBodyAction": "SECURITY_CONFLICT",
+      "crossProjectAction": "REJECT"
+    },
+    "convergence": {
+      "status": "PASS",
+      "webhookAuthority": "HINT_ONLY",
+      "canonicalAuthority": "AUTHORITATIVE_REST_READ",
+      "lostWebhookRepair": "BOUNDED_RECONCILIATION",
+      "projectionRule": "MONOTONIC_HEAD_WITH_APPEND_ONLY_HISTORY",
+      "durableCursorFencing": true
+    },
+    "degradation": {
+      "status": "PASS",
+      "authFailure": "CLOSED_NO_RETRY",
+      "rateAndServerFailure": "BOUNDED_BACKOFF",
+      "retryAfterSeconds": 11,
+      "pendingErrorVisible": true,
+      "manualSessionAndJiraIndependent": true
+    },
+    "restart": {
+      "status": "PASS",
+      "mockHubFaultsPersisted": true,
+      "reconciliationCursorPersisted": true,
+      "redisAuthoritative": false
+    }
+  },
+  "invariants": {
+    "webhookIsCanonicalAuthority": false,
+    "automaticVerdictSignatures": 0,
+    "automaticJiraTransitions": 0,
+    "manualQaAvailableDuringGitLabOutage": true,
+    "recoveryMayCloseJiraWorkItem": false,
+    "recoveryMaySignQaVerdict": false
+  },
+  "stages": [
+    {
+      "id": "foundation",
+      "description": "Current Feature 005 foundation remains green",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 79305,
+      "outputHash": "sha256:05a1c40098a771a703facf237badc332fa4cf50916f95ba3364354397d0f9c7f"
+    },
+    {
+      "id": "scenario-catalog",
+      "description": "Exactly six documented US4 scenarios and persisted fault plans are registered",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 74,
+      "outputHash": "sha256:21f2af6f69fe2af868797d3fc1c45565a9d3545a4dca19dc141b27298b17d5c4"
+    },
+    {
+      "id": "webhook-verifier",
+      "description": "Exact raw-byte HMAC, freshness, replay, size and numeric-project checks",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1102,
+      "outputHash": "sha256:0e05600eb481e2c58b2472ef46e72329fb1eebb3292ae2857e54c984b1263360"
+    },
+    {
+      "id": "mock-hub",
+      "description": "Signed lost/duplicate/out-of-order delivery and durable one-shot 401/403/429/500 faults",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 7091,
+      "outputHash": "sha256:c364f11a0cb4152bc584f51505f74a389eec60d4674eae5bb120de17518e1a2b"
+    },
+    {
+      "id": "reconciliation",
+      "description": "Monotonic observation heads, fenced restart-safe cursors and bounded backoff snapshots",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 5981,
+      "outputHash": "sha256:9335056ca8dfe6143002389242d6ec0f6fe1067fde87fe609f0be5abdad14efd"
+    },
+    {
+      "id": "webhook-security",
+      "description": "Durable dedupe plus quarantine of changed-body and cross-scope attacks",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 6595,
+      "outputHash": "sha256:9c1c0723b1206c87c30bcd7972024252b338a042a1a056f8b40e53b7b487c133"
+    },
+    {
+      "id": "full-process",
+      "description": "Real adapter/Mock Hub outage recovery with visible state and uninterrupted manual QA",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 7562,
+      "outputHash": "sha256:19287431668e48cf90b882beae141ee3e6b00250638f1bf7dd0ca47f43332000"
+    },
+    {
+      "id": "typecheck-connector",
+      "description": "GitLab webhook/read/backoff adapter static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1225,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-effect-store",
+      "description": "GitLab receipt/reconciliation persistence static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1279,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-qa",
+      "description": "Automation health and manual-continuity UI static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3519,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-runtime",
+      "description": "Ingress, reconciliation worker and operational health static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4411,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-api",
+      "description": "Operational health API static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4962,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-worker",
+      "description": "Reconciliation worker process static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4179,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-mock-hub",
+      "description": "Stateful US4 GitLab Mock Hub static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1007,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-web",
+      "description": "Pending/error and manual-continuity route static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2464,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "web-build",
+      "description": "Production web bundle includes operational health and manual fallback",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 324,
+      "outputHash": "sha256:43eb2277a5ffda3b460f4718a6d4798e788c59f3c44e6d9dfab15adb77ded775"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-authority:reconciliation-report:v1",
+  "title": "Operational Reconciliation Run Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "runId", "workspaceId", "projectId", "profileRef", "connectionRef", "lane", "state", "startWatermark", "counts", "startedAt", "correlationId"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "runId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "profileRef": { "$ref": "#/$defs/Ref" },
+    "connectionRef": { "$ref": "#/$defs/Ref" },
+    "lane": { "enum": ["IMPORT_DISCOVERY", "BOUND_REFRESH", "FULL_DRIFT_SWEEP"] },
+    "state": { "enum": ["PENDING", "RUNNING", "SUCCEEDED", "PARTIAL", "FAILED", "CANCELLED"] },
+    "startWatermark": { "$ref": "#/$defs/Watermark" },
+    "completedWatermark": { "$ref": "#/$defs/Watermark" },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["read", "applied", "duplicate", "stale", "gap", "imported", "ignored", "mappingRequired", "notFound", "error"],
+      "properties": {
+        "read": { "$ref": "#/$defs/Count" }, "applied": { "$ref": "#/$defs/Count" }, "duplicate": { "$ref": "#/$defs/Count" }, "stale": { "$ref": "#/$defs/Count" }, "gap": { "$ref": "#/$defs/Count" }, "imported": { "$ref": "#/$defs/Count" }, "ignored": { "$ref": "#/$defs/Count" }, "mappingRequired": { "$ref": "#/$defs/Count" }, "notFound": { "$ref": "#/$defs/Count" }, "error": { "$ref": "#/$defs/Count" }
+      }
+    },
+    "rateLimit": { "type": "object", "additionalProperties": false, "properties": { "reason": { "type": "string", "maxLength": 128 }, "retryAfterSeconds": { "type": "integer", "minimum": 0 }, "remaining": { "type": "integer", "minimum": 0 } } },
+    "terminalCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,127}$" },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "finishedAt": { "type": "string", "format": "date-time" },
+    "correlationId": { "type": "string", "format": "uuid" }
+  },
+  "allOf": [
+    { "if": { "properties": { "state": { "const": "SUCCEEDED" } }, "required": ["state"] }, "then": { "required": ["completedWatermark", "finishedAt"] } },
+    { "if": { "properties": { "state": { "enum": ["PARTIAL", "FAILED", "CANCELLED"] } }, "required": ["state"] }, "then": { "required": ["finishedAt", "terminalCode"], "not": { "required": ["completedWatermark"] } } }
+  ],
+  "$defs": {
+    "Ref": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "integer", "minimum": 1 } } },
+    "Watermark": { "type": "object", "additionalProperties": false, "required": ["updatedAt", "externalKey", "overlapSeconds"], "properties": { "updatedAt": { "type": "string", "format": "date-time" }, "externalKey": { "type": "string", "minLength": 1 }, "overlapSeconds": { "type": "integer", "minimum": 1 } } },
+    "Count": { "type": "integer", "minimum": 0 }
+  }
+}

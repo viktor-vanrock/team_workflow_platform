@@ -1,0 +1,13 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/unit/008",
+    "tests/integration/008",
+    "tests/contract/008",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 1,
+  "durationMs": 12122,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n ❯ tests/integration/008/foundation-persistence.spec.ts (2 tests | 2 failed) 8319ms\n     × upgrades 007, preserves rows and enforces immutable scoped CAS on postgres:17.7-bookworm 3971ms\n     × upgrades 007, preserves rows and enforces immutable scoped CAS on postgres:18.6-bookworm 4347ms\n\n Test Files  1 failed | 9 passed (10)\n      Tests  2 failed | 63 passed (65)\n   Start at  00:07:18\n   Duration  11.30s (transform 2.30s, setup 0ms, import 4.80s, tests 8.59s, environment 1ms)\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/integration/008/foundation-persistence.spec.ts > 008 actual PostgreSQL foundation > upgrades 007, preserves rows and enforces immutable scoped CAS on postgres:17.7-bookworm\n FAIL  tests/integration/008/foundation-persistence.spec.ts > 008 actual PostgreSQL foundation > upgrades 007, preserves rows and enforces immutable scoped CAS on postgres:18.6-bookworm\nQueryFailedError: invalid input syntax for type json\n ❯ PostgresQueryRunner.query node_modules/.pnpm/typeorm@1.1.0_babel-plugin-macros@3.1.0_pg@8.23.0_supports-color@7.2.0/src/driver/postgres/PostgresQueryRunner.ts:345:18\n ❯ DataSource.query node_modules/.pnpm/typeorm@1.1.0_babel-plugin-macros@3.1.0_pg@8.23.0_supports-color@7.2.0/src/data-source/DataSource.ts:520:19\n ❯ persist packages/platform-persistence-typeorm/src/pilot.repository.ts:31:7\n\n ❯ EntityManager.transaction node_modules/.pnpm/typeorm@1.1.0_babel-plugin-macros@3.1.0_pg@8.23.0_supports-color@7.2.0/src/entity-manager/EntityManager.ts:159:27\n ❯ PilotRepository.recordOnboardingGate packages/platform-persistence-typeorm/src/pilot.repository.ts:38:47\n ❯ tests/integration/008/foundation-persistence.spec.ts:28:23\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯\n\n"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "intake-draft-revision@1.1.0",
+  "draftId": "00000000-0000-4000-8000-000000004101",
+  "revisionId": "00000000-0000-4000-8000-000000004102",
+  "revision": 2,
+  "workspaceId": "00000000-0000-4000-8000-000000004110",
+  "projectId": "00000000-0000-4000-8000-000000004120",
+  "requesterPrincipalId": "00000000-0000-4000-8000-000000004130",
+  "previousRevisionId": "00000000-0000-4000-8000-000000004100",
+  "previousContentHash": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+  "intakeSchemaRef": {
+    "id": "urn:awp:schemas:qa:intake:v1",
+    "version": 1,
+    "digest": "sha256:ad12fce95a79e073efd7a4d853db05628211104a93e330d5455a81c2fab54837"
+  },
+  "workTypeRef": {
+    "key": "qa.validation",
+    "version": "1.1.0",
+    "hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+  },
+  "content": {
+    "schemaVersion": 1,
+    "title": "Validate checkout retry behavior",
+    "requestKind": "feature-validation",
+    "goal": "Prove that retry after a transient payment timeout does not duplicate an order.",
+    "scope": "Checkout retry after one transient payment timeout in the local mock environment.",
+    "acceptanceOutcome": "One order exists after the timeout and retry, and the requester sees the confirmed Jira QA Request link.",
+    "sourceRefs": [
+      {
+        "kind": "jira.issue",
+        "id": "QA-READY-42",
+        "version": "1",
+        "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    ],
+    "blockers": [],
+    "dependencies": [],
+    "requestedTarget": {
+      "environmentId": "00000000-0000-4000-8000-000000004160",
+      "environmentRevision": 1
+    },
+    "requestRisk": "MEDIUM",
+    "businessImpact": "A duplicate order would create a customer-visible payment and fulfilment error.",
+    "requestedClassificationKey": "INTERNAL"
+  },
+  "contentHash": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "sourceKind": "MATTERMOST_ACTION",
+  "actionProvenanceRef": "action-provenance:draft-revise:aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "sourceMessageRef": "mattermost:team/mm-team-qa-local/channel/dm-local/post/post-1",
+  "validation": {
+    "rulesRef": {
+      "key": "qa.intake-completeness",
+      "version": "1.0.0",
+      "hash": "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+    },
+    "inputHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "state": "VALID",
+    "blockers": []
+  },
+  "createdBy": "00000000-0000-4000-8000-000000004130",
+  "createdAt": "2026-08-31T10:00:00Z",
+  "correlationId": "00000000-0000-4000-8000-000000004140",
+  "causationId": "00000000-0000-4000-8000-000000004150"
+}

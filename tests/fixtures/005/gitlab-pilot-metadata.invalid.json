@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "gitlab-pilot-metadata-invalid-fixtures@1.0.0",
+  "cases": [
+    {
+      "id": "identity-routing",
+      "patch": { "identities": { "credentialRoutingMode": "CALLER_SELECTED" } },
+      "expectedCode": "GITLAB_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "scope",
+      "patch": { "identities": { "read": { "scopes": ["api"] } } },
+      "expectedCode": "GITLAB_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "schema",
+      "patch": { "providerToken": "secretref://forbidden/unknown-field" },
+      "expectedCode": "GITLAB_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "rehearsal",
+      "patch": { "deploymentPurpose": "PILOT_REHEARSAL", "contourKey": "qa-jira-gitlab-mattermost-local" },
+      "expectedCode": "GITLAB_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "release",
+      "patch": { "deploymentPurpose": "PILOT_DEPLOYMENT", "contourKey": "qa-jira-gitlab-mattermost-test", "environmentClass": "TEST", "server": { "baseUrl": "https://gitlab.test.example.invalid" } },
+      "expectedCode": "GITLAB_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "production",
+      "patch": { "environmentClass": "PRODUCTION", "productionDenied": false },
+      "expectedCode": "GITLAB_PILOT_SCHEMA_INVALID"
+    }
+  ]
+}

@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:capability:source-context-read:v1",
+  "title": "source-context.read capability messages v1",
+  "oneOf": [
+    { "$ref": "#/$defs/Request" },
+    { "$ref": "#/$defs/Result" }
+  ],
+  "$defs": {
+    "Selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceKind", "sourceRef"],
+      "properties": {
+        "sourceKind": { "enum": ["MERGE_REQUEST", "COMMIT", "BUILD"] },
+        "sourceRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "expectedRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "Request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "messageType", "operation", "selector"],
+      "properties": {
+        "schemaVersion": { "const": "source-context.read@1.0.0" },
+        "messageType": { "const": "REQUEST" },
+        "operation": {
+          "enum": ["merge-request.read", "commit.read", "build.read"]
+        },
+        "selector": { "$ref": "#/$defs/Selector" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "operation": { "const": "merge-request.read" } },
+            "required": ["operation"]
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "properties": {
+                  "sourceKind": { "const": "MERGE_REQUEST" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "operation": { "const": "commit.read" } },
+            "required": ["operation"]
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "properties": {
+                  "sourceKind": { "const": "COMMIT" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "operation": { "const": "build.read" } },
+            "required": ["operation"]
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "properties": {
+                  "sourceKind": { "const": "BUILD" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "MergeRequestObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceKind",
+        "sourceRef",
+        "state",
+        "sourceRevision",
+        "targetRevision",
+        "headCommitSha",
+        "buildRefs",
+        "providerRevisionToken",
+        "observedAt",
+        "observationHash"
+      ],
+      "properties": {
+        "sourceKind": { "const": "MERGE_REQUEST" },
+        "sourceRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "state": { "enum": ["OPEN", "MERGED", "CLOSED"] },
+        "sourceRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "targetRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "headCommitSha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "buildRefs": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+          }
+        },
+        "providerRevisionToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "observedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "observationHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    },
+    "CommitObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceKind",
+        "sourceRef",
+        "commitSha",
+        "parentCommitShas",
+        "providerRevisionToken",
+        "observedAt",
+        "observationHash"
+      ],
+      "properties": {
+        "sourceKind": { "const": "COMMIT" },
+        "sourceRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "commitSha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "parentCommitShas": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{40}$"
+          }
+        },
+        "providerRevisionToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "observedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "observationHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    },
+    "BuildObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceKind",
+        "sourceRef",
+        "buildDigest",
+        "sourceCommitSha",
+        "state",
+        "providerRevisionToken",
+        "observedAt",
+        "observationHash"
+      ],
+      "properties": {
+        "sourceKind": { "const": "BUILD" },
+        "sourceRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "buildDigest": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "sourceCommitSha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "state": { "enum": ["AVAILABLE", "UNAVAILABLE", "EXPIRED"] },
+        "providerRevisionToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "observedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "observationHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    },
+    "Result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "messageType", "operation", "observation"],
+      "properties": {
+        "schemaVersion": { "const": "source-context.read@1.0.0" },
+        "messageType": { "const": "RESULT" },
+        "operation": {
+          "enum": ["merge-request.read", "commit.read", "build.read"]
+        },
+        "observation": {
+          "oneOf": [
+            { "$ref": "#/$defs/MergeRequestObservation" },
+            { "$ref": "#/$defs/CommitObservation" },
+            { "$ref": "#/$defs/BuildObservation" }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "operation": { "const": "merge-request.read" } },
+            "required": ["operation"]
+          },
+          "then": {
+            "properties": {
+              "observation": {
+                "$ref": "#/$defs/MergeRequestObservation"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "operation": { "const": "commit.read" } },
+            "required": ["operation"]
+          },
+          "then": {
+            "properties": {
+              "observation": { "$ref": "#/$defs/CommitObservation" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "operation": { "const": "build.read" } },
+            "required": ["operation"]
+          },
+          "then": {
+            "properties": {
+              "observation": { "$ref": "#/$defs/BuildObservation" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

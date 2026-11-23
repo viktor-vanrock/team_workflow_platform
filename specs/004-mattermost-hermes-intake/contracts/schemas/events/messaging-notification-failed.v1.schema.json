@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:messaging-notification-failed:v1",
+  "title": "Messaging Notification Failed Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "effectKey",
+    "connectorCommandId",
+    "reasonCode",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "enum": [
+        "FAILED_RETRYABLE",
+        "FAILED_FINAL",
+        "AMBIGUOUS"
+      ]
+    },
+    "effectKey": {
+      "description": "SHA-256 commitment to the exact bounded Connector effect-idempotency-key string.",
+      "$ref": "#/$defs/digest"
+    },
+    "connectorCommandId": {
+      "$ref": "#/$defs/id"
+    },
+    "reasonCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,127}$"
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

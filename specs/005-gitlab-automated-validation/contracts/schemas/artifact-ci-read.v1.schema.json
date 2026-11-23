@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:capability:artifact-ci-read:v1",
+  "title": "artifact.ci-read capability messages v1",
+  "oneOf": [
+    { "$ref": "#/$defs/MetadataRequest" },
+    { "$ref": "#/$defs/MetadataResult" },
+    { "$ref": "#/$defs/StreamRequest" },
+    { "$ref": "#/$defs/StreamMetadata" }
+  ],
+  "$defs": {
+    "MetadataRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "automationAttemptId",
+        "externalPipelineId",
+        "externalJobId",
+        "logicalArtifactKey",
+        "resultHash"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "artifact.ci-read@1.0.0" },
+        "messageType": { "const": "REQUEST" },
+        "operation": { "const": "artifact.metadata" },
+        "automationAttemptId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "externalPipelineId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "externalJobId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "logicalArtifactKey": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+        },
+        "resultHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    },
+    "MetadataResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "descriptorId",
+        "descriptorHash",
+        "workItemId",
+        "testSessionId",
+        "automationAttemptId",
+        "externalPipelineId",
+        "externalJobId",
+        "artifactKind",
+        "opaqueLocatorHash",
+        "fileName",
+        "mediaType",
+        "byteSize",
+        "checksum",
+        "checksumSource",
+        "classification",
+        "availability",
+        "sourceProfileRef",
+        "sourceProfileHash",
+        "createdAt",
+        "expiresAt",
+        "provenanceHash"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "artifact.ci-read@1.0.0" },
+        "messageType": { "const": "RESULT" },
+        "operation": { "const": "artifact.metadata" },
+        "descriptorId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "descriptorHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "workItemId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "testSessionId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "automationAttemptId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "externalPipelineId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "externalJobId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "artifactKind": {
+          "enum": ["RESULT", "REPORT", "LOG", "SCREENSHOT", "TRACE", "OTHER"]
+        },
+        "opaqueLocatorHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "fileName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]{1,255}$"
+        },
+        "mediaType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "byteSize": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 104857600
+        },
+        "checksum": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "checksumSource": {
+          "enum": ["MACHINE_RESULT_MANIFEST", "CONNECTOR_CONTENT_SHA256"]
+        },
+        "classification": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/classification"
+        },
+        "availability": {
+          "enum": ["AVAILABLE", "MISSING", "EXPIRED", "CHECKSUM_MISMATCH"]
+        },
+        "sourceProfileRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/versionedRef"
+        },
+        "sourceProfileHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "createdAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "expiresAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "provenanceHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "artifactKind": { "const": "RESULT" } },
+            "required": ["artifactKind"]
+          },
+          "then": {
+            "properties": { "checksumSource": { "const": "CONNECTOR_CONTENT_SHA256" } }
+          },
+          "else": {
+            "properties": { "checksumSource": { "const": "MACHINE_RESULT_MANIFEST" } }
+          }
+        }
+      ]
+    },
+    "StreamRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "artifactReferenceId",
+        "descriptorId",
+        "descriptorHash",
+        "expectedByteSize",
+        "expectedChecksum",
+        "expectedClassification"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "artifact.ci-read@1.0.0" },
+        "messageType": { "const": "REQUEST" },
+        "operation": { "const": "artifact.stream" },
+        "artifactReferenceId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "descriptorId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "descriptorHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "expectedByteSize": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 104857600
+        },
+        "expectedChecksum": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "expectedClassification": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/classification"
+        }
+      }
+    },
+    "StreamMetadata": {
+      "description": "Metadata returned beside the non-JSON bounded byte stream; artifact bytes are never embedded here.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "artifactReferenceId",
+        "mediaType",
+        "byteSize",
+        "checksum",
+        "checksumSource",
+        "classification",
+        "availability",
+        "verifiedAt",
+        "streamReceiptHash"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "artifact.ci-read@1.0.0" },
+        "messageType": { "const": "RESULT" },
+        "operation": { "const": "artifact.stream" },
+        "artifactReferenceId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "mediaType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "byteSize": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 104857600
+        },
+        "checksum": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "checksumSource": {
+          "enum": ["MACHINE_RESULT_MANIFEST", "CONNECTOR_CONTENT_SHA256"]
+        },
+        "classification": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/classification"
+        },
+        "availability": { "const": "AVAILABLE" },
+        "verifiedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "streamReceiptHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    }
+  }
+}

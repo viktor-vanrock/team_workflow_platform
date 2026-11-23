@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:project-onboarding-events:v1",
+  "title": "Feature 007 event envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventId", "eventType", "eventVersion", "occurredAt", "workspaceId", "projectId", "correlationId", "actor", "payload"],
+  "properties": {
+    "eventId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "eventType": {
+      "enum": [
+        "project.registry.revised.v1",
+        "project.entitlement.revised.v1",
+        "project.onboarding-gate.evaluated.v1",
+        "project.binding.validated.v1",
+        "project.binding.accepted.v1",
+        "project.binding.published.v1",
+        "project.binding.retired.v1",
+        "project.capability-mode.changed.v1",
+        "project.operational-state.changed.v1",
+        "project.onboarding-stage.changed.v1",
+        "qa.test-account-lease.changed.v1",
+        "qa.evidence-manifest.signed.v1",
+        "artifact.retention-state.changed.v1"
+      ]
+    },
+    "eventVersion": { "const": 1 },
+    "occurredAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "correlationId": { "$ref": "../common.v1.schema.json#/$defs/correlationId" },
+    "causationId": { "$ref": "../common.v1.schema.json#/$defs/correlationId" },
+    "actor": { "$ref": "../common.v1.schema.json#/$defs/actor" },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subjectRef", "previousState", "currentState", "reasonCode"],
+      "properties": {
+        "subjectRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+        "previousState": { "type": ["string", "null"], "maxLength": 128 },
+        "currentState": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "reasonCode": { "$ref": "../common.v1.schema.json#/$defs/stableKey" },
+        "relatedRefs": {
+          "type": "array",
+          "items": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+          "uniqueItems": true
+        },
+        "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" }
+      }
+    }
+  }
+}

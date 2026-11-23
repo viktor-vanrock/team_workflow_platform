@@ -1,0 +1,35 @@
+{
+  "id": "66666666-6666-4666-8666-666666666666",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "key": "sample-local",
+  "connectorRef": {
+    "key": "sample.mock",
+    "version": "1.0.0"
+  },
+  "environmentClass": "LOCAL",
+  "endpoint": "http://mock-hub:4010",
+  "serviceIdentitySecretRef": "secretref://local/sample-mock-service",
+  "quarantineClassificationKey": "RESTRICTED",
+  "dataClassificationKey": "INTERNAL",
+  "tlsPolicyRef": "local-plaintext-only",
+  "networkPolicyRef": "local-mock-hub-only",
+  "connectorConfiguration": {
+    "schemaRef": {
+      "id": "urn:awp:schemas:sample:connection-config:v1",
+      "version": 1,
+      "digest": "sha256:3a47ffc7a93f2e4dcfc699c4091642c29ff620615f70b6e041adc79bd0992b0f"
+    },
+    "value": {
+      "transport": "HTTP",
+      "requestTimeoutMs": 3000
+    }
+  },
+  "version": 1,
+  "state": "PUBLISHED",
+  "contentHash": "sha256:3998df41c7f6582b96b8a195dbc0af9f387ef04704e240992845c6b323029121",
+  "resourceVersion": 3,
+  "validationReportId": "71717171-7171-4171-8171-717171717171",
+  "createdAt": "2026-08-27T10:00:00Z",
+  "validatedAt": "2026-08-27T10:01:00Z",
+  "publishedAt": "2026-08-27T10:02:00Z"
+}

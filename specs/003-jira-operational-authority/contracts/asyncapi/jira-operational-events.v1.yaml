@@ -1,0 +1,317 @@
+asyncapi: 3.0.0
+info:
+  title: Agentic Workspace Platform Jira Operational Authority Events
+  version: 1.0.0
+  description: >-
+    Project-scoped provider-neutral operational import, projection, conflict and
+    reconciliation events. All messages use the durable feature-001 event outbox/inbox
+    envelope. Raw Jira webhook bodies and credentials are never event payloads.
+defaultContentType: application/json
+channels:
+  operationalEvents:
+    address: awp.operational-authority.events.v1
+    messages:
+      imported: { $ref: '#/components/messages/Imported' }
+      projectionUpdated: { $ref: '#/components/messages/ProjectionUpdated' }
+      staleIgnored: { $ref: '#/components/messages/StaleIgnored' }
+      gapDetected: { $ref: '#/components/messages/GapDetected' }
+      conflictDetected: { $ref: '#/components/messages/ConflictDetected' }
+      conflictResolved: { $ref: '#/components/messages/ConflictResolved' }
+      mappingRequired: { $ref: '#/components/messages/MappingRequired' }
+      reconciliationStarted: { $ref: '#/components/messages/ReconciliationStarted' }
+      reconciliationCompleted: { $ref: '#/components/messages/ReconciliationCompleted' }
+      reconciliationFailed: { $ref: '#/components/messages/ReconciliationFailed' }
+      webhookRejected: { $ref: '#/components/messages/WebhookRejected' }
+operations:
+  publishOperationalEvents:
+    action: send
+    channel: { $ref: '#/channels/operationalEvents' }
+    messages:
+      - { $ref: '#/channels/operationalEvents/messages/imported' }
+      - { $ref: '#/channels/operationalEvents/messages/projectionUpdated' }
+      - { $ref: '#/channels/operationalEvents/messages/staleIgnored' }
+      - { $ref: '#/channels/operationalEvents/messages/gapDetected' }
+      - { $ref: '#/channels/operationalEvents/messages/conflictDetected' }
+      - { $ref: '#/channels/operationalEvents/messages/conflictResolved' }
+      - { $ref: '#/channels/operationalEvents/messages/mappingRequired' }
+      - { $ref: '#/channels/operationalEvents/messages/reconciliationStarted' }
+      - { $ref: '#/channels/operationalEvents/messages/reconciliationCompleted' }
+      - { $ref: '#/channels/operationalEvents/messages/reconciliationFailed' }
+      - { $ref: '#/channels/operationalEvents/messages/webhookRejected' }
+  consumeOperationalEvents:
+    action: receive
+    channel: { $ref: '#/channels/operationalEvents' }
+components:
+  messages:
+    Imported:
+      name: work_item.operational.imported
+      title: Verified Jira issue adopted as a Work Item
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.imported }
+              payload:
+                type: object
+                additionalProperties: false
+                required: [importIntentRef, workItemId, bindingRef, projectionRevisionRef, externalEntityId, externalPrincipalBindingRef]
+                properties:
+                  importIntentRef: { $ref: '#/components/schemas/Ref' }
+                  workItemId: { type: string, format: uuid }
+                  bindingRef: { $ref: '#/components/schemas/Ref' }
+                  projectionRevisionRef: { $ref: '#/components/schemas/Ref' }
+                  externalEntityId: { type: string, minLength: 1 }
+                  externalPrincipalBindingRef: { $ref: '#/components/schemas/Ref' }
+    ProjectionUpdated:
+      name: work_item.operational.projection-updated
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.projection-updated }
+              payload: { $ref: '#/components/schemas/ProjectionChange' }
+    StaleIgnored:
+      name: work_item.operational.stale-ignored
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.stale-ignored }
+              payload: { $ref: '#/components/schemas/IgnoredObservation' }
+    GapDetected:
+      name: work_item.operational.gap-detected
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.gap-detected }
+              payload: { $ref: '#/components/schemas/IgnoredObservation' }
+    ConflictDetected:
+      name: work_item.operational.conflict-detected
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.conflict-detected }
+              payload:
+                type: object
+                additionalProperties: false
+                required: [conflictRef, workItemId, commandRef, observedProjectionRevisionRef, reasonCode]
+                properties:
+                  conflictRef: { $ref: '#/components/schemas/Ref' }
+                  workItemId: { type: string, format: uuid }
+                  commandRef: { $ref: '#/components/schemas/Ref' }
+                  observedProjectionRevisionRef: { $ref: '#/components/schemas/Ref' }
+                  reasonCode: { $ref: '#/components/schemas/Code' }
+    ConflictResolved:
+      name: work_item.operational.conflict-resolved
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.conflict-resolved }
+              payload:
+                type: object
+                additionalProperties: false
+                required: [conflictRef, state, resolutionActorId, resolutionReasonHash]
+                properties:
+                  conflictRef: { $ref: '#/components/schemas/Ref' }
+                  state: { enum: [RESOLVED, SUPERSEDED] }
+                  resolutionActorId: { type: string, format: uuid }
+                  resolutionReasonHash: { $ref: '#/components/schemas/Digest' }
+                  replacementCommandRef: { $ref: '#/components/schemas/Ref' }
+    MappingRequired:
+      name: work_item.operational.mapping-required
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.mapping-required }
+              payload:
+                type: object
+                additionalProperties: false
+                required: [profileRef, discoverySnapshotRef, reasonCode, affectedFeature]
+                properties:
+                  workItemId: { type: string, format: uuid }
+                  profileRef: { $ref: '#/components/schemas/Ref' }
+                  discoverySnapshotRef: { $ref: '#/components/schemas/ContentRef' }
+                  reasonCode: { $ref: '#/components/schemas/Code' }
+                  affectedFeature: { enum: [CREATE, IMPORT, SYNC, TRANSITION, ASSIGNMENT, PRIORITY, DUE_DATE, DEFECT] }
+    ReconciliationStarted:
+      name: work_item.operational.reconciliation-started
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.reconciliation-started }
+              payload: { $ref: '#/components/schemas/ReconciliationSummary' }
+    ReconciliationCompleted:
+      name: work_item.operational.reconciliation-completed
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.reconciliation-completed }
+              payload: { $ref: '#/components/schemas/ReconciliationSummary' }
+    ReconciliationFailed:
+      name: work_item.operational.reconciliation-failed
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: work_item.operational.reconciliation-failed }
+              payload: { $ref: '#/components/schemas/ReconciliationSummary' }
+    WebhookRejected:
+      name: connector.webhook.rejected
+      description: >-
+        Workspace-scoped security event emitted only when Project cannot be safely resolved.
+        It carries no project issue content or fabricated human authorization basis.
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/WorkspaceSecurityEnvelope' }
+          - type: object
+            required: [eventType, payload]
+            properties:
+              eventType: { const: connector.webhook.rejected }
+              payload:
+                type: object
+                additionalProperties: false
+                required: [connectionRef, receiptRef, reasonCode, rawBodyHash]
+                properties:
+                  connectionRef: { $ref: '#/components/schemas/Ref' }
+                  receiptRef: { $ref: '#/components/schemas/Ref' }
+                  reasonCode: { $ref: '#/components/schemas/Code' }
+                  rawBodyHash: { $ref: '#/components/schemas/Digest' }
+  schemas:
+    Digest: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+    Code: { type: string, pattern: '^[A-Z][A-Z0-9_]{0,127}$' }
+    Ref:
+      type: object
+      additionalProperties: false
+      required: [id, version]
+      properties:
+        id: { type: string, minLength: 1 }
+        version: { type: integer, minimum: 1 }
+    ContentRef:
+      type: object
+      additionalProperties: false
+      required: [id, version, contentHash]
+      properties:
+        id: { type: string, minLength: 1 }
+        version: { type: integer, minimum: 1 }
+        contentHash: { $ref: '#/components/schemas/Digest' }
+    ProjectEnvelope:
+      type: object
+      additionalProperties: false
+      required: [envelopeVersion, eventId, occurredAt, recordedAt, producer, producerVersion, workspaceId, projectId, entityType, entityId, entityVersion, correlationId, causationId, actor, payloadSchemaRef, payloadHash, dataClassificationKey]
+      properties:
+        envelopeVersion: { const: 1 }
+        eventId: { type: string, format: uuid }
+        eventType: { type: string }
+        occurredAt: { type: string, format: date-time }
+        recordedAt: { type: string, format: date-time }
+        producer: { type: string, minLength: 1 }
+        producerVersion: { type: string, minLength: 1 }
+        workspaceId: { type: string, format: uuid }
+        projectId: { type: string, format: uuid }
+        entityType: { type: string, minLength: 1 }
+        entityId: { type: string, minLength: 1 }
+        entityVersion: { type: integer, minimum: 1 }
+        correlationId: { type: string, format: uuid }
+        causationId: { type: string, format: uuid }
+        actor:
+          type: object
+          additionalProperties: false
+          required: [kind, principalId]
+          properties:
+            kind: { enum: [HUMAN, SERVICE, SYSTEM] }
+            principalId: { type: string, minLength: 1 }
+        payloadSchemaRef: { $ref: '#/components/schemas/ContentRef' }
+        payloadHash: { $ref: '#/components/schemas/Digest' }
+        dataClassificationKey: { type: string, pattern: '^[A-Za-z][A-Za-z0-9._-]{0,127}$' }
+        payload: { type: object }
+    WorkspaceSecurityEnvelope:
+      type: object
+      additionalProperties: false
+      required: [envelopeVersion, eventId, occurredAt, recordedAt, producer, producerVersion, workspaceId, scopeKind, entityType, entityId, entityVersion, correlationId, causationId, actor, payloadSchemaRef, payloadHash, dataClassificationKey]
+      properties:
+        envelopeVersion: { const: 1 }
+        eventId: { type: string, format: uuid }
+        eventType: { type: string }
+        occurredAt: { type: string, format: date-time }
+        recordedAt: { type: string, format: date-time }
+        producer: { type: string, minLength: 1 }
+        producerVersion: { type: string, minLength: 1 }
+        workspaceId: { type: string, format: uuid }
+        scopeKind: { const: WORKSPACE }
+        entityType: { type: string, minLength: 1 }
+        entityId: { type: string, minLength: 1 }
+        entityVersion: { type: integer, minimum: 1 }
+        correlationId: { type: string, format: uuid }
+        causationId: { type: string, format: uuid }
+        actor:
+          type: object
+          additionalProperties: false
+          required: [kind, principalId]
+          properties:
+            kind: { const: SYSTEM }
+            principalId: { type: string, minLength: 1 }
+        payloadSchemaRef: { $ref: '#/components/schemas/ContentRef' }
+        payloadHash: { $ref: '#/components/schemas/Digest' }
+        dataClassificationKey: { type: string, pattern: '^[A-Za-z][A-Za-z0-9._-]{0,127}$' }
+        payload: { type: object }
+    ProjectionChange:
+      type: object
+      additionalProperties: false
+      required: [workItemId, bindingRef, previousProjectionRevisionRef, projectionRevisionRef, externalRevisionToken, normalizedStatus, observationSource]
+      properties:
+        workItemId: { type: string, format: uuid }
+        bindingRef: { $ref: '#/components/schemas/Ref' }
+        previousProjectionRevisionRef: { $ref: '#/components/schemas/Ref' }
+        projectionRevisionRef: { $ref: '#/components/schemas/Ref' }
+        externalRevisionToken: { $ref: '#/components/schemas/Digest' }
+        normalizedStatus: { enum: [NEW, NEEDS_INFO, READY, PLANNED, IN_PROGRESS, REVIEW, BLOCKED, DONE, CANCELLED] }
+        observationSource: { enum: [CREATE_READ_BACK, IMPORT_READ, COMMAND_CONFIRMATION, WEBHOOK_READ, RECONCILIATION_READ, CONFLICT_READ] }
+    IgnoredObservation:
+      type: object
+      additionalProperties: false
+      required: [workItemId, bindingRef, currentProjectionRevisionRef, observationHash, reasonCode]
+      properties:
+        workItemId: { type: string, format: uuid }
+        bindingRef: { $ref: '#/components/schemas/Ref' }
+        currentProjectionRevisionRef: { $ref: '#/components/schemas/Ref' }
+        observationHash: { $ref: '#/components/schemas/Digest' }
+        reasonCode: { $ref: '#/components/schemas/Code' }
+    ReconciliationSummary:
+      type: object
+      additionalProperties: false
+      required: [runRef, profileRef, lane, state, counts]
+      properties:
+        runRef: { $ref: '#/components/schemas/Ref' }
+        profileRef: { $ref: '#/components/schemas/Ref' }
+        lane: { enum: [IMPORT_DISCOVERY, BOUND_REFRESH, FULL_DRIFT_SWEEP] }
+        state: { enum: [PENDING, RUNNING, SUCCEEDED, PARTIAL, FAILED, CANCELLED] }
+        counts:
+          type: object
+          additionalProperties: { type: integer, minimum: 0 }
+        terminalCode: { $ref: '#/components/schemas/Code' }

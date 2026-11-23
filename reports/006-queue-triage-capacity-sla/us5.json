@@ -1,0 +1,614 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "checkpoint": "US5",
+  "status": "PASS",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "externalNetwork": "DENIED",
+  "production": "DENIED",
+  "startedAt": "2026-09-03T11:12:56.587Z",
+  "finishedAt": "2026-09-03T11:13:38.353Z",
+  "taskBinding": {
+    "path": "specs/006-queue-triage-capacity-sla/tasks.md",
+    "sha256": "sha256:bcfb30c1b9aef5b160f48c7d7361e9e27e28a0bea441bc62fd3e6fc7eca9d249"
+  },
+  "invariants": {
+    "closedGoals": [
+      "READY_TO_FIRST_QA_START",
+      "READY_TO_SIGNED_VERDICT"
+    ],
+    "localDorStartsClock": false,
+    "confirmedJiraOrRolloutVerificationRequired": true,
+    "rolloutBackdatingAllowed": false,
+    "policyAndCalendarRevisionPinned": true,
+    "historicalReinterpretationAllowed": false,
+    "unknownPauseReasonPausesClock": false,
+    "measureOnlyTargetState": "NOT_CONFIGURED",
+    "durablePostgresTemporalAuthority": true,
+    "pageReadWrites": 0,
+    "providerOrModelReadsOnSlaGet": 0,
+    "notificationPurpose": "REQUEST_STATUS",
+    "notificationIntentDeliveryCoupledToClock": false,
+    "clockRevisionChangesOnRead": false,
+    "evaluationHashChangesWithAsOf": true,
+    "jiraPriorityOrDueMutations": 0,
+    "exactProvenanceVisible": true
+  },
+  "scenarios": [
+    {
+      "id": "us5-local-dor-does-not-start-sla",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "localReadiness": "READY",
+        "jiraAuthority": "PENDING",
+        "result": {
+          "state": "NOT_STARTED",
+          "reason": "OPERATIONAL_CONFIRMATION_REQUIRED"
+        },
+        "clockWrites": 0
+      }
+    },
+    {
+      "id": "us5-confirmed-ready-starts-at-confirmed-at",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "result": {
+          "state": "START",
+          "effectiveAt": "2026-09-07T09:00:00.000Z",
+          "startSourceRef": {
+            "sourceType": "JIRA_OPERATIONAL_PROJECTION_REVISION",
+            "sourceId": "00000000-0000-4000-8000-000000000301",
+            "sourceVersion": 4,
+            "semanticHash": "sha256:7cf8d3c0c5ae62436dc77f9dbdb9392f015212ee8eedfb378f0034ab3160820c",
+            "observedAt": "2026-09-03T07:59:00.000Z",
+            "confirmedAt": "2026-09-07T09:00:00.000Z"
+          }
+        },
+        "providerTimestampAuthority": false,
+        "jiraMutation": false
+      }
+    },
+    {
+      "id": "us5-no-rollout-backdating",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "providerObservedAt": "2026-08-10T08:00:00.000Z",
+        "rolloutVerifiedAt": "2026-09-10T10:00:00.000Z",
+        "transition": {
+          "schemaVersion": "sla-clock-transition@1.0.0",
+          "workspaceId": "00000000-0000-4000-8000-000000000701",
+          "projectId": "00000000-0000-4000-8000-000000000702",
+          "workItemId": "00000000-0000-4000-8000-000000000703",
+          "goal": "READY_TO_FIRST_QA_START",
+          "slaClockId": "00000000-0000-4000-8000-000000000720",
+          "clockCycle": 1,
+          "transition": "START",
+          "previousClockState": "NOT_STARTED",
+          "currentClockState": "RUNNING",
+          "effectiveAt": "2026-09-10T10:00:00.000Z",
+          "elapsedBusinessSecondsAtTransition": 0,
+          "policyFacetRef": {
+            "id": "00000000-0000-4000-8000-000000000705",
+            "version": 3,
+            "semanticHash": "sha256:6b2dc323305845c257840ff8e81ffd17cf9506bad1cdf79373eaaecf50b511e9"
+          },
+          "calendarRef": {
+            "id": "00000000-0000-4000-8000-000000000704",
+            "version": 1,
+            "semanticHash": "sha256:0e039aef4e2c7abfc180e50d3abcfc9e1906cc600e26ac6f0f0dbb4b8801160c"
+          },
+          "mappingRef": {
+            "sourceType": "JIRA_STATUS_MAPPING_REVISION",
+            "sourceId": "00000000-0000-4000-8000-000000000706",
+            "sourceVersion": 2,
+            "semanticHash": "sha256:482668614ceea2a24b8134350fabcb81106aac19e35ab7fee2124e729aca787b"
+          },
+          "algorithmRef": {
+            "key": "sla-business-time",
+            "version": "1.0.0",
+            "semanticHash": "sha256:34ba12001c44ef65d9261f1bf80ce12efb88819a7c8b1ed973c5d70a676baef9"
+          },
+          "startSourceRef": {
+            "sourceType": "SLA_ROLLOUT_AUTHORITY_VERIFICATION",
+            "sourceId": "00000000-0000-4000-8000-000000000721",
+            "sourceVersion": 1,
+            "semanticHash": "sha256:bbc5c7ffd736417b2f9c9b1004dfe445cb4d83c0593c8bbeea9c453a562dc20e",
+            "confirmedAt": "2026-09-10T10:00:00.000Z"
+          },
+          "startedAt": "2026-09-10T10:00:00.000Z",
+          "transitionSourceRef": {
+            "sourceType": "SLA_ROLLOUT_AUTHORITY_VERIFICATION",
+            "sourceId": "00000000-0000-4000-8000-000000000721",
+            "sourceVersion": 1,
+            "semanticHash": "sha256:bbc5c7ffd736417b2f9c9b1004dfe445cb4d83c0593c8bbeea9c453a562dc20e",
+            "confirmedAt": "2026-09-10T10:00:00.000Z"
+          },
+          "inputFingerprint": "sha256:203807c2c68b39c41f2f924f670aeb9981adfe292abc446be829524ba8b794d3",
+          "clockRevisionRef": {
+            "id": "00000000-0000-4000-8000-000000000720",
+            "version": 1,
+            "semanticHash": "sha256:55ab9453262114c3f15145d2abbbf88493538c195b28e828c71f91b0eb228150"
+          }
+        },
+        "projectionHistoryWrites": 0
+      }
+    },
+    {
+      "id": "us5-rollout-duplicate-read-receipt",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "reducerDisposition": "DUPLICATE",
+        "first": "APPENDED",
+        "replay": "NO_OP_DUPLICATE",
+        "receiptCount": 1,
+        "providerReadsOnReplay": 0
+      }
+    },
+    {
+      "id": "us5-business-calendar-golden-vectors",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "calendarRef": {
+          "id": "00000000-0000-4000-8000-000000000704",
+          "version": 1,
+          "semanticHash": "sha256:0e039aef4e2c7abfc180e50d3abcfc9e1906cc600e26ac6f0f0dbb4b8801160c"
+        },
+        "elapsed": 28800,
+        "plusTwoHours": "2026-09-08T10:00:00.000Z",
+        "timeZone": "UTC",
+        "dstRules": {
+          "nonexistentBoundary": "SHIFT_TO_FIRST_VALID_INSTANT_AFTER_GAP",
+          "ambiguousStart": "EARLIEST_MATCHING_INSTANT",
+          "ambiguousEnd": "LATEST_MATCHING_INSTANT"
+        }
+      }
+    },
+    {
+      "id": "us5-finite-calendar-policy-rejected",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "validThrough": "2026-09-07",
+        "publicationForOpenEndedPolicy": "REJECTED",
+        "errorCode": "BUSINESS_CALENDAR_COVERAGE_EXHAUSTED"
+      }
+    },
+    {
+      "id": "us5-confirmed-pause-resume",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "pause": {
+          "schemaVersion": "sla-clock-transition@1.0.0",
+          "workspaceId": "00000000-0000-4000-8000-000000000701",
+          "projectId": "00000000-0000-4000-8000-000000000702",
+          "workItemId": "00000000-0000-4000-8000-000000000703",
+          "goal": "READY_TO_FIRST_QA_START",
+          "slaClockId": "00000000-0000-4000-8000-000000000708",
+          "clockCycle": 1,
+          "previousClockRevisionRef": {
+            "id": "00000000-0000-4000-8000-000000000708",
+            "version": 1,
+            "semanticHash": "sha256:989ac114d08fe327127b263c4a01a1e28479c9c76b9f30dc9ed973a26830318c"
+          },
+          "transition": "PAUSE",
+          "previousClockState": "RUNNING",
+          "currentClockState": "PAUSED",
+          "effectiveAt": "2026-09-07T11:00:00.000Z",
+          "elapsedBusinessSecondsAtTransition": 7200,
+          "policyFacetRef": {
+            "id": "00000000-0000-4000-8000-000000000705",
+            "version": 3,
+            "semanticHash": "sha256:6b2dc323305845c257840ff8e81ffd17cf9506bad1cdf79373eaaecf50b511e9"
+          },
+          "calendarRef": {
+            "id": "00000000-0000-4000-8000-000000000704",
+            "version": 1,
+            "semanticHash": "sha256:0e039aef4e2c7abfc180e50d3abcfc9e1906cc600e26ac6f0f0dbb4b8801160c"
+          },
+          "mappingRef": {
+            "sourceType": "JIRA_STATUS_MAPPING_REVISION",
+            "sourceId": "00000000-0000-4000-8000-000000000706",
+            "sourceVersion": 2,
+            "semanticHash": "sha256:482668614ceea2a24b8134350fabcb81106aac19e35ab7fee2124e729aca787b"
+          },
+          "algorithmRef": {
+            "key": "sla-business-time",
+            "version": "1.0.0",
+            "semanticHash": "sha256:34ba12001c44ef65d9261f1bf80ce12efb88819a7c8b1ed973c5d70a676baef9"
+          },
+          "startSourceRef": {
+            "sourceType": "JIRA_OPERATIONAL_PROJECTION_REVISION",
+            "sourceId": "00000000-0000-4000-8000-000000000710",
+            "sourceVersion": 5,
+            "semanticHash": "sha256:548c1edd208d16769e89e31e17825e8a1fb063360b4a7dac541b0060d0258261",
+            "observedAt": "2026-09-07T08:58:00.000Z",
+            "confirmedAt": "2026-09-07T09:00:00.000Z"
+          },
+          "startedAt": "2026-09-07T09:00:00.000Z",
+          "transitionSourceRef": {
+            "sourceType": "JIRA_OPERATIONAL_PROJECTION_REVISION",
+            "sourceId": "00000000-0000-4000-8000-000000000301",
+            "sourceVersion": 6,
+            "semanticHash": "sha256:eb48631cb8f49c7cfeecf5e792dc2e922c9ce989b29d4187f84b1da43647b9d3",
+            "observedAt": "2026-09-03T07:59:00.000Z",
+            "confirmedAt": "2026-09-07T11:00:00.000Z"
+          },
+          "mappedPauseReasonCode": "WAITING_EXTERNAL",
+          "inputFingerprint": "sha256:a732997a6db0bcbe748af0b3224e1b6554c979bbc54e7847aac4042747a5c45d",
+          "clockRevisionRef": {
+            "id": "00000000-0000-4000-8000-000000000708",
+            "version": 2,
+            "semanticHash": "sha256:24dcf3a27ded9c558bea0859d3b122b02541aee0e9d6e48a84991d31178168be"
+          }
+        },
+        "resume": {
+          "schemaVersion": "sla-clock-transition@1.0.0",
+          "workspaceId": "00000000-0000-4000-8000-000000000701",
+          "projectId": "00000000-0000-4000-8000-000000000702",
+          "workItemId": "00000000-0000-4000-8000-000000000703",
+          "goal": "READY_TO_FIRST_QA_START",
+          "slaClockId": "00000000-0000-4000-8000-000000000708",
+          "clockCycle": 1,
+          "previousClockRevisionRef": {
+            "id": "00000000-0000-4000-8000-000000000708",
+            "version": 2,
+            "semanticHash": "sha256:24dcf3a27ded9c558bea0859d3b122b02541aee0e9d6e48a84991d31178168be"
+          },
+          "transition": "RESUME",
+          "previousClockState": "PAUSED",
+          "currentClockState": "RUNNING",
+          "effectiveAt": "2026-09-08T09:00:00.000Z",
+          "elapsedBusinessSecondsAtTransition": 7200,
+          "policyFacetRef": {
+            "id": "00000000-0000-4000-8000-000000000705",
+            "version": 3,
+            "semanticHash": "sha256:6b2dc323305845c257840ff8e81ffd17cf9506bad1cdf79373eaaecf50b511e9"
+          },
+          "calendarRef": {
+            "id": "00000000-0000-4000-8000-000000000704",
+            "version": 1,
+            "semanticHash": "sha256:0e039aef4e2c7abfc180e50d3abcfc9e1906cc600e26ac6f0f0dbb4b8801160c"
+          },
+          "mappingRef": {
+            "sourceType": "JIRA_STATUS_MAPPING_REVISION",
+            "sourceId": "00000000-0000-4000-8000-000000000706",
+            "sourceVersion": 2,
+            "semanticHash": "sha256:482668614ceea2a24b8134350fabcb81106aac19e35ab7fee2124e729aca787b"
+          },
+          "algorithmRef": {
+            "key": "sla-business-time",
+            "version": "1.0.0",
+            "semanticHash": "sha256:34ba12001c44ef65d9261f1bf80ce12efb88819a7c8b1ed973c5d70a676baef9"
+          },
+          "startSourceRef": {
+            "sourceType": "JIRA_OPERATIONAL_PROJECTION_REVISION",
+            "sourceId": "00000000-0000-4000-8000-000000000710",
+            "sourceVersion": 5,
+            "semanticHash": "sha256:548c1edd208d16769e89e31e17825e8a1fb063360b4a7dac541b0060d0258261",
+            "observedAt": "2026-09-07T08:58:00.000Z",
+            "confirmedAt": "2026-09-07T09:00:00.000Z"
+          },
+          "startedAt": "2026-09-07T09:00:00.000Z",
+          "transitionSourceRef": {
+            "sourceType": "JIRA_OPERATIONAL_PROJECTION_REVISION",
+            "sourceId": "00000000-0000-4000-8000-000000000301",
+            "sourceVersion": 7,
+            "semanticHash": "sha256:18aa771027c1245b771bac6373786c575193f1c0310c35dcbd0b1b651ad81ccf",
+            "observedAt": "2026-09-03T07:59:00.000Z",
+            "confirmedAt": "2026-09-08T09:00:00.000Z"
+          },
+          "inputFingerprint": "sha256:e882f978f62156f51139cf190be85fbcef99f161e3aa23cf90c5e4f96f78ea75",
+          "clockRevisionRef": {
+            "id": "00000000-0000-4000-8000-000000000708",
+            "version": 3,
+            "semanticHash": "sha256:388998996932431c5a4f09af922eecab16cd323493e90f0d2e704733bb0dfad8"
+          }
+        },
+        "jiraWrites": 0
+      }
+    },
+    {
+      "id": "us5-unknown-pause-reason-keeps-running",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "result": {
+          "outcome": "NO_CHANGE",
+          "reason": "UNKNOWN_PAUSE_REASON"
+        },
+        "currentClockState": "RUNNING",
+        "autoPause": false
+      }
+    },
+    {
+      "id": "us5-policy-calendar-revision-pinning",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "pinnedPolicyFacetRef": {
+          "id": "00000000-0000-4000-8000-000000000705",
+          "version": 3,
+          "semanticHash": "sha256:6b2dc323305845c257840ff8e81ffd17cf9506bad1cdf79373eaaecf50b511e9"
+        },
+        "pinnedCalendarRef": {
+          "id": "00000000-0000-4000-8000-000000000704",
+          "version": 1,
+          "semanticHash": "sha256:0e039aef4e2c7abfc180e50d3abcfc9e1906cc600e26ac6f0f0dbb4b8801160c"
+        },
+        "attemptedCalendarRef": {
+          "id": "00000000-0000-4000-8000-000000000704",
+          "version": 2,
+          "semanticHash": "sha256:2ab2834f038cf680365f66f8d0524a6ddc750d58f6671e127d674bfde6ef856d"
+        },
+        "errorCode": "SLA_CLOCK_CALENDAR_PIN_MISMATCH"
+      }
+    },
+    {
+      "id": "us5-measure-only-versus-enforced",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "measureOnly": {
+          "targetState": "NOT_CONFIGURED",
+          "elapsedBusinessSeconds": 10800
+        },
+        "enforced": {
+          "targetState": "AT_RISK",
+          "elapsedBusinessSeconds": 10800
+        },
+        "sameAuthoritativeClockRef": {
+          "id": "00000000-0000-4000-8000-000000000708",
+          "version": 1,
+          "semanticHash": "sha256:989ac114d08fe327127b263c4a01a1e28479c9c76b9f30dc9ed973a26830318c"
+        }
+      }
+    },
+    {
+      "id": "us5-notification-dedupe-and-outage",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "first": "APPENDED",
+        "replay": "NO_OP_DUPLICATE",
+        "intentState": "QUEUED",
+        "deliveryAttemptCount": 0,
+        "mattermostAvailable": false,
+        "mattermostCalls": 0
+      }
+    },
+    {
+      "id": "us5-clock-revision-versus-evaluation-hash",
+      "status": "PASS",
+      "mode": "TEST",
+      "assertedLayers": [
+        "API_PROJECTION",
+        "POSTGRES_EFFECT_MODEL",
+        "WORKER_REDUCER"
+      ],
+      "evidence": {
+        "clockRevisionRef": {
+          "id": "00000000-0000-4000-8000-000000000708",
+          "version": 1,
+          "semanticHash": "sha256:989ac114d08fe327127b263c4a01a1e28479c9c76b9f30dc9ed973a26830318c"
+        },
+        "firstEvaluationHash": "sha256:d459017ed7dc4209c5f653226222efef92d7025c81b0cf06eab3bae10e0507d2",
+        "secondEvaluationHash": "sha256:5a991a612ed4fa36a823ace61de5ad9e1a6e18ba671d45418579864817a1a61c",
+        "durableClockWritesOnRead": 0
+      }
+    }
+  ],
+  "results": [
+    {
+      "id": "us5-contract-unit-security-integration-browser",
+      "description": "Confirmed starts, rollout, calendar arithmetic, immutable clocks, policy modes, notifications, degradation, authorized reads and SLA UI",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/unit/006/business-calendar.spec.ts",
+        "tests/unit/006/sla-clock.spec.ts",
+        "tests/contract/006/us5-sla-contracts.spec.ts",
+        "tests/contract/006/us5-sla-events.spec.ts",
+        "tests/integration/006/us5-rollout-verification.spec.ts",
+        "tests/integration/006/us5-sla-persistence.spec.ts",
+        "tests/integration/006/us5-policy-modes.spec.ts",
+        "tests/integration/006/us5-temporal-notifications.spec.ts",
+        "tests/integration/006/us5-sla-lifecycle.spec.ts",
+        "tests/integration/006/us5-degradation.spec.ts",
+        "tests/integration/security/006/us5-sla-read.spec.ts",
+        "tests/e2e/006/us5-sla-transparency.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 16497,
+      "outputHash": "sha256:8fdc0ba7a81bc117ada26d73c18924d93c2f47b3b98e106ed99252892b1d96aa"
+    },
+    {
+      "id": "typecheck-packages-platform-contracts",
+      "description": "Static typecheck packages/platform-contracts/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-contracts/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 967,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-platform-core",
+      "description": "Static typecheck packages/platform-core/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-core/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1363,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-platform-persistence-typeorm",
+      "description": "Static typecheck packages/platform-persistence-typeorm/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-persistence-typeorm/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1812,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-platform-runtime-nest",
+      "description": "Static typecheck packages/platform-runtime-nest/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-runtime-nest/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1609,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-runtime-composition",
+      "description": "Static typecheck packages/runtime-composition/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4290,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-competency-qa",
+      "description": "Static typecheck packages/competency-qa/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3457,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-apps-api",
+      "description": "Static typecheck apps/api/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4963,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-apps-web",
+      "description": "Static typecheck apps/web/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2488,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-apps-worker",
+      "description": "Static typecheck apps/worker/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/worker/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4263,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  ]
+}

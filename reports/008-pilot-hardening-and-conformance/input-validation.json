@@ -1,0 +1,7 @@
+{
+  "status": "BLOCKED_INPUT",
+  "corporateReady": false,
+  "reasonCodes": [
+    "INPUT_FILE_UNAVAILABLE_OR_INVALID"
+  ]
+}

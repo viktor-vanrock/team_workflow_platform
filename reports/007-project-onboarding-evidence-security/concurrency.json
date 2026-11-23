@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "gate": "concurrency",
+  "status": "PASS",
+  "startedAt": "2026-09-03T18:37:51.800Z",
+  "finishedAt": "2026-09-03T18:37:54.508Z",
+  "taskSourceHash": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62",
+  "invariants": {
+    "fixedLockOrder": true,
+    "singleCasWinner": true,
+    "noPartialSignedEvidence": true,
+    "noEffectAfterSuspend": true
+  },
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/integration/007/concurrency-matrix.spec.ts",
+        "sha256": "sha256:c66e2b92168dd8841d6bcb2e4788bc4a2e34d91404efbcad015cda6742dcff70"
+      },
+      {
+        "path": "tests/integration/007/us2-binding-concurrency.spec.ts",
+        "sha256": "sha256:bfa07a7e6f971f9212c8e84afc5e14b2222083b7c7e427549185eeba691e3223"
+      },
+      {
+        "path": "tests/integration/007/us2-pilot-activation.spec.ts",
+        "sha256": "sha256:1dbfc2052d054f34004aa0e1d4274a3df455a43f5f02b4e86558ee04fe5fe08c"
+      },
+      {
+        "path": "tests/integration/007/us3-entitlement-revocation-race.spec.ts",
+        "sha256": "sha256:97e15d2158e206a863562e7378c5e61f0a04a9f80e5cc30d04ba45b35e9cf412"
+      },
+      {
+        "path": "tests/integration/007/us1-account-leases.spec.ts",
+        "sha256": "sha256:d8fe11a6c13d740097d67f768cd77df6ba4dc8a2c712539a95998a2f15831b66"
+      },
+      {
+        "path": "tests/integration/007/us4-evidence-concurrency.spec.ts",
+        "sha256": "sha256:8152a860fe39697162e01724b4114fb30750f9fefcaf963736738b172213d253"
+      },
+      {
+        "path": "tests/integration/007/us5-operational-concurrency.spec.ts",
+        "sha256": "sha256:4dfa9fecb81dd06998e1184d2d359e31d7becb4b06432624f747d7a30e85ed56"
+      },
+      {
+        "path": "tests/integration/security/007/us5-effect-guard-race.spec.ts",
+        "sha256": "sha256:de2a211fc6446cbff34aab1d573a8cfb9fc09be06f3f235f863080b61e479dfd"
+      }
+    ],
+    "aggregateSha256": "sha256:729e058957cba44a78ddd43bead63d91eb61b6fc72b205ca8c7298aee2217174"
+  },
+  "exitCode": 0,
+  "outputHash": "sha256:b19cd08eee65f6ab653cde262b1c1b82ad39ce5708597ad3b073a63c27ddea19"
+}

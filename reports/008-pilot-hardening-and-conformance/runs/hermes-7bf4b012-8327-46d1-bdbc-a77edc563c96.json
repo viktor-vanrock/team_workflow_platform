@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "hermes-7bf4b012-8327-46d1-bdbc-a77edc563c96",
+  "gate": "hermes",
+  "status": "PASS",
+  "deploymentProfile": "local",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": [
+      "fixture-project-web"
+    ]
+  },
+  "startedAt": "2026-09-04T22:57:04.098Z",
+  "finishedAt": "2026-09-04T22:57:04.676Z",
+  "fingerprints": {
+    "source": "sha256:0dbf53a1ad315dce1e365dd2a42054b9889a02c8eec14b969c787ad4ef0aef14",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:5fc0af1bea362d651725f32fc9ca09377a5c053d7cbeb6e8560505878cc041cf",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:c7416e37dba569ade2f7b061bdf656961938f07b36457e8b5fc811f5c2f6eec9"
+  },
+  "executorIdentity": "local-cli",
+  "prerequisites": [],
+  "checks": [
+    {
+      "id": "hermes-corpus",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/hermes-7bf4b012-8327-46d1-bdbc-a77edc563c96/evaluation.json",
+          "sha256": "sha256:3cceb2278546056b46405760596f47e4328e5d06c16d059b3ca6c396c6d0b322"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "unchanged-source",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/hermes-7bf4b012-8327-46d1-bdbc-a77edc563c96/evaluation.json",
+          "sha256": "sha256:3cceb2278546056b46405760596f47e4328e5d06c16d059b3ca6c396c6d0b322"
+        }
+      ],
+      "reasonCodes": []
+    }
+  ],
+  "reasonCodes": []
+}

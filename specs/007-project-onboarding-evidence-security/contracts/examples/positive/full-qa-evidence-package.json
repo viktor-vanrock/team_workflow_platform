@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "packageId": "40000000-0000-4000-8000-000000000001",
+  "version": 1,
+  "workspaceId": "10000000-0000-4000-8000-000000000001",
+  "projectId": "20000000-0000-4000-8000-000000000001",
+  "workItemId": "work-item-007-001",
+  "manifestRevisionRefs": [
+    { "id": "manifest-revision-1", "version": 1, "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }
+  ],
+  "signatureRefs": [
+    { "id": "signature-1", "version": 1, "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }
+  ],
+  "qaVerdictRef": { "id": "verdict-1", "version": 1, "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+  "residualRiskHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "packagePolicyRef": { "id": "package-policy-1", "version": 1, "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+  "createdBy": {
+    "principalId": "30000000-0000-4000-8000-000000000002",
+    "kind": "HUMAN",
+    "roleKey": "qa.lead",
+    "authorizationBasisHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "authenticationContextRef": "local:acr:human"
+  },
+  "createdAt": "2026-09-03T12:30:00.000Z",
+  "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

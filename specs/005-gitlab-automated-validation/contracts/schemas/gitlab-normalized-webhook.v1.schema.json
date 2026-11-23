@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:gitlab-normalized-webhook:v1",
+  "title": "GitLabNormalizedWebhook v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "connectionId",
+    "workspaceId",
+    "projectId",
+    "deliveryId",
+    "eventKind",
+    "numericGitLabProjectId",
+    "externalPipelineId",
+    "externalStatus",
+    "signatureVerified",
+    "bodyHash",
+    "providerObservedAt",
+    "receivedAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "gitlab-normalized-webhook@1.0.0" },
+    "connectionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "deliveryId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "eventKind": { "enum": ["PIPELINE_HOOK", "JOB_HOOK"] },
+    "numericGitLabProjectId": { "type": "integer", "minimum": 1 },
+    "externalPipelineId": { "type": "integer", "minimum": 1 },
+    "externalJobId": { "type": "integer", "minimum": 1 },
+    "externalStatus": {
+      "enum": [
+        "created",
+        "waiting_for_resource",
+        "preparing",
+        "pending",
+        "running",
+        "success",
+        "failed",
+        "canceled",
+        "skipped",
+        "manual",
+        "scheduled"
+      ]
+    },
+    "commitSha": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "signatureVerified": { "const": true },
+    "bodyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "providerObservedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "receivedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "eventKind": { "const": "JOB_HOOK" } },
+        "required": ["eventKind"]
+      },
+      "then": {
+        "required": ["externalJobId"],
+        "properties": {
+          "externalJobId": {}
+        }
+      },
+      "else": {
+        "properties": {
+          "externalJobId": false
+        }
+      }
+    }
+  ]
+}

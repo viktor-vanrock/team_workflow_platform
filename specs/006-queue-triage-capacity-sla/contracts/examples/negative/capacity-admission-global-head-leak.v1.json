@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "capacity-admission@1.0.0",
+  "admissionDecisionId": "40000000-0000-4000-8000-000000000001",
+  "workspaceId": "40000000-0000-4000-8000-000000000002",
+  "projectId": "40000000-0000-4000-8000-000000000003",
+  "workItemId": "40000000-0000-4000-8000-000000000004",
+  "sessionId": "40000000-0000-4000-8000-000000000005",
+  "request": {
+    "idempotencyKeyHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "requestHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+    "activityKind": "MANUAL_SESSION_START",
+    "actor": {
+      "kind": "HUMAN",
+      "principalId": "40000000-0000-4000-8000-000000000006"
+    },
+    "authorizationScopeWitnessHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "expectedState": {
+    "policyFacetRef": {
+      "id": "40000000-0000-4000-8000-000000000007",
+      "version": 1,
+      "semanticHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+    },
+    "expectedQueueControlVersion": 0,
+    "expectedCapacityHeadVersion": 11,
+    "sessionRef": {
+      "sourceType": "QA_TEST_SESSION_REVISION",
+      "sourceId": "40000000-0000-4000-8000-000000000005",
+      "sourceVersion": 1,
+      "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "operationalProjectionRef": {
+      "sourceType": "JIRA_OPERATIONAL_PROJECTION_REVISION",
+      "sourceId": "40000000-0000-4000-8000-000000000011",
+      "sourceVersion": 7,
+      "semanticHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+      "confirmedAt": "2026-09-02T08:55:00Z"
+    },
+    "qaSourceSetHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "before": {
+    "policyMode": "MEASURE_ONLY",
+    "authorizedScopeSnapshotRef": {
+      "id": "40000000-0000-4000-8000-000000000008",
+      "version": 3,
+      "semanticHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+    }
+  },
+  "outcome": "NO_CHANGE",
+  "violatedConstraints": [],
+  "effect": {
+    "state": "NO_MUTATION"
+  },
+  "override": {
+    "state": "NOT_USED"
+  },
+  "after": {
+    "policyMode": "MEASURE_ONLY",
+    "authorizedScopeSnapshotRef": {
+      "id": "40000000-0000-4000-8000-000000000008",
+      "version": 3,
+      "semanticHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+    }
+  },
+  "reasonCode": "ALREADY_APPLIED",
+  "decidedAt": "2026-09-02T09:00:00Z",
+  "recordedAt": "2026-09-02T09:00:01Z",
+  "correlationId": "40000000-0000-4000-8000-000000000009",
+  "causationId": "40000000-0000-4000-8000-000000000010",
+  "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

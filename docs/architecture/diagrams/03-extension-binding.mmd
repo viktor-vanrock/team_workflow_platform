@@ -1,0 +1,14 @@
+flowchart LR
+  manifests["Pack / Connector manifests<br/>версии и schema refs"] --> validate["Schema validation<br/>совместимость / hash"]
+  validate --> registry["Extension registry<br/>Work Types / Capabilities"]
+  registry --> worktype["qa.validation<br/>required capabilities"]
+  project["Workspace + Project"] --> binding["Project Integration Binding<br/>logical role + exact revision"]
+  worktype --> binding
+  binding --> profile["Connector Profile revision<br/>операции / external scope / limits"]
+  profile --> connection["Connection revision<br/>endpoint / provider / secret ref"]
+  profile --> mapping["Mapping revision<br/>поля / статусы / identities"]
+  binding --> acceptance["Validation report + acceptance<br/>capability probes / freshness"]
+  acceptance --> resolve["Runtime resolver / broker<br/>current pins + authority"]
+  connection --> resolve
+  mapping --> resolve
+  resolve --> adapter["Typed Connector Port<br/>Jira / GitLab / Mattermost"]

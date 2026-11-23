@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "generatedAt": "2026-09-07T09:36:32.833Z",
+  "scope": "Regression test fixtures for integrated features 005, 006, 007 and 008",
+  "reproduced": {
+    "total": 11,
+    "passed": 8,
+    "failed": 3,
+    "report": {
+      "path": "reports/project/merge-regression-fixes/before-vitest.json",
+      "sha256": "sha256:e50b0cfbf958abee774d3644e774aa250d9f98533bcf634de15230fcddf70492"
+    }
+  },
+  "validation": {
+    "total": 32,
+    "passed": 32,
+    "failed": 0,
+    "skipped": 0,
+    "files": 10,
+    "report": {
+      "path": "reports/project/merge-regression-fixes/vitest.json",
+      "sha256": "sha256:3e5f465b63034286448908e0a12e46a05008480f6a3eb8382d8de2956e47c8a7"
+    },
+    "rootTypecheck": "PASS",
+    "changedFileEslint": "PASS",
+    "diffCheck": "PASS"
+  },
+  "fullProjectSuiteRerun": false,
+  "rootCauses": [
+    {
+      "file": "tests/e2e/005-us1-automated-session.spec.ts",
+      "cause": "Legacy bootstrap retains MANUAL_ONLY in the Core onboarding header; the automated-session HTTP guard rejects before suite validation.",
+      "fix": "Verify the MANUAL_ONLY rejection and zero writes, explicitly prepare FULL_QA, then exercise the existing positive and negative automation journey."
+    },
+    {
+      "file": "tests/contract/008/schema-contributions.spec.ts",
+      "cause": "An additive binding-functional-acceptance v2 schema increased the pre-008 registry from 201 to 202 entries; all 201 historical entries are unchanged.",
+      "fix": "Compare every historical ID and document exactly, and explicitly allow the additional versioned contract."
+    },
+    {
+      "file": "tests/integration/security/006/us5-sla-read.spec.ts",
+      "cause": "The database stub lacks the transaction and persisted authorization facts now required by authorizeLocalQaApi; denial is intentionally masked as QUEUE_ITEM_NOT_FOUND.",
+      "fix": "Provide transactional authorization facts and verify that a missing item reaches the item lookup while forbidden access performs no database reads."
+    }
+  ],
+  "sourceBindings": [
+    {
+      "path": "tests/e2e/005-us1-automated-session.spec.ts",
+      "sha256": "sha256:2e0b6b13680b181a779080cf1fa452dcd5ec534b6c4d2e299c3dd6be067190c0"
+    },
+    {
+      "path": "tests/contract/008/schema-contributions.spec.ts",
+      "sha256": "sha256:9f046b17de4552c5a3f9ef5dfe610a8ef0fe0cb99080af04ca6cb116e05a9f7f"
+    },
+    {
+      "path": "tests/integration/security/006/us5-sla-read.spec.ts",
+      "sha256": "sha256:9acd840ae0e94c9047295fbff245c29bdfdbfbe765561f0fa4ca57db9ac87c27"
+    }
+  ]
+}

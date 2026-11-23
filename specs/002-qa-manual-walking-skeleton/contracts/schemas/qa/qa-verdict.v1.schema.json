@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:verdict:v1",
+  "title": "Append-only QA Verdict Content with Signature Projection",
+  "description": "Exact immutable verdict content pins reviewed Sessions and adjudicative evidence. status/signatureRefs are the guarded signature/supersession projection; the contentHash never changes. Upstream drift does not mutate or invalidate a signed Verdict: the current selector rejects stale exact refs, while explicit human revision is the sole SIGNED-to-SUPERSEDED unit of work.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "verdictId", "version", "workspaceId", "projectId", "workItemId", "status", "verdict", "residualRisk", "requiredSessionPlanRef", "sessionReviewRefs", "adjudicativeManifestRevisionRefs", "findingReviewRefs", "defectDraftRefs", "defectLinkIds", "dodRuleSetRef", "riskReviewPolicyRef", "effectiveRisk", "aggregateSnapshotHash", "contentHash", "signatureRefs", "resourceVersion", "createdBy", "createdAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "verdictId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "status": { "type": "string", "enum": ["DRAFT", "PARTIALLY_SIGNED", "SIGNED", "SUPERSEDED"] },
+    "verdict": { "type": "string", "enum": ["PASS", "FAIL", "BLOCKED", "INCONCLUSIVE"] },
+    "residualRisk": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+    "sessionReviewRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "adjudicativeManifestRevisionRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "findingReviewRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "defectDraftRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "defectLinkIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "format": "uuid" } },
+    "dodRuleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "riskReviewPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef" },
+    "effectiveRisk": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "aggregateSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "contentHash": {
+      "description": "Hash of immutable verdict content; excludes status/signature/supersession projection fields.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "signatureRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "supersedesVerdictRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "revisionReason": { "description": "Why this incoming Verdict content revision replaces the exact prior revision. Distinct from the old revision's outgoing supersessionReason.", "type": "string", "minLength": 1, "maxLength": 2000 },
+    "supersededByVerdictRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "supersessionReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "signedAt": { "type": "string", "format": "date-time" },
+    "supersededAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "version": { "minimum": 2 } }, "required": ["version"] },
+      "then": { "required": ["supersedesVerdictRef", "revisionReason"] },
+      "else": { "not": { "anyOf": [{ "required": ["supersedesVerdictRef"] }, { "required": ["revisionReason"] }] } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "DRAFT" } }, "required": ["status"] },
+      "then": {
+        "properties": { "signatureRefs": { "maxItems": 0 } },
+        "not": { "anyOf": [
+          { "required": ["signedAt"] }, { "required": ["supersededByVerdictRef"] },
+          { "required": ["supersededAt"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "effectiveRisk": { "enum": ["LOW", "MEDIUM"] }, "status": { "const": "PARTIALLY_SIGNED" } }, "required": ["effectiveRisk", "status"] },
+      "then": false
+    },
+    {
+      "if": { "properties": { "effectiveRisk": { "enum": ["LOW", "MEDIUM"] }, "status": { "const": "SIGNED" } }, "required": ["effectiveRisk", "status"] },
+      "then": { "properties": { "signatureRefs": { "minItems": 1, "maxItems": 1 } } }
+    },
+    {
+      "if": { "properties": { "effectiveRisk": { "enum": ["LOW", "MEDIUM"] }, "status": { "const": "SUPERSEDED" } }, "required": ["effectiveRisk", "status"] },
+      "then": { "properties": { "signatureRefs": { "minItems": 1, "maxItems": 1 } }, "required": ["signedAt"] }
+    },
+    {
+      "if": { "properties": { "effectiveRisk": { "enum": ["HIGH", "CRITICAL"] }, "status": { "const": "PARTIALLY_SIGNED" } }, "required": ["effectiveRisk", "status"] },
+      "then": { "properties": { "signatureRefs": { "minItems": 1, "maxItems": 1 } } }
+    },
+    {
+      "if": { "properties": { "effectiveRisk": { "enum": ["HIGH", "CRITICAL"] }, "status": { "const": "SIGNED" } }, "required": ["effectiveRisk", "status"] },
+      "then": { "properties": { "signatureRefs": { "minItems": 2, "maxItems": 2 } } }
+    },
+    {
+      "if": { "properties": { "effectiveRisk": { "enum": ["HIGH", "CRITICAL"] }, "status": { "const": "SUPERSEDED" } }, "required": ["effectiveRisk", "status"] },
+      "then": { "properties": { "signatureRefs": { "minItems": 2, "maxItems": 2 } }, "required": ["signedAt"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "PARTIALLY_SIGNED" } }, "required": ["status"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["signedAt"] }, { "required": ["supersededByVerdictRef"] },
+        { "required": ["supersededAt"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "SIGNED" } }, "required": ["status"] },
+      "then": {
+        "required": ["signedAt"],
+        "not": { "anyOf": [
+          { "required": ["supersededByVerdictRef"] }, { "required": ["supersededAt"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "SUPERSEDED" } }, "required": ["status"] },
+      "then": {
+        "required": ["supersededByVerdictRef", "supersessionReason", "supersededAt"]
+      },
+      "else": { "not": { "anyOf": [
+        { "required": ["supersededByVerdictRef"] }, { "required": ["supersessionReason"] },
+        { "required": ["supersededAt"] }
+      ] } }
+    }
+  ]
+}

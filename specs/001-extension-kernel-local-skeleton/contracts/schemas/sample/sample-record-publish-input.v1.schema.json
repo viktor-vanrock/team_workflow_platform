@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:sample:record-publish-input:v1",
+  "title": "Sample Record Publish Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["title", "body"],
+  "properties": {
+    "sourceDraftId": { "type": "string", "format": "uuid" },
+    "sourceWorkItemId": { "type": "string", "format": "uuid" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "body": { "type": "string", "minLength": 1, "maxLength": 2000 }
+  },
+  "oneOf": [
+    {
+      "required": ["sourceDraftId"],
+      "not": { "required": ["sourceWorkItemId"] }
+    },
+    {
+      "required": ["sourceWorkItemId"],
+      "not": { "required": ["sourceDraftId"] }
+    }
+  ]
+}

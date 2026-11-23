@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "feature": "003-jira-operational-authority",
+  "gate": "nonprod-conformance",
+  "startedAt": "2026-09-03T10:18:47.984Z",
+  "finishedAt": "2026-09-03T10:18:48.069Z",
+  "status": "SKIPPED_GATED",
+  "reasonCode": "C1_METADATA_NOT_SUPPLIED",
+  "metadataStatus": "SKIPPED_GATED"
+}

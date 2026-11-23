@@ -1,0 +1,22 @@
+{
+  "integrity": {
+    "status": "PASS",
+    "reasonCodes": [],
+    "measurements": {
+      "auditEvents": 1,
+      "signatures": 2,
+      "requiredArtifacts": 1,
+      "expiredArtifactsWithMetadata": 1
+    }
+  },
+  "measurements": {
+    "status": "PASS",
+    "reasonCodes": [],
+    "rpoObservedSeconds": 1,
+    "rtoObservedSeconds": 3,
+    "rtoEndedAt": "2026-09-04T21:08:55.283Z",
+    "databaseStartupIsTerminal": false,
+    "policyRef": "fixture:development-recovery-policy"
+  },
+  "corporatePolicy": "BLOCKED_INPUT"
+}

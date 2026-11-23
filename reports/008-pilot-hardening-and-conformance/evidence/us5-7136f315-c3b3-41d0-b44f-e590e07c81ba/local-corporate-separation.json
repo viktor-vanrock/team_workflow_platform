@@ -1,0 +1,6 @@
+{
+  "localMode": "DEVELOPMENT_MOCKS",
+  "corporateShadow": "BLOCKED_INPUT",
+  "actualObservedPilotReview": "BLOCKED_INPUT",
+  "localSampleIsCorporateOutcome": false
+}

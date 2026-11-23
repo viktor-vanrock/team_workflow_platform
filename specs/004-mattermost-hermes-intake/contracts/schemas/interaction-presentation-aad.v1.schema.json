@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:interaction-presentation-aad:v1",
+  "title": "InteractionPresentationAadV1",
+  "$comment": "AWP_CANONICAL_JSON_V1 is exactly the UTF-8 encoding, without BOM or trailing newline, of the RFC 8785 JSON Canonicalization Scheme serialization of this closed object. Mutable intent state/result fields, ciphertextHash, aadHash, AEAD nonce, auth tag and ciphertext are deliberately excluded. The composed validator requires this object to be reconstructed from the exact referenced InteractionIntent/capsule commitments and requires its schemaRef digest to match this registry document.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "schemaRef",
+    "capsuleFormat",
+    "plaintextEncoding",
+    "aeadAlgorithm",
+    "aeadNonceBytes",
+    "aeadTagBytes",
+    "aadCanonicalization",
+    "intent",
+    "capsule"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "interaction-presentation-aad@1.0.0" },
+    "schemaRef": { "$ref": "#/$defs/aadSchemaRef" },
+    "capsuleFormat": { "const": "AWP_INTERACTION_TOKEN_AEAD_V1" },
+    "plaintextEncoding": { "const": "UTF8_NO_NORMALIZATION" },
+    "aeadAlgorithm": { "const": "AES_256_GCM" },
+    "aeadNonceBytes": { "const": 12 },
+    "aeadTagBytes": { "const": 16 },
+    "aadCanonicalization": { "const": "AWP_CANONICAL_JSON_V1" },
+    "intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "intentId",
+        "workspaceId",
+        "projectId",
+        "actionKind",
+        "actionParameters",
+        "subject",
+        "actor",
+        "transport",
+        "configuration",
+        "initialAuthorizationBasisHash",
+        "nonceHash",
+        "expiresAt",
+        "createdAt",
+        "correlationId",
+        "causationId"
+      ],
+      "properties": {
+        "schemaVersion": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/schemaVersion" },
+        "intentId": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/intentId" },
+        "workspaceId": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/workspaceId" },
+        "projectId": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/projectId" },
+        "actionKind": { "enum": ["CANDIDATE_CREATE", "CANDIDATE_SNOOZE", "CANDIDATE_IGNORE", "DRAFT_REVISION_SUBMIT", "DRAFT_CONFIRM", "OPEN_WEB"] },
+        "actionParameters": { "type": "object" },
+        "subject": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/subject" },
+        "actor": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/actor" },
+        "transport": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/$defs/mattermostTransport" },
+        "configuration": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/configuration" },
+        "initialAuthorizationBasisHash": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/initialAuthorizationBasisHash" },
+        "nonceHash": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/nonceHash" },
+        "expiresAt": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/expiresAt" },
+        "createdAt": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/createdAt" },
+        "correlationId": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/correlationId" },
+        "causationId": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/properties/causationId" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "actionKind": { "const": "CANDIDATE_CREATE" } }, "required": ["actionKind"] },
+          "then": {
+            "properties": {
+              "subject": { "type": "object", "properties": { "kind": { "const": "CANDIDATE" } } },
+              "actionParameters": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/$defs/candidateCreateActionParameters" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "actionKind": { "const": "CANDIDATE_SNOOZE" } }, "required": ["actionKind"] },
+          "then": {
+            "properties": {
+              "subject": { "type": "object", "properties": { "kind": { "const": "CANDIDATE" } } },
+              "actionParameters": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/$defs/candidateSnoozeActionParameters" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "actionKind": { "const": "CANDIDATE_IGNORE" } }, "required": ["actionKind"] },
+          "then": {
+            "properties": {
+              "subject": { "type": "object", "properties": { "kind": { "const": "CANDIDATE" } } },
+              "actionParameters": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/$defs/candidateIgnoreActionParameters" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "actionKind": { "const": "DRAFT_REVISION_SUBMIT" } }, "required": ["actionKind"] },
+          "then": {
+            "properties": {
+              "subject": { "type": "object", "properties": { "kind": { "const": "DRAFT_REVISION" } } },
+              "actionParameters": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/$defs/draftRevisionSubmitActionParameters" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "actionKind": { "const": "DRAFT_CONFIRM" } }, "required": ["actionKind"] },
+          "then": {
+            "properties": {
+              "subject": { "type": "object", "properties": { "kind": { "const": "DRAFT_REVISION" } } },
+              "actionParameters": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/$defs/draftConfirmActionParameters" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "actionKind": { "const": "OPEN_WEB" } }, "required": ["actionKind"] },
+          "then": {
+            "properties": {
+              "subject": { "type": "object", "properties": { "kind": { "const": "WEB_ROUTE" } } },
+              "actionParameters": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/$defs/openWebActionParameters" }
+            }
+          }
+        }
+      ]
+    },
+    "capsule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "capsuleId",
+        "encryptionKeyVersionRef",
+        "presentationNotificationIntentId",
+        "presentationSlot",
+        "presentationCommandId",
+        "presentationCapabilityKey",
+        "presentationEffectKeyHash",
+        "presentationTargetHash",
+        "presentationPayloadHash",
+        "presentationRenderHash",
+        "retainUntil"
+      ],
+      "properties": {
+        "kind": { "const": "SEALED_PRESENTATION" },
+        "capsuleId": { "$ref": "#/$defs/id" },
+        "encryptionKeyVersionRef": { "$ref": "urn:awp:schemas:004:interaction-intent:v1#/$defs/presentationKeyVersionRef" },
+        "presentationNotificationIntentId": { "$ref": "#/$defs/id" },
+        "presentationSlot": { "type": "integer", "minimum": 0, "maximum": 7 },
+        "presentationCommandId": { "$ref": "#/$defs/id" },
+        "presentationCapabilityKey": { "const": "messaging.callback@1.0.0" },
+        "presentationEffectKeyHash": { "$ref": "#/$defs/hash" },
+        "presentationTargetHash": { "$ref": "#/$defs/hash" },
+        "presentationPayloadHash": { "$ref": "#/$defs/hash" },
+        "presentationRenderHash": { "$ref": "#/$defs/hash" },
+        "retainUntil": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "aadSchemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "const": "urn:awp:schemas:004:interaction-presentation-aad:v1" },
+        "version": { "const": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

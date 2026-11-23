@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "sla-snapshot@1.0.0",
+  "workspaceId": "32000000-0000-4000-8000-000000000001",
+  "projectId": "32000000-0000-4000-8000-000000000002",
+  "workItemId": "32000000-0000-4000-8000-000000000003",
+  "goal": "READY_TO_SIGNED_VERDICT",
+  "clockState": "NOT_STARTED",
+  "targetState": "NOT_STARTED",
+  "targetConfiguration": {
+    "state": "NOT_CONFIGURED"
+  },
+  "notStartedReason": "NO_CONFIRMED_START_EVENT",
+  "pause": {
+    "state": "NOT_PAUSED"
+  },
+  "elapsedBusinessSeconds": 0,
+  "freshness": "CURRENT",
+  "asOf": "2026-09-02T09:00:00Z",
+  "evaluationHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

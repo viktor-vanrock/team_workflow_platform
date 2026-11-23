@@ -1,0 +1,58 @@
+{
+  "apiVersion": "awp.platform/v1",
+  "kind": "CompetencyPack",
+  "metadata": {
+    "key": "dummy",
+    "version": "1.0.0",
+    "displayName": "Dummy Competency Pack"
+  },
+  "requires": {
+    "coreContracts": ">=1.0.0 <2.0.0",
+    "competencySdk": ">=1.0.0 <2.0.0"
+  },
+  "workTypes": [
+    {
+      "key": "dummy.request",
+      "definitionVersion": "1.0.0",
+      "displayName": "Dummy Request",
+      "intakeSchemaRef": {
+        "id": "urn:awp:schemas:sample:intake-form:v1",
+        "version": 1,
+        "digest": "sha256:97a2be19b6f31509ce5f48b7b9597e5844514e1f792afb0373eeef6bf2ff9815"
+      },
+      "applicationComponentRef": "dummy.application.module",
+      "migrationNamespace": "dummy",
+      "uiContributions": [
+        {
+          "slot": "WORK_ITEM_DETAIL_TAB",
+          "routeSegment": "sample",
+          "componentRef": "dummy.ui.detail"
+        }
+      ],
+      "capabilityRequirements": [
+        {
+          "requirementKey": "primary-record-publisher",
+          "capabilityKey": "sample.record",
+          "versionRange": ">=1.0.0 <2.0.0",
+          "logicalRole": "PRIMARY",
+          "operations": ["record.publish"],
+          "requirement": "REQUIRED",
+          "featureKey": "dummy.external-publish",
+          "allowedEnvironmentScopes": ["LOCAL"],
+          "maxDataClassification": "INTERNAL"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "eventType": "sample.record.published",
+      "payloadVersion": 1,
+      "payloadSchemaRef": {
+        "id": "urn:awp:schemas:sample:record-published-event:v1",
+        "version": 1,
+        "digest": "sha256:c33d8953fff5dc52c2dd5d39d000eb18fc2db10e46f59c5efdf23bf07e41d6ec"
+      }
+    }
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "checkpoint": "QUICKSTART",
+  "status": "PASS",
+  "startedAt": "2026-09-03T18:41:07.389Z",
+  "finishedAt": "2026-09-03T18:41:07.390Z",
+  "documentedCommands": 29,
+  "documentedScripts": 23,
+  "documentedScenarios": 5,
+  "orphanedScripts": [],
+  "orphanedScenarios": [],
+  "undocumentedScenarios": [],
+  "unclassifiedCommands": [],
+  "commandCoverage": [
+    {
+      "command": "corepack enable",
+      "script": "corepack",
+      "disposition": "PACKAGE_MANAGER_BUILTIN"
+    },
+    {
+      "command": "pnpm prerequisites",
+      "script": "prerequisites",
+      "disposition": "PACKAGE_MANAGER_BUILTIN"
+    },
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "script": "install",
+      "disposition": "PACKAGE_MANAGER_BUILTIN"
+    },
+    {
+      "command": "pnpm verify:007:prerequisites",
+      "script": "verify:007:prerequisites",
+      "disposition": "FEATURE_007_GATE"
+    },
+    {
+      "command": "pnpm local:onboarding:up",
+      "script": "local:onboarding:up",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm local:onboarding:migrate",
+      "script": "local:onboarding:migrate",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm local:onboarding:seed",
+      "script": "local:onboarding:seed",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm local:onboarding:status",
+      "script": "local:onboarding:status",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm onboarding:scenario -- list",
+      "script": "onboarding:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm onboarding:scenario -- run manual-only-onboarding",
+      "script": "onboarding:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm onboarding:scenario -- run full-qa-promotion",
+      "script": "onboarding:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm onboarding:scenario -- run cross-project-deny",
+      "script": "onboarding:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm onboarding:scenario -- run evidence-revision-retention",
+      "script": "onboarding:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm onboarding:scenario -- run emergency-suspend-resume",
+      "script": "onboarding:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm test:contract:007",
+      "script": "test:contract:007",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "pnpm test:unit:007",
+      "script": "test:unit:007",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "pnpm test:architecture:007",
+      "script": "test:architecture:007",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "pnpm test:integration:007",
+      "script": "test:integration:007",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "pnpm test:security:007",
+      "script": "test:security:007",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "pnpm test:concurrency:007",
+      "script": "test:concurrency:007",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "pnpm test:recovery:007",
+      "script": "test:recovery:007",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "pnpm test:e2e:007",
+      "script": "test:e2e:007",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "pnpm test:browser:007",
+      "script": "test:browser:007",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "pnpm verify:007:migrations",
+      "script": "verify:007:migrations",
+      "disposition": "FEATURE_007_GATE"
+    },
+    {
+      "command": "pnpm smoke:007",
+      "script": "smoke:007",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "pnpm trace:007",
+      "script": "trace:007",
+      "disposition": "FEATURE_007_GATE"
+    },
+    {
+      "command": "pnpm verify:007",
+      "script": "verify:007",
+      "disposition": "FEATURE_007_GATE"
+    },
+    {
+      "command": "pnpm onboarding:inputs -- validate --file ./pilot-inputs.json",
+      "script": "onboarding:inputs",
+      "disposition": "SAFE_INPUT_VALIDATION"
+    },
+    {
+      "command": "pnpm local:onboarding:down",
+      "script": "local:onboarding:down",
+      "disposition": "ISOLATED_CONTOUR"
+    }
+  ],
+  "reports": [
+    {
+      "name": "prerequisites.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:502bf5f40980991fcc1425d6669242154769eec4071ad380a1bc56c4d469086f"
+    },
+    {
+      "name": "governance.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:4a492c1c4e5625633d270d2b9361dc71a6e5adf26baaa89e7ea2f0d32f28c269"
+    },
+    {
+      "name": "setup-gate.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:593073c8d42d16db73b230d314462dc3b5492f5514eb8b484ffeb6931a68b90f"
+    },
+    {
+      "name": "contracts.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:5b5116a265b4366b9f8e9acb5393a2545437a12b346eef2b9cb46646fc652571"
+    },
+    {
+      "name": "architecture.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:0e243cd4aa9297522a4bfe09bbf863fa453ac63f8becf0a15094cdeb834f267f"
+    },
+    {
+      "name": "unit-matrices.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:3264b086a3f73bc2c3b538d9370fcdc95f710c4ea4561038178af2fcd3cf1d97"
+    },
+    {
+      "name": "foundation.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:c7353a669a27a99aba7080a2b27454ccd766322a180f6cf3a363eabe0a5bd7de"
+    },
+    {
+      "name": "us1.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:06e2a2efc011643a71743578fe50e7d1d399de9cf144db0ba24c118c4616ed9c"
+    },
+    {
+      "name": "us2.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:c2410fee4ceabe5ca24f09e74c74a03323c51676e99788df6bcc977995558c2b"
+    },
+    {
+      "name": "us3.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:4d25e4b8165bd6c13cb8e08f983237fc70f368b003929cf1b5343391ebc64d2e"
+    },
+    {
+      "name": "us4.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:bdb52451b4d8fe6ffd31be37eae29c1142718631493f4f08fcf0647899292867"
+    },
+    {
+      "name": "us5.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:66cd775938e801e3d363d0b1e359a7f3ad94f9f6fc0b629eeae1cefd30788407"
+    },
+    {
+      "name": "migrations-postgres-17.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:f5476dcccddb33f3148796f3c3e1d4902d39e9d02045e435cc0dd011ed587d38"
+    },
+    {
+      "name": "migrations-postgres-18.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:dd2a23e981648e609b5c33abadc6991d4beb419a0fe9b1ca62f09278aaa609dd"
+    },
+    {
+      "name": "concurrency.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:59e4f0291672b6bdfc2ff2c36312f6201c907742ec0ad4b8f169cc20fd13fb87"
+    },
+    {
+      "name": "integration.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:64991175814335eb9e886ae587a3deb3b7faaa7dd777385218c33686622f4909"
+    },
+    {
+      "name": "security.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:57cda9b8b1c5da6b3f97d9cbacc4a9ed2c16294f2409286e42013725b0e65845"
+    },
+    {
+      "name": "recovery.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:f648959b4854e83dd31ee317cbeae88774e1f49dc64220960effa9d1898e1509"
+    },
+    {
+      "name": "observability.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:8f14f31b9f368f8093a642447d521fc4dec7f856a9df253878a8b69a4cf01684"
+    },
+    {
+      "name": "browser.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:2a57a9c8bfc5fcdfc731370dacc8a7f152a41bda8e863dce5b7c2868fe6052c6"
+    },
+    {
+      "name": "smoke.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:942e74d110dc3ae8916e3feb7d9aa708902b3f438d7232fab3c18cc5d5a16c10"
+    }
+  ],
+  "sourceBinding": {
+    "quickstart": "sha256:c731b39f35528e3711143221c814be65f42b45603d21525502a748b63b204151",
+    "packageJson": "sha256:2d83934bae3e5516510eca4d8061c9516faca132fa321722464cd92a4ac3009c",
+    "scenarioCatalog": "sha256:a5b42780f3c07f4ec5d077ee75559dd39d5efc33e57dd65e070e7fd42f4fd06f"
+  }
+}

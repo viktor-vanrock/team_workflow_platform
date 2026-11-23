@@ -1,0 +1,8 @@
+{
+  "inputPath": null,
+  "status": "BLOCKED_INPUT",
+  "reasonCodes": [
+    "LIMITED_PILOT_REPORT_MISSING"
+  ],
+  "actualElapsedPilot": false
+}

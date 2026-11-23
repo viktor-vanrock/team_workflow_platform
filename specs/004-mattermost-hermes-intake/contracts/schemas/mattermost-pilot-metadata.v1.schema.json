@@ -1,0 +1,308 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:mattermost-pilot-metadata:v1",
+  "title": "MattermostPilotMetadataPackage v1",
+  "$comment": "The composed-package validator requires every package in one contour to pin the same fixed authority-free bootstrap continuation/evidence, resolves those artifacts, requires both Mattermost and bootstrap URLs to be loopback for LOCAL and TLS for DEVELOPMENT/TEST, and verifies every transitive project Connection/Profile/callback-contract/evidence digest, scope, role, credential fingerprint and policy constraint. The resolved Profile reconciliationMode must have the matching validated server capability: PENDING_POST_ID_LOOKUP requires pendingPostIdLookupSupported, EFFECT_MARKER_LOOKUP requires effectMarkerLookupSupported, and NONE_AMBIGUOUS requires neither. When callbacks are enabled it also resolves immutable project/environment-scoped presentation-key metadata and a measured retention policy/evidence, rejects bot/gateway/foreign-Project identity aliasing, requires each retainUntil-createdAt <= maxCapsuleLifetimeSeconds, expirySweepIntervalSeconds <= expiryPurgeSlaSeconds, decryptUntil to cover every retainUntil, key access disabled by decryptUntil + keyDisableSlaSeconds, and active/WAL/backup settings no greater than their declared bounds. The bootstrap has no Connection or credential and cannot create durable state.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contourKey",
+    "environmentClass",
+    "workspaceId",
+    "projectId",
+    "server",
+    "bootstrapContinuationRef",
+    "bootstrapValidationEvidenceRef",
+    "projectConnectionRef",
+    "profileRef",
+    "profileValidationReportRef",
+    "ingressContractRefs",
+    "projectCredentialSecretRefs",
+    "secretRotationOwner",
+    "secretRevocationProcedureRef",
+    "identityBindingSourceRef",
+    "membershipSourceRef",
+    "callbackAuthentication",
+    "teamId",
+    "botUserId",
+    "credentialIdentityFingerprint",
+    "channelIds",
+    "membershipEvidenceHash",
+    "templateCatalogRef",
+    "redactionPolicyRef",
+    "validatedServerLimits",
+    "policyValidationEvidence",
+    "operatorOptIn",
+    "productionDenied"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "mattermost-pilot-metadata@1.0.0" },
+    "contourKey": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$" },
+    "environmentClass": { "enum": ["LOCAL", "DEVELOPMENT", "TEST"] },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseUrl", "buildVersion", "apiFamily", "tlsOwner", "networkOwner"],
+      "properties": {
+        "baseUrl": { "type": "string", "format": "uri", "pattern": "^https?://" },
+        "buildVersion": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "apiFamily": { "const": "v4" },
+        "tlsOwner": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "networkOwner": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "bootstrapContinuationRef": {
+      "description": "Versioned non-secret configuration that resolves to the one fixed first-party OIDC continuation rendered by the stateless /awp create bootstrap.",
+      "$ref": "#/$defs/versionedHashRef"
+    },
+    "bootstrapValidationEvidenceRef": {
+      "description": "Immutable evidence that the public bootstrap response is static, bounded, authority-free and creates no durable state.",
+      "$ref": "#/$defs/versionedHashRef"
+    },
+    "projectConnectionRef": {
+      "description": "Project-scoped Mattermost Connection whose external credential authority must not exceed this package's Workspace, Project and environment.",
+      "$ref": "#/$defs/ref"
+    },
+    "profileRef": { "$ref": "#/$defs/ref" },
+    "profileValidationReportRef": { "$ref": "#/$defs/ref" },
+    "ingressContractRefs": {
+      "description": "Project-scoped dialog/post-action callback contracts. Empty only when callbackAuthentication is DISABLED.",
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/versionedHashRef" }
+    },
+    "projectCredentialSecretRefs": {
+      "description": "Project/environment-scoped Mattermost bot and optional callback-gateway credential references.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/secretRef" }
+    },
+    "presentationTokenEncryptionKeyRef": {
+      "description": "Immutable Core-owned project/environment-scoped envelope-key metadata used only to AEAD-seal transient Mattermost callback-presentation tokens. The composed validator resolves the exact version, rejects bot/gateway/cross-Project identity aliasing and requires its decrypt horizon to cover every capsule retainUntil.",
+      "$ref": "#/$defs/presentationKeyVersionRef"
+    },
+    "presentationTokenRetention": {
+      "description": "Measured non-production recovery/erasure bounds plus immutable policy and validation evidence. Cross-field and infrastructure checks are performed by the composed-package validator.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyRef",
+        "validationEvidenceRef",
+        "maxCapsuleLifetimeSeconds",
+        "expirySweepIntervalSeconds",
+        "expiryPurgeSlaSeconds",
+        "terminalPurgeSlaSeconds",
+        "walRetentionMaxSeconds",
+        "backupRetentionMaxSeconds",
+        "keyDisableSlaSeconds"
+      ],
+      "properties": {
+        "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+        "validationEvidenceRef": { "$ref": "#/$defs/versionedHashRef" },
+        "maxCapsuleLifetimeSeconds": { "type": "integer", "minimum": 30, "maximum": 86400 },
+        "expirySweepIntervalSeconds": { "type": "integer", "minimum": 1, "maximum": 3600 },
+        "expiryPurgeSlaSeconds": { "type": "integer", "minimum": 1, "maximum": 7200 },
+        "terminalPurgeSlaSeconds": { "const": 0 },
+        "walRetentionMaxSeconds": { "type": "integer", "minimum": 1, "maximum": 2592000 },
+        "backupRetentionMaxSeconds": { "type": "integer", "minimum": 1, "maximum": 31536000 },
+        "keyDisableSlaSeconds": { "type": "integer", "minimum": 0, "maximum": 86400 }
+      }
+    },
+    "secretRotationOwner": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "secretRevocationProcedureRef": { "$ref": "#/$defs/versionedHashRef" },
+    "identityBindingSourceRef": { "$ref": "#/$defs/versionedHashRef" },
+    "membershipSourceRef": { "$ref": "#/$defs/versionedHashRef" },
+    "callbackAuthentication": {
+      "description": "Explicitly DISABLED when the optional messaging.callback capability is not published.",
+      "enum": ["DISABLED", "AWP_OPAQUE_INTENT", "SIGNED_PROXY_HMAC_PLUS_AWP_INTENT"]
+    },
+    "teamId": { "$ref": "#/$defs/id" },
+    "botUserId": { "$ref": "#/$defs/id" },
+    "credentialIdentityFingerprint": { "$ref": "#/$defs/hash" },
+    "channelIds": {
+      "description": "Exact channels for this one Project only.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "membershipEvidenceHash": { "$ref": "#/$defs/hash" },
+    "templateCatalogRef": { "$ref": "#/$defs/versionedHashRef" },
+    "redactionPolicyRef": { "$ref": "#/$defs/versionedHashRef" },
+    "validatedServerLimits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requestTimeoutMs",
+        "maxRequestsPerMinute",
+        "maxMessageCharacters",
+        "retryAfterSupported",
+        "maxRetryAfterSeconds",
+        "mentionsSupported",
+        "directMessagesSupported",
+        "interactiveDialogsSupported",
+        "interactiveMessagesSupported",
+        "pendingPostIdLookupSupported",
+        "effectMarkerLookupSupported"
+      ],
+      "properties": {
+        "requestTimeoutMs": { "type": "integer", "minimum": 100, "maximum": 120000 },
+        "maxRequestsPerMinute": { "type": "integer", "minimum": 1, "maximum": 60000 },
+        "maxMessageCharacters": { "type": "integer", "minimum": 1, "maximum": 16383 },
+        "retryAfterSupported": { "type": "boolean" },
+        "maxRetryAfterSeconds": { "type": "integer", "minimum": 0, "maximum": 86400 },
+        "mentionsSupported": { "type": "boolean" },
+        "directMessagesSupported": { "type": "boolean" },
+        "interactiveDialogsSupported": { "type": "boolean" },
+        "interactiveMessagesSupported": { "type": "boolean" },
+        "pendingPostIdLookupSupported": { "type": "boolean" },
+        "effectMarkerLookupSupported": { "type": "boolean" }
+      }
+    },
+    "policyValidationEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["callbackIngress", "membership", "notification", "redaction", "reconciliation"],
+      "properties": {
+        "callbackIngress": { "$ref": "#/$defs/versionedHashRef" },
+        "membership": { "$ref": "#/$defs/versionedHashRef" },
+        "notification": { "$ref": "#/$defs/versionedHashRef" },
+        "redaction": { "$ref": "#/$defs/versionedHashRef" },
+        "reconciliation": { "$ref": "#/$defs/versionedHashRef" }
+      }
+    },
+    "operatorOptIn": { "type": "boolean" },
+    "productionDenied": { "const": true }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "properties": { "environmentClass": { "const": "LOCAL" } },
+        "required": ["environmentClass"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "server": {
+            "type": "object",
+            "properties": {
+              "baseUrl": {
+                "type": "string",
+                "pattern": "^https?://(?:127\\.0\\.0\\.1|localhost|\\[::1\\])(?::[0-9]{1,5})?(?:/|$)"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "callbackAuthentication": { "const": "AWP_OPAQUE_INTENT" } },
+        "required": ["callbackAuthentication"]
+      },
+      "then": {
+        "type": "object",
+        "properties": { "environmentClass": { "const": "LOCAL" } }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "callbackAuthentication": { "const": "DISABLED" } },
+        "required": ["callbackAuthentication"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "ingressContractRefs": { "type": "array", "maxItems": 0 },
+          "presentationTokenEncryptionKeyRef": false,
+          "presentationTokenRetention": false
+        }
+      },
+      "else": {
+        "type": "object",
+        "required": ["presentationTokenEncryptionKeyRef", "presentationTokenRetention"],
+        "properties": {
+          "presentationTokenEncryptionKeyRef": { "$ref": "#/$defs/presentationKeyVersionRef" },
+          "presentationTokenRetention": true,
+          "ingressContractRefs": { "type": "array", "minItems": 2, "maxItems": 2 },
+          "validatedServerLimits": {
+            "type": "object",
+            "properties": {
+              "interactiveDialogsSupported": { "const": true },
+              "interactiveMessagesSupported": { "const": true }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "environmentClass": { "enum": ["DEVELOPMENT", "TEST"] } },
+        "required": ["environmentClass"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "server": {
+            "type": "object",
+            "properties": { "baseUrl": { "type": "string", "pattern": "^https://" } }
+          },
+          "operatorOptIn": { "const": true }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "secretRef": { "type": "string", "pattern": "^secret-ref:[A-Za-z0-9._/-]+$" },
+    "presentationKeyVersionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["keyId", "version", "purpose", "workspaceId", "projectId", "environmentClass", "keyIdentityFingerprint", "metadataHash", "decryptUntil"],
+      "properties": {
+        "keyId": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "purpose": { "const": "INTERACTION_PRESENTATION_AEAD" },
+        "workspaceId": { "$ref": "#/$defs/id" },
+        "projectId": { "$ref": "#/$defs/id" },
+        "environmentClass": { "enum": ["LOCAL", "DEVELOPMENT", "TEST"] },
+        "keyIdentityFingerprint": { "$ref": "#/$defs/hash" },
+        "metadataHash": { "$ref": "#/$defs/hash" },
+        "decryptUntil": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{1,255}$" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

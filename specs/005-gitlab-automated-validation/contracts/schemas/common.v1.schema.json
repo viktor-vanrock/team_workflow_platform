@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:common:v1",
+  "title": "Feature 005 common definitions",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "versionedRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "contentHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workspaceId", "projectId"],
+      "properties": {
+        "workspaceId": { "$ref": "#/$defs/id" },
+        "projectId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "classification": {
+      "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+    },
+    "nonEmptyRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "immutableExternalRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version", "contentHash"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+        },
+        "id": { "$ref": "#/$defs/nonEmptyRef" },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "automationQuarantineSubject": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "suiteBindingRef"],
+          "properties": {
+            "kind": { "const": "SUITE_BINDING_VERSION" },
+            "suiteBindingRef": { "$ref": "#/$defs/versionedContentRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "infrastructureCode"],
+          "properties": {
+            "kind": { "const": "INFRASTRUCTURE_CODE" },
+            "infrastructureCode": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+            }
+          }
+        }
+      ]
+    },
+    "acceptedParameters": {
+      "type": "object",
+      "maxProperties": 32,
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+          },
+          {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          { "type": "boolean" },
+          {
+            "type": "array",
+            "maxItems": 16,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+            }
+          }
+        ]
+      }
+    },
+    "configurationPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logicalRole",
+        "capabilityKey",
+        "exactContractVersion",
+        "operations",
+        "operationSetHash",
+        "projectIntegrationBindingRef",
+        "projectIntegrationBindingHash",
+        "profileRef",
+        "profileHash",
+        "connectionRef",
+        "connectionHash",
+        "validationReportId",
+        "validationEvidenceHash"
+      ],
+      "properties": {
+        "logicalRole": { "enum": ["SOURCE_CONTEXT", "TEST_EXECUTION", "ARTIFACT_SOURCE"] },
+        "capabilityKey": {
+          "enum": [
+            "source-context.read",
+            "test-executor.trigger-status",
+            "artifact.ci-read"
+          ]
+        },
+        "exactContractVersion": { "const": "1.0.0" },
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "merge-request.read",
+              "commit.read",
+              "build.read",
+              "pipeline.trigger",
+              "pipeline.read",
+              "pipeline.lookup",
+              "artifact.metadata",
+              "artifact.stream"
+            ]
+          }
+        },
+        "operationSetHash": { "$ref": "#/$defs/hash" },
+        "projectIntegrationBindingRef": { "$ref": "#/$defs/versionedRef" },
+        "projectIntegrationBindingHash": { "$ref": "#/$defs/hash" },
+        "profileRef": { "$ref": "#/$defs/versionedRef" },
+        "profileHash": { "$ref": "#/$defs/hash" },
+        "connectionRef": { "$ref": "#/$defs/versionedRef" },
+        "connectionHash": { "$ref": "#/$defs/hash" },
+        "mappingRef": { "$ref": "#/$defs/nonEmptyRef" },
+        "validationReportId": { "$ref": "#/$defs/id" },
+        "validationEvidenceHash": { "$ref": "#/$defs/hash" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "logicalRole": { "const": "SOURCE_CONTEXT" } },
+            "required": ["logicalRole"]
+          },
+          "then": {
+            "properties": {
+              "capabilityKey": { "const": "source-context.read" },
+              "operations": {
+                "minItems": 3,
+                "maxItems": 3,
+                "uniqueItems": true,
+                "items": { "enum": ["merge-request.read", "commit.read", "build.read"] }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "logicalRole": { "const": "TEST_EXECUTION" } },
+            "required": ["logicalRole"]
+          },
+          "then": {
+            "properties": {
+              "capabilityKey": { "const": "test-executor.trigger-status" },
+              "operations": {
+                "minItems": 3,
+                "maxItems": 3,
+                "uniqueItems": true,
+                "items": { "enum": ["pipeline.trigger", "pipeline.read", "pipeline.lookup"] }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "logicalRole": { "const": "ARTIFACT_SOURCE" } },
+            "required": ["logicalRole"]
+          },
+          "then": {
+            "properties": {
+              "capabilityKey": { "const": "artifact.ci-read" },
+              "operations": {
+                "minItems": 2,
+                "maxItems": 2,
+                "uniqueItems": true,
+                "items": { "enum": ["artifact.metadata", "artifact.stream"] }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

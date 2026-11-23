@@ -1,0 +1,5 @@
+{
+  "state": "FAILED",
+  "closeApprovalRef": { "approvalId": "30303030-3030-4030-8030-303030303030", "subjectHash": "sha256:2727272727272727272727272727272727272727272727272727272727272727" },
+  "terminalReason": "Connector rejected the already authorized command"
+}

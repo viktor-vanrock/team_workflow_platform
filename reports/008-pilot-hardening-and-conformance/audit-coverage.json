@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/audit-ed8a7d8f-ee56-4cd3-88aa-2f54ca662292.json",
+    "sha256": "sha256:d54fb1075b2d64e8447f094429281a9546cb58f1fb03fe36a41da507166914cd"
+  },
+  "mode": "DEVELOPMENT_MOCKS",
+  "measurements": {
+    "observedEffects": 2,
+    "expectedEffects": 2,
+    "coveredEffects": 2,
+    "duplicateEffects": 0,
+    "unmatchedAuditEvents": 0
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:mattermost-profile:v1",
+  "title": "MattermostProfile v1",
+  "$comment": "This Profile is valid only after Project scope is known; public bootstrap and project selection are outside Profile content. Publication additionally enforces baseBackoffMs <= maxBackoffMs, uniqueness of each (teamId, channelId, purpose) tuple within the Profile, and active channel/bot/credential/Connection isolation across Projects.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileId",
+    "profileVersion",
+    "profileDigest",
+    "workspaceId",
+    "projectId",
+    "environmentClass",
+    "connectionRef",
+    "serverCompatibility",
+    "teamId",
+    "bot",
+    "channelBindings",
+    "ingressContractRefs",
+    "interactionPolicy",
+    "templates",
+    "notificationPolicy",
+    "reconciliationMode",
+    "productionDenied"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "mattermost-profile@1.0.0" },
+    "profileId": { "$ref": "#/$defs/id" },
+    "profileVersion": { "type": "integer", "minimum": 1 },
+    "profileDigest": { "$ref": "#/$defs/hash" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "environmentClass": { "enum": ["LOCAL", "DEVELOPMENT", "TEST"] },
+    "connectionRef": { "$ref": "#/$defs/versionedRef" },
+    "serverCompatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapterFamily", "adapterVersion", "serverVersionRange", "apiFamily"],
+      "properties": {
+        "adapterFamily": { "const": "mattermost-rest-v4" },
+        "adapterVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "serverVersionRange": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "apiFamily": { "const": "v4" }
+      }
+    },
+    "teamId": { "$ref": "#/$defs/id" },
+    "bot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["userId", "credentialIdentityFingerprint", "membershipEvidenceHash"],
+      "properties": {
+        "userId": { "$ref": "#/$defs/id" },
+        "credentialIdentityFingerprint": { "$ref": "#/$defs/hash" },
+        "membershipEvidenceHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "channelBindings": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["channelId", "channelKind", "purpose", "audience", "classificationCeiling"],
+        "properties": {
+          "channelId": { "$ref": "#/$defs/id" },
+          "channelKind": { "enum": ["DIRECT", "PRIVATE", "PUBLIC"] },
+          "purpose": { "enum": ["INTAKE", "REQUEST_STATUS", "QA_COORDINATION"] },
+          "audience": { "enum": ["REQUESTER", "QA_PROJECT_MEMBERS", "QA_LEADS"] },
+          "classificationCeiling": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] }
+        }
+      }
+    },
+    "ingressContractRefs": {
+      "description": "Exact project-scoped dialog/post-action callback contracts; empty when messaging.callback is not published.",
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/versionedHashRef" }
+    },
+    "interactionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["directMessageMode", "directMessageClassificationCeiling", "projectChannelContentMode", "webFallbackMode", "highRiskActionMode"],
+      "properties": {
+        "directMessageMode": { "enum": ["BOUND_PRINCIPALS_ONLY", "DISABLED"] },
+        "directMessageClassificationCeiling": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+        "projectChannelContentMode": { "const": "MINIMAL_SUMMARY_ONLY" },
+        "webFallbackMode": { "const": "ENABLED" },
+        "highRiskActionMode": { "const": "WEB_ONLY" }
+      }
+    },
+    "templates": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["templateRef", "templateHash", "variablesSchemaRef", "classificationCeiling", "audiences"],
+        "properties": {
+          "templateRef": { "type": "string", "minLength": 1, "maxLength": 256 },
+          "templateHash": { "$ref": "#/$defs/hash" },
+          "variablesSchemaRef": { "$ref": "#/$defs/schemaRef" },
+          "classificationCeiling": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+          "audiences": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "uniqueItems": true,
+            "items": { "enum": ["REQUESTER", "QA_PROJECT_MEMBERS", "QA_LEADS"] }
+          }
+        }
+      }
+    },
+    "notificationPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxAttempts", "baseBackoffMs", "maxBackoffMs", "honorRetryAfter", "requestTimeoutMs", "maxRequestsPerMinute", "maxMessageCharacters", "mentionMode", "messageExpirySeconds"],
+      "properties": {
+        "maxAttempts": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "baseBackoffMs": { "type": "integer", "minimum": 1, "maximum": 600000 },
+        "maxBackoffMs": { "type": "integer", "minimum": 1, "maximum": 86400000 },
+        "honorRetryAfter": { "const": true },
+        "requestTimeoutMs": { "type": "integer", "minimum": 100, "maximum": 120000 },
+        "maxRequestsPerMinute": { "type": "integer", "minimum": 1, "maximum": 60000 },
+        "maxMessageCharacters": { "type": "integer", "minimum": 1, "maximum": 16383 },
+        "mentionMode": { "enum": ["NONE", "EXPLICIT_BOUND_PRINCIPALS_ONLY"] },
+        "messageExpirySeconds": { "type": "integer", "minimum": 1, "maximum": 2592000 }
+      }
+    },
+    "reconciliationMode": {
+      "description": "Immutable delivery recovery mode. Composed publication requires the selected lookup mode to be supported by validated pilot/server evidence; NONE_AMBIGUOUS performs no lookup and terminates uncertainty directly.",
+      "enum": ["PENDING_POST_ID_LOOKUP", "EFFECT_MARKER_LOOKUP", "NONE_AMBIGUOUS"]
+    },
+    "productionDenied": { "const": true }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^urn:awp:schemas:[A-Za-z0-9:._-]+$", "maxLength": 512 },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{1,255}$" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "versionedRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

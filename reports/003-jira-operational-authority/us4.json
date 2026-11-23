@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "feature": "003-jira-operational-authority",
+  "gate": "us4",
+  "startedAt": "2026-09-03T10:03:34.170Z",
+  "finishedAt": "2026-09-03T10:03:35.979Z",
+  "status": "PASS",
+  "trace": {
+    "approval": "exact-subject-consumed-once",
+    "effect": "marker-proven-absent-or-adopted",
+    "subEffects": [
+      "request-link",
+      "session-ref",
+      "build-ref",
+      "evidence-ref"
+    ],
+    "defectLink": "generic-confirmation-hook"
+  },
+  "hashes": {
+    "tests/contract/003/us4-defect-create.spec.ts": "sha256:575ad9384c5964cecf54cf419bf162e64cc8c0d4dd09273c23f0bdcda1e9d2e1",
+    "tests/integration/security/003/us4-defect-approval.spec.ts": "sha256:c3c8ca547200aa95f26ecdcbbc48a768a35eff672bc81b0e1012713247dcbaeb",
+    "tests/integration/003/us4-defect-recovery.spec.ts": "sha256:6f84a3fe284a242e0c1918fbce9d224d445c74ce3eb425fb80682d9219192065",
+    "tests/integration/003/us4-defect-duplicate-policy.spec.ts": "sha256:d19a6ace2eca4be28acf17a4c65c2cd6d27649cf1b7aab14d86565ef07f9c4c0",
+    "tests/integration/security/003/us4-defect-routing.spec.ts": "sha256:ebe991e83c671d90e010ff52fb94be47ff074d0240debd78231a453bf6efe740",
+    "tests/e2e/003-us4-approved-defect.spec.ts": "sha256:bd41421ce06e5bbf78d20f6ffe7c33979e30ec85ff1f0745b22149c8a1dd210e"
+  }
+}

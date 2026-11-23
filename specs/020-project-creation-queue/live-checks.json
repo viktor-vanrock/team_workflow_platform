@@ -1,0 +1,54 @@
+[
+  {
+    "key": "owner.local",
+    "registrationOptionsStatus": 200,
+    "protectedWriteStatus": 409,
+    "ui": "passed"
+  },
+  {
+    "key": "integration-admin.alpha",
+    "registrationOptionsStatus": 200,
+    "protectedWriteStatus": 409,
+    "ui": "passed"
+  },
+  {
+    "key": "requester.alpha",
+    "registrationOptionsStatus": 404,
+    "protectedWriteStatus": 404,
+    "ui": "passed"
+  },
+  {
+    "key": "executor.alpha",
+    "registrationOptionsStatus": 404,
+    "protectedWriteStatus": 404,
+    "ui": "passed"
+  },
+  {
+    "key": "executor.qa2",
+    "registrationOptionsStatus": 404,
+    "protectedWriteStatus": 404,
+    "ui": "passed"
+  },
+  {
+    "key": "lead.alpha",
+    "registrationOptionsStatus": 404,
+    "protectedWriteStatus": 404,
+    "ui": "passed"
+  },
+  {
+    "key": "viewer.beta",
+    "registrationOptionsStatus": 404,
+    "protectedWriteStatus": 404,
+    "ui": "passed"
+  },
+  {
+    "key": "writer.docs",
+    "registrationOptionsStatus": 404,
+    "ui": "passed"
+  },
+  {
+    "key": "lead.docs",
+    "registrationOptionsStatus": 404,
+    "ui": "passed"
+  }
+]

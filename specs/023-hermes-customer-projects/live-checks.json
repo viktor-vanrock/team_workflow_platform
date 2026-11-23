@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-09-09T22:40:14.519Z",
+  "customerProjects": [
+    "ALPHA"
+  ],
+  "visibleTasks": 4,
+  "denied": [
+    {
+      "project": "BETA",
+      "status": 403
+    },
+    {
+      "project": "GAMMA",
+      "status": 403
+    }
+  ],
+  "dialogue": "PASS",
+  "browser": "PASS",
+  "projectAndTaskWrites": 0
+}

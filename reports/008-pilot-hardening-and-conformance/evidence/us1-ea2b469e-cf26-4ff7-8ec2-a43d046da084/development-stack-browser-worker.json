@@ -1,0 +1,7 @@
+{
+  "command": [
+    "tools/smoke/008-development.mts"
+  ],
+  "exitCode": 0,
+  "output": "{\"status\":\"PASS\",\"mode\":\"DEVELOPMENT_MOCKS\",\"corporateReady\":false,\"browserLogin\":true,\"draftId\":\"196b5cbb-c6a0-4df6-81be-638dd5961ed3\",\"confirmedByWorker\":true,\"repeatedConfirmation\":true,\"independentlyCountedProviderCreates\":1,\"collectorTraces\":true,\"collectorMetrics\":true}\n"
+}

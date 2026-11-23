@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "checkpoint": "US5",
+  "status": "PASS",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "production": "DENIED",
+  "externalNetwork": "DENIED",
+  "startedAt": "2026-09-03T18:37:07.908Z",
+  "finishedAt": "2026-09-03T18:37:36.079Z",
+  "taskBinding": {
+    "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+    "sha256": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62"
+  },
+  "invariants": {
+    "effectsWhileSuspended": 0,
+    "sessionsStartedWhileSuspended": 0,
+    "leasesAcquiredWhileSuspended": 0,
+    "investigationPreserved": true,
+    "resumeActionKind": "PROJECT_RESUME",
+    "exactDistinctOwnerApproval": true,
+    "staleProbeResumeDenied": true,
+    "safeModeRecalculation": true,
+    "recoveryUsesPostgresAuthority": true
+  },
+  "results": [
+    {
+      "id": "us5-unit-integration-security-concurrency-recovery-e2e",
+      "description": "Operational transitions, fail-safe effect/session/lease denial, investigation, exact resume, races and restart recovery",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/unit/007/us5-operational-state.spec.ts",
+        "tests/integration/007/us5-emergency-suspend.spec.ts",
+        "tests/integration/security/007/us5-effect-guard-race.spec.ts",
+        "tests/integration/007/us5-session-lease-guards.spec.ts",
+        "tests/integration/security/007/us5-investigation-access.spec.ts",
+        "tests/integration/007/us5-resume-approval.spec.ts",
+        "tests/integration/007/us5-resume-mode-recalculation.spec.ts",
+        "tests/integration/007/us5-operational-concurrency.spec.ts",
+        "tests/integration/007/us5-suspension-recovery.spec.ts",
+        "tests/e2e/007/us5-suspend-resume.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2147,
+      "outputHash": "sha256:7a81c13d099c9e0e6a0c9320971efff978b1bf2ff72496ace51704879e66f0f3"
+    },
+    {
+      "id": "emergency-suspend-resume-scenario",
+      "description": "Suspend between intent and effect, preserve investigation, then consume exact approved resume",
+      "args": [
+        "--import",
+        "tsx",
+        "tools/local/onboarding-scenario.mts",
+        "run",
+        "emergency-suspend-resume"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 680,
+      "outputHash": "sha256:1a3cc3a291a217d1e111c0d70b75fc145ce82dad6bee6ec4e3371a364f275530"
+    },
+    {
+      "id": "suspend-resume-browser",
+      "description": "Emergency controls, incident/probe/approval explanations and preserved investigation navigation",
+      "args": [
+        "node_modules/@playwright/test/cli.js",
+        "test",
+        "tests/e2e/007/us5-suspend-resume-browser.spec.ts",
+        "--project=chromium",
+        "--workers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1096,
+      "outputHash": "sha256:d27de589a3ffdcf932e39bfe7bfa97f6da82695b1114721864f0585afc9ba53c"
+    },
+    {
+      "id": "typecheck-packages-platform-core",
+      "description": "Static typecheck packages/platform-core/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-core/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1376,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-platform-persistence-typeorm",
+      "description": "Static typecheck packages/platform-persistence-typeorm/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-persistence-typeorm/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1967,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-competency-qa",
+      "description": "Static typecheck packages/competency-qa/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3241,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-runtime-composition",
+      "description": "Static typecheck packages/runtime-composition/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4413,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-platform-runtime-nest",
+      "description": "Static typecheck packages/platform-runtime-nest/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-runtime-nest/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1550,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-apps-api",
+      "description": "Static typecheck apps/api/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4921,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-apps-worker",
+      "description": "Static typecheck apps/worker/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/worker/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4298,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-apps-web",
+      "description": "Static typecheck apps/web/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2479,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  ]
+}

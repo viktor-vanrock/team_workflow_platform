@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:finding:v1",
+  "title": "Human-classified QA Finding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "findingId", "workspaceId", "projectId", "workItemId", "sessionId", "observationIds", "severity", "summary", "affectedTargetHash", "evidenceRefs", "state", "resourceVersion", "createdBy", "createdAt", "updatedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "findingId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "observationIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "format": "uuid" } },
+    "severity": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "affectedTargetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "evidenceRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ArtifactRef" } },
+    "state": { "type": "string", "enum": ["DRAFT", "CLASSIFIED", "DISPOSED", "FROZEN"] },
+    "latestReviewRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "frozenReviewRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "frozenMembershipSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "classification": { "type": "string", "enum": ["PRODUCT", "INFRA", "INCONCLUSIVE", "DUPLICATE", "ACCEPTED_RISK"] },
+    "classificationReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "classifiedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "classifiedAt": { "type": "string", "format": "date-time" },
+    "dispositionDecision": { "type": "string", "enum": ["CREATE_DEFECT", "DUPLICATE", "NOT_A_BUG", "ACCEPTED_RISK", "DEFERRED", "WAIVED"] },
+    "dispositionReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "disposedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "disposedAt": { "type": "string", "format": "date-time" },
+    "duplicateDefectRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+    "acceptedRiskActionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericPlatformActionRef" },
+    "waiverActionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericPlatformActionRef" },
+    "frozenAt": { "type": "string", "format": "date-time" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "enum": ["CLASSIFIED", "DISPOSED", "FROZEN"] } }, "required": ["state"] },
+      "then": { "required": ["latestReviewRevisionRef", "classification", "classificationReason", "classifiedBy", "classifiedAt"] },
+      "else": {
+        "not": { "anyOf": [
+          { "required": ["latestReviewRevisionRef"] }, { "required": ["classification"] },
+          { "required": ["classificationReason"] }, { "required": ["classifiedBy"] },
+          { "required": ["classifiedAt"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["DISPOSED", "FROZEN"] } }, "required": ["state"] },
+      "then": { "required": ["dispositionDecision", "dispositionReason", "disposedBy", "disposedAt"] },
+      "else": { "not": { "anyOf": [
+        { "required": ["dispositionDecision"] }, { "required": ["dispositionReason"] },
+        { "required": ["disposedBy"] }, { "required": ["disposedAt"] },
+        { "required": ["duplicateDefectRef"] }, { "required": ["acceptedRiskActionRef"] },
+        { "required": ["waiverActionRef"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "dispositionDecision": { "const": "ACCEPTED_RISK" } }, "required": ["dispositionDecision"] },
+      "then": { "required": ["acceptedRiskActionRef"] },
+      "else": { "not": { "required": ["acceptedRiskActionRef"] } }
+    },
+    {
+      "if": { "properties": { "dispositionDecision": { "const": "DUPLICATE" } }, "required": ["dispositionDecision"] },
+      "then": { "required": ["duplicateDefectRef", "dispositionReason"] },
+      "else": { "not": { "required": ["duplicateDefectRef"] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "FROZEN" } }, "required": ["state"] },
+      "then": { "required": ["frozenReviewRevisionRef", "frozenMembershipSetHash", "frozenAt"] },
+      "else": { "not": { "anyOf": [
+        { "required": ["frozenReviewRevisionRef"] }, { "required": ["frozenMembershipSetHash"] }, { "required": ["frozenAt"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "classification": { "const": "PRODUCT" } }, "required": ["classification"] },
+      "then": { "properties": { "dispositionDecision": { "enum": ["CREATE_DEFECT", "DEFERRED", "WAIVED"] } } }
+    },
+    {
+      "if": { "properties": { "classification": { "const": "INFRA" } }, "required": ["classification"] },
+      "then": { "properties": { "dispositionDecision": { "enum": ["NOT_A_BUG", "DEFERRED", "WAIVED"] } } }
+    },
+    {
+      "if": { "properties": { "classification": { "const": "INCONCLUSIVE" } }, "required": ["classification"] },
+      "then": { "properties": { "dispositionDecision": { "enum": ["DEFERRED", "WAIVED"] } } }
+    },
+    {
+      "if": { "properties": { "classification": { "const": "DUPLICATE" } }, "required": ["classification"] },
+      "then": { "properties": { "dispositionDecision": { "const": "DUPLICATE" } } }
+    },
+    {
+      "if": { "properties": { "classification": { "const": "ACCEPTED_RISK" } }, "required": ["classification"] },
+      "then": { "properties": { "dispositionDecision": { "const": "ACCEPTED_RISK" } } }
+    },
+    {
+      "if": { "properties": { "dispositionDecision": { "const": "WAIVED" } }, "required": ["dispositionDecision"] },
+      "then": { "required": ["waiverActionRef"] },
+      "else": { "not": { "required": ["waiverActionRef"] } }
+    }
+  ]
+}

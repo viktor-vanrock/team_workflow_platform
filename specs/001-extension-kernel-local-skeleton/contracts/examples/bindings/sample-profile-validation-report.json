@@ -1,0 +1,56 @@
+{
+  "reportId": "73737373-7373-4373-8373-737373737373",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "requestedBy": {
+    "type": "HUMAN",
+    "principalId": "13131313-1313-4313-8313-131313131313",
+    "issuer": "https://fake-idp:4443/oidc",
+    "subject": "integration-admin.alpha"
+  },
+  "authorizationBasis": {
+    "policyRef": { "id": "phase1-profile-validation-policy", "version": 1 },
+    "membershipRef": { "id": "15151515-1515-4515-8515-151515151515", "version": 3 },
+    "entitlementRefs": [],
+    "roleAssignmentRefs": [
+      { "id": "17171717-1717-4717-8717-171717171717", "version": 1 }
+    ],
+    "skillContext": { "kind": "NOT_APPLICABLE" },
+    "evaluatedAt": "2026-08-27T10:06:00Z"
+  },
+  "authorizationBasisHash": "sha256:df05c86aef9d93d2e846b80f2c80e28404723efd42cdb1210697f39813f70c35",
+  "correlationId": "73737370-7370-4370-8370-737073707370",
+  "dataClassificationKey": "INTERNAL",
+  "subject": {
+    "type": "CONNECTOR_PROFILE",
+    "id": "55555555-5555-4555-8555-555555555555",
+    "version": 1
+  },
+  "contentHash": "sha256:fc35c03899394ddd462cf4089854c1330819b8b1497c517d6419afa1d92d4cc3",
+  "status": "VALID",
+  "checks": [
+    {
+      "code": "EXACT_CONNECTION_RESOLVED",
+      "severity": "ERROR",
+      "status": "PASSED",
+      "path": "/connectionRef",
+      "message": "The exact published Connection revision resolves in the same Workspace."
+    },
+    {
+      "code": "EXACT_MAPPING_RESOLVED",
+      "severity": "ERROR",
+      "status": "PASSED",
+      "path": "/capabilityConfigurations/0/mappingRef",
+      "message": "The exact published Mapping revision and mappingContentHash match."
+    },
+    {
+      "code": "WRITE_STRATEGY_INTERSECTION",
+      "severity": "ERROR",
+      "status": "PASSED",
+      "path": "/capabilityConfigurations/0/operationConfigurations/0",
+      "message": "Idempotency and confirmation modes are supported by both capability and connector implementation."
+    }
+  ],
+  "capabilityAvailability": [],
+  "validatedAt": "2026-08-27T10:06:00Z",
+  "createdAt": "2026-08-27T10:06:00Z"
+}

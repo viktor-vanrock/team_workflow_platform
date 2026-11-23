@@ -1,0 +1,24 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/unit/008",
+    "tests/integration/008",
+    "tests/integration/security/008",
+    "tests/contract/008",
+    "--exclude",
+    "tests/integration/008/published-runtime-configuration.spec.ts",
+    "--exclude",
+    "tests/integration/008/published-deployment-startup.spec.ts",
+    "--exclude",
+    "tests/integration/008/automation-availability.spec.ts",
+    "--exclude",
+    "tests/integration/008/runtime-composition.spec.ts",
+    "--exclude",
+    "tests/integration/008/development-probes.spec.ts",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 143,
+  "durationMs": 240024,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n ❯ tests/integration/008/startup-agreement.spec.ts (6 tests | 1 failed) 175699ms\n     × requires both exact current processes and fences rollout, stop and policy outage on postgres:17.7-bookworm 120006ms\n ❯ tests/integration/008/completion-runtime.spec.ts (10 tests | 1 failed) 179323ms\n     × pins confirmed state, commits one held command and releases it with an exact distinct approval 120041ms\n{\"timestamp\":\"2026-09-04T13:43:26.837Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"7956a158-00b1-498c-a68b-fbc1d0904cf4\",\"projectId\":\"ccbf3ebd-407d-42e6-b3f0-43915e3aa3a1\",\"correlationId\":\"5bb22a3c-7d15-462e-b0fb-53482635b4e1\",\"causationId\":\"9a72c497-eaf2-4c35-a543-2e09a4a3739f\",\"operation\":\"http.request\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":4}\n{\"timestamp\":\"2026-09-04T13:43:26.850Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"worker\",\"workspaceId\":\"7956a158-00b1-498c-a68b-fbc1d0904cf4\",\"projectId\":\"ccbf3ebd-407d-42e6-b3f0-43915e3aa3a1\",\"correlationId\":\"5bb22a3c-7d15-462e-b0fb-53482635b4e1\",\"causationId\":\"9a72c497-eaf2-4c35-a543-2e09a4a3739f\",\"operation\":\"worker.commands\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":1}\n{\"timestamp\":\"2026-09-04T13:43:30.501Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"160ccfb2-5369-4457-8410-7b4d35aa89ff\",\"causationId\":\"f4047d30-1111-4d7b-a19d-003614a3f195\",\"operation\":\"record.publish\",\"outcome\":\"FAILED\",\"latencyMs\":1}\n{\"timestamp\":\"2026-09-04T13:43:30.515Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"9d391014-81bd-4f1d-84a5-0bf22f67a86a\",\"causationId\":\"8f137575-570b-423d-b880-446b9bcfc854\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":12}\n{\"timestamp\":\"2026-09-04T13:43:30.526Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"5183be6a-3bfd-461d-8cf0-f5403988c504\",\"causationId\":\"10269181-5bf1-44ca-b74a-9d1e0cd91cbb\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":9}\n{\"timestamp\":\"2026-09-04T13:43:32.755Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"89e72acd-eccb-4463-b90f-a00111df825b\",\"causationId\":\"9e43a6e0-1983-4d27-822c-e3ada2226b83\",\"operation\":\"record.publish\",\"outcome\":\"FAILED\",\"latencyMs\":0}\n{\"timestamp\":\"2026-09-04T13:43:32.768Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"9cd644e2-9f22-47ec-8946-431231688873\",\"causationId\":\"ada07281-b54c-4655-8cd0-fa1c3ea5046a\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":11}\n{\"timestamp\":\"2026-09-04T13:43:32.778Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"f913b67a-6fe6-4326-9ef0-b018958427e3\",\"causationId\":\"54e0d2d1-d616-4958-90bf-84c40076e786\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":8}\n"
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:qa-triage-assessment-created:v1",
+  "title": "QA Triage Assessment Created Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "subject",
+    "inputFingerprint",
+    "confidence",
+    "expiresAt",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "const": "CURRENT"
+    },
+    "subject": {
+      "$ref": "#/$defs/agentSubject"
+    },
+    "inputFingerprint": {
+      "$ref": "#/$defs/digest"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "agentSubject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "contentHash"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "DRAFT",
+            "CANDIDATE",
+            "WORK_ITEM"
+          ]
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "contentHash": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    }
+  }
+}

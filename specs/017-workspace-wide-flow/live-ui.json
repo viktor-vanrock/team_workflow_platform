@@ -1,0 +1,1107 @@
+[
+  {
+    "key": "owner.local",
+    "label": "Администратор · 1",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/requests",
+        "label": "Запросы",
+        "detailActions": [
+          {
+            "tab": "Статус в Jira",
+            "buttons": [
+              {
+                "text": "Обновить достоверную проекцию",
+                "disabled": false
+              },
+              {
+                "text": "Перевести в состояние «Выполнено»",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "tab": "Замечания",
+            "buttons": [
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "tab": "Заключение",
+            "buttons": [
+              {
+                "text": "Создать черновик заключения",
+                "disabled": true
+              },
+              {
+                "text": "Создать замещающее заключение",
+                "disabled": true
+              },
+              {
+                "text": "Подписать первым",
+                "disabled": true
+              },
+              {
+                "text": "Запросить подпись руководителя",
+                "disabled": true
+              },
+              {
+                "text": "Подписать как руководитель QA",
+                "disabled": true
+              },
+              {
+                "text": "Оценить DoD",
+                "disabled": true
+              },
+              {
+                "text": "Подготовить закрытие",
+                "disabled": true
+              },
+              {
+                "text": "Запросить внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Согласовать внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/qa/queue",
+        "label": "Очередь",
+        "detailActions": []
+      },
+      {
+        "path": "/projects",
+        "label": "Проекты",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/intake-candidates",
+        "label": "Входящие обращения",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/hermes-proposals",
+        "label": "Предложения помощника",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/automated-session",
+        "label": "Автоматические проверки",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/notification-health",
+        "label": "Доставка уведомлений",
+        "detailActions": []
+      },
+      {
+        "path": "/projects/onboarding",
+        "label": "Настройки проекта",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/qa/new",
+    "failures": []
+  },
+  {
+    "key": "integration-admin.alpha",
+    "label": "Администратор · 2",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/requests",
+        "label": "Запросы",
+        "detailActions": [
+          {
+            "tab": "Статус в Jira",
+            "buttons": [
+              {
+                "text": "Обновить достоверную проекцию",
+                "disabled": false
+              },
+              {
+                "text": "Перевести в состояние «Выполнено»",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "tab": "Замечания",
+            "buttons": [
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "tab": "Заключение",
+            "buttons": [
+              {
+                "text": "Создать черновик заключения",
+                "disabled": true
+              },
+              {
+                "text": "Создать замещающее заключение",
+                "disabled": true
+              },
+              {
+                "text": "Подписать первым",
+                "disabled": true
+              },
+              {
+                "text": "Запросить подпись руководителя",
+                "disabled": true
+              },
+              {
+                "text": "Подписать как руководитель QA",
+                "disabled": true
+              },
+              {
+                "text": "Оценить DoD",
+                "disabled": true
+              },
+              {
+                "text": "Подготовить закрытие",
+                "disabled": true
+              },
+              {
+                "text": "Запросить внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Согласовать внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/qa/queue",
+        "label": "Очередь",
+        "detailActions": []
+      },
+      {
+        "path": "/projects",
+        "label": "Проекты",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/intake-candidates",
+        "label": "Входящие обращения",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/hermes-proposals",
+        "label": "Предложения помощника",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/automated-session",
+        "label": "Автоматические проверки",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/notification-health",
+        "label": "Доставка уведомлений",
+        "detailActions": []
+      },
+      {
+        "path": "/projects/onboarding",
+        "label": "Настройки проекта",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/qa/new",
+    "failures": []
+  },
+  {
+    "key": "requester.alpha",
+    "label": "Requester",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/requests",
+        "label": "Запросы",
+        "detailActions": [
+          {
+            "tab": "Статус в Jira",
+            "buttons": [
+              {
+                "text": "Обновить достоверную проекцию",
+                "disabled": false
+              },
+              {
+                "text": "Перевести в состояние «Выполнено»",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "tab": "Замечания",
+            "buttons": [
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "tab": "Заключение",
+            "buttons": [
+              {
+                "text": "Создать черновик заключения",
+                "disabled": true
+              },
+              {
+                "text": "Создать замещающее заключение",
+                "disabled": true
+              },
+              {
+                "text": "Подписать первым",
+                "disabled": true
+              },
+              {
+                "text": "Запросить подпись руководителя",
+                "disabled": true
+              },
+              {
+                "text": "Подписать как руководитель QA",
+                "disabled": true
+              },
+              {
+                "text": "Оценить DoD",
+                "disabled": true
+              },
+              {
+                "text": "Подготовить закрытие",
+                "disabled": true
+              },
+              {
+                "text": "Запросить внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Согласовать внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/qa/queue",
+        "label": "Очередь",
+        "detailActions": []
+      },
+      {
+        "path": "/projects",
+        "label": "Проекты",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/intake-candidates",
+        "label": "Входящие обращения",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/hermes-proposals",
+        "label": "Предложения помощника",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/notification-health",
+        "label": "Доставка уведомлений",
+        "detailActions": []
+      },
+      {
+        "path": "/projects/onboarding",
+        "label": "Настройки проекта",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/docs/documents",
+    "failures": []
+  },
+  {
+    "key": "limited.alpha",
+    "label": "Читатель · 1",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/requests",
+        "label": "Запросы",
+        "detailActions": [
+          {
+            "tab": "Статус в Jira",
+            "buttons": [
+              {
+                "text": "Обновить достоверную проекцию",
+                "disabled": false
+              },
+              {
+                "text": "Перевести в состояние «Выполнено»",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "tab": "Замечания",
+            "buttons": [
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "tab": "Заключение",
+            "buttons": [
+              {
+                "text": "Создать черновик заключения",
+                "disabled": true
+              },
+              {
+                "text": "Создать замещающее заключение",
+                "disabled": true
+              },
+              {
+                "text": "Подписать первым",
+                "disabled": true
+              },
+              {
+                "text": "Запросить подпись руководителя",
+                "disabled": true
+              },
+              {
+                "text": "Подписать как руководитель QA",
+                "disabled": true
+              },
+              {
+                "text": "Оценить DoD",
+                "disabled": true
+              },
+              {
+                "text": "Подготовить закрытие",
+                "disabled": true
+              },
+              {
+                "text": "Запросить внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Согласовать внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/qa/queue",
+        "label": "Очередь",
+        "detailActions": []
+      },
+      {
+        "path": "/projects",
+        "label": "Проекты",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/intake-candidates",
+        "label": "Входящие обращения",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/hermes-proposals",
+        "label": "Предложения помощника",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/notification-health",
+        "label": "Доставка уведомлений",
+        "detailActions": []
+      },
+      {
+        "path": "/projects/onboarding",
+        "label": "Настройки проекта",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/qa/new",
+    "failures": []
+  },
+  {
+    "key": "executor.alpha",
+    "label": "QA Executor · QA 1",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/requests",
+        "label": "Запросы",
+        "detailActions": [
+          {
+            "tab": "Статус в Jira",
+            "buttons": [
+              {
+                "text": "Обновить достоверную проекцию",
+                "disabled": false
+              },
+              {
+                "text": "Перевести в состояние «Выполнено»",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "tab": "Замечания",
+            "buttons": [
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "tab": "Заключение",
+            "buttons": [
+              {
+                "text": "Создать черновик заключения",
+                "disabled": true
+              },
+              {
+                "text": "Создать замещающее заключение",
+                "disabled": true
+              },
+              {
+                "text": "Подписать первым",
+                "disabled": true
+              },
+              {
+                "text": "Запросить подпись руководителя",
+                "disabled": true
+              },
+              {
+                "text": "Подписать как руководитель QA",
+                "disabled": true
+              },
+              {
+                "text": "Оценить DoD",
+                "disabled": true
+              },
+              {
+                "text": "Подготовить закрытие",
+                "disabled": true
+              },
+              {
+                "text": "Запросить внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Согласовать внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/qa/queue",
+        "label": "Очередь",
+        "detailActions": []
+      },
+      {
+        "path": "/projects",
+        "label": "Проекты",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/intake-candidates",
+        "label": "Входящие обращения",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/hermes-proposals",
+        "label": "Предложения помощника",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/automated-session",
+        "label": "Автоматические проверки",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/notification-health",
+        "label": "Доставка уведомлений",
+        "detailActions": []
+      },
+      {
+        "path": "/projects/onboarding",
+        "label": "Настройки проекта",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/qa/new",
+    "failures": []
+  },
+  {
+    "key": "executor.qa2",
+    "label": "QA Executor · QA 2",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/requests",
+        "label": "Запросы",
+        "detailActions": [
+          {
+            "tab": "Статус в Jira",
+            "buttons": [
+              {
+                "text": "Обновить достоверную проекцию",
+                "disabled": false
+              },
+              {
+                "text": "Перевести в состояние «Выполнено»",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "tab": "Замечания",
+            "buttons": [
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "tab": "Заключение",
+            "buttons": [
+              {
+                "text": "Создать черновик заключения",
+                "disabled": true
+              },
+              {
+                "text": "Создать замещающее заключение",
+                "disabled": true
+              },
+              {
+                "text": "Подписать первым",
+                "disabled": true
+              },
+              {
+                "text": "Запросить подпись руководителя",
+                "disabled": true
+              },
+              {
+                "text": "Подписать как руководитель QA",
+                "disabled": true
+              },
+              {
+                "text": "Оценить DoD",
+                "disabled": true
+              },
+              {
+                "text": "Подготовить закрытие",
+                "disabled": true
+              },
+              {
+                "text": "Запросить внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Согласовать внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/qa/queue",
+        "label": "Очередь",
+        "detailActions": []
+      },
+      {
+        "path": "/projects",
+        "label": "Проекты",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/intake-candidates",
+        "label": "Входящие обращения",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/hermes-proposals",
+        "label": "Предложения помощника",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/automated-session",
+        "label": "Автоматические проверки",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/notification-health",
+        "label": "Доставка уведомлений",
+        "detailActions": []
+      },
+      {
+        "path": "/projects/onboarding",
+        "label": "Настройки проекта",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/qa/new",
+    "failures": []
+  },
+  {
+    "key": "lead.alpha",
+    "label": "QA Lead",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/requests",
+        "label": "Запросы",
+        "detailActions": [
+          {
+            "tab": "Статус в Jira",
+            "buttons": [
+              {
+                "text": "Обновить достоверную проекцию",
+                "disabled": false
+              },
+              {
+                "text": "Перевести в состояние «Выполнено»",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "tab": "Замечания",
+            "buttons": [
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "tab": "Заключение",
+            "buttons": [
+              {
+                "text": "Создать черновик заключения",
+                "disabled": true
+              },
+              {
+                "text": "Создать замещающее заключение",
+                "disabled": true
+              },
+              {
+                "text": "Подписать первым",
+                "disabled": true
+              },
+              {
+                "text": "Запросить подпись руководителя",
+                "disabled": true
+              },
+              {
+                "text": "Подписать как руководитель QA",
+                "disabled": true
+              },
+              {
+                "text": "Оценить DoD",
+                "disabled": true
+              },
+              {
+                "text": "Подготовить закрытие",
+                "disabled": true
+              },
+              {
+                "text": "Запросить внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Согласовать внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/qa/queue",
+        "label": "Очередь",
+        "detailActions": []
+      },
+      {
+        "path": "/projects",
+        "label": "Проекты",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/intake-candidates",
+        "label": "Входящие обращения",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/hermes-proposals",
+        "label": "Предложения помощника",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/automated-session",
+        "label": "Автоматические проверки",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/notification-health",
+        "label": "Доставка уведомлений",
+        "detailActions": []
+      },
+      {
+        "path": "/projects/onboarding",
+        "label": "Настройки проекта",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/qa/new",
+    "failures": []
+  },
+  {
+    "key": "viewer.beta",
+    "label": "Читатель · 2",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/requests",
+        "label": "Запросы",
+        "detailActions": [
+          {
+            "tab": "Статус в Jira",
+            "buttons": [
+              {
+                "text": "Обновить достоверную проекцию",
+                "disabled": false
+              },
+              {
+                "text": "Перевести в состояние «Выполнено»",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "tab": "Замечания",
+            "buttons": [
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "tab": "Заключение",
+            "buttons": [
+              {
+                "text": "Создать черновик заключения",
+                "disabled": true
+              },
+              {
+                "text": "Создать замещающее заключение",
+                "disabled": true
+              },
+              {
+                "text": "Подписать первым",
+                "disabled": true
+              },
+              {
+                "text": "Запросить подпись руководителя",
+                "disabled": true
+              },
+              {
+                "text": "Подписать как руководитель QA",
+                "disabled": true
+              },
+              {
+                "text": "Оценить DoD",
+                "disabled": true
+              },
+              {
+                "text": "Подготовить закрытие",
+                "disabled": true
+              },
+              {
+                "text": "Запросить внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Согласовать внешнее состояние «Выполнено»",
+                "disabled": true
+              },
+              {
+                "text": "Обновить точное состояние",
+                "disabled": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "path": "/qa/queue",
+        "label": "Очередь",
+        "detailActions": []
+      },
+      {
+        "path": "/projects",
+        "label": "Проекты",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/intake-candidates",
+        "label": "Входящие обращения",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/hermes-proposals",
+        "label": "Предложения помощника",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/notification-health",
+        "label": "Доставка уведомлений",
+        "detailActions": []
+      },
+      {
+        "path": "/projects/onboarding",
+        "label": "Настройки проекта",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/qa/new",
+    "failures": []
+  },
+  {
+    "key": "worker.local",
+    "label": "Worker Service",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/projects",
+    "failures": []
+  },
+  {
+    "key": "outsider.delta",
+    "label": "Outsider",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Обзор",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/requests",
+        "label": "Запросы",
+        "detailActions": []
+      },
+      {
+        "path": "/help",
+        "label": "Как работать",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/intake-candidates",
+        "label": "Входящие обращения",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/hermes-proposals",
+        "label": "Предложения помощника",
+        "detailActions": []
+      },
+      {
+        "path": "/qa/notification-health",
+        "label": "Доставка уведомлений",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/projects",
+    "failures": []
+  },
+  {
+    "key": "writer.docs",
+    "label": "Технический писатель",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Рабочий стол писателя",
+        "detailActions": []
+      },
+      {
+        "path": "/docs/documents",
+        "label": "Мои документы",
+        "detailActions": []
+      },
+      {
+        "path": "/docs/new",
+        "label": "Новое задание",
+        "detailActions": []
+      },
+      {
+        "path": "/docs/help",
+        "label": "Как подготовить документ",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/qa/queue",
+    "failures": []
+  },
+  {
+    "key": "lead.docs",
+    "label": "Лид технических писателей",
+    "pages": [
+      {
+        "path": "/",
+        "label": "Пульт лида",
+        "detailActions": []
+      },
+      {
+        "path": "/docs/review",
+        "label": "Очередь ревью",
+        "detailActions": []
+      },
+      {
+        "path": "/docs/documents",
+        "label": "Библиотека документов",
+        "detailActions": []
+      },
+      {
+        "path": "/docs/help",
+        "label": "Как подготовить документ",
+        "detailActions": []
+      }
+    ],
+    "forbidden": "/qa/queue",
+    "failures": []
+  }
+]

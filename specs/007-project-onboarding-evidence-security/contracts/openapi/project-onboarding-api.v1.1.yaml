@@ -1,0 +1,1505 @@
+openapi: 3.1.0
+info:
+  title: Project Onboarding API
+  version: 1.1.0
+  description: Registered onboarding HTTP boundary. Supersedes the unimplemented onboarding response portion of
+    design contract 1.0. Legacy /v1 clients retain their original shapes. See
+    docs/runbooks/onboarding-openapi-convergence.md for compatibility and canonical reference semantics.
+    Evidence remains outside this onboarding contract.
+servers:
+  - url: /api
+security:
+  - oidc: []
+tags:
+  - name: Projects
+  - name: Entitlements
+  - name: Bindings
+  - name: Operations
+  - name: QA Resources
+paths:
+  /v1/workspaces/{workspaceId}/projects:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+    get:
+      tags:
+        - Projects
+      operationId: listAuthorizedProjects
+      summary: List only Projects visible to the current principal
+      parameters:
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+      responses:
+        "200":
+          description: Authorization-filtered page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectPage"
+        default:
+          $ref: "#/components/responses/Problem"
+    post:
+      tags:
+        - Projects
+      operationId: registerProject
+      summary: Register a stable Project and its first onboarding revision
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterProjectCommand"
+      responses:
+        "201":
+          description: Project registered
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/project/project-onboarding-package.v1.schema.json
+        "409":
+          $ref: "#/components/responses/Conflict"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/onboarding:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+    get:
+      tags:
+        - Projects
+      operationId: getProjectOnboarding
+      summary: Read the current exact onboarding package and gate status
+      responses:
+        "200":
+          description: Current authorized onboarding view
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/project/project-onboarding-package.v1.schema.json
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/onboarding/evaluations:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+    post:
+      tags:
+        - Projects
+      operationId: evaluateProjectOnboarding
+      summary: Evaluate exact L0, C1, N2 or P3 onboarding inputs
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvaluateOnboardingCommand"
+      responses:
+        "202":
+          description: Gate evaluation accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandReceipt"
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/onboarding/activate-pilot:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+    post:
+      tags:
+        - Projects
+      operationId: activateProjectPilot
+      summary: Consume exact approval and sequential rollout lease for first pilot activation
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExactApprovedActionCommand"
+      responses:
+        "200":
+          description: Pilot-active onboarding revision
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/project/project-onboarding-package.v1.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Rejected"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/entitlements:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+    post:
+      tags:
+        - Entitlements
+      operationId: grantProjectEntitlement
+      summary: Grant a new Project Entitlement; If-Match is the current onboarding version
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GrantEntitlementCommand"
+      responses:
+        "201":
+          description: Immutable entitlement revision
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/project/project-entitlement-revision.v1.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/entitlements/{entitlementId}/revoke:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+      - $ref: "#/components/parameters/EntitlementId"
+    post:
+      tags:
+        - Entitlements
+      operationId: revokeProjectEntitlement
+      summary: Revoke immediately without relocating business data
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReasonCommand"
+      responses:
+        "200":
+          description: Immutable revoke revision
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/project/project-entitlement-revision.v1.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/bindings/{bindingId}/validate:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+      - $ref: "#/components/parameters/BindingId"
+    post:
+      tags:
+        - Bindings
+      operationId: validateBinding
+      summary: Validate an exact Binding candidate and run safe capability probes
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateBindingCommand"
+      responses:
+        "202":
+          description: Validation accepted; observations are immutable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandReceipt"
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/bindings/{bindingId}/acceptances:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+      - $ref: "#/components/parameters/BindingId"
+    post:
+      tags:
+        - Bindings
+      operationId: acceptBindingFunctionally
+      summary: Record QA Lead acceptance or rejection of an exact validated Binding
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BindingAcceptanceCommand"
+      responses:
+        "201":
+          description: Immutable functional acceptance
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/integration/binding-functional-acceptance.v2.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/bindings/{bindingId}/{bindingAction}:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+      - $ref: "#/components/parameters/BindingId"
+      - name: bindingAction
+        in: path
+        required: true
+        schema:
+          enum:
+            - publish
+            - retire
+            - rollback
+    post:
+      tags:
+        - Bindings
+      operationId: applyBindingLifecycleAction
+      summary: Consume an exact approved publish, retire or rollback action
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExactApprovedActionCommand"
+      responses:
+        "200":
+          description: Exact lifecycle result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandReceipt"
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Rejected"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/operations/suspend:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+    post:
+      tags:
+        - Operations
+      operationId: emergencySuspendProject
+      summary: Fail safe immediately and deny new effects, Sessions and leases
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SuspendCommand"
+      responses:
+        "200":
+          description: Suspended onboarding revision
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/project/project-onboarding-package.v1.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/operations/resume:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+    post:
+      tags:
+        - Operations
+      operationId: resumeProject
+      summary: Resume only with fresh probes, incident disposition and exact approval
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResumeCommand"
+      responses:
+        "200":
+          description: Active onboarding revision
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/project/project-onboarding-package.v1.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Rejected"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/qa/environments:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+    post:
+      tags:
+        - QA Resources
+      operationId: publishProjectEnvironment
+      summary: Publish a secret-free exact non-production environment revision
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnvironmentRevisionCommand"
+      responses:
+        "201":
+          description: Published revision
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/qa/project-environment-revision.v1.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Rejected"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/qa/context:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+    post:
+      tags:
+        - QA Resources
+      operationId: publishQaProjectContext
+      summary: Publish the exact QA-owned Project policy and resource context
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QaProjectContextCommand"
+      responses:
+        "201":
+          description: Published QA Project Context v2
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/qa/qa-project-context.v2.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Rejected"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/qa/resources/{resourceKind}:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+      - name: resourceKind
+        in: path
+        required: true
+        schema:
+          enum:
+            - test-data
+            - account-pools
+    post:
+      tags:
+        - QA Resources
+      operationId: publishQaProjectResource
+      summary: Publish a secret-free test-data or account-pool reference
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/TestDataResourceCommand"
+                - $ref: "#/components/schemas/AccountPoolResourceCommand"
+      responses:
+        "201":
+          description: Immutable schema-bound resource receipt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandReceipt"
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Rejected"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/qa/account-leases:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+    post:
+      tags:
+        - QA Resources
+      operationId: acquireTestAccountLease
+      summary: Acquire one time-bounded opaque test-account lease
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AcquireLeaseCommand"
+      responses:
+        "201":
+          description: Lease acquired without credential material
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/qa/test-account-lease.v1.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Rejected"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/qa/account-leases/{leaseId}/release:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+      - $ref: "#/components/parameters/LeaseId"
+    post:
+      tags:
+        - QA Resources
+      operationId: releaseTestAccountLease
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReasonCommand"
+      responses:
+        "200":
+          description: Lease released idempotently
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/qa/test-account-lease.v1.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        default:
+          $ref: "#/components/responses/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/entitlements/{entitlementId}/replace:
+    parameters:
+      - $ref: "#/components/parameters/WorkspaceId"
+      - $ref: "#/components/parameters/ProjectId"
+      - $ref: "#/components/parameters/EntitlementId"
+    post:
+      tags:
+        - Entitlements
+      operationId: replaceProjectEntitlement
+      summary: Replace an exact Project Entitlement; If-Match is its current version
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/IfMatch"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReplaceEntitlementCommand"
+      responses:
+        "201":
+          description: Immutable revoke revision
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/project/project-entitlement-revision.v1.schema.json
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            AWP-Resource-Ref:
+              $ref: "#/components/headers/CanonicalResourceRef"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        default:
+          $ref: "#/components/responses/Problem"
+components:
+  securitySchemes:
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: https://identity.invalid/.well-known/openid-configuration
+      description: Deployment replaces this metadata URL; local L0 uses the existing mock identity adapter.
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    EntitlementId:
+      name: entitlementId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    BindingId:
+      name: bindingId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LeaseId:
+      name: leaseId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ManifestId:
+      name: manifestId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    PackageId:
+      name: packageId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 256
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: ^"[1-9][0-9]*"$
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+        maxLength: 2048
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 50
+  headers:
+    ETag:
+      description: Quoted current resource version
+      schema:
+        type: string
+        pattern: ^"[1-9][0-9]*"$
+    CanonicalResourceRef:
+      description: JSON ExactRef for the canonical persisted revision. Wire projections have their own contentHash;
+        use this ref when identifying the Core record.
+      schema:
+        type: string
+  responses:
+    Problem:
+      description: Safe RFC 9457-style problem response
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+    NotFound:
+      description: Missing and forbidden resources share this public response
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+    Conflict:
+      description: CAS, idempotency or lifecycle conflict
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+    Rejected:
+      description: Safe deterministic policy or gate rejection
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+  schemas:
+    Problem:
+      type: object
+      additionalProperties: false
+      required:
+        - type
+        - title
+        - status
+        - code
+        - correlationId
+      properties:
+        type:
+          type: string
+          format: uri-reference
+        title:
+          type: string
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        code:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        correlationId:
+          type: string
+          minLength: 8
+          maxLength: 256
+    RegisterProjectCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - name
+        - ownerIds
+        - criticalityKey
+        - dataClassificationKey
+        - reason
+      properties:
+        key:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_-]{1,31}$
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+        ownerIds:
+          type: object
+          additionalProperties: false
+          required:
+            - business
+            - technical
+            - qa
+            - security
+            - escalation
+          properties:
+            business:
+              type: string
+              format: uuid
+            technical:
+              type: string
+              format: uuid
+            qa:
+              type: string
+              format: uuid
+            security:
+              type: string
+              format: uuid
+            escalation:
+              type: string
+              format: uuid
+        criticalityKey:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        dataClassificationKey:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    EvaluateOnboardingCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - gateKind
+        - projectRegistryRef
+        - starterEntitlementSetHash
+        - bindingRef
+        - qaProjectContextRef
+        - requestedCapabilityMode
+      properties:
+        gateKind:
+          enum:
+            - L0
+            - C1
+            - N2
+            - P3
+        projectRegistryRef:
+          $ref: "#/components/schemas/ExactRef"
+        starterEntitlementSetHash:
+          type: string
+          pattern: ^sha256:[a-f0-9]{64}$
+        bindingRef:
+          $ref: "#/components/schemas/ExactRef"
+        qaProjectContextRef:
+          $ref: "#/components/schemas/ExactRef"
+        requestedCapabilityMode:
+          enum:
+            - MANUAL_ONLY
+            - FULL_QA
+    ProjectPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          maxItems: 100
+          items:
+            $ref: ../schemas/project/project-onboarding-package.v1.schema.json
+        nextCursor:
+          type: string
+          maxLength: 2048
+    EntitlementCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - principalId
+        - operation
+        - effect
+        - permissions
+        - classificationCeilingKey
+        - validFrom
+        - reason
+      properties:
+        principalId:
+          type: string
+          format: uuid
+        operation:
+          enum:
+            - GRANT
+            - REPLACE
+        effect:
+          enum:
+            - ALLOW
+            - DENY
+        permissions:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: string
+            pattern: ^[a-zA-Z][a-zA-Z0-9._:-]{0,127}$
+        classificationCeilingKey:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        validFrom:
+          type: string
+          format: date-time
+        validUntil:
+          type: string
+          format: date-time
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    ReasonCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    ValidateBindingCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - bindingVersion
+        - bindingContentHash
+        - probeKeys
+      properties:
+        bindingVersion:
+          type: integer
+          minimum: 1
+        bindingContentHash:
+          type: string
+          pattern: ^sha256:[a-f0-9]{64}$
+        probeKeys:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: string
+            pattern: ^[a-zA-Z][a-zA-Z0-9._:-]{0,127}$
+    BindingAcceptanceCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - bindingRef
+        - validationReportRef
+        - qaProjectContextRef
+        - acceptedResourceRefs
+        - checklistRef
+        - outcome
+        - reason
+      properties:
+        bindingRef:
+          $ref: "#/components/schemas/ExactRef"
+        validationReportRef:
+          $ref: "#/components/schemas/ExactRef"
+        qaProjectContextRef:
+          $ref: "#/components/schemas/ExactRef"
+        acceptedResourceRefs:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/ExactRef"
+        checklistRef:
+          $ref: "#/components/schemas/ExactRef"
+        outcome:
+          enum:
+            - ACCEPTED
+            - REJECTED
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    ExactApprovedActionCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - candidateRef
+        - approvalRef
+      properties:
+        candidateRef:
+          $ref: "#/components/schemas/ExactRef"
+        approvalRef:
+          $ref: "#/components/schemas/ExactRef"
+    SuspendCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - incidentRef
+        - reason
+      properties:
+        incidentRef:
+          type: string
+          minLength: 1
+          maxLength: 2048
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    ResumeCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - incidentRef
+        - incidentDispositionRef
+        - freshProbeRefs
+        - actionCandidateRef
+        - approvalRef
+        - reason
+      properties:
+        incidentRef:
+          type: string
+          minLength: 1
+          maxLength: 2048
+        incidentDispositionRef:
+          $ref: "#/components/schemas/ExactRef"
+        freshProbeRefs:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/ExactRef"
+        actionCandidateRef:
+          $ref: "#/components/schemas/ExactRef"
+        approvalRef:
+          $ref: "#/components/schemas/ExactRef"
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    EnvironmentRevisionCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - environmentId
+        - key
+        - name
+        - scope
+        - ownerPrincipalId
+        - dataClassificationKey
+        - configurationRef
+        - allowedTestDataPolicyRefs
+        - reason
+      properties:
+        environmentId:
+          type: string
+          format: uuid
+        key:
+          type: string
+          pattern: ^[a-zA-Z][a-zA-Z0-9._:-]{0,127}$
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+        scope:
+          enum:
+            - LOCAL
+            - NON_PROD
+            - PREPROD
+        ownerPrincipalId:
+          type: string
+          format: uuid
+        dataClassificationKey:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        configurationRef:
+          type: object
+          additionalProperties: false
+          required:
+            - key
+            - schemaRef
+            - resourceRef
+          properties:
+            key:
+              type: string
+              pattern: ^[a-zA-Z][a-zA-Z0-9._:-]{0,127}$
+            schemaRef:
+              type: object
+              additionalProperties: false
+              required:
+                - id
+                - version
+                - digest
+              properties:
+                id:
+                  type: string
+                  minLength: 1
+                  maxLength: 512
+                version:
+                  type: integer
+                  minimum: 1
+                digest:
+                  type: string
+                  pattern: ^sha256:[a-f0-9]{64}$
+            resourceRef:
+              $ref: "#/components/schemas/ExactRef"
+        allowedTestDataPolicyRefs:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/ExactRef"
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    QaProjectContextCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - environmentRefs
+        - testDataCatalogRefs
+        - accountPoolRefs
+        - targetPolicyRefs
+        - scopePolicyRefs
+        - checklistPolicyRefs
+        - defaultTargetPolicyRef
+        - defaultScopePolicyRef
+        - defaultChecklistRefs
+        - evidencePolicyRef
+        - retentionPolicyRef
+        - redactionPolicyRef
+        - exportPolicyRef
+        - riskReviewPolicyRef
+        - dorRuleSetRef
+        - dodRuleSetRef
+        - capabilityRequirementSetRef
+        - maximumClassificationKey
+        - reason
+      properties:
+        environmentRefs:
+          $ref: "#/components/schemas/ExactRefSet"
+        testDataCatalogRefs:
+          $ref: "#/components/schemas/ExactRefSet"
+        accountPoolRefs:
+          $ref: "#/components/schemas/ExactRefSet"
+        targetPolicyRefs:
+          $ref: "#/components/schemas/ExactRefSet"
+        scopePolicyRefs:
+          $ref: "#/components/schemas/ExactRefSet"
+        checklistPolicyRefs:
+          $ref: "#/components/schemas/ExactRefSet"
+        defaultTargetPolicyRef:
+          $ref: "#/components/schemas/ExactRef"
+        defaultScopePolicyRef:
+          $ref: "#/components/schemas/ExactRef"
+        defaultChecklistRefs:
+          $ref: "#/components/schemas/ExactRefSet"
+        evidencePolicyRef:
+          $ref: "#/components/schemas/ExactRef"
+        retentionPolicyRef:
+          $ref: "#/components/schemas/ExactRef"
+        redactionPolicyRef:
+          $ref: "#/components/schemas/ExactRef"
+        exportPolicyRef:
+          $ref: "#/components/schemas/ExactRef"
+        riskReviewPolicyRef:
+          $ref: "#/components/schemas/ExactRef"
+        dorRuleSetRef:
+          $ref: "#/components/schemas/ExactRef"
+        dodRuleSetRef:
+          $ref: "#/components/schemas/ExactRef"
+        capabilityRequirementSetRef:
+          $ref: "#/components/schemas/ExactRef"
+        maximumClassificationKey:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    TestDataResourceCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - kind
+        - resourceId
+        - externalRef
+        - ownerPrincipalId
+        - allowedEnvironmentRefs
+        - dataClassificationKey
+        - retentionPolicyRef
+      properties:
+        kind:
+          enum:
+            - DATASET
+            - PREPARATION_PROCEDURE
+        resourceId:
+          type: string
+          format: uuid
+        externalRef:
+          $ref: "#/components/schemas/ExactRef"
+        ownerPrincipalId:
+          type: string
+          format: uuid
+        allowedEnvironmentRefs:
+          $ref: "#/components/schemas/ExactRefSet"
+        dataClassificationKey:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        retentionPolicyRef:
+          $ref: "#/components/schemas/ExactRef"
+    AccountPoolResourceCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - kind
+        - resourceId
+        - environmentRef
+        - resolverRef
+        - ownerPrincipalId
+        - maximumConcurrentLeases
+        - maximumLeaseDurationSeconds
+        - dataClassificationKey
+      properties:
+        kind:
+          const: ACCOUNT_POOL
+        resourceId:
+          type: string
+          format: uuid
+        environmentRef:
+          $ref: "#/components/schemas/ExactRef"
+        resolverRef:
+          type: object
+          additionalProperties: false
+          required:
+            - key
+            - schemaRef
+            - resourceRef
+          properties:
+            key:
+              type: string
+              pattern: ^[a-zA-Z][a-zA-Z0-9._:-]{0,127}$
+            schemaRef:
+              $ref: "#/components/schemas/SchemaRef"
+            resourceRef:
+              $ref: "#/components/schemas/ExactRef"
+        ownerPrincipalId:
+          type: string
+          format: uuid
+        maximumConcurrentLeases:
+          type: integer
+          minimum: 1
+        maximumLeaseDurationSeconds:
+          type: integer
+          minimum: 1
+        dataClassificationKey:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+    AcquireLeaseCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - environmentRef
+        - accountPoolRef
+        - subjectRef
+        - purpose
+        - requestedUntil
+      properties:
+        environmentRef:
+          $ref: "#/components/schemas/ExactRef"
+        accountPoolRef:
+          $ref: "#/components/schemas/ExactRef"
+        subjectRef:
+          type: string
+          minLength: 1
+          maxLength: 256
+        purpose:
+          type: string
+          minLength: 1
+          maxLength: 512
+        requestedUntil:
+          type: string
+          format: date-time
+    ExportCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - packageVersion
+        - redactionPolicyRef
+        - format
+        - reason
+      properties:
+        packageVersion:
+          type: integer
+          minimum: 1
+        redactionPolicyRef:
+          $ref: "#/components/schemas/ExactRef"
+        format:
+          enum:
+            - JSON
+            - ZIP
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    ExactRef:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - version
+        - contentHash
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 256
+        version:
+          type: integer
+          minimum: 1
+        contentHash:
+          type: string
+          pattern: ^sha256:[a-f0-9]{64}$
+    ExactRefSet:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: "#/components/schemas/ExactRef"
+    SchemaRef:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - version
+        - digest
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 512
+        version:
+          type: integer
+          minimum: 1
+        digest:
+          type: string
+          pattern: ^sha256:[a-f0-9]{64}$
+    CommandReceipt:
+      type: object
+      additionalProperties: false
+      required:
+        - commandId
+        - state
+        - correlationId
+      properties:
+        commandId:
+          type: string
+          format: uuid
+        state:
+          enum:
+            - ACCEPTED
+            - COMPLETED
+            - REJECTED
+        resultRef:
+          $ref: "#/components/schemas/ExactRef"
+        correlationId:
+          type: string
+          minLength: 8
+          maxLength: 256
+    VerificationResult:
+      type: object
+      additionalProperties: false
+      required:
+        - manifestRef
+        - integrity
+        - signature
+        - keyStatus
+        - verifiedAt
+        - correlationId
+      properties:
+        manifestRef:
+          $ref: "#/components/schemas/ExactRef"
+        integrity:
+          enum:
+            - PASS
+            - FAIL
+        signature:
+          enum:
+            - PASS
+            - FAIL
+            - LEGACY_INTEGRITY_ONLY
+        keyStatus:
+          enum:
+            - PINNED_TRUSTED
+            - PINNED_REVOKED
+            - UNKNOWN
+            - NOT_APPLICABLE
+        safeIssueCodes:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        verifiedAt:
+          type: string
+          format: date-time
+        correlationId:
+          type: string
+          minLength: 8
+          maxLength: 256
+    GrantEntitlementCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - principalId
+        - operation
+        - effect
+        - permissions
+        - classificationCeilingKey
+        - validFrom
+        - reason
+      properties:
+        principalId:
+          type: string
+          format: uuid
+        operation:
+          const: GRANT
+        effect:
+          enum:
+            - ALLOW
+            - DENY
+        permissions:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: string
+            pattern: ^[a-zA-Z][a-zA-Z0-9._:-]{0,127}$
+        classificationCeilingKey:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        validFrom:
+          type: string
+          format: date-time
+        validUntil:
+          type: string
+          format: date-time
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    ReplaceEntitlementCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - principalId
+        - operation
+        - effect
+        - permissions
+        - classificationCeilingKey
+        - validFrom
+        - reason
+      properties:
+        principalId:
+          type: string
+          format: uuid
+        operation:
+          const: REPLACE
+        effect:
+          enum:
+            - ALLOW
+            - DENY
+        permissions:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: string
+            pattern: ^[a-zA-Z][a-zA-Z0-9._:-]{0,127}$
+        classificationCeilingKey:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]{1,63}$
+        validFrom:
+          type: string
+          format: date-time
+        validUntil:
+          type: string
+          format: date-time
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+x-awp-supersedes: project-onboarding-evidence-api.v1.yaml
+x-awp-compatibility-policy: docs/runbooks/onboarding-openapi-convergence.md

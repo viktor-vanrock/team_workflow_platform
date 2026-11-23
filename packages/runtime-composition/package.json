@@ -1,0 +1,33 @@
+{
+  "name": "@awp/runtime-composition",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./non-local": "./src/non-local.composition.ts",
+    "./qa": "./src/qa/composition.ts"
+  },
+  "scripts": {
+    "migrate": "tsx --tsconfig ../../tsconfig.base.json src/cli/migrate.ts",
+    "seed": "tsx --tsconfig ../../tsconfig.base.json src/cli/seed.ts"
+  },
+  "dependencies": {
+    "@awp/competency-dummy": "workspace:*",
+    "@awp/competency-qa": "workspace:*",
+    "@awp/connector-gitlab": "workspace:*",
+    "@awp/connector-gitlab-persistence-typeorm": "workspace:*",
+    "@awp/connector-jira": "workspace:*",
+    "@awp/connector-jira-persistence-typeorm": "workspace:*",
+    "@awp/connector-mattermost": "workspace:*",
+    "@awp/connector-mock": "workspace:*",
+    "@awp/connector-sdk": "workspace:*",
+    "@awp/platform-contracts": "workspace:*",
+    "@awp/platform-core": "workspace:*",
+    "@awp/platform-persistence-typeorm": "workspace:*",
+    "@awp/platform-runtime-nest": "workspace:*",
+    "typeorm": "catalog:",
+    "@awp/competency-tech-writing": "workspace:*",
+    "@awp/competency-ui-sdk": "workspace:*"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:event-envelope:v1",
+  "title": "QA Alias to the Published Project-scoped Event Envelope",
+  "description": "No QA-specific transport fork. Payload specialization is defined in qa-events.v1.schema.json.",
+  "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/events/event-envelope.v1.schema.json"
+}
+

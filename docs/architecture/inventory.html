@@ -1,0 +1,4216 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AWP — технический каталог</title><style>
+:root{color-scheme:light;--ink:#19344f;--muted:#567087;--line:#dbe4ed;--accent:#185fb0}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#fff}header{padding:22px 36px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;font-weight:600}header span{font-weight:400;color:var(--muted)}.layout{display:grid;grid-template-columns:240px minmax(0,1fr);max-width:1720px;margin:0 auto}nav{padding:30px 20px;position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto}nav a{display:block;padding:8px 10px;font-size:14px;text-decoration:none;border-radius:5px}nav a:hover{background:#edf4fc}main{padding:26px 48px 100px;min-width:0;border-left:1px solid var(--line)}h1{font-size:36px;line-height:1.18;letter-spacing:-.8px;margin:6px 0 28px}h2{font-size:27px;line-height:1.3;margin:60px 0 20px;padding-top:18px;border-top:1px solid var(--line)}h3{font-size:20px;line-height:1.4;margin:32px 0 14px}p{margin:16px 0}a{color:var(--accent);overflow-wrap:anywhere}code{font-size:.86em;background:#f1f5f9;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#f4f7fb;padding:18px;border-radius:6px;overflow:auto;line-height:1.4}pre code{background:none;padding:0}table{width:100%;border-collapse:collapse;font-size:14px;margin:22px 0}th{text-align:left;background:#f1f6fb;font-weight:600}td,th{padding:12px 13px;border:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}li{margin:9px 0}.architecture-figure{margin:28px 0;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.diagram-scroll{overflow:auto;padding:12px 0}.diagram-scroll>svg{display:block;margin:0 auto;max-width:100%;height:auto}figcaption{font-size:13px;color:var(--muted);padding-top:14px}details{margin-top:12px}summary{cursor:pointer;color:var(--accent);font-size:13px}a[id]{scroll-margin-top:18px}
+.diagram-controls{display:flex;gap:8px;justify-content:flex-end}.diagram-controls button{cursor:pointer;border:1px solid var(--line);color:var(--ink);background:#fff;border-radius:4px;padding:5px 10px;font:inherit;font-size:13px}.diagram-controls button[aria-pressed=true]{background:#eaf2fc;border-color:#8fa9c8}
+@media(max-width:950px){.layout{grid-template-columns:1fr}nav{position:static;max-height:none;display:flex;flex-wrap:wrap;padding:12px}nav a{padding:5px 8px}main{padding:20px;border:0}h1{font-size:28px}header{padding:18px;flex-wrap:wrap}.diagram-scroll>svg{min-width:800px}table{font-size:12px}td,th{padding:8px 6px}}
+@media print{nav,header,details,figcaption{display:none}.layout{display:block}main{padding:0;border:0}h2{break-before:page}.architecture-figure,table{break-inside:avoid}a{color:inherit}}
+</style></head><body><header>AWP <span>Архитектура · 10.09.2026 · рабочий срез 3a7b21c</span></header><div class="layout"><nav aria-label="Разделы"><a href="architecture.html">← Архитектурная схема</a></nav><main><h1 id="технический-каталог-архитектуры">Технический каталог архитектуры</h1>
+<p>Снимок: 2026-09-10T12:52:30.332Z. HEAD: <code>3a7b21c</code> + рабочие изменения.</p>
+<p>Автоматический разбор TypeScript AST. Декларация контроллера не означает его подключение в каждом runtime profile. Список таблиц отражает EntitySchema в исходниках, а не запрос к развёрнутой БД; таблицы, создаваемые только SQL-миграциями, сюда не входят. Source imports включают type-only imports и re-exports.</p>
+<p><a href="architecture.html">Основная схема</a></p>
+<h2 id="пакеты-и-зависимости">Пакеты и зависимости</h2>
+<table>
+<thead>
+<tr>
+<th>Пакет</th>
+<th align="right">Исходники</th>
+<th>Импорты других пакетов</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="../../apps/api/package.json">@awp/api</a></td>
+<td align="right">98</td>
+<td><code>@awp/competency-dummy</code>, <code>@awp/competency-qa</code>, <code>@awp/competency-tech-writing</code>, <code>@awp/competency-ui-sdk</code>, <code>@awp/platform-contracts</code>, <code>@awp/platform-core</code>, <code>@awp/platform-persistence-typeorm</code>, <code>@awp/platform-runtime-nest</code>, <code>@awp/runtime-composition</code></td>
+</tr>
+<tr>
+<td><a href="../../apps/fake-idp/package.json">@awp/fake-idp</a></td>
+<td align="right">2</td>
+<td>—</td>
+</tr>
+<tr>
+<td><a href="../../apps/mock-hub/package.json">@awp/mock-hub</a></td>
+<td align="right">49</td>
+<td>—</td>
+</tr>
+<tr>
+<td><a href="../../apps/web/package.json">@awp/web</a></td>
+<td align="right">35</td>
+<td><code>@awp/competency-dummy</code>, <code>@awp/competency-qa</code>, <code>@awp/competency-tech-writing</code>, <code>@awp/competency-ui-sdk</code>, <code>@awp/platform-ui</code></td>
+</tr>
+<tr>
+<td><a href="../../apps/worker/package.json">@awp/worker</a></td>
+<td align="right">5</td>
+<td><code>@awp/platform-core</code>, <code>@awp/platform-runtime-nest</code>, <code>@awp/runtime-composition</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/competency-dummy/package.json">@awp/competency-dummy</a></td>
+<td align="right">11</td>
+<td><code>@awp/competency-sdk</code>, <code>@awp/competency-ui-sdk</code>, <code>@awp/platform-core</code>, <code>@awp/platform-ui</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/competency-qa/package.json">@awp/competency-qa</a></td>
+<td align="right">245</td>
+<td><code>@awp/competency-sdk</code>, <code>@awp/competency-ui-sdk</code>, <code>@awp/platform-contracts</code>, <code>@awp/platform-ui</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/competency-sdk/package.json">@awp/competency-sdk</a></td>
+<td align="right">3</td>
+<td><code>@awp/platform-contracts</code>, <code>@awp/platform-core</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/competency-tech-writing/package.json">@awp/competency-tech-writing</a></td>
+<td align="right">7</td>
+<td><code>@awp/competency-sdk</code>, <code>@awp/competency-ui-sdk</code>, <code>@awp/platform-ui</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/competency-ui-sdk/package.json">@awp/competency-ui-sdk</a></td>
+<td align="right">2</td>
+<td>—</td>
+</tr>
+<tr>
+<td><a href="../../packages/connector-gitlab/package.json">@awp/connector-gitlab</a></td>
+<td align="right">16</td>
+<td><code>@awp/connector-sdk</code>, <code>@awp/platform-contracts</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/package.json">@awp/connector-gitlab-persistence-typeorm</a></td>
+<td align="right">13</td>
+<td><code>@awp/platform-contracts</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/connector-jira/package.json">@awp/connector-jira</a></td>
+<td align="right">38</td>
+<td><code>@awp/platform-contracts</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/connector-jira-persistence-typeorm/package.json">@awp/connector-jira-persistence-typeorm</a></td>
+<td align="right">14</td>
+<td><code>@awp/connector-jira</code>, <code>@awp/platform-contracts</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/connector-mattermost/package.json">@awp/connector-mattermost</a></td>
+<td align="right">12</td>
+<td><code>@awp/connector-sdk</code>, <code>@awp/platform-contracts</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/connector-mock/package.json">@awp/connector-mock</a></td>
+<td align="right">5</td>
+<td><code>@awp/connector-sdk</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/connector-sdk/package.json">@awp/connector-sdk</a></td>
+<td align="right">10</td>
+<td><code>@awp/platform-contracts</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/platform-contracts/package.json">@awp/platform-contracts</a></td>
+<td align="right">12</td>
+<td>—</td>
+</tr>
+<tr>
+<td><a href="../../packages/platform-core/package.json">@awp/platform-core</a></td>
+<td align="right">87</td>
+<td><code>@awp/platform-contracts</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/platform-persistence-typeorm/package.json">@awp/platform-persistence-typeorm</a></td>
+<td align="right">113</td>
+<td><code>@awp/platform-contracts</code>, <code>@awp/platform-core</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/platform-runtime-nest/package.json">@awp/platform-runtime-nest</a></td>
+<td align="right">35</td>
+<td><code>@awp/platform-core</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/platform-testkit/package.json">@awp/platform-testkit</a></td>
+<td align="right">7</td>
+<td><code>@awp/platform-core</code></td>
+</tr>
+<tr>
+<td><a href="../../packages/platform-ui/package.json">@awp/platform-ui</a></td>
+<td align="right">8</td>
+<td>—</td>
+</tr>
+<tr>
+<td><a href="../../packages/runtime-composition/package.json">@awp/runtime-composition</a></td>
+<td align="right">237</td>
+<td><code>@awp/competency-dummy</code>, <code>@awp/competency-qa</code>, <code>@awp/competency-tech-writing</code>, <code>@awp/competency-ui-sdk</code>, <code>@awp/connector-gitlab</code>, <code>@awp/connector-gitlab-persistence-typeorm</code>, <code>@awp/connector-jira</code>, <code>@awp/connector-jira-persistence-typeorm</code>, <code>@awp/connector-mattermost</code>, <code>@awp/connector-mock</code>, <code>@awp/connector-sdk</code>, <code>@awp/platform-contracts</code>, <code>@awp/platform-core</code>, <code>@awp/platform-persistence-typeorm</code>, <code>@awp/platform-runtime-nest</code></td>
+</tr>
+</tbody></table>
+<h2 id="модули-nestjs">Модули NestJS</h2>
+<table>
+<thead>
+<tr>
+<th>Модуль</th>
+<th>Контроллеры в статическом декораторе</th>
+<th>Импорты / dynamic</th>
+<th>Источник</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CorporateAccessModule</td>
+<td>—</td>
+<td>—; register() — состав см. в коде</td>
+<td><a href="../../apps/api/src/access/access.module.ts#L9">apps/api/src/access/access.module.ts:9</a></td>
+</tr>
+<tr>
+<td>LocalApiModule</td>
+<td>LocalHealthController, LocalOpenApiController, LocalPersonaController, LocalAccessController, WorkspaceSubjectsController, TechWritingController, LocalWalkingSkeletonController</td>
+<td>—</td>
+<td><a href="../../apps/api/src/app.module.ts#L260">apps/api/src/app.module.ts:260</a></td>
+</tr>
+<tr>
+<td>QaLocalApiModule</td>
+<td>LocalHealthController, LocalOpenApiController, LocalPersonaController, LocalAccessController, WorkspaceSubjectsController, TechWritingController, LocalWalkingSkeletonController, QaPackController, QaReadinessController, QaRequiredSessionPlansController, QaSessionsController, QaManualExecutionController, QaEvidenceController, QaSessionReviewController, QaFindingsController, QaDefectsController, QaVerdictCompletionController</td>
+<td>—</td>
+<td><a href="../../apps/api/src/app.module.ts#L300">apps/api/src/app.module.ts:300</a></td>
+</tr>
+<tr>
+<td>QaJiraLocalApiModule</td>
+<td>LocalHealthController, LocalOpenApiController, LocalPersonaController, LocalAccessController, WorkspaceSubjectsController, TechWritingController, LocalWalkingSkeletonController, QaPackController, QaReadinessController, QaRequiredSessionPlansController, QaSessionsController, QaManualExecutionController, QaEvidenceController, QaSessionReviewController, QaFindingsController, QaDefectsController, QaVerdictCompletionController, ConnectorWebhooksController, OperationalAuthorityController, ApprovalsV11Controller, QueueController, PortfolioQueueController, QueueControlsController, QueuePoliciesController</td>
+<td>QueueFoundationApiModule</td>
+<td><a href="../../apps/api/src/app.module.ts#L450">apps/api/src/app.module.ts:450</a></td>
+</tr>
+<tr>
+<td>QaJiraGitLabLocalApiModule</td>
+<td>qaGitLabAutomationControllers</td>
+<td>QaJiraLocalApiModule</td>
+<td><a href="../../apps/api/src/app.module.ts#L877">apps/api/src/app.module.ts:877</a></td>
+</tr>
+<tr>
+<td>QaJiraMattermostLocalApiModule</td>
+<td>MattermostIntegrationController, MattermostBootstrapController, MattermostProjectSelectionController, MattermostIngressController, IntakeDraftRevisionsController, IntakeCandidatesController, AgentRunsController, NotificationIntentsController, QaHermesProposalsController, QaHermesProposalResourcesController, OnboardingController, ProjectDialogueController, PublishedOnboardingController, ProjectReadsController, EvidenceIntegrityController, ProjectOperationsController, PublishedProjectOperationsController</td>
+<td>QaJiraLocalApiModule</td>
+<td><a href="../../apps/api/src/app.module.ts#L884">apps/api/src/app.module.ts:884</a></td>
+</tr>
+<tr>
+<td>QaJiraGitLabMattermostLocalApiModule</td>
+<td>qaGitLabAutomationControllers</td>
+<td>QaJiraMattermostLocalApiModule, QaJiraLocalApiModule</td>
+<td><a href="../../apps/api/src/app.module.ts#L1032">apps/api/src/app.module.ts:1032</a></td>
+</tr>
+<tr>
+<td>CoreApiModule</td>
+<td>HealthController</td>
+<td>—</td>
+<td><a href="../../apps/api/src/app.module.ts#L1039">apps/api/src/app.module.ts:1039</a></td>
+</tr>
+<tr>
+<td>PilotNonLocalApiModule</td>
+<td>—</td>
+<td>—; register() — состав см. в коде</td>
+<td><a href="../../apps/api/src/app.module.ts#L1053">apps/api/src/app.module.ts:1053</a></td>
+</tr>
+<tr>
+<td>PublishedAutomationAvailabilityModule</td>
+<td>—</td>
+<td>—; register() — состав см. в коде</td>
+<td><a href="../../apps/api/src/extensions/gitlab-automation/published-automation-availability.module.ts#L21">apps/api/src/extensions/gitlab-automation/published-automation-availability.module.ts:21</a></td>
+</tr>
+<tr>
+<td>CorporateOnboardingModule</td>
+<td>—</td>
+<td>—; register() — состав см. в коде</td>
+<td><a href="../../apps/api/src/extensions/onboarding/corporate-onboarding.module.ts#L66">apps/api/src/extensions/onboarding/corporate-onboarding.module.ts:66</a></td>
+</tr>
+<tr>
+<td>PilotDeadLetterModule</td>
+<td>—</td>
+<td>—; register() — состав см. в коде</td>
+<td><a href="../../apps/api/src/extensions/pilot/dead-letter.module.ts#L15">apps/api/src/extensions/pilot/dead-letter.module.ts:15</a></td>
+</tr>
+<tr>
+<td>ProviderIngressModule</td>
+<td>—</td>
+<td>—; register() — состав см. в коде</td>
+<td><a href="../../apps/api/src/extensions/pilot/provider-ingress.module.ts#L96">apps/api/src/extensions/pilot/provider-ingress.module.ts:96</a></td>
+</tr>
+<tr>
+<td>QueueFoundationApiModule</td>
+<td>—</td>
+<td>—</td>
+<td><a href="../../apps/api/src/extensions/queue/queue.module.ts#L6">apps/api/src/extensions/queue/queue.module.ts:6</a></td>
+</tr>
+<tr>
+<td>WorkspaceInstallationModule</td>
+<td>—</td>
+<td>—; register() — состав см. в коде</td>
+<td><a href="../../apps/api/src/workspace/workspace.module.ts#L86">apps/api/src/workspace/workspace.module.ts:86</a></td>
+</tr>
+<tr>
+<td>FakeIdpModule</td>
+<td>IdpHealthController, FakeOidcController</td>
+<td>—</td>
+<td><a href="../../apps/fake-idp/src/main.ts#L20">apps/fake-idp/src/main.ts:20</a></td>
+</tr>
+<tr>
+<td>MockHubAppModule</td>
+<td>—</td>
+<td>—</td>
+<td><a href="../../apps/mock-hub/src/app.module.ts#L21">apps/mock-hub/src/app.module.ts:21</a></td>
+</tr>
+<tr>
+<td>ConfiguredMockHubModule</td>
+<td>MockHealthController, MockHubController, OperationalController, PilotCapabilitiesController</td>
+<td>JiraModule.configured(source), MattermostModule.configured(source), GitLabModule.configured(source)</td>
+<td><a href="../../apps/mock-hub/src/app.module.ts#L24">apps/mock-hub/src/app.module.ts:24</a></td>
+</tr>
+<tr>
+<td>GitLabModule</td>
+<td>—</td>
+<td>—</td>
+<td><a href="../../apps/mock-hub/src/gitlab/gitlab.module.ts#L57">apps/mock-hub/src/gitlab/gitlab.module.ts:57</a></td>
+</tr>
+<tr>
+<td>JiraModule</td>
+<td>—</td>
+<td>—</td>
+<td><a href="../../apps/mock-hub/src/jira/jira.module.ts#L8">apps/mock-hub/src/jira/jira.module.ts:8</a></td>
+</tr>
+<tr>
+<td>MattermostModule</td>
+<td>—</td>
+<td>—</td>
+<td><a href="../../apps/mock-hub/src/mattermost/mattermost.module.ts#L19">apps/mock-hub/src/mattermost/mattermost.module.ts:19</a></td>
+</tr>
+<tr>
+<td>OperationalModule</td>
+<td>OperationalController</td>
+<td>—</td>
+<td><a href="../../apps/mock-hub/src/operational/operational.module.ts#L5">apps/mock-hub/src/operational/operational.module.ts:5</a></td>
+</tr>
+<tr>
+<td>LocalWorkerAppModule</td>
+<td>LocalWorkerHealthController</td>
+<td>—</td>
+<td><a href="../../apps/worker/src/app.module.ts#L339">apps/worker/src/app.module.ts:339</a></td>
+</tr>
+<tr>
+<td>QaLocalWorkerAppModule</td>
+<td>LocalWorkerHealthController</td>
+<td>—</td>
+<td><a href="../../apps/worker/src/app.module.ts#L357">apps/worker/src/app.module.ts:357</a></td>
+</tr>
+<tr>
+<td>QaJiraLocalWorkerAppModule</td>
+<td>LocalWorkerHealthController</td>
+<td>—</td>
+<td><a href="../../apps/worker/src/app.module.ts#L383">apps/worker/src/app.module.ts:383</a></td>
+</tr>
+<tr>
+<td>QaJiraGitLabLocalWorkerAppModule</td>
+<td>—</td>
+<td>QaJiraLocalWorkerAppModule</td>
+<td><a href="../../apps/worker/src/app.module.ts#L506">apps/worker/src/app.module.ts:506</a></td>
+</tr>
+<tr>
+<td>QaJiraMattermostLocalWorkerAppModule</td>
+<td>LocalWorkerHealthController</td>
+<td>—</td>
+<td><a href="../../apps/worker/src/app.module.ts#L509">apps/worker/src/app.module.ts:509</a></td>
+</tr>
+<tr>
+<td>QaJiraGitLabMattermostLocalWorkerAppModule</td>
+<td>—</td>
+<td>QaJiraMattermostLocalWorkerAppModule</td>
+<td><a href="../../apps/worker/src/app.module.ts#L646">apps/worker/src/app.module.ts:646</a></td>
+</tr>
+<tr>
+<td>CoreWorkerAppModule</td>
+<td>HealthController</td>
+<td>—</td>
+<td><a href="../../apps/worker/src/app.module.ts#L649">apps/worker/src/app.module.ts:649</a></td>
+</tr>
+<tr>
+<td>PilotNonLocalWorkerAppModule</td>
+<td>—</td>
+<td>—; register() — состав см. в коде</td>
+<td><a href="../../apps/worker/src/app.module.ts#L654">apps/worker/src/app.module.ts:654</a></td>
+</tr>
+<tr>
+<td>CorporateAuthenticationModule</td>
+<td>—</td>
+<td>—</td>
+<td><a href="../../packages/platform-runtime-nest/src/auth/corporate-session.controller.ts#L102">packages/platform-runtime-nest/src/auth/corporate-session.controller.ts:102</a></td>
+</tr>
+<tr>
+<td>InstrumentedRuntimeModule</td>
+<td>—</td>
+<td>—</td>
+<td><a href="../../packages/platform-runtime-nest/src/observability/runtime-module.ts#L23">packages/platform-runtime-nest/src/observability/runtime-module.ts:23</a></td>
+</tr>
+</tbody></table>
+<h2 id="таблицы-entityschema">Таблицы EntitySchema</h2>
+<p>Найдено 242 деклараций. Ownership — пакет с декларацией; один PostgreSQL, логические владельцы и префиксы таблиц.</p>
+<h3 id="awpmock-hub">@awp/mock-hub</h3>
+<table>
+<thead>
+<tr>
+<th>Таблица</th>
+<th>Entity</th>
+<th>Источник</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>mattermost_mock_callbacks</code></td>
+<td>MattermostMockCallback</td>
+<td><a href="../../apps/mock-hub/src/mattermost/state/mattermost.entities.ts#L71">apps/mock-hub/src/mattermost/state/mattermost.entities.ts:71</a></td>
+</tr>
+<tr>
+<td><code>mattermost_mock_channels</code></td>
+<td>MattermostMockChannel</td>
+<td><a href="../../apps/mock-hub/src/mattermost/state/mattermost.entities.ts#L13">apps/mock-hub/src/mattermost/state/mattermost.entities.ts:13</a></td>
+</tr>
+<tr>
+<td><code>mattermost_mock_effect_calls</code></td>
+<td>MattermostMockEffectCall</td>
+<td><a href="../../apps/mock-hub/src/mattermost/state/mattermost.entities.ts#L84">apps/mock-hub/src/mattermost/state/mattermost.entities.ts:84</a></td>
+</tr>
+<tr>
+<td><code>mattermost_mock_faults</code></td>
+<td>MattermostMockFault</td>
+<td><a href="../../apps/mock-hub/src/mattermost/state/mattermost.entities.ts#L61">apps/mock-hub/src/mattermost/state/mattermost.entities.ts:61</a></td>
+</tr>
+<tr>
+<td><code>mattermost_mock_memberships</code></td>
+<td>MattermostMockMembership</td>
+<td><a href="../../apps/mock-hub/src/mattermost/state/mattermost.entities.ts#L36">apps/mock-hub/src/mattermost/state/mattermost.entities.ts:36</a></td>
+</tr>
+<tr>
+<td><code>mattermost_mock_teams</code></td>
+<td>MattermostMockTeam</td>
+<td><a href="../../apps/mock-hub/src/mattermost/state/mattermost.entities.ts#L3">apps/mock-hub/src/mattermost/state/mattermost.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>mattermost_mock_users</code></td>
+<td>MattermostMockUser</td>
+<td><a href="../../apps/mock-hub/src/mattermost/state/mattermost.entities.ts#L25">apps/mock-hub/src/mattermost/state/mattermost.entities.ts:25</a></td>
+</tr>
+<tr>
+<td><code>mock_calls</code></td>
+<td>MockCall</td>
+<td><a href="../../apps/mock-hub/src/persistence/entities.ts#L7">apps/mock-hub/src/persistence/entities.ts:7</a></td>
+</tr>
+<tr>
+<td><code>mock_effects</code></td>
+<td>MockEffect</td>
+<td><a href="../../apps/mock-hub/src/persistence/entities.ts#L17">apps/mock-hub/src/persistence/entities.ts:17</a></td>
+</tr>
+<tr>
+<td><code>mock_events</code></td>
+<td>MockEvent</td>
+<td><a href="../../apps/mock-hub/src/persistence/entities.ts#L29">apps/mock-hub/src/persistence/entities.ts:29</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_artifacts</code></td>
+<td>GitLabMockArtifact</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L103">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:103</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_call_audit</code></td>
+<td>GitLabMockCallAudit</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L151">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:151</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_commits</code></td>
+<td>GitLabMockCommit</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L28">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:28</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_faults</code></td>
+<td>GitLabMockFault</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L139">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:139</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_jobs</code></td>
+<td>GitLabMockJob</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L71">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:71</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_machine_results</code></td>
+<td>GitLabMockMachineResult</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L88">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:88</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_merge_requests</code></td>
+<td>GitLabMockMergeRequest</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L38">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:38</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_pipelines</code></td>
+<td>GitLabMockPipeline</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L53">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:53</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_projects</code></td>
+<td>GitLabMockProject</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L8">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:8</a></td>
+</tr>
+<tr>
+<td><code>mock_gitlab_webhook_deliveries</code></td>
+<td>GitLabMockWebhookDelivery</td>
+<td><a href="../../apps/mock-hub/src/gitlab/state/gitlab.entities.ts#L121">apps/mock-hub/src/gitlab/state/gitlab.entities.ts:121</a></td>
+</tr>
+<tr>
+<td><code>mock_mattermost_posts</code></td>
+<td>MattermostMockPost</td>
+<td><a href="../../apps/mock-hub/src/mattermost/state/mattermost.entities.ts#L47">apps/mock-hub/src/mattermost/state/mattermost.entities.ts:47</a></td>
+</tr>
+<tr>
+<td><code>mock_scenario</code></td>
+<td>MockScenario</td>
+<td><a href="../../apps/mock-hub/src/persistence/entities.ts#L40">apps/mock-hub/src/persistence/entities.ts:40</a></td>
+</tr>
+<tr>
+<td><code>mock_seed_state</code></td>
+<td>MockSeed</td>
+<td><a href="../../apps/mock-hub/src/persistence/entities.ts#L49">apps/mock-hub/src/persistence/entities.ts:49</a></td>
+</tr>
+<tr>
+<td><code>operational_completion_effects</code></td>
+<td>OperationalCompletionEffect</td>
+<td><a href="../../apps/mock-hub/src/operational/operational.entities.ts#L86">apps/mock-hub/src/operational/operational.entities.ts:86</a></td>
+</tr>
+<tr>
+<td><code>operational_defect_effects</code></td>
+<td>OperationalDefectEffect</td>
+<td><a href="../../apps/mock-hub/src/operational/operational.entities.ts#L70">apps/mock-hub/src/operational/operational.entities.ts:70</a></td>
+</tr>
+<tr>
+<td><code>operational_defects</code></td>
+<td>OperationalDefect</td>
+<td><a href="../../apps/mock-hub/src/operational/operational.entities.ts#L48">apps/mock-hub/src/operational/operational.entities.ts:48</a></td>
+</tr>
+<tr>
+<td><code>operational_request_effects</code></td>
+<td>OperationalRequestEffect</td>
+<td><a href="../../apps/mock-hub/src/operational/operational.entities.ts#L32">apps/mock-hub/src/operational/operational.entities.ts:32</a></td>
+</tr>
+<tr>
+<td><code>operational_requests</code></td>
+<td>OperationalRequest</td>
+<td><a href="../../apps/mock-hub/src/operational/operational.entities.ts#L3">apps/mock-hub/src/operational/operational.entities.ts:3</a></td>
+</tr>
+</tbody></table>
+<h3 id="awpcompetency-dummy">@awp/competency-dummy</h3>
+<table>
+<thead>
+<tr>
+<th>Таблица</th>
+<th>Entity</th>
+<th>Источник</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>dummy_requests</code></td>
+<td>DummyRequest</td>
+<td><a href="../../packages/competency-dummy/src/persistence/entities.ts#L3">packages/competency-dummy/src/persistence/entities.ts:3</a></td>
+</tr>
+</tbody></table>
+<h3 id="awpcompetency-qa">@awp/competency-qa</h3>
+<table>
+<thead>
+<tr>
+<th>Таблица</th>
+<th>Entity</th>
+<th>Источник</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>qa_account_pool_references</code></td>
+<td>QaAccountPoolReference</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1674">packages/competency-qa/src/persistence/entities.ts:1674</a></td>
+</tr>
+<tr>
+<td><code>qa_attempt_identities</code></td>
+<td>QaAttemptIdentity</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1167">packages/competency-qa/src/persistence/entities.ts:1167</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_artifact_memberships</code></td>
+<td>QaAutomationArtifactMembership</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1373">packages/competency-qa/src/persistence/entities.ts:1373</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_attempt_results</code></td>
+<td>QaAutomationAttemptResult</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1304">packages/competency-qa/src/persistence/entities.ts:1304</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_attempt_status_revisions</code></td>
+<td>QaAutomationAttemptStatusRevision</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1275">packages/competency-qa/src/persistence/entities.ts:1275</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_attempts</code></td>
+<td>QaAutomationAttempt</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1226">packages/competency-qa/src/persistence/entities.ts:1226</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_launch_requests</code></td>
+<td>QaAutomationLaunchRequest</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1191">packages/competency-qa/src/persistence/entities.ts:1191</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_quarantine_revisions</code></td>
+<td>QaAutomationQuarantineRevision</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1433">packages/competency-qa/src/persistence/entities.ts:1433</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_quarantines</code></td>
+<td>QaAutomationQuarantine</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1410">packages/competency-qa/src/persistence/entities.ts:1410</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_retry_decisions</code></td>
+<td>QaAutomationRetryDecision</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1346">packages/competency-qa/src/persistence/entities.ts:1346</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_review_freezes</code></td>
+<td>QaAutomationReviewFreeze</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1467">packages/competency-qa/src/persistence/entities.ts:1467</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_session_configuration_pins</code></td>
+<td>QaAutomationSessionConfigurationPin</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1133">packages/competency-qa/src/persistence/entities.ts:1133</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_suite_binding_versions</code></td>
+<td>QaAutomationSuiteBindingVersion</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1062">packages/competency-qa/src/persistence/entities.ts:1062</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_suite_bindings</code></td>
+<td>QaAutomationSuiteBinding</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1042">packages/competency-qa/src/persistence/entities.ts:1042</a></td>
+</tr>
+<tr>
+<td><code>qa_automation_suite_validation_reports</code></td>
+<td>QaAutomationSuiteValidationReport</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1107">packages/competency-qa/src/persistence/entities.ts:1107</a></td>
+</tr>
+<tr>
+<td><code>qa_completion_candidates</code></td>
+<td>QaCompletionCandidate</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L908">packages/competency-qa/src/persistence/entities.ts:908</a></td>
+</tr>
+<tr>
+<td><code>qa_defect_draft_proposals</code></td>
+<td>QaDefectProposal</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1912">packages/competency-qa/src/persistence/entities.ts:1912</a></td>
+</tr>
+<tr>
+<td><code>qa_defect_drafts</code></td>
+<td>QaDefectDraft</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L762">packages/competency-qa/src/persistence/entities.ts:762</a></td>
+</tr>
+<tr>
+<td><code>qa_defect_links</code></td>
+<td>QaDefectLink</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L802">packages/competency-qa/src/persistence/entities.ts:802</a></td>
+</tr>
+<tr>
+<td><code>qa_dod_assessments</code></td>
+<td>QaDodAssessment</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L886">packages/competency-qa/src/persistence/entities.ts:886</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_artifact_links</code></td>
+<td>QaEvidenceArtifactLink</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L522">packages/competency-qa/src/persistence/entities.ts:522</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_manifest_artifact_memberships</code></td>
+<td>QaEvidenceManifestArtifactMembership</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L610">packages/competency-qa/src/persistence/entities.ts:610</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_manifest_artifact_memberships_v2</code></td>
+<td>QaEvidenceManifestArtifactMembershipV2</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1815">packages/competency-qa/src/persistence/entities.ts:1815</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_manifest_headers_v2</code></td>
+<td>QaEvidenceManifestHeaderV2</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1767">packages/competency-qa/src/persistence/entities.ts:1767</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_manifest_revisions</code></td>
+<td>QaEvidenceManifestRevision</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L587">packages/competency-qa/src/persistence/entities.ts:587</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_manifest_revisions_v2</code></td>
+<td>QaEvidenceManifestRevisionV2</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1785">packages/competency-qa/src/persistence/entities.ts:1785</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_manifests</code></td>
+<td>QaEvidenceManifest</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L566">packages/competency-qa/src/persistence/entities.ts:566</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_packages</code></td>
+<td>QaEvidencePackage</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1858">packages/competency-qa/src/persistence/entities.ts:1858</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_signature_envelopes</code></td>
+<td>QaEvidenceSignatureEnvelope</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1831">packages/competency-qa/src/persistence/entities.ts:1831</a></td>
+</tr>
+<tr>
+<td><code>qa_evidence_uploads</code></td>
+<td>QaEvidenceUpload</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1880">packages/competency-qa/src/persistence/entities.ts:1880</a></td>
+</tr>
+<tr>
+<td><code>qa_final_close_confirmations</code></td>
+<td>QaFinalCloseConfirmation</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L952">packages/competency-qa/src/persistence/entities.ts:952</a></td>
+</tr>
+<tr>
+<td><code>qa_finding_observations</code></td>
+<td>QaFindingObservation</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L686">packages/competency-qa/src/persistence/entities.ts:686</a></td>
+</tr>
+<tr>
+<td><code>qa_finding_review_revisions</code></td>
+<td>QaFindingReviewRevision</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L706">packages/competency-qa/src/persistence/entities.ts:706</a></td>
+</tr>
+<tr>
+<td><code>qa_findings</code></td>
+<td>QaFinding</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L660">packages/competency-qa/src/persistence/entities.ts:660</a></td>
+</tr>
+<tr>
+<td><code>qa_manual_attempts</code></td>
+<td>QaManualAttempt</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L386">packages/competency-qa/src/persistence/entities.ts:386</a></td>
+</tr>
+<tr>
+<td><code>qa_observations</code></td>
+<td>QaObservation</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L410">packages/competency-qa/src/persistence/entities.ts:410</a></td>
+</tr>
+<tr>
+<td><code>qa_plan_item_result_attempt_memberships</code></td>
+<td>QaPlanItemResultAttemptMembership</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L489">packages/competency-qa/src/persistence/entities.ts:489</a></td>
+</tr>
+<tr>
+<td><code>qa_plan_item_result_evidence_memberships</code></td>
+<td>QaPlanItemResultEvidenceMembership</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L550">packages/competency-qa/src/persistence/entities.ts:550</a></td>
+</tr>
+<tr>
+<td><code>qa_plan_item_result_flaky_observation_memberships</code></td>
+<td>QaPlanItemResultFlakyObservationMembership</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L744">packages/competency-qa/src/persistence/entities.ts:744</a></td>
+</tr>
+<tr>
+<td><code>qa_plan_item_result_observation_memberships</code></td>
+<td>QaPlanItemResultObservationMembership</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L505">packages/competency-qa/src/persistence/entities.ts:505</a></td>
+</tr>
+<tr>
+<td><code>qa_plan_item_result_revisions</code></td>
+<td>QaPlanItemResultRevision</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L437">packages/competency-qa/src/persistence/entities.ts:437</a></td>
+</tr>
+<tr>
+<td><code>qa_plan_items</code></td>
+<td>QaPlanItem</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L357">packages/competency-qa/src/persistence/entities.ts:357</a></td>
+</tr>
+<tr>
+<td><code>qa_post_close_correction_markers</code></td>
+<td>QaPostCloseCorrectionMarker</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L977">packages/competency-qa/src/persistence/entities.ts:977</a></td>
+</tr>
+<tr>
+<td><code>qa_project_context_headers_v2</code></td>
+<td>QaProjectContextHeaderV2</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1564">packages/competency-qa/src/persistence/entities.ts:1564</a></td>
+</tr>
+<tr>
+<td><code>qa_project_context_revisions_v2</code></td>
+<td>QaProjectContextRevisionV2</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1580">packages/competency-qa/src/persistence/entities.ts:1580</a></td>
+</tr>
+<tr>
+<td><code>qa_project_context_versions</code></td>
+<td>QaProjectContextVersion</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L32">packages/competency-qa/src/persistence/entities.ts:32</a></td>
+</tr>
+<tr>
+<td><code>qa_project_contexts</code></td>
+<td>QaProjectContext</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L10">packages/competency-qa/src/persistence/entities.ts:10</a></td>
+</tr>
+<tr>
+<td><code>qa_project_environment_headers</code></td>
+<td>QaProjectEnvironmentHeader</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1605">packages/competency-qa/src/persistence/entities.ts:1605</a></td>
+</tr>
+<tr>
+<td><code>qa_project_environment_revisions</code></td>
+<td>QaProjectEnvironmentRevision</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1622">packages/competency-qa/src/persistence/entities.ts:1622</a></td>
+</tr>
+<tr>
+<td><code>qa_queue_fact_current_indexes</code></td>
+<td>QaQueueFactCurrentIndex</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1547">packages/competency-qa/src/persistence/entities.ts:1547</a></td>
+</tr>
+<tr>
+<td><code>qa_queue_fact_heads</code></td>
+<td>QaQueueFactHead</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1508">packages/competency-qa/src/persistence/entities.ts:1508</a></td>
+</tr>
+<tr>
+<td><code>qa_queue_fact_revisions</code></td>
+<td>QaQueueFactRevision</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1525">packages/competency-qa/src/persistence/entities.ts:1525</a></td>
+</tr>
+<tr>
+<td><code>qa_readiness_assessments</code></td>
+<td>QaReadinessAssessment</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L175">packages/competency-qa/src/persistence/entities.ts:175</a></td>
+</tr>
+<tr>
+<td><code>qa_request_extensions</code></td>
+<td>QaRequestExtension</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L90">packages/competency-qa/src/persistence/entities.ts:90</a></td>
+</tr>
+<tr>
+<td><code>qa_request_input_revisions</code></td>
+<td>QaRequestInputRevision</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L140">packages/competency-qa/src/persistence/entities.ts:140</a></td>
+</tr>
+<tr>
+<td><code>qa_required_session_plan_requirements</code></td>
+<td>QaRequiredSessionPlanRequirement</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L250">packages/competency-qa/src/persistence/entities.ts:250</a></td>
+</tr>
+<tr>
+<td><code>qa_required_session_plan_versions</code></td>
+<td>QaRequiredSessionPlanVersion</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L231">packages/competency-qa/src/persistence/entities.ts:231</a></td>
+</tr>
+<tr>
+<td><code>qa_required_session_plans</code></td>
+<td>QaRequiredSessionPlan</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L213">packages/competency-qa/src/persistence/entities.ts:213</a></td>
+</tr>
+<tr>
+<td><code>qa_risk_review_policies</code></td>
+<td>QaRiskReviewPolicy</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L50">packages/competency-qa/src/persistence/entities.ts:50</a></td>
+</tr>
+<tr>
+<td><code>qa_risk_review_policy_versions</code></td>
+<td>QaRiskReviewPolicyVersion</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L72">packages/competency-qa/src/persistence/entities.ts:72</a></td>
+</tr>
+<tr>
+<td><code>qa_session_plan_proposals</code></td>
+<td>QaSessionPlanProposal</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1018">packages/competency-qa/src/persistence/entities.ts:1018</a></td>
+</tr>
+<tr>
+<td><code>qa_session_reviews</code></td>
+<td>QaSessionReview</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L630">packages/competency-qa/src/persistence/entities.ts:630</a></td>
+</tr>
+<tr>
+<td><code>qa_target_snapshots_v2</code></td>
+<td>QaTargetSnapshotV2</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1747">packages/competency-qa/src/persistence/entities.ts:1747</a></td>
+</tr>
+<tr>
+<td><code>qa_test_account_lease_heads</code></td>
+<td>QaTestAccountLeaseHead</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1722">packages/competency-qa/src/persistence/entities.ts:1722</a></td>
+</tr>
+<tr>
+<td><code>qa_test_account_leases</code></td>
+<td>QaTestAccountLease</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1694">packages/competency-qa/src/persistence/entities.ts:1694</a></td>
+</tr>
+<tr>
+<td><code>qa_test_data_catalog_entries</code></td>
+<td>QaTestDataCatalogEntry</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L1654">packages/competency-qa/src/persistence/entities.ts:1654</a></td>
+</tr>
+<tr>
+<td><code>qa_test_sessions</code></td>
+<td>QaTestSession</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L281">packages/competency-qa/src/persistence/entities.ts:281</a></td>
+</tr>
+<tr>
+<td><code>qa_triage_assessments</code></td>
+<td>QaTriageAssessment</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L997">packages/competency-qa/src/persistence/entities.ts:997</a></td>
+</tr>
+<tr>
+<td><code>qa_verdict_signatures</code></td>
+<td>QaVerdictSignature</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L867">packages/competency-qa/src/persistence/entities.ts:867</a></td>
+</tr>
+<tr>
+<td><code>qa_verdicts</code></td>
+<td>QaVerdict</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L835">packages/competency-qa/src/persistence/entities.ts:835</a></td>
+</tr>
+<tr>
+<td><code>qa_waivers</code></td>
+<td>QaWaiver</td>
+<td><a href="../../packages/competency-qa/src/persistence/entities.ts#L195">packages/competency-qa/src/persistence/entities.ts:195</a></td>
+</tr>
+</tbody></table>
+<h3 id="awpconnector-gitlab-persistence-typeorm">@awp/connector-gitlab-persistence-typeorm</h3>
+<table>
+<thead>
+<tr>
+<th>Таблица</th>
+<th>Entity</th>
+<th>Источник</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>gitlab_artifact_locator_revisions</code></td>
+<td>GitLabArtifactLocatorRevision</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L277">packages/connector-gitlab-persistence-typeorm/src/entities.ts:277</a></td>
+</tr>
+<tr>
+<td><code>gitlab_artifact_stream_receipts</code></td>
+<td>GitLabArtifactStreamReceipt</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L306">packages/connector-gitlab-persistence-typeorm/src/entities.ts:306</a></td>
+</tr>
+<tr>
+<td><code>gitlab_discovery_snapshots</code></td>
+<td>GitLabDiscoverySnapshot</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L9">packages/connector-gitlab-persistence-typeorm/src/entities.ts:9</a></td>
+</tr>
+<tr>
+<td><code>gitlab_effect_lookup_observations</code></td>
+<td>GitLabEffectLookupObservation</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L256">packages/connector-gitlab-persistence-typeorm/src/entities.ts:256</a></td>
+</tr>
+<tr>
+<td><code>gitlab_effect_reconciliations</code></td>
+<td>GitLabEffectReconciliation</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L216">packages/connector-gitlab-persistence-typeorm/src/entities.ts:216</a></td>
+</tr>
+<tr>
+<td><code>gitlab_pipeline_observations</code></td>
+<td>GitLabPipelineObservation</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L127">packages/connector-gitlab-persistence-typeorm/src/entities.ts:127</a></td>
+</tr>
+<tr>
+<td><code>gitlab_pipeline_projection_heads</code></td>
+<td>GitLabPipelineProjectionHead</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L153">packages/connector-gitlab-persistence-typeorm/src/entities.ts:153</a></td>
+</tr>
+<tr>
+<td><code>gitlab_profile_validation_details</code></td>
+<td>GitLabProfileValidationDetail</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L44">packages/connector-gitlab-persistence-typeorm/src/entities.ts:44</a></td>
+</tr>
+<tr>
+<td><code>gitlab_rate_limit_snapshots</code></td>
+<td>GitLabRateLimitSnapshot</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L194">packages/connector-gitlab-persistence-typeorm/src/entities.ts:194</a></td>
+</tr>
+<tr>
+<td><code>gitlab_reconciliation_cursors</code></td>
+<td>GitLabReconciliationCursor</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L170">packages/connector-gitlab-persistence-typeorm/src/entities.ts:170</a></td>
+</tr>
+<tr>
+<td><code>gitlab_suite_contract_probes</code></td>
+<td>GitLabSuiteContractProbe</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L74">packages/connector-gitlab-persistence-typeorm/src/entities.ts:74</a></td>
+</tr>
+<tr>
+<td><code>gitlab_webhook_receipts</code></td>
+<td>GitLabWebhookReceipt</td>
+<td><a href="../../packages/connector-gitlab-persistence-typeorm/src/entities.ts#L99">packages/connector-gitlab-persistence-typeorm/src/entities.ts:99</a></td>
+</tr>
+</tbody></table>
+<h3 id="awpconnector-jira-persistence-typeorm">@awp/connector-jira-persistence-typeorm</h3>
+<table>
+<thead>
+<tr>
+<th>Таблица</th>
+<th>Entity</th>
+<th>Источник</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>jira_ambiguity_resolutions</code></td>
+<td>JiraAmbiguityResolution</td>
+<td><a href="../../packages/connector-jira-persistence-typeorm/src/entities.ts#L124">packages/connector-jira-persistence-typeorm/src/entities.ts:124</a></td>
+</tr>
+<tr>
+<td><code>jira_discovery_snapshots</code></td>
+<td>JiraDiscoverySnapshot</td>
+<td><a href="../../packages/connector-jira-persistence-typeorm/src/entities.ts#L3">packages/connector-jira-persistence-typeorm/src/entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>jira_effect_reconciliations</code></td>
+<td>JiraEffectReconciliation</td>
+<td><a href="../../packages/connector-jira-persistence-typeorm/src/entities.ts#L77">packages/connector-jira-persistence-typeorm/src/entities.ts:77</a></td>
+</tr>
+<tr>
+<td><code>jira_effect_sub_effects</code></td>
+<td>JiraEffectSubEffect</td>
+<td><a href="../../packages/connector-jira-persistence-typeorm/src/entities.ts#L106">packages/connector-jira-persistence-typeorm/src/entities.ts:106</a></td>
+</tr>
+<tr>
+<td><code>jira_profile_validation_details</code></td>
+<td>JiraProfileValidationDetail</td>
+<td><a href="../../packages/connector-jira-persistence-typeorm/src/entities.ts#L23">packages/connector-jira-persistence-typeorm/src/entities.ts:23</a></td>
+</tr>
+<tr>
+<td><code>jira_rate_limit_snapshots</code></td>
+<td>JiraRateLimitSnapshot</td>
+<td><a href="../../packages/connector-jira-persistence-typeorm/src/entities.ts#L61">packages/connector-jira-persistence-typeorm/src/entities.ts:61</a></td>
+</tr>
+<tr>
+<td><code>jira_webhook_normalizations</code></td>
+<td>JiraWebhookNormalization</td>
+<td><a href="../../packages/connector-jira-persistence-typeorm/src/entities.ts#L39">packages/connector-jira-persistence-typeorm/src/entities.ts:39</a></td>
+</tr>
+</tbody></table>
+<h3 id="awpplatform-persistence-typeorm">@awp/platform-persistence-typeorm</h3>
+<table>
+<thead>
+<tr>
+<th>Таблица</th>
+<th>Entity</th>
+<th>Источник</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>action_provenance_records</code></td>
+<td>ActionProvenance</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts#L7">packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts:7</a></td>
+</tr>
+<tr>
+<td><code>agent_run_grants</code></td>
+<td>AgentRunGrant</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts#L19">packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts:19</a></td>
+</tr>
+<tr>
+<td><code>agent_run_steps</code></td>
+<td>AgentRunStep</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts#L25">packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts:25</a></td>
+</tr>
+<tr>
+<td><code>agent_runs</code></td>
+<td>AgentRun</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts#L7">packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts:7</a></td>
+</tr>
+<tr>
+<td><code>agent_tool_invocations</code></td>
+<td>AgentToolInvocation</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts#L31">packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts:31</a></td>
+</tr>
+<tr>
+<td><code>approvals</code></td>
+<td>Approval</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/approvals-idempotency.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/approvals-idempotency.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>artifact_availability_heads</code></td>
+<td>ArtifactAvailabilityHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts#L61">packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts:61</a></td>
+</tr>
+<tr>
+<td><code>artifact_availability_revisions</code></td>
+<td>ArtifactAvailabilityRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts#L74">packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts:74</a></td>
+</tr>
+<tr>
+<td><code>artifact_references</code></td>
+<td>ArtifactReference</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts#L36">packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts:36</a></td>
+</tr>
+<tr>
+<td><code>artifact_retention_decisions</code></td>
+<td>ArtifactRetentionDecision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts#L113">packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts:113</a></td>
+</tr>
+<tr>
+<td><code>audit_events</code></td>
+<td>AuditEvent</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/audit.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/audit.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>authorized_scope_queue_policy_facet_heads</code></td>
+<td>AuthorizedScopeQueuePolicyFacetHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L171">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:171</a></td>
+</tr>
+<tr>
+<td><code>authorized_scope_queue_policy_facet_projects</code></td>
+<td>AuthorizedScopeQueuePolicyFacetProject</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L198">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:198</a></td>
+</tr>
+<tr>
+<td><code>authorized_scope_queue_policy_facet_revisions</code></td>
+<td>AuthorizedScopeQueuePolicyFacetRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L184">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:184</a></td>
+</tr>
+<tr>
+<td><code>binding_functional_acceptances</code></td>
+<td>BindingFunctionalAcceptance</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L107">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:107</a></td>
+</tr>
+<tr>
+<td><code>capability_contracts</code></td>
+<td>CapabilityContract</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts#L83">packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts:83</a></td>
+</tr>
+<tr>
+<td><code>capability_mode_assessments</code></td>
+<td>CapabilityModeAssessment</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L160">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:160</a></td>
+</tr>
+<tr>
+<td><code>capability_probe_results</code></td>
+<td>CapabilityProbeResult</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L129">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:129</a></td>
+</tr>
+<tr>
+<td><code>capacity_admission_decisions</code></td>
+<td>CapacityAdmissionDecision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L598">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:598</a></td>
+</tr>
+<tr>
+<td><code>capacity_scope_projection_heads</code></td>
+<td>CapacityScopeProjectionHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L521">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:521</a></td>
+</tr>
+<tr>
+<td><code>capacity_scope_projection_projects</code></td>
+<td>CapacityScopeProjectionProject</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L550">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:550</a></td>
+</tr>
+<tr>
+<td><code>capacity_scope_projection_revisions</code></td>
+<td>CapacityScopeProjectionRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L535">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:535</a></td>
+</tr>
+<tr>
+<td><code>classification_catalog</code></td>
+<td>Classification</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/platform-primitives.entities.ts#L12">packages/platform-persistence-typeorm/src/entities/platform-primitives.entities.ts:12</a></td>
+</tr>
+<tr>
+<td><code>client_request_idempotency</code></td>
+<td>ClientRequestIdempotency</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/approvals-idempotency.entities.ts#L44">packages/platform-persistence-typeorm/src/entities/approvals-idempotency.entities.ts:44</a></td>
+</tr>
+<tr>
+<td><code>command_outbox</code></td>
+<td>CommandOutbox</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts#L28">packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts:28</a></td>
+</tr>
+<tr>
+<td><code>competency_pack_registrations</code></td>
+<td>PackRegistration</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>connection_headers</code></td>
+<td>ConnectionHeader</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L21">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:21</a></td>
+</tr>
+<tr>
+<td><code>connection_health</code></td>
+<td>ConnectionHealth</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L95">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:95</a></td>
+</tr>
+<tr>
+<td><code>connection_revisions</code></td>
+<td>ConnectionRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L27">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:27</a></td>
+</tr>
+<tr>
+<td><code>connector_command_configuration_pins</code></td>
+<td>ConnectorCommandConfigurationPin</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts#L96">packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts:96</a></td>
+</tr>
+<tr>
+<td><code>connector_commands</code></td>
+<td>ConnectorCommand</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>connector_mapping_headers</code></td>
+<td>MappingHeader</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L33">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:33</a></td>
+</tr>
+<tr>
+<td><code>connector_mapping_revisions</code></td>
+<td>MappingRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L39">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:39</a></td>
+</tr>
+<tr>
+<td><code>connector_profile_headers</code></td>
+<td>ProfileHeader</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L45">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:45</a></td>
+</tr>
+<tr>
+<td><code>connector_profile_revisions</code></td>
+<td>ProfileRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L51">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:51</a></td>
+</tr>
+<tr>
+<td><code>connector_registrations</code></td>
+<td>ConnectorRegistration</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts#L69">packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts:69</a></td>
+</tr>
+<tr>
+<td><code>connector_target_execution_lanes</code></td>
+<td>ConnectorTargetExecutionLane</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts#L115">packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts:115</a></td>
+</tr>
+<tr>
+<td><code>consumer_inbox</code></td>
+<td>ConsumerInbox</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts#L58">packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts:58</a></td>
+</tr>
+<tr>
+<td><code>corporate_identity_revocations</code></td>
+<td>CorporateIdentityRevocation</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/corporate-session.entities.ts#L14">packages/platform-persistence-typeorm/src/entities/corporate-session.entities.ts:14</a></td>
+</tr>
+<tr>
+<td><code>corporate_session_states</code></td>
+<td>CorporateSessionState</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/corporate-session.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/corporate-session.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>event_outbox</code></td>
+<td>EventOutbox</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts#L68">packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts:68</a></td>
+</tr>
+<tr>
+<td><code>evidence_export_records</code></td>
+<td>EvidenceExportRecord</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts#L135">packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts:135</a></td>
+</tr>
+<tr>
+<td><code>extension_registration_attempts</code></td>
+<td>ExtensionRegistrationAttempt</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts#L19">packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts:19</a></td>
+</tr>
+<tr>
+<td><code>external_interaction_receipts</code></td>
+<td>ExternalInteractionReceipt</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts#L79">packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts:79</a></td>
+</tr>
+<tr>
+<td><code>external_principal_bindings</code></td>
+<td>ExternalPrincipalBinding</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts#L133">packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts:133</a></td>
+</tr>
+<tr>
+<td><code>identities</code></td>
+<td>Identity</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/identity-workspace.entities.ts#L7">packages/platform-persistence-typeorm/src/entities/identity-workspace.entities.ts:7</a></td>
+</tr>
+<tr>
+<td><code>intake_candidate_decisions</code></td>
+<td>IntakeCandidateDecision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts#L43">packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts:43</a></td>
+</tr>
+<tr>
+<td><code>intake_candidate_source_observations</code></td>
+<td>IntakeCandidateObservation</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts#L30">packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts:30</a></td>
+</tr>
+<tr>
+<td><code>intake_candidates</code></td>
+<td>IntakeCandidate</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts#L18">packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts:18</a></td>
+</tr>
+<tr>
+<td><code>intake_draft_confirmations</code></td>
+<td>IntakeDraftConfirmation</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts#L65">packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts:65</a></td>
+</tr>
+<tr>
+<td><code>intake_draft_revisions</code></td>
+<td>IntakeDraftRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts#L55">packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts:55</a></td>
+</tr>
+<tr>
+<td><code>intake_drafts</code></td>
+<td>IntakeDraft</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>integration_validation_reports</code></td>
+<td>ValidationReport</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L79">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:79</a></td>
+</tr>
+<tr>
+<td><code>interaction_intents</code></td>
+<td>InteractionIntent</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts#L94">packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts:94</a></td>
+</tr>
+<tr>
+<td><code>interaction_presentation_secrets</code></td>
+<td>InteractionPresentationSecret</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts#L108">packages/platform-persistence-typeorm/src/entities/intake-interaction.entities.ts:108</a></td>
+</tr>
+<tr>
+<td><code>notification_delivery_attempts</code></td>
+<td>NotificationDeliveryAttempt</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts#L56">packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts:56</a></td>
+</tr>
+<tr>
+<td><code>notification_intents</code></td>
+<td>NotificationIntent</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts#L40">packages/platform-persistence-typeorm/src/entities/agent-notification.entities.ts:40</a></td>
+</tr>
+<tr>
+<td><code>operational_bindings</code></td>
+<td>OperationalBinding</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts#L8">packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts:8</a></td>
+</tr>
+<tr>
+<td><code>operational_import_intents</code></td>
+<td>OperationalImportIntent</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts#L157">packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts:157</a></td>
+</tr>
+<tr>
+<td><code>operational_projection_revisions</code></td>
+<td>OperationalProjectionRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts#L49">packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts:49</a></td>
+</tr>
+<tr>
+<td><code>operational_sync_conflicts</code></td>
+<td>OperationalSyncConflict</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts#L74">packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts:74</a></td>
+</tr>
+<tr>
+<td><code>pilot_record_headers</code></td>
+<td>PilotRecordHeader</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/pilot.entities.ts#L21">packages/platform-persistence-typeorm/src/entities/pilot.entities.ts:21</a></td>
+</tr>
+<tr>
+<td><code>pilot_record_revisions</code></td>
+<td>PilotRecordRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/pilot.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/pilot.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>pilot_runtime_registrations</code></td>
+<td>PilotRuntimeRegistration</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/runtime-registration.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/runtime-registration.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>platform_actions</code></td>
+<td>PlatformAction</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/approvals-idempotency.entities.ts#L27">packages/platform-persistence-typeorm/src/entities/approvals-idempotency.entities.ts:27</a></td>
+</tr>
+<tr>
+<td><code>platform_schema_versions</code></td>
+<td>SchemaVersion</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/platform-primitives.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/platform-primitives.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>project_entitlement_headers</code></td>
+<td>ProjectEntitlementHeader</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts#L47">packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts:47</a></td>
+</tr>
+<tr>
+<td><code>project_entitlement_permissions</code></td>
+<td>ProjectEntitlementPermission</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts#L39">packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts:39</a></td>
+</tr>
+<tr>
+<td><code>project_entitlement_revisions</code></td>
+<td>ProjectEntitlementRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts#L66">packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts:66</a></td>
+</tr>
+<tr>
+<td><code>project_entitlements</code></td>
+<td>ProjectEntitlement</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts#L20">packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts:20</a></td>
+</tr>
+<tr>
+<td><code>project_incident_dispositions</code></td>
+<td>ProjectIncidentDisposition</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts#L128">packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts:128</a></td>
+</tr>
+<tr>
+<td><code>project_integration_binding_headers</code></td>
+<td>BindingHeader</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L57">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:57</a></td>
+</tr>
+<tr>
+<td><code>project_integration_binding_revisions</code></td>
+<td>BindingRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L63">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:63</a></td>
+</tr>
+<tr>
+<td><code>project_onboarding_gate_results</code></td>
+<td>ProjectOnboardingGateResult</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts#L89">packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts:89</a></td>
+</tr>
+<tr>
+<td><code>project_onboarding_headers</code></td>
+<td>ProjectOnboardingHeader</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts#L35">packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts:35</a></td>
+</tr>
+<tr>
+<td><code>project_onboarding_revisions</code></td>
+<td>ProjectOnboardingRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts#L57">packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts:57</a></td>
+</tr>
+<tr>
+<td><code>project_operational_action_candidates</code></td>
+<td>ProjectOperationalActionCandidate</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts#L183">packages/platform-persistence-typeorm/src/entities/integration-configuration.entities.ts:183</a></td>
+</tr>
+<tr>
+<td><code>project_queue_policy_facet_heads</code></td>
+<td>ProjectQueuePolicyFacetHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L144">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:144</a></td>
+</tr>
+<tr>
+<td><code>project_queue_policy_facet_revisions</code></td>
+<td>ProjectQueuePolicyFacetRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L157">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:157</a></td>
+</tr>
+<tr>
+<td><code>project_registry_revisions</code></td>
+<td>ProjectRegistryRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts#L6">packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts:6</a></td>
+</tr>
+<tr>
+<td><code>projects</code></td>
+<td>Project</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts#L3">packages/platform-persistence-typeorm/src/entities/projects-entitlements.entities.ts:3</a></td>
+</tr>
+<tr>
+<td><code>queue_action_candidates</code></td>
+<td>QueueActionCandidate</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L475">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:475</a></td>
+</tr>
+<tr>
+<td><code>queue_entry_heads</code></td>
+<td>QueueEntryHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L223">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:223</a></td>
+</tr>
+<tr>
+<td><code>queue_entry_revisions</code></td>
+<td>QueueEntryRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L240">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:240</a></td>
+</tr>
+<tr>
+<td><code>queue_order_invalidation_heads</code></td>
+<td>QueueOrderInvalidationHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L449">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:449</a></td>
+</tr>
+<tr>
+<td><code>queue_order_invalidation_revisions</code></td>
+<td>QueueOrderInvalidationRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L461">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:461</a></td>
+</tr>
+<tr>
+<td><code>queue_order_overrides</code></td>
+<td>QueueOrderOverride</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L434">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:434</a></td>
+</tr>
+<tr>
+<td><code>queue_order_scope_heads</code></td>
+<td>QueueOrderScopeHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L410">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:410</a></td>
+</tr>
+<tr>
+<td><code>queue_order_scope_projects</code></td>
+<td>QueueOrderScopeProject</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L424">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:424</a></td>
+</tr>
+<tr>
+<td><code>queue_projection_generations</code></td>
+<td>QueueProjectionGeneration</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L209">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:209</a></td>
+</tr>
+<tr>
+<td><code>reconciliation_cursors</code></td>
+<td>ReconciliationCursor</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts#L200">packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts:200</a></td>
+</tr>
+<tr>
+<td><code>reconciliation_runs</code></td>
+<td>ReconciliationRun</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts#L223">packages/platform-persistence-typeorm/src/entities/operational-authority.entities.ts:223</a></td>
+</tr>
+<tr>
+<td><code>review_capacity_reservations</code></td>
+<td>ReviewCapacityReservation</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L579">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:579</a></td>
+</tr>
+<tr>
+<td><code>role_assignments</code></td>
+<td>RoleAssignment</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/identity-workspace.entities.ts#L45">packages/platform-persistence-typeorm/src/entities/identity-workspace.entities.ts:45</a></td>
+</tr>
+<tr>
+<td><code>runtime_configuration_events</code></td>
+<td>RuntimeConfigurationEvent</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/runtime-configuration.entities.ts#L44">packages/platform-persistence-typeorm/src/entities/runtime-configuration.entities.ts:44</a></td>
+</tr>
+<tr>
+<td><code>runtime_configuration_headers</code></td>
+<td>RuntimeConfigurationHeader</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/runtime-configuration.entities.ts#L32">packages/platform-persistence-typeorm/src/entities/runtime-configuration.entities.ts:32</a></td>
+</tr>
+<tr>
+<td><code>runtime_configuration_projects</code></td>
+<td>RuntimeConfigurationProject</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/runtime-configuration.entities.ts#L23">packages/platform-persistence-typeorm/src/entities/runtime-configuration.entities.ts:23</a></td>
+</tr>
+<tr>
+<td><code>runtime_configuration_revisions</code></td>
+<td>RuntimeConfigurationRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/runtime-configuration.entities.ts#L8">packages/platform-persistence-typeorm/src/entities/runtime-configuration.entities.ts:8</a></td>
+</tr>
+<tr>
+<td><code>sla_clock_heads</code></td>
+<td>SlaClockHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L256">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:256</a></td>
+</tr>
+<tr>
+<td><code>sla_clock_revisions</code></td>
+<td>SlaClockRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L275">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:275</a></td>
+</tr>
+<tr>
+<td><code>sla_clock_segment_heads</code></td>
+<td>SlaClockSegmentHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L293">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:293</a></td>
+</tr>
+<tr>
+<td><code>sla_clock_segments</code></td>
+<td>SlaClockSegment</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L312">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:312</a></td>
+</tr>
+<tr>
+<td><code>sla_rollout_verification_receipts</code></td>
+<td>SlaRolloutVerificationReceipt</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L360">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:360</a></td>
+</tr>
+<tr>
+<td><code>sla_threshold_emissions</code></td>
+<td>SlaThresholdEmission</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L330">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:330</a></td>
+</tr>
+<tr>
+<td><code>webhook_receipts</code></td>
+<td>WebhookReceipt</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts#L48">packages/platform-persistence-typeorm/src/entities/connector-delivery.entities.ts:48</a></td>
+</tr>
+<tr>
+<td><code>work_item_human_wip_claims</code></td>
+<td>WorkItemHumanWipClaim</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L560">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:560</a></td>
+</tr>
+<tr>
+<td><code>work_item_queue_control_heads</code></td>
+<td>WorkItemQueueControlHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L383">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:383</a></td>
+</tr>
+<tr>
+<td><code>work_item_queue_control_revisions</code></td>
+<td>WorkItemQueueControlRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L395">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:395</a></td>
+</tr>
+<tr>
+<td><code>work_items</code></td>
+<td>WorkItem</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts#L20">packages/platform-persistence-typeorm/src/entities/work-and-artifacts.entities.ts:20</a></td>
+</tr>
+<tr>
+<td><code>work_type_definitions</code></td>
+<td>WorkTypeDefinition</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts#L35">packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts:35</a></td>
+</tr>
+<tr>
+<td><code>workspace_business_calendar_heads</code></td>
+<td>WorkspaceBusinessCalendarHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L38">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:38</a></td>
+</tr>
+<tr>
+<td><code>workspace_business_calendar_revisions</code></td>
+<td>WorkspaceBusinessCalendarRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L52">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:52</a></td>
+</tr>
+<tr>
+<td><code>workspace_capacity_heads</code></td>
+<td>WorkspaceCapacityHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L491">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:491</a></td>
+</tr>
+<tr>
+<td><code>workspace_capacity_reconciliation_checkpoints</code></td>
+<td>WorkspaceCapacityReconciliationCheckpoint</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L504">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:504</a></td>
+</tr>
+<tr>
+<td><code>workspace_memberships</code></td>
+<td>WorkspaceMembership</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/identity-workspace.entities.ts#L31">packages/platform-persistence-typeorm/src/entities/identity-workspace.entities.ts:31</a></td>
+</tr>
+<tr>
+<td><code>workspace_project_rollout_leases</code></td>
+<td>WorkspaceProjectRolloutLease</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts#L113">packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts:113</a></td>
+</tr>
+<tr>
+<td><code>workspace_queue_configuration_requests</code></td>
+<td>WorkspaceQueueConfigurationRequest</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L98">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:98</a></td>
+</tr>
+<tr>
+<td><code>workspace_queue_policy_heads</code></td>
+<td>WorkspaceQueuePolicyHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L69">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:69</a></td>
+</tr>
+<tr>
+<td><code>workspace_queue_policy_revisions</code></td>
+<td>WorkspaceQueuePolicyRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L83">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:83</a></td>
+</tr>
+<tr>
+<td><code>workspace_queue_policy_view_heads</code></td>
+<td>WorkspaceQueuePolicyViewHead</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L117">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:117</a></td>
+</tr>
+<tr>
+<td><code>workspace_queue_policy_view_revisions</code></td>
+<td>WorkspaceQueuePolicyViewRevision</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts#L130">packages/platform-persistence-typeorm/src/entities/queue-management.entities.ts:130</a></td>
+</tr>
+<tr>
+<td><code>workspace_work_types</code></td>
+<td>WorkspaceWorkType</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts#L53">packages/platform-persistence-typeorm/src/entities/extension-registry.entities.ts:53</a></td>
+</tr>
+<tr>
+<td><code>workspaces</code></td>
+<td>Workspace</td>
+<td><a href="../../packages/platform-persistence-typeorm/src/entities/identity-workspace.entities.ts#L20">packages/platform-persistence-typeorm/src/entities/identity-workspace.entities.ts:20</a></td>
+</tr>
+</tbody></table>
+<h2 id="объявленные-http-маршруты">Объявленные HTTP-маршруты</h2>
+<p>Это каталог исходного кода. Локальные fixtures, reusable controllers и корпоративные routes указаны вместе, но не являются одним подключённым API. Рабочие поверхности показаны в основной схеме.</p>
+<h3 id="corporateaccesscontroller">CorporateAccessController</h3>
+<p>@awp/api · <a href="../../apps/api/src/access/corporate-access.controller.ts#L11">apps/api/src/access/corporate-access.controller.ts:11</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+</table>
+<h3 id="localaccesscontroller">LocalAccessController</h3>
+<p>@awp/api · <a href="../../apps/api/src/access/local-access.controller.ts#L11">apps/api/src/access/local-access.controller.ts:11</a> · class guard: <code>LocalSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+</table>
+<h3 id="dummypackcontroller">DummyPackController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/dummy-pack.controller.ts#L7">apps/api/src/extensions/dummy-pack.controller.ts:7</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/dummy-pack.controller.ts</code></td>
+<td><code>getSampleWorkItemExtension</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/dummy-pack.controller.ts</code></td>
+<td><code>publishSampleRecord</code></td>
+</tr>
+</tbody></table>
+<h3 id="gitlabwebhookcontroller">GitLabWebhookController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/gitlab-automation/gitlab-webhook.controller.ts#L38">apps/api/src/extensions/gitlab-automation/gitlab-webhook.controller.ts:38</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/gitlab-automation/gitlab-webhook.controller.ts</code></td>
+<td><code>receive</code></td>
+</tr>
+</tbody></table>
+<h3 id="qaautomatedsessionscontroller">QaAutomatedSessionsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/gitlab-automation/qa-automated-sessions.controller.ts#L39">apps/api/src/extensions/gitlab-automation/qa-automated-sessions.controller.ts:39</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automated-sessions.controller.ts</code></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automated-sessions.controller.ts</code></td>
+<td><code>get</code></td>
+</tr>
+</tbody></table>
+<h3 id="qaautomationattemptscontroller">QaAutomationAttemptsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts#L163">apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts:163</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts</code></td>
+<td><code>launchConfirmation</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts</code></td>
+<td><code>launch</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts</code></td>
+<td><code>detail</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts</code></td>
+<td><code>statusHistory</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts</code></td>
+<td><code>result</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts</code></td>
+<td><code>retryDecision</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts</code></td>
+<td><code>artifacts</code></td>
+</tr>
+</tbody></table>
+<h3 id="qaautomationavailabilitycontroller">QaAutomationAvailabilityController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/gitlab-automation/qa-automation-availability.controller.ts#L43">apps/api/src/extensions/gitlab-automation/qa-automation-availability.controller.ts:43</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-availability.controller.ts</code></td>
+<td><code>current</code></td>
+</tr>
+</tbody></table>
+<h3 id="qaautomationquarantinescontroller">QaAutomationQuarantinesController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/gitlab-automation/qa-automation-quarantines.controller.ts#L707">apps/api/src/extensions/gitlab-automation/qa-automation-quarantines.controller.ts:707</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-quarantines.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-quarantines.controller.ts</code></td>
+<td><code>get</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-quarantines.controller.ts</code></td>
+<td><code>revisions</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-quarantines.controller.ts</code></td>
+<td><code>activate</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-quarantines.controller.ts</code></td>
+<td><code>lift</code></td>
+</tr>
+</tbody></table>
+<h3 id="qaautomationsuitebindingscontroller">QaAutomationSuiteBindingsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/gitlab-automation/qa-automation-suite-bindings.controller.ts#L74">apps/api/src/extensions/gitlab-automation/qa-automation-suite-bindings.controller.ts:74</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-suite-bindings.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-suite-bindings.controller.ts</code></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-suite-bindings.controller.ts</code></td>
+<td><code>validate</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-suite-bindings.controller.ts</code></td>
+<td><code>reports</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/gitlab-automation/qa-automation-suite-bindings.controller.ts</code></td>
+<td><code>publish</code></td>
+</tr>
+</tbody></table>
+<h3 id="mattermostbootstrapcontroller">MattermostBootstrapController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/mattermost-bootstrap.controller.ts#L5">apps/api/src/extensions/mattermost-bootstrap.controller.ts:5</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/mattermost-bootstrap.controller.ts</code></td>
+<td><code>bootstrap</code></td>
+</tr>
+</tbody></table>
+<h3 id="mattermostingresscontroller">MattermostIngressController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/mattermost-ingress.controller.ts#L11">apps/api/src/extensions/mattermost-ingress.controller.ts:11</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/mattermost-ingress.controller.ts</code></td>
+<td><code>dialog</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/mattermost-ingress.controller.ts</code></td>
+<td><code>action</code></td>
+</tr>
+</tbody></table>
+<h3 id="mattermostintegrationcontroller">MattermostIntegrationController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/mattermost-integration.controller.ts#L32">apps/api/src/extensions/mattermost-integration.controller.ts:32</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/mattermost-integration.controller.ts</code></td>
+<td><code>discover</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/mattermost-integration.controller.ts</code></td>
+<td><code>validate</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/mattermost-integration.controller.ts</code></td>
+<td><code>preview</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/mattermost-integration.controller.ts</code></td>
+<td><code>dryRun</code></td>
+</tr>
+</tbody></table>
+<h3 id="mattermostprojectselectioncontroller">MattermostProjectSelectionController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/mattermost-project-selection.controller.ts#L14">apps/api/src/extensions/mattermost-project-selection.controller.ts:14</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/mattermost-project-selection.controller.ts</code></td>
+<td><code>options</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/mattermost-project-selection.controller.ts</code></td>
+<td><code>select</code></td>
+</tr>
+</tbody></table>
+<h3 id="evidenceintegritycontroller">EvidenceIntegrityController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/onboarding/evidence.controller.ts#L82">apps/api/src/extensions/onboarding/evidence.controller.ts:82</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/evidence.controller.ts</code></td>
+<td><code>verify</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/evidence.controller.ts</code></td>
+<td><code>package</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/evidence.controller.ts</code></td>
+<td><code>exportOptions</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/evidence.controller.ts</code></td>
+<td><code>correct</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/evidence.controller.ts</code></td>
+<td><code>exportPackage</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/evidence.controller.ts</code></td>
+<td><code>exportResult</code></td>
+</tr>
+</tbody></table>
+<h3 id="onboardingcontroller">OnboardingController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/onboarding/onboarding.controller.ts#L53">apps/api/src/extensions/onboarding/onboarding.controller.ts:53</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>registrationOptions</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>register</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>projectMetadata</code></td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>updateProjectMetadata</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>onboarding</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>grantEntitlement</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>replaceEntitlement</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>revokeEntitlement</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>publishQaEnvironment</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>publishQaContext</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>publishQaResource</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>acquireAccountLease</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>releaseAccountLease</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>validateBinding</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>acceptBinding</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>evaluate</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>applyBindingLifecycleAction</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>activatePilot</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>prepareBinding</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/onboarding.controller.ts</code></td>
+<td><code>preparePilot</code></td>
+</tr>
+</tbody></table>
+<h3 id="projectdialoguecontroller">ProjectDialogueController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/onboarding/project-dialogue.controller.ts#L35">apps/api/src/extensions/onboarding/project-dialogue.controller.ts:35</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/project-dialogue.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/project-dialogue.controller.ts</code></td>
+<td><code>start</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/project-dialogue.controller.ts</code></td>
+<td><code>message</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/project-dialogue.controller.ts</code></td>
+<td><code>confirm</code></td>
+</tr>
+</tbody></table>
+<h3 id="projectoperationscontroller">ProjectOperationsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/onboarding/project-operations.controller.ts#L33">apps/api/src/extensions/onboarding/project-operations.controller.ts:33</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/project-operations.controller.ts</code></td>
+<td><code>read</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/project-operations.controller.ts</code></td>
+<td><code>suspend</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/project-operations.controller.ts</code></td>
+<td><code>disposition</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/project-operations.controller.ts</code></td>
+<td><code>prepare</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/project-operations.controller.ts</code></td>
+<td><code>approve</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/onboarding/project-operations.controller.ts</code></td>
+<td><code>resume</code></td>
+</tr>
+</tbody></table>
+<h3 id="projectreadscontroller">ProjectReadsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/onboarding/project-reads.controller.ts#L18">apps/api/src/extensions/onboarding/project-reads.controller.ts:18</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/project-reads.controller.ts</code></td>
+<td><code>search</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/project-reads.controller.ts</code></td>
+<td><code>events</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/onboarding/project-reads.controller.ts</code></td>
+<td><code>item</code></td>
+</tr>
+</tbody></table>
+<h3 id="publishedonboardingcontroller">PublishedOnboardingController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/onboarding/published.controllers.ts#L30">apps/api/src/extensions/onboarding/published.controllers.ts:30</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+</table>
+<h3 id="publishedprojectoperationscontroller">PublishedProjectOperationsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/onboarding/published.controllers.ts#L44">apps/api/src/extensions/onboarding/published.controllers.ts:44</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+</table>
+<h3 id="pilotcontroller">PilotController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/pilot/pilot.controller.ts#L125">apps/api/src/extensions/pilot/pilot.controller.ts:125</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>health</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>readiness</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>evidenceImport</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>run</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>metrics</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>measurementProtocol</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>baselineImport</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>review</code></td>
+</tr>
+</tbody></table>
+<h3 id="pilotdeadlettercontroller">PilotDeadLetterController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/pilot/pilot.controller.ts#L417">apps/api/src/extensions/pilot/pilot.controller.ts:417</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>deadLetters</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>recovery</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>captureDiagnostics</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/pilot/pilot.controller.ts</code></td>
+<td><code>replayDecision</code></td>
+</tr>
+</tbody></table>
+<h3 id="provideringresscontroller">ProviderIngressController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/pilot/provider-ingress.module.ts#L36">apps/api/src/extensions/pilot/provider-ingress.module.ts:36</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/pilot/provider-ingress.module.ts</code></td>
+<td><code>receive</code></td>
+</tr>
+</tbody></table>
+<h3 id="qaartifactscontroller">QaArtifactsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-artifacts.controller.ts#L27">apps/api/src/extensions/qa-artifacts.controller.ts:27</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-artifacts.controller.ts</code></td>
+<td><code>metadata</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-artifacts.controller.ts</code></td>
+<td><code>content</code></td>
+</tr>
+</tbody></table>
+<h3 id="qadefectscontroller">QaDefectsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-defects.controller.ts#L62">apps/api/src/extensions/qa-defects.controller.ts:62</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-defects.controller.ts</code></td>
+<td><code>propose</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-defects.controller.ts</code></td>
+<td><code>proposal</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-defects.controller.ts</code></td>
+<td><code>drafts</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-defects.controller.ts</code></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-defects.controller.ts</code></td>
+<td><code>reject</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-defects.controller.ts</code></td>
+<td><code>publish</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-defects.controller.ts</code></td>
+<td><code>links</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-defects.controller.ts</code></td>
+<td><code>approve</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-defects.controller.ts</code></td>
+<td><code>link</code></td>
+</tr>
+</tbody></table>
+<h3 id="qaevidencecontroller">QaEvidenceController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-evidence.controller.ts#L47">apps/api/src/extensions/qa-evidence.controller.ts:47</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-evidence.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-evidence.controller.ts</code></td>
+<td><code>get</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-evidence.controller.ts</code></td>
+<td><code>manifests</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-evidence.controller.ts</code></td>
+<td><code>history</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-evidence.controller.ts</code></td>
+<td><code>revision</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-evidence.controller.ts</code></td>
+<td><code>postCloseCorrection</code></td>
+</tr>
+</tbody></table>
+<h3 id="qafindingscontroller">QaFindingsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-findings.controller.ts#L59">apps/api/src/extensions/qa-findings.controller.ts:59</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-findings.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-findings.controller.ts</code></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-findings.controller.ts</code></td>
+<td><code>memberships</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-findings.controller.ts</code></td>
+<td><code>assign</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-findings.controller.ts</code></td>
+<td><code>release</code></td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>apps/api/src/extensions/qa-findings.controller.ts</code></td>
+<td><code>classify</code></td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>apps/api/src/extensions/qa-findings.controller.ts</code></td>
+<td><code>dispose</code></td>
+</tr>
+</tbody></table>
+<h3 id="qahermesproposalscontroller">QaHermesProposalsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-hermes-proposals.controller.ts#L11">apps/api/src/extensions/qa-hermes-proposals.controller.ts:11</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-hermes-proposals.controller.ts</code></td>
+<td><code>triage</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-hermes-proposals.controller.ts</code></td>
+<td><code>plans</code></td>
+</tr>
+</tbody></table>
+<h3 id="qahermesproposalresourcescontroller">QaHermesProposalResourcesController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-hermes-proposals.controller.ts#L44">apps/api/src/extensions/qa-hermes-proposals.controller.ts:44</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-hermes-proposals.controller.ts</code></td>
+<td><code>assessment</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-hermes-proposals.controller.ts</code></td>
+<td><code>proposal</code></td>
+</tr>
+</tbody></table>
+<h3 id="qamanualexecutioncontroller">QaManualExecutionController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-manual-execution.controller.ts#L124">apps/api/src/extensions/qa-manual-execution.controller.ts:124</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-manual-execution.controller.ts</code></td>
+<td><code>listAttempts</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-manual-execution.controller.ts</code></td>
+<td><code>startAttempt</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-manual-execution.controller.ts</code></td>
+<td><code>completeAttempt</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-manual-execution.controller.ts</code></td>
+<td><code>listObservations</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-manual-execution.controller.ts</code></td>
+<td><code>recordObservation</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-manual-execution.controller.ts</code></td>
+<td><code>listResults</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-manual-execution.controller.ts</code></td>
+<td><code>recordResult</code></td>
+</tr>
+</tbody></table>
+<h3 id="qapackcontroller">QaPackController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-pack.controller.ts#L100">apps/api/src/extensions/qa-pack.controller.ts:100</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-pack.controller.ts</code></td>
+<td><code>createDraft</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-pack.controller.ts</code></td>
+<td><code>confirmDraft</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-pack.controller.ts</code></td>
+<td><code>status</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-pack.controller.ts</code></td>
+<td><code>backlog</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-pack.controller.ts</code></td>
+<td><code>backlogItem</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-pack.controller.ts</code></td>
+<td><code>currentInput</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-pack.controller.ts</code></td>
+<td><code>inputHistory</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-pack.controller.ts</code></td>
+<td><code>requestExtension</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-pack.controller.ts</code></td>
+<td><code>detail</code></td>
+</tr>
+</tbody></table>
+<h3 id="qareadinesscontroller">QaReadinessController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-readiness.controller.ts#L54">apps/api/src/extensions/qa-readiness.controller.ts:54</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-readiness.controller.ts</code></td>
+<td><code>revise</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-readiness.controller.ts</code></td>
+<td><code>assess</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-readiness.controller.ts</code></td>
+<td><code>history</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-readiness.controller.ts</code></td>
+<td><code>confirm</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-readiness.controller.ts</code></td>
+<td><code>requestWaiver</code></td>
+</tr>
+</tbody></table>
+<h3 id="qarequiredsessionplanscontroller">QaRequiredSessionPlansController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-required-session-plans.controller.ts#L40">apps/api/src/extensions/qa-required-session-plans.controller.ts:40</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-required-session-plans.controller.ts</code></td>
+<td><code>current</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-required-session-plans.controller.ts</code></td>
+<td><code>history</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-required-session-plans.controller.ts</code></td>
+<td><code>currentRevision</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-required-session-plans.controller.ts</code></td>
+<td><code>revision</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-required-session-plans.controller.ts</code></td>
+<td><code>publish</code></td>
+</tr>
+</tbody></table>
+<h3 id="qasessionreviewcontroller">QaSessionReviewController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-session-review.controller.ts#L60">apps/api/src/extensions/qa-session-review.controller.ts:60</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-session-review.controller.ts</code></td>
+<td><code>publish</code></td>
+</tr>
+</tbody></table>
+<h3 id="qasessionscontroller">QaSessionsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-sessions.controller.ts#L253">apps/api/src/extensions/qa-sessions.controller.ts:253</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-sessions.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-sessions.controller.ts</code></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-sessions.controller.ts</code></td>
+<td><code>get</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-sessions.controller.ts</code></td>
+<td><code>transition</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-sessions.controller.ts</code></td>
+<td><code>listPlanItems</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-sessions.controller.ts</code></td>
+<td><code>createPlanItem</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-sessions.controller.ts</code></td>
+<td><code>getPlanItem</code></td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>apps/api/src/extensions/qa-sessions.controller.ts</code></td>
+<td><code>updatePlanItem</code></td>
+</tr>
+</tbody></table>
+<h3 id="qaverdictcompletioncontroller">QaVerdictCompletionController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/qa-verdict-completion.controller.ts#L63">apps/api/src/extensions/qa-verdict-completion.controller.ts:63</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>detail</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>createVerdict</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>signVerdict</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>requestCosign</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>approveCosign</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>supersedeVerdict</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>assessDod</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>createCandidate</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>candidate</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>finalClose</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>requestCompletion</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/qa-verdict-completion.controller.ts</code></td>
+<td><code>approveCompletion</code></td>
+</tr>
+</tbody></table>
+<h3 id="queuecontrolscontroller">QueueControlsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/queue/queue-controls.controller.ts#L39">apps/api/src/extensions/queue/queue-controls.controller.ts:39</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/queue/queue-controls.controller.ts</code></td>
+<td><code>control</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/queue/queue-controls.controller.ts</code></td>
+<td><code>projectOrder</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/extensions/queue/queue-controls.controller.ts</code></td>
+<td><code>portfolioOrder</code></td>
+</tr>
+</tbody></table>
+<h3 id="queuepoliciescontroller">QueuePoliciesController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/queue/queue-policies.controller.ts#L39">apps/api/src/extensions/queue/queue-policies.controller.ts:39</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/queue/queue-policies.controller.ts</code></td>
+<td><code>policy</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/queue/queue-policies.controller.ts</code></td>
+<td><code>calendar</code></td>
+</tr>
+</tbody></table>
+<h3 id="queuecontroller">QueueController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/queue/queue.controller.ts#L52">apps/api/src/extensions/queue/queue.controller.ts:52</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/queue/queue.controller.ts</code></td>
+<td><code>lane</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/queue/queue.controller.ts</code></td>
+<td><code>item</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/queue/queue.controller.ts</code></td>
+<td><code>sla</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/queue/queue.controller.ts</code></td>
+<td><code>capacity</code></td>
+</tr>
+</tbody></table>
+<h3 id="portfolioqueuecontroller">PortfolioQueueController</h3>
+<p>@awp/api · <a href="../../apps/api/src/extensions/queue/queue.controller.ts#L139">apps/api/src/extensions/queue/queue.controller.ts:139</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/queue/queue.controller.ts</code></td>
+<td><code>portfolio</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/extensions/queue/queue.controller.ts</code></td>
+<td><code>capacity</code></td>
+</tr>
+</tbody></table>
+<h3 id="healthcontroller">HealthController</h3>
+<p>@awp/api · <a href="../../apps/api/src/health.controller.ts#L10">apps/api/src/health.controller.ts:10</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/health.controller.ts</code></td>
+<td><code>live</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/health.controller.ts</code></td>
+<td><code>ready</code></td>
+</tr>
+</tbody></table>
+<h3 id="localhealthcontroller">LocalHealthController</h3>
+<p>@awp/api · <a href="../../apps/api/src/local/local-health.controller.ts#L8">apps/api/src/local/local-health.controller.ts:8</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/local/local-health.controller.ts</code></td>
+<td><code>live</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/local/local-health.controller.ts</code></td>
+<td><code>ready</code></td>
+</tr>
+</tbody></table>
+<h3 id="localopenapicontroller">LocalOpenApiController</h3>
+<p>@awp/api · <a href="../../apps/api/src/local/local-openapi.controller.ts#L5">apps/api/src/local/local-openapi.controller.ts:5</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/local/local-openapi.controller.ts</code></td>
+<td><code>docs</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/local/local-openapi.controller.ts</code></td>
+<td><code>openapi</code></td>
+</tr>
+</tbody></table>
+<h3 id="localpersonacontroller">LocalPersonaController</h3>
+<p>@awp/api · <a href="../../apps/api/src/local/local-persona.controller.ts#L276">apps/api/src/local/local-persona.controller.ts:276</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/local/local-persona.controller.ts</code></td>
+<td><code>options</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/local/local-persona.controller.ts</code></td>
+<td><code>exchange</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/local/local-persona.controller.ts</code></td>
+<td><code>selectProject</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/local/local-persona.controller.ts</code></td>
+<td><code>stepUp</code></td>
+</tr>
+</tbody></table>
+<h3 id="localwalkingskeletoncontroller">LocalWalkingSkeletonController</h3>
+<p>@awp/api · <a href="../../apps/api/src/local/local-walking-skeleton.controller.ts#L37">apps/api/src/local/local-walking-skeleton.controller.ts:37</a> · class guard: <code>LocalSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/local/local-walking-skeleton.controller.ts</code></td>
+<td><code>overview</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/local/local-walking-skeleton.controller.ts</code></td>
+<td><code>submitDummy</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/local/local-walking-skeleton.controller.ts</code></td>
+<td><code>command</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/local/local-walking-skeleton.controller.ts</code></td>
+<td><code>approve</code></td>
+</tr>
+</tbody></table>
+<h3 id="techwritingcontroller">TechWritingController</h3>
+<p>@awp/api · <a href="../../apps/api/src/local/tech-writing.controller.ts#L19">apps/api/src/local/tech-writing.controller.ts:19</a> · class guard: <code>LocalSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/local/tech-writing.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/local/tech-writing.controller.ts</code></td>
+<td><code>get</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/local/tech-writing.controller.ts</code></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/local/tech-writing.controller.ts</code></td>
+<td><code>act</code></td>
+</tr>
+</tbody></table>
+<h3 id="workspacesubjectscontroller">WorkspaceSubjectsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/local/workspace-subjects.controller.ts#L20">apps/api/src/local/workspace-subjects.controller.ts:20</a> · class guard: <code>LocalSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/local/workspace-subjects.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+</tbody></table>
+<h3 id="workspaceprojectscontroller">WorkspaceProjectsController</h3>
+<p>@awp/api · <a href="../../apps/api/src/workspace/workspace.module.ts#L30">apps/api/src/workspace/workspace.module.ts:30</a> · class guard: <code>QaSessionGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/workspace/workspace.module.ts</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/workspace/workspace.module.ts</code></td>
+<td><code>options</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/api/src/workspace/workspace.module.ts</code></td>
+<td><code>register</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/workspace/workspace.module.ts</code></td>
+<td><code>metadata</code></td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>apps/api/src/workspace/workspace.module.ts</code></td>
+<td><code>update</code></td>
+</tr>
+</tbody></table>
+<h3 id="workspacehealthcontroller">WorkspaceHealthController</h3>
+<p>@awp/api · <a href="../../apps/api/src/workspace/workspace.module.ts#L76">apps/api/src/workspace/workspace.module.ts:76</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/api/src/workspace/workspace.module.ts</code></td>
+<td><code>live</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/api/src/workspace/workspace.module.ts</code></td>
+<td><code>ready</code></td>
+</tr>
+</tbody></table>
+<h3 id="idphealthcontroller">IdpHealthController</h3>
+<p>@awp/fake-idp · <a href="../../apps/fake-idp/src/main.ts#L10">apps/fake-idp/src/main.ts:10</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/fake-idp/src/main.ts</code></td>
+<td><code>live</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/fake-idp/src/main.ts</code></td>
+<td><code>ready</code></td>
+</tr>
+</tbody></table>
+<h3 id="fakeoidccontroller">FakeOidcController</h3>
+<p>@awp/fake-idp · <a href="../../apps/fake-idp/src/oidc.controller.ts#L128">apps/fake-idp/src/oidc.controller.ts:128</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/fake-idp/src/oidc.controller.ts</code></td>
+<td><code>discovery</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/fake-idp/src/oidc.controller.ts</code></td>
+<td><code>jwks</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/fake-idp/src/oidc.controller.ts</code></td>
+<td><code>token</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/fake-idp/src/oidc.controller.ts</code></td>
+<td><code>rotate</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/fake-idp/src/oidc.controller.ts</code></td>
+<td><code>stepUp</code></td>
+</tr>
+</tbody></table>
+<h3 id="mockhealthcontroller">MockHealthController</h3>
+<p>@awp/mock-hub · <a href="../../apps/mock-hub/src/app.module.ts#L14">apps/mock-hub/src/app.module.ts:14</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/app.module.ts</code></td>
+<td><code>live</code></td>
+</tr>
+</tbody></table>
+<h3 id="gitlabcontroller">GitLabController</h3>
+<p>@awp/mock-hub · <a href="../../apps/mock-hub/src/gitlab/api/gitlab.controller.ts#L89">apps/mock-hub/src/gitlab/api/gitlab.controller.ts:89</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>version</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>project</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>mergeRequest</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>commit</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>branch</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>lint</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>trigger</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>pipelines</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>pipeline</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>variables</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>jobs</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/api/gitlab.controller.ts</code></td>
+<td><code>artifact</code></td>
+</tr>
+</tbody></table>
+<h3 id="gitlabcontrolcontroller">GitLabControlController</h3>
+<p>@awp/mock-hub · <a href="../../apps/mock-hub/src/gitlab/control/gitlab-control.controller.ts#L61">apps/mock-hub/src/gitlab/control/gitlab-control.controller.ts:61</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/control/gitlab-control.controller.ts</code></td>
+<td><code>state</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/gitlab/control/gitlab-control.controller.ts</code></td>
+<td><code>fault</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/gitlab/control/gitlab-control.controller.ts</code></td>
+<td><code>scenario</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/gitlab/control/gitlab-control.controller.ts</code></td>
+<td><code>webhook</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/gitlab/control/gitlab-control.controller.ts</code></td>
+<td><code>nextWebhook</code></td>
+</tr>
+</tbody></table>
+<h3 id="jiracontroller">JiraController</h3>
+<p>@awp/mock-hub · <a href="../../apps/mock-hub/src/jira/jira.controller.ts#L132">apps/mock-hub/src/jira/jira.controller.ts:132</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>serverInfo</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>issue</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>search</code></td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>edit</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>transition</code></td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>property</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>link</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>comment</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>scenario</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/jira/jira.controller.ts</code></td>
+<td><code>rate</code></td>
+</tr>
+</tbody></table>
+<h3 id="mattermostcontroller">MattermostController</h3>
+<p>@awp/mock-hub · <a href="../../apps/mock-hub/src/mattermost/api/mattermost.controller.ts#L50">apps/mock-hub/src/mattermost/api/mattermost.controller.ts:50</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/mattermost/api/mattermost.controller.ts</code></td>
+<td><code>ping</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/mattermost/api/mattermost.controller.ts</code></td>
+<td><code>clientConfig</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/mattermost/api/mattermost.controller.ts</code></td>
+<td><code>teams</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/mattermost/api/mattermost.controller.ts</code></td>
+<td><code>channels</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/mattermost/api/mattermost.controller.ts</code></td>
+<td><code>membership</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/mattermost/api/mattermost.controller.ts</code></td>
+<td><code>createPost</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/mattermost/api/mattermost.controller.ts</code></td>
+<td><code>lookup</code></td>
+</tr>
+</tbody></table>
+<h3 id="mattermostcontrolcontroller">MattermostControlController</h3>
+<p>@awp/mock-hub · <a href="../../apps/mock-hub/src/mattermost/control/mattermost-control.controller.ts#L6">apps/mock-hub/src/mattermost/control/mattermost-control.controller.ts:6</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/mattermost/control/mattermost-control.controller.ts</code></td>
+<td><code>state</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/mattermost/control/mattermost-control.controller.ts</code></td>
+<td><code>setFault</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/mattermost/control/mattermost-control.controller.ts</code></td>
+<td><code>recordCallback</code></td>
+</tr>
+</tbody></table>
+<h3 id="mockhubcontroller">MockHubController</h3>
+<p>@awp/mock-hub · <a href="../../apps/mock-hub/src/mock-hub.controller.ts#L143">apps/mock-hub/src/mock-hub.controller.ts:143</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/mock-hub.controller.ts</code></td>
+<td><code>publish</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/mock-hub.controller.ts</code></td>
+<td><code>reset</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/mock-hub.controller.ts</code></td>
+<td><code>seed</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/mock-hub.controller.ts</code></td>
+<td><code>scenario</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/mock-hub.controller.ts</code></td>
+<td><code>health</code></td>
+</tr>
+</tbody></table>
+<h3 id="operationalcontroller">OperationalController</h3>
+<p>@awp/mock-hub · <a href="../../apps/mock-hub/src/operational/operational.controller.ts#L324">apps/mock-hub/src/operational/operational.controller.ts:324</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/operational/operational.controller.ts</code></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/operational/operational.controller.ts</code></td>
+<td><code>request</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/operational/operational.controller.ts</code></td>
+<td><code>transition</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/operational/operational.controller.ts</code></td>
+<td><code>effect</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/operational/operational.controller.ts</code></td>
+<td><code>createDefect</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/operational/operational.controller.ts</code></td>
+<td><code>defect</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/operational/operational.controller.ts</code></td>
+<td><code>defectEffect</code></td>
+</tr>
+</tbody></table>
+<h3 id="pilotcapabilitiescontroller">PilotCapabilitiesController</h3>
+<p>@awp/mock-hub · <a href="../../apps/mock-hub/src/pilot-capabilities.controller.ts#L18">apps/mock-hub/src/pilot-capabilities.controller.ts:18</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/mock-hub/src/pilot-capabilities.controller.ts</code></td>
+<td><code>state</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/pilot-capabilities.controller.ts</code></td>
+<td><code>fault</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>apps/mock-hub/src/pilot-capabilities.controller.ts</code></td>
+<td><code>probe</code></td>
+</tr>
+</tbody></table>
+<h3 id="healthcontroller">HealthController</h3>
+<p>@awp/worker · <a href="../../apps/worker/src/health.controller.ts#L10">apps/worker/src/health.controller.ts:10</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/worker/src/health.controller.ts</code></td>
+<td><code>live</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/worker/src/health.controller.ts</code></td>
+<td><code>ready</code></td>
+</tr>
+</tbody></table>
+<h3 id="localworkerhealthcontroller">LocalWorkerHealthController</h3>
+<p>@awp/worker · <a href="../../apps/worker/src/local-health.controller.ts#L8">apps/worker/src/local-health.controller.ts:8</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>apps/worker/src/local-health.controller.ts</code></td>
+<td><code>live</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>apps/worker/src/local-health.controller.ts</code></td>
+<td><code>ready</code></td>
+</tr>
+</tbody></table>
+<h3 id="corporatesessioncontroller">CorporateSessionController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/auth/corporate-session.controller.ts#L27">packages/platform-runtime-nest/src/auth/corporate-session.controller.ts:27</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/auth/corporate-session.controller.ts</code></td>
+<td><code>login</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/auth/corporate-session.controller.ts</code></td>
+<td><code>callback</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/auth/corporate-session.controller.ts</code></td>
+<td><code>session</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/auth/corporate-session.controller.ts</code></td>
+<td><code>logout</code></td>
+</tr>
+</tbody></table>
+<h3 id="agentrunscontroller">AgentRunsController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/agent-runs.controller.ts#L24">packages/platform-runtime-nest/src/http/agent-runs.controller.ts:24</a> · class guard: <code>IntakeDraftHttpGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/agent-runs.controller.ts</code></td>
+<td><code>start</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/agent-runs.controller.ts</code></td>
+<td><code>get</code></td>
+</tr>
+</tbody></table>
+<h3 id="approvalsv11controller">ApprovalsV11Controller</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/approvals.controller.ts#L56">packages/platform-runtime-nest/src/http/approvals.controller.ts:56</a> · class guard: <code>ApprovalsV11HttpGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/approvals.controller.ts</code></td>
+<td><code>get</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/approvals.controller.ts</code></td>
+<td><code>decide</code></td>
+</tr>
+</tbody></table>
+<h3 id="artifactscontroller">ArtifactsController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/artifacts.controller.ts#L17">packages/platform-runtime-nest/src/http/artifacts.controller.ts:17</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/artifacts.controller.ts</code></td>
+<td><code>getArtifactMetadata</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/artifacts.controller.ts</code></td>
+<td><code>streamArtifactContent</code></td>
+</tr>
+</tbody></table>
+<h3 id="auditcontroller">AuditController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/audit.controller.ts#L57">packages/platform-runtime-nest/src/http/audit.controller.ts:57</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/audit.controller.ts</code></td>
+<td><code>project</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/audit.controller.ts</code></td>
+<td><code>workspace</code></td>
+</tr>
+</tbody></table>
+<h3 id="connectorwebhookscontroller">ConnectorWebhooksController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/connector-webhooks.controller.ts#L22">packages/platform-runtime-nest/src/http/connector-webhooks.controller.ts:22</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/connector-webhooks.controller.ts</code></td>
+<td><code>receive</code></td>
+</tr>
+</tbody></table>
+<h3 id="controlplanecontroller">ControlPlaneController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/control-plane.controller.ts#L36">packages/platform-runtime-nest/src/http/control-plane.controller.ts:36</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/control-plane.controller.ts</code></td>
+<td><code>command</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/control-plane.controller.ts</code></td>
+<td><code>approval</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/control-plane.controller.ts</code></td>
+<td><code>decide</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/control-plane.controller.ts</code></td>
+<td><code>requestPublication</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/control-plane.controller.ts</code></td>
+<td><code>webhook</code></td>
+</tr>
+</tbody></table>
+<h3 id="extensionregistrycontroller">ExtensionRegistryController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/extension-registry.controller.ts#L10">packages/platform-runtime-nest/src/http/extension-registry.controller.ts:10</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/extension-registry.controller.ts</code></td>
+<td><code>listPackRegistrations</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/extension-registry.controller.ts</code></td>
+<td><code>listConnectorRegistrations</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/extension-registry.controller.ts</code></td>
+<td><code>listCapabilityContracts</code></td>
+</tr>
+</tbody></table>
+<h3 id="intakecandidatescontroller">IntakeCandidatesController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/intake-candidates.controller.ts#L39">packages/platform-runtime-nest/src/http/intake-candidates.controller.ts:39</a> · class guard: <code>IntakeDraftHttpGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/intake-candidates.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/intake-candidates.controller.ts</code></td>
+<td><code>get</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/intake-candidates.controller.ts</code></td>
+<td><code>decide</code></td>
+</tr>
+</tbody></table>
+<h3 id="intakedraftrevisionscontroller">IntakeDraftRevisionsController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/intake-draft-revisions.controller.ts#L49">packages/platform-runtime-nest/src/http/intake-draft-revisions.controller.ts:49</a> · class guard: <code>IntakeDraftHttpGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/intake-draft-revisions.controller.ts</code></td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/intake-draft-revisions.controller.ts</code></td>
+<td><code>revise</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/intake-draft-revisions.controller.ts</code></td>
+<td><code>validate</code></td>
+</tr>
+</tbody></table>
+<h3 id="intakedraftscontroller">IntakeDraftsController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/intake-drafts.controller.ts#L21">packages/platform-runtime-nest/src/http/intake-drafts.controller.ts:21</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/intake-drafts.controller.ts</code></td>
+<td><code>createIntakeDraft</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/intake-drafts.controller.ts</code></td>
+<td><code>getIntakeDraft</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/intake-drafts.controller.ts</code></td>
+<td><code>submitIntakeDraft</code></td>
+</tr>
+</tbody></table>
+<h3 id="integrationregistrycontroller">IntegrationRegistryController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/integration-registry.controller.ts#L122">packages/platform-runtime-nest/src/http/integration-registry.controller.ts:122</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>createConnection</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>getConnection</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>validateConnection</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>publishConnection</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>health</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>createMapping</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>getMapping</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>validateMapping</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>publishMapping</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>createProfile</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>getProfile</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>validateProfile</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>publishProfile</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>createBinding</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>getBinding</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>validateBinding</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>availability</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/integration-registry.controller.ts</code></td>
+<td><code>report</code></td>
+</tr>
+</tbody></table>
+<h3 id="notificationintentscontroller">NotificationIntentsController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/notification-intents.controller.ts#L17">packages/platform-runtime-nest/src/http/notification-intents.controller.ts:17</a> · class guard: <code>IntakeDraftHttpGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/notification-intents.controller.ts</code></td>
+<td><code>get</code></td>
+</tr>
+</tbody></table>
+<h3 id="operationalauthoritycontroller">OperationalAuthorityController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/operational-authority.controller.ts#L80">packages/platform-runtime-nest/src/http/operational-authority.controller.ts:80</a> · class guard: <code>OperationalAuthorityHttpGuard</code></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/operational-authority.controller.ts</code></td>
+<td><code>projection</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/operational-authority.controller.ts</code></td>
+<td><code>conflicts</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/operational-authority.controller.ts</code></td>
+<td><code>imports</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/operational-authority.controller.ts</code></td>
+<td><code>reconciliation</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/operational-authority.controller.ts</code></td>
+<td><code>approval</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/operational-authority.controller.ts</code></td>
+<td><code>action</code></td>
+</tr>
+</tbody></table>
+<h3 id="projectonboardingcontroller">ProjectOnboardingController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/project-onboarding.controller.ts#L129">packages/platform-runtime-nest/src/http/project-onboarding.controller.ts:129</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>catalog</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>register</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>onboarding</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>evaluate</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>activatePilot</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>grantEntitlement</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>revokeEntitlement</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>validateBinding</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>acceptBinding</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>applyBindingLifecycleAction</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>publishQaEnvironment</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>publishQaContext</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>publishQaResource</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>acquireAccountLease</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>packages/platform-runtime-nest/src/http/project-onboarding.controller.ts</code></td>
+<td><code>releaseAccountLease</code></td>
+</tr>
+</tbody></table>
+<h3 id="projectscontroller">ProjectsController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/projects.controller.ts#L11">packages/platform-runtime-nest/src/http/projects.controller.ts:11</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/projects.controller.ts</code></td>
+<td><code>listVisibleProjects</code></td>
+</tr>
+</tbody></table>
+<h3 id="workitemscontroller">WorkItemsController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/work-items.controller.ts#L11">packages/platform-runtime-nest/src/http/work-items.controller.ts:11</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>packages/platform-runtime-nest/src/http/work-items.controller.ts</code></td>
+<td><code>getWorkItem</code></td>
+</tr>
+</tbody></table>
+<h3 id="worktypescontroller">WorkTypesController</h3>
+<p>@awp/platform-runtime-nest · <a href="../../packages/platform-runtime-nest/src/http/work-types.controller.ts#L24">packages/platform-runtime-nest/src/http/work-types.controller.ts:24</a></p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Путь</th>
+<th>Handler</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PUT</td>
+<td><code>packages/platform-runtime-nest/src/http/work-types.controller.ts</code></td>
+<td><code>changeEnablement</code></td>
+</tr>
+</tbody></table>
+<h2 id="незавершённые-задачи-в-исходных-tasksmd">Незавершённые задачи в исходных tasks.md</h2>
+<ul>
+<li>001-extension-kernel-local-skeleton: 163/163; открыто 0.</li>
+<li>002-qa-manual-walking-skeleton: 180/180; открыто 0.</li>
+<li>003-jira-operational-authority: 163/163; открыто 0.</li>
+<li>004-mattermost-hermes-intake: 215/215; открыто 0.</li>
+<li>005-gitlab-automated-validation: 159/159; открыто 0.</li>
+<li>006-queue-triage-capacity-sla: 170/170; открыто 0.</li>
+<li>007-project-onboarding-evidence-security: 184/184; открыто 0.</li>
+<li>008-pilot-hardening-and-conformance: 108/115; открыто 7.<ul>
+<li>T025 [US1] Implement shared complete non-local factories in <code>packages/runtime-composition/src/pilot/composition.ts</code>; wire API/worker entry points and entity/migration selection in <code>apps/api/src/main.ts</code> and <code>apps/worker/src/main.ts</code>. — <a href="../../specs/008-pilot-hardening-and-conformance/tasks.md#L118">specs/008-pilot-hardening-and-conformance/tasks.md:118</a></li>
+<li>T040 [US1] After C1 metadata is supplied, pin selected real protocol/auth strategy and sanitized fixtures in <code>config/pilot/provider-capabilities.json</code> and a scoped input report; record unsupported capabilities instead of substituting versions. — <a href="../../specs/008-pilot-hardening-and-conformance/tasks.md#L196">specs/008-pilot-hardening-and-conformance/tasks.md:196</a></li>
+<li>T057 [US2] After C1 and approved sandbox scope, implement/run N2 conformance in <code>tools/verification/feature-008-integration.mts</code>; save exact real-provider evidence and BLOCKED_INPUT for missing corporate prerequisites. — <a href="../../specs/008-pilot-hardening-and-conformance/tasks.md#L260">specs/008-pilot-hardening-and-conformance/tasks.md:260</a></li>
+<li>T084 [US4] Implement/run approved corporate drill wrapper in <code>tools/verification/feature-008-recovery.mts</code> after IN-08; preserve BLOCKED_INPUT for absent target/fence/RPO/RTO/owner. — <a href="../../specs/008-pilot-hardening-and-conformance/tasks.md#L378">specs/008-pilot-hardening-and-conformance/tasks.md:378</a></li>
+<li>T104 [US5] After N2/security/recovery and cohort input, implement/run actual shadow validation in <code>tools/verification/feature-008-shadow.mts</code>; record human-reviewed differences and zero external business writes. — <a href="../../specs/008-pilot-hardening-and-conformance/tasks.md#L432">specs/008-pilot-hardening-and-conformance/tasks.md:432</a></li>
+<li>T105 [US5] After exact human activation, collect the actual approved pilot window/sample and guardrail observations through <code>packages/runtime-composition/src/pilot/observation-worker.ts</code>; persist source evidence for <code>reports/008-pilot-hardening-and-conformance/limited-pilot.json</code>. — <a href="../../specs/008-pilot-hardening-and-conformance/tasks.md#L436">specs/008-pilot-hardening-and-conformance/tasks.md:436</a></li>
+<li>T106 [US5] Implement/run observed-pilot review validation in <code>tools/verification/feature-008-review.mts</code>; require real sample/provenance and human review, never simulate elapsed pilot time. — <a href="../../specs/008-pilot-hardening-and-conformance/tasks.md#L440">specs/008-pilot-hardening-and-conformance/tasks.md:440</a></li>
+</ul>
+</li>
+<li>009-russian-interface: 27/27; открыто 0.</li>
+<li>010-remove-redis-s3: 30/30; открыто 0.</li>
+<li>011-code-quality-standards: 22/22; открыто 0.</li>
+<li>012-readme-script-cleanup: 14/14; открыто 0.</li>
+<li>013-guided-workspace-ux: 18/18; открыто 0.</li>
+<li>014-black-order-ui: 22/22; открыто 0.</li>
+<li>015-tech-writing-workspace: 19/19; открыто 0.</li>
+<li>016-shared-domain-team: 20/20; открыто 0.</li>
+<li>017-workspace-wide-flow: 18/18; открыто 0.</li>
+<li>018-local-account-cleanup: 13/13; открыто 0.</li>
+<li>019-platform-access-admin: 19/19; открыто 0.</li>
+<li>020-project-creation-queue: 11/11; открыто 0.</li>
+<li>021-admin-workspace-projects: 9/9; открыто 0.</li>
+<li>022-project-editing: 10/10; открыто 0.</li>
+</ul>
+<h2 id="воспроизведение">Воспроизведение</h2>
+<p><code>node docs/architecture/generate-inventory.mjs</code> из корня репозитория обновляет этот каталог и inventory.json; основная архитектурная схема редактируется после анализа изменений.</p>
+<p>SHA-256 набора проанализированных исходников: <code>2fa1837540e0e32d5a138b4dc097cc6c7311bfabfc83dfc222a1a0e1e5d31b45</code>.</p>
+</main></div><script>document.querySelectorAll('.architecture-figure').forEach(figure=>{figure.querySelectorAll('[data-scale]').forEach(button=>button.addEventListener('click',()=>{const svg=figure.querySelector('svg'),scale=button.dataset.scale;svg.style.maxWidth=scale==='fit'?'100%':'none';svg.style.width=scale==='fit'?'100%':svg.viewBox.baseVal.width*Number(scale)+'px';svg.style.height='auto';figure.querySelectorAll('[data-scale]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}));});</script></body></html>

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "packageId": "00000000-0000-4000-8000-000000000302",
+  "version": 1,
+  "environment": "NON_PROD",
+  "adapter": {
+    "edition": "CLOUD",
+    "family": "jira-cloud-v3",
+    "contractVersion": "1.0.0",
+    "exactBuild": "cloud-nonprod-fixture-100245",
+    "apiFlavor": "CLOUD_REST_V3",
+    "capabilityEvidenceRef": { "id": "nonprod-capabilities", "version": 1, "contentHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111" }
+  },
+  "endpoint": {
+    "baseUrl": "https://jira-nonprod.example.invalid/",
+    "tenantKey": "nonprod-jira",
+    "cloudId": "nonprod-cloud",
+    "tlsPolicyRef": { "id": "nonprod-tls-policy", "version": 1, "contentHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222" }
+  },
+  "auth": {
+    "kind": "CLOUD_SERVICE_OAUTH2_CLIENT",
+    "secretRef": "secretref://nonprod/jira/service",
+    "credentialOwner": "platform-integration-team",
+    "rotationPolicyRef": { "id": "nonprod-rotation", "version": 1, "contentHash": "sha256:3333333333333333333333333333333333333333333333333333333333333333" },
+    "revocationRunbookRef": { "id": "nonprod-revoke", "version": 1, "contentHash": "sha256:4444444444444444444444444444444444444444444444444444444444444444" },
+    "leastPrivilegeEvidenceRef": { "id": "nonprod-permissions", "version": 1, "contentHash": "sha256:5555555555555555555555555555555555555555555555555555555555555555" }
+  },
+  "centralRequestProfileRef": { "id": "nonprod-central-profile", "version": 1, "contentHash": "sha256:6666666666666666666666666666666666666666666666666666666666666666" },
+  "sourceContextProfileRefs": [
+    { "id": "nonprod-source-profile", "version": 1, "contentHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777" }
+  ],
+  "defectProfileRefs": [
+    { "id": "nonprod-defect-profile", "version": 1, "contentHash": "sha256:8888888888888888888888888888888888888888888888888888888888888888" }
+  ],
+  "webhook": {
+    "registrationKind": "ADMIN_STATIC",
+    "verificationMode": "HMAC",
+    "deliveryIdentityMode": "CLOUD_HEADER",
+    "retryHorizonSeconds": 3600,
+    "dedupeHorizonSeconds": 7200,
+    "evidenceRef": { "id": "nonprod-webhook-evidence", "version": 1, "contentHash": "sha256:9999999999999999999999999999999999999999999999999999999999999999" }
+  },
+  "reconciliation": {
+    "freshnessTargetSeconds": 120,
+    "webhookGraceSeconds": 30,
+    "pollIntervalSeconds": 60,
+    "fullSweepIntervalSeconds": 3600,
+    "overlapSeconds": 120,
+    "pageSize": 50,
+    "maxConcurrency": 4
+  },
+  "rateBudget": {
+    "windowSeconds": 60,
+    "maxRequests": 300,
+    "burst": 25,
+    "maxInFlight": 8,
+    "maxRetryAfterSeconds": 600
+  },
+  "concurrency": {
+    "mode": "COMPARE_AND_VERIFY",
+    "safetyEvidenceRef": { "id": "nonprod-concurrency-evidence", "version": 1, "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    "riskAcceptanceRef": { "id": "nonprod-risk-acceptance", "version": 1, "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }
+  },
+  "networkEvidenceRef": { "id": "nonprod-network-allowlist", "version": 1, "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+  "generatedAt": "2026-08-31T00:00:00Z",
+  "contentHash": "sha256:23043284f42b4ac946e1ca2bfd153ef5abc802d5fe30f35d864a225087ba53bf"
+}

@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automation-availability:v1",
+  "title": "AutomationAvailability v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "capabilityMode",
+    "liveAvailability",
+    "launchPermitted",
+    "availableCapabilities",
+    "capabilityReasonCodes",
+    "availabilityReasonCodes",
+    "evaluatedAt",
+    "projectionHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automation-availability@1.0.0" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "capabilityMode": { "enum": ["MANUAL_ONLY", "FULL_QA"] },
+    "liveAvailability": { "enum": ["AVAILABLE", "DEGRADED", "UNAVAILABLE"] },
+    "launchPermitted": { "type": "boolean" },
+    "availableCapabilities": {
+      "type": "array",
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "source-context.read@1.0.0",
+          "test-executor.trigger-status@1.0.0",
+          "artifact.ci-read@1.0.0"
+        ]
+      }
+    },
+    "capabilityReasonCodes": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "SUITE_BINDING_MISSING",
+          "SUITE_BINDING_NOT_PUBLISHED",
+          "PROJECT_BINDING_INACTIVE",
+          "PROFILE_INVALID",
+          "ENVIRONMENT_NOT_ALLOWED",
+          "PRODUCTION_DENIED"
+        ]
+      }
+    },
+    "availabilityReasonCodes": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "GITLAB_DEGRADED",
+          "GITLAB_UNAVAILABLE",
+          "AUTH_REVOKED",
+          "RATE_LIMITED",
+          "WEBHOOK_STALE",
+          "RECONCILIATION_STALE",
+          "ARTIFACT_READ_DEGRADED"
+        ]
+      }
+    },
+    "evaluatedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "projectionHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "capabilityMode": { "const": "FULL_QA" } },
+        "required": ["capabilityMode"]
+      },
+      "then": {
+        "properties": {
+          "availableCapabilities": { "minItems": 3, "maxItems": 3 },
+          "capabilityReasonCodes": { "maxItems": 0 }
+        }
+      },
+      "else": {
+        "properties": { "capabilityReasonCodes": { "minItems": 1 } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "liveAvailability": { "const": "AVAILABLE" } },
+        "required": ["liveAvailability"]
+      },
+      "then": {
+        "properties": { "availabilityReasonCodes": { "maxItems": 0 } }
+      },
+      "else": {
+        "properties": { "availabilityReasonCodes": { "minItems": 1 } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilityMode": { "const": "FULL_QA" },
+          "liveAvailability": { "const": "AVAILABLE" }
+        },
+        "required": ["capabilityMode", "liveAvailability"]
+      },
+      "then": {
+        "properties": { "launchPermitted": { "const": true } }
+      },
+      "else": {
+        "properties": { "launchPermitted": { "const": false } }
+      }
+    }
+  ]
+}

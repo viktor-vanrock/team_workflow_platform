@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 2,
+  "feature": "003-jira-operational-authority",
+  "gate": "quickstart",
+  "startedAt": "2026-09-03T10:11:07.237Z",
+  "finishedAt": "2026-09-03T10:17:58.450Z",
+  "status": "PASS",
+  "documentedCommands": 67,
+  "documentedScenarios": 42,
+  "orphanedScripts": [],
+  "orphanedScenarios": [],
+  "undocumentedScenarios": [],
+  "unclassifiedCommands": [],
+  "commandCoverage": [
+    {
+      "command": "pnpm prerequisites",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm verify:001",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm verify:002",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm verify:003:prerequisites",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm local:jira:up",
+      "disposition": "EXECUTED_BY_QA_JIRA_PROCESS"
+    },
+    {
+      "command": "pnpm local:jira:migrate",
+      "disposition": "EXECUTED_BY_QA_JIRA_PROCESS"
+    },
+    {
+      "command": "pnpm local:jira:seed",
+      "disposition": "EXECUTED_BY_QA_JIRA_PROCESS"
+    },
+    {
+      "command": "pnpm local:jira:status",
+      "disposition": "EXECUTED_BY_QA_JIRA_PROCESS"
+    },
+    {
+      "command": "pnpm test:contract:003",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm test:integration:003",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm test:e2e:003",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm smoke:003",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm trace:003",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm verify:003",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm verify:003:foundation",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm verify:003:us1",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm verify:003:us2",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm verify:003:us3",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm verify:003:us4",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm jira:scenario profile-lifecycle",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us1-create",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us1-duplicate-submit",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us1-timeout-after-create",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us1-timeout-after-source-link",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us1-worker-restart",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us1-redis-loss",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us1-jira-unavailable",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us1-marker-search-ambiguous",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us2-direct-import",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us2-unverified-creator",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us2-missing-discriminator",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us2-ambiguous-discriminator",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us2-out-of-scope-issue",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us2-cross-project-substitution",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us2-create-import-race",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-human-change",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-duplicate-webhook",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-out-of-order-webhook",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-lost-webhook-reconciliation",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-same-token-different-hash",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-transition",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-assignment",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-priority",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-due-date",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-stale-command",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-profile-drift-before-effect",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-permission-revoked",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-mapping-drift",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us3-post-read-mismatch",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us4-defect",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us4-defect-replay",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us4-timeout-after-defect",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us4-timeout-after-link",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us4-duplicate-candidates",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us4-profile-drift",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario us4-wrong-project",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario failures",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario security-matrix",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario freshness",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario cloud-pagination",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm jira:scenario dc-pagination",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "pnpm trace:003 --scenario us4-defect",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "pnpm jira:nonprod:preflight",
+      "disposition": "GATED_NONPROD"
+    },
+    {
+      "command": "pnpm jira:nonprod:contract",
+      "disposition": "GATED_NONPROD"
+    },
+    {
+      "command": "pnpm jira:nonprod:least-privilege",
+      "disposition": "GATED_NONPROD"
+    },
+    {
+      "command": "pnpm local:jira:reset",
+      "disposition": "OPERATOR_DESTRUCTIVE"
+    },
+    {
+      "command": "pnpm local:jira:down",
+      "disposition": "EXECUTED_BY_QA_JIRA_PROCESS"
+    }
+  ],
+  "results": [
+    {
+      "command": [
+        "/opt/homebrew/bin/pnpm",
+        "test:contract:003"
+      ],
+      "status": "PASS",
+      "durationMs": 5666,
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "/opt/homebrew/bin/pnpm",
+        "test:integration:003"
+      ],
+      "status": "PASS",
+      "durationMs": 33865,
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "/opt/homebrew/bin/pnpm",
+        "test:e2e:003"
+      ],
+      "status": "PASS",
+      "durationMs": 2049,
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "/opt/homebrew/bin/pnpm",
+        "smoke:003"
+      ],
+      "status": "PASS",
+      "durationMs": 369629,
+      "exitCode": 0
+    }
+  ],
+  "executedScenarioNames": [
+    "profile-lifecycle",
+    "cloud-pagination",
+    "dc-pagination",
+    "failures",
+    "freshness",
+    "security-matrix",
+    "us1-create",
+    "us1-duplicate-submit",
+    "us1-timeout-after-create",
+    "us1-timeout-after-source-link",
+    "us1-worker-restart",
+    "us1-redis-loss",
+    "us1-jira-unavailable",
+    "us1-marker-search-ambiguous",
+    "us2-direct-import",
+    "us2-out-of-scope-issue",
+    "us2-create-import-race",
+    "us2-ambiguous-discriminator",
+    "us2-cross-project-substitution",
+    "us2-missing-discriminator",
+    "us2-unverified-creator",
+    "us3-assignment",
+    "us3-due-date",
+    "us3-duplicate-webhook",
+    "us3-human-change",
+    "us3-lost-webhook-reconciliation",
+    "us3-mapping-drift",
+    "us3-out-of-order-webhook",
+    "us3-permission-revoked",
+    "us3-post-read-mismatch",
+    "us3-priority",
+    "us3-profile-drift-before-effect",
+    "us3-same-token-different-hash",
+    "us3-stale-command",
+    "us3-transition",
+    "us4-defect",
+    "us4-defect-replay",
+    "us4-duplicate-candidates",
+    "us4-profile-drift",
+    "us4-timeout-after-defect",
+    "us4-timeout-after-link",
+    "us4-wrong-project"
+  ],
+  "unexecutedInvariants": []
+}

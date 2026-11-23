@@ -1,0 +1,401 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hermes customer project dialogues",
+    "version": "1.0.0"
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "CorporateSession": []
+    }
+  ],
+  "paths": {
+    "/api/v1/workspaces/{workspaceId}/project-dialogues": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "workspaceId",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "listOwnProjectDialogues",
+        "responses": {
+          "200": {
+            "description": "Owned dialogue state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "maxItems": 20,
+                      "items": {
+                        "$ref": "#/components/schemas/ProjectDialogue"
+                      }
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed command"
+          },
+          "401": {
+            "description": "Verified session required"
+          },
+          "403": {
+            "description": "Workspace permission, classification or step-up denied"
+          },
+          "404": {
+            "description": "Dialogue unavailable"
+          },
+          "409": {
+            "description": "Stale version or idempotency conflict"
+          },
+          "503": {
+            "description": "Service unavailable"
+          }
+        }
+      },
+      "post": {
+        "operationId": "startProjectDialogue",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Owned dialogue state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDialogue"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed command"
+          },
+          "401": {
+            "description": "Verified session required"
+          },
+          "403": {
+            "description": "Workspace permission, classification or step-up denied"
+          },
+          "404": {
+            "description": "Dialogue unavailable"
+          },
+          "409": {
+            "description": "Stale version or idempotency conflict"
+          },
+          "503": {
+            "description": "Service unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/workspaces/{workspaceId}/project-dialogues/{id}/messages": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "workspaceId",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "sendProjectDialogueMessage",
+        "description": "Collect project name and purpose; message text cannot supply authority.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "expectedVersion": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "requestKey": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "message": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000
+                  }
+                },
+                "required": [
+                  "expectedVersion",
+                  "requestKey",
+                  "message"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Owned dialogue state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDialogue"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed command"
+          },
+          "401": {
+            "description": "Verified session required"
+          },
+          "403": {
+            "description": "Workspace permission, classification or step-up denied"
+          },
+          "404": {
+            "description": "Dialogue unavailable"
+          },
+          "409": {
+            "description": "Stale version or idempotency conflict"
+          },
+          "503": {
+            "description": "Service unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/workspaces/{workspaceId}/project-dialogues/{id}/confirm": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "workspaceId",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "confirmProjectDialogue",
+        "description": "Confirm the exact current proposal as the verified human; creates a DRAFT project and scoped customer access atomically.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "expectedVersion": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "requestKey": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "expectedVersion",
+                  "requestKey"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Owned dialogue state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDialogue"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed command"
+          },
+          "401": {
+            "description": "Verified session required"
+          },
+          "403": {
+            "description": "Workspace permission, classification or step-up denied"
+          },
+          "404": {
+            "description": "Dialogue unavailable"
+          },
+          "409": {
+            "description": "Stale version or idempotency conflict"
+          },
+          "503": {
+            "description": "Service unavailable"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "CorporateSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-awp-session",
+        "description": "Verified corporate session; writes also require the session CSRF header."
+      }
+    },
+    "schemas": {
+      "ProjectDialogue": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "workspaceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "state": {
+            "enum": [
+              "COLLECTING",
+              "READY",
+              "CREATED"
+            ]
+          },
+          "draft": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "key": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_-]{1,31}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "purpose": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              }
+            },
+            "required": [
+              "key"
+            ]
+          },
+          "messages": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "role": {
+                  "enum": [
+                    "user",
+                    "assistant"
+                  ]
+                },
+                "text": {
+                  "type": "string",
+                  "maxLength": 2000
+                }
+              },
+              "required": [
+                "role",
+                "text"
+              ]
+            }
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "id",
+          "workspaceId",
+          "version",
+          "state",
+          "draft",
+          "messages"
+        ]
+      }
+    }
+  }
+}

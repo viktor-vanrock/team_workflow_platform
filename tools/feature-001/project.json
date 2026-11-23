@@ -1,0 +1,74 @@
+{
+  "name": "feature-001",
+  "root": "tools/feature-001",
+  "projectType": "application",
+  "tags": ["type:verification", "feature:001"],
+  "targets": {
+    "test-unit": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "vitest run tests/integration/work-type-enablement.spec.ts tests/integration/extension-registration-rejection.spec.ts tests/integration/fake-idp-oidc.spec.ts tests/e2e/001-durable-preview.spec.ts"
+      }
+    },
+    "test-architecture": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "commands": [
+          "node tools/architecture/check-import-graph.mts",
+          "vitest run tests/architecture"
+        ],
+        "parallel": false
+      }
+    },
+    "test-contract": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "commands": [
+          "node tools/contracts/build-registry.mts --check",
+          "node tools/contracts/build-openapi-snapshots.mts --check",
+          "vitest run tests/contract"
+        ],
+        "parallel": false
+      }
+    },
+    "test-integration": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "vitest run tests/integration"
+      }
+    },
+    "test-e2e-001": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "playwright test 001-local-walking-skeleton.spec.ts 001-acceptance.spec.ts"
+      }
+    },
+    "smoke-001": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node tools/verification/smoke-001-gate.mts"
+      }
+    },
+    "check": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["test-unit", "test-architecture", "test-contract"],
+      "options": {
+        "commands": [
+          "pnpm format:check",
+          "pnpm lint",
+          "tsc --noEmit --project tsconfig.json",
+          "nx run-many -t typecheck --all --exclude=feature-001",
+          "nx run-many -t build --all --exclude=feature-001"
+        ],
+        "parallel": false
+      }
+    }
+  }
+}

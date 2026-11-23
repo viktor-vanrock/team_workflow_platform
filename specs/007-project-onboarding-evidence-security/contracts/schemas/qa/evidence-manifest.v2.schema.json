@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:evidence-manifest:v2",
+  "title": "QA evidence manifest revision v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "manifestRevisionId", "manifestId", "version", "kind", "workspaceId", "projectId", "workItemId", "sessionId", "workTypeDefinitionRef", "targetSnapshot", "scopeSnapshotRef", "planItemResults", "attempts", "observations", "frozenFindingReviewRefs", "artifactMembers", "sessionOutcome", "outcomeSummary", "definitionRefs", "ruleRefs", "policyRefs", "bindingRefs", "profileRefs", "connectionRefs", "mappingRefs", "humanAttestation", "correlationId", "effectiveClassificationKey", "createdAt", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": "qa-evidence-manifest@2.0.0" },
+    "manifestRevisionId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "manifestId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "kind": { "enum": ["INITIAL", "SUBSTANTIVE_CORRECTION", "CLERICAL"] },
+    "previousRevisionRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "correctionReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "workItemId": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "sessionId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "workTypeDefinitionRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "targetSnapshot": { "$ref": "../common.v1.schema.json#/$defs/schemaBoundValue" },
+    "scopeSnapshotRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "planItemResults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["planItemRef", "expectedOutcome", "actualOutcome", "canonicalResult", "startedAt", "finishedAt"],
+        "properties": {
+          "planItemRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+          "expectedOutcome": { "$ref": "../common.v1.schema.json#/$defs/schemaBoundValue" },
+          "actualOutcome": { "$ref": "../common.v1.schema.json#/$defs/schemaBoundValue" },
+          "canonicalResult": { "enum": ["PASS", "FAIL", "BLOCKED", "SKIPPED", "ERROR"] },
+          "startedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+          "finishedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" }
+        }
+      }
+    },
+    "attempts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["attemptRef", "actor", "runnerRef", "startedAt", "finishedAt", "resultRef"],
+        "properties": {
+          "attemptRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+          "actor": { "$ref": "../common.v1.schema.json#/$defs/actor" },
+          "runnerRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+          "startedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+          "finishedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+          "resultRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" }
+        }
+      }
+    },
+    "observations": { "$ref": "#/$defs/refSet" },
+    "frozenFindingReviewRefs": { "$ref": "#/$defs/refSet" },
+    "artifactMembers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifactRef", "checksum", "classificationKey", "availabilityAtSigning", "retentionPolicyRef"],
+        "properties": {
+          "artifactRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+          "checksum": { "$ref": "../common.v1.schema.json#/$defs/hash" },
+          "classificationKey": { "$ref": "../common.v1.schema.json#/$defs/classificationKey" },
+          "availabilityAtSigning": { "enum": ["AVAILABLE", "EXPIRED", "QUARANTINED", "UNAVAILABLE"] },
+          "retentionPolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" }
+        }
+      }
+    },
+    "sessionOutcome": { "$ref": "../common.v1.schema.json#/$defs/schemaBoundValue" },
+    "outcomeSummary": { "$ref": "../common.v1.schema.json#/$defs/schemaBoundValue" },
+    "definitionRefs": { "$ref": "#/$defs/refSet" },
+    "ruleRefs": { "$ref": "#/$defs/refSet" },
+    "policyRefs": { "$ref": "#/$defs/refSet" },
+    "bindingRefs": { "$ref": "#/$defs/refSet" },
+    "profileRefs": { "$ref": "#/$defs/refSet" },
+    "connectionRefs": { "$ref": "#/$defs/refSet" },
+    "mappingRefs": { "$ref": "#/$defs/refSet" },
+    "humanAttestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor", "attestedAt"],
+      "properties": {
+        "actor": { "$ref": "../common.v1.schema.json#/$defs/humanActor" },
+        "attestedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" }
+      }
+    },
+    "correlationId": { "$ref": "../common.v1.schema.json#/$defs/correlationId" },
+    "causationId": { "$ref": "../common.v1.schema.json#/$defs/correlationId" },
+    "effectiveClassificationKey": { "$ref": "../common.v1.schema.json#/$defs/classificationKey" },
+    "createdAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" }
+  },
+  "$defs": {
+    "refSet": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "../common.v1.schema.json#/$defs/exactRef" }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "kind": { "const": "INITIAL" } }, "required": ["kind"] },
+      "then": { "not": { "anyOf": [{ "required": ["previousRevisionRef"] }, { "required": ["correctionReason"] }] } },
+      "else": { "required": ["previousRevisionRef", "correctionReason"] }
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "feature": "004-mattermost-hermes-intake",
+  "checkpoint": "US4",
+  "status": "PASS",
+  "generatedAt": "2026-09-03T10:23:12.610Z",
+  "taskSourceHash": "sha256:898061c3ce6c367812c7b11520f6888d641012d3cd50f0d67357e8eb740040f8",
+  "assertions": {
+    "sourceStateMutation": 0,
+    "maximumPostCountAfterMarker": 1,
+    "reconciliationOutcomes": [
+      "DELIVERED",
+      "AMBIGUOUS"
+    ],
+    "terminalLookupCodes": [
+      "ZERO_MATCHES",
+      "MULTIPLE_MATCHES",
+      "LOOKUP_UNSUPPORTED"
+    ],
+    "capture": "SUPPRESSED",
+    "explicitHealthyProbe": true
+  },
+  "results": [
+    {
+      "key": "US4_CONTRACT_INTEGRATION_E2E",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 11192,
+      "outputHash": "sha256:162d1b0e49d00f6e1b3792a88b8393961a0f4864b297f003fe34146c9f763d5e"
+    },
+    {
+      "key": "CONNECTOR_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 962,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "PERSISTENCE_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1772,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "RUNTIME_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4201,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "API_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4757,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "WORKER_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4209,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "WEB_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2479,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  ]
+}

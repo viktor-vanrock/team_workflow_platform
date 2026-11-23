@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "checkpoint": "US1",
+  "status": "PASS",
+  "contour": "qa-jira-mattermost-local",
+  "production": "DENIED",
+  "externalNetwork": "DENIED",
+  "startedAt": "2026-09-03T18:35:05.717Z",
+  "finishedAt": "2026-09-03T18:35:37.045Z",
+  "taskBinding": {
+    "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+    "sha256": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62"
+  },
+  "invariants": {
+    "stage": "SHADOW",
+    "capabilityMode": "MANUAL_ONLY",
+    "operationalState": "ACTIVE",
+    "manualSessionAllowed": true,
+    "automatedSessionDenied": true,
+    "exactConfigurationRefs": true,
+    "auditAndOutbox": true,
+    "replayDedupe": true
+  },
+  "results": [
+    {
+      "id": "us1-contract-unit-integration-e2e",
+      "description": "Manual-only registration, resources, Binding, capability mode, Session guard and in-process journey",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/unit/007/us1-project-onboarding.spec.ts",
+        "tests/unit/007/us1-capability-mode.spec.ts",
+        "tests/contract/007/us1-project-api.spec.ts",
+        "tests/integration/007/us1-entitlement-uow.spec.ts",
+        "tests/integration/007/us1-project-resources.spec.ts",
+        "tests/integration/007/us1-account-leases.spec.ts",
+        "tests/integration/007/us1-manual-binding.spec.ts",
+        "tests/integration/007/us1-session-mode-guards.spec.ts",
+        "tests/e2e/007/us1-manual-onboarding.spec.ts",
+        "tests/e2e/007/us1-manual-onboarding-ui.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4848,
+      "outputHash": "sha256:530ca0582a2f63f2fed3bbea4ea020c07c68f4247af191d8262f3302a890ce09"
+    },
+    {
+      "id": "manual-only-scenario",
+      "description": "Exact documented CLI scenario",
+      "args": [
+        "--import",
+        "tsx",
+        "tools/local/onboarding-scenario.mts",
+        "run",
+        "manual-only-onboarding"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 798,
+      "outputHash": "sha256:81bb3ed6889522dc381329dfd47d83b2329f2213964baa058344603bdb784200"
+    },
+    {
+      "id": "authorized-browser",
+      "description": "Integration Administrator and QA Lead onboarding workspace",
+      "args": [
+        "node_modules/@playwright/test/cli.js",
+        "test",
+        "tests/e2e/007/us1-manual-onboarding-browser.spec.ts",
+        "--project=chromium",
+        "--workers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1207,
+      "outputHash": "sha256:e93235a155a3c25e7f3015ce14b1c4ceefe089943e2983ae94be1cd2d0b6080c"
+    },
+    {
+      "id": "typecheck-packages-platform-core",
+      "description": "Static typecheck packages/platform-core/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-core/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1444,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-platform-persistence-typeorm",
+      "description": "Static typecheck packages/platform-persistence-typeorm/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-persistence-typeorm/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1879,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-competency-qa",
+      "description": "Static typecheck packages/competency-qa/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3323,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-runtime-composition",
+      "description": "Static typecheck packages/runtime-composition/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4459,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-packages-platform-runtime-nest",
+      "description": "Static typecheck packages/platform-runtime-nest/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/platform-runtime-nest/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1540,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-apps-api",
+      "description": "Static typecheck apps/api/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4954,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-apps-worker",
+      "description": "Static typecheck apps/worker/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/worker/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4390,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-apps-web",
+      "description": "Static typecheck apps/web/tsconfig.json",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2483,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  ]
+}

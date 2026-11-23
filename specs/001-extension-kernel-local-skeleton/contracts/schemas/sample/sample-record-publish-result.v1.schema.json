@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:sample:record-publish-result:v1",
+  "title": "Sample Record Publish Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recordId", "recordVersion", "storedHash"],
+  "properties": {
+    "recordId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "recordVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "storedHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" }
+  }
+}

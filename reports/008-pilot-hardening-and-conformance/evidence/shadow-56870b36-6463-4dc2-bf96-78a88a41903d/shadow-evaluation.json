@@ -1,0 +1,9 @@
+{
+  "inputPath": null,
+  "status": "BLOCKED_INPUT",
+  "reasonCodes": [
+    "SHADOW_EVIDENCE_MISSING"
+  ],
+  "independentProviderWriteCount": null,
+  "corporateEvidence": false
+}

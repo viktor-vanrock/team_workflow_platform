@@ -1,0 +1,16 @@
+{
+  "evaluationIntent": "ASSERT_READY_TO_CLOSE",
+  "expectedAggregateVersion": 7,
+  "expectedInputFingerprint": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+  "requiredSessionPlanRef": {
+    "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    "revision": 1,
+    "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "verdictRef": {
+    "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+    "version": 1,
+    "contentHash": "sha256:2828282828282828282828282828282828282828282828282828282828282828"
+  }
+}
+

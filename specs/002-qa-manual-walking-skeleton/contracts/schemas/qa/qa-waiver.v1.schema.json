@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:waiver:v1",
+  "title": "Immutable Exact QA Waiver Subject with Decision Projection",
+  "description": "The version/content hash pins scope, rule, input fingerprint, subject, reason, expiry and risk policy. Decision provenance is a CAS projection; distinct live-authorized QA Lead enforcement remains a domain/Approval invariant.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "waiverId", "version", "workspaceId", "projectId", "workItemId", "waiverKind", "subjectRef", "ruleRef", "inputFingerprint", "reason", "candidateHash", "expiresAt", "riskReviewPolicyRef", "state", "initiatedBy", "platformActionRef", "contentHash", "createdAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "waiverId": { "type": "string", "format": "uuid" },
+    "version": { "const": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "waiverKind": { "$ref": "#/$defs/WaiverKind" },
+    "waivedRuleCode": { "const": "PROJECT_REGISTRY_NEEDS_REVIEW" },
+    "subjectRef": { "$ref": "#/$defs/WaiverSubjectRef" },
+    "ruleRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "inputFingerprint": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "reason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "candidateHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "riskReviewPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef" },
+    "state": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED", "EXPIRED", "INVALIDATED", "CONSUMED"] },
+    "initiatedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "platformActionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericPlatformActionRef" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "decidedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "authorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "decidedAt": { "type": "string", "format": "date-time" },
+    "consumedAt": { "type": "string", "format": "date-time" },
+    "invalidationReason": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" },
+    "invalidatedBy": { "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/common/actor-ref.v1.schema.json" },
+    "invalidatedAt": { "type": "string", "format": "date-time" },
+    "expiredAt": { "type": "string", "format": "date-time" },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+  },
+  "$defs": {
+    "WaiverKind": { "type": "string", "enum": ["DOR", "PLAN_ITEM", "SESSION", "REQUIRED_SESSION", "FINDING"] },
+    "DorSubjectSelector": {
+      "description": "Selects one exact readiness assessment. The server verifies the sole allowlisted blocker and derives the immutable aggregate snapshot; no caller-supplied generic subject is trusted.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "readinessAssessmentRef"],
+      "properties": {
+        "kind": { "const": "DOR" },
+        "readinessAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" }
+      }
+    },
+    "PlanItemSubjectSelector": {
+      "description": "Selects a same-scope Plan Item by ID. The server resolves its current resourceVersion and aggregate snapshot under CAS before creating the immutable candidate.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "planItemId"],
+      "properties": {
+        "kind": { "const": "PLAN_ITEM" },
+        "planItemId": { "type": "string", "format": "uuid" }
+      }
+    },
+    "SessionSubjectSelector": {
+      "description": "Selects a same-scope Session by ID. The server resolves its current resourceVersion and aggregate snapshot under CAS before creating the immutable candidate.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sessionId"],
+      "properties": {
+        "kind": { "const": "SESSION" },
+        "sessionId": { "type": "string", "format": "uuid" }
+      }
+    },
+    "RequiredSessionSubjectSelector": {
+      "description": "Pins one exact requirement inside one immutable Required Session Plan revision.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "requirementRef"],
+      "properties": {
+        "kind": { "const": "REQUIRED_SESSION" },
+        "requirementRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionRequirementRef" }
+      }
+    },
+    "FindingSubjectSelector": {
+      "description": "Pins one exact frozen Finding review revision; the negative evidence remains unaffected.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "findingReviewRef"],
+      "properties": {
+        "kind": { "const": "FINDING" },
+        "findingReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" }
+      }
+    },
+    "WaiverSubjectSelector": {
+      "description": "Closed public selector union. PLAN_ITEM and SESSION selectors are deliberately IDs, not caller-authored snapshots; the server resolves and hashes their current same-scope resource under CAS.",
+      "oneOf": [
+        { "$ref": "#/$defs/DorSubjectSelector" },
+        { "$ref": "#/$defs/PlanItemSubjectSelector" },
+        { "$ref": "#/$defs/SessionSubjectSelector" },
+        { "$ref": "#/$defs/RequiredSessionSubjectSelector" },
+        { "$ref": "#/$defs/FindingSubjectSelector" }
+      ]
+    },
+    "WaiverSubjectRef": {
+      "description": "Server-derived immutable typed subject persisted in the waiver candidate. Every branch includes the exact aggregate snapshot hash used by Approval and consumption-time revalidation.",
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "readinessAssessmentRef", "aggregateSnapshotHash"],
+          "properties": {
+            "kind": { "const": "DOR" },
+            "readinessAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+            "aggregateSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "planItemId", "resolvedResourceVersion", "aggregateSnapshotHash"],
+          "properties": {
+            "kind": { "const": "PLAN_ITEM" },
+            "planItemId": { "type": "string", "format": "uuid" },
+            "resolvedResourceVersion": { "type": "integer", "minimum": 1 },
+            "aggregateSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "sessionId", "resolvedResourceVersion", "aggregateSnapshotHash"],
+          "properties": {
+            "kind": { "const": "SESSION" },
+            "sessionId": { "type": "string", "format": "uuid" },
+            "resolvedResourceVersion": { "type": "integer", "minimum": 1 },
+            "aggregateSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "requirementRef", "aggregateSnapshotHash"],
+          "properties": {
+            "kind": { "const": "REQUIRED_SESSION" },
+            "requirementRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionRequirementRef" },
+            "aggregateSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "findingReviewRef", "aggregateSnapshotHash"],
+          "properties": {
+            "kind": { "const": "FINDING" },
+            "findingReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+            "aggregateSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "enum": ["APPROVED", "REJECTED", "CONSUMED"] } }, "required": ["state"] },
+      "then": { "required": ["decidedBy", "authorizationBasisHash", "decidedAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "CONSUMED" } }, "required": ["state"] },
+      "then": { "required": ["consumedAt"], "not": { "anyOf": [
+        { "required": ["invalidationReason"] }, { "required": ["invalidatedBy"] },
+        { "required": ["invalidatedAt"] }, { "required": ["expiredAt"] }
+      ] } },
+      "else": { "not": { "required": ["consumedAt"] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "INVALIDATED" } }, "required": ["state"] },
+      "then": {
+        "required": ["invalidationReason", "invalidatedBy", "invalidatedAt"],
+        "not": { "anyOf": [
+          { "required": ["decidedBy"] }, { "required": ["authorizationBasisHash"] },
+          { "required": ["decidedAt"] }, { "required": ["consumedAt"] },
+          { "required": ["expiredAt"] }
+        ] }
+      },
+      "else": { "not": { "anyOf": [
+        { "required": ["invalidationReason"] }, { "required": ["invalidatedBy"] },
+        { "required": ["invalidatedAt"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "EXPIRED" } }, "required": ["state"] },
+      "then": {
+        "required": ["expiredAt"],
+        "not": { "anyOf": [
+          { "required": ["decidedBy"] }, { "required": ["authorizationBasisHash"] },
+          { "required": ["decidedAt"] }, { "required": ["consumedAt"] },
+          { "required": ["invalidationReason"] }, { "required": ["invalidatedBy"] },
+          { "required": ["invalidatedAt"] }
+        ] }
+      },
+      "else": { "not": { "required": ["expiredAt"] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "PENDING" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["decidedBy"] }, { "required": ["authorizationBasisHash"] },
+        { "required": ["decidedAt"] }, { "required": ["consumedAt"] },
+        { "required": ["invalidationReason"] }, { "required": ["invalidatedBy"] },
+        { "required": ["invalidatedAt"] }, { "required": ["expiredAt"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["APPROVED", "REJECTED"] } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["consumedAt"] }, { "required": ["invalidationReason"] },
+        { "required": ["invalidatedBy"] }, { "required": ["invalidatedAt"] },
+        { "required": ["expiredAt"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "waiverKind": { "const": "DOR" } }, "required": ["waiverKind"] },
+      "then": {
+        "required": ["waivedRuleCode"],
+        "properties": {
+          "ruleRef": { "type": "object", "properties": { "key": { "const": "qa.dor" } } },
+          "subjectRef": { "$ref": "#/$defs/WaiverSubjectRef", "properties": { "kind": { "const": "DOR" } } }
+        }
+      },
+      "else": { "not": { "required": ["waivedRuleCode"] } }
+    },
+    {
+      "if": { "properties": { "waiverKind": { "const": "PLAN_ITEM" } }, "required": ["waiverKind"] },
+      "then": { "properties": { "subjectRef": { "$ref": "#/$defs/WaiverSubjectRef", "properties": { "kind": { "const": "PLAN_ITEM" } } } } }
+    },
+    {
+      "if": { "properties": { "waiverKind": { "const": "SESSION" } }, "required": ["waiverKind"] },
+      "then": { "properties": { "subjectRef": { "$ref": "#/$defs/WaiverSubjectRef", "properties": { "kind": { "const": "SESSION" } } } } }
+    },
+    {
+      "if": { "properties": { "waiverKind": { "const": "REQUIRED_SESSION" } }, "required": ["waiverKind"] },
+      "then": { "properties": { "subjectRef": { "$ref": "#/$defs/WaiverSubjectRef", "properties": { "kind": { "const": "REQUIRED_SESSION" } } } } }
+    },
+    {
+      "if": { "properties": { "waiverKind": { "const": "FINDING" } }, "required": ["waiverKind"] },
+      "then": {
+        "properties": {
+          "subjectRef": {
+            "$ref": "#/$defs/WaiverSubjectRef",
+            "properties": { "kind": { "const": "FINDING" } }
+          }
+        }
+      }
+    }
+  ]
+}

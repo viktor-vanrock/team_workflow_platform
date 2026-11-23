@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:gitlab-pilot-gate-evidence:v1",
+  "title": "GitLabPilotGateEvidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "gateKind",
+    "status",
+    "metadataRef",
+    "metadataContentHash",
+    "contourKey",
+    "feature003EvidenceRef",
+    "feature003EvidenceHash",
+    "feature004EvidenceRef",
+    "feature004EvidenceHash",
+    "feature005EvidenceRef",
+    "feature005EvidenceHash",
+    "mattermostCompositionEvidenceRef",
+    "mattermostCompositionEvidenceHash",
+    "mattermostOutageDegradation",
+    "deploymentApproval",
+    "productionDenied",
+    "generatedAt",
+    "contentHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "gitlab-pilot-gate-evidence@1.0.0" },
+    "gateKind": { "enum": ["PILOT_REHEARSAL", "PILOT_RELEASE"] },
+    "status": { "const": "PASS" },
+    "metadataRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "metadataContentHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "contourKey": {
+      "enum": [
+        "qa-jira-gitlab-mattermost-local",
+        "qa-jira-gitlab-mattermost-development",
+        "qa-jira-gitlab-mattermost-test"
+      ]
+    },
+    "feature003EvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "feature003EvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "feature004EvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "feature004EvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "feature005EvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "feature005EvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "mattermostCompositionEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "mattermostCompositionEvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "pilotRehearsalEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "pilotRehearsalEvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "mattermostOutageDegradation": { "const": "PASS" },
+    "deploymentApproval": { "enum": ["PILOT_REHEARSAL_ONLY", "PILOT_APPROVED"] },
+    "productionDenied": { "const": true },
+    "generatedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "contentHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "gateKind": { "const": "PILOT_REHEARSAL" } },
+        "required": ["gateKind"]
+      },
+      "then": {
+        "properties": {
+          "contourKey": { "const": "qa-jira-gitlab-mattermost-local" },
+          "deploymentApproval": { "const": "PILOT_REHEARSAL_ONLY" },
+          "pilotRehearsalEvidenceRef": false,
+          "pilotRehearsalEvidenceHash": false
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "gateKind": { "const": "PILOT_RELEASE" } },
+        "required": ["gateKind"]
+      },
+      "then": {
+        "required": ["pilotRehearsalEvidenceRef", "pilotRehearsalEvidenceHash"],
+        "properties": {
+          "contourKey": {
+            "enum": [
+              "qa-jira-gitlab-mattermost-development",
+              "qa-jira-gitlab-mattermost-test"
+            ]
+          },
+          "deploymentApproval": { "const": "PILOT_APPROVED" }
+        }
+      }
+    }
+  ]
+}

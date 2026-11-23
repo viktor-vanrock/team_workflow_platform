@@ -1,0 +1,14 @@
+ Container awp-local-pilot-dev-mock-seed-1  Exited
+ Container awp-local-pilot-dev-core-migrate-1  Exited
+ Container awp-local-pilot-dev-fake-idp-1  Healthy
+ Container awp-local-pilot-dev-edge-proxy-1  Healthy
+NAME                                   IMAGE                                                                                                                  COMMAND                  SERVICE             CREATED             STATUS                    PORTS
+awp-local-pilot-dev-api-1              awp-local-node:24.20.0                                                                                                 "docker-entrypoint.s…"   api                 58 seconds ago      Up 23 seconds (healthy)   
+awp-local-pilot-dev-edge-proxy-1       awp-local-node:24.20.0                                                                                                 "docker-entrypoint.s…"   edge-proxy          53 seconds ago      Up 2 seconds (healthy)    127.0.0.1:5300->3000/tcp, 127.0.0.1:5310->3010/tcp, 127.0.0.1:54010->4010/tcp, 127.0.0.1:54443->4443/tcp, 127.0.0.1:55173->5173/tcp
+awp-local-pilot-dev-fake-idp-1         awp-local-node:24.20.0                                                                                                 "docker-entrypoint.s…"   fake-idp            59 seconds ago      Up 41 seconds (healthy)   
+awp-local-pilot-dev-mock-hub-1         awp-local-node:24.20.0                                                                                                 "docker-entrypoint.s…"   mock-hub            59 seconds ago      Up 34 seconds (healthy)   
+awp-local-pilot-dev-otel-collector-1   otel/opentelemetry-collector-contrib:0.135.0@sha256:89107a3a8f4636a396927edf7025bb9614b8da2d92f4cc3f43109e8d115736e2   "/otelcol-contrib --…"   otel-collector      26 minutes ago      Up 25 minutes             
+awp-local-pilot-dev-postgres-1         postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af                         "docker-entrypoint.s…"   postgres            26 minutes ago      Up 25 minutes (healthy)   
+awp-local-pilot-dev-web-1              awp-local-node:24.20.0                                                                                                 "docker-entrypoint.s…"   web                 54 seconds ago      Up 5 seconds (healthy)    
+awp-local-pilot-dev-worker-1           awp-local-node:24.20.0                                                                                                 "docker-entrypoint.s…"   worker              58 seconds ago      Up 23 seconds (healthy)   
+runtime.profile=local | composition=qa-jira-gitlab-mattermost-local | web=http://localhost:55173 | api=http://localhost:5300 | OpenAPI=http://localhost:5300/api/docs

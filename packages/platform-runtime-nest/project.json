@@ -1,0 +1,17 @@
+{
+  "name": "platform-runtime-nest",
+  "root": "packages/platform-runtime-nest",
+  "sourceRoot": "packages/platform-runtime-nest/src",
+  "projectType": "library",
+  "tags": ["type:adapter", "runtime:node", "domain:platform"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/platform-runtime-nest/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/platform-runtime-nest/tsconfig.json --noEmit" }
+    }
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "feature": "003-jira-operational-authority",
+  "gate": "foundation",
+  "startedAt": "2026-09-03T10:02:56.742Z",
+  "finishedAt": "2026-09-03T10:03:27.060Z",
+  "status": "PASS",
+  "invariants": {
+    "providerNeutralAboveConnector": true,
+    "exactWebhookBytesBeforeAck": true,
+    "orderedImmutableConfigurationPins": true,
+    "fencedTargetExecutionLane": true,
+    "schemaVersions": {
+      "featureCoreTail": 95,
+      "currentCore": 140,
+      "connector": 3040
+    }
+  },
+  "hashes": {
+    "specs/003-jira-operational-authority/spec.md": "sha256:cad7624a777537243074bf20c8ed249eef1333ef6daaf85a1c921b0237b3554b",
+    "specs/003-jira-operational-authority/plan.md": "sha256:b98f403111d0f2f448c850f8f36307ef4802eb118e454812ecee26e9eadbf018",
+    "specs/003-jira-operational-authority/tasks.md": "sha256:15b2066a500cb671086dd5fde94a8678f931fd236512459a1aee272143c5bbd2",
+    "config/local/jira-pilot-metadata.v1.json": "sha256:5c9392134f3a7129d9bbe40cfae44d6980673b66121227f52a5efb44ea61a14a",
+    "packages/platform-persistence-typeorm/src/migrations/core/0090-operational-authority.ts": "sha256:d213cf4c9b5dd9a4ebc04382cfb58c16d4f1ffbc7a795b9331cf677e1a106df6",
+    "packages/platform-persistence-typeorm/src/migrations/core/0095-external-identity-import-reconciliation.ts": "sha256:1285df088dee9df5399beef04947a733761de263ebd7bdf37bf8de0ec6a81e1a",
+    "packages/connector-jira-persistence-typeorm/src/migrations/3030-jira-authoritative-read-outbox-lease.ts": "sha256:63211a74d49ea1adca5de237c67bf9cea9ebd8567684655ad6f1c7439dd9cf76",
+    "packages/connector-jira-persistence-typeorm/src/migrations/3040-jira-effect-lease-owner.ts": "sha256:fb060c05fcd94b2fceacf02a5581d8df469dbb4bae5b963bf9e86cc889071b88"
+  },
+  "stages": [
+    {
+      "id": "contracts-and-architecture",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/003",
+        "tests/architecture/003-jira-boundaries.spec.ts",
+        "tests/architecture/feature-001-hard-boundaries.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/003",
+        "tests/architecture/003-jira-boundaries.spec.ts",
+        "tests/architecture/feature-001-hard-boundaries.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4811
+    },
+    {
+      "id": "foundation-domain-security-and-mock",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/003/operational-binding-chain.spec.ts",
+        "tests/integration/003/target-execution-lane.spec.ts",
+        "tests/integration/003/external-identity-import.spec.ts",
+        "tests/integration/003/projection-conflict.spec.ts",
+        "tests/integration/003/jira-profile-lifecycle.spec.ts",
+        "tests/integration/003/jira-effect-recovery.spec.ts",
+        "tests/integration/003/jira-reconciliation.spec.ts",
+        "tests/integration/security/003/webhook-ingress.spec.ts",
+        "tests/integration/security/003/jira-auth-egress.spec.ts",
+        "tests/integration/002-qa-foundation-composition.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/003/operational-binding-chain.spec.ts",
+        "tests/integration/003/target-execution-lane.spec.ts",
+        "tests/integration/003/external-identity-import.spec.ts",
+        "tests/integration/003/projection-conflict.spec.ts",
+        "tests/integration/003/jira-profile-lifecycle.spec.ts",
+        "tests/integration/003/jira-effect-recovery.spec.ts",
+        "tests/integration/003/jira-reconciliation.spec.ts",
+        "tests/integration/security/003/webhook-ingress.spec.ts",
+        "tests/integration/security/003/jira-auth-egress.spec.ts",
+        "tests/integration/002-qa-foundation-composition.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 5540
+    },
+    {
+      "id": "postgres-migrations",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/migrations/003-operational-authority.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/migrations/003-operational-authority.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 6722
+    },
+    {
+      "id": "typecheck",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "-p",
+        "connector-sdk",
+        "platform-core",
+        "platform-persistence-typeorm",
+        "connector-jira",
+        "connector-jira-persistence-typeorm",
+        "runtime-composition",
+        "platform-runtime-nest",
+        "api",
+        "worker",
+        "mock-hub"
+      ],
+      "timeoutMs": 240000,
+      "command": [
+        "node",
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "-p",
+        "connector-sdk",
+        "platform-core",
+        "platform-persistence-typeorm",
+        "connector-jira",
+        "connector-jira-persistence-typeorm",
+        "runtime-composition",
+        "platform-runtime-nest",
+        "api",
+        "worker",
+        "mock-hub"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 555
+    },
+    {
+      "id": "eslint",
+      "args": [
+        "node_modules/eslint/bin/eslint.js",
+        "packages/connector-sdk/src",
+        "packages/platform-core/src/work-management",
+        "packages/platform-core/src/identity-access/external-principal-binding.ts",
+        "packages/platform-core/src/events/external-entity-observation.ts",
+        "packages/platform-core/src/events/webhook-ingress.ts",
+        "packages/platform-core/src/commanding/target-execution-lane.ts",
+        "packages/platform-persistence-typeorm/src",
+        "packages/connector-jira/src",
+        "packages/connector-jira-persistence-typeorm/src",
+        "packages/runtime-composition/src/jira",
+        "packages/platform-runtime-nest/src/http",
+        "apps/mock-hub/src/jira",
+        "tests/contract/003",
+        "tests/architecture/003-jira-boundaries.spec.ts",
+        "tests/integration/003",
+        "tests/integration/security/003"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "packages/connector-sdk/src",
+        "packages/platform-core/src/work-management",
+        "packages/platform-core/src/identity-access/external-principal-binding.ts",
+        "packages/platform-core/src/events/external-entity-observation.ts",
+        "packages/platform-core/src/events/webhook-ingress.ts",
+        "packages/platform-core/src/commanding/target-execution-lane.ts",
+        "packages/platform-persistence-typeorm/src",
+        "packages/connector-jira/src",
+        "packages/connector-jira-persistence-typeorm/src",
+        "packages/runtime-composition/src/jira",
+        "packages/platform-runtime-nest/src/http",
+        "apps/mock-hub/src/jira",
+        "tests/contract/003",
+        "tests/architecture/003-jira-boundaries.spec.ts",
+        "tests/integration/003",
+        "tests/integration/security/003"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 12686
+    }
+  ]
+}

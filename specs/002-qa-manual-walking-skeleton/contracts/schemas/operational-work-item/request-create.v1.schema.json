@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-work-item:request-create:v1",
+  "title": "Create Operational QA Request Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sourceDraftId", "workTypeKey", "workTypeVersion", "requestKind", "summary", "requestedNormalizedStatus", "dataClassificationKey"],
+  "properties": {
+    "sourceDraftId": { "type": "string", "format": "uuid" },
+    "workTypeKey": { "const": "qa.validation" },
+    "workTypeVersion": { "const": "1.0.0" },
+    "requestKind": { "type": "string", "enum": ["feature-validation", "smoke", "regression", "retest", "investigation"] },
+    "summary": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "description": { "description": "Optional exact human goal/scope text; omitted when the confirmed Draft has no DoR-semantic description.", "type": "string", "minLength": 1, "maxLength": 20000 },
+    "acceptanceOutcome": { "description": "Optional exact human acceptance outcome; omitted rather than invented when absent.", "type": "string", "minLength": 1, "maxLength": 4000 },
+    "sourceRefs": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+    "requestedNormalizedStatus": { "const": "NEW" },
+    "dataClassificationKey": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ClassificationKey" }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:session-review:v1",
+  "title": "Append-only Human QA Session Review",
+  "description": "Human attestation tying the Session outcome to one exact adjudicative Evidence Manifest revision and frozen execution/finding sets.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sessionReviewId", "version", "workspaceId", "projectId", "workItemId", "sessionId", "requiredSessionPlanRef", "sessionOutcome", "outcomeSummary", "adjudicativeManifestRevisionRef", "executionSetHash", "resultSetHash", "frozenFindingSetHash", "flakyDispositionConfirmations", "reviewer", "authorizationBasisHash", "riskReviewPolicyRef", "reviewedAt", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "sessionReviewId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+    "sessionOutcome": { "type": "string", "enum": ["PASSED", "FAILED", "BLOCKED", "INCONCLUSIVE"] },
+    "outcomeSummary": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "adjudicativeManifestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "executionSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "resultSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "frozenFindingSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "flakyDispositionConfirmations": {
+      "description": "Exact disposed-to-frozen links created in this review UoW for PASS + FLAKY_SUSPECTED result revisions. Empty when no such result exists.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/FlakyDispositionConfirmation" }
+    },
+    "reviewer": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "authorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "riskReviewPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef" },
+    "reviewedAt": { "type": "string", "format": "date-time" },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "supersedesSessionReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "supersessionReason": { "type": "string", "minLength": 1, "maxLength": 2000 }
+  },
+  "$defs": {
+    "FlakyDispositionConfirmation": {
+      "description": "Session-review proof that the exact current DISPOSED basis pinned by a result revision was unchanged and its append-only FROZEN successor was created atomically with this review and manifest.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resultRevisionRef", "findingId", "disposedFindingReviewRef", "frozenFindingReviewRef", "activeMembershipSetHash", "policyRef"],
+      "properties": {
+        "resultRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "findingId": { "type": "string", "format": "uuid" },
+        "disposedFindingReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "frozenFindingReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "activeMembershipSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "policyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "version": { "minimum": 2 } }, "required": ["version"] },
+      "then": { "required": ["supersedesSessionReviewRef", "supersessionReason"] },
+      "else": {
+        "allOf": [
+          { "not": { "required": ["supersedesSessionReviewRef"] } },
+          { "not": { "required": ["supersessionReason"] } }
+        ]
+      }
+    }
+  ]
+}

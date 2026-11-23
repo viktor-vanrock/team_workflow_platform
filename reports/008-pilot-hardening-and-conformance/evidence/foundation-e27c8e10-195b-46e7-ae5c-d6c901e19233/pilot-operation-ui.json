@@ -1,0 +1,12 @@
+{
+  "args": [
+    "node_modules/@playwright/test/cli.js",
+    "test",
+    "tests/e2e/008/pilot-operation.spec.ts",
+    "--project=chromium",
+    "--workers=1"
+  ],
+  "exitCode": 1,
+  "durationMs": 966,
+  "output": "\nRunning 1 test using 1 worker\nF\n\n  1) [chromium] › tests/e2e/008/pilot-operation.spec.ts:18:1 › baseline to shadow, activation, expiry suspension and review preserves independent effect counts \n\n    Error: listen EPERM: operation not permitted 127.0.0.1\n\n    Error Context: test-results/008-pilot-operation-baseli-632a8-s-independent-effect-counts-chromium/error-context.md\n\n    Error Context: test-results/008-pilot-operation-baseli-632a8-s-independent-effect-counts-chromium/error-context.md\n\n    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────\n    test-results/008-pilot-operation-baseli-632a8-s-independent-effect-counts-chromium/trace.zip\n    Usage:\n\n        pnpm exec playwright show-trace test-results/008-pilot-operation-baseli-632a8-s-independent-effect-counts-chromium/trace.zip\n\n    ────────────────────────────────────────────────────────────────────────────────────────────────\n\n  1 failed\n    [chromium] › tests/e2e/008/pilot-operation.spec.ts:18:1 › baseline to shadow, activation, expiry suspension and review preserves independent effect counts \n(node:32604) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

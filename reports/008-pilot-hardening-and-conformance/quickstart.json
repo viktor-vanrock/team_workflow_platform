@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "gate": "quickstart",
+  "startedAt": "2026-09-05T20:57:55.964Z",
+  "finishedAt": "2026-09-05T20:59:50.862Z",
+  "status": "PASS",
+  "mode": "DEVELOPMENT_MOCKS",
+  "corporateReady": false,
+  "results": [
+    {
+      "id": "command-catalog",
+      "status": "PASS",
+      "catalogErrors": [],
+      "documentationErrors": [],
+      "documentedPnpmCommands": [
+        "dev:pilot:up",
+        "dev:pilot:status",
+        "dev:pilot:down",
+        "verify:008:foundation",
+        "verify:008:quickstart",
+        "smoke:008",
+        "prerequisites",
+        "verify:008:prerequisites",
+        "verify:008:setup",
+        "verify:008:foundation",
+        "verify:008:compatibility",
+        "verify:008:migrations",
+        "verify:008:quickstart",
+        "verify:008:us1",
+        "verify:008:us2",
+        "verify:008:us3",
+        "verify:008:us4",
+        "verify:008:us5",
+        "smoke:008",
+        "ci:008",
+        "verify:008:inputs",
+        "verify:008:inputs",
+        "verify:008:recovery",
+        "verify:008:shadow",
+        "verify:008:review",
+        "verify:008:review",
+        "verify:008:hermes"
+      ],
+      "documentedNodePaths": [
+        "tools/smoke/008-development.mts"
+      ]
+    },
+    {
+      "id": "development-up",
+      "status": "PASS",
+      "command": [
+        "pnpm",
+        "dev:pilot:up"
+      ],
+      "exitCode": 0,
+      "outputSha256": "sha256:9af67c4fd845a3094378eb4418d89f46f4bcb7c94126acf48d60e2796e1f3783"
+    },
+    {
+      "id": "development-status",
+      "status": "PASS",
+      "command": [
+        "pnpm",
+        "dev:pilot:status"
+      ],
+      "exitCode": 0,
+      "outputSha256": "sha256:104c4f9f718f0a75747dffbd97313f5984c249b2ab49b12397987cca2b2e611c"
+    },
+    {
+      "id": "development-guide-smoke",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/smoke/008-development.mts"
+      ],
+      "exitCode": 0,
+      "outputSha256": "sha256:5f73ea0828972c809ec3a7506b452015b5c8fc21997391969937ba0841e20509"
+    },
+    {
+      "id": "development-down",
+      "status": "PASS",
+      "command": [
+        "pnpm",
+        "dev:pilot:down"
+      ],
+      "exitCode": 0,
+      "outputSha256": "sha256:f25a040d8ddb191d76f07e1ae1acf69cdfe25bdd61e820c88152f14146d6db27"
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "specs/008-pilot-hardening-and-conformance/quickstart.md",
+        "sha256": "sha256:68c8e6364b3c285d3a4d771bf469bd1e7e47b2f45ea26bf7face404fc2542dc9"
+      },
+      {
+        "path": "tools/verification/feature-008-command-catalog.mts",
+        "sha256": "sha256:96fe7df175507cd2f2f642285e49c44faa4046ed7167bed05ce088ea935535d6"
+      },
+      {
+        "path": "tools/local/pilot-cli.mts",
+        "sha256": "sha256:231531e8bab9f52b632d459ff6f0527d4b073b8c7956f0d574aa0e52efae42f1"
+      },
+      {
+        "path": "tools/smoke/008-development.mts",
+        "sha256": "sha256:665fb1dd844b8c569d79a18fbf79f0b05f91bf7a8d5f102279ea53db105aea13"
+      },
+      {
+        "path": "package.json",
+        "sha256": "sha256:43379c19a6b740b2864f61784b0dbf44fe9ce07316df7a7f28eb664eded7a151"
+      }
+    ],
+    "aggregateSha256": "sha256:2cbad82dcbbcdd6124612b63df0ed7ae257ee166a88fec674eaa060fbee63be6"
+  }
+}

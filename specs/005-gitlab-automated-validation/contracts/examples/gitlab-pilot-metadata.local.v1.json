@@ -1,0 +1,242 @@
+{
+  "schemaVersion": "gitlab-pilot-metadata@1.0.0",
+  "deploymentPurpose": "CONFORMANCE_VALIDATION",
+  "contourKey": "qa-jira-gitlab-local",
+  "environmentClass": "LOCAL",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "server": {
+    "baseUrl": "http://127.0.0.1:4010",
+    "edition": "EE",
+    "exactVersion": "18.1.0-mock.1",
+    "exactBuild": "mock-build-2026.09.01.1",
+    "apiFamily": "v4",
+    "tlsOwner": "local-mock-hub",
+    "networkOwner": "local-compose"
+  },
+  "numericGitLabProjectId": 5001,
+  "configurationPins": [
+    {
+      "logicalRole": "SOURCE_CONTEXT",
+      "capabilityKey": "source-context.read",
+      "exactContractVersion": "1.0.0",
+      "operations": [
+        "merge-request.read",
+        "commit.read",
+        "build.read"
+      ],
+      "operationSetHash": "sha256:1010101010101010101010101010101010101010101010101010101010101010",
+      "projectIntegrationBindingRef": {
+        "id": "99999999-9999-4999-8999-999999999999",
+        "version": 1
+      },
+      "projectIntegrationBindingHash": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "profileRef": {
+        "id": "77777777-7777-4777-8777-777777777777",
+        "version": 1
+      },
+      "profileHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "connectionRef": {
+        "id": "88888888-8888-4888-8888-888888888888",
+        "version": 1
+      },
+      "connectionHash": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+      "validationReportId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "validationEvidenceHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "logicalRole": "TEST_EXECUTION",
+      "capabilityKey": "test-executor.trigger-status",
+      "exactContractVersion": "1.0.0",
+      "operations": [
+        "pipeline.trigger",
+        "pipeline.read",
+        "pipeline.lookup"
+      ],
+      "operationSetHash": "sha256:2020202020202020202020202020202020202020202020202020202020202020",
+      "projectIntegrationBindingRef": {
+        "id": "99999999-9999-4999-8999-999999999999",
+        "version": 1
+      },
+      "projectIntegrationBindingHash": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "profileRef": {
+        "id": "77777777-7777-4777-8777-777777777777",
+        "version": 1
+      },
+      "profileHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "connectionRef": {
+        "id": "88888888-8888-4888-8888-888888888888",
+        "version": 1
+      },
+      "connectionHash": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+      "validationReportId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "validationEvidenceHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "logicalRole": "ARTIFACT_SOURCE",
+      "capabilityKey": "artifact.ci-read",
+      "exactContractVersion": "1.0.0",
+      "operations": [
+        "artifact.metadata",
+        "artifact.stream"
+      ],
+      "operationSetHash": "sha256:3030303030303030303030303030303030303030303030303030303030303030",
+      "projectIntegrationBindingRef": {
+        "id": "99999999-9999-4999-8999-999999999999",
+        "version": 1
+      },
+      "projectIntegrationBindingHash": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "profileRef": {
+        "id": "77777777-7777-4777-8777-777777777777",
+        "version": 1
+      },
+      "profileHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "connectionRef": {
+        "id": "88888888-8888-4888-8888-888888888888",
+        "version": 1
+      },
+      "connectionHash": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+      "validationReportId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "validationEvidenceHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "configurationPinSetHash": "sha256:abababababababababababababababababababababababababababababababab",
+  "suiteBindingRefs": [
+    {
+      "id": "66666666-6666-4666-8666-666666666666",
+      "version": 1,
+      "contentHash": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  ],
+  "identities": {
+    "credentialRoutingMode": "NAMED_CONNECTION_SLOTS_V1",
+    "credentialSeparationEvidenceHash": "sha256:1414141414141414141414141414141414141414141414141414141414141414",
+    "read": {
+      "identityKind": "NON_HUMAN_PROJECT",
+      "scopes": ["read_api"],
+      "secretRef": "secretref://local/gitlab/project-5001/read",
+      "credentialFingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "ownerRef": "team:qa-platform",
+      "nonHumanIdentityEvidenceRef": "evidence:gitlab:project-5001:read-non-human:v1",
+      "leastPrivilegeEvidenceRef": "evidence:gitlab:project-5001:read-scopes:v1",
+      "rotationPolicyRef": "policy:credentials:local-30d:v1",
+      "revocationRunbookRef": "runbook:gitlab-credential-revoke:v1"
+    },
+    "trigger": {
+      "identityKind": "NON_HUMAN_PROJECT",
+      "scopes": ["pipeline_trigger"],
+      "secretRef": "secretref://local/gitlab/project-5001/trigger",
+      "credentialFingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "ownerRef": "team:qa-platform",
+      "nonHumanIdentityEvidenceRef": "evidence:gitlab:project-5001:trigger-non-human:v1",
+      "leastPrivilegeEvidenceRef": "evidence:gitlab:project-5001:trigger-scope:v1",
+      "rotationPolicyRef": "policy:credentials:local-30d:v1",
+      "revocationRunbookRef": "runbook:gitlab-trigger-revoke:v1"
+    },
+    "webhook": {
+      "credentialKind": "STANDARD_WEBHOOK_HMAC_KEY",
+      "secretRef": "secretref://local/gitlab/project-5001/webhook",
+      "credentialFingerprint": "sha256:1515151515151515151515151515151515151515151515151515151515151515",
+      "keyVersionRef": "key-version:gitlab-webhook:project-5001:v1",
+      "ownerRef": "team:qa-platform",
+      "rotationPolicyRef": "policy:credentials:local-30d:v1",
+      "revocationRunbookRef": "runbook:gitlab-webhook-revoke:v1"
+    }
+  },
+  "capabilitiesEvidenceRef": "evidence:gitlab:project-5001:capabilities:v1",
+  "sourceContextContractRef": "contract:gitlab-source-context:project-5001:v1",
+  "allowedRefs": [
+    "refs/heads/qa/smoke"
+  ],
+  "allowedEnvironmentRefs": [
+    "environment:test:qa-1@17"
+  ],
+  "triggerContract": {
+    "endpointKind": "PIPELINE_TRIGGER_TOKEN",
+    "logicalPipelineKey": "qa.validation",
+    "sourceRefPolicyRef": "policy:source-ref:qa-smoke:v1",
+    "logicalExecutionContractHash": "sha256:5656565656565656565656565656565656565656565656565656565656565656",
+    "ref": "refs/heads/qa/smoke",
+    "dialect": "TYPED_INPUTS",
+    "markerInputName": "AWP_REQUEST_MARKER",
+    "allowedInputNames": [
+      "AWP_REQUEST_MARKER",
+      "AWP_SUITE_KEY",
+      "AWP_ENVIRONMENT_REF",
+      "AWP_COMMIT_SHA"
+    ],
+    "inputMappingHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "resultContract": {
+    "schemaRef": {
+      "id": "urn:awp:schemas:005:gitlab-pipeline-result:v1",
+      "version": 1,
+      "digest": "sha256:d668c14c37a8636b71d9c03405312b7d01586a2e7e6a51996e3b067855bcb678"
+    },
+    "resultJobKey": "machine-result",
+    "jobName": "awp:result",
+    "artifactPath": "awp/results/result.json",
+    "maxBytes": 1048576
+  },
+  "artifactContract": {
+    "allowedTypes": [
+      "application/json",
+      "application/xml",
+      "application/zip"
+    ],
+    "maxBytes": 104857600,
+    "checksumSource": "MACHINE_RESULT_MANIFEST",
+    "allowedClassifications": ["INTERNAL", "CONFIDENTIAL"],
+    "artifactPolicyRef": "policy:artifact:qa-local:v1",
+    "artifactPolicyHash": "sha256:4545454545454545454545454545454545454545454545454545454545454545",
+    "minimumRetentionSeconds": 3600,
+    "maximumRetentionSeconds": 604800,
+    "retentionEvidenceRef": "evidence:gitlab:project-5001:artifact-retention:v1",
+    "accessEvidenceRef": "evidence:gitlab:project-5001:artifact-access:v1"
+  },
+  "webhookContract": {
+    "verificationMode": "STANDARD_WEBHOOKS_HMAC_SHA256",
+    "identitySlot": "WEBHOOK",
+    "deliverySemantics": "AT_LEAST_ONCE_SIGNAL_ONLY",
+    "eventKinds": [
+      "PIPELINE_HOOK",
+      "JOB_HOOK"
+    ],
+    "freshnessSeconds": 300,
+    "dedupeHorizonSeconds": 86400
+  },
+  "reconciliationContract": {
+    "webhookGraceSeconds": 30,
+    "pollIntervalSeconds": 30,
+    "lookupConsistencyWindowSeconds": 120,
+    "freshnessTargetSeconds": 120,
+    "maxConcurrentReads": 4,
+    "rateBudgetPerMinute": 120,
+    "requestTimeoutMs": 10000,
+    "executionTimeoutSeconds": 3600,
+    "costBudgetRef": "budget:gitlab:qa-local:v1"
+  },
+  "qaRetryPolicy": {
+    "policyRef": "policy:retry:qa-local:v1",
+    "policyHash": "sha256:4646464646464646464646464646464646464646464646464646464646464646",
+    "allowedInfrastructureCodes": [
+      "RUNNER_UNAVAILABLE",
+      "SERVICE_DEPENDENCY_TIMEOUT"
+    ],
+    "maxAutomaticRetries": 1
+  },
+  "transportRetry": {
+    "maxPreEffectTransportRetries": 1,
+    "retryableHttpStatuses": [429, 500, 502, 503, 504],
+    "minimumBackoffMs": 1000,
+    "maximumBackoffMs": 30000
+  },
+  "cancellationSemantics": "OBSERVE_ONLY",
+  "runnerReadinessEvidenceRef": "evidence:gitlab-runner:local:v1",
+  "containerReadinessEvidenceRef": "evidence:gitlab-container:local:v1",
+  "ciNoDeployAttestationRef": "evidence:gitlab-ci:no-deploy:project-5001:v1",
+  "operatorOptIn": true,
+  "productionDenied": true,
+  "generatedAt": "2026-09-01T07:45:00.000Z",
+  "contentHash": "sha256:3d729409e8be21865f8599d35a02893007fdd3cc6c8589efc09acb37e905c6bc"
+}

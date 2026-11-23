@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "gate": "002-phase1-regression",
+  "startedAt": "2026-08-30T01:18:03.196Z",
+  "finishedAt": "2026-08-30T01:20:00.204Z",
+  "status": "PASS",
+  "environment": {
+    "node": "24.20.0",
+    "composition": "foundation",
+    "runtimeProfile": "local"
+  },
+  "evidence": {
+    "generatedRegistry": "./packages/platform-contracts/src/generated/schema-documents.ts",
+    "currentSmoke001": "./artifacts/verification/002-phase1-smoke-001.json",
+    "preservedCleanSmoke001": "./artifacts/verification/smoke-001-gate.json"
+  },
+  "stages": [
+    {
+      "id": "compile-design-registry",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/contracts/build-registry.mts"
+      ],
+      "durationMs": 289,
+      "detail": "exitCode=0"
+    },
+    {
+      "id": "verify-design-registry-snapshot",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "durationMs": 293,
+      "detail": "exitCode=0"
+    },
+    {
+      "id": "phase1-contracts-green",
+      "status": "PASS",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/002-design-contract-build.spec.ts",
+        "tests/contract/feature-002-prerequisite-contract.spec.ts",
+        "--pool=threads",
+        "--maxWorkers=1"
+      ],
+      "durationMs": 3867,
+      "detail": "exitCode=0"
+    },
+    {
+      "id": "core-only-architecture",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/architecture/check-import-graph.mts",
+        "--core-only"
+      ],
+      "durationMs": 120,
+      "detail": "exitCode=0"
+    },
+    {
+      "id": "core-only-smoke-001",
+      "status": "PASS",
+      "command": [
+        "pnpm",
+        "smoke:001"
+      ],
+      "durationMs": 109491,
+      "detail": "exitCode=0"
+    },
+    {
+      "id": "current-smoke-report",
+      "status": "PASS",
+      "command": [],
+      "durationMs": 0,
+      "detail": "8 stages PASS; composition=foundation; evidence=./artifacts/verification/002-phase1-smoke-001.json"
+    },
+    {
+      "id": "stop-local-stack",
+      "status": "PASS",
+      "command": [
+        "node",
+        "tools/local/cli.mts",
+        "down"
+      ],
+      "durationMs": 2944,
+      "detail": "exitCode=0"
+    }
+  ]
+}

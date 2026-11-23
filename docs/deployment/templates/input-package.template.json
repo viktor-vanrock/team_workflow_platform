@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "id": null,
+  "version": 1,
+  "profile": "integration",
+  "scope": {
+    "workspaceId": null,
+    "projectIds": []
+  },
+  "entries": [
+    {
+      "id": "IN-01",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "workspaceRef": null,
+        "projectRefs": [],
+        "workflowRef": null,
+        "suiteRef": null,
+        "environmentRef": null,
+        "channelRefs": []
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-02",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "providers": [
+          {
+            "type": "JIRA",
+            "edition": null,
+            "version": null,
+            "apiDialect": null,
+            "authStrategy": null,
+            "documentRef": null,
+            "permissionsRef": null
+          },
+          {
+            "type": "GITLAB",
+            "edition": null,
+            "version": null,
+            "apiDialect": null,
+            "authStrategy": null,
+            "documentRef": null,
+            "permissionsRef": null
+          },
+          {
+            "type": "MATTERMOST",
+            "edition": null,
+            "version": null,
+            "apiDialect": null,
+            "authStrategy": null,
+            "documentRef": null,
+            "permissionsRef": null
+          }
+        ]
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-03",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "issuer": null,
+        "audience": null,
+        "tokenDialect": null,
+        "groupMappingRef": null,
+        "sessionPolicyRef": null,
+        "stepUpPolicyRef": null
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-04",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "authMethod": null,
+        "resolverPolicyRef": null,
+        "secretRefs": [],
+        "signingPolicyRef": null,
+        "rotationPolicyRef": null,
+        "breakGlassRef": null
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-05",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "origins": [],
+        "trustPolicyRef": null,
+        "egressPolicyRef": null,
+        "callbackRoutes": [],
+        "ingressPolicyRef": null
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-06",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "telemetryPolicyRef": null,
+        "retentionPolicyRef": null,
+        "alertRouteRef": null,
+        "onCallOwner": null
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-07",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "artifactMode": "GITLAB_ONLY",
+        "retentionPolicyRef": null,
+        "verificationPolicyRef": null,
+        "exportPolicyRef": null
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-08",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "backupMethod": "PHYSICAL_PITR",
+        "destinationRef": null,
+        "recoveryPolicyRef": null,
+        "fencePolicyRef": null,
+        "restoreOwner": null,
+        "targetId": null,
+        "maximumRpoSeconds": null,
+        "maximumRtoSeconds": null,
+        "oldRuntimeFenceProofRef": null
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-09",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "scanPolicyRef": null,
+        "scannerRef": null,
+        "freshnessPolicyRef": null,
+        "findingOwner": null
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-10",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "cohortRef": null,
+        "humanRefs": [],
+        "sponsorRef": null,
+        "qaLeadRef": null,
+        "windowPolicyRef": null
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-11",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "baselineMethod": null,
+        "sourceRefs": [],
+        "measurementProtocolRef": null,
+        "spotCheckPolicyRef": null
+      },
+      "contentHash": null
+    },
+    {
+      "id": "IN-12",
+      "version": 1,
+      "workspaceId": null,
+      "projectIds": [],
+      "synthetic": false,
+      "status": "DRAFT",
+      "suppliedBy": null,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "evidenceRef": null,
+      "metadata": {
+        "incidentRunbookRef": null,
+        "rollbackRunbookRef": null,
+        "resumePolicyRef": null,
+        "onCallOwner": null
+      },
+      "contentHash": null
+    }
+  ]
+}

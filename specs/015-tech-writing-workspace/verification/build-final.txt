@@ -1,0 +1,197 @@
+$ nx run-many -t build --all
+
+ NX   Running target build for 24 projects:
+
+- connector-gitlab-persistence-typeorm
+- connector-jira-persistence-typeorm
+- platform-persistence-typeorm
+- competency-tech-writing
+- platform-runtime-nest
+- connector-mattermost
+- runtime-composition
+- platform-contracts
+- competency-ui-sdk
+- competency-dummy
+- connector-gitlab
+- platform-testkit
+- competency-sdk
+- connector-jira
+- connector-mock
+- competency-qa
+- connector-sdk
+- platform-core
+- platform-ui
+- fake-idp
+- mock-hub
+- worker
+- api
+- web
+
+
+
+> nx run platform-contracts:build
+
+> tsc -p packages/platform-contracts/tsconfig.json --noEmit
+
+
+> nx run connector-sdk:build
+
+> tsc -p packages/connector-sdk/tsconfig.json --noEmit
+
+
+> nx run platform-core:build
+
+> tsc -p packages/platform-core/tsconfig.json --noEmit
+
+
+> nx run competency-ui-sdk:build
+
+> tsc -p packages/competency-ui-sdk/tsconfig.json --noEmit
+
+
+> nx run platform-ui:build
+
+> tsc -p packages/platform-ui/tsconfig.json --noEmit
+
+
+> nx run competency-sdk:build
+
+> tsc -p packages/competency-sdk/tsconfig.json --noEmit
+
+
+> nx run competency-dummy:build
+
+> tsc -p packages/competency-dummy/tsconfig.json --noEmit
+
+
+> nx run competency-tech-writing:build
+
+> tsc -p packages/competency-tech-writing/tsconfig.json --noEmit
+
+
+> nx run connector-gitlab:build
+
+> tsc -p packages/connector-gitlab/tsconfig.json --noEmit
+
+
+> nx run platform-persistence-typeorm:build
+
+> tsc -p packages/platform-persistence-typeorm/tsconfig.json --noEmit
+
+
+> nx run competency-qa:build
+
+> tsc -p packages/competency-qa/tsconfig.json --noEmit
+
+
+> nx run connector-jira:build
+
+> tsc -p packages/connector-jira/tsconfig.json --noEmit
+
+
+> nx run connector-gitlab-persistence-typeorm:build
+
+> tsc -p packages/connector-gitlab-persistence-typeorm/tsconfig.json --noEmit
+
+
+> nx run connector-jira-persistence-typeorm:build
+
+> tsc -p packages/connector-jira-persistence-typeorm/tsconfig.json --noEmit
+
+
+> nx run platform-runtime-nest:build
+
+> tsc -p packages/platform-runtime-nest/tsconfig.json --noEmit
+
+
+> nx run connector-mattermost:build
+
+> tsc -p packages/connector-mattermost/tsconfig.json --noEmit
+
+
+> nx run connector-mock:build
+
+> tsc -p packages/connector-mock/tsconfig.json --noEmit
+
+
+> nx run worker:build
+
+> tsc -p apps/worker/tsconfig.json --noEmit
+
+
+> nx run runtime-composition:build
+
+> tsc -p packages/runtime-composition/tsconfig.json --noEmit
+
+
+> nx run mock-hub:build
+
+> tsc -p apps/mock-hub/tsconfig.json --noEmit
+
+
+> nx run api:build
+
+> tsc -p apps/api/tsconfig.json --noEmit
+
+
+> nx run platform-testkit:build
+
+> tsc -p packages/platform-testkit/tsconfig.json --noEmit
+
+
+> nx run fake-idp:build
+
+> tsc -p apps/fake-idp/tsconfig.json --noEmit
+
+
+> nx run web:build
+
+> vite build --config apps/web/vite.config.ts
+
+(node:25802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+vite v8.2.2 building client environment for production...
+transforming...
+[32m✓[0m 954 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/apps/web/[0m[32mindex.html                                  [0m[1;2m  0.38 kB[0m[2m │ gzip:   0.29 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[32mmanrope-400-BEIO-tX3.ttf             [0m[1;2m 94.97 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[32mmanrope-500-C3q1kWH5.ttf             [0m[1;2m 95.06 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[32mmanrope-600-DBphNC1-.ttf             [0m[1;2m 95.09 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[32mcormorant-garamond-500-Pgl8-Oo5.ttf  [0m[1;2m290.49 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mintake-candidates-Bs1-9YQK.js        [0m[1;2m  0.16 kB[0m[2m │ gzip:   0.15 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mqa-work-item-detail-uixhTj4n.js      [0m[1;2m  0.16 kB[0m[2m │ gzip:   0.15 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mnotification-health-BFzu_kpE.js      [0m[1;2m  1.08 kB[0m[2m │ gzip:   0.67 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mhermes-proposals-CSUQR4cS.js         [0m[1;2m  1.52 kB[0m[2m │ gzip:   0.90 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mmattermost-intake-CjDhrM_c.js        [0m[1;2m  2.14 kB[0m[2m │ gzip:   1.11 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36monboarding-DAz5RLXv.js               [0m[1;2m  2.52 kB[0m[2m │ gzip:   1.24 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mrecovery-rqPLzf65.js                 [0m[1;2m  2.71 kB[0m[2m │ gzip:   1.32 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mproject-catalog-CrECZIIH.js          [0m[1;2m  3.31 kB[0m[2m │ gzip:   1.64 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mqueue-workspace-ByeRkigH.js          [0m[1;2m  3.98 kB[0m[2m │ gzip:   1.95 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mevidence-CXloAf44.js                 [0m[1;2m  5.59 kB[0m[2m │ gzip:   2.25 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mpilot-run-DFaWukz8.js                [0m[1;2m  6.03 kB[0m[2m │ gzip:   2.46 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mdeveloper-tools-ORDu12FF.js          [0m[1;2m  6.14 kB[0m[2m │ gzip:   2.25 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mpilot-client-BN36BjtL.js             [0m[1;2m  7.18 kB[0m[2m │ gzip:   2.64 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mautomated-session-DadJbdrk.js        [0m[1;2m  7.21 kB[0m[2m │ gzip:   2.91 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mdead-letters-BJHobNIw.js             [0m[1;2m  8.89 kB[0m[2m │ gzip:   3.63 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mFormControlLabel-BNDVPckW.js         [0m[1;2m 10.92 kB[0m[2m │ gzip:   3.72 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mreadiness-B2lzujKZ.js                [0m[1;2m 13.49 kB[0m[2m │ gzip:   4.53 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mui-CHZszAbK.js                       [0m[1;2m124.79 kB[0m[2m │ gzip:  32.78 kB[0m
+[2mdist/apps/web/[0m[2massets/[0m[36mindex-Dq7BJS8d.js                    [0m[1;2m491.53 kB[0m[2m │ gzip: 153.50 kB[0m
+
+✓ built in 664ms
+
+
+
+ NX   Successfully ran target build for 24 projects
+
+
+  Run duration:      1m 25s
+  Cache:             0/24 hit (0%)
+  Critical path:     35.5s (1 task)
+  Recoverable time:  49.1s (58% of the run)
+
+  Recommendations:
+    - Increase parallelism to recover up to 49.1s → https://nx.dev/docs/concepts/ci-concepts/parallelization-distribution?utm_source=nx-cli&utm_medium=cli&utm_campaign=performance-report&utm_content=parallelization.
+    - Drastically reduce your run duration by sharing a cache across your team and CI → https://nx.dev/ci/features/remote-cache?utm_source=nx-cli&utm_medium=cli&utm_campaign=performance-report&utm_content=remote-cache.

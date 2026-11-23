@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "gate": "feature-006-compatibility",
+  "status": "PASS",
+  "startedAt": "2026-09-03T11:09:21.019Z",
+  "finishedAt": "2026-09-03T11:09:33.002Z",
+  "configuredNode": "24.20.0",
+  "activeNode": "24.20.0",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "production": "DENIED",
+  "externalNetwork": "DENIED",
+  "stages": [
+    {
+      "id": "feature-002-005-bindings",
+      "category": "compatibility",
+      "args": [
+        "tools/verification/feature-006-prerequisites.mts"
+      ],
+      "timeoutMs": 120000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 314
+    },
+    {
+      "id": "contract-registry-drift",
+      "category": "contract",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 471
+    },
+    {
+      "id": "qa-manifest-v12-byte-pins",
+      "category": "contract",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/006/qa-manifest-v13.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3652
+    },
+    {
+      "id": "migration-immutability",
+      "category": "migration",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/migrations/006-migration-registry.spec.ts",
+        "tests/contract/006/canonical-hash-boundaries.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3376
+    },
+    {
+      "id": "production-boundary",
+      "category": "security",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/security/006/production-and-scope-boundary.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4165
+    }
+  ]
+}

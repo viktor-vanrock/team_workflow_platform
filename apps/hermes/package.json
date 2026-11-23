@@ -1,0 +1,12 @@
+{
+  "name": "@awp/hermes",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx --tsconfig ../../tsconfig.base.json src/main.ts"
+  },
+  "dependencies": {
+    "@awp/runtime-composition": "workspace:*"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "corporateStatus": "BLOCKED_INPUT",
+  "releaseEligible": false,
+  "requiredInputs": [
+    "AWP_008_RELEASE_IMAGE_DIGEST",
+    "AWP_008_RELEASE_SCAN_BUNDLE"
+  ],
+  "localCheckpointUnaffected": true
+}

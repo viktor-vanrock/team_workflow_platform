@@ -1,0 +1,404 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:capability:test-executor-trigger-status:v1",
+  "title": "test-executor.trigger-status capability messages v1",
+  "oneOf": [
+    { "$ref": "#/$defs/TriggerRequest" },
+    { "$ref": "#/$defs/TriggerReceipt" },
+    { "$ref": "#/$defs/ReadRequest" },
+    { "$ref": "#/$defs/PipelineObservation" },
+    { "$ref": "#/$defs/LookupRequest" },
+    { "$ref": "#/$defs/LookupResult" }
+  ],
+  "$defs": {
+    "TriggerRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "testSessionId",
+        "automationAttemptId",
+        "launchRequestCommitment",
+        "targetSnapshotRef",
+        "targetSnapshotHash",
+        "suiteBindingRef",
+        "suiteBindingHash",
+        "acceptedParameters",
+        "parameterSetHash",
+        "effectMarkerHash",
+        "triggerRequestHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "test-executor.trigger-status@1.0.0"
+        },
+        "messageType": { "const": "REQUEST" },
+        "operation": { "const": "pipeline.trigger" },
+        "testSessionId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "automationAttemptId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "launchRequestCommitment": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "targetSnapshotRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "targetSnapshotHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "suiteBindingRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/versionedRef"
+        },
+        "suiteBindingHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "acceptedParameters": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/acceptedParameters"
+        },
+        "parameterSetHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "effectMarkerHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "triggerRequestHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    },
+    "TriggerReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "externalPipelineId",
+        "sourceCommitSha",
+        "observedState",
+        "providerCreatedAt",
+        "observedAt",
+        "triggerRequestHash",
+        "effectMarkerHash",
+        "observationHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "test-executor.trigger-status@1.0.0"
+        },
+        "messageType": { "const": "RESULT" },
+        "operation": { "const": "pipeline.trigger" },
+        "externalPipelineId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "externalPipelineDisplayRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "sourceCommitSha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "observedState": { "enum": ["QUEUED", "RUNNING", "TERMINAL"] },
+        "providerCreatedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "observedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "triggerRequestHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "effectMarkerHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "observationHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    },
+    "ReadRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "automationAttemptId",
+        "externalPipelineId",
+        "targetSnapshotHash",
+        "configurationPinSetHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "test-executor.trigger-status@1.0.0"
+        },
+        "messageType": { "const": "REQUEST" },
+        "operation": { "const": "pipeline.read" },
+        "automationAttemptId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "externalPipelineId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "targetSnapshotHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "configurationPinSetHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    },
+    "PipelineObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "externalPipelineId",
+        "externalJobIds",
+        "sourceCommitSha",
+        "providerState",
+        "terminal",
+        "providerRevisionToken",
+        "providerUpdatedAt",
+        "observedAt",
+        "observationHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "test-executor.trigger-status@1.0.0"
+        },
+        "messageType": { "const": "RESULT" },
+        "operation": { "const": "pipeline.read" },
+        "externalPipelineId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "externalJobIds": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "sourceCommitSha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "buildRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "providerState": {
+          "enum": [
+            "CREATED",
+            "WAITING_FOR_RESOURCE",
+            "PREPARING",
+            "PENDING",
+            "RUNNING",
+            "SUCCESS",
+            "FAILED",
+            "CANCELED",
+            "SKIPPED",
+            "MANUAL",
+            "SCHEDULED",
+            "UNKNOWN"
+          ]
+        },
+        "terminal": { "type": "boolean" },
+        "queuedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "startedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "finishedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "providerRevisionToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "providerUpdatedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "resultDescriptorRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "observedAt": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "observationHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "terminal": { "const": true } },
+            "required": ["terminal"]
+          },
+          "then": {
+            "required": ["finishedAt"],
+            "properties": {
+              "providerState": {
+                "enum": ["SUCCESS", "FAILED", "CANCELED", "SKIPPED"]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "providerState": {
+                "enum": [
+                  "CREATED",
+                  "WAITING_FOR_RESOURCE",
+                  "PREPARING",
+                  "PENDING",
+                  "RUNNING",
+                  "MANUAL",
+                  "SCHEDULED",
+                  "UNKNOWN"
+                ]
+              },
+              "finishedAt": false
+            }
+          }
+        }
+      ]
+    },
+    "LookupRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "automationAttemptId",
+        "effectMarkerHash",
+        "expectedTargetCommitment",
+        "windowStart",
+        "windowEnd",
+        "triggerRequestHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "test-executor.trigger-status@1.0.0"
+        },
+        "messageType": { "const": "REQUEST" },
+        "operation": { "const": "pipeline.lookup" },
+        "automationAttemptId": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/id"
+        },
+        "effectMarkerHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "expectedTargetCommitment": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "windowStart": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "windowEnd": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+        },
+        "triggerRequestHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    },
+    "LookupResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "messageType",
+        "operation",
+        "outcome",
+        "observedWindow",
+        "consistencyEvidenceHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "test-executor.trigger-status@1.0.0"
+        },
+        "messageType": { "const": "RESULT" },
+        "operation": { "const": "pipeline.lookup" },
+        "outcome": { "enum": ["EXACT_ONE", "ZERO", "MULTIPLE"] },
+        "receipt": { "$ref": "#/$defs/TriggerReceipt" },
+        "matchCommitmentHashes": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+          }
+        },
+        "observedWindow": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": {
+              "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+            },
+            "end": {
+              "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp"
+            }
+          }
+        },
+        "consistencyEvidenceHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "outcome": { "const": "EXACT_ONE" } },
+            "required": ["outcome"]
+          },
+          "then": {
+            "required": ["receipt"],
+            "properties": {
+              "receipt": {},
+              "matchCommitmentHashes": false
+            }
+          },
+          "else": {
+            "properties": { "receipt": false }
+          }
+        },
+        {
+          "if": {
+            "properties": { "outcome": { "const": "MULTIPLE" } },
+            "required": ["outcome"]
+          },
+          "then": {
+            "required": ["matchCommitmentHashes"],
+            "properties": { "matchCommitmentHashes": {} }
+          },
+          "else": {
+            "properties": { "matchCommitmentHashes": false }
+          }
+        }
+      ]
+    }
+  }
+}

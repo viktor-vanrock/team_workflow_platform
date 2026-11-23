@@ -1,0 +1,27 @@
+{
+  "$id": "urn:awp:schemas:tech-writing:intake:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "goal",
+    "audience"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "audience": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    }
+  }
+}

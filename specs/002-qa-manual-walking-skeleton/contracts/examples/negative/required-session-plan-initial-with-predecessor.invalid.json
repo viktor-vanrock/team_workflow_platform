@@ -1,0 +1,9 @@
+{
+  "expectedCurrentPlanRef": {
+    "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    "revision": 1,
+    "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "publicationReason": "INITIAL"
+}
+

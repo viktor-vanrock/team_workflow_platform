@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "migration-matrix",
+  "startedAt": "2026-09-03T10:49:19.993Z",
+  "finishedAt": "2026-09-03T10:49:36.617Z",
+  "status": "PASS",
+  "taskSourceHash": "sha256:7f15792712dc0ac42f9d0631fd0d37ef8794cb85142699f371c3047c3bd29ab9",
+  "migrationCount": 9,
+  "invariants": {
+    "freshInstall": true,
+    "currentMinusOneUpgrade": true,
+    "repeatNoop": true,
+    "failedRecovery": true,
+    "transactionalPublication": true
+  },
+  "versions": {
+    "qa": 2060,
+    "gitlabConnector": 4020,
+    "mockHubGitlab": 62
+  },
+  "results": [
+    {
+      "image": "postgres:17.7-bookworm",
+      "status": "PASS",
+      "durationMs": 7238,
+      "exitCode": 0
+    },
+    {
+      "image": "postgres:18.6-bookworm",
+      "status": "PASS",
+      "durationMs": 9375,
+      "exitCode": 0
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/integration/005-migration-matrix.spec.ts",
+        "sha256": "sha256:08f10a75c2c6bd1b3ff83ea439538b459d4dd89c264592b565c61431ad0f31d6"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2050-qa-automation-foundation.ts",
+        "sha256": "sha256:1378e1c0c194eb22b19b651bbc80c87985839396a17cbd2c4ac622bfcba9f97e"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2055-qa-automation-execution.ts",
+        "sha256": "sha256:e740fdde56133dfbc9691a7d9b156bb20748ed985e5a74a80df867369a538b14"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2060-qa-automation-review-quarantine.ts",
+        "sha256": "sha256:a44bd7d2fbbde802ac91fa997a24bbe0763a73fe15fbbc75ac791e94078c5578"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/migrations/4000-gitlab-discovery-profiles.ts",
+        "sha256": "sha256:6b8691d60e96e61084ac79fa40f05fec6bc68542e42bf3632ec6080fdd4b7934"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/migrations/4010-gitlab-webhook-rate-reconciliation.ts",
+        "sha256": "sha256:f6d96959eccc135632a9ef2250e8c83b83816ddd248ec4b598139b885c633dd5"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/migrations/4020-gitlab-effect-artifact-reconciliation.ts",
+        "sha256": "sha256:df8effda55dcd501da4b5a8235c71676265fe70ed963bb42fb181685c4dc7904"
+      },
+      {
+        "path": "apps/mock-hub/src/persistence/migrations/0060-gitlab-state.ts",
+        "sha256": "sha256:92b85676f395b250f5c82d27bcda66c034b33866007ee4b2efb36ff320a619ae"
+      },
+      {
+        "path": "apps/mock-hub/src/persistence/migrations/0061-gitlab-results-artifacts.ts",
+        "sha256": "sha256:a733036d6bce851c7863b05b75b208d0a3389a13d24b32662143322a7c759ad6"
+      },
+      {
+        "path": "apps/mock-hub/src/persistence/migrations/0062-gitlab-effects-faults-webhooks.ts",
+        "sha256": "sha256:9c4b0191893aeed71ee9b3a40d7f7610b1fb550ef0bae8a4a8d1e5019dccfb2a"
+      }
+    ],
+    "aggregateSha256": "sha256:a05d825ed8382252dfe06f4db4452895c434c13aab2478909f71e08e0b5123e2"
+  }
+}

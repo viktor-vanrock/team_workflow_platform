@@ -1,0 +1,14 @@
+flowchart LR
+  source["Web / Mattermost<br/>Jira / GitLab discovery"] --> draft["Draft / Candidate<br/>SLA нет, capacity не занят"]
+  draft --> confirm["Явное подтверждение<br/>create или import Jira QA Request"]
+  confirm --> backlog["BACKLOG<br/>подтверждённый Work Item"]
+  backlog --> dor["QA DoR<br/>scope / source / non-prod target<br/>resources / current revisions"]
+  dor --> ready["READY<br/>Jira ready + QA ready/waiver<br/>SLA / capacity policy"]
+  ready --> active["ACTIVE<br/>manual или automated session<br/>human WIP / review reservations"]
+  active --> review["Human session review<br/>findings / evidence / residual risk"]
+  review --> verdict["Human QA Verdict<br/>PASS / FAIL / BLOCKED / INCONCLUSIVE"]
+  verdict --> dod["DoD + completion candidate<br/>exact approval / current facts"]
+  dod --> done["Jira close confirmed<br/>COMPLETED"]
+  hermes["Hermes proposals<br/>completeness · triage · plan<br/>review prep · defect draft"] -.-> draft
+  hermes -.-> dor
+  hermes -.-> review

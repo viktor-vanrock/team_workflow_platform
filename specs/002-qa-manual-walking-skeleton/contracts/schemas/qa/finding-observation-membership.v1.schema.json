@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:finding-observation-membership:v1",
+  "title": "Scoped Finding Observation Membership",
+  "description": "Append-only assignment row with a one-way audited release projection. Scope, actor and timestamps are server-derived. Reassignment creates a new membership row; an existing row is never reactivated.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "membershipId", "workspaceId", "projectId", "workItemId", "sessionId", "findingId", "observationId", "state", "assignedBy", "assignedAt", "resourceVersion"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "membershipId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "findingId": { "type": "string", "format": "uuid" },
+    "observationId": { "type": "string", "format": "uuid" },
+    "state": { "type": "string", "enum": ["ACTIVE", "RELEASED"] },
+    "assignedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "assignedAt": { "type": "string", "format": "date-time" },
+    "releasedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "releasedAt": { "type": "string", "format": "date-time" },
+    "releaseReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "resourceVersion": { "type": "integer", "minimum": 1 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "RELEASED" } }, "required": ["state"] },
+      "then": { "required": ["releasedBy", "releasedAt", "releaseReason"] },
+      "else": {
+        "not": {
+          "anyOf": [
+            { "required": ["releasedBy"] },
+            { "required": ["releasedAt"] },
+            { "required": ["releaseReason"] }
+          ]
+        }
+      }
+    }
+  ]
+}

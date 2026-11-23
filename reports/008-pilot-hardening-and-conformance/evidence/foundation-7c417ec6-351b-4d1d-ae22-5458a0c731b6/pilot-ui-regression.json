@@ -1,0 +1,12 @@
+{
+  "args": [
+    "node_modules/@playwright/test/cli.js",
+    "test",
+    "tests/e2e/008/pilot-readiness-browser.spec.ts",
+    "--project=chromium",
+    "--workers=1"
+  ],
+  "exitCode": 0,
+  "durationMs": 6664,
+  "output": "\nRunning 4 tests using 1 worker\n····\n  4 passed (6.3s)\n(node:76693) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

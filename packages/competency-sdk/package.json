@@ -1,0 +1,13 @@
+{
+  "name": "@awp/competency-sdk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@awp/platform-contracts": "workspace:*",
+    "@awp/platform-core": "workspace:*"
+  }
+}

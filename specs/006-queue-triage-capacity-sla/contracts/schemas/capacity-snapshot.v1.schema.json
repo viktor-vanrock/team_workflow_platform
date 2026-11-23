@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:capacity-snapshot:v1",
+  "title": "CapacitySnapshot v1",
+  "$comment": "Durable immutable public projection revision, not a read-time now evaluation. All counts, set hashes, facets and freshness are for the server-authorized scope only and count distinct Work Items. Global AVAILABLE/AT_LIMIT/OVER_CAPACITY/REBUILDING state is deliberately absent because even a bounded enum would reveal hidden-Project activity. In MEASURE_ONLY every Project facet has policy.state and warningState NOT_CONFIGURED. In ENFORCED a Project facet may remain NOT_CONFIGURED because Project limits are optional; for every facet warningState is NOT_CONFIGURED iff its policy is NOT_CONFIGURED. Composed validation checks committed as union(occupied,reserved), not their arithmetic sum, verifies each Project facet is in the authorized set, and recomputes authorizedProjectionRef.semanticHash from the full document excluding that ref wrapper.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "scope",
+    "authorizedProjectSetHash",
+    "policyFacetRef",
+    "policyMode",
+    "authorizedProjectionRef",
+    "humanOccupiedCount",
+    "reviewReservedCount",
+    "humanCommittedCount",
+    "forcedExternalCount",
+    "activeExpediteCount",
+    "claimSetHash",
+    "reservationSetHash",
+    "expediteSetHash",
+    "limits",
+    "reservationStateCounts",
+    "projectFacets",
+    "freshness",
+    "asOf",
+    "reconciledAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "capacity-snapshot@1.0.0" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "scope": { "$ref": "#/$defs/queryScope" },
+    "authorizedProjectSetHash": {
+      "description": "PROJECT scope hashes the canonical singleton {projectId}; AUTHORIZED_PORTFOLIO hashes the exact server-derived visible set. It never hashes the actor's wider entitlements for a Project read.",
+      "$ref": "#/$defs/hash"
+    },
+    "policyFacetRef": {
+      "description": "Public policy facet for this exact authorized Project set. Its version/hash cover only authorization-neutral settings and allocations for that set; hidden-only policy changes cannot advance it.",
+      "$ref": "#/$defs/versionedContentRef"
+    },
+    "policyMode": { "enum": ["MEASURE_ONLY", "ENFORCED"] },
+    "authorizedProjectionRef": {
+      "description": "ID/version/hash of the immutable projection derived for this exact authorized Project set; never the internal global capacity head. semanticHash covers the complete document except this ref wrapper, so it is non-circular.",
+      "$ref": "#/$defs/versionedContentRef"
+    },
+    "humanOccupiedCount": { "$ref": "#/$defs/count" },
+    "reviewReservedCount": { "$ref": "#/$defs/count" },
+    "humanCommittedCount": { "$ref": "#/$defs/count" },
+    "forcedExternalCount": { "$ref": "#/$defs/count" },
+    "activeExpediteCount": { "$ref": "#/$defs/count" },
+    "claimSetHash": { "$ref": "#/$defs/hash" },
+    "reservationSetHash": { "$ref": "#/$defs/hash" },
+    "expediteSetHash": { "$ref": "#/$defs/hash" },
+    "limits": { "$ref": "#/$defs/limitState" },
+    "reservationStateCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["held", "converted", "released", "coveredByClaim"],
+      "properties": {
+        "held": { "$ref": "#/$defs/count" },
+        "converted": { "$ref": "#/$defs/count" },
+        "released": { "$ref": "#/$defs/count" },
+        "coveredByClaim": { "$ref": "#/$defs/count" }
+      }
+    },
+    "projectFacets": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": { "$ref": "#/$defs/projectFacet" }
+    },
+    "freshness": { "enum": ["CURRENT", "STALE", "ERROR", "REBUILDING"] },
+    "asOf": { "$ref": "#/$defs/timestamp" },
+    "reconciledAt": { "$ref": "#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["policyMode"],
+        "properties": { "policyMode": { "const": "MEASURE_ONLY" } }
+      },
+      "then": {
+        "properties": {
+          "limits": {
+            "properties": { "state": { "const": "NOT_CONFIGURED" } },
+            "required": ["state"]
+          },
+          "projectFacets": {
+            "items": {
+              "allOf": [
+                {
+                  "properties": {
+                    "policy": {
+                      "properties": { "state": { "const": "NOT_CONFIGURED" } },
+                      "required": ["state"]
+                    },
+                    "warningState": { "const": "NOT_CONFIGURED" }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "limits": {
+            "properties": { "state": { "const": "CONFIGURED" } },
+            "required": ["state"]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "format": "uuid" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "count": { "type": "integer", "minimum": 0 },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "queryScope": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "workspaceId", "projectId"],
+          "properties": {
+            "kind": { "const": "PROJECT" },
+            "workspaceId": { "$ref": "#/$defs/id" },
+            "projectId": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "workspaceId"],
+          "properties": {
+            "kind": { "const": "AUTHORIZED_PORTFOLIO" },
+            "workspaceId": { "$ref": "#/$defs/id" }
+          }
+        }
+      ]
+    },
+    "limitState": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NOT_CONFIGURED" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "workspaceHumanWipLimit", "activeExpediteLimit"],
+          "properties": {
+            "state": { "const": "CONFIGURED" },
+            "workspaceHumanWipLimit": { "type": "integer", "minimum": 1 },
+            "activeExpediteLimit": { "type": "integer", "minimum": 1 }
+          }
+        }
+      ]
+    },
+    "projectFacet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectId",
+        "humanOccupiedCount",
+        "reviewReservedCount",
+        "humanCommittedCount",
+        "forcedExternalCount",
+        "activeExpediteCount",
+        "policy",
+        "warningState"
+      ],
+      "properties": {
+        "projectId": { "$ref": "#/$defs/id" },
+        "humanOccupiedCount": { "$ref": "#/$defs/count" },
+        "reviewReservedCount": { "$ref": "#/$defs/count" },
+        "humanCommittedCount": { "$ref": "#/$defs/count" },
+        "forcedExternalCount": { "$ref": "#/$defs/count" },
+        "activeExpediteCount": { "$ref": "#/$defs/count" },
+        "policy": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["state"],
+              "properties": { "state": { "const": "NOT_CONFIGURED" } }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["state", "softWipLimit", "reservedCapacity"],
+              "properties": {
+                "state": { "const": "CONFIGURED" },
+                "softWipLimit": { "type": "integer", "minimum": 0 },
+                "reservedCapacity": { "type": "integer", "minimum": 0 }
+              }
+            }
+          ]
+        },
+        "warningState": { "enum": ["NOT_CONFIGURED", "WITHIN_SOFT_LIMIT", "ABOVE_SOFT_LIMIT", "RESERVATION_PRESSURE"] }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["policy"],
+            "properties": {
+              "policy": {
+                "required": ["state"],
+                "properties": { "state": { "const": "NOT_CONFIGURED" } }
+              }
+            }
+          },
+          "then": {
+            "properties": { "warningState": { "const": "NOT_CONFIGURED" } }
+          },
+          "else": {
+            "properties": {
+              "warningState": {
+                "enum": ["WITHIN_SOFT_LIMIT", "ABOVE_SOFT_LIMIT", "RESERVATION_PRESSURE"]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

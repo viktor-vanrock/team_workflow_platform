@@ -1,0 +1,17 @@
+{
+  "name": "platform-testkit",
+  "root": "packages/platform-testkit",
+  "sourceRoot": "packages/platform-testkit/src",
+  "projectType": "library",
+  "tags": ["type:sdk", "runtime:node", "domain:platform"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/platform-testkit/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/platform-testkit/tsconfig.json --noEmit" }
+    }
+  }
+}

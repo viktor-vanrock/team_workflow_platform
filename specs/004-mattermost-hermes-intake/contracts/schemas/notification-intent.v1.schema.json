@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:notification-intent:v1",
+  "title": "NotificationIntent v1",
+  "$comment": "Composed validation maps MESSAGE to exactly one messaging.notify command and INTERACTION_PRESENTATION to exactly one messaging.callback command. The latter requires an ordered contiguous set of 1-8 same-scope InteractionIntents/capsules whose parent presentation/command/target/configuration/effect commitments match this object. target.sourceInteractionIntentId is routing authority for an existing delivery result and must never equal or substitute for a newly presented action ID. reconciliationRef.kind must equal the immutable Profile reconciliationMode; NONE_AMBIGUOUS transitions directly to AMBIGUOUS and is never LOOKUP_REQUIRED. The ref must resolve to the exact fenced delivery attempt for connectorCommandId that owns effectInvocationStartedAt: pendingPostId is byte-for-byte equal to that attempt's immutable pending ID, or effectMarkerHash equals SHA-256 of the exact UTF-8 marker bytes stored by that attempt. Cross-command, cross-attempt or recomputed selector substitution is rejected before lookup.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "notificationIntentId",
+    "workspaceId",
+    "projectId",
+    "sourceEventRef",
+    "subjectRef",
+    "target",
+    "delivery",
+    "configuration",
+    "template",
+    "classification",
+    "policyDecisionHash",
+    "deduplicationKey",
+    "effectKey",
+    "actionProvenanceRef",
+    "state",
+    "expiresAt",
+    "rowVersion",
+    "createdAt",
+    "correlationId",
+    "causationId"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "notification-intent@1.0.0" },
+    "notificationIntentId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "sourceEventRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "subjectRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "target": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "principalId"],
+          "properties": {
+            "kind": { "const": "PRINCIPAL_DM" },
+            "principalId": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "purpose", "audienceKey"],
+          "properties": {
+            "kind": { "const": "PROJECT_CHANNEL" },
+            "purpose": { "enum": ["INTAKE", "REQUEST_STATUS", "QA_COORDINATION"] },
+            "audienceKey": { "enum": ["REQUESTER", "QA_PROJECT_MEMBERS", "QA_LEADS"] }
+          }
+        },
+        {
+          "description": "Route an update through the immutable delivery result of a consumed source interaction. This source ID is not one of the newly presented action IDs.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "sourceInteractionIntentId"],
+          "properties": {
+            "kind": { "const": "INTERACTION_RESPONSE" },
+            "sourceInteractionIntentId": { "$ref": "#/$defs/id" }
+          }
+        }
+      ]
+    },
+    "delivery": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "capabilityKey"],
+          "properties": {
+            "kind": { "const": "MESSAGE" },
+            "capabilityKey": { "const": "messaging.notify@1.0.0" }
+          }
+        },
+        {
+          "description": "One provider presentation with an ordered bounded set of independently single-use actions. The IDs are presentation content, not routing targets.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "capabilityKey", "actionInteractionIntentIds", "actionSetHash"],
+          "properties": {
+            "kind": { "const": "INTERACTION_PRESENTATION" },
+            "capabilityKey": { "const": "messaging.callback@1.0.0" },
+            "actionInteractionIntentIds": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 8,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/id" }
+            },
+            "actionSetHash": { "$ref": "#/$defs/hash" }
+          }
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectBindingRef", "profileRef", "connectionRef"],
+      "properties": {
+        "projectBindingRef": { "$ref": "#/$defs/versionedRef" },
+        "profileRef": { "$ref": "#/$defs/versionedRef" },
+        "connectionRef": { "$ref": "#/$defs/versionedRef" }
+      }
+    },
+    "template": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["templateRef", "templateHash", "variablesSchemaRef", "variables", "variablesHash", "renderHash"],
+      "properties": {
+        "templateRef": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "templateHash": { "$ref": "#/$defs/hash" },
+        "variablesSchemaRef": { "$ref": "#/$defs/schemaRef" },
+        "variables": {
+          "type": "object",
+          "maxProperties": 32,
+          "propertyNames": { "pattern": "^[a-z][A-Za-z0-9_]{0,63}$" },
+          "additionalProperties": { "$ref": "#/$defs/variableValue" }
+        },
+        "variablesHash": { "$ref": "#/$defs/hash" },
+        "renderHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "classification": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+    "policyDecisionHash": { "$ref": "#/$defs/hash" },
+    "deduplicationKey": { "$ref": "#/$defs/hash" },
+    "effectKey": {
+      "description": "SHA-256 commitment to the exact bounded Connector effect-idempotency-key string; the raw command key is not represented by this field.",
+      "$ref": "#/$defs/hash"
+    },
+    "actionProvenanceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "connectorCommandId": { "$ref": "#/$defs/id" },
+    "externalPostId": { "$ref": "#/$defs/id" },
+    "reconciliationRef": {
+      "description": "Safe immutable reconciliation selector matching the pinned Profile mode. Exact provider request material remains in the command/attempt record.",
+      "oneOf": [
+        { "$ref": "#/$defs/pendingPostIdReconciliation" },
+        { "$ref": "#/$defs/effectMarkerReconciliation" },
+        { "$ref": "#/$defs/noneAmbiguousReconciliation" }
+      ]
+    },
+    "state": { "enum": ["PENDING", "QUEUED", "LOOKUP_REQUIRED", "DELIVERED", "FAILED_RETRYABLE", "FAILED_FINAL", "AMBIGUOUS", "EXPIRED"] },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "rowVersion": { "type": "integer", "minimum": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "correlationId": { "$ref": "#/$defs/id" },
+    "causationId": { "$ref": "#/$defs/id" }
+  },
+  "dependentRequired": {
+    "externalPostId": ["connectorCommandId"],
+    "reconciliationRef": ["connectorCommandId"]
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["delivery"],
+        "properties": {
+          "delivery": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": { "kind": { "const": "INTERACTION_PRESENTATION" } }
+          }
+        }
+      },
+      "then": {
+        "required": ["connectorCommandId"],
+        "properties": {
+          "connectorCommandId": true,
+          "state": { "not": { "const": "PENDING" } }
+        }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "PENDING" } } },
+      "then": {
+        "properties": {
+          "connectorCommandId": false,
+          "externalPostId": false,
+          "reconciliationRef": false
+        }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "QUEUED" } } },
+      "then": {
+        "required": ["connectorCommandId"],
+        "properties": { "connectorCommandId": true, "externalPostId": false, "reconciliationRef": false }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "LOOKUP_REQUIRED" } } },
+      "then": {
+        "required": ["connectorCommandId", "reconciliationRef"],
+        "properties": {
+          "connectorCommandId": true,
+          "externalPostId": false,
+          "reconciliationRef": {
+            "oneOf": [
+              { "$ref": "#/$defs/pendingPostIdReconciliation" },
+              { "$ref": "#/$defs/effectMarkerReconciliation" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "DELIVERED" } } },
+      "then": {
+        "required": ["connectorCommandId", "externalPostId"],
+        "properties": { "connectorCommandId": true, "externalPostId": true, "reconciliationRef": false }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "FAILED_RETRYABLE" } } },
+      "then": {
+        "required": ["connectorCommandId"],
+        "properties": { "connectorCommandId": true, "externalPostId": false, "reconciliationRef": false }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "AMBIGUOUS" } } },
+      "then": {
+        "required": ["connectorCommandId", "reconciliationRef"],
+        "properties": { "connectorCommandId": true, "reconciliationRef": true, "externalPostId": false }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "FAILED_FINAL" } } },
+      "then": {
+        "required": ["connectorCommandId"],
+        "properties": { "connectorCommandId": true, "externalPostId": false, "reconciliationRef": false }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "EXPIRED" } } },
+      "then": { "properties": { "externalPostId": false, "reconciliationRef": false } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "pendingPostIdReconciliation": {
+      "description": "Exact immutable pending-post ID copied from the same fenced command attempt that recorded effectInvocationStartedAt; composed validation requires byte-for-byte equality.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "pendingPostId"],
+      "properties": {
+        "kind": { "const": "PENDING_POST_ID_LOOKUP" },
+        "pendingPostId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "effectMarkerReconciliation": {
+      "description": "SHA-256 of the exact UTF-8 deterministic effect-marker bytes stored on the same fenced command attempt that recorded effectInvocationStartedAt.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "effectMarkerHash"],
+      "properties": {
+        "kind": { "const": "EFFECT_MARKER_LOOKUP" },
+        "effectMarkerHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "noneAmbiguousReconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reasonCode"],
+      "properties": {
+        "kind": { "const": "NONE_AMBIGUOUS" },
+        "reasonCode": { "const": "LOOKUP_UNSUPPORTED" }
+      }
+    },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^urn:awp:schemas:[A-Za-z0-9:._-]+$", "maxLength": 512 },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "variableValue": {
+      "oneOf": [
+        { "type": "string", "maxLength": 4000 },
+        { "type": "number", "minimum": -1000000000000000, "maximum": 1000000000000000 },
+        { "type": "boolean" },
+        { "type": "null" },
+        {
+          "type": "array",
+          "maxItems": 50,
+          "items": { "type": "string", "maxLength": 1000 }
+        }
+      ]
+    },
+    "versionedRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

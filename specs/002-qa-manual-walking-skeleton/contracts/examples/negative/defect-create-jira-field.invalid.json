@@ -1,0 +1,25 @@
+{
+  "sourceWorkItemId": "33333333-3333-4333-8333-333333333333",
+  "findingId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "defectDraftRef": {
+    "id": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+    "version": 1,
+    "contentHash": "sha256:3030303030303030303030303030303030303030303030303030303030303030"
+  },
+  "title": "Checkout returns unstructured server error",
+  "description": "Invalid checkout payload returns an unstructured 500 response",
+  "stepsToReproduce": ["Submit an invalid checkout payload"],
+  "expectedOutcome": "Structured validation error",
+  "actualOutcome": "Unstructured server error",
+  "severity": "HIGH",
+  "targetSnapshotHash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "evidenceRefs": [
+    {
+      "artifactId": "99999999-9999-4999-8999-999999999999",
+      "checksum": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "dataClassificationKey": "INTERNAL"
+    }
+  ],
+  "dataClassificationKey": "INTERNAL",
+  "jiraPriority": "P1"
+}

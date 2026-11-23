@@ -1,0 +1,542 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "kind": "LOCAL_CORPORATE_ONBOARDING_API_INCREMENT",
+  "generatedAt": "2026-09-06T21:36:41.949629+00:00",
+  "task": {
+    "feature": "008-pilot-hardening-and-conformance",
+    "id": "T025",
+    "status": "OPEN",
+    "completedSlice": "Corporate session BFF and durable onboarding/evidence module in PilotNonLocalApiModule"
+  },
+  "taskCounts": {
+    "total": 1349,
+    "closed": 1342,
+    "open": 7
+  },
+  "verification": {
+    "basis": "Latest result per test file; focused evidence/onboarding rerun supersedes the matching three files in the regression report. Earlier failed attempts are preserved.",
+    "files": 45,
+    "tests": 218,
+    "passed": 218,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "regression": {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-regression-final.json",
+      "sha256": "sha256:25e431b6b90ae56081c542f39cf8e9b2ad01bda2d797b3c7c7148a1377ed588c"
+    },
+    "focusedRerun": {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-http-scope-final.json",
+      "sha256": "sha256:3804c13bc7b3e86eb9292f72dea350c5aa4745058d01bbddb819d41e8c88623e"
+    },
+    "quality": {
+      "rootTypeScript": "PASS",
+      "targetedEslint": "PASS",
+      "importGraph": "PASS",
+      "schemaRegistry": "PASS",
+      "gitDiffCheck": "PASS"
+    },
+    "postgresImages": [
+      "postgres:17.7-bookworm",
+      "postgres:18.6-bookworm"
+    ],
+    "scenarios": [
+      "OIDC code/PKCE and encrypted durable sessions",
+      "CSRF/step-up/rotation",
+      "IdP role narrowing at workspace and transaction boundaries",
+      "Explicit new-project enrollment using revised policy/session references",
+      "Target principal differs from authenticated actor",
+      "Suspension from canonical onboarding head",
+      "HUMAN incident disposition with ordinary writes denied",
+      "Remote HTTP Vault signature and tampered signature rejection",
+      "Export replay: one record and one audit",
+      "Cookie and export persist through API restart",
+      "Offline verification during signer outage",
+      "Immediate membership revocation"
+    ]
+  },
+  "sourceSnapshotScope": "Changed files and direct integration dependencies/test suites; this is not a complete deployment attestation.",
+  "sourceBindings": [
+    {
+      "path": "apps/api/src/app.module.ts",
+      "sha256": "sha256:998f20aa649518266c9fa8361a0258e31d4b6cd1a7d6fd493296163dc2c8b064"
+    },
+    {
+      "path": "apps/api/src/extensions/corporate-qa-http-identity.ts",
+      "sha256": "sha256:da65930a0393b960019f71263b02af48ec9e3897b9bc4f9a4fa9d0b026a47ec8"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.application.ts",
+      "sha256": "sha256:36b33e7288663b680e959272ba4e39f23a492562e513a34a2c40bc4fce1c617c"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/corporate-onboarding.module.ts",
+      "sha256": "sha256:468947216975c85599ff8051590109a0615d67cab4e0308dec324c46266c9f82"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/durable-http.ts",
+      "sha256": "sha256:6a44470e5dd0eabdde9772eadda9da1877133b71404dbf3b5fec661168b8f38a"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/evidence.application.ts",
+      "sha256": "sha256:de7b354cccf0d3dc7968fb968fb284a432597049760e5404a7aeba0e2c7447c8"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/onboarding.controller.ts",
+      "sha256": "sha256:dff52ab44c4b284fc8c3f3baaa3e3d2e9c25439945cb3de6f84c13d4562a1388"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.application.ts",
+      "sha256": "sha256:f39777d9bdecbac8b9c44b49abb95fd68b1a394ab83a60ae87c1d52a7f0c5ad7"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-http.ts",
+      "sha256": "sha256:211a3e1bda26d837bbd3e849a696d3d12367b3ebb4eaa760e245ec54bc260ae8"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published.controllers.ts",
+      "sha256": "sha256:b4c026331cff03e564c09e75cb7b56cfff532e6f95889d96c985b9af12554973"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/registry.application.ts",
+      "sha256": "sha256:c0154d3d00fe1808ea3baa21e3139d75c6cc9dd8868e9aa9a0ec3a61e8d3753a"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/resources.application.ts",
+      "sha256": "sha256:acb5bc0eefd14c8168e0e53272a0fe3afe1e372645bc40ca76ba8aa1bb6bd02d"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/validation.application.ts",
+      "sha256": "sha256:ae9cb486c3cb41238c7ab04de7e4bb1936c63efd4590b20951999f4ab6d07e09"
+    },
+    {
+      "path": "apps/api/src/extensions/qa-api-authorization.ts",
+      "sha256": "sha256:10e798e0bbc30fde00c26dfbf54758c335e54d7783b42ad2c6fa1d920c7b513e"
+    },
+    {
+      "path": "apps/api/src/main.ts",
+      "sha256": "sha256:2a6e3bf5b2a63d56de6d9d55c86b5d7e2575d99ca436c706e2a2ed620e382a0e"
+    },
+    {
+      "path": "docs/audits/2026-09-07-corporate-onboarding-api.md",
+      "sha256": "sha256:72d2634aba891fd03219f7a1862d52affb5306f2b9221d6288581929e65981fa"
+    },
+    {
+      "path": "docs/runbooks/corporate-onboarding-api.md",
+      "sha256": "sha256:845c6d1b5c64d0aca49704f3c57d9e458de82caf4ed32d62518dd33c265e0420"
+    },
+    {
+      "path": "docs/runbooks/pilot-deployment-checklist.md",
+      "sha256": "sha256:cfa2ccf097f33a2613044b8a5c9377507d3a67796ce0d067ae8ac3ced4dd49f2"
+    },
+    {
+      "path": "packages/platform-core/src/identity-access/authorization-policy.ts",
+      "sha256": "sha256:269ecaa3fcd4037844e27e61b16b8ec1d6366b9fac8d33fb9dff494a8bd05126"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/corporate-scoped-access.repository.ts",
+      "sha256": "sha256:d9b55b26e82456a1587e74314ba3989c6345ed7c49f344cf3e088ae1a37e9c92"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/identity-access.repository.ts",
+      "sha256": "sha256:c6d4c43e22e042793d266b994115431ed0c3423eac237049c90c35d1f53d1a33"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/index.ts",
+      "sha256": "sha256:f90c65d034d1155ea9396c15343a6ebd2ac4e3c8e4a267e135b4d635c81768a2"
+    },
+    {
+      "path": "packages/platform-runtime-nest/src/auth/corporate-session.controller.ts",
+      "sha256": "sha256:b49779103535b9ba54b38313c448e88576b163e0e54b959e027fd5df16405035"
+    },
+    {
+      "path": "packages/platform-runtime-nest/src/auth/corporate-session.service.ts",
+      "sha256": "sha256:38c82cd62b1dd168eb54ad79b43244f87fa1c79adc9d977cfa8b28eb9b1111b3"
+    },
+    {
+      "path": "packages/platform-runtime-nest/src/auth/workspace-context.ts",
+      "sha256": "sha256:333702adfbe1c6331fe2fdf4ae3221a3814aee79c518c056ab1e6568427efa4a"
+    },
+    {
+      "path": "packages/runtime-composition/src/security/corporate-evidence-signing.ts",
+      "sha256": "sha256:ce7a215e9d15a64ba53d30f105de4f647d38fb94db82593178cac34e48d4098a"
+    },
+    {
+      "path": "packages/runtime-composition/src/security/corporate-identity.ts",
+      "sha256": "sha256:b2444c07d680bfd34bbaebe047de652074e9bfd750a61a535936d0f0b14d4d5a"
+    },
+    {
+      "path": "packages/runtime-composition/src/security/corporate-session-bindings.ts",
+      "sha256": "sha256:11c37457820d7e63180732a28cba3da9516139216a15eb5db33b428d38b04d60"
+    },
+    {
+      "path": "packages/runtime-composition/src/security/public-key-history.ts",
+      "sha256": "sha256:bb72b1c65b1f24a7ff6d127cc212408c27840b00a89921db9d77643a16b31eee"
+    },
+    {
+      "path": "packages/runtime-composition/src/security/vault-http-client.ts",
+      "sha256": "sha256:757187fcf0da04fd13fa35e37494e0588eec7d0bfaefb07cedea2bdf2357f3bd"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7"
+    },
+    {
+      "path": "specs/008-pilot-hardening-and-conformance/tasks.md",
+      "sha256": "sha256:04378a7199898bad738d894095ef8dc158b315ea9818a7b18412508b9c66a32e"
+    },
+    {
+      "path": "tests/architecture/007/onboarding-boundaries.spec.ts",
+      "sha256": "sha256:7b7c96c716b4ded5e525369b15db9353cb53cc56f28307ef706560d17fc46d55"
+    },
+    {
+      "path": "tests/architecture/007/runtime-wiring.spec.ts",
+      "sha256": "sha256:96c217c23612a4e3e5eb17e65962ade51fe1bf6930949e7ba5da52a9c823b1ce"
+    },
+    {
+      "path": "tests/integration/007/us1-full-qa-http.spec.ts",
+      "sha256": "sha256:b18048505d32bc07d145c076424d9ad77961a10c67231fec902e1bd2d80cedec"
+    },
+    {
+      "path": "tests/integration/007/us1-onboarding-http.spec.ts",
+      "sha256": "sha256:5367bd2c98e6c5084eb86df47b541d62b411d91aff3dd90129b3711ef29c8e9c"
+    },
+    {
+      "path": "tests/integration/007/us1-published-http.spec.ts",
+      "sha256": "sha256:2bc07104553fe7ab407ec36ba68694e9a67bb6d4b4f684f9a16c28622a9ba2c5"
+    },
+    {
+      "path": "tests/integration/007/us1-requested-probes-http.spec.ts",
+      "sha256": "sha256:006d3e9d9162fa88163fc4b47fdb8a3b1b4c93e1c60d0e27b35ed0431885065e"
+    },
+    {
+      "path": "tests/integration/007/us1-resources-http.spec.ts",
+      "sha256": "sha256:457d449198a2ca09aafd7574b813d4badc05709504997fcb4258db58cb7c55c7"
+    },
+    {
+      "path": "tests/integration/007/us1-validation-http.spec.ts",
+      "sha256": "sha256:4e8078c438bb91e47188c574b5daab7a05ad54f9f0175de25a93c44806850298"
+    },
+    {
+      "path": "tests/integration/007/us2-binding-http.spec.ts",
+      "sha256": "sha256:b5fa3c33f1c3db6c4903a1601978ac24a5764dfb1466d31719d76a7d38786a98"
+    },
+    {
+      "path": "tests/integration/007/us4-evidence-http.spec.ts",
+      "sha256": "sha256:99360e6f7449d96466380aacf50180c39bdcede8cda74c184df93ddba9fdde26"
+    },
+    {
+      "path": "tests/integration/007/us5-project-operations-http.spec.ts",
+      "sha256": "sha256:5fe85e2f98c49ad72329f0e4e2ea7c5331ef546eb616b4a012034909aeb5790e"
+    },
+    {
+      "path": "tests/integration/008/corporate-signing.spec.ts",
+      "sha256": "sha256:93eb921dadc1bcc5e08bca04f755da6b33fec916d2ef316712268247868aa3b0"
+    },
+    {
+      "path": "tests/integration/008/runtime-composition.spec.ts",
+      "sha256": "sha256:981061ad4351be88646b15f664334f7e961bb497cc145218602a1135ef8197b2"
+    },
+    {
+      "path": "tests/integration/security/007/production-and-scope-boundary.spec.ts",
+      "sha256": "sha256:10afbef9a3fe316916ec09114b865416253befa67f211713342f773c70c33731"
+    },
+    {
+      "path": "tests/integration/security/007/us3-background-reauthorization.spec.ts",
+      "sha256": "sha256:41c7d1d5c1cd72782c6e200d6bdcd37db7fd93ecbc1eafa685a5765a92aaa6b9"
+    },
+    {
+      "path": "tests/integration/security/007/us3-cross-scope-substitution.spec.ts",
+      "sha256": "sha256:557c38436789d09ca5ff59e6c7805236ebd7c0ff007b4478a43e3158f7e10425"
+    },
+    {
+      "path": "tests/integration/security/007/us3-event-isolation.spec.ts",
+      "sha256": "sha256:d1d4fb7a6f1c41bc968ff9d81c029e8bc5851ffa1e3e2134be5feb32d62e7e6e"
+    },
+    {
+      "path": "tests/integration/security/007/us3-evidence-artifact-isolation.spec.ts",
+      "sha256": "sha256:c3154e2980ae692d09f043ab727dc12c98760d68fcca5ae43076804c9a662706"
+    },
+    {
+      "path": "tests/integration/security/007/us3-read-surface-isolation.spec.ts",
+      "sha256": "sha256:5503912b9498b8c4e0a798fe26af545aa32cf9f77820f6cc391add088e437c1b"
+    },
+    {
+      "path": "tests/integration/security/007/us3-repository-prefilter.spec.ts",
+      "sha256": "sha256:55f9778d29d5c67474ae789f7658cfb31602f40f6b9e463c8eeb7e9cc926a479"
+    },
+    {
+      "path": "tests/integration/security/007/us3-side-channel.spec.ts",
+      "sha256": "sha256:061d7326a081586bae8b96f07a87d7570c086e97379b290064d0ae5d78abd88b"
+    },
+    {
+      "path": "tests/integration/security/007/us4-evidence-export.spec.ts",
+      "sha256": "sha256:21b2619c6903bdfd48ee871c32174351080ed1f98e000ae587479ad9650cfbf9"
+    },
+    {
+      "path": "tests/integration/security/007/us5-effect-guard-race.spec.ts",
+      "sha256": "sha256:de2a211fc6446cbff34aab1d573a8cfb9fc09be06f3f235f863080b61e479dfd"
+    },
+    {
+      "path": "tests/integration/security/007/us5-investigation-access.spec.ts",
+      "sha256": "sha256:cc2e0700ed81c17912fbb0dedceb148f3a9575de343ba92f6196ba8efbe569a7"
+    },
+    {
+      "path": "tests/integration/security/008/access-boundaries.spec.ts",
+      "sha256": "sha256:18331071c28adfa2bbff5d1deb3a08babf27f413e6ab9ae6327a37b921591b85"
+    },
+    {
+      "path": "tests/integration/security/008/corporate-auth-http.spec.ts",
+      "sha256": "sha256:98883fe810da51189eb307cfa8e68425455d6b0f51e43497915883592fb97126"
+    },
+    {
+      "path": "tests/integration/security/008/corporate-identity.spec.ts",
+      "sha256": "sha256:33eb36922ddc60c68ade29743e59cf8360e69d94a41ce2358e8b30e95e4fef4d"
+    },
+    {
+      "path": "tests/integration/security/008/corporate-onboarding-http.spec.ts",
+      "sha256": "sha256:e8763290dcd6cc7119ead7768edc8bbf6391b9da59113d118c1c586aa91a4ac6"
+    },
+    {
+      "path": "tests/integration/security/008/corporate-sessions.spec.ts",
+      "sha256": "sha256:368bec101c97dc1c4f338371aaabfc8af6fc45399e271dd716a5a411bffb118c"
+    },
+    {
+      "path": "tests/integration/security/008/exact-approvals.spec.ts",
+      "sha256": "sha256:9745c1c88dd06500079ae64f054cfac2d3bf71e65885032b0decf05996e57690"
+    },
+    {
+      "path": "tests/integration/security/008/identity-tokens.spec.ts",
+      "sha256": "sha256:7d2ec0839bc0c832561d6ee32d8a86eb6de1578e795a79ae082d24669d8fc4f1"
+    },
+    {
+      "path": "tests/integration/security/008/network-policy.spec.ts",
+      "sha256": "sha256:7f237666550447674614f684ec448cc77659c92bcabb24270a1a79d5087161aa"
+    },
+    {
+      "path": "tests/integration/security/008/secret-canaries.spec.ts",
+      "sha256": "sha256:b73a6d0790239b4cff6169e7fa7603fd7acc10e4ad5d2a0bdb5941c247fa67de"
+    },
+    {
+      "path": "tests/integration/security/008/secret-resolution.spec.ts",
+      "sha256": "sha256:b7f8266587cc1303537519f0e9320ffe2ec66e1a44ae25546276f5e12371aff6"
+    },
+    {
+      "path": "tests/integration/security/008/telemetry-redaction.spec.ts",
+      "sha256": "sha256:9b25c6bb04c09257bb81e34794a537d45e465774d648cd689972af4685efdf7d"
+    },
+    {
+      "path": "tests/integration/security/authorization-policy.spec.ts",
+      "sha256": "sha256:f9cefb8311dc380ff6be2f95e96b3cda9f75c2910468ed208b657784cf593024"
+    },
+    {
+      "path": "tests/integration/security/request-trust-boundary.spec.ts",
+      "sha256": "sha256:f8f2d5df510d093f606bab7a7736973da524b1160ad9ac42fb44d084ce7f65cc"
+    },
+    {
+      "path": "tests/support/007-evidence-http-fixture.ts",
+      "sha256": "sha256:54b2bf6af8f25816feeb535e29f01938f67e3623067bb13c1e219e2d8a346923"
+    },
+    {
+      "path": "tests/support/008-oidc-fixture.ts",
+      "sha256": "sha256:8e003ce8297b5c6e6be36466297938b5f3b2111b3492d03d7f1b1b8c923ca326"
+    },
+    {
+      "path": "tests/support/008-vault-fixture.ts",
+      "sha256": "sha256:b850653967240a7fe686835f75d7d3157183a7860d11135e23f00a6350fc0704"
+    },
+    {
+      "path": "tests/unit/007/onboarding-event-worker.spec.ts",
+      "sha256": "sha256:ed8f046dbdde518fa738dc333d11f8d7a8273650c6e1f53555e584dc897d30a6"
+    },
+    {
+      "path": "tests/unit/007/us1-capability-mode.spec.ts",
+      "sha256": "sha256:ace037c023672cbe02ab1ebdb6ce4af0a1b16d33a40da4810bdaa568b00ddb57"
+    },
+    {
+      "path": "tests/unit/007/us1-project-onboarding.spec.ts",
+      "sha256": "sha256:37777e703058cb3c69e177a52f2c2be235a2385bd5a96cc0cf1b529a67ecf778"
+    },
+    {
+      "path": "tests/unit/007/us2-full-qa-mode.spec.ts",
+      "sha256": "sha256:a357c197681906d547189dacb667cc487d38ec7f6984bf99a544d04a46023c40"
+    },
+    {
+      "path": "tests/unit/007/us3-authorization-policy.spec.ts",
+      "sha256": "sha256:33f47c2512df6b39a62b44ebd770faa54eccfa7e327ec02eee1530d32aef367d"
+    },
+    {
+      "path": "tests/unit/007/us4-evidence-canonicalization.spec.ts",
+      "sha256": "sha256:3f7aad91b58bfcf559cd93aa694c4a682565fab4f1dae60febdf4429f49171fd"
+    },
+    {
+      "path": "tests/unit/007/us4-evidence-signature.spec.ts",
+      "sha256": "sha256:acd3cca6a8614e5c71a8bf6342294acf27320f9954014894e4b218b135d64bc1"
+    },
+    {
+      "path": "tests/unit/007/us5-operational-state.spec.ts",
+      "sha256": "sha256:1d7eb279a62bf5f88ba9800ef4542cb1a2fa6ec12ddbd780304e6bc5a48ef2ca"
+    },
+    {
+      "path": "tools/verification/008-foundation-checkpoint.mts",
+      "sha256": "sha256:9fd19edf389707e662b99eba757f4ec0fc92369f47f1b52cbcc416cbcb6e8f81"
+    },
+    {
+      "path": "tsconfig.base.json",
+      "sha256": "sha256:5ce678ccd05fff80daf0d14d27c579eb2da38b952f6ca57534379d65629369e3"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "sha256:49a828d8587980d05bc3ba30430bd40736c3cb69340d32eb803e26921a01717b"
+    },
+    {
+      "path": "vitest.workspace.ts",
+      "sha256": "sha256:695c0de3e1352c087a6f1831dba9791902c10f8a7d89ec2c27ad5239a58de027"
+    }
+  ],
+  "evidenceBindings": [
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-maintenance-red.log",
+      "sha256": "sha256:986fb4263b81301f9840ebede32b210db60c95b795360f362b84e540c9eefe83"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-architecture-final.log",
+      "sha256": "sha256:ee6d93f9613711c790556ea5c5b3b14224aca3235f7817cf182b95b15a414db6"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-architecture-verified.log",
+      "sha256": "sha256:ee6d93f9613711c790556ea5c5b3b14224aca3235f7817cf182b95b15a414db6"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-architecture.log",
+      "sha256": "sha256:ee6d93f9613711c790556ea5c5b3b14224aca3235f7817cf182b95b15a414db6"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-diff-check.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-diff-verified.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-green-1.log",
+      "sha256": "sha256:fb146448369eb9f3519c1ec09081ac5012a3f98c449981903b9a59500b972635"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-green-2.log",
+      "sha256": "sha256:aa3b0f0547f89851e11b90ccc06e24bc845294b0b95b4134e725b46b229b2f0d"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-green-3.log",
+      "sha256": "sha256:5b12c750efc230278800bc3eb2d6adc0328b19e38bc98367a7cf09194738cf22"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-green-4.log",
+      "sha256": "sha256:27ebb1b45aa4e6224e0a19f04d3a1b5ecda84100b7b07c1a5e0cb4c644547440"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-green-5.log",
+      "sha256": "sha256:7ca15b343dc1debf226d4a1df279011bc81119f871fcf1d625ad0c8be5b9b86a"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-http-final.json",
+      "sha256": "sha256:50a479362b34bc38c4ee50e21fd4037db18d0b3661ded8360af6d9e94d3867fd"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-http-final.log",
+      "sha256": "sha256:c4b0edb5f797dda791be7a59d0e48577047db70e41dd4544d856c3f773c82bf3"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-http-scope-final.json",
+      "sha256": "sha256:3804c13bc7b3e86eb9292f72dea350c5aa4745058d01bbddb819d41e8c88623e"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-http-scope-final.log",
+      "sha256": "sha256:f93428e0616f0bcf061d0571b5a74d5d38d1c5f1b1d82420b6f3c52b99d21525"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-http-verified.json",
+      "sha256": "sha256:cf558bfcc7c73a0daf25c62c070df2fa3a3fa21c35b9d8ec2c6a9a17dbb036e5"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-http-verified.log",
+      "sha256": "sha256:d78b770a1b729abcab86c470e7058daa07b4124f0eeba7c16e73f3f47cb1096e"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-lint-final-2.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-lint-final.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-lint-verified.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-lint.log",
+      "sha256": "sha256:424ae4337359d6ccc0923f50da94f1b3ee80d3fa4040268103f73806835013fd"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-red-routes.log",
+      "sha256": "sha256:292a7cb3a39d2a66f8e8eb89167be3f4a4de800322549eab82ad4717e075be5e"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-red.log",
+      "sha256": "sha256:67ae20a3432498c6439c1806a0d82e9063edce6819b0b97b361bed0fd3ed8314"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-registry-final.log",
+      "sha256": "sha256:60d92cd92bdb657ce7ca61c5ea8d92cceaadf8a3a8bafbf1acc41fa3a044bd5e"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-regression-final.json",
+      "sha256": "sha256:25e431b6b90ae56081c542f39cf8e9b2ad01bda2d797b3c7c7148a1377ed588c"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-regression-final.log",
+      "sha256": "sha256:a297d4aa06b1b0ee46a7e1531dbc9aaa9fc12ddf3eed2c51db56964706a41f5d"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-regression.json",
+      "sha256": "sha256:86ce104aa5fc157ce1b55b8a97b6cee3174d1feb5d2c04a8d1653f8bf2a27f1f"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-regression.log",
+      "sha256": "sha256:807ce89982cbb797fce0e08ab3ff11a041228f97a76d2af8a23be73671c3ad14"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-tsc-2.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-tsc-final-2.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-tsc-final.log",
+      "sha256": "sha256:411220d714e9ecd06e35d7b6651bb39b7e3e966f1590086b1ca01a04ca663b8e"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-tsc.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-onboarding-typecheck-verified.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/evidence/corporate-onboarding-2026-09-07/awp-corporate-signer-schema-red.log",
+      "sha256": "sha256:9989cf8a4d608c17909af255b0f9dc0be4072820d27e3e0089779ebfb2392664"
+    }
+  ],
+  "limitations": [
+    "IAM, work type, Work Item and source evidence are controlled test inputs.",
+    "OIDC/Vault HTTP fixtures do not prove an installed corporate provider.",
+    "The full QA/intake/queue factories, domain worker contributions, corporate launcher and release images remain T025.",
+    "No full ci:project, ci:008, Compose smoke or C1/N2/P3 run in this increment."
+  ]
+}

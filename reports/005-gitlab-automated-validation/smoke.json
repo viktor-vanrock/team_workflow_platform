@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "smoke",
+  "composition": "qa-jira-gitlab-local",
+  "startedAt": "2026-09-03T10:53:25.008Z",
+  "finishedAt": "2026-09-03T10:54:57.601Z",
+  "status": "PASS",
+  "isolatedProjectName": "awp-local-005-smoke-mtleps3u-16441",
+  "scenarios": {
+    "required": 30,
+    "executed": 30,
+    "persistedCurrentAfterRestart": "us4-rate-limit-recovery",
+    "unexecuted": []
+  },
+  "restartDurability": {
+    "api": "PASS",
+    "worker": "PASS",
+    "mockHub": "PASS",
+    "postgresStatePreserved": true
+  },
+  "durableInspection": {
+    "platform": {
+      "migrations": 39,
+      "suiteBindings": 0,
+      "automationAttempts": 0,
+      "connectorCommands": 1
+    },
+    "mockHub": {
+      "projects": 2,
+      "pipelines": 1,
+      "faultRows": 1,
+      "webhookDeliveries": 1
+    },
+    "sources": [
+      "POSTGRESQL",
+      "MOCK_HUB",
+      "PROCESS_HTTP"
+    ]
+  },
+  "cleanShutdown": "PASS",
+  "stages": [
+    {
+      "id": "documented-scenarios",
+      "status": "PASS",
+      "durationMs": 76,
+      "details": {
+        "required": 30
+      }
+    },
+    {
+      "id": "isolated-local-up",
+      "status": "PASS",
+      "durationMs": 31016,
+      "details": {
+        "projectName": "awp-local-005-smoke-mtleps3u-16441",
+        "ports": [
+          58004,
+          58005,
+          58006,
+          58007,
+          58008,
+          58009
+        ]
+      }
+    },
+    {
+      "id": "stateful-scenario-execution",
+      "status": "PASS",
+      "durationMs": 8162,
+      "details": {
+        "executed": 30,
+        "persistedCurrent": "us4-rate-limit-recovery"
+      }
+    },
+    {
+      "id": "api-worker-mock-hub-restarts",
+      "status": "PASS",
+      "durationMs": 8612,
+      "details": {
+        "services": [
+          "mock-hub",
+          "worker",
+          "api"
+        ],
+        "statePreserved": true
+      }
+    },
+    {
+      "id": "postgresql-inspection",
+      "status": "PASS",
+      "durationMs": 323,
+      "details": {
+        "platformInspection": {
+          "migrations": 39,
+          "suiteBindings": 0,
+          "automationAttempts": 0,
+          "connectorCommands": 1
+        },
+        "mockInspection": {
+          "projects": 2,
+          "pipelines": 1,
+          "faultRows": 1,
+          "webhookDeliveries": 1
+        }
+      }
+    },
+    {
+      "id": "core-clean-shutdown",
+      "status": "PASS",
+      "durationMs": 12438
+    },
+    {
+      "id": "visible-human-review-browser",
+      "status": "PASS",
+      "durationMs": 31667
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tools/smoke/feature-005.mts",
+        "sha256": "sha256:13bc809a0945efa88bce5ca90e865a04c7c016a1085f896fa4856f1d7aa8ac89"
+      },
+      {
+        "path": "tools/smoke/feature-005-browser-process.mts",
+        "sha256": "sha256:32b1477b94cc7a15879f46927fb8e46b5337c848dbc219549439f0e12e55896a"
+      },
+      {
+        "path": "tests/e2e/acceptance/005-gitlab-human-review-browser.spec.ts",
+        "sha256": "sha256:95f65683930f26b25a70864aab5092effca30971db99b81202d44265b3a9e433"
+      },
+      {
+        "path": "tools/local/gitlab-scenario-catalog.mts",
+        "sha256": "sha256:adf11894da837d42701d28d51e3728b5e5f682d72a3ac1f6ac85f61991a14ec3"
+      },
+      {
+        "path": "tools/local/gitlab-scenario.mts",
+        "sha256": "sha256:f592eb65ea72dbe5b7fdb114a8ecb16eed598358a578b583ec2c2be6211d8562"
+      },
+      {
+        "path": "infra/compose/docker-compose.local.yml",
+        "sha256": "sha256:f78a8c61b3d5d490f22719e4ab0339b93e5f5ccb8c4717b028cb5cbbca66fa10"
+      }
+    ],
+    "aggregateSha256": "sha256:c3ca137c411c1689fd198769393e87428308aa0dea4fdb16b8f801b4d310a6a0"
+  }
+}

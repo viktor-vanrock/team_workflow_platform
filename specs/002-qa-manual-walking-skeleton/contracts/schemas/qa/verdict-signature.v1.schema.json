@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:verdict-signature:v1",
+  "title": "Append-only QA Verdict Signature",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "signatureId", "version", "workspaceId", "projectId", "workItemId", "verdictRef", "verdictContentHash", "signatureRole", "signer", "authorizationBasisHash", "riskReviewPolicyRef", "signedAt", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "signatureId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "verdictRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "verdictContentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "signatureRole": { "type": "string", "enum": ["PRIMARY", "LEAD_COSIGN"] },
+    "signer": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "authorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "riskReviewPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef" },
+    "platformActionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericPlatformActionRef" },
+    "signedAt": { "type": "string", "format": "date-time" },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "signatureRole": { "const": "LEAD_COSIGN" } }, "required": ["signatureRole"] },
+      "then": { "required": ["platformActionRef"] },
+      "else": { "not": { "required": ["platformActionRef"] } }
+    }
+  ]
+}

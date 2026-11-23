@@ -1,0 +1,27 @@
+flowchart TB
+  browser["Browser на машине разработчика"] --> edge["edge-proxy · TCP forwarding<br/>127.0.0.1 published ports<br/>awp-edge + awp-internal"]
+  subgraph internal["awp-internal · internal: true · внешний egress закрыт"]
+    web["web :5173<br/>Vite dev server"]
+    api["api :3000"]
+    worker["worker :3010 health"]
+    idp["fake-idp :4443 HTTPS"]
+    mock["mock-hub :4010"]
+    pg[("postgres :5432<br/>awp + awp_mock")]
+    otel["otel-collector :4317 / :4318<br/>observability profile"]
+    jobs["One-shot bootstrap<br/>core/mock migrate → seed"]
+    jobs --> pg
+    api --> pg
+    worker --> pg
+    mock -->|"только awp_mock"| pg
+    api --> idp
+    api --> mock
+    worker --> mock
+    api --> otel
+    worker --> otel
+  end
+  edge --> web
+  edge --> api
+  edge --> worker
+  edge --> idp
+  edge --> mock
+  volumes["Named volume<br/>postgres-data"] --- pg

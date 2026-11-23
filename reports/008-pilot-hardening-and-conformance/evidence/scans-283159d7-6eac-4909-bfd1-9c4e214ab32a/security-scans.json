@@ -1,0 +1,115 @@
+{
+  "mode": "DEVELOPMENT_MOCKS",
+  "releaseScan": "BLOCKED_INPUT",
+  "policyRef": {
+    "path": "config/pilot/development-scan-policy.json",
+    "sha256": "sha256:4955caf94cfe281aff9181efc1ba71056c8bca1fff46873389a6a74be036879f"
+  },
+  "databaseRef": {
+    "path": "config/pilot/development-scanner-database.json",
+    "sha256": "sha256:5ab91473dd8470ca7ef506314a8f424e861c4fc41445742a790953d1b259027e"
+  },
+  "dependency": {
+    "report": {
+      "schemaVersion": "security-scan@1.0.0",
+      "contour": "DEVELOPMENT_MOCKS",
+      "coverage": "ADAPTER_FIXTURE",
+      "database": {
+        "id": "feature-008-development-scanner-database",
+        "version": "2026.09.03",
+        "publishedAt": "2026-09-03T21:49:12.495Z",
+        "digest": "sha256:5ab91473dd8470ca7ef506314a8f424e861c4fc41445742a790953d1b259027e"
+      },
+      "policy": {
+        "id": "feature-008-development-security",
+        "version": "1.0.0",
+        "digest": "sha256:4955caf94cfe281aff9181efc1ba71056c8bca1fff46873389a6a74be036879f"
+      },
+      "kind": "DEPENDENCY",
+      "artifact": {
+        "kind": "LOCKFILE",
+        "digest": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2"
+      },
+      "scanner": {
+        "id": "pnpm-audit-snapshot",
+        "version": "11.21.0"
+      },
+      "scannedAt": "2026-09-03T21:49:12.495Z",
+      "findings": [
+        {
+          "id": "GHSA-x5fp-wj9c-mxmx",
+          "component": "qs",
+          "installedVersion": "6.15.3",
+          "severity": "MODERATE",
+          "status": "ACCEPTED_RISK",
+          "fixedVersion": ">=6.15.4",
+          "owner": "fixture-security-owner",
+          "expiresAt": "2026-09-12T00:00:00Z"
+        },
+        {
+          "id": "GHSA-4mjr-xmp4-gh2g",
+          "component": "qs",
+          "installedVersion": "6.15.3",
+          "severity": "MODERATE",
+          "status": "ACCEPTED_RISK",
+          "fixedVersion": ">=6.16.0",
+          "owner": "fixture-security-owner",
+          "expiresAt": "2026-09-12T00:00:00Z"
+        }
+      ]
+    },
+    "evaluation": {
+      "status": "PASS",
+      "releaseEligible": false,
+      "reasonCodes": [],
+      "measurements": {
+        "critical": 0,
+        "high": 0,
+        "moderate": 2,
+        "low": 0,
+        "open": 0
+      }
+    }
+  },
+  "image": {
+    "report": {
+      "schemaVersion": "security-scan@1.0.0",
+      "contour": "DEVELOPMENT_MOCKS",
+      "coverage": "ADAPTER_FIXTURE",
+      "database": {
+        "id": "feature-008-development-scanner-database",
+        "version": "2026.09.03",
+        "publishedAt": "2026-09-03T21:49:12.495Z",
+        "digest": "sha256:5ab91473dd8470ca7ef506314a8f424e861c4fc41445742a790953d1b259027e"
+      },
+      "policy": {
+        "id": "feature-008-development-security",
+        "version": "1.0.0",
+        "digest": "sha256:4955caf94cfe281aff9181efc1ba71056c8bca1fff46873389a6a74be036879f"
+      },
+      "kind": "IMAGE",
+      "artifact": {
+        "kind": "OCI_IMAGE",
+        "digest": "sha256:c9f058adfe5a0b6180500597e6c13859d8532f5ae46bf4894a31a11b06cef90f"
+      },
+      "scanner": {
+        "id": "docker-scout-adapter-fixture",
+        "version": "0.20.0"
+      },
+      "scannedAt": "2026-09-04T20:34:12.385Z",
+      "findings": []
+    },
+    "evaluation": {
+      "status": "PASS",
+      "releaseEligible": false,
+      "reasonCodes": [],
+      "measurements": {
+        "critical": 0,
+        "high": 0,
+        "moderate": 0,
+        "low": 0,
+        "open": 0
+      }
+    }
+  }
+}

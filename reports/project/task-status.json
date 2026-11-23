@@ -1,0 +1,98 @@
+{
+  "reviewedAt": "2026-09-06T19:09:36.167468+00:00",
+  "basis": "007/T106 is closed locally: independent HTTP/PostgreSQL API processes verify project scope across catalog, search, queue, event notifications, Work Items, artifact bytes, signatures and export. Current DENY/expiry/classification/session limits, revocation, cursor replay, restart and safe errors are verified. Final regression: 723/723 tests in 197 files. Two local and six corporate tasks remain; full Compose smoke and corporate composition/acceptance are not claimed complete.",
+  "total": 1349,
+  "complete": 1341,
+  "features": [
+    {
+      "feature": "001-extension-kernel-local-skeleton",
+      "path": "specs/001-extension-kernel-local-skeleton/tasks.md",
+      "total": 163,
+      "complete": 163,
+      "open": []
+    },
+    {
+      "feature": "002-qa-manual-walking-skeleton",
+      "path": "specs/002-qa-manual-walking-skeleton/tasks.md",
+      "total": 180,
+      "complete": 180,
+      "open": []
+    },
+    {
+      "feature": "003-jira-operational-authority",
+      "path": "specs/003-jira-operational-authority/tasks.md",
+      "total": 163,
+      "complete": 163,
+      "open": []
+    },
+    {
+      "feature": "004-mattermost-hermes-intake",
+      "path": "specs/004-mattermost-hermes-intake/tasks.md",
+      "total": 215,
+      "complete": 215,
+      "open": []
+    },
+    {
+      "feature": "005-gitlab-automated-validation",
+      "path": "specs/005-gitlab-automated-validation/tasks.md",
+      "total": 159,
+      "complete": 159,
+      "open": []
+    },
+    {
+      "feature": "006-queue-triage-capacity-sla",
+      "path": "specs/006-queue-triage-capacity-sla/tasks.md",
+      "total": 170,
+      "complete": 170,
+      "open": []
+    },
+    {
+      "feature": "007-project-onboarding-evidence-security",
+      "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+      "total": 184,
+      "complete": 183,
+      "open": [
+        {
+          "id": "T176",
+          "description": "Implement isolated child-process smoke with API/worker/web/PostgreSQL/Redis/Mock Hub restarts, deterministic effect counts, signing verification, browser run and clean shutdown in tools/smoke/feature-007.mts and tools/smoke/feature-007-browser-process.mts"
+        }
+      ]
+    },
+    {
+      "feature": "008-pilot-hardening-and-conformance",
+      "path": "specs/008-pilot-hardening-and-conformance/tasks.md",
+      "total": 115,
+      "complete": 108,
+      "open": [
+        {
+          "id": "T025",
+          "description": "[US1] Implement shared complete non-local factories in `packages/runtime-composition/src/pilot/composition.ts`; wire API/worker entry points and entity/migration selection in `apps/api/src/main.ts` and `apps/worker/src/main.ts`."
+        },
+        {
+          "id": "T040",
+          "description": "[US1] After C1 metadata is supplied, pin selected real protocol/auth strategy and sanitized fixtures in `config/pilot/provider-capabilities.json` and a scoped input report; record unsupported capabilities instead of substituting versions."
+        },
+        {
+          "id": "T057",
+          "description": "[US2] After C1 and approved sandbox scope, implement/run N2 conformance in `tools/verification/feature-008-integration.mts`; save exact real-provider evidence and BLOCKED_INPUT for missing corporate prerequisites."
+        },
+        {
+          "id": "T084",
+          "description": "[US4] Implement/run approved corporate drill wrapper in `tools/verification/feature-008-recovery.mts` after IN-08; preserve BLOCKED_INPUT for absent target/fence/RPO/RTO/owner."
+        },
+        {
+          "id": "T104",
+          "description": "[US5] After N2/security/recovery and cohort input, implement/run actual shadow validation in `tools/verification/feature-008-shadow.mts`; record human-reviewed differences and zero external business writes."
+        },
+        {
+          "id": "T105",
+          "description": "[US5] After exact human activation, collect the actual approved pilot window/sample and guardrail observations through `packages/runtime-composition/src/pilot/observation-worker.ts`; persist source evidence for `reports/008-pilot-hardening-and-conformance/limited-pilot.json`."
+        },
+        {
+          "id": "T106",
+          "description": "[US5] Implement/run observed-pilot review validation in `tools/verification/feature-008-review.mts`; require real sample/provenance and human review, never simulate elapsed pilot time."
+        }
+      ]
+    }
+  ]
+}

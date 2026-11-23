@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-work-item:action-input:v1.1",
+  "title": "Operational Work Item 1.1 Action Input",
+  "description": "Additive 1.1 action payload. Target remains the unchanged 1.0 OperationalTarget and expected external state is derived server-side from If-Match.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "operation", "targetNormalizedStatus"],
+      "properties": {
+        "schemaVersion": { "const": "1.1" },
+        "operation": { "const": "request.transition" },
+        "targetNormalizedStatus": { "$ref": "#/$defs/NormalizedStatus" }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "operation", "assignment"],
+      "properties": {
+        "schemaVersion": { "const": "1.1" },
+        "operation": { "const": "request.assign" },
+        "assignment": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["canonicalPrincipalId"],
+              "properties": { "canonicalPrincipalId": { "type": "string", "format": "uuid" } }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["unassign"],
+              "properties": { "unassign": { "const": true } }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "operation", "normalizedPriorityKey"],
+      "properties": {
+        "schemaVersion": { "const": "1.1" },
+        "operation": { "const": "request.set-priority" },
+        "normalizedPriorityKey": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$" }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "operation", "dueDate"],
+      "properties": {
+        "schemaVersion": { "const": "1.1" },
+        "operation": { "const": "request.set-due-date" },
+        "dueDate": { "type": ["string", "null"], "format": "date" }
+      }
+    }
+  ],
+  "$defs": {
+    "NormalizedStatus": {
+      "enum": ["NEW", "NEEDS_INFO", "READY", "PLANNED", "IN_PROGRESS", "REVIEW", "BLOCKED", "DONE", "CANCELLED"]
+    }
+  }
+}

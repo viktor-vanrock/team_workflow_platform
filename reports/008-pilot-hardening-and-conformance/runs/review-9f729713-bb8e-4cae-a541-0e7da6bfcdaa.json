@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "review-9f729713-bb8e-4cae-a541-0e7da6bfcdaa",
+  "gate": "review",
+  "status": "BLOCKED_INPUT",
+  "deploymentProfile": "pilot",
+  "scope": {
+    "workspaceId": "corporate-input-required",
+    "projectIds": [
+      "corporate-project-required"
+    ]
+  },
+  "startedAt": "2026-09-04T21:30:56.907Z",
+  "finishedAt": "2026-09-04T21:30:57.631Z",
+  "fingerprints": {
+    "source": "sha256:b4efe8dba0e461953340a40c29f449e9c0a3667c426af039f73870ea7058b1cf",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:472a062dab5a3312dcdd07919cce521ca55d72996dc28c4530a50cd0226b3974",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:14cdadfff91a53c33065eb6fd4f87bcc3a8271a82e9b378ce5eac50b2bcf24f1"
+  },
+  "executorIdentity": "local-cli",
+  "checks": [
+    {
+      "id": "actual-observed-pilot-review",
+      "status": "BLOCKED_INPUT",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/review-9f729713-bb8e-4cae-a541-0e7da6bfcdaa/observed-pilot-review.json",
+          "sha256": "sha256:8a80670bc29526ca5c728c2ba70a1c815ec173681be97394a7b06d7c4bfa8707"
+        }
+      ],
+      "reasonCodes": [
+        "LIMITED_PILOT_REPORT_MISSING"
+      ]
+    }
+  ],
+  "prerequisites": [],
+  "reasonCodes": [
+    "LIMITED_PILOT_REPORT_MISSING"
+  ]
+}

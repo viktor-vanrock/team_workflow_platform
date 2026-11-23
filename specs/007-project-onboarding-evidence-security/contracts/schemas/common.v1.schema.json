@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:common:v1",
+  "title": "Feature 007 common definitions",
+  "$defs": {
+    "uuid": { "type": "string", "format": "uuid" },
+    "nonEmpty": { "type": "string", "minLength": 1, "maxLength": 2048 },
+    "stableKey": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9._:-]{0,127}$" },
+    "classificationKey": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,63}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "integerVersionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "exactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "contentHash"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "schemaBoundResourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "schemaRef", "resourceRef"],
+      "properties": {
+        "key": { "$ref": "#/$defs/stableKey" },
+        "schemaRef": { "$ref": "#/$defs/schemaRef" },
+        "resourceRef": { "$ref": "#/$defs/exactRef" }
+      }
+    },
+    "schemaBoundValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaRef", "value", "contentHash"],
+      "properties": {
+        "schemaRef": { "$ref": "#/$defs/schemaRef" },
+        "value": { "type": ["object", "array", "string", "number", "boolean", "null"] },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "humanActor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principalId", "kind", "roleKey", "authorizationBasisHash", "authenticationContextRef"],
+      "properties": {
+        "principalId": { "$ref": "#/$defs/uuid" },
+        "kind": { "const": "HUMAN" },
+        "roleKey": { "$ref": "#/$defs/stableKey" },
+        "authorizationBasisHash": { "$ref": "#/$defs/hash" },
+        "authenticationContextRef": { "$ref": "#/$defs/nonEmpty" },
+        "stepUpAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "serviceActor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principalId", "kind", "authorizationBasisHash"],
+      "properties": {
+        "principalId": { "$ref": "#/$defs/uuid" },
+        "kind": { "const": "SERVICE" },
+        "authorizationBasisHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "actor": { "oneOf": [{ "$ref": "#/$defs/humanActor" }, { "$ref": "#/$defs/serviceActor" }] },
+    "environmentScope": { "type": "string", "enum": ["LOCAL", "NON_PROD", "PREPROD"] },
+    "correlationId": { "type": "string", "minLength": 8, "maxLength": 256 }
+  }
+}

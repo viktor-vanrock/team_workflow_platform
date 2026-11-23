@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "feature-008-development-scanner-database",
+  "version": "2026.09.03",
+  "publishedAt": "2026-09-03T21:49:12.495Z",
+  "evidenceMode": "DEVELOPMENT_MOCKS",
+  "coverage": ["DEPENDENCY_ADAPTER", "IMAGE_ADAPTER"]
+}

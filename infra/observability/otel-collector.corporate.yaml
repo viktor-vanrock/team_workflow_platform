@@ -1,0 +1,38 @@
+# Merge after otel-collector.yaml. All certificate files are mounted by the
+# approved deployment; absence prevents startup. The debug exporter is unused.
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        tls:
+          cert_file: /run/otel/server.crt
+          key_file: /run/otel/server.key
+          client_ca_file: /run/otel/workloads-ca.crt
+      http:
+        tls:
+          cert_file: /run/otel/server.crt
+          key_file: /run/otel/server.key
+          client_ca_file: /run/otel/workloads-ca.crt
+exporters:
+  otlphttp/secured:
+    endpoint: ${env:AWP_TELEMETRY_BACKEND_ORIGIN}
+    tls:
+      ca_file: /run/otel/backend-ca.crt
+      cert_file: /run/otel/exporter.crt
+      key_file: /run/otel/exporter.key
+    timeout: 5s
+    retry_on_failure:
+      enabled: true
+      initial_interval: 1s
+      max_interval: 5s
+      max_elapsed_time: 15s
+    sending_queue:
+      enabled: true
+      num_consumers: 2
+      queue_size: 128
+service:
+  pipelines:
+    traces:
+      exporters: [otlphttp/secured]
+    metrics:
+      exporters: [otlphttp/secured]

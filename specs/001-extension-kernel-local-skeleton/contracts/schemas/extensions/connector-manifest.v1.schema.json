@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:extensions:connector-manifest:v1",
+  "title": "Connector Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "requires",
+    "connectorType",
+    "runtimeComponentRef",
+    "connectionSchemaRef",
+    "profileSchemaRef",
+    "implements",
+    "webhookContracts",
+    "conformanceSuiteRefs"
+  ],
+  "properties": {
+    "apiVersion": { "const": "awp.platform/v1" },
+    "kind": { "const": "Connector" },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "displayName"],
+      "properties": {
+        "key": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "version": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 }
+      }
+    },
+    "requires": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coreContracts", "connectorSdk"],
+      "properties": {
+        "coreContracts": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVerRange" },
+        "connectorSdk": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVerRange" }
+      }
+    },
+    "connectorType": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "runtimeComponentRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/ComponentRef" },
+    "connectionSchemaRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SchemaRef" },
+    "profileSchemaRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SchemaRef" },
+    "implements": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "capabilityKey",
+          "exactContractVersions",
+          "operations",
+          "supportedIdempotencyStrategies",
+          "supportedConfirmationModes",
+          "handlerComponentRef"
+        ],
+        "properties": {
+          "capabilityKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+          "exactContractVersions": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" }
+          },
+          "operations": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" }
+          },
+          "supportedIdempotencyStrategies": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": ["NATIVE_KEY", "NATURAL_KEY_LOOKUP", "RECONCILIATION"]
+            }
+          },
+          "supportedConfirmationModes": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": ["SYNC_RECEIPT", "READ_BACK", "WEBHOOK", "RECONCILIATION"]
+            }
+          },
+          "handlerComponentRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/ComponentRef" }
+        }
+      }
+    },
+    "webhookContracts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["eventType", "payloadVersion", "payloadSchemaRef"],
+        "properties": {
+          "eventType": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+          "payloadVersion": { "type": "integer", "minimum": 1 },
+          "payloadSchemaRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SchemaRef" }
+        }
+      }
+    },
+    "conformanceSuiteRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/ComponentRef" }
+    }
+  }
+}

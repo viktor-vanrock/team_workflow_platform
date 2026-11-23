@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:intake-draft-validation-completed:v1",
+  "title": "Intake Draft Validation Completed Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "revisionId",
+    "contentHash",
+    "validation",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "revisionId": {
+      "$ref": "#/$defs/id"
+    },
+    "contentHash": {
+      "$ref": "#/$defs/digest"
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rulesRef",
+        "inputHash",
+        "state",
+        "blockers"
+      ],
+      "properties": {
+        "rulesRef": {
+          "$ref": "#/$defs/versionedHashRef"
+        },
+        "inputHash": {
+          "$ref": "#/$defs/digest"
+        },
+        "state": {
+          "enum": [
+            "VALID",
+            "INCOMPLETE",
+            "INVALID"
+          ]
+        },
+        "blockers": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      }
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "version",
+        "hash"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+        },
+        "hash": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    }
+  }
+}

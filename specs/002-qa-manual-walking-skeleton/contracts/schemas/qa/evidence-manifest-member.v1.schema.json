@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:evidence-manifest-member:v1",
+  "title": "Immutable Evidence Manifest Member Snapshot",
+  "description": "Signed metadata snapshot. availabilityAtSigning is historical and never follows the mutable current availability projection of EvidenceArtifactLink.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "evidenceManifestMemberId", "sourceEvidenceArtifactLinkId", "workspaceId", "projectId", "workItemId", "sessionId", "artifactRef", "owner", "mediaType", "sizeBytes", "availabilityAtSigning", "finalizedAt", "capturedBy", "capturedAt", "provenance", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "evidenceManifestMemberId": { "type": "string", "format": "uuid" },
+    "sourceEvidenceArtifactLinkId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "artifactRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ArtifactRef" },
+    "displayLabel": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ownerType", "ownerId"],
+      "properties": {
+        "ownerType": { "type": "string", "enum": ["SESSION", "PLAN_ITEM", "ATTEMPT", "OBSERVATION", "FINDING"] },
+        "ownerId": { "type": "string", "format": "uuid" }
+      }
+    },
+    "mediaType": { "type": "string", "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$", "maxLength": 127 },
+    "sizeBytes": { "type": "integer", "minimum": 1 },
+    "availabilityAtSigning": { "const": "AVAILABLE" },
+    "finalizedAt": { "type": "string", "format": "date-time" },
+    "capturedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "captureMethod"],
+      "properties": {
+        "source": { "type": "string", "enum": ["MANUAL_UPLOAD", "SCREENSHOT", "LOG_EXPORT", "EXTERNAL_REFERENCE"] },
+        "captureMethod": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+  }
+}

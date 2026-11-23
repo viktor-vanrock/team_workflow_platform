@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "findingReviewRevisionId": "57575757-5757-4757-8757-575757575758",
+  "version": 1,
+  "stage": "FROZEN",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "findingId": "58585858-5858-4858-8858-585858585858",
+  "classification": "DUPLICATE",
+  "severity": "MEDIUM",
+  "summary": "Observed behavior matches an existing tracked defect",
+  "affectedTargetHash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "classificationActor": {
+    "type": "HUMAN",
+    "principalId": "77777777-7777-4777-8777-777777777777",
+    "issuer": "https://id.example.test",
+    "subject": "qa-executor-1"
+  },
+  "classificationReason": "The same root cause and affected target are already tracked",
+  "classificationAt": "2026-08-27T12:17:00Z",
+  "dispositionDecision": "DUPLICATE",
+  "dispositionActor": {
+    "type": "HUMAN",
+    "principalId": "77777777-7777-4777-8777-777777777777",
+    "issuer": "https://id.example.test",
+    "subject": "qa-executor-1"
+  },
+  "dispositionAt": "2026-08-27T12:18:00Z",
+  "frozenAt": "2026-08-27T12:19:00Z",
+  "duplicateDefectRef": {
+    "kind": "defect",
+    "id": "DEF-41",
+    "version": "7",
+    "contentHash": "sha256:5959595959595959595959595959595959595959595959595959595959595959"
+  },
+  "activeMembershipSetHash": "sha256:5353535353535353535353535353535353535353535353535353535353535353",
+  "observationMembershipIds": ["54545454-5454-4454-8454-545454545454"],
+  "evidenceRefHash": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+  "policyRef": {
+    "key": "qa.finding-review",
+    "version": "1.0.0",
+    "contentHash": "sha256:5656565656565656565656565656565656565656565656565656565656565656"
+  },
+  "contentHash": "sha256:5757575757575757575757575757575757575757575757575757575757575758"
+}

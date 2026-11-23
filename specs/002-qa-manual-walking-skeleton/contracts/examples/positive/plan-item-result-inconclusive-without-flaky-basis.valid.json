@@ -1,0 +1,14 @@
+{
+  "expectedPreviousResultRevisionRef": null,
+  "expectedAttemptSetHash": "sha256:4747474747474747474747474747474747474747474747474747474747474747",
+  "expectedMaximumAttemptNo": 1,
+  "expectedObservationSetHash": "sha256:6969696969696969696969696969696969696969696969696969696969696969",
+  "expectedObservationCount": 1,
+  "reviewFlags": [
+    "FLAKY_SUSPECTED"
+  ],
+  "result": "INCONCLUSIVE",
+  "actualOutcome": "The current execution cannot establish a conclusive assertion.",
+  "decisionReason": "US3 records the suspected flaky but inconclusive result without depending on a future Finding freeze.",
+  "artifactIds": ["99999999-9999-4999-8999-999999999999"]
+}

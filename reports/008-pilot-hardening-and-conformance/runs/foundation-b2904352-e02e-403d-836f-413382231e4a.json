@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "foundation-b2904352-e02e-403d-836f-413382231e4a",
+  "gate": "foundation",
+  "status": "PASS",
+  "deploymentProfile": "local",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": [
+      "fixture-project-web"
+    ]
+  },
+  "startedAt": "2026-09-04T00:21:31.477Z",
+  "finishedAt": "2026-09-04T00:23:47.423Z",
+  "fingerprints": {
+    "source": "sha256:1d3578c7c768990a5e92a6e3a00a975396b74ef69afe7dbf033a9b2f154d71ee",
+    "contracts": "sha256:8bfe61cdd47987651be74e8dc313dc28ba9614eb46c2e23ddcb7862a7e429025",
+    "migrations": "sha256:b6d43d5e7d78e25e0d59cc8383684acec301b12b69aa2a2dfba6ab813a204a1a",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:5e423d2ce4925362fef5e0f4238a059c652fd75e2170768a44a03efb08211415",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:a0f4cfe336a21bb9e6fcafbbd8e7f937433966342c6a39d1348a1512e717c251"
+  },
+  "executorIdentity": "local-cli",
+  "checks": [
+    {
+      "id": "entry-and-published-history",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/entry-and-published-history.json",
+          "sha256": "sha256:e124893a5b8ad1338449a26d6fbdb3470b0122a32c08ce3b31cb9227fb0f7284"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "boundaries-and-databases",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/boundaries-and-databases.json",
+          "sha256": "sha256:1e312ce8a1ace62ab7efa4bbcd1c4b2c77d56524daa3a20a7c0025c6ea2e45cd"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "onboarding-regression",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/onboarding-regression.json",
+          "sha256": "sha256:4cac4a42a66cc8b496cfb42cd9193799919d6cfd396a55037e59f404ce30a072"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "qa-http-regression",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/qa-http-regression.json",
+          "sha256": "sha256:6d3c90fe7e497af13924031140d35acb3d8db61a13adf1d0d684a53411ecf8bc"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "typecheck",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/typecheck.json",
+          "sha256": "sha256:7ab8487e14bfe108236bdcd85c282a19a004cc2aca4eff62c51991e9365b95f5"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "worker-typecheck",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/worker-typecheck.json",
+          "sha256": "sha256:2b12ac0705ad4b5754ade9afe32c2b0518190dd79b4807b491962596bf69380d"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "api-typecheck",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/api-typecheck.json",
+          "sha256": "sha256:ec90e15b79b37052ac9035dac43fb4a54bff2bbd3d041915fc8bfd0e9174a378"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "telemetry-regression",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/telemetry-regression.json",
+          "sha256": "sha256:b1e31936fd60f75e650511fec84a696ce345a2f3c15d2ef6325b4fd418527e30"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "schema-registry",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/schema-registry.json",
+          "sha256": "sha256:35a96adf243d551eb6c748648203c5ce5c94b75a8b79b10ab249013d319fb068"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "architecture",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/architecture.json",
+          "sha256": "sha256:56297f872941631c9ddfd341d34d9905a409c78336c05855296aac248f714441"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "lint",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/lint.json",
+          "sha256": "sha256:8d178db2a2edd8f3e39f0a75f47623cb8535134f17f71709b246145d14fc14ac"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "unchanged-source",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/foundation-b2904352-e02e-403d-836f-413382231e4a/unchanged-source.json",
+          "sha256": "sha256:e02d0803b92c87f8e6c88046a8b529d62fe2cde77d7025e2ef6975d2f2405587"
+        }
+      ],
+      "reasonCodes": []
+    }
+  ],
+  "prerequisites": [],
+  "reasonCodes": []
+}

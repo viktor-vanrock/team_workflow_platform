@@ -1,0 +1,43 @@
+[
+  {
+    "attemptRef": {
+      "id": "66666666-6666-4666-8666-666666666666",
+      "contentHash": "sha256:4646464646464646464646464646464646464646464646464646464646464646"
+    },
+    "attemptNo": 1,
+    "technicalResult": "ASSERTION_FAILED",
+    "actor": {
+      "type": "HUMAN",
+      "principalId": "77777777-7777-4777-8777-777777777777",
+      "issuer": "https://id.example.test",
+      "subject": "qa-executor-1"
+    },
+    "startedAt": "2026-08-27T12:10:00Z",
+    "endedAt": "2026-08-27T12:12:00Z",
+    "observationRefs": [
+      {
+        "id": "51515151-5151-4151-8151-515151515151",
+        "contentHash": "sha256:5151515151515151515151515151515151515151515151515151515151515151"
+      }
+    ],
+    "evidenceLinkRefs": []
+  },
+  {
+    "attemptRef": {
+      "id": "67676767-6767-4767-8767-676767676767",
+      "contentHash": "sha256:6767676767676767676767676767676767676767676767676767676767676767"
+    },
+    "attemptNo": 2,
+    "technicalResult": "PASS",
+    "actor": {
+      "type": "HUMAN",
+      "principalId": "77777777-7777-4777-8777-777777777777",
+      "issuer": "https://id.example.test",
+      "subject": "qa-executor-1"
+    },
+    "startedAt": "2026-08-27T12:13:00Z",
+    "endedAt": "2026-08-27T12:15:00Z",
+    "observationRefs": [],
+    "evidenceLinkRefs": []
+  }
+]

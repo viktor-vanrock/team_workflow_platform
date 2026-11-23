@@ -1,0 +1,20 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/durable-command-delivery-postgres.spec.ts",
+    "tests/unit/005/gitlab-reconciliation.spec.ts",
+    "tests/contract/005/gitlab-connector-conformance.spec.ts",
+    "tests/integration/004/us4-notification-recovery.spec.ts",
+    "tests/e2e/004-us4-notification-outage.spec.ts",
+    "tests/integration/003/jira-effect-persistence.spec.ts",
+    "tests/contract/003/jira-request-create-http-port.spec.ts",
+    "tests/integration/migrations/003-migration-registry.spec.ts",
+    "tests/integration/005/us2-trigger-once.spec.ts",
+    "tests/integration/005/us2-trigger-reconciliation.spec.ts",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 0,
+  "durationMs": 22694,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  10 passed (10)\n      Tests  37 passed (37)\n   Start at  00:04:36\n   Duration  22.18s (transform 2.16s, setup 0ms, import 9.69s, tests 11.66s, environment 1ms)\n\n"
+}

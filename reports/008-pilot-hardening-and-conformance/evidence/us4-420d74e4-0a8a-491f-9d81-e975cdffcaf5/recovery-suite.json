@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/008/isolated-restore.spec.ts",
+    "tests/integration/008/post-backup-effects.spec.ts",
+    "tests/integration/008/restored-evidence.spec.ts",
+    "tests/unit/008/recovery-pitr-and-measurements.spec.ts",
+    "tests/unit/008/recovery-evidence-api.spec.ts",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 0,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  5 passed (5)\n      Tests  19 passed (19)\n   Start at  03:59:52\n   Duration  5.14s (transform 615ms, setup 0ms, import 1.23s, tests 3.49s, environment 0ms)\n\n"
+}

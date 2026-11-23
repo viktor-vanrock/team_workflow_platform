@@ -1,0 +1,11 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/security/008",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 0,
+  "durationMs": 18021,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  10 passed (10)\n      Tests  100 passed (100)\n   Start at  05:14:21\n   Duration  17.42s (transform 4.06s, setup 0ms, import 12.08s, tests 20.94s, environment 1ms)\n\n"
+}

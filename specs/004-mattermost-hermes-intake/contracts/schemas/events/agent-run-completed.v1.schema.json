@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:agent-run-completed:v1",
+  "title": "Agent Run Completed Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "outputSchemaRef",
+    "outputHash",
+    "resultRef",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "const": "COMPLETED"
+    },
+    "outputSchemaRef": {
+      "$ref": "#/$defs/schemaReference"
+    },
+    "outputHash": {
+      "$ref": "#/$defs/digest"
+    },
+    "resultRef": {
+      "$ref": "#/$defs/ref"
+    },
+    "fallbackReasonCode": {
+      "enum": [
+        "MODEL_DISABLED",
+        "MODEL_UNAVAILABLE",
+        "MODEL_TIMEOUT",
+        "MODEL_RATE_LIMITED",
+        "MODEL_INVALID_OUTPUT",
+        "MODEL_POLICY_DENIED",
+        "LOW_CONFIDENCE",
+        "CONTRADICTORY_EVIDENCE"
+      ]
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "schemaReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:awp:schemas:[A-Za-z0-9:._-]+$"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    }
+  }
+}

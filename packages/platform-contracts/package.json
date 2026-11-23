@@ -1,0 +1,14 @@
+{
+  "name": "@awp/platform-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./canonical-hash": "./src/canonical-hash.ts"
+  },
+  "dependencies": {
+    "ajv": "catalog:",
+    "typebox": "catalog:"
+  }
+}

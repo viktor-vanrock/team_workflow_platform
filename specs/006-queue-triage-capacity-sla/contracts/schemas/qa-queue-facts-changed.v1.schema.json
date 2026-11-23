@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:qa-queue-facts-changed:v1",
+  "title": "QaQueueFactsChanged v1",
+  "$comment": "Immutable Project-scoped invalidation emitted after the QA queue-fact head transaction commits. Composed semantic validation requires changedFactKinds to equal the distinct factKind set in changedFactRefs and requires changedFactRefs to be canonically ordered. Consumers use the refs only to invalidate and re-read current authorized local facts; this payload contains no source content and grants no authorization.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "invalidationId",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "changedFactKinds",
+    "changedFactRefs",
+    "occurredAt",
+    "semanticHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "qa-queue-facts-changed@1.0.0" },
+    "invalidationId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "workItemId": { "$ref": "#/$defs/id" },
+    "changedFactKinds": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/factKind" }
+    },
+    "changedFactRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/exactFactRef" }
+    },
+    "occurredAt": { "$ref": "#/$defs/timestamp" },
+    "semanticHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "factKind": {
+      "enum": [
+        "READINESS",
+        "SESSION",
+        "AUTOMATION",
+        "VERDICT",
+        "REQUIRED_SESSION_PLAN"
+      ]
+    },
+    "exactFactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factKind",
+        "factId",
+        "revision",
+        "semanticHash"
+      ],
+      "properties": {
+        "factKind": { "$ref": "#/$defs/factKind" },
+        "factId": { "$ref": "#/$defs/id" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

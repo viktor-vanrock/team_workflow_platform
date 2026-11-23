@@ -1,0 +1,14 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/unit/008",
+    "tests/integration/008",
+    "tests/integration/security/008",
+    "tests/contract/008",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 1,
+  "durationMs": 202225,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n ❯ tests/integration/008/completion-runtime.spec.ts (10 tests | 1 failed) 67545ms\n     × recovers a lost HTTP write response by read-back only, with one external effect after restart 6779ms\n{\"timestamp\":\"2026-09-04T10:36:26.771Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"3e97efe7-c1b4-42b1-8325-7bc1340fa86f\",\"projectId\":\"e6a2ddc2-1b61-47db-9d83-4967f7867bc1\",\"correlationId\":\"14d955a2-9657-40b0-a055-01fb2ed7be19\",\"causationId\":\"a5eb1337-988e-4636-94f5-5f4eec3b5bbd\",\"operation\":\"http.request\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":6}\n{\"timestamp\":\"2026-09-04T10:36:26.803Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"worker\",\"workspaceId\":\"3e97efe7-c1b4-42b1-8325-7bc1340fa86f\",\"projectId\":\"e6a2ddc2-1b61-47db-9d83-4967f7867bc1\",\"correlationId\":\"14d955a2-9657-40b0-a055-01fb2ed7be19\",\"causationId\":\"a5eb1337-988e-4636-94f5-5f4eec3b5bbd\",\"operation\":\"worker.commands\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":0}\n\n Test Files  1 failed | 49 passed (50)\n      Tests  1 failed | 285 passed (286)\n   Start at  14:33:35\n   Duration  201.43s (transform 6.38s, setup 0ms, import 57.06s, tests 339.42s, environment 3ms)\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/integration/008/completion-runtime.spec.ts > completion publication/approval postgres:17.7-bookworm > recovers a lost HTTP write response by read-back only, with one external effect after restart\nTypeError: Cannot read properties of undefined (reading 'outbox')\n ❯ tests/integration/008/completion-runtime.spec.ts:146:46\n\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+}

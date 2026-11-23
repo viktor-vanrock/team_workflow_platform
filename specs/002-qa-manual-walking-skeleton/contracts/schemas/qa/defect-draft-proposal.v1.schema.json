@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:defect-draft-proposal:v1",
+  "title": "Non-authoritative QA Defect Draft Wording Proposal",
+  "description": "Optional wording-only assistant output over one exact frozen Finding review. It cannot approve, publish, mutate a Finding or create a DefectDraft; a human must explicitly accept the exact proposalHash through the draft-create operation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "proposalId", "workspaceId", "projectId", "workItemId", "findingId", "frozenFindingReviewRef", "source", "title", "description", "stepsToReproduce", "expectedOutcome", "actualOutcome", "promptTemplateRef", "proposalHash", "generatedAt", "expiresAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "proposalId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "findingId": { "type": "string", "format": "uuid" },
+    "frozenFindingReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "source": { "type": "string", "enum": ["MODEL_PROPOSAL", "DETERMINISTIC_FALLBACK"] },
+    "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 20000 },
+    "stepsToReproduce": { "type": "array", "minItems": 1, "maxItems": 100, "items": { "type": "string", "minLength": 1, "maxLength": 2000 } },
+    "expectedOutcome": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "actualOutcome": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "modelRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+    "fallbackReasonCode": { "type": "string", "enum": ["MODEL_UNSET", "MODEL_CONFIGURATION_INVALID", "MODEL_TIMEOUT", "MODEL_UNAVAILABLE", "MODEL_OUTPUT_INVALID"] },
+    "promptTemplateRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "proposalHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "source": { "const": "MODEL_PROPOSAL" } }, "required": ["source"] },
+      "then": { "required": ["modelRef"], "not": { "required": ["fallbackReasonCode"] } },
+      "else": { "required": ["fallbackReasonCode"], "not": { "required": ["modelRef"] } }
+    }
+  ]
+}

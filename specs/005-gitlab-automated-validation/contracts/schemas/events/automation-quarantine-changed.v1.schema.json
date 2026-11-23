@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:events:automation-quarantine-changed:v1",
+  "title": "Automation Quarantine Changed Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "quarantineId",
+    "quarantineRevisionId",
+    "revisionNo",
+    "subject",
+    "action",
+    "effectiveState",
+    "ownerPrincipalId",
+    "reason",
+    "evidenceRefs",
+    "evidenceSetHash",
+    "policyRef",
+    "policyHash",
+    "actorPrincipalId",
+    "authorizationBasisHash",
+    "effectiveAt",
+    "contentHash"
+  ],
+  "properties": {
+    "quarantineId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "quarantineRevisionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "revisionNo": { "type": "integer", "minimum": 1 },
+    "previousRevisionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "previousRevisionHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "subject": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/automationQuarantineSubject" },
+    "action": { "enum": ["ACTIVATE", "LIFT"] },
+    "effectiveState": { "enum": ["ACTIVE", "INACTIVE"] },
+    "ownerPrincipalId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "reason": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+    },
+    "evidenceSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "policyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "policyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "actorPrincipalId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "authorizationBasisHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "expiresAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "effectiveAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "contentHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "revisionNo": { "const": 1 } },
+        "required": ["revisionNo"]
+      },
+      "then": {
+        "properties": {
+          "previousRevisionId": false,
+          "previousRevisionHash": false
+        }
+      },
+      "else": {
+        "required": ["previousRevisionId", "previousRevisionHash"],
+        "properties": {
+          "previousRevisionId": {},
+          "previousRevisionHash": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "action": { "const": "ACTIVATE" } },
+        "required": ["action"]
+      },
+      "then": {
+        "required": ["expiresAt"],
+        "properties": { "effectiveState": { "const": "ACTIVE" } }
+      },
+      "else": {
+        "properties": {
+          "effectiveState": { "const": "INACTIVE" },
+          "expiresAt": false
+        }
+      }
+    }
+  ]
+}

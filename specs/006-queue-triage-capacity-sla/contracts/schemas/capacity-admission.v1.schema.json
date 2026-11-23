@@ -1,0 +1,993 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:capacity-admission:v1",
+  "title": "CapacityAdmission v1",
+  "$comment": "Immutable public admission decision. Global capacity state/head versions/counts/set hashes and full authorization-basis hashes are deliberately absent because even bounded state changes could reveal hidden Project activity. before/after contain only the exact authorized-scope projection ref and public policy mode. The operation-local outcome/violations disclose only why this authorized target mutation did or did not occur. authorizationScopeWitnessHash covers only the target-Project authorization outcome. Mutation refs are a closed Project-safe allowlist correlated to activityKind: manual start/resume writes Session+claim, automated launch writes Session+reservation, automated review conversion writes Session+reservation+claim, automated release writes Session+reservation, external Jira reconciliation writes claims only, and SET/CLEAR/EXPIRE EXPEDITE writes exactly one Work Item queue-control revision. For a consumed override, composed validation resolves actionCandidateRef and approvalRef and requires: candidate actionId=actionCandidateRef.sourceId, publicIntentHash=actionCandidateRef.semanticHash, candidate actionKind/effect/target equal the admission override declarations and Work Item, and the Approval v2 actionId/target SchemaBoundValue/targetHash/payloadHash bind that same exact candidate. No private actionHash is serialized. Exact global witnesses and complete authorization bases remain internal to the admission transaction and stored action record. NON_DISCRETIONARY_OVERFLOW records an unavoidable fact; it is not approval.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "admissionDecisionId",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "request",
+    "expectedState",
+    "before",
+    "outcome",
+    "violatedConstraints",
+    "effect",
+    "override",
+    "after",
+    "reasonCode",
+    "decidedAt",
+    "recordedAt",
+    "correlationId",
+    "causationId",
+    "semanticHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "capacity-admission@1.0.0" },
+    "admissionDecisionId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "workItemId": { "$ref": "#/$defs/id" },
+    "sessionId": { "$ref": "#/$defs/id" },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["idempotencyKeyHash", "requestHash", "activityKind", "actor", "authorizationScopeWitnessHash"],
+      "properties": {
+        "idempotencyKeyHash": { "$ref": "#/$defs/hash" },
+        "requestHash": { "$ref": "#/$defs/hash" },
+        "activityKind": {
+          "enum": [
+            "MANUAL_SESSION_START",
+            "MANUAL_SESSION_RESUME",
+            "AUTOMATED_SESSION_LAUNCH",
+            "AUTOMATED_RESULT_APPLY",
+            "EXTERNAL_JIRA_RECONCILIATION",
+            "SET_EXPEDITE",
+            "CLEAR_EXPEDITE",
+            "EXPIRE_EXPEDITE"
+          ]
+        },
+        "automatedResultPath": {
+          "enum": ["CONVERT_RESERVATION_TO_REVIEW_CLAIM", "RELEASE_RESERVATION"]
+        },
+        "actor": { "$ref": "#/$defs/actor" },
+        "authorizationScopeWitnessHash": {
+          "description": "Hash of {workspaceId, projectId, requiredPermission, classificationDecision}; it excludes membership/entitlement/role record IDs and every other Project.",
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "expectedState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyFacetRef",
+        "expectedQueueControlVersion",
+        "operationalProjectionRef",
+        "qaSourceSetHash"
+      ],
+      "properties": {
+        "policyFacetRef": {
+          "description": "Project-scoped public policy facet copied from the authorized read. The internal transaction separately pins the full Workspace policy revision.",
+          "$ref": "#/$defs/versionedContentRef"
+        },
+        "expectedQueueControlVersion": { "type": "integer", "minimum": 0 },
+        "sessionRef": { "$ref": "#/$defs/sessionRevisionRef" },
+        "operationalProjectionRef": { "$ref": "#/$defs/operationalProjectionRevisionRef" },
+        "qaSourceSetHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "before": { "$ref": "#/$defs/capacityWitness" },
+    "outcome": {
+      "enum": ["ADMITTED", "DENIED", "ADMITTED_WITH_EXACT_OVERRIDE", "NON_DISCRETIONARY_APPLIED", "NON_DISCRETIONARY_OVERFLOW", "NO_CHANGE"]
+    },
+    "violatedConstraints": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "HARD_WIP",
+          "EXPEDITE_SINGLETON",
+          "SOURCE_STALE",
+          "SOURCE_CONFLICT",
+          "CAPABILITY_MISSING",
+          "APPROVAL_REQUIRED",
+          "APPROVAL_STALE",
+          "PROJECT_SOFT_LIMIT",
+          "RESERVATION_PRESSURE",
+          "OVER_CAPACITY_EXTERNAL"
+        ]
+      }
+    },
+    "effect": { "$ref": "#/$defs/effect" },
+    "override": { "$ref": "#/$defs/override" },
+    "after": { "$ref": "#/$defs/capacityWitness" },
+    "reasonCode": { "$ref": "#/$defs/reasonCode" },
+    "decidedAt": { "$ref": "#/$defs/timestamp" },
+    "recordedAt": { "$ref": "#/$defs/timestamp" },
+    "correlationId": { "$ref": "#/$defs/id" },
+    "causationId": { "$ref": "#/$defs/id" },
+    "semanticHash": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "request": {
+            "properties": {
+              "activityKind": {
+                "enum": ["MANUAL_SESSION_START", "MANUAL_SESSION_RESUME", "AUTOMATED_SESSION_LAUNCH", "SET_EXPEDITE", "CLEAR_EXPEDITE"]
+              }
+            },
+            "required": ["activityKind"]
+          }
+        },
+        "required": ["request"]
+      },
+      "then": {
+        "properties": {
+          "request": {
+            "properties": {
+              "actor": {
+                "properties": { "kind": { "const": "HUMAN" } },
+                "required": ["kind"]
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "request": {
+            "properties": {
+              "actor": {
+                "properties": { "kind": { "const": "SERVICE" } },
+                "required": ["kind"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["outcome"],
+        "properties": { "outcome": { "enum": ["ADMITTED", "DENIED", "ADMITTED_WITH_EXACT_OVERRIDE"] } }
+      },
+      "then": {
+        "properties": {
+          "request": {
+            "properties": { "activityKind": { "enum": ["MANUAL_SESSION_START", "MANUAL_SESSION_RESUME", "AUTOMATED_SESSION_LAUNCH", "SET_EXPEDITE", "CLEAR_EXPEDITE"] } },
+            "required": ["activityKind"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": { "const": "ADMITTED_WITH_EXACT_OVERRIDE" },
+          "request": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "const": "SET_EXPEDITE" } }
+          }
+        },
+        "required": ["outcome", "request"]
+      },
+      "then": {
+        "properties": {
+          "violatedConstraints": {
+            "items": { "enum": ["EXPEDITE_SINGLETON", "PROJECT_SOFT_LIMIT", "RESERVATION_PRESSURE"] },
+            "contains": { "const": "EXPEDITE_SINGLETON" }
+          },
+          "override": {
+            "properties": {
+              "actionKind": { "const": "EXPEDITE_CAPACITY_OVERRIDE" },
+              "effectKind": { "const": "ALLOW_EXPEDITE_CAPACITY" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": { "const": "ADMITTED_WITH_EXACT_OVERRIDE" },
+          "request": {
+            "required": ["activityKind"],
+            "properties": {
+              "activityKind": { "enum": ["MANUAL_SESSION_START", "MANUAL_SESSION_RESUME", "AUTOMATED_SESSION_LAUNCH"] }
+            }
+          }
+        },
+        "required": ["outcome", "request"]
+      },
+      "then": {
+        "properties": {
+          "violatedConstraints": {
+            "items": { "enum": ["HARD_WIP", "PROJECT_SOFT_LIMIT", "RESERVATION_PRESSURE"] },
+            "contains": { "const": "HARD_WIP" }
+          },
+          "override": {
+            "properties": {
+              "actionKind": { "const": "WIP_ADMISSION_OVERRIDE" },
+              "effectKind": { "const": "ALLOW_WIP_ADMISSION" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "request": {
+            "properties": { "activityKind": { "enum": ["EXTERNAL_JIRA_RECONCILIATION", "SET_EXPEDITE", "CLEAR_EXPEDITE", "EXPIRE_EXPEDITE"] } },
+            "required": ["activityKind"]
+          }
+        },
+        "required": ["request"]
+      },
+      "then": {
+        "properties": {
+          "sessionId": false,
+          "expectedState": { "properties": { "sessionRef": false } }
+        }
+      },
+      "else": {
+        "required": ["sessionId"],
+        "properties": { "expectedState": { "required": ["sessionRef"] } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "request": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "const": "AUTOMATED_RESULT_APPLY" } }
+          }
+        },
+        "required": ["request"]
+      },
+      "then": {
+        "properties": { "request": { "required": ["automatedResultPath"] } }
+      },
+      "else": {
+        "properties": { "request": { "properties": { "automatedResultPath": false } } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "before": {
+            "required": ["policyMode"],
+            "properties": { "policyMode": { "const": "MEASURE_ONLY" } }
+          }
+        },
+        "required": ["before"]
+      },
+      "then": {
+        "properties": {
+          "after": {
+            "required": ["policyMode"],
+            "properties": { "policyMode": { "const": "MEASURE_ONLY" } }
+          },
+          "violatedConstraints": {
+            "items": {
+              "enum": [
+                "SOURCE_STALE",
+                "SOURCE_CONFLICT",
+                "CAPABILITY_MISSING",
+                "APPROVAL_REQUIRED",
+                "APPROVAL_STALE",
+                "PROJECT_SOFT_LIMIT",
+                "RESERVATION_PRESSURE"
+              ]
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "after": {
+            "required": ["policyMode"],
+            "properties": { "policyMode": { "const": "ENFORCED" } }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["outcome"],
+        "properties": { "outcome": { "const": "ADMITTED_WITH_EXACT_OVERRIDE" } }
+      },
+      "then": {
+        "properties": {
+          "request": {
+            "properties": {
+              "activityKind": { "enum": ["MANUAL_SESSION_START", "MANUAL_SESSION_RESUME", "AUTOMATED_SESSION_LAUNCH", "SET_EXPEDITE"] }
+            },
+            "required": ["activityKind"]
+          },
+          "before": {
+            "properties": { "policyMode": { "const": "ENFORCED" } },
+            "required": ["policyMode"]
+          },
+          "after": {
+            "properties": { "policyMode": { "const": "ENFORCED" } },
+            "required": ["policyMode"]
+          },
+          "violatedConstraints": {
+            "items": {
+              "enum": ["HARD_WIP", "EXPEDITE_SINGLETON", "PROJECT_SOFT_LIMIT", "RESERVATION_PRESSURE"]
+            },
+            "contains": { "enum": ["HARD_WIP", "EXPEDITE_SINGLETON"] }
+          },
+          "override": {
+            "properties": { "state": { "const": "CONSUMED" } },
+            "required": ["state"]
+          },
+          "effect": {
+            "properties": { "state": { "const": "COMMITTED" } },
+            "required": ["state"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["outcome"],
+        "properties": { "outcome": { "const": "NON_DISCRETIONARY_APPLIED" } }
+      },
+      "then": {
+        "properties": {
+          "request": {
+            "properties": {
+              "activityKind": { "enum": ["AUTOMATED_RESULT_APPLY", "EXTERNAL_JIRA_RECONCILIATION", "EXPIRE_EXPEDITE"] },
+              "actor": {
+                "properties": { "kind": { "const": "SERVICE" } },
+                "required": ["kind"]
+              }
+            },
+            "required": ["activityKind"]
+          },
+          "violatedConstraints": {
+            "items": { "enum": ["PROJECT_SOFT_LIMIT", "RESERVATION_PRESSURE"] }
+          },
+          "override": {
+            "properties": { "state": { "const": "NOT_USED" } },
+            "required": ["state"]
+          },
+          "effect": {
+            "properties": { "state": { "const": "COMMITTED" } },
+            "required": ["state"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["outcome"],
+        "properties": { "outcome": { "const": "ADMITTED" } }
+      },
+      "then": {
+        "properties": {
+          "violatedConstraints": {
+            "items": { "enum": ["PROJECT_SOFT_LIMIT", "RESERVATION_PRESSURE"] }
+          },
+          "override": {
+            "properties": { "state": { "const": "NOT_USED" } },
+            "required": ["state"]
+          },
+          "effect": {
+            "properties": { "state": { "const": "COMMITTED" } },
+            "required": ["state"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["outcome"],
+        "properties": { "outcome": { "enum": ["DENIED", "NO_CHANGE"] } }
+      },
+      "then": {
+        "properties": {
+          "override": {
+            "properties": { "state": { "const": "NOT_USED" } },
+            "required": ["state"]
+          },
+          "effect": {
+            "properties": { "state": { "const": "NO_MUTATION" } },
+            "required": ["state"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["outcome"],
+        "properties": { "outcome": { "const": "NON_DISCRETIONARY_OVERFLOW" } }
+      },
+      "then": {
+        "properties": {
+          "request": {
+            "properties": {
+              "activityKind": { "enum": ["AUTOMATED_RESULT_APPLY", "EXTERNAL_JIRA_RECONCILIATION"] },
+              "actor": {
+                "properties": { "kind": { "const": "SERVICE" } },
+                "required": ["kind"]
+              }
+            }
+          },
+          "violatedConstraints": {
+            "items": {
+              "enum": ["HARD_WIP", "PROJECT_SOFT_LIMIT", "RESERVATION_PRESSURE", "OVER_CAPACITY_EXTERNAL"]
+            },
+            "contains": { "const": "OVER_CAPACITY_EXTERNAL" }
+          },
+          "override": {
+            "properties": { "state": { "const": "NOT_USED" } },
+            "required": ["state"]
+          },
+          "effect": {
+            "properties": { "state": { "const": "COMMITTED" } },
+            "required": ["state"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["outcome"],
+        "properties": { "outcome": { "const": "DENIED" } }
+      },
+      "then": {
+        "properties": {
+          "violatedConstraints": {
+            "minItems": 1,
+            "contains": {
+              "enum": [
+                "HARD_WIP",
+                "EXPEDITE_SINGLETON",
+                "SOURCE_STALE",
+                "SOURCE_CONFLICT",
+                "CAPABILITY_MISSING",
+                "APPROVAL_REQUIRED",
+                "APPROVAL_STALE"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["outcome"],
+        "properties": { "outcome": { "const": "NO_CHANGE" } }
+      },
+      "then": {
+        "properties": { "violatedConstraints": { "maxItems": 0 } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": { "const": "DENIED" },
+          "request": {
+            "required": ["activityKind"],
+            "properties": {
+              "activityKind": { "enum": ["MANUAL_SESSION_START", "MANUAL_SESSION_RESUME", "AUTOMATED_SESSION_LAUNCH"] }
+            }
+          }
+        },
+        "required": ["outcome", "request"]
+      },
+      "then": {
+        "properties": {
+          "violatedConstraints": {
+            "items": {
+              "enum": ["HARD_WIP", "SOURCE_STALE", "SOURCE_CONFLICT", "CAPABILITY_MISSING", "APPROVAL_REQUIRED", "APPROVAL_STALE", "PROJECT_SOFT_LIMIT", "RESERVATION_PRESSURE"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": { "const": "NON_DISCRETIONARY_OVERFLOW" },
+          "request": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "const": "AUTOMATED_RESULT_APPLY" } }
+          }
+        },
+        "required": ["outcome", "request"]
+      },
+      "then": {
+        "properties": {
+          "request": {
+            "properties": {
+              "automatedResultPath": { "const": "CONVERT_RESERVATION_TO_REVIEW_CLAIM" }
+            },
+            "required": ["automatedResultPath"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": { "const": "DENIED" },
+          "request": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "const": "SET_EXPEDITE" } }
+          }
+        },
+        "required": ["outcome", "request"]
+      },
+      "then": {
+        "properties": {
+          "violatedConstraints": {
+            "items": {
+              "enum": ["EXPEDITE_SINGLETON", "SOURCE_STALE", "SOURCE_CONFLICT", "CAPABILITY_MISSING", "APPROVAL_REQUIRED", "APPROVAL_STALE", "PROJECT_SOFT_LIMIT", "RESERVATION_PRESSURE"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": { "const": "DENIED" },
+          "request": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "const": "CLEAR_EXPEDITE" } }
+          }
+        },
+        "required": ["outcome", "request"]
+      },
+      "then": {
+        "properties": {
+          "violatedConstraints": {
+            "items": { "enum": ["SOURCE_STALE", "SOURCE_CONFLICT", "CAPABILITY_MISSING"] }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "request": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "enum": ["MANUAL_SESSION_START", "MANUAL_SESSION_RESUME"] } }
+          },
+          "effect": {
+            "required": ["state"],
+            "properties": { "state": { "const": "COMMITTED" } }
+          }
+        },
+        "required": ["request", "effect"]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "properties": {
+              "mutationRefs": {
+                "minItems": 2,
+                "maxItems": 2,
+                "uniqueItems": true,
+                "items": {
+                  "oneOf": [
+                    { "$ref": "#/$defs/qaSessionMutationRef" },
+                    { "$ref": "#/$defs/humanWipClaimMutationRef" }
+                  ]
+                },
+                "allOf": [
+                  { "contains": { "$ref": "#/$defs/qaSessionMutationRef" } },
+                  { "contains": { "$ref": "#/$defs/humanWipClaimMutationRef" } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "request": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "const": "AUTOMATED_SESSION_LAUNCH" } }
+          },
+          "effect": {
+            "required": ["state"],
+            "properties": { "state": { "const": "COMMITTED" } }
+          }
+        },
+        "required": ["request", "effect"]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "properties": {
+              "mutationRefs": {
+                "minItems": 2,
+                "maxItems": 2,
+                "uniqueItems": true,
+                "items": {
+                  "oneOf": [
+                    { "$ref": "#/$defs/qaSessionMutationRef" },
+                    { "$ref": "#/$defs/reviewReservationMutationRef" }
+                  ]
+                },
+                "allOf": [
+                  { "contains": { "$ref": "#/$defs/qaSessionMutationRef" } },
+                  { "contains": { "$ref": "#/$defs/reviewReservationMutationRef" } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "request": {
+            "required": ["activityKind", "automatedResultPath"],
+            "properties": {
+              "activityKind": { "const": "AUTOMATED_RESULT_APPLY" },
+              "automatedResultPath": { "const": "CONVERT_RESERVATION_TO_REVIEW_CLAIM" }
+            }
+          },
+          "effect": {
+            "required": ["state"],
+            "properties": { "state": { "const": "COMMITTED" } }
+          }
+        },
+        "required": ["request", "effect"]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "properties": {
+              "mutationRefs": {
+                "minItems": 3,
+                "maxItems": 3,
+                "uniqueItems": true,
+                "items": {
+                  "oneOf": [
+                    { "$ref": "#/$defs/qaSessionMutationRef" },
+                    { "$ref": "#/$defs/humanWipClaimMutationRef" },
+                    { "$ref": "#/$defs/reviewReservationMutationRef" }
+                  ]
+                },
+                "allOf": [
+                  { "contains": { "$ref": "#/$defs/qaSessionMutationRef" } },
+                  { "contains": { "$ref": "#/$defs/humanWipClaimMutationRef" } },
+                  { "contains": { "$ref": "#/$defs/reviewReservationMutationRef" } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "request": {
+            "required": ["activityKind", "automatedResultPath"],
+            "properties": {
+              "activityKind": { "const": "AUTOMATED_RESULT_APPLY" },
+              "automatedResultPath": { "const": "RELEASE_RESERVATION" }
+            }
+          },
+          "effect": {
+            "required": ["state"],
+            "properties": { "state": { "const": "COMMITTED" } }
+          }
+        },
+        "required": ["request", "effect"]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "properties": {
+              "mutationRefs": {
+                "minItems": 2,
+                "maxItems": 2,
+                "uniqueItems": true,
+                "items": {
+                  "oneOf": [
+                    { "$ref": "#/$defs/qaSessionMutationRef" },
+                    { "$ref": "#/$defs/reviewReservationMutationRef" }
+                  ]
+                },
+                "allOf": [
+                  { "contains": { "$ref": "#/$defs/qaSessionMutationRef" } },
+                  { "contains": { "$ref": "#/$defs/reviewReservationMutationRef" } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "request": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "const": "EXTERNAL_JIRA_RECONCILIATION" } }
+          },
+          "effect": {
+            "required": ["state"],
+            "properties": { "state": { "const": "COMMITTED" } }
+          }
+        },
+        "required": ["request", "effect"]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "properties": {
+              "mutationRefs": {
+                "uniqueItems": true,
+                "items": { "$ref": "#/$defs/humanWipClaimMutationRef" }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "request": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "enum": ["SET_EXPEDITE", "CLEAR_EXPEDITE", "EXPIRE_EXPEDITE"] } }
+          },
+          "effect": {
+            "required": ["state"],
+            "properties": { "state": { "const": "COMMITTED" } }
+          }
+        },
+        "required": ["request", "effect"]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "properties": {
+              "mutationRefs": {
+                "minItems": 1,
+                "maxItems": 1,
+                "uniqueItems": true,
+                "items": { "$ref": "#/$defs/workItemQueueControlMutationRef" }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "format": "uuid" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "reasonCode": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "versionValue": {
+      "oneOf": [
+        { "type": "integer", "minimum": 1 },
+        { "type": "string", "minLength": 1, "maxLength": 128 }
+      ]
+    },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "sessionRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QA_TEST_SESSION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "operationalProjectionRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash", "confirmedAt"],
+      "properties": {
+        "sourceType": { "const": "JIRA_OPERATIONAL_PROJECTION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "observedAt": { "$ref": "#/$defs/timestamp" },
+        "confirmedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "qaSessionMutationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QA_TEST_SESSION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "humanWipClaimMutationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "HUMAN_WIP_CLAIM_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "reviewReservationMutationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "REVIEW_CAPACITY_RESERVATION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "workItemQueueControlMutationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "WORK_ITEM_QUEUE_CONTROL_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "publicAdmissionMutationRef": {
+      "oneOf": [
+        { "$ref": "#/$defs/qaSessionMutationRef" },
+        { "$ref": "#/$defs/humanWipClaimMutationRef" },
+        { "$ref": "#/$defs/reviewReservationMutationRef" },
+        { "$ref": "#/$defs/workItemQueueControlMutationRef" }
+      ]
+    },
+    "approvalSubjectV2Ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "APPROVAL_SUBJECT_V2" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": {
+          "description": "Public Approval v2 subjectHash, never a private execution-witness hash.",
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "publicActionCandidateRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QUEUE_ACTION_CANDIDATE" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "const": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "actor": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "principalId"],
+          "properties": {
+            "kind": { "const": "HUMAN" },
+            "principalId": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "serviceId"],
+          "properties": {
+            "kind": { "const": "SERVICE" },
+            "serviceId": { "type": "string", "minLength": 1, "maxLength": 128 }
+          }
+        }
+      ]
+    },
+    "capacityWitness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyMode",
+        "authorizedScopeSnapshotRef"
+      ],
+      "properties": {
+        "policyMode": { "enum": ["MEASURE_ONLY", "ENFORCED"] },
+        "authorizedScopeSnapshotRef": { "$ref": "#/$defs/versionedContentRef" }
+      }
+    },
+    "effect": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NO_MUTATION" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "mutationRefs"],
+          "properties": {
+            "state": { "const": "COMMITTED" },
+            "mutationRefs": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 16,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/publicAdmissionMutationRef" }
+            }
+          }
+        }
+      ]
+    },
+    "override": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NOT_USED" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "actionKind", "effectKind", "approvalRef", "actionCandidateRef", "publicIntentHash"],
+          "properties": {
+            "state": { "const": "CONSUMED" },
+            "actionKind": { "enum": ["EXPEDITE_CAPACITY_OVERRIDE", "WIP_ADMISSION_OVERRIDE"] },
+            "effectKind": { "enum": ["ALLOW_EXPEDITE_CAPACITY", "ALLOW_WIP_ADMISSION"] },
+            "approvalRef": { "$ref": "#/$defs/approvalSubjectV2Ref" },
+            "actionCandidateRef": { "$ref": "#/$defs/publicActionCandidateRef" },
+            "publicIntentHash": {
+              "description": "Safe candidate/payload hash over caller-visible intent only. Semantic validation requires equality with actionCandidateRef.semanticHash; the internal execution-witness actionHash is never published.",
+              "$ref": "#/$defs/hash"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

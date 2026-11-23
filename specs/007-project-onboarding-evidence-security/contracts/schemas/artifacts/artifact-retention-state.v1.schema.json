@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:artifact-retention-state:v1",
+  "title": "Artifact availability and retention projection v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "artifactId", "workspaceId", "projectId", "availabilityVersion", "availability", "availabilityReasonCode", "availabilitySource", "observedAt", "retentionDecisionRef", "retentionPolicyRef", "retentionDecision", "eligibleAt", "legalHold", "ownerPrincipalId", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "artifactId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "availabilityVersion": { "type": "integer", "minimum": 1 },
+    "availability": { "enum": ["AVAILABLE", "EXPIRED", "QUARANTINED", "UNAVAILABLE"] },
+    "availabilityReasonCode": { "$ref": "../common.v1.schema.json#/$defs/stableKey" },
+    "availabilitySource": { "enum": ["PROVIDER", "RETENTION_WORKER", "SECURITY_REVIEW"] },
+    "observedObjectVersionOrEtag": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "observedChecksum": { "$ref": "../common.v1.schema.json#/$defs/hash" },
+    "observedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "retentionDecisionRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "retentionPolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "retentionDecision": { "enum": ["RETAIN", "EXPIRE", "QUARANTINE"] },
+    "eligibleAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "effectiveAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "legalHold": { "type": "boolean" },
+    "legalHoldRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "ownerPrincipalId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "legalHold": { "const": true } }, "required": ["legalHold"] },
+      "then": { "required": ["legalHoldRef"] }
+    }
+  ]
+}

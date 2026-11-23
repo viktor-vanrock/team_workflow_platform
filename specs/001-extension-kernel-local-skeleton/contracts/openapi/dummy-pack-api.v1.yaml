@@ -1,0 +1,125 @@
+openapi: 3.1.0
+info:
+  title: Dummy Competency Pack API
+  version: 1.0.0
+  description: >-
+    Compile-time API contribution used only by the Phase-1 Dummy Pack. Removing the Pack removes
+    these routes without changing Core. The publish endpoint calls the typed sample.record port;
+    it does not accept Connector/Profile IDs or arbitrary operations.
+servers:
+  - url: http://localhost:3000
+security:
+  - bearerAuth: []
+paths:
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/sample:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: getSampleWorkItemExtension
+      x-awp-owner: dummy
+      responses:
+        '200':
+          description: Sample Pack-owned detail projection
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/sample/sample-work-item-extension.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}/sample/commands/publish-record:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    post:
+      operationId: publishSampleRecord
+      x-awp-owner: dummy
+      description: >-
+        Creates a typed CapabilityCommandIntent for the manifest requirement
+        primary-record-publisher. Actor and scope are injected by the backend.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishSampleRecordRequest'
+      responses:
+        '202':
+          description: Durable command accepted; external effect is asynchronous
+          headers:
+            Location:
+              description: Scoped Core command status URL
+              schema:
+                type: string
+                format: uri-reference
+          content:
+            application/json:
+              schema:
+                $ref: './core-api.v1.yaml#/components/schemas/ExternalCommandAccepted'
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    WorkItemId:
+      name: workItemId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        $ref: '../schemas/commands/capability-command-intent.v1.schema.json#/$defs/IdempotencyKey'
+    CorrelationId:
+      name: X-Correlation-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Problem:
+      description: Structured error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '../schemas/common/problem-details.v1.schema.json'
+  schemas:
+    PublishSampleRecordRequest:
+      type: object
+      additionalProperties: false
+      required: [target, payload, expectedExternalState]
+      properties:
+        target:
+          $ref: '../schemas/sample/sample-record-target.v1.schema.json'
+        payload:
+          $ref: '../schemas/sample/sample-record-publish-input.v1.schema.json'
+        expectedExternalState:
+          $ref: '../schemas/commands/capability-command-intent.v1.schema.json#/$defs/ExpectedExternalState'

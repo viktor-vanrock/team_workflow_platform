@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:common:v1",
+  "title": "QA Pack Common Definitions",
+  "$defs": {
+    "Digest": {
+      "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/Digest"
+    },
+    "StableKey": {
+      "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey"
+    },
+    "SemVer": {
+      "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/SemVer"
+    },
+    "SchemaRef": {
+      "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/SchemaRef"
+    },
+    "IntegerVersionRef": {
+      "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef"
+    },
+    "HumanActorRef": {
+      "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/common/actor-ref.v1.schema.json#/$defs/HumanActorRef"
+    },
+    "UuidRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" }
+      }
+    },
+    "ImmutableRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "contentHash"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "ImmutableContentRef": {
+      "description": "Exact reference to a singleton immutable/content-addressed row that has no independent revision number.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "contentHash"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "QaRequestExtensionSnapshotRef": {
+      "description": "Exact content snapshot of a mutable QA Request Extension at one CAS resource version.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["extensionId", "resourceVersion", "contentHash"],
+      "properties": {
+        "extensionId": { "type": "string", "format": "uuid" },
+        "resourceVersion": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "QaRequestInputRevisionRef": {
+      "description": "Exact append-only QA request-input revision selected by the stable QA Request Extension pointer.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "contentHash"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "ReadinessAssessmentRef": {
+      "description": "Exact immutable readiness assessment revision.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessmentId", "version", "contentHash"],
+      "properties": {
+        "assessmentId": { "type": "string", "format": "uuid" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "QaWaiverRef": {
+      "description": "Exact immutable QA waiver decision revision; live scope, state, expiry, rule and input-fingerprint checks remain mandatory at consumption time.",
+      "$ref": "#/$defs/ImmutableRevisionRef"
+    },
+    "RequiredSessionPlanRef": {
+      "description": "Exact immutable Required Session Plan revision evaluated by a session, manifest, verdict or completion decision.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "revision", "contentHash"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "RequiredSessionRequirementRef": {
+      "description": "Exact requirement within one immutable Required Session Plan revision; the Session is coverage for this key/ordinal only.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planRef", "requirementKey", "ordinal", "contentHash"],
+      "properties": {
+        "planRef": { "$ref": "#/$defs/RequiredSessionPlanRef" },
+        "requirementKey": { "$ref": "#/$defs/StableKey" },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "RiskReviewPolicyRef": {
+      "description": "Exact immutable project-scoped Risk Review Policy version; unlike semantic DoR/DoD/evidence rule refs, this never follows a stable-key pointer.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "contentHash"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "ResponseChannelRef": {
+      "description": "Exact provider-neutral response channel resolved and confirmed by the server. Feature 002 seeds only the in-platform web channel; future adapters may version a broader schema.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channelKind", "channelId", "version", "contentHash"],
+      "properties": {
+        "channelKind": { "const": "PLATFORM_WEB" },
+        "channelId": { "type": "string", "format": "uuid" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "PreviousSessionRef": {
+      "description": "Typed prior Session lineage for RETEST. US1 can pin a validated immutable external historical record before QA Session tables exist; later revisions may pin a same-scope reviewed QA Session.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "historicalSessionRef"],
+          "properties": {
+            "kind": { "const": "EXTERNAL_HISTORICAL" },
+            "historicalSessionRef": { "$ref": "#/$defs/ExternalImmutableRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "sessionId", "sessionReviewRef"],
+          "properties": {
+            "kind": { "const": "QA_SESSION" },
+            "sessionId": { "type": "string", "format": "uuid" },
+            "sessionReviewRef": { "$ref": "#/$defs/ImmutableRevisionRef" }
+          }
+        }
+      ]
+    },
+    "DeclaredBlocker": {
+      "description": "Requester-declared blocker fact; readiness rules decide whether it is hard, informational, resolved or waived.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "description"],
+      "properties": {
+        "code": { "$ref": "#/$defs/ErrorCode" },
+        "description": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      }
+    },
+    "SemanticRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "contentHash"],
+      "properties": {
+        "key": { "$ref": "#/$defs/StableKey" },
+        "version": { "$ref": "#/$defs/SemVer" },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "GenericApprovalRef": {
+      "description": "Reference only. Exact subject remains owned by the generic Core Approval Gateway.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approvalId", "subjectHash"],
+      "properties": {
+        "approvalId": { "type": "string", "format": "uuid" },
+        "subjectHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "GenericPlatformActionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platformActionId", "approvalRef"],
+      "properties": {
+        "platformActionId": { "type": "string", "format": "uuid" },
+        "approvalRef": { "$ref": "#/$defs/GenericApprovalRef" }
+      }
+    },
+    "GenericCommandRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commandId"],
+      "properties": {
+        "commandId": { "type": "string", "format": "uuid" }
+      }
+    },
+    "BindingRef": {
+      "$ref": "#/$defs/IntegerVersionRef"
+    },
+    "ProfileRef": {
+      "$ref": "#/$defs/IntegerVersionRef"
+    },
+    "ClassificationKey": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "ErrorCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{2,127}$"
+    },
+    "ExternalImmutableRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version", "contentHash"],
+      "properties": {
+        "kind": { "$ref": "#/$defs/StableKey" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "version": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    },
+    "ArtifactRef": {
+      "description": "Provider-neutral metadata reference; locator and signed URL are forbidden.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactId", "checksum", "dataClassificationKey"],
+      "properties": {
+        "artifactId": { "type": "string", "format": "uuid" },
+        "checksum": { "$ref": "#/$defs/Digest" },
+        "dataClassificationKey": { "$ref": "#/$defs/ClassificationKey" }
+      }
+    },
+    "HumanSignoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signer", "authorizationBasisHash", "policyRef", "signedContentHash", "signedAt"],
+      "properties": {
+        "signer": { "$ref": "#/$defs/HumanActorRef" },
+        "authorizationBasisHash": { "$ref": "#/$defs/Digest" },
+        "policyRef": { "$ref": "#/$defs/SemanticRef" },
+        "signedContentHash": { "$ref": "#/$defs/Digest" },
+        "signedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "StructuredIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "field", "severity", "remediation"],
+      "properties": {
+        "code": { "$ref": "#/$defs/ErrorCode" },
+        "field": { "type": "string", "pattern": "^(?:/[^/~]*(?:~[01][^/~]*)*)*$", "maxLength": 512 },
+        "severity": { "type": "string", "enum": ["BLOCKER", "WARNING"] },
+        "remediation": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    }
+  }
+}

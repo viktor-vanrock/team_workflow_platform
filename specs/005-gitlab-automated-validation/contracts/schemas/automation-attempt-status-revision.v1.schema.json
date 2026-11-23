@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automation-attempt-status-revision:v1",
+  "title": "AutomationAttemptStatusRevision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "statusRevisionId",
+    "workspaceId",
+    "projectId",
+    "automationAttemptId",
+    "revisionNo",
+    "status",
+    "externalAuthorityHash",
+    "providerStatus",
+    "providerRevisionToken",
+    "source",
+    "sourceReceiptRef",
+    "sourceReceiptHash",
+    "observedAt",
+    "recordedAt",
+    "observationHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automation-attempt-status-revision@1.0.0" },
+    "statusRevisionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "automationAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "revisionNo": { "type": "integer", "minimum": 1 },
+    "previousRevisionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "previousStateHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "status": { "enum": ["CREATED", "TRIGGER_PENDING", "RUNNING", "TERMINAL"] },
+    "externalAuthorityHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "providerStatus": {
+      "enum": [
+        "NOT_OBSERVED",
+        "CREATED",
+        "WAITING_FOR_RESOURCE",
+        "PREPARING",
+        "PENDING",
+        "RUNNING",
+        "SUCCESS",
+        "FAILED",
+        "CANCELED",
+        "SKIPPED",
+        "MANUAL",
+        "SCHEDULED",
+        "UNKNOWN"
+      ]
+    },
+    "providerRevisionToken": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "providerUpdatedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "source": {
+      "enum": [
+        "COMMAND_RECEIPT",
+        "WEBHOOK_SIGNAL",
+        "POLL_READ",
+        "RECONCILIATION_READ",
+        "SYNTHETIC_FAILURE"
+      ]
+    },
+    "externalPipelineId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "externalJobIds": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+    },
+    "sourceReceiptRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "sourceReceiptHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "terminalResultId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "terminalResultHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "observedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "recordedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "observationHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "revisionNo": { "const": 1 } },
+        "required": ["revisionNo"]
+      },
+      "then": {
+        "properties": {
+          "previousRevisionId": false,
+          "previousStateHash": false
+        }
+      },
+      "else": {
+        "required": ["previousRevisionId", "previousStateHash"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "TERMINAL" } },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["terminalResultId", "terminalResultHash"]
+      },
+      "else": {
+        "properties": {
+          "terminalResultId": false,
+          "terminalResultHash": false
+        }
+      }
+    }
+  ]
+}

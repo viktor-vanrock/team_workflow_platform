@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-work-item:request-transition:v1",
+  "title": "Transition Operational QA Request Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["externalEntityId", "expectedExternalVersion", "expectedNormalizedStatus", "requestedNormalizedStatus", "reason", "sourceWorkItemId"],
+  "properties": {
+    "externalEntityId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "expectedExternalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "expectedNormalizedStatus": { "type": "string", "enum": ["NEW", "NEEDS_INFO", "READY", "PLANNED", "IN_PROGRESS", "REVIEW", "BLOCKED"] },
+    "requestedNormalizedStatus": { "type": "string", "enum": ["READY", "DONE"] },
+    "reason": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "sourceWorkItemId": { "type": "string", "format": "uuid" },
+    "completionSummary": { "$ref": "./completion-summary.v1.schema.json" },
+    "completionSummaryHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+    "verdictRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "dodAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "requestedNormalizedStatus": { "const": "DONE" } }, "required": ["requestedNormalizedStatus"] },
+      "then": { "required": ["completionSummary", "completionSummaryHash", "requiredSessionPlanRef", "verdictRef", "dodAssessmentRef"] },
+      "else": {
+        "allOf": [
+          { "not": { "required": ["completionSummary"] } },
+          { "not": { "required": ["completionSummaryHash"] } },
+          { "not": { "required": ["requiredSessionPlanRef"] } },
+          { "not": { "required": ["verdictRef"] } },
+          { "not": { "required": ["dodAssessmentRef"] } }
+        ]
+      }
+    }
+  ]
+}

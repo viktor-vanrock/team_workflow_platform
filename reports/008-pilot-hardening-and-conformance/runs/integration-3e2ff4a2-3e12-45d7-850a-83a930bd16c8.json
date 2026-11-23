@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "integration-3e2ff4a2-3e12-45d7-850a-83a930bd16c8",
+  "gate": "integration",
+  "status": "BLOCKED_INPUT",
+  "deploymentProfile": "integration",
+  "scope": {
+    "workspaceId": "corporate-input-required",
+    "projectIds": [
+      "corporate-project-required"
+    ]
+  },
+  "startedAt": "2026-09-05T00:17:57.267Z",
+  "finishedAt": "2026-09-05T00:17:57.418Z",
+  "fingerprints": {
+    "source": "sha256:27b55bd1d347c4c4ed41cd176590689cb54cb0bba510d7a3bc78cd63cd804741",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:5fc0af1bea362d651725f32fc9ca09377a5c053d7cbeb6e8560505878cc041cf",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:c7416e37dba569ade2f7b061bdf656961938f07b36457e8b5fc811f5c2f6eec9"
+  },
+  "executorIdentity": "local-cli",
+  "checks": [
+    {
+      "id": "actual-corporate-n2-conformance",
+      "status": "BLOCKED_INPUT",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/integration-3e2ff4a2-3e12-45d7-850a-83a930bd16c8/n2-evaluation.json",
+          "sha256": "sha256:8bf2e9be54af2a1766701393c929273a0a3379fd4c8c3c06235ed164b225d461"
+        }
+      ],
+      "reasonCodes": [
+        "CORPORATE_INPUT_PACKAGE_MISSING",
+        "N2_EVIDENCE_MISSING"
+      ]
+    }
+  ],
+  "prerequisites": [],
+  "reasonCodes": [
+    "CORPORATE_INPUT_PACKAGE_MISSING",
+    "N2_EVIDENCE_MISSING"
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "feature": "003-jira-operational-authority",
+  "gate": "feature-003-prerequisites",
+  "startedAt": "2026-09-03T10:02:47.169Z",
+  "finishedAt": "2026-09-03T10:02:47.173Z",
+  "status": "PASS",
+  "reports": {
+    "status": "PASS",
+    "checks": [
+      {
+        "id": "feature-001-final",
+        "status": "PASS",
+        "code": "REPORT_ACCEPTED",
+        "detail": "artifacts/verification/feature-001-gate.json sha256=b59fbf5a1cf18132fd7ec554703768b6c412c1d1820f0ab68c9cb3c2c58a0c75"
+      },
+      {
+        "id": "feature-001-smoke",
+        "status": "PASS",
+        "code": "REPORT_ACCEPTED",
+        "detail": "artifacts/verification/smoke-001-gate.json sha256=aceec9e735343478d12fae1559937900c4dec444dfb819ab291d574feff6afbe"
+      },
+      {
+        "id": "feature-002-final",
+        "status": "PASS",
+        "code": "REPORT_ACCEPTED",
+        "detail": "artifacts/verification/feature-002-gate.json sha256=15dce7e0427a0326daffa0ea129813be074567cc87dd6e41b392d2646c5839a6"
+      },
+      {
+        "id": "feature-002-smoke",
+        "status": "PASS",
+        "code": "REPORT_ACCEPTED",
+        "detail": "artifacts/verification/feature-002-smoke.json sha256=419e9753893bdbfdf0a2860920bfcc0e79ae36d218c19547454fea3c67ad0fb1"
+      },
+      {
+        "id": "feature-002-regression",
+        "status": "PASS",
+        "code": "REPORT_ACCEPTED",
+        "detail": "artifacts/verification/feature-002-regression-gate.json sha256=787b885f17318e114e3b7bf49e6822d5e56ca2d150e9311395dafc0b651af211"
+      },
+      {
+        "id": "feature-002-ci",
+        "status": "PASS",
+        "code": "REPORT_ACCEPTED",
+        "detail": "artifacts/verification/feature-002-ci.json sha256=ef7131f99191c9bc80fcc2b7e5e2942378643e3b0abdc0ed2dbd4dad164cd57c"
+      },
+      {
+        "id": "feature-002-trace",
+        "status": "PASS",
+        "code": "REPORT_ACCEPTED",
+        "detail": "artifacts/verification/feature-002-trace.json sha256=21e503929dbb15fef58747d26e34d3c21006aed535a54e65eb12717fe23990cd"
+      }
+    ]
+  },
+  "implementation": {
+    "status": "PASS",
+    "checks": [
+      {
+        "id": "node-runtime",
+        "status": "PASS",
+        "code": "NODE_VERSION_ACCEPTED",
+        "detail": "active=24.20.0; .node-version=24.20.0; package engine=24.20.0; expected=24.20.0"
+      },
+      {
+        "id": "package:@awp/platform-core",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "@awp/platform-core@1.0.0"
+      },
+      {
+        "id": "package:@awp/platform-contracts",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "@awp/platform-contracts@1.0.0"
+      },
+      {
+        "id": "package:@awp/competency-qa",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "@awp/competency-qa@1.0.0"
+      },
+      {
+        "id": "operational-work-item-v1",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "packages/runtime-composition/src/qa/operational-work-item.contract.ts, packages/competency-qa/src/manifest.ts expose the required implemented surface"
+      },
+      {
+        "id": "command-primary-role-round-trip",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "packages/platform-persistence-typeorm/src/command.repository.ts expose the required implemented surface"
+      },
+      {
+        "id": "primary-configuration-round-trip",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "packages/platform-core/src/commanding/connector-command.ts, packages/platform-persistence-typeorm/src/command.repository.ts expose the required implemented surface"
+      },
+      {
+        "id": "generic-confirmation-unit-of-work",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "packages/platform-contracts/src/extensions/confirmation-hook.ts, packages/platform-core/src/work-management/confirm-operational-effect.ts, packages/platform-persistence-typeorm/src/confirmation-unit-of-work.ts expose the required implemented surface"
+      },
+      {
+        "id": "exact-external-command-approval",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "packages/platform-core/src/approval/approval.ts, packages/platform-core/src/approval/external-command-approval.ts expose the required implemented surface"
+      },
+      {
+        "id": "qa-confirmation-contributions",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "packages/competency-qa/src/application/on-qa-request-confirmed.ts, packages/competency-qa/src/application/on-defect-confirmed.ts, packages/competency-qa/src/application/on-completion-confirmed.ts, packages/runtime-composition/src/qa/confirmation-hooks.ts expose the required implemented surface"
+      },
+      {
+        "id": "runnable-api-worker",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "apps/api/package.json, apps/api/project.json, apps/api/src/main.ts, apps/worker/package.json, apps/worker/project.json, apps/worker/src/main.ts expose the required implemented surface"
+      },
+      {
+        "id": "runnable-local-composition",
+        "status": "PASS",
+        "code": "IMPLEMENTATION_ACCEPTED",
+        "detail": "infra/compose/docker-compose.local.yml, packages/runtime-composition/package.json, packages/runtime-composition/src/qa/composition.ts expose the required implemented surface"
+      },
+      {
+        "id": "feature-002-import-hook",
+        "status": "PASS",
+        "code": "EXPLICIT_NON_REQUIREMENT",
+        "detail": "Feature 003 owns the additive generic operational-import hook"
+      }
+    ]
+  }
+}

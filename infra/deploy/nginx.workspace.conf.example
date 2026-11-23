@@ -1,0 +1,20 @@
+# Include in nginx http context; replace hostnames and certificate paths.
+log_format awp_without_query '$remote_addr [$time_local] "$request_method $uri $server_protocol" $status $body_bytes_sent';
+server {
+    listen 443 ssl;
+    server_name qa.example.org;
+    ssl_certificate /etc/nginx/tls/qa.fullchain.pem;
+    ssl_certificate_key /etc/nginx/tls/qa.key;
+    access_log /var/log/nginx/awp-access.log awp_without_query;
+    client_max_body_size 128k;
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_cache off;
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 30s;
+    }
+}

@@ -1,0 +1,325 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "recordedAt": "2026-09-06T11:42:33.879963+00:00",
+  "closedTasks": [
+    "007/T155"
+  ],
+  "advancedTasks": [
+    "007/T071"
+  ],
+  "sourceBinding": [
+    {
+      "path": "apps/api/src/app.module.ts",
+      "sha256": "sha256:63f1be31dfb1467411d25015dad1108eabd6c5a49c1ee02fa3c7f9487f17f962"
+    },
+    {
+      "path": "apps/api/src/extensions/corporate-qa-http-identity.ts",
+      "sha256": "sha256:e942af7cd9cf3c8fe55b19e11ded58e9f75e45a05389e2f8f58f48c2de053eb6"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/binding-facts.ts",
+      "sha256": "sha256:062907276b69fcdc5b1e8a66644c88b891bbb86d56640670a866948c47efee2a"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.application.ts",
+      "sha256": "sha256:36b33e7288663b680e959272ba4e39f23a492562e513a34a2c40bc4fce1c617c"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/durable-http.ts",
+      "sha256": "sha256:9ba35bf4180a4218a05b893e7d3411bc638d046478d767d843f4698be605fe2b"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/onboarding.controller.ts",
+      "sha256": "sha256:2783fa2122742a80674ef425f614761e6e9e0b335d5ee09ebbce75dc944f0ce9"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.application.ts",
+      "sha256": "sha256:f39777d9bdecbac8b9c44b49abb95fd68b1a394ab83a60ae87c1d52a7f0c5ad7"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/registry.application.ts",
+      "sha256": "sha256:00bb92a5124a570b32c08e88f5d5aab4ce36029104bfe0ef822d9a4e50b10c1f"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/resources.application.ts",
+      "sha256": "sha256:acb5bc0eefd14c8168e0e53272a0fe3afe1e372645bc40ca76ba8aa1bb6bd02d"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/validation.application.ts",
+      "sha256": "sha256:598ca39f4a491f3ad13f18e0afca2cf3dea007a33cc531eed21ada2a1988e1ae"
+    },
+    {
+      "path": "apps/api/src/extensions/qa-api-authorization.ts",
+      "sha256": "sha256:10e798e0bbc30fde00c26dfbf54758c335e54d7783b42ad2c6fa1d920c7b513e"
+    },
+    {
+      "path": "apps/api/src/local/local-qa-authorization.ts",
+      "sha256": "sha256:48a832a3927b57e53234c77575b8a07fd4c991d2debae3efbea27cd9c764627d"
+    },
+    {
+      "path": "apps/api/src/local/local-qa-http-identity.ts",
+      "sha256": "sha256:9829f7b32d6d1934ca87e7c10be237b166d09b2cef64eabc7ab0e47412cf49f5"
+    },
+    {
+      "path": "apps/api/src/local/local-session.guard.ts",
+      "sha256": "sha256:434acda500e407b9d5ba6a15d1f115873060ee561ea1c34ab824b20a3504bfd9"
+    },
+    {
+      "path": "apps/worker/src/app.module.ts",
+      "sha256": "sha256:52bd0a7b48e0247faca7488c0dfee4072b3705b2c06cb0de58d0c28297e61919"
+    },
+    {
+      "path": "docs/audits/2026-09-06-local-audit.md",
+      "sha256": "sha256:dc8947a94ced16e58f2f3c16a59507cc7324e8e3e00f3ef059f579ce23dd4557"
+    },
+    {
+      "path": "docs/runbooks/onboarding-http.md",
+      "sha256": "sha256:fd19f793c3637dfd5f61b62fef9d48534cdeec11d99dcafce7e6b1358e47caed"
+    },
+    {
+      "path": "docs/runbooks/pilot-deployment-checklist.md",
+      "sha256": "sha256:bd0eb2013f580aabc9446cbb9945b4deb8c798dd679343ea1b75e89448b19cff"
+    },
+    {
+      "path": "docs/runbooks/project-operations-http.md",
+      "sha256": "sha256:c96a30067c6487a12762de633aa832a4c277291f58304fce12fe1dd9300494e2"
+    },
+    {
+      "path": "package.json",
+      "sha256": "sha256:43379c19a6b740b2864f61784b0dbf44fe9ce07316df7a7f28eb664eded7a151"
+    },
+    {
+      "path": "packages/competency-qa/src/application/manage-test-account-lease.ts",
+      "sha256": "sha256:f225b865b375ec4c3617336a3286fc3dd94c65a6c2bccbd40469b5cbc62b3555"
+    },
+    {
+      "path": "packages/competency-qa/src/domain/project-resources.ts",
+      "sha256": "sha256:78bd1441721fdafbd34da8f5e05def487bac549f99f319bf00ae8de4a7fcb6c5"
+    },
+    {
+      "path": "packages/competency-qa/src/domain/qa-project-context.ts",
+      "sha256": "sha256:24f121d8e69b33c1df4967ca725b4040e72a87dbed91a3848e5adf459f62e120"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/contributions.ts",
+      "sha256": "sha256:7fce4effe5c4103d8ee5720b5ce7664317c3f4a4e2e33afa1313fc0e9a7bacbd"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/migrations/2110-resource-publication-heads.ts",
+      "sha256": "sha256:da9618299179e2c3db568a8aa7a667a172ee23db090221812fd02b6ea7814c1f"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/migrations/index.ts",
+      "sha256": "sha256:b366e23e36499a48a82d1c9c8a6ea608351ed464a009a881e6f1ffe5f1e815ad"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/project-resource.repository.ts",
+      "sha256": "sha256:59c84fc652cde9249ad8621b1d9eef2c375be535ae80504c4eceb5a949abe1da"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/test-account-lease.repository.ts",
+      "sha256": "sha256:b3eab6676ed1ee9cc6f0be0d212459756df4dd3d6f2d6af0e43c429a95715d64"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/command-delivery.store.ts",
+      "sha256": "sha256:5f52fe9b076c7eb5fdb3881010be382cf302cb2c74632ee8d53587a82a7ddb56"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/command-outbox.repository.ts",
+      "sha256": "sha256:0b5525f3e2442a27a2071658be845b22eb7682b6b81ab850854eea60ab74c39a"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/command.repository.ts",
+      "sha256": "sha256:434b7df3ec33a5ec34123b28c3b9d3aff9699d688c01586ee6060d6aa0435207"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/migrations/core/0200-capability-probe-requests.ts",
+      "sha256": "sha256:ed36a36cbfbb62064dd86d0bc221931f977c7304a422341f8939cd8d07f21fd1"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/migrations/core/index.ts",
+      "sha256": "sha256:d5cd11e5490b61f9fdf75b7127f7c5fb59203518add8195732e989ebca139971"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/project-entitlement.repository.ts",
+      "sha256": "sha256:2e6749de8455a30042c4a4bd40bb79163f7a18020caf0c40b48b064cb974388f"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/project-onboarding.repository.ts",
+      "sha256": "sha256:c5ca8e282312c99a250d0645ea35dcbb25b2acbdd855b1422130eef67b8e959d"
+    },
+    {
+      "path": "packages/platform-runtime-nest/src/auth/workspace-context.ts",
+      "sha256": "sha256:333702adfbe1c6331fe2fdf4ae3221a3814aee79c518c056ab1e6568427efa4a"
+    },
+    {
+      "path": "packages/platform-runtime-nest/src/http/project-onboarding.controller.ts",
+      "sha256": "sha256:58e2b5c71109a30e200d4a4ff78dee6cd62824af212f17529d2a0ff9699b059f"
+    },
+    {
+      "path": "packages/runtime-composition/src/index.ts",
+      "sha256": "sha256:aa9b55e717188aef83cfaf2af9a349aba672067c17c5fe1838e244e8b6052039"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/configuration-hash.ts",
+      "sha256": "sha256:62cbeb30eade441ff68f56c9ca8a0a5582eb3976703dda8494b517b69da5f77a"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/project-effect-guard.ts",
+      "sha256": "sha256:1327cb618ef3a8639bb117512b9f78dd493519955c2c36bfe874c42dadb717fe"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/requested-probe-worker.ts",
+      "sha256": "sha256:3641452bf695479dc30d43756b796fd77d80d586e2258c1846cff83890758194"
+    },
+    {
+      "path": "packages/runtime-composition/src/pilot/development-probes.ts",
+      "sha256": "sha256:452eb0991f454071be7a34faf4112374c975805dc43173b5e57f85f02f5d4dba"
+    },
+    {
+      "path": "packages/runtime-composition/src/pilot/maintenance-probes.ts",
+      "sha256": "sha256:c69a1ed45a61df07da59a7cae60f238090e15abd5c0a1e6afb30a93d27cc6f79"
+    },
+    {
+      "path": "packages/runtime-composition/src/seed/local-seed.ts",
+      "sha256": "sha256:2dfc28263544d3702f38c9c570bfe671c8382a24955eb936f832015a96e633cc"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+      "sha256": "sha256:c1bddbae638a1ac774ea5b5a4b3ea3eb56e7e43e2b9b0440a7085e5f2d1e01ec"
+    },
+    {
+      "path": "tests/contract/008/backward-compatibility.spec.ts",
+      "sha256": "sha256:12c9171e275aa4ccb2742702b290a61a4f9e3bbd75879e9da9616b563e302a5f"
+    },
+    {
+      "path": "tests/e2e/007/us5-suspend-resume.spec.ts",
+      "sha256": "sha256:f1a2d76814eeb3056203506beb4b5959e1d1bf38afe22154b3c1cb139f8ad578"
+    },
+    {
+      "path": "tests/integration/007/us1-onboarding-atomicity.spec.ts",
+      "sha256": "sha256:8960b803f4a1f6011bbc14130e60cf79dcd2d9bf43cc9efebb28f9cb04597232"
+    },
+    {
+      "path": "tests/integration/007/us1-onboarding-http.spec.ts",
+      "sha256": "sha256:5367bd2c98e6c5084eb86df47b541d62b411d91aff3dd90129b3711ef29c8e9c"
+    },
+    {
+      "path": "tests/integration/007/us1-requested-probes-http.spec.ts",
+      "sha256": "sha256:006d3e9d9162fa88163fc4b47fdb8a3b1b4c93e1c60d0e27b35ed0431885065e"
+    },
+    {
+      "path": "tests/integration/007/us1-resources-http.spec.ts",
+      "sha256": "sha256:457d449198a2ca09aafd7574b813d4badc05709504997fcb4258db58cb7c55c7"
+    },
+    {
+      "path": "tests/integration/007/us1-validation-http.spec.ts",
+      "sha256": "sha256:4e8078c438bb91e47188c574b5daab7a05ad54f9f0175de25a93c44806850298"
+    },
+    {
+      "path": "tests/integration/007/us2-binding-http.spec.ts",
+      "sha256": "sha256:b5fa3c33f1c3db6c4903a1601978ac24a5764dfb1466d31719d76a7d38786a98"
+    },
+    {
+      "path": "tests/integration/008/migration-matrix.spec.ts",
+      "sha256": "sha256:ae1c91cf19008015bfef70e45a7b067dffd81d52f2236b87ec27247803922ff7"
+    },
+    {
+      "path": "tests/integration/008/runtime-composition.spec.ts",
+      "sha256": "sha256:981061ad4351be88646b15f664334f7e961bb497cc145218602a1135ef8197b2"
+    },
+    {
+      "path": "tests/support/007-binding-http-fixture.ts",
+      "sha256": "sha256:8c358ddc21168ed14e937aa34b81fb0326e715da1cfc54486c1a01233697ff1d"
+    },
+    {
+      "path": "tests/support/007-child-worker.ts",
+      "sha256": "sha256:3eaf3cddb470dda93f53b9284b2857f70adbeed1038c46b26818cd6ea01b07df"
+    },
+    {
+      "path": "tests/support/007-effect-worker-process.ts",
+      "sha256": "sha256:2bb2d2a9a4fd65f5464c26bd056f23a07e1cbdc4e98382c840fa055e5b16c70e"
+    },
+    {
+      "path": "tests/support/007-evidence-http-fixture.ts",
+      "sha256": "sha256:518b0f55c77b123ceb396eaf2c38d4bff25d628a18dbeedbb580c561df1989f1"
+    },
+    {
+      "path": "tools/ci/verify-008-migrations.mts",
+      "sha256": "sha256:7b0d6430e3bb92f12db9a6baf6e153eb95a370a33198658e9a4c1712152dd614"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "sha256:49a828d8587980d05bc3ba30430bd40736c3cb69340d32eb803e26921a01717b"
+    }
+  ],
+  "schemaVersions": {
+    "core": 200,
+    "pack:qa": 2110
+  },
+  "postgresImages": [
+    "postgres:17.7-bookworm",
+    "postgres:18.6-bookworm"
+  ],
+  "regression": {
+    "report": "reports/project/local-task-closure/regression-vitest.json",
+    "tests": 158,
+    "passed": 158,
+    "files": 66,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "finalTargeted": {
+    "report": "reports/project/local-task-closure/targeted-vitest.json",
+    "tests": 6,
+    "passed": 6,
+    "files": 3,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "quality": {
+    "rootTypecheck": "PASS",
+    "targetedEslint": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "proven": [
+    "A child Node worker with its own DataSource claims a durable command; HTTP suspension cancels it before invocation, with zero provider POSTs.",
+    "API/worker restart preserves cancellation. Self-approval is denied; current distinct owner approval and disposition allow resume.",
+    "One freshly admitted command yields exactly one controlled HTTP POST and durable confirmation; repeat resume and restart yield no new POST.",
+    "Validation, immutable probe request, audit and receipt commit together; forced audit failure rolls everything back.",
+    "Registered development worker factory calls a bounded controlled HTTP observer. Expired lease recovery by competing workers publishes one result set.",
+    "Repeat/restart does not duplicate requested probes; negative provider observations remain negative; revoked initiator stops provider reads.",
+    "Core 0200 has scoped report FK and immutable request/terminal records; fresh/upgrade/down/up/failed migration recovery pass on both database versions."
+  ],
+  "limits": [
+    "Regression ran before the final queue constraint/authority hardening; final targeted tests reran both worker journeys and migration matrix after those changes.",
+    "T155 uses controlled identity/provider and initial fresh probe fixtures; it does not certify real Jira/GitLab/Mattermost or full Compose smoke.",
+    "T071 remains open for FULL_QA/accepted Suite evaluation and full HTTP DTO/status/ETag convergence with published OpenAPI.",
+    "007/T059, 007/T106, 007/T176 and 008/T025 remain open. No full current ci:project/ci:008 or corporate conformance pass is claimed."
+  ],
+  "remaining": {
+    "all": 11,
+    "local": [
+      "007/T059",
+      "007/T071",
+      "007/T106",
+      "007/T176",
+      "008/T025"
+    ],
+    "corporate": [
+      "008/T040",
+      "008/T057",
+      "008/T084",
+      "008/T104",
+      "008/T105",
+      "008/T106"
+    ]
+  }
+}

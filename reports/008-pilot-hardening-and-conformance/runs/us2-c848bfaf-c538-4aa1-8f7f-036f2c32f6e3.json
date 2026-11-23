@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "us2-c848bfaf-c538-4aa1-8f7f-036f2c32f6e3",
+  "gate": "us2",
+  "status": "FAIL",
+  "deploymentProfile": "local",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": [
+      "fixture-project-web"
+    ]
+  },
+  "startedAt": "2026-09-04T18:54:38.994Z",
+  "finishedAt": "2026-09-04T18:54:39.237Z",
+  "fingerprints": {
+    "source": "sha256:0b11a6fb4a3794a9129de95fa1af5bd3052f91bda9a8363b8874086922b764a8",
+    "contracts": "sha256:73be4a836b01275260e24005c9e4240a2e48145311f90ca4e69efcf07de9098f",
+    "migrations": "sha256:366eca7b9018f25327fb967cfcab2ad6544c7cba7e4b4dcf3348c9cd9afa33e9",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:6f07208129605f40cb4fa060569d3c9eef22e25cdae0ccfbd7a84e018756d144",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:67dd1e574db5faa7d53e4c07f7579870a02eff67a7b40b613b1b78d22ba5dd5b"
+  },
+  "executorIdentity": "local-cli",
+  "checks": [
+    {
+      "id": "foundation-prerequisite",
+      "status": "FAIL",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us2-c848bfaf-c538-4aa1-8f7f-036f2c32f6e3/foundation-prerequisite.json",
+          "sha256": "sha256:a113a3dbe0e7a8d0bf42f1b893c7075befc3a7a129716d3c5e5439ad5d522082"
+        }
+      ],
+      "reasonCodes": [
+        "US2_CHECK_FAILED"
+      ]
+    },
+    {
+      "id": "independent-provider-effect-counts",
+      "status": "FAIL",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us2-c848bfaf-c538-4aa1-8f7f-036f2c32f6e3/independent-provider-effect-counts.json",
+          "sha256": "sha256:101c55b27e7d9781e2a1e507b1ad9b9d5828912f80e503e2379ebc09af0aa074"
+        }
+      ],
+      "reasonCodes": [
+        "US2_CHECK_FAILED"
+      ]
+    },
+    {
+      "id": "unchanged-source",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us2-c848bfaf-c538-4aa1-8f7f-036f2c32f6e3/unchanged-source.json",
+          "sha256": "sha256:4632d3bd1e67fe5f149a00b21110288f8511574021e8e5db6ba7ad04e18c74b8"
+        }
+      ],
+      "reasonCodes": []
+    }
+  ],
+  "prerequisites": [],
+  "reasonCodes": [
+    "US2_FAILED"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "task": "007/T091",
+  "status": "PASS",
+  "recordedAt": "2026-09-06T01:02:02.534744+00:00",
+  "sourceBinding": [
+    {
+      "path": "apps/api/src/extensions/onboarding/binding-facts.ts",
+      "sha256": "sha256:250d904c141b83d1cf5b0752c5dc41929dbe47935059ec05644f255deddff19d"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.application.ts",
+      "sha256": "sha256:36b33e7288663b680e959272ba4e39f23a492562e513a34a2c40bc4fce1c617c"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.controller.ts",
+      "sha256": "sha256:1130518cd775aef4351c21a9d7320537304b3d89a7d95e3fa61a336efba40629"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/onboarding.controller.ts",
+      "sha256": "sha256:c04cec499fe52cd6c0b51bb70b7a9b1e4ade12cb061cb4a338627133f84da9d2"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.application.ts",
+      "sha256": "sha256:f39777d9bdecbac8b9c44b49abb95fd68b1a394ab83a60ae87c1d52a7f0c5ad7"
+    },
+    {
+      "path": "apps/api/src/app.module.ts",
+      "sha256": "sha256:36151c225c6b6f0276c557d2f7860bee21fc2144d00ab6d4658213743bbd65c3"
+    },
+    {
+      "path": "tests/support/007-binding-http-fixture.ts",
+      "sha256": "sha256:60640f452befe2929678bac300988fc62e094e645c09ddb75e132851a91d81d1"
+    },
+    {
+      "path": "tests/support/007-project-operations-fixture.ts",
+      "sha256": "sha256:fdb21f7da4561e446fbfcdcfa80d6a47bb6d6212ee174be71a95e8d08f5e6f9f"
+    },
+    {
+      "path": "tests/integration/007/us2-binding-http.spec.ts",
+      "sha256": "sha256:423332252ebe733aece6c50490c756317ee66aeee6c13660f908e5636d5026ff"
+    },
+    {
+      "path": "tests/integration/007/us5-project-operations-http.spec.ts",
+      "sha256": "sha256:5fe85e2f98c49ad72329f0e4e2ea7c5331ef546eb616b4a012034909aeb5790e"
+    },
+    {
+      "path": "tests/contract/007/us2-lifecycle-api.spec.ts",
+      "sha256": "sha256:472980139438d17dcde5df32c5ab25582f80a5fafa85d656a4c0cbc77cea3e1f"
+    },
+    {
+      "path": "docs/runbooks/binding-http.md",
+      "sha256": "sha256:05c5b7370a826f63173d35817b625697d9cce522e8351b613be55ca321039282"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7"
+    }
+  ],
+  "regression": {
+    "path": "reports/project/binding-regression-vitest.json",
+    "sha256": "sha256:93f02f9f39bbf663855cf6360d83d07057aa6741e8309ee4fd45a8617ec07e6c",
+    "total": 140,
+    "passed": 140,
+    "failed": 0,
+    "skipped": 0
+  },
+  "standaloneChecks": [
+    {
+      "command": "tsc --noEmit --project tsconfig.json",
+      "exitCode": 0,
+      "log": "reports/project/binding-http/typecheck.log"
+    },
+    {
+      "command": "eslint changed implementation and test files",
+      "exitCode": 0,
+      "log": "reports/project/binding-http/lint.log"
+    }
+  ],
+  "boundaries": [
+    "Real Nest HTTP/PostgreSQL 17.7/18.6; controlled verified identity and source validation/gate observations.",
+    "API/DataSource restart; actual Core TypeORM revision and ValidationReport format; immutable rollback draft and approved republish.",
+    "Exact distinct approval, current rights/configuration/gates, workspace lease, concurrent CAS, idempotency and atomic audit rollback.",
+    "Feature 007 regression includes real Chromium evidence workflow; this is not the independent T176 process smoke.",
+    "T071 validation/registration/resource HTTP, T059/T106/T155/T176 independent journeys and corporate T025 remain open.",
+    "Full repository CI was not rerun; previous whole-project fingerprints are historical."
+  ],
+  "corporateReady": false
+}

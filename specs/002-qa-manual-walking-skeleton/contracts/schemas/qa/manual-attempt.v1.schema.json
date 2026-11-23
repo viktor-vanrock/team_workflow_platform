@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:manual-attempt:v1",
+  "title": "Append-only Manual Attempt",
+  "description": "Each execution is a new record; Plan Item result is intentionally not reused as canonical Attempt result.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "attemptId", "workspaceId", "projectId", "workItemId", "sessionId", "planItemId", "attemptNo", "state", "actor", "targetSnapshotHash", "startedAt", "contentHash", "resourceVersion"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "attemptId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "planItemId": { "type": "string", "format": "uuid" },
+    "attemptNo": { "type": "integer", "minimum": 1 },
+    "state": { "type": "string", "enum": ["RUNNING", "COMPLETED"] },
+    "actor": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "targetSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "endedAt": { "type": "string", "format": "date-time" },
+    "result": { "type": "string", "enum": ["PASS", "ASSERTION_FAILED", "INFRA_FAILED", "TIMEOUT", "CANCELLED", "INCOMPLETE"] },
+    "cancellationReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "notes": { "type": "string", "maxLength": 4000 },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "resourceVersion": { "type": "integer", "minimum": 1 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "COMPLETED" } }, "required": ["state"] },
+      "then": { "required": ["endedAt", "result"] },
+      "else": {
+        "allOf": [
+          { "not": { "required": ["endedAt"] } },
+          { "not": { "required": ["result"] } },
+          { "not": { "required": ["cancellationReason"] } }
+        ]
+      }
+    },
+    {
+      "if": { "properties": { "result": { "const": "CANCELLED" } }, "required": ["result"] },
+      "then": { "required": ["cancellationReason"] },
+      "else": { "not": { "required": ["cancellationReason"] } }
+    }
+  ]
+}

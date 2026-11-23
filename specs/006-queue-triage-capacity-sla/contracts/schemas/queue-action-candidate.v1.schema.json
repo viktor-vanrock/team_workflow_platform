@@ -1,0 +1,550 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:queue-action-candidate:v1",
+  "title": "QueueActionCandidate v1",
+  "$comment": "Immutable caller-visible candidate used as the SchemaBoundValue target of a Core PLATFORM_ACTION Approval. publicIntentHash is SHA-256 over RFC 8785 canonical bytes of this complete document. It deliberately contains only authorized read tokens; the paired internal queue-control-action witness and its global capacity fields are keyed by the same actionId but are not part of this document. For WIP resume, composed validation requires requestedSessionState to equal the pinned Session blockedFrom milestone; REVIEW_REQUIRED is valid only for MANUAL_SESSION_RESUME, while starts and launches request RUNNING.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "actionId",
+    "actionKind",
+    "scope",
+    "target",
+    "requestHash",
+    "expectedVisibleState",
+    "requestedEffect",
+    "reason",
+    "approvalPolicy"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "queue-action-candidate@1.0.0" },
+    "actionId": { "$ref": "#/$defs/id" },
+    "actionKind": {
+      "enum": [
+        "QUEUE_CONTROL_ACCEPT",
+        "QUEUE_ORDER_OVERRIDE",
+        "SERVICE_CLASS_EXPEDITE",
+        "EXPEDITE_CAPACITY_OVERRIDE",
+        "WIP_ADMISSION_OVERRIDE"
+      ]
+    },
+    "scope": { "$ref": "#/$defs/actionScope" },
+    "target": { "$ref": "#/$defs/workItemTarget" },
+    "requestHash": {
+      "description": "Canonical hash of the schema-closed caller DTO; it excludes trusted context and the raw idempotency key.",
+      "$ref": "#/$defs/hash"
+    },
+    "expectedVisibleState": { "$ref": "#/$defs/expectedVisibleState" },
+    "requestedEffect": { "$ref": "#/$defs/requestedEffect" },
+    "reason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "expiresAt": { "$ref": "#/$defs/timestamp" },
+    "approvalPolicy": { "enum": ["NO_SECOND_APPROVAL", "SELF_APPROVAL_FORBIDDEN"] }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["actionKind"], "properties": { "actionKind": { "const": "QUEUE_CONTROL_ACCEPT" } } },
+      "then": {
+        "properties": {
+          "scope": { "$ref": "#/$defs/projectScope" },
+          "expectedVisibleState": { "$ref": "#/$defs/controlVisibleState" },
+          "requestedEffect": { "$ref": "#/$defs/acceptControlEffect" },
+          "approvalPolicy": { "const": "NO_SECOND_APPROVAL" },
+          "expiresAt": false
+        }
+      }
+    },
+    {
+      "if": { "required": ["actionKind"], "properties": { "actionKind": { "const": "QUEUE_ORDER_OVERRIDE" } } },
+      "then": {
+        "properties": {
+          "expectedVisibleState": { "$ref": "#/$defs/orderVisibleState" },
+          "requestedEffect": {
+            "oneOf": [
+              { "$ref": "#/$defs/orderEffect" },
+              { "$ref": "#/$defs/orderNoOpEffect" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["actionKind", "requestedEffect"],
+        "properties": {
+          "actionKind": { "const": "QUEUE_ORDER_OVERRIDE" },
+          "requestedEffect": { "required": ["kind"], "properties": { "kind": { "const": "MOVE_ORDER" } } }
+        }
+      },
+      "then": {
+        "required": ["expiresAt"],
+        "properties": { "approvalPolicy": { "const": "SELF_APPROVAL_FORBIDDEN" } }
+      }
+    },
+    {
+      "if": {
+        "required": ["actionKind", "requestedEffect"],
+        "properties": {
+          "actionKind": { "const": "QUEUE_ORDER_OVERRIDE" },
+          "requestedEffect": { "required": ["kind"], "properties": { "kind": { "const": "ANCHOR_UNAVAILABLE_NO_OP" } } }
+        }
+      },
+      "then": {
+        "not": { "required": ["expiresAt"] },
+        "properties": { "approvalPolicy": { "const": "NO_SECOND_APPROVAL" } }
+      }
+    },
+    {
+      "if": { "required": ["actionKind"], "properties": { "actionKind": { "const": "SERVICE_CLASS_EXPEDITE" } } },
+      "then": {
+        "properties": {
+          "scope": { "$ref": "#/$defs/projectScope" },
+          "expectedVisibleState": {
+            "allOf": [
+              { "$ref": "#/$defs/capacityVisibleState" },
+              { "properties": { "sessionRef": false } }
+            ]
+          },
+          "requestedEffect": { "$ref": "#/$defs/expediteEffect" }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["actionKind", "requestedEffect"],
+        "properties": {
+          "actionKind": { "const": "SERVICE_CLASS_EXPEDITE" },
+          "requestedEffect": { "required": ["kind"], "properties": { "kind": { "const": "SET_EXPEDITE" } } }
+        }
+      },
+      "then": {
+        "required": ["expiresAt"],
+        "properties": { "approvalPolicy": { "const": "SELF_APPROVAL_FORBIDDEN" } }
+      }
+    },
+    {
+      "if": {
+        "required": ["actionKind", "requestedEffect"],
+        "properties": {
+          "actionKind": { "const": "SERVICE_CLASS_EXPEDITE" },
+          "requestedEffect": { "required": ["kind"], "properties": { "kind": { "const": "CLEAR_EXPEDITE" } } }
+        }
+      },
+      "then": {
+        "not": { "required": ["expiresAt"] },
+        "properties": { "approvalPolicy": { "const": "NO_SECOND_APPROVAL" } }
+      }
+    },
+    {
+      "if": { "required": ["actionKind"], "properties": { "actionKind": { "const": "EXPEDITE_CAPACITY_OVERRIDE" } } },
+      "then": {
+        "required": ["expiresAt"],
+        "properties": {
+          "scope": { "$ref": "#/$defs/projectScope" },
+          "expectedVisibleState": {
+            "allOf": [
+              { "$ref": "#/$defs/capacityVisibleState" },
+              {
+                "properties": {
+                  "policyMode": { "const": "ENFORCED" },
+                  "sessionRef": false
+                }
+              }
+            ]
+          },
+          "requestedEffect": { "$ref": "#/$defs/allowExpediteCapacityEffect" },
+          "approvalPolicy": { "const": "SELF_APPROVAL_FORBIDDEN" }
+        }
+      }
+    },
+    {
+      "if": { "required": ["actionKind"], "properties": { "actionKind": { "const": "WIP_ADMISSION_OVERRIDE" } } },
+      "then": {
+        "required": ["expiresAt"],
+        "properties": {
+          "scope": { "$ref": "#/$defs/projectScope" },
+          "expectedVisibleState": {
+            "allOf": [
+              { "$ref": "#/$defs/capacityVisibleState" },
+              {
+                "required": ["sessionRef"],
+                "properties": { "policyMode": { "const": "ENFORCED" } }
+              }
+            ]
+          },
+          "requestedEffect": { "$ref": "#/$defs/allowWipAdmissionEffect" },
+          "approvalPolicy": { "const": "SELF_APPROVAL_FORBIDDEN" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "format": "uuid" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "workItemRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "WORK_ITEM_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "operationalProjectionRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash", "confirmedAt"],
+      "properties": {
+        "sourceType": { "const": "JIRA_OPERATIONAL_PROJECTION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "observedAt": { "$ref": "#/$defs/timestamp" },
+        "confirmedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "sessionRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QA_TEST_SESSION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "triageAssessmentRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QA_TRIAGE_ASSESSMENT_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "algorithmRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "semanticHash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "version": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "projectScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "workspaceId", "projectId"],
+      "properties": {
+        "kind": { "const": "PROJECT" },
+        "workspaceId": { "$ref": "#/$defs/id" },
+        "projectId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "portfolioScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "workspaceId", "authorizedProjectSetHash"],
+      "properties": {
+        "kind": { "const": "AUTHORIZED_PORTFOLIO" },
+        "workspaceId": { "$ref": "#/$defs/id" },
+        "authorizedProjectSetHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "actionScope": {
+      "oneOf": [
+        { "$ref": "#/$defs/projectScope" },
+        { "$ref": "#/$defs/portfolioScope" }
+      ]
+    },
+    "workItemTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "workspaceId", "projectId", "workItemRef"],
+      "properties": {
+        "kind": { "const": "WORK_ITEM" },
+        "workspaceId": { "$ref": "#/$defs/id" },
+        "projectId": { "$ref": "#/$defs/id" },
+        "workItemRef": { "$ref": "#/$defs/workItemRevisionRef" }
+      }
+    },
+    "queueEntryRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["queueEntryId", "revision", "semanticHash", "inputFingerprint"],
+      "properties": {
+        "queueEntryId": { "$ref": "#/$defs/id" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "inputFingerprint": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "controlVisibleState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "policyFacetRef", "expectedControlVersion", "expectedQueueEntry", "operationalProjectionRef", "qaSourceSetHash"],
+      "properties": {
+        "kind": { "const": "WORK_ITEM_CONTROL" },
+        "policyFacetRef": { "$ref": "#/$defs/versionedContentRef" },
+        "expectedControlVersion": { "type": "integer", "minimum": 0 },
+        "expectedQueueEntry": { "$ref": "#/$defs/queueEntryRef" },
+        "operationalProjectionRef": { "$ref": "#/$defs/operationalProjectionRevisionRef" },
+        "qaSourceSetHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "orderVisibleState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "policyFacetRef", "expectedControlVersion", "expectedOrderScopeVersion", "expectedQueueEpoch", "expectedQueueEntry", "expectedProjectionGeneration", "baseComparatorRef", "authorizedProjectSetHash", "baseVisibleSetHash"],
+      "properties": {
+        "kind": { "const": "ORDER_SCOPE" },
+        "policyFacetRef": { "$ref": "#/$defs/versionedContentRef" },
+        "expectedControlVersion": { "type": "integer", "minimum": 0 },
+        "expectedOrderScopeVersion": { "type": "integer", "minimum": 0 },
+        "expectedQueueEpoch": { "type": "integer", "minimum": 1 },
+        "expectedQueueEntry": { "$ref": "#/$defs/queueEntryRef" },
+        "expectedProjectionGeneration": { "$ref": "#/$defs/hash" },
+        "baseComparatorRef": { "$ref": "#/$defs/algorithmRef" },
+        "authorizedProjectSetHash": {
+          "description": "For PROJECT order scope this is the canonical singleton target Project; for AUTHORIZED_PORTFOLIO it is the exact server-derived visible set.",
+          "$ref": "#/$defs/hash"
+        },
+        "baseVisibleSetHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "capacityVisibleState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "policyFacetRef", "policyMode", "expectedControlVersion", "expectedQueueEntry", "authorizedCapacitySnapshotRef", "operationalProjectionRef"],
+      "properties": {
+        "kind": { "const": "CAPACITY" },
+        "policyFacetRef": { "$ref": "#/$defs/versionedContentRef" },
+        "policyMode": { "enum": ["MEASURE_ONLY", "ENFORCED"] },
+        "expectedControlVersion": { "type": "integer", "minimum": 0 },
+        "expectedQueueEntry": { "$ref": "#/$defs/queueEntryRef" },
+        "authorizedCapacitySnapshotRef": { "$ref": "#/$defs/versionedContentRef" },
+        "sessionRef": { "$ref": "#/$defs/sessionRevisionRef" },
+        "operationalProjectionRef": { "$ref": "#/$defs/operationalProjectionRevisionRef" }
+      }
+    },
+    "expectedVisibleState": {
+      "oneOf": [
+        { "$ref": "#/$defs/controlVisibleState" },
+        { "$ref": "#/$defs/orderVisibleState" },
+        { "$ref": "#/$defs/capacityVisibleState" }
+      ]
+    },
+    "planningValues": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["risk", "businessImpact", "dependencyReadiness", "effortRange"],
+      "properties": {
+        "risk": { "enum": ["LOW", "MEDIUM", "HIGH", "VERY_HIGH", "UNKNOWN"] },
+        "businessImpact": { "enum": ["LOW", "MEDIUM", "HIGH", "VERY_HIGH", "UNKNOWN"] },
+        "dependencyReadiness": { "enum": ["READY", "BLOCKED", "UNKNOWN", "NOT_APPLICABLE"] },
+        "effortRange": { "$ref": "#/$defs/effortRange" }
+      }
+    },
+    "effortRange": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": { "kind": { "const": "UNKNOWN" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "lower", "upper", "unit"],
+          "properties": {
+            "kind": { "const": "ESTIMATE" },
+            "lower": { "type": "number", "minimum": 0, "maximum": 100000 },
+            "upper": { "type": "number", "minimum": 0, "maximum": 100000 },
+            "unit": { "enum": ["PERSON_HOURS", "PERSON_DAYS", "SESSION_COUNT"] }
+          }
+        }
+      ]
+    },
+    "acceptControlEffect": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "serviceClass", "before", "after"],
+          "properties": {
+            "kind": { "const": "ACCEPT_PLANNING_VALUES" },
+            "serviceClass": { "enum": ["STANDARD", "FIXED_DATE", "EXPEDITE"] },
+            "before": { "$ref": "#/$defs/planningValues" },
+            "after": { "$ref": "#/$defs/planningValues" },
+            "triageAssessmentRef": { "$ref": "#/$defs/triageAssessmentRevisionRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "beforeServiceClass", "afterServiceClass", "retainedPlanningValues", "confirmedDueDateRef"],
+          "properties": {
+            "kind": { "const": "SET_FIXED_DATE" },
+            "beforeServiceClass": { "const": "STANDARD" },
+            "afterServiceClass": { "const": "FIXED_DATE" },
+            "retainedPlanningValues": { "$ref": "#/$defs/planningValues" },
+            "confirmedDueDateRef": { "$ref": "#/$defs/operationalProjectionRevisionRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "beforeServiceClass", "afterServiceClass", "retainedPlanningValues"],
+          "properties": {
+            "kind": { "const": "CLEAR_SERVICE_CLASS" },
+            "beforeServiceClass": { "const": "FIXED_DATE" },
+            "afterServiceClass": { "const": "STANDARD" },
+            "retainedPlanningValues": { "$ref": "#/$defs/planningValues" }
+          }
+        }
+      ]
+    },
+    "orderAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectId", "workItemId"],
+      "properties": {
+        "projectId": { "$ref": "#/$defs/id" },
+        "workItemId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "orderEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "placement"],
+      "properties": {
+        "kind": { "const": "MOVE_ORDER" },
+        "placement": { "enum": ["FIRST", "LAST", "BEFORE", "AFTER"] },
+        "anchor": { "$ref": "#/$defs/orderAnchor" }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["placement"], "properties": { "placement": { "enum": ["BEFORE", "AFTER"] } } },
+          "then": { "required": ["anchor"] },
+          "else": { "properties": { "anchor": false } }
+        }
+      ]
+    },
+    "orderNoOpEffect": {
+      "description": "Terminal viewer-safe result produced before Approval creation when a BEFORE/AFTER anchor is absent from the already-authorized view. The requested anchor key remains only in the private witness/audit record.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "placement"],
+      "properties": {
+        "kind": { "const": "ANCHOR_UNAVAILABLE_NO_OP" },
+        "placement": { "enum": ["BEFORE", "AFTER"] }
+      }
+    },
+    "setExpediteEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "beforeServiceClass", "afterServiceClass", "reviewAt"],
+      "properties": {
+        "kind": { "const": "SET_EXPEDITE" },
+        "beforeServiceClass": { "enum": ["STANDARD", "FIXED_DATE", "EXPEDITE"] },
+        "afterServiceClass": { "const": "EXPEDITE" },
+        "reviewAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "expediteEffect": {
+      "oneOf": [
+        { "$ref": "#/$defs/setExpediteEffect" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "beforeServiceClass", "afterServiceClass"],
+          "properties": {
+            "kind": { "const": "CLEAR_EXPEDITE" },
+            "beforeServiceClass": { "const": "EXPEDITE" },
+            "afterServiceClass": { "const": "STANDARD" }
+          }
+        }
+      ]
+    },
+    "allowExpediteCapacityEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "workItemRef", "originatingActionRef", "requestedExpediteEffect"],
+      "properties": {
+        "kind": { "const": "ALLOW_EXPEDITE_CAPACITY" },
+        "workItemRef": { "$ref": "#/$defs/workItemRevisionRef" },
+        "originatingActionRef": {
+          "description": "Resolves the originating public SERVICE_CLASS_EXPEDITE candidate; semanticHash is that candidate's publicIntentHash.",
+          "$ref": "#/$defs/publicActionCandidateRef"
+        },
+        "requestedExpediteEffect": { "$ref": "#/$defs/setExpediteEffect" }
+      }
+    },
+    "allowWipAdmissionEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "activityKind", "sessionRef", "requestedSessionState"],
+      "properties": {
+        "kind": { "const": "ALLOW_WIP_ADMISSION" },
+        "activityKind": { "enum": ["MANUAL_SESSION_START", "MANUAL_SESSION_RESUME", "AUTOMATED_SESSION_LAUNCH"] },
+        "sessionRef": { "$ref": "#/$defs/sessionRevisionRef" },
+        "requestedSessionState": { "enum": ["RUNNING", "REVIEW_REQUIRED"] }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["activityKind"],
+            "properties": { "activityKind": { "enum": ["MANUAL_SESSION_START", "AUTOMATED_SESSION_LAUNCH"] } }
+          },
+          "then": { "properties": { "requestedSessionState": { "const": "RUNNING" } } }
+        },
+        {
+          "if": {
+            "required": ["requestedSessionState"],
+            "properties": { "requestedSessionState": { "const": "REVIEW_REQUIRED" } }
+          },
+          "then": { "properties": { "activityKind": { "const": "MANUAL_SESSION_RESUME" } } }
+        }
+      ]
+    },
+    "publicActionCandidateRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QUEUE_ACTION_CANDIDATE" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "const": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "requestedEffect": {
+      "oneOf": [
+        { "$ref": "#/$defs/acceptControlEffect" },
+        { "$ref": "#/$defs/orderEffect" },
+        { "$ref": "#/$defs/orderNoOpEffect" },
+        { "$ref": "#/$defs/expediteEffect" },
+        { "$ref": "#/$defs/allowExpediteCapacityEffect" },
+        { "$ref": "#/$defs/allowWipAdmissionEffect" }
+      ]
+    }
+  }
+}

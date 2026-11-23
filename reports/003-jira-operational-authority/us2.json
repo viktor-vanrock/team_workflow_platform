@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "feature": "003-jira-operational-authority",
+  "gate": "us2",
+  "startedAt": "2026-09-03T10:03:29.314Z",
+  "finishedAt": "2026-09-03T10:03:31.452Z",
+  "status": "PASS",
+  "hashes": {
+    "tests/contract/003/us2-import-intent.spec.ts": "sha256:113ba4f95387b5c3df5d0a460274ec3fefa1070d56a0b3d4ee08230b34144dff",
+    "tests/integration/003/us2-import-scope.spec.ts": "sha256:80de3ee2437c17402ef358df96f30810fea0bd7f19b8b6a124737188233f18df",
+    "tests/integration/security/003/us2-import-identity.spec.ts": "sha256:4bf5e6c03da296dc6587cfc1327d6772664b4dfcd993ea3d7d9d840aba9c6feb",
+    "tests/integration/003/us2-import-completeness.spec.ts": "sha256:5470395ebbe511809218f33e804bb6d6f34206d867d261e6ccec942a3646c1c9",
+    "tests/integration/003/us2-import-race.spec.ts": "sha256:78c160a4279cc799f888549344bdd4edf0616f267bd4088caf5886662d840484",
+    "tests/integration/security/003/us2-webhook-lifecycle.spec.ts": "sha256:cd8ae78622d0fdb1131c85b31282820d30d63a1ac594f7b23f06057b39423aeb",
+    "tests/integration/security/003/us2-import-isolation.spec.ts": "sha256:2c023b87e66a855b015488a5246457ea0d350125de148b8de714eefaf7359745",
+    "tests/e2e/003-us2-direct-import.spec.ts": "sha256:45efafea04f963841465971bba76c70d1772ce1eb8f41906417a36146b563d63"
+  }
+}

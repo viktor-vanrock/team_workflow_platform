@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:intake-draft-confirmed:v1",
+  "title": "Intake Draft Confirmed Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "confirmationId",
+    "revisionId",
+    "contentHash",
+    "summaryHash",
+    "requestHash",
+    "connectorCommandId",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "confirmationId": {
+      "$ref": "#/$defs/id"
+    },
+    "revisionId": {
+      "$ref": "#/$defs/id"
+    },
+    "contentHash": {
+      "$ref": "#/$defs/digest"
+    },
+    "summaryHash": {
+      "$ref": "#/$defs/digest"
+    },
+    "requestHash": {
+      "$ref": "#/$defs/digest"
+    },
+    "connectorCommandId": {
+      "$ref": "#/$defs/id"
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

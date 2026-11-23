@@ -1,0 +1,17 @@
+{
+  "name": "competency-dummy",
+  "root": "packages/competency-dummy",
+  "sourceRoot": "packages/competency-dummy/src",
+  "projectType": "library",
+  "tags": ["type:pack", "runtime:universal", "domain:dummy"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/competency-dummy/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/competency-dummy/tsconfig.json --noEmit" }
+    }
+  }
+}

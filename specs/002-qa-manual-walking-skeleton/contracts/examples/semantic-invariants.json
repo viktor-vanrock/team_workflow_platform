@@ -1,0 +1,595 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "kind": "POST_CLOSE_CLERICAL_DIFF",
+      "previousManifestFixture": "positive/evidence-manifest-product-defect-required.valid.json",
+      "correctionRevisionFixture": "positive/evidence-manifest-clerical-correction.valid.json",
+      "requireSameManifestId": true,
+      "allowedManifestDifferencePointers": [
+        "/artifactMembers/0/evidenceManifestMemberId",
+        "/artifactMembers/0/displayLabel",
+        "/artifactMembers/0/contentHash",
+        "/createdAt",
+        "/contentHash",
+        "/clericalAnnotations"
+      ]
+    },
+    {
+      "kind": "COMPLETION_SUMMARY_PROJECTION_EQUALITY",
+      "candidateFixture": "positive/completion-candidate-confirmed.valid.json",
+      "requireEqualMappings": [
+        [
+          "/scopeSummary",
+          "/transitionInput/completionSummary/scopeSummary"
+        ],
+        [
+          "/residualRisk",
+          "/transitionInput/completionSummary/residualRisk"
+        ],
+        [
+          "/verdictRef",
+          "/transitionInput/completionSummary/verdictRef"
+        ],
+        [
+          "/completionSummaryHash",
+          "/transitionInput/completionSummaryHash"
+        ]
+      ],
+      "requireFlattenedDefectProjection": true,
+      "requireEvidenceManifestProjection": true
+    },
+    {
+      "kind": "RESPONSE_CHANNEL_PROJECTION_MAPPING",
+      "stateMapping": {
+        "CONFIRMED": "CONFIRMED",
+        "MISSING": "UNCONFIRMED"
+      },
+      "requireEqualFields": [
+        "requesterPrincipal",
+        "resolutionPolicyRef",
+        "evaluatedAt"
+      ],
+      "representativePairs": [
+        {
+          "input": {
+            "state": "CONFIRMED",
+            "requesterPrincipal": {
+              "type": "HUMAN",
+              "principalId": "76767676-7676-4676-8676-767676767676",
+              "issuer": "https://id.example.test",
+              "subject": "qa-requester-1"
+            },
+            "resolutionPolicyRef": {
+              "key": "qa.response-channel-resolution",
+              "version": "1.0.0",
+              "contentHash": "sha256:3838383838383838383838383838383838383838383838383838383838383838"
+            },
+            "responseChannelRef": {
+              "channelKind": "PLATFORM_WEB",
+              "channelId": "39393939-3939-4939-8939-393939393939",
+              "version": 1,
+              "contentHash": "sha256:3939393939393939393939393939393939393939393939393939393939393939"
+            },
+            "evaluatedAt": "2026-08-27T12:00:00Z"
+          },
+          "readiness": {
+            "state": "CONFIRMED",
+            "requesterPrincipal": {
+              "type": "HUMAN",
+              "principalId": "76767676-7676-4676-8676-767676767676",
+              "issuer": "https://id.example.test",
+              "subject": "qa-requester-1"
+            },
+            "resolutionPolicyRef": {
+              "key": "qa.response-channel-resolution",
+              "version": "1.0.0",
+              "contentHash": "sha256:3838383838383838383838383838383838383838383838383838383838383838"
+            },
+            "responseChannelRef": {
+              "channelKind": "PLATFORM_WEB",
+              "channelId": "39393939-3939-4939-8939-393939393939",
+              "version": 1,
+              "contentHash": "sha256:3939393939393939393939393939393939393939393939393939393939393939"
+            },
+            "evaluatedAt": "2026-08-27T12:00:00Z"
+          }
+        },
+        {
+          "input": {
+            "state": "MISSING",
+            "requesterPrincipal": {
+              "type": "HUMAN",
+              "principalId": "76767676-7676-4676-8676-767676767676",
+              "issuer": "https://id.example.test",
+              "subject": "qa-requester-1"
+            },
+            "resolutionPolicyRef": {
+              "key": "qa.response-channel-resolution",
+              "version": "1.0.0",
+              "contentHash": "sha256:3838383838383838383838383838383838383838383838383838383838383838"
+            },
+            "evaluatedAt": "2026-08-27T12:00:00Z",
+            "missingReasonCode": "REQUESTER_RESPONSE_CHANNEL_MISSING"
+          },
+          "readiness": {
+            "state": "UNCONFIRMED",
+            "requesterPrincipal": {
+              "type": "HUMAN",
+              "principalId": "76767676-7676-4676-8676-767676767676",
+              "issuer": "https://id.example.test",
+              "subject": "qa-requester-1"
+            },
+            "resolutionPolicyRef": {
+              "key": "qa.response-channel-resolution",
+              "version": "1.0.0",
+              "contentHash": "sha256:3838383838383838383838383838383838383838383838383838383838383838"
+            },
+            "evaluatedAt": "2026-08-27T12:00:00Z",
+            "missingReasonCode": "REQUESTER_RESPONSE_CHANNEL_MISSING"
+          }
+        }
+      ],
+      "branchRules": {
+        "CONFIRMED": {
+          "responseChannelRef": "REQUIRED_AND_EQUAL",
+          "missingReasonCode": "FORBIDDEN"
+        },
+        "MISSING_TO_UNCONFIRMED": {
+          "responseChannelRef": "FORBIDDEN",
+          "missingReasonCode": "REQUIRED_AND_EQUAL"
+        }
+      }
+    },
+    {
+      "kind": "PROJECT_CONTEXT_POLICY_CATALOG_MEMBERSHIP",
+      "contextFixture": "positive/qa-project-context.valid.json",
+      "requiredSessionPlanFixture": "positive/required-session-plan.valid.json",
+      "requireDefaultTargetMember": true,
+      "requireDefaultScopeMember": true,
+      "requireDefaultChecklistSubset": true,
+      "requireEveryPlanSlotPolicyMember": true,
+      "negativePolicyRefs": [
+        {
+          "catalog": "allowedChecklistPolicyRefs",
+          "ref": {
+            "kind": "checklist-policy",
+            "id": "unpublished-checklist",
+            "version": "1",
+            "contentHash": "sha256:7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b"
+          },
+          "expectedDecision": "REJECT_NOT_ALLOWLISTED"
+        }
+      ]
+    },
+    {
+      "kind": "POST_CLOSE_CLERICAL_NOTE_HASH_AND_SIGNATURE",
+      "previousManifestFixture": "positive/evidence-manifest-product-defect-required.valid.json",
+      "correctionRevisionFixture": "positive/evidence-manifest-clerical-note-only.valid.json",
+      "requireSameManifestId": true,
+      "requireAnnotationOrdinalsStrictlyIncreasing": true,
+      "requireManifestContentHashEqualsSignature": true,
+      "negativeMutations": [
+        {
+          "path": "/manifest/clericalAnnotations/0/text",
+          "value": "Tampered after signing",
+          "preserveContentHash": true,
+          "preserveSignature": true,
+          "expectedDecision": "REJECT_HASH_OR_SIGNATURE_MISMATCH"
+        },
+        {
+          "path": "/kind",
+          "value": "INITIAL",
+          "expectedDecision": "REJECT_ANNOTATIONS_OUTSIDE_CLERICAL"
+        }
+      ]
+    },
+    {
+      "kind": "VERDICT_SIGNATURE_LINKAGE",
+      "verdictFixture": "positive/qa-verdict-signed.valid.json",
+      "signatureFixtures": [
+        "positive/verdict-signature-primary.valid.json"
+      ],
+      "requireRefIdVersionContentHashMatch": true,
+      "requireVerdictContentHashMatch": true,
+      "ordinaryRiskRoles": [
+        "PRIMARY"
+      ],
+      "elevatedRiskRoles": [
+        "PRIMARY",
+        "LEAD_COSIGN"
+      ],
+      "allowedLifecycle": ["DRAFT", "PARTIALLY_SIGNED", "SIGNED", "SUPERSEDED"],
+      "forbidInvalidatedState": true,
+      "upstreamDriftPreservesHistoricalSigned": true,
+      "currentSelectorRejectsStaleExactRef": true,
+      "onlyExplicitHumanRevisionSupersedes": true
+    },
+    {
+      "kind": "REQUIRED_SESSION_CARRY_FORWARD",
+      "priorPlanFixture": "positive/required-session-plan.valid.json",
+      "completedSessionFixtures": [
+        "positive/test-session-completed.valid.json"
+      ],
+      "currentPlanFixture": "positive/required-session-plan-v2-carry-forward-and-waiver.valid.json",
+      "requireSameRequirementKeyOrdinalContentHash": true,
+      "requireWaivedSlotsNoCarryForward": true,
+      "requireAtLeastOneRequired": true,
+      "negativeMutations": [
+        {
+          "path": "/slots/0/contentHash",
+          "value": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+          "preserveCarriedForwardRef": true,
+          "expectedDecision": "REJECT_CHANGED_REQUIREMENT_CARRY_FORWARD"
+        },
+        {
+          "path": "/slots/0/resolution",
+          "value": "WAIVED",
+          "expectedDecision": "REJECT_LAST_REQUIRED_WAIVER"
+        }
+      ]
+    },
+    {
+      "kind": "MUTATION_CAS_HANDOFF",
+      "routes": [
+        {
+          "operationId": "publishRequiredSessionPlanRevision",
+          "casOwner": "required-session-plan-header",
+          "bootstrapFixture": "positive/required-session-plan-bootstrap-history.valid.json",
+          "requireRequestIfMatch": true,
+          "requireResponseETag": true,
+          "requireResponseResourceVersion": "planHeaderResourceVersion"
+        },
+        {
+          "operationId": "initiateQaEvidenceAttachment",
+          "casOwner": "evidence-attachment-session",
+          "requireResponseETag": true
+        },
+        {
+          "operationId": "uploadQaEvidenceContent",
+          "casOwner": "evidence-attachment-session",
+          "requireRequestIfMatch": true,
+          "requireResponseETag": true
+        },
+        {
+          "operationId": "finalizeQaEvidenceAttachment",
+          "casOwner": "evidence-attachment-session",
+          "requireRequestIfMatch": true,
+          "requireResponseETag": true
+        },
+        {
+          "operationId": "createQaPostCloseManifestRevision",
+          "casOwner": "evidence-manifest-header",
+          "requireRequestIfMatch": true,
+          "requireResponseETag": true,
+          "requireResponseResourceVersion": "manifestHeaderResourceVersion"
+        },
+        {
+          "operationId": "requestQaFinalClose",
+          "casOwner": "completion-candidate",
+          "requireRequestIfMatch": true,
+          "requireReloadETagOperation": "getQaCompletionCandidate"
+        }
+      ],
+      "staleTokenExpectedDecision": "REJECT_PRECONDITION_FAILED"
+    },
+    {
+      "kind": "TYPED_WAIVER_AND_DOD_DEREFERENCE",
+      "selectorFixtures": [
+        "positive/plan-item-waiver-selector.valid.json",
+        "positive/required-session-waiver-selector.valid.json"
+      ],
+      "requireKindShapeMatch": true,
+      "dodWaiverAllowedKinds": [
+        "PLAN_ITEM",
+        "SESSION",
+        "REQUIRED_SESSION"
+      ],
+      "forbiddenKinds": [
+        "DOR",
+        "FINDING",
+        "DOD",
+        "EVIDENCE"
+      ],
+      "rejectLastRequiredSessionWaiver": true
+    },
+    {
+      "kind": "QA_DETAIL_SECTION_COMPOSITION",
+      "requiredSections": [
+        "intake",
+        "readiness",
+        "execution",
+        "evidence",
+        "findings",
+        "completion"
+      ],
+      "allowEmptyArraysBeforeOwningContribution": true,
+      "requireEverySectionExactlyOnceInFinalComposition": true,
+      "forbidCrossStorySecondAuthority": true
+    },
+    {
+      "kind": "POST_CLOSE_MARKER_EVENT_PARITY",
+      "markerFixture": "positive/post-close-correction-marker.valid.json",
+      "eventFixture": "positive/post-close-correction-recorded-event.valid.json",
+      "requireEqualFields": [
+        "markerId",
+        "finalCloseConfirmationRef",
+        "manifestRevisionRef",
+        "adjudicativeManifestRevisionRef",
+        "requestedBy",
+        "permissionKey",
+        "authorizationBasisHash"
+      ],
+      "requireAnnotationsFromSignedManifestFixture": "positive/evidence-manifest-clerical-correction.valid.json"
+    },
+    {
+      "kind": "COMPLETION_DEFECT_PUBLICATION_BRANCHES",
+      "linkedFixture": "positive/completion-summary-defect-linked.valid.json",
+      "rejectedFixture": "positive/completion-summary-defect-rejected.valid.json",
+      "requireRejectedRefEqualsSoleDraft": true,
+      "requireLinkedOneDraftOneLink": true,
+      "requireNonCreateNoDraftOrLink": true,
+      "requireDuplicateExactRefAndReason": true
+    },
+    {
+      "kind": "COMPLETION_AGGREGATE_LOCK_RACE",
+      "extensionFixture": "positive/qa-request-extension.valid.json",
+      "candidateFixture": "positive/completion-candidate-confirmed.valid.json",
+      "openGuardFixture": "positive/completion-dispatch-guard-open.valid.json",
+      "dispatchedGuardFixture": "positive/completion-dispatch-guard-in-flight.valid.json",
+      "doneFrozenGuardFixture": "positive/completion-dispatch-guard-done-frozen.valid.json",
+      "dispatchedCandidateProjectionFixture": "positive/completion-dispatched-projection.valid.json",
+      "failedCandidateProjectionFixture": "positive/completion-failed-dispatch-provenance.valid.json",
+      "predispatchInvalidatedProjectionFixture": "positive/completion-invalidated-authorized-projection.valid.json",
+      "invalidatedFromDispatchedFixture": "negative/completion-invalidated-from-dispatched.invalid.json",
+      "requireCandidateAggregateHashEqualsExtension": true,
+      "requireDispatchAtomicBeforeOutbox": [
+        "RECHECK_EXTENSION_RESOURCE_VERSION",
+        "RECHECK_ADJUDICATIVE_AGGREGATE_HASH",
+        "SET_CANDIDATE_DISPATCHED",
+        "SET_EXTENSION_GUARD_DISPATCHED",
+        "APPEND_COMMAND_AND_OUTBOX"
+      ],
+      "adjudicativeMutationFamilies": [
+        "REQUEST_INPUT",
+        "READINESS_OR_WAIVER",
+        "REQUIRED_SESSION_PLAN",
+        "SESSION_EXECUTION_OR_REVIEW",
+        "EVIDENCE_ADJUDICATION",
+        "FINDING_OR_DEFECT",
+        "VERDICT_OR_DOD",
+        "COMPLETION_CANDIDATE"
+      ],
+      "correctionFirst": {
+        "invalidateCandidateStates": [
+          "CANDIDATE",
+          "AWAITING_APPROVAL",
+          "AUTHORIZED"
+        ],
+        "advanceAggregateHash": true,
+        "invalidatePredispatchCandidate": true,
+        "connectorCallCount": 0,
+        "expectedDecision": "INVALIDATE_STALE_CANDIDATE_ZERO_EFFECT"
+      },
+      "dispatchFirst": {
+        "guardState": "DISPATCHED",
+        "adjudicativeMutationExpectedDecision": "REJECT_COMPLETION_IN_FLIGHT",
+        "legalCandidateNextStates": [
+          "CONFIRMED",
+          "FAILED"
+        ]
+      },
+      "finalCloseInitiatorRole": "EXECUTOR",
+      "leadMayInitiate": false,
+      "leadApprovalMustBeDistinct": true,
+      "humanRejection": {
+        "onlyFromState": "AWAITING_APPROVAL",
+        "requiresExactGenericApprovalRef": true,
+        "candidatePreapprovalDriftState": "INVALIDATED",
+        "candidateDiscardRouteExists": false
+      },
+      "failedReconciliation": {
+        "candidateState": "FAILED",
+        "releasedGuardState": "OPEN",
+        "preserveCommandAndEffectProvenance": true
+      },
+      "confirmedReconciliation": {
+        "candidateState": "CONFIRMED",
+        "guardState": "DONE_FROZEN",
+        "normalizedStatus": "DONE"
+      },
+      "postDoneClericalCorrectionIsNonAdjudicative": true
+    },
+    {
+      "kind": "FLAKY_DISPOSITION_FREEZE_ORDERING",
+      "resultFixture": "positive/plan-item-result-flaky-pass.valid.json",
+      "commandFixture": "positive/plan-item-result-flaky-pass-command.valid.json",
+      "disposedFindingReviewFixture": "positive/finding-review-duplicate-disposed.valid.json",
+      "frozenFindingReviewFixture": "positive/finding-review-duplicate.valid.json",
+      "negativeObservationFixture": "positive/observation-negative-attempt.valid.json",
+      "positiveObservationFixture": "positive/observation-positive-retry.valid.json",
+      "activeFlakyMembershipFixture": "positive/finding-observation-membership-flaky-active.valid.json",
+      "sessionReviewConfirmationFixture": "positive/session-review-flaky-disposition-confirmation.valid.json",
+      "inconclusiveFixture": "positive/plan-item-result-inconclusive-without-flaky-basis.valid.json",
+      "forbiddenFlaggedResultFixture": "negative/plan-item-result-fail-with-flaky-flag.invalid.json",
+      "allowedFlaggedResultStates": ["PASS", "INCONCLUSIVE"],
+      "forbiddenFlaggedResultStates": ["FAIL", "BLOCKED", "NOT_RUN"],
+      "requireResultAndCommandSameBasis": true,
+      "requireCompleteFailedAttemptSubset": true,
+      "requireFlakyObservationsCoverEveryFailedAttempt": true,
+      "requireFlakyObservationsActiveInPinnedFinding": true,
+      "requireBasisStage": "DISPOSED",
+      "forbidFrozenReviewRefInResult": true,
+      "sessionReviewAtomicSteps": [
+        "RECHECK_CURRENT_DISPOSED_REVIEW",
+        "RECHECK_ACTIVE_MEMBERSHIP_SET_HASH",
+        "RECHECK_PINNED_POLICY",
+        "CREATE_FROZEN_SUCCESSOR",
+        "PIN_SESSION_REVIEW_AND_MANIFEST"
+      ],
+      "requireFrozenPreviousRefEqualsDisposedBasis": true,
+      "inconclusiveRequiresNoBasis": true,
+      "semanticNegativeFixtures": {
+        "wrongFailedAttempt": "negative/plan-item-result-flaky-pass-wrong-failed-attempt.semantic.json",
+        "unrelatedSameSessionFinding": "negative/plan-item-result-flaky-pass-unrelated-finding.semantic.json"
+      }
+    },
+    {
+      "kind": "PLAN_ITEM_NEGATIVE_OBSERVATION_LINEAGE",
+      "resultFixture": "positive/plan-item-result-fail-with-evidence.valid.json",
+      "negativeObservationFixture": "positive/observation-negative-attempt.valid.json",
+      "zeroObservationFixture": "negative/plan-item-result-fail-without-observation.invalid.json",
+      "requireSameWorkspaceProjectWorkItemSessionPlanItem": true,
+      "negativeTechnicalResults": ["ASSERTION_FAILED", "INFRA_FAILED", "TIMEOUT", "INCOMPLETE"],
+      "requiredObservationKinds": ["NEGATIVE", "AMBIGUOUS"],
+      "requireEveryNegativeAttemptCoveredByExactObservation": true,
+      "requireHumanNegativeResultsHaveObservation": ["FAIL", "BLOCKED", "INCONCLUSIVE"],
+      "notRunRequiresEmptyAttemptsAndObservations": true
+    },
+    {
+      "kind": "CLEAN_PASS_POSITIVE_OBSERVATION_LINEAGE",
+      "attemptFixture": "positive/manual-attempt-clean-pass.valid.json",
+      "observationFixture": "positive/observation-clean-pass.valid.json",
+      "resultFixture": "positive/plan-item-result-clean-pass.valid.json",
+      "commandFixture": "positive/plan-item-result-clean-pass-command.valid.json",
+      "requireResult": "PASS",
+      "requireObservationKind": "POSITIVE",
+      "requireObservationAttemptResult": "PASS",
+      "requireSameWorkspaceProjectWorkItemSessionPlanItem": true,
+      "requireStructuredExpectedAndActualOutcome": true,
+      "requireCurrentLeafObservation": true,
+      "schemaNegativeZeroObservationFixture": "negative/plan-item-result-clean-pass-zero-observations.invalid.json",
+      "semanticNegativeFixtures": {
+        "informationalOnlyObservation": "negative/observation-informational-pass-attempt.semantic.json",
+        "informationalOnlyResult": "negative/plan-item-result-pass-informational-only.semantic.json",
+        "positiveObservationOnNonPassAttempt": "negative/observation-positive-on-failed-attempt.semantic.json",
+        "nonPassAttemptResult": "negative/plan-item-result-pass-nonpass-attempt.semantic.json",
+        "staleCorrectedObservationResult": "negative/plan-item-result-pass-stale-observation.semantic.json"
+      }
+    },
+    {
+      "kind": "PLAN_ITEM_RESULT_MEMBERSHIP_AND_RACE",
+      "cleanCommandFixture": "positive/plan-item-result-clean-pass-command.valid.json",
+      "cleanResultFixture": "positive/plan-item-result-clean-pass.valid.json",
+      "flakyResultFixture": "positive/plan-item-result-flaky-pass.valid.json",
+      "attemptMembershipMode": "ALL_FINALIZED_CONTIGUOUS",
+      "observationMembershipMode": "ALL_CURRENT_LEAVES",
+      "requireContiguousAttemptNumbers": "1_TO_MAXIMUM_ATTEMPT_NO",
+      "commandCarriesOnlyExpectedSetCas": true,
+      "persistedResultExposesCompleteRefsHashesAndMaximum": true,
+      "omittedEarlierAttemptFixture": "negative/plan-item-result-command-omits-earlier-attempt.semantic.json",
+      "lateRepeatStaleCommandFixture": "negative/plan-item-result-command-stale-after-late-repeat.semantic.json",
+      "resultCommitAtomicWrites": ["RESULT_REVISION", "PLAN_ITEM_TERMINAL_STATE", "LATEST_RESULT_POINTER", "AUDIT", "OUTBOX"],
+      "resultFirst": {
+        "lateRepeatExpectedDecision": "REJECT_PLAN_ITEM_TERMINAL",
+        "initialObservationExpectedDecision": "REJECT_PLAN_ITEM_TERMINAL"
+      },
+      "executionFirst": {
+        "expandCompleteAttemptAndObservationSets": true,
+        "oldResultCommandExpectedDecision": "REJECT_STALE_MEMBERSHIP_CAS",
+        "failThenPassForcesFlag": "FLAKY_SUSPECTED"
+      },
+      "preReviewObservationCorrection": {
+        "newLeafFixture": "positive/observation-clean-pass-correction.valid.json",
+        "invalidateCurrentResultRevision": true,
+        "advanceObservationSetHash": true,
+        "requireNewHumanResultRevision": true
+      },
+      "postReviewObservationCorrectionExpectedDecision": "REJECT_SESSION_REVIEW_FROZEN"
+    },
+    {
+      "kind": "FINDING_REVIEW_REVISION_CHAIN",
+      "allowedStageTransitions": [
+        "CLASSIFIED_TO_DISPOSED",
+        "CLASSIFIED_TO_CLASSIFIED",
+        "DISPOSED_TO_FROZEN"
+      ],
+      "duplicateChainFixtures": [
+        "positive/finding-review-duplicate-classified.valid.json",
+        "positive/finding-review-duplicate-disposed.valid.json",
+        "positive/finding-review-duplicate.valid.json"
+      ],
+      "waivedChainFixtures": [
+        "positive/finding-review-classified.valid.json",
+        "positive/finding-review-waived-disposed.valid.json",
+        "positive/finding-review-waived.valid.json"
+      ],
+      "requireSameFindingReviewRevisionId": true,
+      "requireSameFindingIdAndScope": true,
+      "requireExactPreviousRevisionRef": true,
+      "requireUnitVersionIncrement": true,
+      "versionOneStage": "CLASSIFIED",
+      "disposedPredecessorStage": "CLASSIFIED",
+      "frozenPredecessorStage": "DISPOSED",
+      "negativeVersionOneDispositionFixture": "negative/finding-review-disposed-v1.invalid.json"
+    },
+    {
+      "kind": "SESSION_REVIEW_ATOMIC_FINDING_FREEZE_SET",
+      "eventPayloadFixture": "positive/session-reviewed-payload-with-frozen-findings.valid.json",
+      "requireCanonicalOrderedUniqueRefs": true,
+      "requireEqualsFullLockedSessionFindingInventory": true,
+      "allowExplicitEmptySetForCleanUs3": true,
+      "forbidPartialPerFindingFrozenEvent": true,
+      "sameTransactionWrites": [
+        "FROZEN_FINDING_REVIEW_SUCCESSORS",
+        "SESSION_REVIEW",
+        "ADJUDICATIVE_EVIDENCE_MANIFEST",
+        "SESSION_REVIEWED_OUTBOX_EVENT"
+      ]
+    },
+    {
+      "kind": "FINDING_OBSERVATION_MEMBERSHIP_CAS",
+      "activeFixture": "positive/finding-observation-membership-active.valid.json",
+      "releasedFixture": "positive/finding-observation-membership-released.valid.json",
+      "requireSameWorkspaceProjectWorkItemSession": true,
+      "maximumActiveFindingMembershipsPerObservation": 1,
+      "releaseIsOneWay": true,
+      "reassignmentCreatesNewMembershipId": true,
+      "forbidMutationWhenFindingFrozen": true,
+      "commands": ["ASSIGN", "RELEASE"],
+      "requireIfMatchAndExpectedMembershipSetHash": true,
+      "requireResponseEtagAndAdvancedMembershipSetHash": true,
+      "forbidGenericStateSetter": true
+    },
+    {
+      "kind": "REQUEST_INPUT_FROZEN_STRUCTURAL_IDENTITY",
+      "initialRevisionFixture": "positive/qa-request-input-revision-incomplete.valid.json",
+      "semanticOnlyCommandFixture": "positive/request-input-revision-command-semantic-only.valid.json",
+      "negativeIdentityDriftFixture": "negative/request-input-revision-command-structural-identity-drift.invalid.json",
+      "frozenFields": [
+        "workspaceId",
+        "projectId",
+        "workItemId",
+        "definitionRef",
+        "acceptedDraftRef",
+        "externalRequestRef",
+        "operationalBindingRef",
+        "originalRequesterRef",
+        "title",
+        "requestKind",
+        "dataClassificationKey"
+      ],
+      "requireServerCarryForwardFromRevisionOne": true,
+      "requireApplicationComparison": true,
+      "requireInsertTimeDbComparison": true,
+      "revisionCommandForbidsFrozenFields": true,
+      "responseChannelResolvedFromOriginalRequester": true
+    },
+    {
+      "kind": "SESSION_STRUCTURE_READINESS_CAS",
+      "structureChangedFixture": "positive/test-session-structure-changed-from-ready.valid.json",
+      "staleRunningFixture": "negative/test-session-running-stale-ready-structure.semantic.json",
+      "structureFields": ["target", "scope", "owner", "requiredCapabilities", "orderedPlanItems"],
+      "requireMonotonicStructureRevision": true,
+      "requireStructureHashChange": true,
+      "readyEditAtomicResult": {
+        "state": "PLANNED",
+        "reasonCode": "STRUCTURE_CHANGED",
+        "readyAgainstStructureHash": null,
+        "requireAdvancedEtag": true
+      },
+      "startRequiresReadyAgainstEqualsCurrentStructureHash": true,
+      "staleStartExpectedDecision": "REJECT_STRUCTURE_CHANGED"
+    }
+  ]
+}

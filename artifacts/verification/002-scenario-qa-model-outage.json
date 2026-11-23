@@ -1,0 +1,12 @@
+{
+  "feature": "002",
+  "scenario": "qa-model-outage",
+  "composition": "qa-local",
+  "tests": [
+    "tests/e2e/acceptance/002-at-013-model-degraded-mode.spec.ts"
+  ],
+  "startedAt": "2026-08-30T23:02:13.463Z",
+  "finishedAt": "2026-08-30T23:02:15.157Z",
+  "status": "PASS",
+  "exitCode": 0
+}

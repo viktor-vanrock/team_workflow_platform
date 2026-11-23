@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:events:automation-artifact-registered:v1",
+  "title": "Automation Artifact Registered Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "automationAttemptId",
+    "artifactReferenceId",
+    "checksum",
+    "classification",
+    "expiresAt",
+    "registeredAt"
+  ],
+  "properties": {
+    "automationAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "artifactReferenceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "checksum": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "classification": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/classification" },
+    "expiresAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "registeredAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+  }
+}

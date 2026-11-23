@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:qa-intake-partial-content:v1",
+  "title": "QA Intake Partial Content v1",
+  "description": "Structurally valid partial Draft content using exactly the canonical Feature 002 QA intake field vocabulary and value types. Canonical required user fields may be absent until deterministic validation reports VALID.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "requestKind": { "type": "string", "enum": ["feature-validation", "smoke", "regression", "retest", "investigation"] },
+    "goal": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "scope": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "acceptanceOutcome": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "sourceRefs": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/externalImmutableRef" }
+    },
+    "blockers": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/declaredBlocker" }
+    },
+    "dependencies": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/externalImmutableRef" }
+    },
+    "requestedTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "environmentId": { "type": "string", "format": "uuid" },
+        "environmentRevision": { "type": "integer", "minimum": 1 },
+        "buildRef": { "$ref": "#/$defs/externalImmutableRef" },
+        "targetPolicyRef": { "$ref": "#/$defs/externalImmutableRef" },
+        "testDataRef": { "$ref": "#/$defs/externalImmutableRef" },
+        "accountLeaseRef": { "$ref": "#/$defs/externalImmutableRef" }
+      }
+    },
+    "requestRisk": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "businessImpact": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "desiredDate": { "type": "string", "format": "date" },
+    "checklistRefs": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/externalImmutableRef" }
+    },
+    "roleMetadataRefs": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/externalImmutableRef" }
+    },
+    "requestedClassificationKey": { "$ref": "#/$defs/classificationKey" },
+    "defectRef": { "$ref": "#/$defs/externalImmutableRef" },
+    "previousSessionRef": { "$ref": "#/$defs/previousSessionRef" },
+    "sourceBuildRef": { "$ref": "#/$defs/externalImmutableRef" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "requestKind": { "const": "retest" } },
+        "required": ["requestKind"]
+      },
+      "then": true,
+      "else": {
+        "not": {
+          "anyOf": [
+            { "required": ["defectRef"], "properties": { "defectRef": true } },
+            { "required": ["previousSessionRef"], "properties": { "previousSessionRef": true } },
+            { "required": ["sourceBuildRef"], "properties": { "sourceBuildRef": true } }
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "stableKey": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9][a-z0-9-]*)*$",
+      "maxLength": 128
+    },
+    "classificationKey": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,63}$" },
+    "errorCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$" },
+    "externalImmutableRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version", "contentHash"],
+      "properties": {
+        "kind": { "$ref": "#/$defs/stableKey" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "version": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "contentHash": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "declaredBlocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "description"],
+      "properties": {
+        "code": { "$ref": "#/$defs/errorCode" },
+        "description": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      }
+    },
+    "immutableRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "contentHash"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "previousSessionRef": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "historicalSessionRef"],
+          "properties": {
+            "kind": { "const": "EXTERNAL_HISTORICAL" },
+            "historicalSessionRef": { "$ref": "#/$defs/externalImmutableRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "sessionId", "sessionReviewRef"],
+          "properties": {
+            "kind": { "const": "QA_SESSION" },
+            "sessionId": { "type": "string", "format": "uuid" },
+            "sessionReviewRef": { "$ref": "#/$defs/immutableRevisionRef" }
+          }
+        }
+      ]
+    }
+  }
+}

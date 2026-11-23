@@ -1,0 +1,21 @@
+{
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "requiredSessionPlanRef": {
+    "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    "revision": 1,
+    "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "previousRevisionRef": {
+    "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    "revision": 1,
+    "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "readinessAssessmentRef": {
+    "assessmentId": "68686868-6868-4868-8868-686868686868",
+    "version": 1,
+    "contentHash": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  "publicationReason": "INITIAL",
+  "requirementCount": 1
+}
+

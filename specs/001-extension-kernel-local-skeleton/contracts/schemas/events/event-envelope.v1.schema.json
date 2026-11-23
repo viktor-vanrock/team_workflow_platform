@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:events:event-envelope:v1",
+  "title": "Project-scoped Operational Event Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "envelopeVersion",
+    "eventId",
+    "eventType",
+    "occurredAt",
+    "recordedAt",
+    "producer",
+    "producerVersion",
+    "workspaceId",
+    "projectId",
+    "entityType",
+    "entityId",
+    "entityVersion",
+    "correlationId",
+    "causationId",
+    "actor",
+    "dataClassificationKey",
+    "payloadVersion",
+    "payloadSchemaRef",
+    "payload"
+  ],
+  "properties": {
+    "envelopeVersion": { "const": 1 },
+    "eventId": { "type": "string", "format": "uuid" },
+    "eventType": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "recordedAt": { "type": "string", "format": "date-time" },
+    "producer": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "producerVersion": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "entityType": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "entityId": { "type": "string", "format": "uuid" },
+    "entityVersion": { "type": "integer", "minimum": 1 },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "causationId": { "type": "string", "format": "uuid" },
+    "actor": { "$ref": "../common/actor-ref.v1.schema.json" },
+    "dataClassificationKey": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "payloadVersion": { "type": "integer", "minimum": 1 },
+    "payloadSchemaRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SchemaRef" },
+    "payload": true
+  }
+}

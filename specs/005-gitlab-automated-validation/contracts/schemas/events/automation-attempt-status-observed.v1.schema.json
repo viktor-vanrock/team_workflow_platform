@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:events:automation-attempt-status-observed:v1",
+  "title": "Automation Attempt Status Observed Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "automationAttemptId",
+    "revisionNo",
+    "status",
+    "source",
+    "observationHash",
+    "observedAt"
+  ],
+  "properties": {
+    "automationAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "revisionNo": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["CREATED", "TRIGGER_PENDING", "RUNNING", "TERMINAL"] },
+    "source": {
+      "enum": [
+        "COMMAND_RECEIPT",
+        "WEBHOOK_SIGNAL",
+        "POLL_READ",
+        "RECONCILIATION_READ",
+        "SYNTHETIC_FAILURE"
+      ]
+    },
+    "externalPipelineId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "externalJobIds": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+    },
+    "observationHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "observedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+  }
+}

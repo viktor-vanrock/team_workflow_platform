@@ -1,0 +1,12 @@
+{
+  "expectedPreviousResultRevisionRef": null,
+  "expectedAttemptSetHash": "sha256:6868686868686868686868686868686868686868686868686868686868686869",
+  "expectedMaximumAttemptNo": 2,
+  "expectedObservationSetHash": "sha256:6969696969696969696969696969696969696969696969696969696969696968",
+  "expectedObservationCount": 2,
+  "reviewFlags": ["FLAKY_SUSPECTED"],
+  "result": "PASS",
+  "actualOutcome": "Initial assertion failed; retry passed.",
+  "decisionReason": "This is missing the exact current disposed Finding basis.",
+  "artifactIds": ["99999999-9999-4999-8999-999999999999"]
+}

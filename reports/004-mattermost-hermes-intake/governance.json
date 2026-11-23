@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "feature-004-governance",
+  "startedAt": "2026-09-03T10:20:23.456Z",
+  "finishedAt": "2026-09-03T10:20:23.458Z",
+  "manifest": {
+    "schemaVersion": 1,
+    "acceptedAdr": {
+      "path": "docs/adr/0008-agent-run-subject-union.md",
+      "sha256": "sha256:efb0fcfcf983355d7a3f279221ed5333e1975fb8b8965a82cfb4be733fbe38ad"
+    },
+    "partiallySupersededAdr": {
+      "path": "docs/adr/0005-hermes-coordinator-approval.md",
+      "sha256": "sha256:8779c598e1d90207257fad00ebfd164fd1602ee866eaaa69ee15575de93440d2"
+    },
+    "constitution": {
+      "path": ".specify/memory/constitution.md",
+      "sha256": "sha256:d448f4586b3d798e9fd27a44471d9ad5ad1a6852db4b5255b6ee1d8c7ea7630f",
+      "version": "2.0.0"
+    }
+  },
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "adr-0008",
+      "status": "PASS",
+      "code": "GOVERNANCE_DOCUMENT_ACCEPTED",
+      "detail": "docs/adr/0008-agent-run-subject-union.md sha256:efb0fcfcf983355d7a3f279221ed5333e1975fb8b8965a82cfb4be733fbe38ad"
+    },
+    {
+      "id": "adr-0005",
+      "status": "PASS",
+      "code": "GOVERNANCE_DOCUMENT_ACCEPTED",
+      "detail": "docs/adr/0005-hermes-coordinator-approval.md sha256:8779c598e1d90207257fad00ebfd164fd1602ee866eaaa69ee15575de93440d2"
+    },
+    {
+      "id": "constitution",
+      "status": "PASS",
+      "code": "GOVERNANCE_DOCUMENT_ACCEPTED",
+      "detail": ".specify/memory/constitution.md sha256:d448f4586b3d798e9fd27a44471d9ad5ad1a6852db4b5255b6ee1d8c7ea7630f"
+    }
+  ]
+}

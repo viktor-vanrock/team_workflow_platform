@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:intake-draft-revised:v1",
+  "title": "Intake Draft Revised Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "revisionId",
+    "contentHash",
+    "sourceKind",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "revisionId": {
+      "$ref": "#/$defs/id"
+    },
+    "previousRevisionId": {
+      "$ref": "#/$defs/id"
+    },
+    "previousContentHash": {
+      "$ref": "#/$defs/digest"
+    },
+    "contentHash": {
+      "$ref": "#/$defs/digest"
+    },
+    "sourceKind": {
+      "enum": [
+        "HUMAN_FORM",
+        "MATTERMOST_ACTION",
+        "HERMES_PROPOSAL_ACCEPTED",
+        "DETERMINISTIC_NORMALIZATION"
+      ]
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

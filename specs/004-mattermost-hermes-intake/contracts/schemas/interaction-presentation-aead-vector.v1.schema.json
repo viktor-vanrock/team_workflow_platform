@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:interaction-presentation-aead-vector:v1",
+  "title": "Interaction Presentation AEAD Golden Vector v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "testOnly",
+    "keyHex",
+    "aeadNonceHex",
+    "plaintextUtf8",
+    "plaintextHex",
+    "aad",
+    "aadHash",
+    "ciphertextHex",
+    "authTagHex",
+    "ciphertextHash",
+    "tokenHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "interaction-presentation-aead-vector@1.0.0" },
+    "testOnly": { "const": true },
+    "keyHex": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "aeadNonceHex": { "type": "string", "pattern": "^[a-f0-9]{24}$" },
+    "plaintextUtf8": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "plaintextHex": { "type": "string", "pattern": "^(?:[a-f0-9]{2})+$", "maxLength": 2048 },
+    "aad": { "$ref": "urn:awp:schemas:004:interaction-presentation-aad:v1" },
+    "aadHash": { "$ref": "#/$defs/hash" },
+    "ciphertextHex": { "type": "string", "pattern": "^(?:[a-f0-9]{2})+$", "maxLength": 2048 },
+    "authTagHex": { "type": "string", "pattern": "^[a-f0-9]{32}$" },
+    "ciphertextHash": { "$ref": "#/$defs/hash" },
+    "tokenHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  }
+}

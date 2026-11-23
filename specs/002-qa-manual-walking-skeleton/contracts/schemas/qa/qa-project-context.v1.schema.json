@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:project-context:v1",
+  "title": "Immutable QA Project Context Revision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "contextId", "version", "workspaceId", "projectId", "state", "allowedEnvironments", "allowedResponseChannelKinds", "requestAuthorityRequirementKey", "defectDestinationRequirementKey", "allowedTargetPolicyRefs", "allowedScopePolicyRefs", "allowedChecklistPolicyRefs", "defaultTargetPolicyRef", "defaultScopePolicyRef", "defaultChecklistRefs", "projectRisk", "maximumClassificationKey", "dorRuleSetRef", "dodRuleSetRef", "evidencePolicyRef", "riskReviewPolicyRef", "contentHash", "createdBy", "publishedBy", "publishedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contextId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "state": { "const": "PUBLISHED" },
+    "allowedEnvironments": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["environmentId", "revision", "scope"],
+        "properties": {
+          "environmentId": { "type": "string", "format": "uuid" },
+          "revision": { "type": "integer", "minimum": 1 },
+          "scope": { "type": "string", "enum": ["LOCAL", "NON_PROD", "PREPROD"] }
+        }
+      }
+    },
+    "allowedResponseChannelKinds": {
+      "description": "Server-resolved response-channel kinds allowed by this immutable project context. Feature 002 intentionally seeds no Mattermost runtime.",
+      "type": "array",
+      "const": ["PLATFORM_WEB"]
+    },
+    "requestAuthorityRequirementKey": { "const": "qa-request-authority" },
+    "defectDestinationRequirementKey": { "const": "defect-destination" },
+    "allowedTargetPolicyRefs": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+    },
+    "allowedScopePolicyRefs": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+    },
+    "allowedChecklistPolicyRefs": {
+      "description": "Closed exact checklist-policy catalog for this immutable context version. It is distinct from the default subset.",
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+    },
+    "defaultTargetPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+    "defaultScopePolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+    "defaultChecklistRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+    },
+    "projectRisk": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "maximumClassificationKey": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ClassificationKey" },
+    "dorRuleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "dodRuleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "evidencePolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "riskReviewPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef" },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "publishedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "publishedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    { "description": "Semantic conformance requires each default target/scope ref and every default checklist ref to be byte-equal to a member of the corresponding closed allowlist. Plan publication accepts only target, scope and checklist members of this exact context version; defaults are not treated as the whole catalog." }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "reportId": "72727272-7272-4272-8272-727272727272",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "requestedBy": {
+    "type": "HUMAN",
+    "principalId": "13131313-1313-4313-8313-131313131313",
+    "issuer": "https://fake-idp:4443/oidc",
+    "subject": "integration-admin.alpha"
+  },
+  "authorizationBasis": {
+    "policyRef": { "id": "phase1-mapping-validation-policy", "version": 1 },
+    "membershipRef": { "id": "15151515-1515-4515-8515-151515151515", "version": 3 },
+    "entitlementRefs": [],
+    "roleAssignmentRefs": [
+      { "id": "17171717-1717-4717-8717-171717171717", "version": 1 }
+    ],
+    "skillContext": { "kind": "NOT_APPLICABLE" },
+    "evaluatedAt": "2026-08-27T10:03:30Z"
+  },
+  "authorizationBasisHash": "sha256:f4d27ba83402b4015d7531f40e13a314d5c8b8c1eb0913713009cad0021c4676",
+  "correlationId": "72727270-7270-4270-8270-727072707270",
+  "dataClassificationKey": "INTERNAL",
+  "subject": {
+    "type": "CONNECTOR_MAPPING",
+    "id": "45454545-4545-4545-8545-454545454545",
+    "version": 1
+  },
+  "contentHash": "sha256:e1ba8a1ab67d4f489ad90cab61c8254c612cf018cb65d339b38737a365630e66",
+  "status": "VALID",
+  "checks": [
+    {
+      "code": "MAPPING_SCHEMA_VALID",
+      "severity": "ERROR",
+      "status": "PASSED",
+      "path": "/mappingDefinition",
+      "message": "The mapping payload validates against the pinned schema digest."
+    },
+    {
+      "code": "MAPPING_CONNECTOR_MATCH",
+      "severity": "ERROR",
+      "status": "PASSED",
+      "path": "/connectorRef",
+      "message": "The mapping and connector registration use the same exact connector reference."
+    }
+  ],
+  "capabilityAvailability": [],
+  "validatedAt": "2026-08-27T10:03:30Z",
+  "createdAt": "2026-08-27T10:03:30Z"
+}

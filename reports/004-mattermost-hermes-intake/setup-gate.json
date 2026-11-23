@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "feature-004-setup",
+  "startedAt": "2026-09-03T10:20:23.317Z",
+  "finishedAt": "2026-09-03T10:20:25.550Z",
+  "status": "PASS",
+  "mandatoryEntryGates": {
+    "prerequisites": "PASS",
+    "governance": "PASS"
+  },
+  "optionalNonProdEvidence": {
+    "metadata": "SKIPPED_GATED",
+    "conformance": "SKIPPED_GATED",
+    "livePassRequiredForLocalRelease": false
+  },
+  "localPilotMetadata": {
+    "status": "PASS",
+    "path": "config/local/mattermost-pilot-metadata.v1.json"
+  },
+  "stages": [
+    {
+      "id": "prerequisites",
+      "description": "Exact Feature 003 final evidence and consumed contracts",
+      "args": [
+        "tools/verification/feature-004-prerequisites.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 73
+    },
+    {
+      "id": "governance",
+      "description": "Accepted ADR-0008, ADR-0005 partial supersession and Constitution 2.0.0",
+      "args": [
+        "tools/verification/feature-004-governance.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 73
+    },
+    {
+      "id": "registry",
+      "description": "Immutable order-100/200/300/400 offline schema registry",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 319
+    },
+    {
+      "id": "design-contracts",
+      "description": "Feature 004 JSON Schema, OpenAPI, AsyncAPI and AEAD vector",
+      "args": [
+        "tools/contracts/verify-004-contracts.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 358
+    },
+    {
+      "id": "phase-1-tests",
+      "description": "Prerequisite, governance and pilot metadata contracts",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/004/prerequisite-gate.spec.ts",
+        "tests/contract/004/governance-gate.spec.ts",
+        "tests/contract/004/pilot-metadata.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 937
+    },
+    {
+      "id": "architecture",
+      "description": "Workspace import graph including the Mattermost package shell",
+      "args": [
+        "tools/architecture/check-import-graph.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 162
+    },
+    {
+      "id": "phase-1-typecheck",
+      "description": "Feature 004 contracts, connector and composition package typechecks",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "-p",
+        "platform-contracts",
+        "connector-mattermost",
+        "runtime-composition"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 306
+    }
+  ]
+}

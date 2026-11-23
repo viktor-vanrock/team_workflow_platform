@@ -1,0 +1,10 @@
+{
+  "inputPath": null,
+  "evaluation": {
+    "status": "BLOCKED_INPUT",
+    "reasonCodes": [
+      "RECOVERY_INPUT_PACKAGE_MISSING"
+    ]
+  },
+  "execution": "NOT_STARTED_WITHOUT_APPROVED_IN08"
+}

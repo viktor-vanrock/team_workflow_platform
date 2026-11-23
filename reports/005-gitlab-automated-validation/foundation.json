@@ -1,0 +1,875 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-foundation",
+  "contour": "qa-jira-gitlab-local",
+  "startedAt": "2026-09-03T10:45:07.563Z",
+  "finishedAt": "2026-09-03T10:46:26.692Z",
+  "status": "PASS",
+  "taskBinding": {
+    "path": "specs/005-gitlab-automated-validation/tasks.md",
+    "sha256": "sha256:7f15792712dc0ac42f9d0631fd0d37ef8794cb85142699f371c3047c3bd29ab9"
+  },
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "apps/mock-hub/src/gitlab/api/gitlab.controller.ts",
+        "sha256": "sha256:7c41aef582b0d650fc47960742d906c0926de2ca2a401ac5614742581b3d2554"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/control/gitlab-control.controller.ts",
+        "sha256": "sha256:e8c47ff69a0a74e8f3312fc92db98dae5409e7883c2e384e8a5f5d4c480c789c"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/gitlab.module.ts",
+        "sha256": "sha256:fee4c92278d58cd3729ee01f00892c9a083c6768753751de1a0e9b96194affa9"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/scenarios/gitlab-scenarios.ts",
+        "sha256": "sha256:c8cf27b1c751bbcb729f7198ffeb219bcb1a6a188221bf258f02df2e8239fec0"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/state/gitlab.entities.ts",
+        "sha256": "sha256:3364f92fbad5d36c1c0a2cdd01fdabe1b4ac321ac93d7590720805d588e71c05"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/state/gitlab.repository.ts",
+        "sha256": "sha256:90d023402144df5dc01ffdb9546a311732b2438baffb166d2ae37458f42e4bad"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/webhooks/gitlab-webhook-emitter.ts",
+        "sha256": "sha256:ea287802d1946b3cec613f03ca7c79103d635ce8e4bec917be23d39aed133686"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/automation-attempt.spec.ts",
+        "sha256": "sha256:b667e8a1bd404d1a5156f25100b8e77de774734920042a58d49053b68ca1c75c"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/automation-attempt.ts",
+        "sha256": "sha256:7166405c62472be01f94a7078a115dba3e440d645e975002135791ed8b35308b"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/completion.ts",
+        "sha256": "sha256:41819f86a3f52f13395db58b54bfd6f5b6d96a9f516ac0e6424e28a2d6cc2662"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/defect-publication.ts",
+        "sha256": "sha256:58a05b700d458786682a18aa55957cdda330bb7f5b8d248fa826a4eb0b2525ce"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/dod.ts",
+        "sha256": "sha256:cfa55c79f1b972274fb24cde595a91a77afa4dc09c7a3aff28ee10c70119c80f"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/evidence-manifest.ts",
+        "sha256": "sha256:29bcc197dea8c4935f23b88f582ab42217d46b5e584176afae1b652bb4ef50b6"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/finding.ts",
+        "sha256": "sha256:8834996a6e44b46a0dbccb589205646f9894cd240a70f4d0be6df9c5db5c7320"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/human-actor-policy.ts",
+        "sha256": "sha256:9f64014cdf2f748effaaa8742b92a17f6f3cca97af31bcb4ab9519f720f422cf"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/human-attestation.ts",
+        "sha256": "sha256:f2895f7e572e9db9c587bbefe1f975a120f5fda9b42a98178bfa4a7cea96caaa"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/manual-attempt.ts",
+        "sha256": "sha256:bf9d0b1b80fe2555f72e4f327260048e7a717810f69f5e76448f7ade6f292611"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/observation.ts",
+        "sha256": "sha256:c2565919e5a89933832c388412f6a45bf830d3caac3d0221ad2458b7cec8ab22"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/plan-item-result.ts",
+        "sha256": "sha256:5ed4195e6903149272abfec803869d483f600a69e20d8e43f2aa5110ce33445f"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/plan-item.ts",
+        "sha256": "sha256:877d0ae3845b380d6ef85b4a4d7b2e5be6074fad01a1902023c66a302458660c"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/post-close-correction.ts",
+        "sha256": "sha256:2388d8bae9bd46e2f430348dc520df37990b51910059e4055505a8b5a9f4124b"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/primitives.ts",
+        "sha256": "sha256:906cf70c87e4d281fe3dc966fe77cdb12f1d4a67b80264142c42d04d4990b656"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/qa-project-context.ts",
+        "sha256": "sha256:2fa9c26dc6635ea7dd5f91c2ce995ba1d2020830c61b352e1b516ba5cbb72b68"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/qa-request-input-revision.ts",
+        "sha256": "sha256:a9c300ac4af9c754a010e0fcfb99cb90063345bbede59a7ce0a32ea77443b655"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/qa-request.ts",
+        "sha256": "sha256:adcdc665b0b86ef58460055094a7f22e8acc0ebc753403e5202a4f3f6b5b2066"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/readiness.ts",
+        "sha256": "sha256:9232acf585b1b7795e5ba0e879d9cb7b0148fcb92e104ad7cbbab68c945782a2"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/required-session-plan.ts",
+        "sha256": "sha256:93a3e7671f19b8ae0e94a1460571fac9b9dcf947c068c4f627c5d2b894d36e06"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/revisions.ts",
+        "sha256": "sha256:61c23d6fd6daeeeb18f0a9d5c7bd1ed37434d2a627a62570f7235f8d13ffb941"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/risk-review-policy.ts",
+        "sha256": "sha256:b4d301a6ec4646f67c1b997667f1f9f69a95a92c9d31c221705967a5b32c853c"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/session-plan-proposal.ts",
+        "sha256": "sha256:cfe7b5c824203abb67ad023a04722ab08162404b05e5083500e93751f68cf004"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/session-review.ts",
+        "sha256": "sha256:51d8bca9181dd8795947c6b6655fea8259c77f3e99facfcc1633272f9ada58b5"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/snapshots.ts",
+        "sha256": "sha256:ae32cc3fc27e2e1e8f8985a7381868d8e8b1c596001a929c8d354f7618cd475b"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/suite-binding.spec.ts",
+        "sha256": "sha256:e2638096aff8d04f5181ed6ef9daf34e8e109617a19b659d717206439f934894"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/suite-binding.ts",
+        "sha256": "sha256:c615e3ad4732b3130ff59715b9233cb86a23ca41acd19c376a339db0e558cd74"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/test-session.spec.ts",
+        "sha256": "sha256:788f9fc9d46aa5f27e0c9e50c439740a2dd73e70d75dd6340bc01ce8ebd0541e"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/test-session.ts",
+        "sha256": "sha256:4b9c6e0d8a47e508ba5cb1c621aa2bb16488905d1ff221a6ef38b500197fdb48"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/triage-assessment.ts",
+        "sha256": "sha256:9f542ef724f94952c5e0f58adf3f04228ae0c369a4f20c1b9d358d4706a0d9c3"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/verdict.ts",
+        "sha256": "sha256:154bbc7aa3a7a72a43c8b6712333f3d5b1d83a94d81cd4a3a7dccfda8f782193"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/versioned-publication.ts",
+        "sha256": "sha256:1410d18ecb6a2d8f0b2a3133b2e3f7f8896c871bbc20358306b61c7ca0d6c11c"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/waiver.ts",
+        "sha256": "sha256:1f7275ae108ea2a7f3e925ac95f5f851cd493388a94472fbf99ac09feafea3b3"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/automated-session.uow.ts",
+        "sha256": "sha256:204cb0a4ff3f0303e58bf1ef960bd7fce8643ab928d8e7f9c46bd9a42fff499d"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/automation-execution.repository.ts",
+        "sha256": "sha256:55c94ca94f44a76701f851ecc69bcfa4d9a01dfe8434ec67dbd4f6d5f8848719"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/automation-suite.repository.ts",
+        "sha256": "sha256:b01fb003a672c079b9fe03f389d56eadf8662927603eddedbe30645e2bd93018"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/contributions.ts",
+        "sha256": "sha256:12024f2dd0a0b0e6a1da5ae38096c68862a530eb37ca6af4703058ce6d675f79"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/defect-publication.repository.ts",
+        "sha256": "sha256:5266fb5f06d7132fca22628fcac9ff084fb555bab03aca06431211411e9294a2"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/entities.ts",
+        "sha256": "sha256:ab372a70f12df2d5cd822bca22a0c4712542a5d366fafc2f92f58ac3cb8b8e5f"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/evidence-review.repository.ts",
+        "sha256": "sha256:297f684db7a4fe34d8f9fae97b1d5475592332d47e15f06ace422e7c6bd4587b"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/finding.repository.ts",
+        "sha256": "sha256:b2fd904e92632a3162f869ab2d988af50c75a7aeee01958cb753cb5a3cf21802"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/manual-execution.repository.ts",
+        "sha256": "sha256:be140c9e21bc46b018e0099d8e300805caeb617a528f5fd98e8378c27fda4d23"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/manual-execution.uow.ts",
+        "sha256": "sha256:ccc385861d74983709066a01c7ca08eb6989fd2872ca89fe1bf3db3a4b8debf2"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/manual-session.repository.ts",
+        "sha256": "sha256:c55bfbfe206608b5b5359de0265a15ada2ae8a724a2c5c20c72a7907ca72b736"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2000-qa-context-policy-requests.ts",
+        "sha256": "sha256:c77b812842f1c6d2971f6d8f2e39a7ae564bae2a3f09b95b8dbf44050d27c9e8"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2005-qa-readiness-required-plans.ts",
+        "sha256": "sha256:193952a7d5aba404fa718aecd90ec699c428b6210013ee9e3035d3454c42f97e"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2010-qa-session-planning.ts",
+        "sha256": "sha256:5ab0b4713e3b039c225c13e6177eb0fd59a6206ea260094d559a78e4e8a098b1"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2015-qa-manual-execution.ts",
+        "sha256": "sha256:c68a50ce89a043fe052bb24c8f55a272b7d2b8fb9453a7a68a3bbfacf487669f"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2020-qa-evidence-review.ts",
+        "sha256": "sha256:c0d7f60c40c0fcd93c846d7d4c046dc04b75cbbe75b59aec5cbd777eb5914254"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2025-qa-findings-defect-publication.ts",
+        "sha256": "sha256:32ffaa449f181bde289f391e4d1939663902c6a559d44f847a7e23bd96d3c162"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2030-qa-verdict-completion.ts",
+        "sha256": "sha256:940625a8292b8c5dc26cdaef5eb5a4a6eb4e5adc89d0569a7cddae668ee95eb4"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2040-hermes-proposals.ts",
+        "sha256": "sha256:9dc9a52ca90e80e2698d27fef1c9560369cc2c5fd3b43a6f5a7e1ace1dfbbc04"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2050-qa-automation-foundation.ts",
+        "sha256": "sha256:1378e1c0c194eb22b19b651bbc80c87985839396a17cbd2c4ac622bfcba9f97e"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2055-qa-automation-execution.ts",
+        "sha256": "sha256:e740fdde56133dfbc9691a7d9b156bb20748ed985e5a74a80df867369a538b14"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2060-qa-automation-review-quarantine.ts",
+        "sha256": "sha256:a44bd7d2fbbde802ac91fa997a24bbe0763a73fe15fbbc75ac791e94078c5578"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2070-qa-queue-facts.ts",
+        "sha256": "sha256:3b7b79c0991c3ad0002778c6130b907ae604bb7f6ac236c05ed9ccb74c008b3e"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/immutability-helpers.ts",
+        "sha256": "sha256:9af0096539a6377e9dcbd94344821550577fcd52309f86c980a15dac0f2a435c"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/index.ts",
+        "sha256": "sha256:bf7a2a528e4e48fea4338c2f9b2e214937bd1f5eba4b2b8b932ee28ee16e3a1e"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/scope-helpers.ts",
+        "sha256": "sha256:c3c8eeb88fa56d358cf8374e66cd1350e43f030f4fe51a11c2dbe5aca0e9e91b"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/post-close-correction.repository.ts",
+        "sha256": "sha256:68561be281a8bf2ebb9f5944e6dd6722a24c089caeb6777c48ebe212001bd09c"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/qa-project-policy.repository.ts",
+        "sha256": "sha256:278b03c51a025cef8985cac17db817fbb833ee934cef584bbb867b8bc9832b5d"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/qa-readiness.repository.ts",
+        "sha256": "sha256:7bf038327cc7f87a2a0414670fe185fb4d42c19c45d8861a938c99d63ae79c0f"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/qa-request-input.repository.ts",
+        "sha256": "sha256:d7bd103f5e05074d23d768287ce96869a7f1ef61188d7302840d4d6817b0e976"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/qa-request.repository.ts",
+        "sha256": "sha256:9c7bcae233c8954d42946ced30e62a927d900289f627862724ce7702cdf41e76"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/queue-fact.repository.ts",
+        "sha256": "sha256:50598cd0275358b93027e5466dc0a3e38c3d9eb5f10c19ea6195b3039356fd4c"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/repository-helpers.ts",
+        "sha256": "sha256:efc3e8fd79c8a691b29a3c8984efac1a443b7583d5b58fd6f25dd2028a237407"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/result-evidence.uow.ts",
+        "sha256": "sha256:30c00ee56b4a4d20d23db2886c06de0655e81c5f7ed996a8ee907e353316ea85"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/revision.repository.ts",
+        "sha256": "sha256:c4f00bf14e59b85c32b5198f4bfc3aa6926530e35ce65b5cd7b82e459e3dad42"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/scoped-pack-store.ts",
+        "sha256": "sha256:3279b03491322fb55ae3ea07fc58f60e3003f0463c70e36dc5a0123540fcdbfb"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/session-plan-proposal.repository.ts",
+        "sha256": "sha256:a8a9986b85eb721ebe7b5686be2c454586012e3121d4e315779f2af2eb1a3823"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/session-review.uow.ts",
+        "sha256": "sha256:68e54fdb179e1a3fbac1581a55711ad7733c3c90718f7963e0405b9eb6ec7a32"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/triage-assessment.repository.ts",
+        "sha256": "sha256:8590f97b80a94fef4ccc37cae7af07dc7f99bcb42913c0067f4e3eb1bf1f1f00"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/verdict-dod.repository.ts",
+        "sha256": "sha256:9be1d84f6ec7dbc8da4445f9c83af291d3f1ba69809c025d9f7f2e16bce54b4e"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/versioned-publication.repository.ts",
+        "sha256": "sha256:4cdb1fa75a6f78e5fb934372eebf3175e2c003fbd4d1267c94f2f2d4d8bf4056"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/entities.ts",
+        "sha256": "sha256:7d1d719780434b1ee6f419dcba0004bfe94211530999cbea9fc633b228facab0"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/index.ts",
+        "sha256": "sha256:2284be2ba8d47052877aef03aa07bbcc6a96b0022dcd476c63a1adfc85f208fd"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/migrations/4000-gitlab-discovery-profiles.ts",
+        "sha256": "sha256:6b8691d60e96e61084ac79fa40f05fec6bc68542e42bf3632ec6080fdd4b7934"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/migrations/4010-gitlab-webhook-rate-reconciliation.ts",
+        "sha256": "sha256:f6d96959eccc135632a9ef2250e8c83b83816ddd248ec4b598139b885c633dd5"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/migrations/4010-gitlab-webhook-status-reconciliation.ts",
+        "sha256": "sha256:a95e60a71f13d78ea6537008d774895fc493550eab991fd9bbe1e9a7e7a687da"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/migrations/4020-gitlab-effect-artifact-reconciliation.ts",
+        "sha256": "sha256:df8effda55dcd501da4b5a8235c71676265fe70ed963bb42fb181685c4dc7904"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/migrations/4020-gitlab-trigger-artifacts.ts",
+        "sha256": "sha256:3611fbe8178a3328c703614511ff454126b88ca8747434c64eee9bc1ec5e9b4a"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/migrations/index.ts",
+        "sha256": "sha256:3815eb7fbf4b74ca54d97779890817fe0380b6032c14bd92fb7daeb2b96bfe61"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/repositories/gitlab-artifact.repository.ts",
+        "sha256": "sha256:fe109903ed2d83e7720b13c9d908c46f4d2b3df257c44ded88525cfdf24f300a"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/repositories/gitlab-configuration.repository.ts",
+        "sha256": "sha256:bc59c1f07aa24a22aae3f4427189a52b835abe8a42a07892f9d6ac61861993fb"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/repositories/gitlab-effect.repository.ts",
+        "sha256": "sha256:f3865bc49abfb096b10d98b79fec9ca557e3f8184428b439fc8f106fc98ff44d"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/repositories/gitlab-reconciliation.repository.ts",
+        "sha256": "sha256:115a3050f0dd5cbbdf467da3f471242eb7c63c9e84f3c3d5c92895098145978a"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/repositories/repository-helpers.ts",
+        "sha256": "sha256:725668c1bd3d9fb9cbb0280d8bd69b9b1ddc842d522785f670c9836d95b06341"
+      },
+      {
+        "path": "packages/connector-gitlab/src/artifacts/gitlab-ci-artifacts.ts",
+        "sha256": "sha256:3a076a19504cbea4022b4b2dd004a02947a12711f8468991633b69e44184402a"
+      },
+      {
+        "path": "packages/connector-gitlab/src/auth/gitlab-auth.ts",
+        "sha256": "sha256:bfe323fbed2e99906e8df594b94fcd7e6d7b700483c53e231d913adcc41506ba"
+      },
+      {
+        "path": "packages/connector-gitlab/src/http/gitlab-rest-client.ts",
+        "sha256": "sha256:faa701169c547886db8abb37466853732cf39308b67a2221c330b01fabfb61af"
+      },
+      {
+        "path": "packages/connector-gitlab/src/index.ts",
+        "sha256": "sha256:396351a7e33d7d1d67e0bb77500f838014f1476c1fb6874782237717bc3256dd"
+      },
+      {
+        "path": "packages/connector-gitlab/src/manifest.ts",
+        "sha256": "sha256:cb6d4e60d604f714fd7f8bd32983fa3813b823019976719dedf18baebd3380df"
+      },
+      {
+        "path": "packages/connector-gitlab/src/pipeline/gitlab-pipeline-reader.ts",
+        "sha256": "sha256:dea25383ae37dc345299310ae4234f66349564e369034b5212cdefcf7e442675"
+      },
+      {
+        "path": "packages/connector-gitlab/src/pipeline/gitlab-pipeline-trigger.ts",
+        "sha256": "sha256:4b14158698e043aa88a9ba693a4c40b81abcddc2cb0953e566db9949ba412af0"
+      },
+      {
+        "path": "packages/connector-gitlab/src/pipeline/gitlab-result-normalizer.ts",
+        "sha256": "sha256:443ddee23c79bb5607eb9ebeda01f7b6137cbaf022485199b0c20f2f7c3a5b76"
+      },
+      {
+        "path": "packages/connector-gitlab/src/profile/gitlab-dialect.ts",
+        "sha256": "sha256:98719d6ec24c2c53bd9b284444fc5fec7b3ecb26c6fb048c9497feda0e514d2e"
+      },
+      {
+        "path": "packages/connector-gitlab/src/profile/gitlab-discovery.ts",
+        "sha256": "sha256:40853f040f0016aa90c9fc83b5ddf4c2425138825582fa0e8392eeed45a8af5d"
+      },
+      {
+        "path": "packages/connector-gitlab/src/profile/gitlab-profile-validator.ts",
+        "sha256": "sha256:77218a14f3582bfd411f5b3ffb6f785f81751ace6e1b796dee58505c03b3b322"
+      },
+      {
+        "path": "packages/connector-gitlab/src/reconciliation/gitlab-rate-health.ts",
+        "sha256": "sha256:3e6a620fd9b2d9cfa0aab81fbae12642ea3ebe0e3432af1be7f6c17d69a4acae"
+      },
+      {
+        "path": "packages/connector-gitlab/src/reconciliation/gitlab-reconciliation.ts",
+        "sha256": "sha256:f2a151a0ffc80c0ed14f40d31e0cae72195c42b309b542113600157ad3742a9e"
+      },
+      {
+        "path": "packages/connector-gitlab/src/reconciliation/gitlab-trigger-reconciliation.ts",
+        "sha256": "sha256:87d8e29e9775ac0b32478108bea88fa258cb174a81160380eed7f36544434f09"
+      },
+      {
+        "path": "packages/connector-gitlab/src/source-context/gitlab-source-context.ts",
+        "sha256": "sha256:b68f9e1b3eaea8778809d7c2aaa793d5f2b00701b1ef61c724f33498f58a57cc"
+      },
+      {
+        "path": "packages/connector-gitlab/src/webhooks/gitlab-webhook-normalizer.ts",
+        "sha256": "sha256:83d169d34e7305ac7e44e062d308084ad4c03a98e7ccc6e9e1b85a8d37870894"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/artifact-storage.ts",
+        "sha256": "sha256:aac20eb1edf8ba58a0d286a9e24dcdd1357627f722dd1c01e86a458cb078d99c"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automated-session-service.ts",
+        "sha256": "sha256:0a48c1526780a594af965e6a1e077de874984cc16d80fe04aac20aeb3c392912"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-attempt-query.ts",
+        "sha256": "sha256:66b3443ed20150e2ee9c7477bbba0f6e1d9c006795f4e9a3718ae9202a7e566c"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-launch-service.ts",
+        "sha256": "sha256:a0fbe10037172e2c80d9c764a5fc8a7a3a8e970629f2d61168365b36f2a5822b"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-worker-authority.ts",
+        "sha256": "sha256:cb69f706cb2071c806d253772dd0fb91a980c2f45ba38fe272a623387974a425"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-worker.ts",
+        "sha256": "sha256:ca1458829ea4eebcf7681af695991cd909822450193900fcf3ab39d6f8744493"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/composition.ts",
+        "sha256": "sha256:25052fdde189f1ca90fe972fa89656944ddd88324b1e92e734e9f831d119c9e8"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/local-artifact-storage-authority.ts",
+        "sha256": "sha256:9aca7561574c1f129ceff3bf2d7ade5f689ef4904f656ad7aef02b62c1541e49"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/observability.ts",
+        "sha256": "sha256:eb4db7e838ba0616091a6e4b4beffbd05548c9a4e7ff9fe3c11eef8cc7b2ab99"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/operational-health.ts",
+        "sha256": "sha256:76da176789d9d0a3c519692fd74e6d87e6d183d4504c3bd554eaf57cdd1b3415"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/profile-validation.ts",
+        "sha256": "sha256:e331cda2031067c7f82a983bd5872c1adfeaa7c4e1bc66c46780ba08e29b2ece"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/reconciliation-worker.ts",
+        "sha256": "sha256:4cb643a2ddbdc671de9c8b4a5f7d1d2ea31bcb6996bd04849eac42d9f26b983d"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/result-sync.ts",
+        "sha256": "sha256:40af71702baa0612e317c6c2540e6d30d8f223f83920446eecff32bb077c8d1d"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/source-context-worker.ts",
+        "sha256": "sha256:cdb6438d61340c4c21b80fb2c875bf484bc80a690afc4cdd42e986f9c13f924b"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/suite-validation-worker.ts",
+        "sha256": "sha256:c6f4d06922cbbfadf9d0caf7f3c79794794ed170bf57b5b55c765ace7758d480"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/suite-validation.ts",
+        "sha256": "sha256:20e89875d88cda8743e04d5466384d0931c09cd21b09d0ab958b17c663f19444"
+      },
+      {
+        "path": "tests/contract/005/capability-compatibility.spec.ts",
+        "sha256": "sha256:441136f2e6aaa240845094622b800527fc2961f00d869e484b3dd0c36a8908f3"
+      },
+      {
+        "path": "tests/contract/005/design-contracts.spec.ts",
+        "sha256": "sha256:6073a2ac47193c16acacd615a7f7aa624a70d81de91b40c7ef0b1fa7633bd2fb"
+      },
+      {
+        "path": "tests/contract/005/gitlab-connector-conformance.spec.ts",
+        "sha256": "sha256:313dc1e2501fbf4b97eadcaf2cbe015299b18fc753770fcc7dbf3ef8f752d9a3"
+      },
+      {
+        "path": "tests/contract/005/governance-gate.spec.ts",
+        "sha256": "sha256:ab782c25adbfee0d2627351b5c02a32380a72b90e72f817955eef85c1056f055"
+      },
+      {
+        "path": "tests/contract/005/mock-hub-gitlab.spec.ts",
+        "sha256": "sha256:ef6e59fa842576a87fe919f7e42a5552463d32ce0c693d3b899807d9ce27e351"
+      },
+      {
+        "path": "tests/contract/005/openapi-asyncapi.spec.ts",
+        "sha256": "sha256:a9462ab3148e92cbb9a6cfe4adaa28dd66bb0c903e61e2e65f06d3814259486a"
+      },
+      {
+        "path": "tests/contract/005/pilot-metadata.spec.ts",
+        "sha256": "sha256:3e6b0a546e5f83ea0a2a360f43f4929250d9c1d9a1acffe811d41c4c310639c7"
+      },
+      {
+        "path": "tests/contract/005/prerequisite-gate.spec.ts",
+        "sha256": "sha256:c51ecfdecde3c36c032679c29a1b08c2e06fd733809ad9388537c7baa9ab9244"
+      },
+      {
+        "path": "tests/contract/005/schema-registry-parity.spec.ts",
+        "sha256": "sha256:fb315cf52854941e96823a946da5fd26962e38eda75bf4f19d308635a4e1715c"
+      },
+      {
+        "path": "tests/contract/005/us1-availability-suite-session.spec.ts",
+        "sha256": "sha256:54a51c547b2cf06ea98f623c61685e36f2f909f373fcc3d441c0db5106d93338"
+      },
+      {
+        "path": "tests/contract/005/us1-capability-profile-conformance.spec.ts",
+        "sha256": "sha256:94a12e9a7332801a1a8b43e84a31405b81a5a403bbeb63d7a14d1e58d0674687"
+      },
+      {
+        "path": "tests/contract/005/us1-gitlab-source-context-conformance.spec.ts",
+        "sha256": "sha256:f137e6bcd2928b911cf154ffc08074b26f50ad8477e9f788dbb5d1b68fb8b45a"
+      },
+      {
+        "path": "tests/contract/005/us2-gitlab-trigger-conformance.spec.ts",
+        "sha256": "sha256:498cd6d8fad462168d0d97baeb0ce42dd00d8e825af20056b8f1a5366441dd10"
+      },
+      {
+        "path": "tests/contract/005/us2-trigger-contract.spec.ts",
+        "sha256": "sha256:a16c463fe6829355108b9db7a16f1d9522d1eab88bf73f6ef058b99395936c54"
+      },
+      {
+        "path": "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "sha256": "sha256:3398d71e5bc08c6938b4de8f5a8342102dd345a63e5d1d4949df8a384f128132"
+      },
+      {
+        "path": "tests/integration/005/automation-review-readiness.spec.ts",
+        "sha256": "sha256:eaf1a87b7d856e62e02ae39c81943b32f43b09a78534cb2942de01bd954ef110"
+      },
+      {
+        "path": "tests/integration/005/gitlab-profile-lifecycle.spec.ts",
+        "sha256": "sha256:f20c1e39fb435c9088d2faa03b6ed919946b34dac7094cef0e82b0a9d8cda045"
+      },
+      {
+        "path": "tests/integration/005/local-composition-foundation.spec.ts",
+        "sha256": "sha256:1430c29e7fb8cdea5496796505664bf27238cac35ae2be43ddf4ead486ba1ec3"
+      },
+      {
+        "path": "tests/integration/005/mock-hub-gitlab.spec.ts",
+        "sha256": "sha256:1767919cc651ac81a2d87a6140a8a9b601769046580ad4af9a44b51db680445e"
+      },
+      {
+        "path": "tests/integration/005/observability-slo.spec.ts",
+        "sha256": "sha256:86ad7e7635516ab251593d4ef9448ccf255a4b047680ae516fff447c7d817fb6"
+      },
+      {
+        "path": "tests/integration/005/us1-automated-session.spec.ts",
+        "sha256": "sha256:b853ee71ac24f1674448f9ef34b48528a3e7c801094fec4678a7071b04136697"
+      },
+      {
+        "path": "tests/integration/005/us1-availability-and-target-lineage.spec.ts",
+        "sha256": "sha256:e0927e5548b2bce4d252eb2464b68179313b574985c5849a0c1fe448e20754d0"
+      },
+      {
+        "path": "tests/integration/005/us1-suite-publication.spec.ts",
+        "sha256": "sha256:1d89ebe1c47fda8f7b47ad281ad679b0d9e237b13720d5e7367367b3806ef9b5"
+      },
+      {
+        "path": "tests/integration/005/us2-launch-idempotency.spec.ts",
+        "sha256": "sha256:c61dc2bd6f5c97f9b5d66005759854dcbbb116fba82e7a8d124f1f6ba92b7b75"
+      },
+      {
+        "path": "tests/integration/005/us2-trigger-once.spec.ts",
+        "sha256": "sha256:291f125213d7f48ddebbc29cd54bbeb060fb9841718f644357e3e239518d289b"
+      },
+      {
+        "path": "tests/integration/005/us2-trigger-reconciliation.spec.ts",
+        "sha256": "sha256:ac146bd9b12242d94f0e8d0676fdc6bf6c8012bb4c8eaccf90d0285b4dbdf010"
+      },
+      {
+        "path": "tests/integration/005/us3-result-retry-review.spec.ts",
+        "sha256": "sha256:28db56c065c64119520486ecc0c38ff1942e88ce5de88cefa9a9a0364ddd2bc3"
+      },
+      {
+        "path": "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "sha256": "sha256:c48a1ff6ab9969455025895e5c5e0aa0e1b04466b2ab1fa8173da3dc34880087"
+      },
+      {
+        "path": "tests/integration/005/worker-command-routing.spec.ts",
+        "sha256": "sha256:0b8a72ba701ce4505982c57d7f47c6d945d8f85bc3690dbfbd833912c0e306b7"
+      },
+      {
+        "path": "tests/unit/005/automated-session-executor-ui.spec.ts",
+        "sha256": "sha256:525105fcb5a83ce11fbbbed01a60d4bd2dc0d9cc30323f3c9d19e8e2d73dea41"
+      },
+      {
+        "path": "tests/unit/005/automation-foundation.spec.ts",
+        "sha256": "sha256:8ea352185605b8b14a32b8a99fd0b97f2039e1f7b7323dc8c9c5f8f64b552357"
+      },
+      {
+        "path": "tests/unit/005/automation-human-rerun.spec.ts",
+        "sha256": "sha256:6cc8c84f86b8173ee3c4688235bd6a79480933f123033f932932029313f4903c"
+      },
+      {
+        "path": "tests/unit/005/automation-quarantine.spec.ts",
+        "sha256": "sha256:23780ac1e75bd43d26409c79fc7d213989cc84b2c4b3af205bea1bcafa65bae2"
+      },
+      {
+        "path": "tests/unit/005/automation-result-reducer.spec.ts",
+        "sha256": "sha256:ec4bddd6803d39cf82e548ea9aa733d5ad2e66bc9319d9119e67bb0ebf84cd5b"
+      },
+      {
+        "path": "tests/unit/005/automation-result-sync.spec.ts",
+        "sha256": "sha256:dade4c315fecd3121e6ec17296d694d5651e24b8e967f59157dc97b0e4f338bf"
+      },
+      {
+        "path": "tests/unit/005/automation-retry-policy.spec.ts",
+        "sha256": "sha256:3e4a79b5d4488acd2111905c6007f0c4df8c54687b620582f604dc77fda88889"
+      },
+      {
+        "path": "tests/unit/005/automation-review-packet.spec.ts",
+        "sha256": "sha256:d8c76544585bb9ee572a8b31933849d856d5aa1e5642de8b20858c48871fdcae"
+      },
+      {
+        "path": "tests/unit/005/automation-review-readiness.spec.ts",
+        "sha256": "sha256:78e83ae6cb6f1d1457461d8d6813d7e1c9a566cefe148e59bf8a76f2ad2604a8"
+      },
+      {
+        "path": "tests/unit/005/command-recovery.spec.ts",
+        "sha256": "sha256:8c2a2ef06a47343e7d872cdbe4bb371df782f4d628d55f1874fbb3560ff09a1b"
+      },
+      {
+        "path": "tests/unit/005/gitlab-pilot-gates.spec.ts",
+        "sha256": "sha256:07a24b1c7018ec023d0bf42d27869a6cd5ae72a9ccf96739d5b5acea1ee3fdf8"
+      },
+      {
+        "path": "tests/unit/005/gitlab-pilot-metadata-verifier.spec.ts",
+        "sha256": "sha256:7632c32ce6ae79cca935f30630a72844db9f42ea7a8e7e4f5a5d01bbab7f5745"
+      },
+      {
+        "path": "tests/unit/005/gitlab-reconciliation.spec.ts",
+        "sha256": "sha256:d572856842e9f3851be985a0168d521ebf42de980ae0793d6a3c09c78d034ea9"
+      },
+      {
+        "path": "tests/unit/005/gitlab-us3-scenarios.spec.ts",
+        "sha256": "sha256:e7bf50b60220032806f5ea5014a3b905cc5437e8e1d60a790ed6e9f9e0a954fe"
+      },
+      {
+        "path": "tests/unit/005/gitlab-webhook-verifier.spec.ts",
+        "sha256": "sha256:5b92e248ee8097a480434726c48f3363a323c0ed3c2d801dd942cbf644050e1c"
+      }
+    ],
+    "aggregateSha256": "sha256:ae4eaefcb96e52b0be30b7c496926798463664da76110fe51545960a60d273a6"
+  },
+  "runtimeBinding": {
+    "node": "v24.20.0",
+    "packageManager": "pnpm@11.21.0",
+    "dockerCompose": "2.20.2-desktop.1",
+    "composePath": "infra/compose/docker-compose.local.yml",
+    "composeSha256": "sha256:f78a8c61b3d5d490f22719e4ab0339b93e5f5ccb8c4717b028cb5cbbca66fa10",
+    "postgres": "17.7|18.6",
+    "redis": "8.2.9"
+  },
+  "invariants": {
+    "production": "DENIED",
+    "technicalResultMaySignVerdict": false,
+    "providerEffectStoryHandlers": "ABSENT_BY_DESIGN",
+    "redisAuthority": "RECONSTRUCTIBLE_HINT_ONLY"
+  },
+  "stages": [
+    {
+      "id": "contracts",
+      "description": "Feature 005 design, connector and Mock GitLab contracts",
+      "command": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/005",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 14306
+    },
+    {
+      "id": "architecture",
+      "description": "Pure adapter, persistence ownership and static composition boundaries",
+      "command": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/architecture/005-gitlab-boundaries.spec.ts",
+        "tests/architecture/005-gitlab-runtime-wiring.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 764
+    },
+    {
+      "id": "unit",
+      "description": "QA automation primitives and reconstructible command ownership",
+      "command": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/unit/005",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 8115
+    },
+    {
+      "id": "integration-pure",
+      "description": "Profile lifecycle, routing and security without container state",
+      "command": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/005/gitlab-profile-lifecycle.spec.ts",
+        "tests/integration/005/worker-command-routing.spec.ts",
+        "tests/integration/security/005",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 17283
+    },
+    {
+      "id": "mock-hub",
+      "description": "Stateful Mock GitLab persistence and one-shot fault restart",
+      "command": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/005/mock-hub-gitlab.spec.ts",
+        "tests/integration/005/mock-hub-gitlab.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 6431
+    },
+    {
+      "id": "runtime-seed",
+      "description": "Clean qa-jira-gitlab-local migrations and idempotent foundation seed",
+      "command": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/005/local-composition-foundation.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 6231
+    },
+    {
+      "id": "migrations",
+      "description": "QA, Connector and Mock Hub order/entity/upgrade evidence",
+      "command": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/migrations/005-migration-registry.spec.ts",
+        "tests/integration/migrations/005-gitlab-automation.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 11669
+    },
+    {
+      "id": "typecheck-runtime",
+      "description": "Runtime composition static typecheck",
+      "command": "node",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 5000
+    },
+    {
+      "id": "typecheck-api",
+      "description": "API static GitLab contour typecheck",
+      "command": "node",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4951
+    },
+    {
+      "id": "typecheck-worker",
+      "description": "Worker static GitLab contour typecheck",
+      "command": "node",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/worker/tsconfig.json",
+        "--noEmit"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4172
+    },
+    {
+      "id": "compose",
+      "description": "Closed local Docker Compose graph",
+      "command": "docker",
+      "args": [
+        "compose",
+        "--file",
+        "infra/compose/docker-compose.local.yml",
+        "config",
+        "--quiet"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 204
+    }
+  ]
+}

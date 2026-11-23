@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:events:automation-attempt-completed:v1",
+  "title": "Automation Attempt Completed Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "automationAttemptId",
+    "testSessionId",
+    "outcome",
+    "resultHash",
+    "artifactDescriptorSetHash",
+    "terminalAt"
+  ],
+  "properties": {
+    "automationAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "testSessionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "outcome": {
+      "enum": ["PASS", "ASSERTION_FAILED", "INFRA_FAILED", "TIMEOUT", "CANCELLED", "INCOMPLETE"]
+    },
+    "infrastructureCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "resultHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "artifactDescriptorSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "terminalAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "enum": ["PASS", "ASSERTION_FAILED", "TIMEOUT", "CANCELLED"]
+          }
+        },
+        "required": ["outcome"]
+      },
+      "then": {
+        "properties": {
+          "infrastructureCode": false
+        }
+      }
+    }
+  ]
+}

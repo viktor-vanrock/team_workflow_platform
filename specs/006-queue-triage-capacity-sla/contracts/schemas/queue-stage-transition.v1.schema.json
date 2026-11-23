@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:queue-stage-transition:v1",
+  "title": "QueueStageTransition v1",
+  "$comment": "Immutable Project-scoped derived transition. Composed semantic validation requires previousStage to differ from currentStage, verifies both exact queue-entry refs in the same Workspace/Project scope, and checks that the referenced revisions carry the declared stages. It also verifies canonical reason-code order. This payload contains no content or authorization grant.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "transitionId",
+    "workspaceId",
+    "projectId",
+    "previousQueueEntryRef",
+    "currentQueueEntryRef",
+    "previousStage",
+    "currentStage",
+    "reasonCodes",
+    "occurredAt",
+    "semanticHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "queue-stage-transition@1.0.0" },
+    "transitionId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "previousQueueEntryRef": { "$ref": "#/$defs/exactQueueEntryRef" },
+    "currentQueueEntryRef": { "$ref": "#/$defs/exactQueueEntryRef" },
+    "previousStage": { "$ref": "#/$defs/stage" },
+    "currentStage": { "$ref": "#/$defs/stage" },
+    "reasonCodes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/reasonCode" }
+    },
+    "occurredAt": { "$ref": "#/$defs/timestamp" },
+    "semanticHash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "stage": {
+      "enum": [
+        "CANDIDATE",
+        "BACKLOG",
+        "READY",
+        "ACTIVE",
+        "COMPLETED"
+      ]
+    },
+    "reasonCode": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "exactQueueEntryRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "queueEntryId",
+        "revision",
+        "semanticHash"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "queue-entry@1.0.0" },
+        "queueEntryId": { "$ref": "#/$defs/id" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+# Integration example, deliberately not included by the root pipeline yet.
+# Protected runners/environments and an implemented release host are prerequisites.
+corporate:inputs:
+  stage: conformance
+  tags: [awp-corporate-nonprod]
+  needs: [verify:local]
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $AWP_CORPORATE_PILOT == "1"'
+      when: manual
+  allow_failure: false
+  before_script:
+    - pnpm install --frozen-lockfile
+    - mkdir -p .pipeline-inputs
+    - cp "$AWP_INPUT_PACKAGE_FILE" .pipeline-inputs/inputs.json
+    - cp "$AWP_N2_EVIDENCE_FILE" .pipeline-inputs/n2.json
+  script:
+    - pnpm verify:008:inputs -- --input .pipeline-inputs/inputs.json --stage N2
+    - AWP_008_N2_EVIDENCE_BUNDLE=.pipeline-inputs/n2.json pnpm verify:008:integration -- --input .pipeline-inputs/inputs.json
+  artifacts:
+    when: always
+    expire_in: 90 days
+    paths: [reports/008-pilot-hardening-and-conformance/]
+
+corporate:release:
+  stage: deploy
+  tags: [awp-corporate-nonprod]
+  needs: [corporate:inputs]
+  resource_group: awp-corporate-pilot
+  interruptible: false
+  environment:
+    name: corporate-nonprod/pilot
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $AWP_CORPORATE_PILOT == "1"'
+      when: manual
+  allow_failure: false
+  script:
+    # These are required delivery files, not supplied production implementations.
+    - test -f apps/api/src/corporate-main.ts
+    - test -f apps/worker/src/corporate-main.ts
+    - test -x tools/deploy/corporate-release.sh
+    - tools/deploy/corporate-release.sh

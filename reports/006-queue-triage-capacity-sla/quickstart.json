@@ -1,0 +1,646 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "checkpoint": "QUICKSTART",
+  "status": "PASS",
+  "startedAt": "2026-09-03T11:18:34.872Z",
+  "finishedAt": "2026-09-03T11:18:34.873Z",
+  "documentedCommands": 95,
+  "documentedScripts": 35,
+  "documentedScenarios": 57,
+  "orphanedScripts": [],
+  "orphanedScenarios": [],
+  "undocumentedScenarios": [],
+  "unclassifiedCommands": [],
+  "commandCoverage": [
+    {
+      "command": "corepack pnpm install --frozen-lockfile",
+      "script": "install",
+      "disposition": "PACKAGE_MANAGER_BUILTIN"
+    },
+    {
+      "command": "corepack pnpm verify:002",
+      "script": "verify:002",
+      "disposition": "COMPATIBILITY_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:003:evidence",
+      "script": "verify:003:evidence",
+      "disposition": "COMPATIBILITY_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:004:evidence",
+      "script": "verify:004:evidence",
+      "disposition": "COMPATIBILITY_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:005:evidence",
+      "script": "verify:005:evidence",
+      "disposition": "COMPATIBILITY_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:006:prerequisites",
+      "script": "verify:006:prerequisites",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:006:governance",
+      "script": "verify:006:governance",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm test:contract:006",
+      "script": "test:contract:006",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "corepack pnpm test:architecture:006",
+      "script": "test:architecture:006",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "corepack pnpm test:unit:006",
+      "script": "test:unit:006",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "corepack pnpm local:queue:up",
+      "script": "local:queue:up",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm local:queue:status",
+      "script": "local:queue:status",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm local:queue:migrate",
+      "script": "local:queue:migrate",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm local:queue:seed",
+      "script": "local:queue:seed",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- --list",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- setup-portfolio",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- external-network-denied",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us1-candidate-has-no-operational-effects",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us1-confirmed-needs-info-backlog",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us1-dor-and-pending-jira-remain-backlog",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us1-confirmed-jira-ready-starts-clock",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us1-first-required-session-consumes-wip",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us1-completed-precedence",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm verify:006:us1",
+      "script": "verify:006:us1",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us2-project-lanes-and-portfolio",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us2-comparator-tie-breakers",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us2-forbidden-project-interleaved",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us2-hidden-anchor-no-existence-signal",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us2-overlapping-order-views",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us2-order-invalidation-ref",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us2-portfolio-order-no-project-fanout",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm verify:006:us2",
+      "script": "verify:006:us2",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us3-factorized-assessment",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us3-missing-business-impact",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us3-model-outage-fallback",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us3-assessment-drift-conflict",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us3-exact-lead-order-override",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us3-order-hidden-anchor-terminal-no-op",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us3-approval-v1-v2-compatibility",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us3-jira-priority-remains-separate",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm verify:006:us3",
+      "script": "verify:006:us3",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-measure-only-observation",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-enforced-publication-requires-baseline",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-project-soft-limit-warning",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-automated-launch-reserves-review",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-running-automation-is-not-human-wip",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-terminal-result-converts-reservation",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-pre-review-cancel-releases-reservation",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-one-work-item-one-capacity-unit",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-concurrent-last-slot",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-concurrent-review-reservation",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-exact-wip-override",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-denial-without-override-intent",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-stale-or-self-approved-override-denied",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-concurrent-expedite-singleton",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-expedite-clear-and-expiry-lock",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-forced-external-overflow",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us4-blocked-release-and-resume",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm verify:006:us4",
+      "script": "verify:006:us4",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-local-dor-does-not-start-sla",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-confirmed-ready-starts-at-confirmed-at",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-no-rollout-backdating",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-rollout-duplicate-read-receipt",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-business-calendar-golden-vectors",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-finite-calendar-policy-rejected",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-confirmed-pause-resume",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-unknown-pause-reason-keeps-running",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-policy-calendar-revision-pinning",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-measure-only-versus-enforced",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-notification-dedupe-and-outage",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- us5-clock-revision-versus-evaluation-hash",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm verify:006:us5",
+      "script": "verify:006:us5",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm test:concurrency:006",
+      "script": "test:concurrency:006",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "corepack pnpm test:integration:006",
+      "script": "test:integration:006",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "corepack pnpm test:security:006",
+      "script": "test:security:006",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- rebuild-duplicate-and-out-of-order-events",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- rebuild-missed-event-and-gap",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- rebuild-shadow-generation-cutover",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- rebuild-redis-worker-process-restart",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- rebuild-no-duplicate-notification-or-effect",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm verify:006:rebuild",
+      "script": "verify:006:rebuild",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:006:migrations -- postgres=17",
+      "script": "verify:006:migrations",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:006:migrations -- postgres=18",
+      "script": "verify:006:migrations",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm test:e2e:006",
+      "script": "test:e2e:006",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "corepack pnpm test:browser:006",
+      "script": "test:browser:006",
+      "disposition": "TEST_SUITE"
+    },
+    {
+      "command": "corepack pnpm smoke:006",
+      "script": "smoke:006",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm trace:006",
+      "script": "trace:006",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:006:quickstart",
+      "script": "verify:006:quickstart",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:006:evidence",
+      "script": "verify:006:evidence",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:006",
+      "script": "verify:006",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm ci:006",
+      "script": "ci:006",
+      "disposition": "FEATURE_006_GATE"
+    },
+    {
+      "command": "corepack pnpm queue:scenario -- reset",
+      "script": "queue:scenario",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm local:queue:down",
+      "script": "local:queue:down",
+      "disposition": "ISOLATED_CONTOUR"
+    },
+    {
+      "command": "corepack pnpm local:queue:reset --",
+      "script": "local:queue:reset",
+      "disposition": "OPERATOR_DESTRUCTIVE"
+    },
+    {
+      "command": "corepack pnpm verify:006 -- --plan",
+      "script": "verify:006",
+      "disposition": "FEATURE_006_GATE"
+    }
+  ],
+  "reports": [
+    {
+      "name": "prerequisites.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:608ffb9b69decba01e4e8db22b5f9b3926c9c9417f54c6e63c64fb8f757e0250"
+    },
+    {
+      "name": "governance.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:a7510cc70800082ad268546475025215c48c91b3098a8e91549917be7945130e"
+    },
+    {
+      "name": "setup-gate.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:b9dc59a7b5c5864d6d3136e5d33907e5bc80b68f8154e1f31d306951d4defa78"
+    },
+    {
+      "name": "contracts.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:45a2a1c486357c471f90273814bb9cdb39abf1882ece5238665e5aa56a6a90c5"
+    },
+    {
+      "name": "architecture.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:24431939a12c6a307fd39cb88bb7cf7bad2bdf32df42a0059e6a13bdd643b4c6"
+    },
+    {
+      "name": "unit-matrices.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:b16ed8158f1b0ac5fa89304a7fb617194c31e34dbaa9a6ceca30c7d58f6fdc10"
+    },
+    {
+      "name": "setup-contour.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:7595d1ef25a33673e39598c83cad953fcbc582552040cdfb141df9fa0b83e36d"
+    },
+    {
+      "name": "foundation.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:b885041fd597db2f96f421de833c5df055f04841edcc38fffd59d402d7a783d0"
+    },
+    {
+      "name": "us1.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:387924569e3c1bae76ad75f1efc4a337d170d3eac21837b48a25653f4a17735d"
+    },
+    {
+      "name": "us2.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:66ffef31927052819a6a647ea74981876ec5dc6e7f68624eb97fb955d636e94d"
+    },
+    {
+      "name": "us3.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:3fc4d9798a77592926e0913501377fb4515a2ec983e70dcbbacd34ed794027fd"
+    },
+    {
+      "name": "us4.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:6b51f8b6da21e98b3119314d158ec0b8dd9e54931fb12dfa19a5c2c3fc86a8e4"
+    },
+    {
+      "name": "us5.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:0ee9ad9e93c2b312faee335735a21967e0c86cdc94fd584ce193684ac61e95ac"
+    },
+    {
+      "name": "concurrency.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:cbdbdbe927303c2fc2876ca9c278a08a0dc2e8ddd02869777c37d946f02f42db"
+    },
+    {
+      "name": "security.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:c60893852caf79577128478dcffaf5383ee1c1ef4027588a579093ec129f3db8"
+    },
+    {
+      "name": "rebuild.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:1b8ebbe709ccd1ece91f3e853d332d6551a5ce75a4e20d562923c645c063a2db"
+    },
+    {
+      "name": "observability.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:9216558b0d4063863fc94bb313293cf2aedfc4f92f3c2711fb09000c8b4b485b"
+    },
+    {
+      "name": "migrations-postgres-17.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:2d8e5f928e3e768fba33f3842b3deab19ce56e67433ecd8f735a06ebb7c74be0"
+    },
+    {
+      "name": "migrations-postgres-18.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:7d0f313109e984381e4eb7f3fa145ce458891daeec48f564166d186e05cac0b3"
+    },
+    {
+      "name": "browser.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:eebc1cf4c2f2ee073830a7029fabdaf9184e554ad9f52bd30cc7fb2101a52837"
+    },
+    {
+      "name": "smoke.json",
+      "status": "PASS",
+      "fresh": true,
+      "accepted": true,
+      "sha256": "sha256:efd8bbc26ce39683f4544ab98870e39fdc2a8f4c6c1c053904d37c5f58e5e9a2"
+    }
+  ],
+  "sourceBinding": {
+    "quickstart": "sha256:be961f1add00915e530435100a27610d4282cd3ece364e9f5364e1effd40abe9",
+    "packageJson": "sha256:fc4b47f2570430984bed399c51159d8da8ec8cf30c94db7c8f302733dd5c5254",
+    "scenarioCatalog": "sha256:c6195068e04ea790a21d80ec266f2590d747be1d4649a16aeb414f6e3e4a210c"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "profileId": "55555555-5555-4555-8555-555555555555",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "key": "sample-local-profile",
+  "dataClassificationKey": "INTERNAL",
+  "version": 1,
+  "state": "PUBLISHED",
+  "connectorRef": {
+    "key": "sample.mock",
+    "version": "1.0.0"
+  },
+  "connectionRef": {
+    "id": "66666666-6666-4666-8666-666666666666",
+    "version": 1
+  },
+  "connectorConfiguration": {
+    "schemaRef": {
+      "id": "urn:awp:schemas:sample:profile-config:v1",
+      "version": 1,
+      "digest": "sha256:be2e35b4733379ddb970e3329c831c7e945cf974ec70f074baba98d1ca169c62"
+    },
+    "value": {
+      "confirmationMode": "SYNC_RECEIPT"
+    }
+  },
+  "capabilityConfigurations": [
+    {
+      "capabilityKey": "sample.record",
+      "exactContractVersion": "1.0.0",
+      "operationConfigurations": [
+        {
+          "operation": "record.publish",
+          "effect": "WRITE",
+          "idempotencyStrategy": "NATIVE_KEY",
+          "confirmationMode": "SYNC_RECEIPT"
+        }
+      ],
+      "environmentScopes": ["LOCAL"],
+      "allowedDataClassifications": ["INTERNAL"],
+      "externalScope": {
+        "schemaRef": {
+          "id": "urn:awp:schemas:sample:record-external-scope:v1",
+          "version": 1,
+          "digest": "sha256:8d22db38aa2b6fcef661afb8785bc0e20cb739a8023ebcab6076893d12638ea3"
+        },
+        "value": {
+          "namespace": "phase1",
+          "allowedRecordPrefix": "phase1-"
+        }
+      },
+      "mappingRef": {
+        "id": "45454545-4545-4545-8545-454545454545",
+        "version": 1
+      },
+      "mappingContentHash": "sha256:e1ba8a1ab67d4f489ad90cab61c8254c612cf018cb65d339b38737a365630e66"
+    }
+  ],
+  "schemaVersion": 1,
+  "contentHash": "sha256:fc35c03899394ddd462cf4089854c1330819b8b1497c517d6419afa1d92d4cc3",
+  "resourceVersion": 3,
+  "validationReportId": "73737373-7373-4373-8373-737373737373",
+  "createdAt": "2026-08-27T10:05:00Z",
+  "validatedAt": "2026-08-27T10:06:00Z",
+  "publishedAt": "2026-08-27T10:07:00Z"
+}

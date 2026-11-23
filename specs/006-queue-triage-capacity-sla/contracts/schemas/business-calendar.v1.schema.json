@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:business-calendar:v1",
+  "title": "BusinessCalendar v1",
+  "$comment": "Composed validation resolves timeZone against the IANA database, requires non-overlapping startLocalTime < endLocalTime intervals, requires every dateOverrides.date to be unique across both CLOSED and WORKING variants (there is no precedence rule), requires validThrough >= validFrom when finite, validates overrides on or after validFrom and no later than a finite validThrough, and recomputes semanticHash. A null validThrough makes the immutable weekly recurrence and declared overrides authoritative for every future local date; only such an open-ended revision may be activated by a QueuePolicy. Intervals crossing midnight are represented as two intervals.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "calendarId",
+    "calendarKey",
+    "workspaceId",
+    "revision",
+    "timeZone",
+    "validFrom",
+    "validThrough",
+    "weeklyIntervals",
+    "dateOverrides",
+    "dstAlgorithmRef",
+    "dstRules",
+    "sourceKind",
+    "sourceRef",
+    "sourceHash",
+    "ownerPrincipalId",
+    "effectiveFrom",
+    "publishedAt",
+    "publishedByPrincipalId",
+    "semanticHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "business-calendar@1.0.0" },
+    "calendarId": { "$ref": "#/$defs/id" },
+    "calendarKey": { "$ref": "#/$defs/key" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "previousCalendarRef": { "$ref": "#/$defs/versionedContentRef" },
+    "timeZone": {
+      "description": "Canonical IANA tzdb identifier, including link IDs such as UTC; fixed offsets and server-local aliases are rejected by composed validation.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "validFrom": { "$ref": "#/$defs/localDate" },
+    "validThrough": {
+      "description": "Inclusive final local date, or null for an open-ended immutable recurrence. QueuePolicy publication accepts only null so pinned SLA clocks and READY aging remain defined for an unbounded lifetime.",
+      "oneOf": [
+        { "$ref": "#/$defs/localDate" },
+        { "type": "null" }
+      ]
+    },
+    "weeklyIntervals": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 84,
+      "items": { "$ref": "#/$defs/weeklyInterval" }
+    },
+    "dateOverrides": {
+      "type": "array",
+      "maxItems": 3660,
+      "items": { "$ref": "#/$defs/dateOverride" }
+    },
+    "dstAlgorithmRef": {
+      "allOf": [
+        { "$ref": "#/$defs/algorithmRef" },
+        {
+          "properties": {
+            "key": { "const": "business-calendar-dst" },
+            "version": { "const": "1.0.0" }
+          }
+        }
+      ]
+    },
+    "dstRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nonexistentBoundary", "ambiguousStart", "ambiguousEnd"],
+      "properties": {
+        "nonexistentBoundary": { "const": "SHIFT_TO_FIRST_VALID_INSTANT_AFTER_GAP" },
+        "ambiguousStart": { "const": "EARLIEST_MATCHING_INSTANT" },
+        "ambiguousEnd": { "const": "LATEST_MATCHING_INSTANT" }
+      }
+    },
+    "sourceKind": { "enum": ["MANUAL", "IMPORTED"] },
+    "sourceRef": { "$ref": "#/$defs/nonEmptyRef" },
+    "sourceHash": { "$ref": "#/$defs/hash" },
+    "ownerPrincipalId": { "$ref": "#/$defs/id" },
+    "effectiveFrom": { "$ref": "#/$defs/timestamp" },
+    "publishedAt": { "$ref": "#/$defs/timestamp" },
+    "publishedByPrincipalId": { "$ref": "#/$defs/id" },
+    "semanticHash": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["revision"],
+        "properties": { "revision": { "const": 1 } }
+      },
+      "then": { "properties": { "previousCalendarRef": false } },
+      "else": { "required": ["previousCalendarRef"] }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "format": "uuid" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "localDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "localTime": {
+      "description": "Second-precision wall-clock time; midnight-crossing intervals are split by date/day.",
+      "type": "string",
+      "pattern": "^(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+    },
+    "endLocalTime": {
+      "description": "Exclusive interval end. 24:00:00 is allowed only here so the first half of a midnight split is representable.",
+      "oneOf": [
+        { "$ref": "#/$defs/localTime" },
+        { "const": "24:00:00" }
+      ]
+    },
+    "key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+    },
+    "nonEmptyRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "algorithmRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "semanticHash"],
+      "properties": {
+        "key": { "$ref": "#/$defs/key" },
+        "version": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "localInterval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startLocalTime", "endLocalTime"],
+      "properties": {
+        "startLocalTime": { "$ref": "#/$defs/localTime" },
+        "endLocalTime": { "$ref": "#/$defs/endLocalTime" }
+      }
+    },
+    "weeklyInterval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dayOfWeek", "startLocalTime", "endLocalTime"],
+      "properties": {
+        "dayOfWeek": {
+          "enum": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
+        },
+        "startLocalTime": { "$ref": "#/$defs/localTime" },
+        "endLocalTime": { "$ref": "#/$defs/endLocalTime" }
+      }
+    },
+    "dateOverride": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "date", "reasonCode"],
+          "properties": {
+            "kind": { "const": "CLOSED" },
+            "date": { "$ref": "#/$defs/localDate" },
+            "reasonCode": {
+              "enum": ["PUBLIC_HOLIDAY", "WORKSPACE_CLOSURE", "SOURCE_CLOSURE", "OTHER_CONFIGURED_CLOSURE"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "date", "reasonCode", "workingIntervals"],
+          "properties": {
+            "kind": { "const": "WORKING" },
+            "date": { "$ref": "#/$defs/localDate" },
+            "reasonCode": {
+              "enum": ["WORKING_DAY_OVERRIDE", "SOURCE_WORKING_OVERRIDE", "OTHER_CONFIGURED_WORKING"]
+            },
+            "workingIntervals": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 12,
+              "items": { "$ref": "#/$defs/localInterval" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

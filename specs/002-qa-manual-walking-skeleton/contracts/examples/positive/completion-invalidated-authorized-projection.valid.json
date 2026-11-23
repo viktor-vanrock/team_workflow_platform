@@ -1,0 +1,17 @@
+{
+  "state": "INVALIDATED",
+  "terminalFromState": "AUTHORIZED",
+  "terminalReason": "Exact approved subject became stale before dispatch",
+  "closeApprovalRef": {
+    "approvalId": "30303030-3030-4030-8030-303030303030",
+    "subjectHash": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  "approvedBy": {
+    "type": "HUMAN",
+    "principalId": "78787878-7878-4878-8878-787878787878",
+    "issuer": "https://id.example.test",
+    "subject": "qa-lead-1"
+  },
+  "approvedAt": "2026-08-27T12:59:00Z"
+}
+

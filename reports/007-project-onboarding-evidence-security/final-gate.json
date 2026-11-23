@@ -1,0 +1,347 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "gate": "feature-007-final",
+  "status": "PASS",
+  "startedAt": "2026-09-03T18:34:27.167Z",
+  "finishedAt": "2026-09-03T18:42:06.501Z",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "production": "DENIED",
+  "deploymentApproval": "LOCAL_CONFORMANCE_ONLY",
+  "corporateRuntimeOwner": "FEATURE_008",
+  "autonomousPriority": false,
+  "liveProviderAuthority": false,
+  "compatibility": {
+    "path": "reports/007-project-onboarding-evidence-security/compatibility.json",
+    "sha256": "sha256:c420722eb55ce6430e7a00d799a4e543f90ff4f0e1fa738710a0e56d7180e64b",
+    "status": "PASS"
+  },
+  "evidence": {
+    "path": "reports/007-project-onboarding-evidence-security/evidence.json",
+    "sha256": "sha256:c787010795ae6ba67cbb0122e497c1cb16bb25e1ab2a4b072f46a8760be60793",
+    "status": "PASS"
+  },
+  "stages": [
+    {
+      "id": "feature-001-006-compatibility",
+      "category": "compatibility",
+      "args": [
+        "tools/verification/feature-007-prerequisites.mts"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 77
+    },
+    {
+      "id": "contract-registry-drift",
+      "category": "contract",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 331
+    },
+    {
+      "id": "historical-schema-byte-pins",
+      "category": "contract",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/007/historical-contract-compatibility.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1094
+    },
+    {
+      "id": "migration-immutability",
+      "category": "migration",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/migrations/007-migration-registry.spec.ts",
+        "tests/contract/007/prerequisite-gate.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2275
+    },
+    {
+      "id": "production-boundary",
+      "category": "security",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/security/007/production-and-scope-boundary.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 614
+    },
+    {
+      "id": "setup",
+      "category": "setup",
+      "args": [
+        "tools/verification/007-setup-gate.mts"
+      ],
+      "timeoutMs": 300000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1229
+    },
+    {
+      "id": "foundation",
+      "category": "foundation",
+      "args": [
+        "tools/verification/007-foundation-checkpoint.mts"
+      ],
+      "timeoutMs": 1200000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 32866
+    },
+    {
+      "id": "us1",
+      "category": "story",
+      "args": [
+        "tools/verification/007-us1-checkpoint.mts"
+      ],
+      "timeoutMs": 3600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 31394
+    },
+    {
+      "id": "us2",
+      "category": "story",
+      "args": [
+        "tools/verification/007-us2-checkpoint.mts"
+      ],
+      "timeoutMs": 3600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 31160
+    },
+    {
+      "id": "us3",
+      "category": "story",
+      "args": [
+        "tools/verification/007-us3-checkpoint.mts"
+      ],
+      "timeoutMs": 3600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 29754
+    },
+    {
+      "id": "us4",
+      "category": "story",
+      "args": [
+        "tools/verification/007-us4-checkpoint.mts"
+      ],
+      "timeoutMs": 3600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 29884
+    },
+    {
+      "id": "us5",
+      "category": "story",
+      "args": [
+        "tools/verification/007-us5-checkpoint.mts"
+      ],
+      "timeoutMs": 3600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 28236
+    },
+    {
+      "id": "migrations-postgres-17-18",
+      "category": "migration",
+      "args": [
+        "tools/ci/verify-007-migrations.mts"
+      ],
+      "timeoutMs": 1200000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 15649
+    },
+    {
+      "id": "concurrency",
+      "category": "concurrency",
+      "args": [
+        "tools/verification/007-concurrency-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2779
+    },
+    {
+      "id": "integration",
+      "category": "integration",
+      "args": [
+        "tools/verification/007-integration-checkpoint.mts"
+      ],
+      "timeoutMs": 1200000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 9253
+    },
+    {
+      "id": "security",
+      "category": "security",
+      "args": [
+        "tools/verification/007-security-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3677
+    },
+    {
+      "id": "recovery",
+      "category": "recovery",
+      "args": [
+        "tools/verification/007-recovery-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3749
+    },
+    {
+      "id": "observability",
+      "category": "observability",
+      "args": [
+        "tools/verification/feature-007-observability.mts"
+      ],
+      "timeoutMs": 600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 664
+    },
+    {
+      "id": "browser",
+      "category": "browser",
+      "args": [
+        "tools/verification/007-browser-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1793
+    },
+    {
+      "id": "smoke",
+      "category": "smoke",
+      "args": [
+        "tools/smoke/feature-007.mts"
+      ],
+      "timeoutMs": 3600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 172909
+    },
+    {
+      "id": "quickstart-parser",
+      "category": "documentation",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/007/quickstart-commands.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 180000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 762
+    },
+    {
+      "id": "quickstart",
+      "category": "documentation",
+      "args": [
+        "tools/verification/007-quickstart.mts"
+      ],
+      "timeoutMs": 600000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 74
+    },
+    {
+      "id": "trace",
+      "category": "trace",
+      "args": [
+        "tools/verification/feature-007-trace.mts"
+      ],
+      "timeoutMs": 300000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 77
+    },
+    {
+      "id": "typecheck",
+      "category": "typecheck",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "--all"
+      ],
+      "timeoutMs": 1200000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 523
+    },
+    {
+      "id": "lint",
+      "category": "lint",
+      "args": [
+        "node_modules/eslint/bin/eslint.js",
+        "."
+      ],
+      "timeoutMs": 1200000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 48311
+    },
+    {
+      "id": "build",
+      "category": "build",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "build",
+        "--all"
+      ],
+      "timeoutMs": 1200000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 10036
+    },
+    {
+      "id": "evidence",
+      "category": "evidence",
+      "args": [
+        "tools/verification/feature-007-evidence.mts"
+      ],
+      "timeoutMs": 300000,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 159
+    }
+  ],
+  "pendingTaskIds": []
+}

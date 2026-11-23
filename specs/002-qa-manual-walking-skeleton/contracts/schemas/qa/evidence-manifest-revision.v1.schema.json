@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:evidence-manifest-revision:v1",
+  "title": "Signed Append-only Evidence Manifest Revision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "manifestRevisionId", "manifestId", "version", "kind", "evaluationStatus", "isAdjudicative", "workspaceId", "projectId", "workItemId", "sessionId", "manifest", "signature", "publishedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "manifestRevisionId": { "type": "string", "format": "uuid" },
+    "manifestId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "kind": { "type": "string", "enum": ["INITIAL", "SUBSTANTIVE_CORRECTION", "CLERICAL_CORRECTION"] },
+    "evaluationStatus": { "type": "string", "enum": ["EVALUATED", "POST_CLOSE_NOT_EVALUATED"] },
+    "isAdjudicative": { "type": "boolean" },
+    "previousRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "correctionReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "adjudicativeManifestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "postCloseCorrectionMarkerRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "manifest": { "$ref": "./evidence-manifest.v1.schema.json" },
+    "signature": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanSignoff" },
+    "publishedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "description": "Cross-revision semantic invariant: CLERICAL_CORRECTION must keep the same manifestId and preserve plan/item/Attempt/Observation/result/outcome/flags/snapshots/review/Finding/policy/provenance bytes from previousRevisionRef. Only correction metadata and non-normative display text (represented by a newly content-addressed member if necessary), revision timestamps/signature and resulting hashes may differ. CI performs an explicit previous-vs-current semantic diff; schema shape alone is insufficient."
+    },
+    {
+      "if": { "properties": { "version": { "minimum": 2 } }, "required": ["version"] },
+      "then": { "required": ["previousRevisionRef", "correctionReason"] },
+      "else": {
+        "allOf": [
+          { "not": { "required": ["previousRevisionRef"] } },
+          { "not": { "required": ["correctionReason"] } }
+        ]
+      }
+    },
+    {
+      "if": { "properties": { "kind": { "const": "INITIAL" } }, "required": ["kind"] },
+      "then": {
+        "properties": {
+          "version": { "const": 1 },
+          "evaluationStatus": { "const": "EVALUATED" },
+          "isAdjudicative": { "const": true }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "kind": { "const": "SUBSTANTIVE_CORRECTION" } }, "required": ["kind"] },
+      "then": {
+        "properties": {
+          "version": { "minimum": 2 },
+          "evaluationStatus": { "const": "EVALUATED" },
+          "isAdjudicative": { "const": true }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "kind": { "const": "CLERICAL_CORRECTION" } }, "required": ["kind"] },
+      "then": {
+        "properties": {
+          "version": { "minimum": 2 },
+          "evaluationStatus": { "const": "POST_CLOSE_NOT_EVALUATED" },
+          "isAdjudicative": { "const": false },
+          "manifest": { "required": ["clericalAnnotations"] }
+        },
+        "required": ["adjudicativeManifestRevisionRef", "postCloseCorrectionMarkerRef"]
+      },
+      "else": {
+        "allOf": [
+          { "not": { "required": ["adjudicativeManifestRevisionRef"] } },
+          { "not": { "required": ["postCloseCorrectionMarkerRef"] } },
+          { "properties": { "manifest": { "not": { "required": ["clericalAnnotations"] } } } }
+        ]
+      }
+    }
+  ]
+}

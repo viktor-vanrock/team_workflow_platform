@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "gate": "repeatable-smoke",
+  "composition": "qa-local",
+  "startedAt": "2026-08-30T23:01:58.914Z",
+  "finishedAt": "2026-08-30T23:02:17.230Z",
+  "status": "PASS",
+  "effectAssertions": {
+    "requestCreate": 1,
+    "readyTransition": 1,
+    "defectPublish": 1,
+    "completionTransition": 1,
+    "replayEffectCount": 1
+  },
+  "correlationTrace": {
+    "required": true,
+    "assertionSource": "002-at-015-resilience.spec.ts",
+    "scope": "workspace/project/effect/correlation"
+  },
+  "results": [
+    {
+      "id": "clean-pass",
+      "description": "Scoped scenario cleanup and clean manual PASS",
+      "command": [
+        "node",
+        "tools/local/qa-scenario.mts",
+        "qa-manual-pass"
+      ],
+      "status": "PASS",
+      "durationMs": 6135,
+      "exitCode": 0
+    },
+    {
+      "id": "repeat-pass",
+      "description": "Repeat the exact PASS flow without duplicate effects",
+      "command": [
+        "node",
+        "tools/local/qa-scenario.mts",
+        "qa-manual-pass"
+      ],
+      "status": "PASS",
+      "durationMs": 6271,
+      "exitCode": 0
+    },
+    {
+      "id": "done-fail",
+      "description": "Manual FAIL, linked defect, signed Verdict and external DONE",
+      "command": [
+        "node",
+        "tools/local/qa-scenario.mts",
+        "qa-manual-fail"
+      ],
+      "status": "PASS",
+      "durationMs": 1185,
+      "exitCode": 0
+    },
+    {
+      "id": "high-risk",
+      "description": "Distinct Lead co-sign and stale/expired denial",
+      "command": [
+        "node",
+        "tools/local/qa-scenario.mts",
+        "qa-high-risk"
+      ],
+      "status": "PASS",
+      "durationMs": 898,
+      "exitCode": 0
+    },
+    {
+      "id": "model-outage",
+      "description": "Deterministic model fallback and denied restricted prompt",
+      "command": [
+        "node",
+        "tools/local/qa-scenario.mts",
+        "qa-model-outage"
+      ],
+      "status": "PASS",
+      "durationMs": 1762,
+      "exitCode": 0
+    },
+    {
+      "id": "cross-project-deny",
+      "description": "Cross-Project/Workspace deny before downstream calls",
+      "command": [
+        "node",
+        "tools/local/qa-scenario.mts",
+        "qa-cross-project-deny"
+      ],
+      "status": "PASS",
+      "durationMs": 1256,
+      "exitCode": 0
+    },
+    {
+      "id": "restart-reconciliation",
+      "description": "Crash windows, restart/same-effect replay and out-of-order denial",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/acceptance/002-at-015-resilience.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "durationMs": 808,
+      "exitCode": 0
+    }
+  ]
+}

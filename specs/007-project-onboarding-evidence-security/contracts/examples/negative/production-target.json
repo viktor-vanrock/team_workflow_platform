@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "revisionId": "50000000-0000-4000-8000-000000000003",
+  "environmentId": "50000000-0000-4000-8000-000000000004",
+  "version": 1,
+  "workspaceId": "10000000-0000-4000-8000-000000000001",
+  "projectId": "20000000-0000-4000-8000-000000000001",
+  "key": "product.production",
+  "name": "Product production",
+  "scope": "PLATFORM_PROD",
+  "ownerPrincipalId": "30000000-0000-4000-8000-000000000002",
+  "dataClassificationKey": "CONFIDENTIAL",
+  "status": "PUBLISHED",
+  "configurationRef": {
+    "key": "environment.config",
+    "schemaRef": { "id": "environment-config", "version": 1, "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    "resourceRef": { "id": "environment-config-2", "version": 1, "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }
+  },
+  "allowedTestDataPolicyRefs": [],
+  "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "createdBy": {
+    "principalId": "30000000-0000-4000-8000-000000000002",
+    "kind": "HUMAN",
+    "roleKey": "qa.lead",
+    "authorizationBasisHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "authenticationContextRef": "local:acr:human"
+  },
+  "createdAt": "2026-09-03T12:00:00.000Z"
+}

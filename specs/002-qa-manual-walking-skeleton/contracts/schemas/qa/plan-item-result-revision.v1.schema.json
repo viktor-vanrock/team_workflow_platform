@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:plan-item-result-revision:v1",
+  "title": "Append-only Plan Item Result Revision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "resultRevisionId", "version", "workspaceId", "projectId", "workItemId", "sessionId", "planItemId", "attemptMembershipMode", "consideredAttemptRefs", "consideredAttemptSetHash", "observationMembershipMode", "consideredObservationRefs", "consideredObservationSetHash", "maximumAttemptNo", "reviewFlags", "result", "actualOutcome", "decisionReason", "authorizationBasisHash", "policyRef", "contentHash", "recordedBy", "recordedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "resultRevisionId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "previousRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "correctionReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "planItemId": { "type": "string", "format": "uuid" },
+    "attemptMembershipMode": {
+      "description": "The service derived consideredAttemptRefs from every finalized Attempt for this PlanItem, ordered by contiguous attemptNo 1..maximumAttemptNo; a caller cannot select a subset.",
+      "const": "ALL_FINALIZED_CONTIGUOUS"
+    },
+    "consideredAttemptRefs": {
+      "description": "Complete server-derived finalized Attempt membership, never a caller-selected subset.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" }
+    },
+    "consideredAttemptSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "observationMembershipMode": {
+      "description": "The service derived consideredObservationRefs from every current leaf Observation for the complete finalized Attempt set; a caller cannot select a subset or an obsolete corrected parent.",
+      "const": "ALL_CURRENT_LEAVES"
+    },
+    "consideredObservationRefs": {
+      "description": "Exact canonical Observation set considered by this human result. Semantic validation requires same-scope/same-PlanItem rows; every considered negative technical Attempt must be covered by at least one NEGATIVE or AMBIGUOUS Observation that references that exact Attempt.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" }
+    },
+    "consideredObservationSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "maximumAttemptNo": { "type": "integer", "minimum": 0 },
+    "reviewFlags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["FLAKY_SUSPECTED"] }
+    },
+    "result": { "type": "string", "enum": ["PASS", "FAIL", "BLOCKED", "NOT_RUN", "INCONCLUSIVE"] },
+    "actualOutcome": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "decisionReason": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "authorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "policyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "artifactRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ArtifactRef" } },
+    "waiverRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" },
+    "flakyDispositionBasis": { "$ref": "#/$defs/FlakyDispositionBasis" },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "recordedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "recordedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "FlakyDispositionBasis": {
+      "description": "Exact current DISPOSED Finding basis used when fail-to-pass execution is recorded as PASS + FLAKY_SUSPECTED. It deliberately cannot point at a future FROZEN review. Session review rechecks this same-scope membership/policy snapshot and creates the FROZEN successor atomically with review and manifest publication.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["findingId", "findingState", "disposedFindingReviewRef", "activeMembershipSetHash", "failedAttemptRefs", "failedAttemptSetHash", "flakyObservationRefs", "flakyObservationSetHash", "policyRef"],
+      "properties": {
+        "findingId": { "type": "string", "format": "uuid" },
+        "findingState": { "const": "DISPOSED" },
+        "disposedFindingReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "activeMembershipSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "failedAttemptRefs": {
+          "description": "Complete exact subset of considered Attempts whose technical result is ASSERTION_FAILED, INFRA_FAILED, TIMEOUT or INCOMPLETE.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" }
+        },
+        "failedAttemptSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "flakyObservationRefs": {
+          "description": "Complete exact NEGATIVE/AMBIGUOUS Observation set covering failedAttemptRefs. Each row must be same-PlanItem, reference one exact failed Attempt and be active in the pinned Finding membership set.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" }
+        },
+        "flakyObservationSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "policyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" }
+      }
+    },
+    "FlakyDispositionDecision": {
+      "description": "Closed flaky truth table: FLAKY_SUSPECTED is legal only with PASS or INCONCLUSIVE. PASS + FLAKY_SUSPECTED requires the exact current DISPOSED basis; INCONCLUSIVE + FLAKY_SUSPECTED forbids that future-dependent basis. FAIL, BLOCKED and NOT_RUN forbid the flag. Without the flag, every result forbids the basis.",
+      "type": "object",
+      "properties": {
+        "result": { "type": "string" },
+        "reviewFlags": { "type": "array" },
+        "flakyDispositionBasis": { "$ref": "#/$defs/FlakyDispositionBasis" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "reviewFlags": { "contains": { "const": "FLAKY_SUSPECTED" } }
+            },
+            "required": ["reviewFlags"]
+          },
+          "then": {
+            "properties": {
+              "result": { "enum": ["PASS", "INCONCLUSIVE"] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": { "const": "PASS" },
+              "reviewFlags": { "contains": { "const": "FLAKY_SUSPECTED" } }
+            },
+            "required": ["result", "reviewFlags"]
+          },
+          "then": { "required": ["flakyDispositionBasis"] },
+          "else": { "not": { "required": ["flakyDispositionBasis"] } }
+        }
+      ]
+    },
+    "RevisionCommand": {
+      "description": "Append-only human result command. A null predecessor is initial and forbids correctionReason; a non-null exact predecessor is a correction and requires the bounded reason.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedPreviousResultRevisionRef", "expectedAttemptSetHash", "expectedMaximumAttemptNo", "expectedObservationSetHash", "expectedObservationCount", "reviewFlags", "result", "actualOutcome", "decisionReason", "artifactIds"],
+      "properties": {
+        "expectedPreviousResultRevisionRef": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" }
+          ]
+        },
+        "correctionReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "expectedAttemptSetHash": {
+          "description": "CAS hint for the complete server-derived finalized Attempt set; mismatch or a later repeat rejects the command before a result revision is written.",
+          "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+        },
+        "expectedMaximumAttemptNo": { "type": "integer", "minimum": 0 },
+        "expectedObservationSetHash": {
+          "description": "CAS hint for the complete server-derived current-leaf Observation set; mismatch, correction or late Observation rejects the command.",
+          "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+        },
+        "expectedObservationCount": { "type": "integer", "minimum": 0 },
+        "reviewFlags": { "type": "array", "uniqueItems": true, "items": { "type": "string", "enum": ["FLAKY_SUSPECTED"] } },
+        "result": { "type": "string", "enum": ["PASS", "FAIL", "BLOCKED", "NOT_RUN", "INCONCLUSIVE"] },
+        "actualOutcome": { "type": "string", "minLength": 1, "maxLength": 10000 },
+        "decisionReason": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "artifactIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "format": "uuid" } },
+        "waiverRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" },
+        "flakyDispositionBasis": { "$ref": "#/$defs/FlakyDispositionBasis" }
+      },
+      "allOf": [
+        { "$ref": "#/$defs/RevisionPredecessorDecision" },
+        { "$ref": "#/$defs/FlakyDispositionDecision" },
+        { "$ref": "#/$defs/CommandObservationDecision" },
+        {
+          "if": { "properties": { "result": { "enum": ["FAIL", "BLOCKED", "INCONCLUSIVE"] } }, "required": ["result"] },
+          "then": { "properties": { "artifactIds": { "minItems": 1 } }
+          }
+        },
+        {
+          "if": { "properties": { "result": { "const": "NOT_RUN" } }, "required": ["result"] },
+          "then": {
+            "properties": { "expectedMaximumAttemptNo": { "const": 0 }, "expectedObservationCount": { "const": 0 }, "artifactIds": { "maxItems": 0 } },
+            "required": ["waiverRef"]
+          },
+          "else": {
+            "properties": { "expectedMaximumAttemptNo": { "minimum": 1 }, "expectedObservationCount": { "minimum": 1 } },
+            "not": { "required": ["waiverRef"] }
+          }
+        }
+      ]
+    },
+    "NegativeObservationDecision": {
+      "description": "Every executed result is not recordable without a nonempty exact current-leaf Observation set. PASS additionally requires at least one POSITIVE Observation; FAIL/BLOCKED/INCONCLUSIVE require at least one NEGATIVE or AMBIGUOUS Observation. Kind/leaf/attempt coverage is a transactional semantic invariant.",
+      "type": "object",
+      "properties": {
+        "result": { "type": "string" },
+        "consideredObservationRefs": { "type": "array" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "result": { "enum": ["PASS", "FAIL", "BLOCKED", "INCONCLUSIVE"] } }, "required": ["result"] },
+          "then": { "properties": { "consideredObservationRefs": { "minItems": 1 } } }
+        }
+      ]
+    },
+    "CommandObservationDecision": {
+      "description": "The public command carries only CAS facts for the complete server-derived current-leaf Observation set. NOT_RUN expects zero; every executed result expects a nonempty set.",
+      "type": "object",
+      "required": ["result", "expectedObservationCount"],
+      "properties": {
+        "result": { "type": "string" },
+        "expectedObservationCount": { "type": "integer", "minimum": 0 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "result": { "const": "NOT_RUN" } }, "required": ["result"] },
+          "then": { "properties": { "expectedObservationCount": { "const": 0 } } },
+          "else": { "properties": { "expectedObservationCount": { "minimum": 1 } } }
+        }
+      ]
+    },
+    "RevisionPredecessorDecision": {
+      "description": "Public result-revision predecessor/reason truth table. Null means initial and forbids correctionReason; an exact non-null predecessor requires it.",
+      "type": "object",
+      "required": ["expectedPreviousResultRevisionRef"],
+      "properties": {
+        "expectedPreviousResultRevisionRef": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" }
+          ]
+        },
+        "correctionReason": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "expectedPreviousResultRevisionRef": { "type": "null" } }, "required": ["expectedPreviousResultRevisionRef"] },
+          "then": { "not": { "required": ["correctionReason"] } },
+          "else": { "required": ["correctionReason"] }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    { "$ref": "#/$defs/FlakyDispositionDecision" },
+    { "$ref": "#/$defs/NegativeObservationDecision" },
+    {
+      "if": { "properties": { "version": { "minimum": 2 } }, "required": ["version"] },
+      "then": { "required": ["previousRevisionRef", "correctionReason"] },
+      "else": {
+        "allOf": [
+          { "not": { "required": ["previousRevisionRef"] } },
+          { "not": { "required": ["correctionReason"] } }
+        ]
+      }
+    },
+    {
+      "if": { "properties": { "result": { "enum": ["FAIL", "BLOCKED", "INCONCLUSIVE"] } }, "required": ["result"] },
+      "then": { "properties": { "artifactRefs": { "minItems": 1 } }, "required": ["artifactRefs"] }
+    },
+    {
+      "if": { "properties": { "result": { "const": "NOT_RUN" } }, "required": ["result"] },
+      "then": {
+        "properties": {
+          "consideredAttemptRefs": { "maxItems": 0 },
+          "consideredObservationRefs": { "maxItems": 0 },
+          "maximumAttemptNo": { "const": 0 },
+          "artifactRefs": { "maxItems": 0 }
+        },
+        "required": ["waiverRef"]
+      },
+      "else": {
+        "properties": {
+          "consideredAttemptRefs": { "minItems": 1 },
+          "maximumAttemptNo": { "minimum": 1 }
+        },
+        "not": { "required": ["waiverRef"] }
+      }
+    }
+  ]
+}

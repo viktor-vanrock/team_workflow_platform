@@ -1,0 +1,16 @@
+{
+  "state": "CONFIRMED",
+  "closeApprovalRef": { "approvalId": "30303030-3030-4030-8030-303030303030", "subjectHash": "sha256:2727272727272727272727272727272727272727272727272727272727272727" },
+  "approvedBy": {
+    "type": "HUMAN",
+    "principalId": "78787878-7878-4878-8878-787878787878",
+    "issuer": "https://id.example.test",
+    "subject": "qa-lead-1"
+  },
+  "approvedAt": "2026-08-27T12:59:00Z",
+  "commandRef": { "commandId": "40404040-4040-4040-8040-404040404040" },
+  "effectKeyHash": "sha256:4242424242424242424242424242424242424242424242424242424242424242",
+  "confirmationReceiptRef": { "id": "45454545-4545-4545-8545-454545454545" },
+  "finalCloseConfirmationRef": { "id": "44444444-4444-4444-8444-444444444445" },
+  "terminalReason": "This field must not coexist with confirmed close"
+}

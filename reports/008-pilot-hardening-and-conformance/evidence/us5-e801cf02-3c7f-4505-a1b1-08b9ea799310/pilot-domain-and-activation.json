@@ -1,0 +1,17 @@
+{
+  "command": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/unit/008/pilot-measurements.spec.ts",
+    "tests/unit/008/pilot-corporate-evidence.spec.ts",
+    "tests/integration/008/pilot-activation.spec.ts",
+    "tests/integration/008/shadow-fence.spec.ts",
+    "tests/integration/008/pilot-cohort.spec.ts",
+    "tests/integration/008/pilot-review.spec.ts",
+    "tests/integration/008/pilot-observation-worker.spec.ts",
+    "tests/integration/008/pilot-run-api.spec.ts",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 0,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  8 passed (8)\n      Tests  17 passed | 1 skipped (18)\n   Start at  04:00:02\n   Duration  5.73s (transform 2.16s, setup 0ms, import 4.89s, tests 195ms, environment 0ms)\n\n"
+}

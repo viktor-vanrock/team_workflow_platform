@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "audit-43d8cf6f-2bb8-4d44-a99d-1c5928620f87",
+  "gate": "audit-coverage",
+  "status": "PASS",
+  "deploymentProfile": "local",
+  "scope": {
+    "workspaceId": "10000000-0000-4000-8000-000000000001",
+    "projectIds": [
+      "20000000-0000-4000-8000-000000000001"
+    ]
+  },
+  "startedAt": "2026-09-04T20:23:20.075Z",
+  "finishedAt": "2026-09-04T20:23:21.293Z",
+  "fingerprints": {
+    "source": "sha256:ed6a3a0e5ecfca086c0b706592ee50f4ab0e4c8161c375f1bb91b39d33405a41",
+    "contracts": "sha256:cfbb8f44102b0a6ace7af4daa172c2fa976a95faa138650e4348b89bad94070a",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:17db55ba07a770e8567741ee7a5d777b9f1b8b4b0a85a0f612b0fc3470c3b76f",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:aa8f126a6eb7c4d28fffb09337b4479333f5ae405672e36fa76f57ebcea09f0a"
+  },
+  "executorIdentity": "local-cli",
+  "prerequisites": [],
+  "reasonCodes": [],
+  "checks": [
+    {
+      "id": "effect-audit-coverage",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/audit-43d8cf6f-2bb8-4d44-a99d-1c5928620f87/coverage.json",
+          "sha256": "sha256:32f3834aba8e6328d46156f34b39accdb49496e68331f34116eebd554d9b8e32"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "unchanged-source",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/audit-43d8cf6f-2bb8-4d44-a99d-1c5928620f87/coverage.json",
+          "sha256": "sha256:32f3834aba8e6328d46156f34b39accdb49496e68331f34116eebd554d9b8e32"
+        }
+      ],
+      "reasonCodes": []
+    }
+  ]
+}

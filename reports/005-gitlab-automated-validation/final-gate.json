@@ -1,0 +1,719 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-final",
+  "contour": "qa-jira-gitlab-local",
+  "startedAt": "2026-09-03T10:36:59.987Z",
+  "processGateCompletedAt": "2026-09-03T10:55:48.682Z",
+  "stages": [
+    {
+      "id": "prerequisites",
+      "category": "prerequisites",
+      "args": [
+        "tools/verification/feature-005-prerequisites.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-005-prerequisites.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 78,
+      "exitCode": 0
+    },
+    {
+      "id": "governance",
+      "category": "governance",
+      "args": [
+        "tools/verification/feature-005-governance.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-005-governance.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 74,
+      "exitCode": 0
+    },
+    {
+      "id": "setup-contracts",
+      "category": "contract",
+      "args": [
+        "tools/verification/005-setup-gate.mts"
+      ],
+      "timeoutMs": 300000,
+      "command": [
+        "node",
+        "tools/verification/005-setup-gate.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 3075,
+      "exitCode": 0
+    },
+    {
+      "id": "foundation",
+      "category": "contract+integration+security",
+      "args": [
+        "tools/verification/005-foundation-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/005-foundation-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 82878,
+      "exitCode": 0
+    },
+    {
+      "id": "us1",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/005-us1-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/005-us1-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 122246,
+      "exitCode": 0
+    },
+    {
+      "id": "us2",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/005-us2-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/005-us2-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 142395,
+      "exitCode": 0
+    },
+    {
+      "id": "us3",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/005-us3-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/005-us3-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 136668,
+      "exitCode": 0
+    },
+    {
+      "id": "us4",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/005-us4-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/005-us4-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 131164,
+      "exitCode": 0
+    },
+    {
+      "id": "openapi-drift",
+      "category": "contract",
+      "args": [
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "durationMs": 302,
+      "exitCode": 0
+    },
+    {
+      "id": "registry-drift",
+      "category": "contract",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "durationMs": 291,
+      "exitCode": 0
+    },
+    {
+      "id": "feature-tests",
+      "category": "architecture+contract+unit+integration+security+e2e",
+      "args": [
+        "tools/ci/feature-005-tests.mts"
+      ],
+      "timeoutMs": 1200000,
+      "command": [
+        "node",
+        "tools/ci/feature-005-tests.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 120750,
+      "exitCode": 0
+    },
+    {
+      "id": "migrations-postgres-17-18",
+      "category": "integration",
+      "args": [
+        "tools/ci/verify-005-migrations.mts"
+      ],
+      "timeoutMs": 900000,
+      "command": [
+        "node",
+        "tools/ci/verify-005-migrations.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 16711,
+      "exitCode": 0
+    },
+    {
+      "id": "observability",
+      "category": "observability+slo",
+      "args": [
+        "tools/verification/feature-005-observability.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/feature-005-observability.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 5702,
+      "exitCode": 0
+    },
+    {
+      "id": "smoke",
+      "category": "process+browser+e2e",
+      "args": [
+        "tools/smoke/feature-005.mts"
+      ],
+      "timeoutMs": 3600000,
+      "command": [
+        "node",
+        "tools/smoke/feature-005.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 96297,
+      "exitCode": 0
+    },
+    {
+      "id": "quickstart",
+      "category": "documentation+process+e2e",
+      "args": [
+        "tools/verification/005-quickstart.mts"
+      ],
+      "timeoutMs": 4800000,
+      "command": [
+        "node",
+        "tools/verification/005-quickstart.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 218996,
+      "exitCode": 0
+    },
+    {
+      "id": "typecheck",
+      "category": "typecheck",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "--all"
+      ],
+      "timeoutMs": 900000,
+      "command": [
+        "node",
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "--all"
+      ],
+      "status": "PASS",
+      "durationMs": 680,
+      "exitCode": 0
+    },
+    {
+      "id": "lint",
+      "category": "lint",
+      "args": [
+        "node_modules/eslint/bin/eslint.js",
+        "."
+      ],
+      "timeoutMs": 900000,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "."
+      ],
+      "status": "PASS",
+      "durationMs": 48689,
+      "exitCode": 0
+    },
+    {
+      "id": "build",
+      "category": "build",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "build",
+        "--all"
+      ],
+      "timeoutMs": 1200000,
+      "command": [
+        "node",
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "build",
+        "--all"
+      ],
+      "status": "PASS",
+      "durationMs": 522,
+      "exitCode": 0
+    },
+    {
+      "id": "nonprod-metadata",
+      "category": "nonprod",
+      "args": [
+        "tools/verification/feature-005-nonprod-metadata.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-005-nonprod-metadata.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 233,
+      "exitCode": 0
+    },
+    {
+      "id": "nonprod",
+      "category": "nonprod",
+      "args": [
+        "tools/verification/feature-005-nonprod.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-005-nonprod.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 437,
+      "exitCode": 0
+    },
+    {
+      "id": "traceability",
+      "category": "trace",
+      "args": [
+        "tools/verification/feature-005-trace.mts"
+      ],
+      "timeoutMs": 300000,
+      "command": [
+        "node",
+        "tools/verification/feature-005-trace.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 284,
+      "exitCode": 0
+    },
+    {
+      "id": "evidence-aggregation",
+      "category": "evidence",
+      "args": [
+        "tools/verification/feature-005-evidence.mts",
+        "--collect"
+      ],
+      "timeoutMs": 300000,
+      "command": [
+        "node",
+        "tools/verification/feature-005-evidence.mts",
+        "--collect"
+      ],
+      "status": "PASS",
+      "durationMs": 144,
+      "exitCode": 0
+    }
+  ],
+  "categories": {
+    "prerequisites": "PASS",
+    "governance": "PASS",
+    "contract": "PASS",
+    "contract+integration+security": "PASS",
+    "contract+integration+security+e2e": "PASS",
+    "architecture+contract+unit+integration+security+e2e": "PASS",
+    "integration": "PASS",
+    "observability+slo": "PASS",
+    "process+browser+e2e": "PASS",
+    "documentation+process+e2e": "PASS",
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "build": "PASS",
+    "nonprod": "PASS",
+    "trace": "PASS",
+    "evidence": "PASS"
+  },
+  "evidence": [
+    {
+      "name": "prerequisites.json",
+      "status": "PASS",
+      "sha256": "sha256:31fa3331ca69d74595bc6f5f13de1263147bd8ce5087e41ef46872977377d7ba"
+    },
+    {
+      "name": "governance.json",
+      "status": "PASS",
+      "sha256": "sha256:7b46de70e92927aad6393b2015ed2d331c91d69f00ebb75a93ff5aa299035e0e"
+    },
+    {
+      "name": "setup-gate.json",
+      "status": "PASS",
+      "sha256": "sha256:48d6d77a82e32e51fa1edd77031a236524f2b1715d06a48143a939bd2ba46142"
+    },
+    {
+      "name": "foundation.json",
+      "status": "PASS",
+      "sha256": "sha256:f98be43c8e1561ddf1170c91bf36819a7bfb9c67b7d90b03cfcb0490754e0715"
+    },
+    {
+      "name": "us1.json",
+      "status": "PASS",
+      "sha256": "sha256:1f1e6ac0e0f363f0d0f17ba7f5a1e15b5eab05adf69017775098f0c52484e2fe"
+    },
+    {
+      "name": "us2.json",
+      "status": "PASS",
+      "sha256": "sha256:625a2d39d94890a55f3b59aa2aef1a8445119e21a56c2f60ca076f659ed5685a"
+    },
+    {
+      "name": "us3.json",
+      "status": "PASS",
+      "sha256": "sha256:40a14acaf9c4b4209ed15ad5fe56f8ff37446f1e6a26e920ccb172d8a0388219"
+    },
+    {
+      "name": "us4.json",
+      "status": "PASS",
+      "sha256": "sha256:17d5de6a5ceb85c1f488b7224a009e6b4596f33a5c8f4518de6a7e5d32afeec7"
+    },
+    {
+      "name": "migrations.json",
+      "status": "PASS",
+      "sha256": "sha256:4cb9d3ed01b5b5598450e148bf1b74a353a042e1c0f0b080d278e737d5a36adb"
+    },
+    {
+      "name": "observability.json",
+      "status": "PASS",
+      "sha256": "sha256:22b99d53c6f8a2e3224b1e8d1887cfad4938440973a3bdb659f50c69732106dd"
+    },
+    {
+      "name": "documented-scenarios.json",
+      "status": "PASS",
+      "sha256": "sha256:b0bfd991a8c14d30129f170e44e56c52b0dc93b581e08e3533b17694a076e850"
+    },
+    {
+      "name": "smoke.json",
+      "status": "PASS",
+      "sha256": "sha256:434fdc4dd8d0bce945bc0ada0c8419d9c5310ba51faac080188996f5d4928ad8"
+    },
+    {
+      "name": "quickstart.json",
+      "status": "PASS",
+      "sha256": "sha256:6fafa64b39481810135c5a3588a4d327392928f3271d19a25040f62b171b29c8"
+    },
+    {
+      "name": "nonprod-metadata.json",
+      "status": "SKIPPED_GATED",
+      "sha256": "sha256:feb423d8f6b7b19762a1761dda8cd898f5d74e203f8d39014a72bc373c93b498"
+    },
+    {
+      "name": "nonprod.json",
+      "status": "SKIPPED_GATED",
+      "sha256": "sha256:49cbb7895a8c98671b5ae56614b225dc3412dd7f44b5a98b13c8503644e530c6"
+    },
+    {
+      "name": "traceability.json",
+      "status": "PASS",
+      "sha256": "sha256:424f1fc94f0ee06effc3439f37c7098a82cb19cee22f1a36ca2c1ba0c5508ed0"
+    },
+    {
+      "name": "evidence.json",
+      "status": "PASS",
+      "sha256": "sha256:10563bcd82e952c624bacf8142227fdc8832d5adca9d4e9036448a33956d52cb"
+    }
+  ],
+  "local": "PASS",
+  "liveGitLab": "SKIPPED_GATED",
+  "mattermostCompatibility": "NOT_REQUESTED",
+  "deploymentApproval": "LOCAL_CONFORMANCE_ONLY",
+  "pilotRelease": "NOT_REQUESTED",
+  "production": "DENIED",
+  "productionRunsSupported": false,
+  "finishedAt": "2026-09-03T10:55:48.730Z",
+  "status": "PASS",
+  "handoff": {
+    "status": "BOUND",
+    "generatedAfterAllProcessGates": true,
+    "generatedAt": "2026-09-03T10:55:48.730Z",
+    "verificationCommand": "pnpm verify:005:evidence",
+    "toolchain": {
+      "node": "24.20.0",
+      "packageManager": "pnpm@11.21.0"
+    },
+    "taskSnapshot": {
+      "path": "specs/005-gitlab-automated-validation/tasks.md",
+      "sha256": "sha256:7f15792712dc0ac42f9d0631fd0d37ef8794cb85142699f371c3047c3bd29ab9",
+      "taskCount": 159,
+      "completedTaskIds": [
+        "T001",
+        "T002",
+        "T003",
+        "T004",
+        "T005",
+        "T006",
+        "T007",
+        "T008",
+        "T009",
+        "T010",
+        "T011",
+        "T012",
+        "T013",
+        "T014",
+        "T015",
+        "T016",
+        "T017",
+        "T018",
+        "T019",
+        "T020",
+        "T021",
+        "T022",
+        "T023",
+        "T024",
+        "T025",
+        "T026",
+        "T027",
+        "T028",
+        "T029",
+        "T030",
+        "T031",
+        "T032",
+        "T033",
+        "T034",
+        "T035",
+        "T036",
+        "T037",
+        "T038",
+        "T039",
+        "T040",
+        "T041",
+        "T042",
+        "T043",
+        "T044",
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T049",
+        "T050",
+        "T051",
+        "T052",
+        "T053",
+        "T054",
+        "T055",
+        "T056",
+        "T057",
+        "T058",
+        "T059",
+        "T060",
+        "T061",
+        "T062",
+        "T063",
+        "T064",
+        "T065",
+        "T066",
+        "T067",
+        "T068",
+        "T069",
+        "T070",
+        "T071",
+        "T072",
+        "T073",
+        "T074",
+        "T075",
+        "T076",
+        "T077",
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T082",
+        "T083",
+        "T084",
+        "T085",
+        "T086",
+        "T087",
+        "T088",
+        "T089",
+        "T090",
+        "T091",
+        "T092",
+        "T093",
+        "T094",
+        "T095",
+        "T096",
+        "T097",
+        "T098",
+        "T099",
+        "T100",
+        "T101",
+        "T102",
+        "T103",
+        "T104",
+        "T105",
+        "T106",
+        "T107",
+        "T108",
+        "T109",
+        "T110",
+        "T111",
+        "T112",
+        "T113",
+        "T114",
+        "T115",
+        "T116",
+        "T117",
+        "T118",
+        "T119",
+        "T120",
+        "T121",
+        "T122",
+        "T123",
+        "T124",
+        "T125",
+        "T126",
+        "T127",
+        "T128",
+        "T129",
+        "T130",
+        "T131",
+        "T132",
+        "T133",
+        "T134",
+        "T135",
+        "T136",
+        "T137",
+        "T138",
+        "T139",
+        "T140",
+        "T141",
+        "T142",
+        "T143",
+        "T144",
+        "T145",
+        "T146",
+        "T147",
+        "T148",
+        "T149",
+        "T150",
+        "T151",
+        "T152",
+        "T153",
+        "T154",
+        "T155",
+        "T156",
+        "T157",
+        "T158",
+        "T159"
+      ],
+      "pendingTaskIds": []
+    },
+    "sourceSnapshot": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          "apps",
+          "packages",
+          "config",
+          "infra",
+          "docs",
+          "specs/005-gitlab-automated-validation"
+        ],
+        "files": [],
+        "exclusions": [
+          "specs/005-gitlab-automated-validation/tasks.md"
+        ]
+      },
+      "fileCount": 932,
+      "sha256": "sha256:a71fb0942ce8adf009420df06a19cdcdb3f3491ed7618bef3dd2fb78a1380825"
+    },
+    "contractSnapshot": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          "specs/005-gitlab-automated-validation/contracts"
+        ],
+        "files": [
+          "packages/platform-contracts/src/generated/schema-documents.ts",
+          "apps/api/openapi.generated.json",
+          "apps/mock-hub/openapi.generated.json"
+        ],
+        "exclusions": []
+      },
+      "fileCount": 48,
+      "sha256": "sha256:b7dc459c1c31fce815c0286c4f286921effa13aa91bf43b53ad0ee98bb25f55c"
+    },
+    "runtimeSnapshot": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          "tests/contract/005",
+          "tests/unit/005",
+          "tests/integration/005",
+          "tests/integration/security/005",
+          "tools"
+        ],
+        "files": [
+          "tests/architecture/005-gitlab-boundaries.spec.ts",
+          "tests/architecture/005-gitlab-runtime-wiring.spec.ts",
+          "tests/e2e/005-us1-automated-session.spec.ts",
+          "tests/e2e/005-us2-trigger-once.spec.ts",
+          "tests/e2e/005-us3-technical-result-review.spec.ts",
+          "tests/e2e/005-us4-outage-recovery.spec.ts",
+          "playwright.config.ts",
+          "package.json",
+          "pnpm-lock.yaml",
+          "tsconfig.base.json"
+        ],
+        "exclusions": [
+          "tools/verification/feature-006-prerequisites.mts"
+        ]
+      },
+      "fileCount": 219,
+      "sha256": "sha256:a4061d48c9444ec2d5181add9b5941073b05d1d866b6525f9f119c19427029be"
+    }
+  }
+}

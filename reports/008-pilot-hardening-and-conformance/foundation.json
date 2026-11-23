@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/foundation-3b8fe93e-66ac-4df9-880c-d4ef5cee8eb2.json",
+    "sha256": "sha256:885238a4ccf7d2d8ba6e775249164a6ea13b2f51b2d669ea367e0f336468f805"
+  },
+  "corporateReady": false
+}

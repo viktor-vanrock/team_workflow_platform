@@ -1,0 +1,289 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:sla-clock-transition:v1",
+  "title": "SlaClockTransition v1",
+  "$comment": "Immutable Project-scoped public projection of one stored SLA clock revision. It contains transition-time facts only: no read-time asOf, freshness, remaining time, target evaluation or evaluationHash. clockRevisionRef.semanticHash is SHA-256 over RFC 8785 canonical bytes of this complete document with clockRevisionRef omitted. Composed validation requires clockRevisionRef.id=slaClockId, the envelope entityId/entityVersion to equal slaClockId/clockRevisionRef.version, exact previous-revision lineage, same-scope refs, source/goal compatibility, cumulative elapsed calculation at effectiveAt, and equality between START transitionSourceRef and startSourceRef. Cycle 1 START is revision 1 with no predecessor; a later-cycle START immediately follows and resolves the prior cycle's STOP revision under the same clock ID, increments clockCycle by one and starts a fresh lineage without changing prior facts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "goal",
+    "slaClockId",
+    "clockCycle",
+    "clockRevisionRef",
+    "transition",
+    "previousClockState",
+    "currentClockState",
+    "effectiveAt",
+    "elapsedBusinessSecondsAtTransition",
+    "policyFacetRef",
+    "calendarRef",
+    "mappingRef",
+    "algorithmRef",
+    "startSourceRef",
+    "startedAt",
+    "transitionSourceRef",
+    "inputFingerprint"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "sla-clock-transition@1.0.0" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "workItemId": { "$ref": "#/$defs/id" },
+    "goal": { "enum": ["READY_TO_FIRST_QA_START", "READY_TO_SIGNED_VERDICT"] },
+    "slaClockId": { "$ref": "#/$defs/id" },
+    "clockCycle": { "type": "integer", "minimum": 1 },
+    "clockRevisionRef": { "$ref": "#/$defs/versionedContentRef" },
+    "previousClockRevisionRef": { "$ref": "#/$defs/versionedContentRef" },
+    "transition": { "enum": ["START", "PAUSE", "RESUME", "STOP"] },
+    "previousClockState": { "enum": ["NOT_STARTED", "RUNNING", "PAUSED", "STOPPED"] },
+    "currentClockState": { "enum": ["RUNNING", "PAUSED", "STOPPED"] },
+    "effectiveAt": { "$ref": "#/$defs/timestamp" },
+    "elapsedBusinessSecondsAtTransition": { "type": "integer", "minimum": 0 },
+    "policyFacetRef": { "$ref": "#/$defs/versionedContentRef" },
+    "calendarRef": { "$ref": "#/$defs/versionedContentRef" },
+    "mappingRef": { "$ref": "#/$defs/statusMappingRevisionRef" },
+    "algorithmRef": { "$ref": "#/$defs/algorithmRef" },
+    "startSourceRef": { "$ref": "#/$defs/startSourceRef" },
+    "startedAt": { "$ref": "#/$defs/timestamp" },
+    "transitionSourceRef": { "$ref": "#/$defs/transitionSourceRef" },
+    "mappedPauseReasonCode": { "$ref": "#/$defs/reasonCode" },
+    "inputFingerprint": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["transition"],
+        "properties": { "transition": { "const": "START" } }
+      },
+      "then": {
+        "properties": {
+          "currentClockState": { "const": "RUNNING" },
+          "transitionSourceRef": { "$ref": "#/$defs/startSourceRef" },
+          "elapsedBusinessSecondsAtTransition": { "const": 0 },
+          "mappedPauseReasonCode": false
+        },
+        "oneOf": [
+          {
+            "properties": {
+              "clockCycle": { "const": 1 },
+              "previousClockState": { "const": "NOT_STARTED" },
+              "clockRevisionRef": {
+                "properties": { "version": { "const": 1 } },
+                "required": ["version"]
+              }
+            },
+            "not": { "required": ["previousClockRevisionRef"] }
+          },
+          {
+            "required": ["previousClockRevisionRef"],
+            "properties": {
+              "clockCycle": { "type": "integer", "minimum": 2 },
+              "previousClockState": { "const": "STOPPED" },
+              "clockRevisionRef": {
+                "properties": { "version": { "type": "integer", "minimum": 2 } },
+                "required": ["version"]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "if": {
+        "required": ["transition"],
+        "properties": { "transition": { "const": "PAUSE" } }
+      },
+      "then": {
+        "required": ["previousClockRevisionRef", "mappedPauseReasonCode"],
+        "properties": {
+          "previousClockState": { "const": "RUNNING" },
+          "currentClockState": { "const": "PAUSED" },
+          "clockRevisionRef": {
+            "properties": { "version": { "type": "integer", "minimum": 2 } },
+            "required": ["version"]
+          },
+          "transitionSourceRef": { "$ref": "#/$defs/jiraConfirmedProjectionRef" }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["transition"],
+        "properties": { "transition": { "const": "RESUME" } }
+      },
+      "then": {
+        "required": ["previousClockRevisionRef"],
+        "properties": {
+          "previousClockState": { "const": "PAUSED" },
+          "currentClockState": { "const": "RUNNING" },
+          "clockRevisionRef": {
+            "properties": { "version": { "type": "integer", "minimum": 2 } },
+            "required": ["version"]
+          },
+          "transitionSourceRef": { "$ref": "#/$defs/jiraConfirmedProjectionRef" },
+          "mappedPauseReasonCode": false
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["transition", "goal"],
+        "properties": {
+          "transition": { "const": "STOP" },
+          "goal": { "const": "READY_TO_FIRST_QA_START" }
+        }
+      },
+      "then": {
+        "required": ["previousClockRevisionRef"],
+        "properties": {
+          "previousClockState": { "enum": ["RUNNING", "PAUSED"] },
+          "currentClockState": { "const": "STOPPED" },
+          "clockRevisionRef": {
+            "properties": { "version": { "type": "integer", "minimum": 2 } },
+            "required": ["version"]
+          },
+          "transitionSourceRef": { "$ref": "#/$defs/sessionStopSourceRef" },
+          "mappedPauseReasonCode": false
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["transition", "goal"],
+        "properties": {
+          "transition": { "const": "STOP" },
+          "goal": { "const": "READY_TO_SIGNED_VERDICT" }
+        }
+      },
+      "then": {
+        "required": ["previousClockRevisionRef"],
+        "properties": {
+          "previousClockState": { "enum": ["RUNNING", "PAUSED"] },
+          "currentClockState": { "const": "STOPPED" },
+          "clockRevisionRef": {
+            "properties": { "version": { "type": "integer", "minimum": 2 } },
+            "required": ["version"]
+          },
+          "transitionSourceRef": { "$ref": "#/$defs/verdictStopSourceRef" },
+          "mappedPauseReasonCode": false
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "format": "uuid" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+    },
+    "reasonCode": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "statusMappingRevisionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "JIRA_STATUS_MAPPING_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "jiraConfirmedProjectionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash", "confirmedAt"],
+      "properties": {
+        "sourceType": { "const": "JIRA_OPERATIONAL_PROJECTION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "observedAt": { "$ref": "#/$defs/timestamp" },
+        "confirmedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "rolloutVerificationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash", "confirmedAt"],
+      "properties": {
+        "sourceType": { "const": "SLA_ROLLOUT_AUTHORITY_VERIFICATION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "const": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "confirmedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "startSourceRef": {
+      "oneOf": [
+        { "$ref": "#/$defs/jiraConfirmedProjectionRef" },
+        { "$ref": "#/$defs/rolloutVerificationRef" }
+      ]
+    },
+    "sessionStopSourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QA_TEST_SESSION_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "verdictStopSourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "const": "QA_VERDICT_REVISION" },
+        "sourceId": { "$ref": "#/$defs/id" },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "transitionSourceRef": {
+      "oneOf": [
+        { "$ref": "#/$defs/startSourceRef" },
+        { "$ref": "#/$defs/sessionStopSourceRef" },
+        { "$ref": "#/$defs/verdictStopSourceRef" }
+      ]
+    },
+    "algorithmRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "semanticHash"],
+      "properties": {
+        "key": { "$ref": "#/$defs/key" },
+        "version": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

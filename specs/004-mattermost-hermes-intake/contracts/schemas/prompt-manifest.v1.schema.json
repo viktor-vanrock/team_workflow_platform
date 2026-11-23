@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:prompt-manifest:v1",
+  "title": "PromptManifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "manifestId",
+    "workspaceId",
+    "projectId",
+    "subject",
+    "agentDefinitionRef",
+    "skillRef",
+    "rulesRef",
+    "policyRef",
+    "promptTemplateRef",
+    "factSegments",
+    "maximumClassification",
+    "classificationDecisionHash",
+    "outputSchemaRef",
+    "inputFingerprint",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "prompt-manifest@1.0.0" },
+    "manifestId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version", "contentHash"],
+      "properties": {
+        "kind": { "enum": ["DRAFT", "CANDIDATE", "WORK_ITEM"] },
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "agentDefinitionRef": { "$ref": "#/$defs/versionedHashRef" },
+    "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+    "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+    "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+    "promptTemplateRef": { "$ref": "#/$defs/versionedHashRef" },
+    "modelRef": { "$ref": "#/$defs/versionedHashRef" },
+    "factSegments": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceKind", "sourceRef", "sourceVersion", "sourceHash", "classification", "trust", "sanitizedValue", "sanitizationRuleRef"],
+        "properties": {
+          "sourceKind": { "enum": ["DRAFT", "JIRA", "MATTERMOST", "GITLAB", "QA_STATE", "ARTIFACT_METADATA", "POLICY_FACT"] },
+          "sourceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "sourceVersion": { "type": "string", "minLength": 1, "maxLength": 256 },
+          "sourceHash": { "$ref": "#/$defs/hash" },
+          "classification": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+          "trust": { "const": "UNTRUSTED" },
+          "sanitizedValue": {
+            "anyOf": [
+              { "type": "string", "maxLength": 4000 },
+              { "type": "number", "minimum": -1000000000000000, "maximum": 1000000000000000 },
+              { "type": "boolean" },
+              { "type": "null" }
+            ]
+          },
+          "sanitizationRuleRef": { "$ref": "#/$defs/versionedHashRef" }
+        }
+      }
+    },
+    "maximumClassification": { "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"] },
+    "classificationDecisionHash": { "$ref": "#/$defs/hash" },
+    "outputSchemaRef": { "$ref": "#/$defs/schemaRef" },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^urn:awp:schemas:[A-Za-z0-9:._-]+$", "maxLength": 512 },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

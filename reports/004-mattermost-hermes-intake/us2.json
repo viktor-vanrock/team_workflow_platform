@@ -1,0 +1,46 @@
+{
+  "feature": "004-mattermost-hermes-intake",
+  "checkpoint": "US2",
+  "status": "PASS",
+  "generatedAt": "2026-09-03T10:22:12.459Z",
+  "taskSourceHash": "sha256:898061c3ce6c367812c7b11520f6888d641012d3cd50f0d67357e8eb740040f8",
+  "assertions": {
+    "operationalWorkCreated": 0,
+    "decisionSet": [
+      "CREATE",
+      "SNOOZE",
+      "IGNORE"
+    ],
+    "gitLabProducer": "DENY_NOT_INSTALLED"
+  },
+  "results": [
+    {
+      "key": "US2_CONTRACT_INTEGRATION_E2E",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 7158,
+      "outputHash": "sha256:c1d1715773eba7ede6c10d35ae258a826d276ef61ac185491396a60de461d2e3"
+    },
+    {
+      "key": "RUNTIME_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4196,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "API_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4746,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "WEB_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2415,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  ]
+}

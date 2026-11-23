@@ -1,0 +1,17 @@
+{
+  "name": "competency-sdk",
+  "root": "packages/competency-sdk",
+  "sourceRoot": "packages/competency-sdk/src",
+  "projectType": "library",
+  "tags": ["type:sdk", "runtime:universal", "domain:platform"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/competency-sdk/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/competency-sdk/tsconfig.json --noEmit" }
+    }
+  }
+}

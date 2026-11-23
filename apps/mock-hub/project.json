@@ -1,0 +1,17 @@
+{
+  "name": "mock-hub",
+  "root": "apps/mock-hub",
+  "sourceRoot": "apps/mock-hub/src",
+  "projectType": "application",
+  "tags": ["type:app", "runtime:node", "domain:mock"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p apps/mock-hub/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p apps/mock-hub/tsconfig.json --noEmit" }
+    }
+  }
+}

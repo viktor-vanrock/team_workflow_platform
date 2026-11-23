@@ -1,0 +1,12 @@
+{
+  "feature": "002",
+  "scenario": "qa-high-risk",
+  "composition": "qa-local",
+  "tests": [
+    "tests/integration/security/acceptance/002-at-010-verdict-risk-review.spec.ts"
+  ],
+  "startedAt": "2026-08-30T23:02:12.566Z",
+  "finishedAt": "2026-08-30T23:02:13.397Z",
+  "status": "PASS",
+  "exitCode": 0
+}

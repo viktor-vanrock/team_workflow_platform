@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "edition-family-mismatch",
+      "patch": { "adapter": { "edition": "DATA_CENTER" } },
+      "expectedCode": "JIRA_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "local-auth-mismatch",
+      "patch": { "auth": { "kind": "CLOUD_SERVICE_API_TOKEN" } },
+      "expectedCode": "JIRA_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "pinned-build-mismatch",
+      "patch": {
+        "adapter": { "edition": "DATA_CENTER", "family": "jira-dc-10-v2", "exactBuild": "9.13.0", "apiFlavor": "DC_REST_V2" },
+        "endpoint": { "contextPath": "/jira" }
+      },
+      "expectedCode": "JIRA_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "dynamic-webhook-missing-renewal",
+      "patch": { "webhook": { "registrationKind": "DYNAMIC_REFRESHED" } },
+      "expectedCode": "JIRA_PILOT_SCHEMA_INVALID"
+    },
+    {
+      "id": "jira-side-cas-missing-capability",
+      "patch": { "concurrency": { "mode": "JIRA_SIDE_CAS" } },
+      "expectedCode": "JIRA_PILOT_SCHEMA_INVALID"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "restore": {
+    "status": "PASS",
+    "dumpBytes": 3992,
+    "dumpDigest": "sha256:f4d65601080aacc1ad3b41d440b40e7a47a3d522973df3df6590c9a341d139c9",
+    "tables": [
+      "canonical_records",
+      "recovery_commands",
+      "recovery_audit",
+      "recovery_keys",
+      "recovery_artifacts"
+    ],
+    "targetId": "isolated-drill-008",
+    "workerEgress": "FENCED"
+  },
+  "counts": {
+    "canonical": 1,
+    "commands": 2,
+    "audit": 2,
+    "keys": 1,
+    "artifacts": 2
+  },
+  "targetIdentityChecked": true,
+  "activeTargetRejected": true
+}

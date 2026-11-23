@@ -1,0 +1,668 @@
+asyncapi: 3.0.0
+info:
+  title: AWP Queue, Triage, Capacity and SLA Events
+  version: 1.0.0
+  description: >-
+    Project-scoped Feature 006 facts carried by the existing durable Core/QA
+    outbox and inbox. Every message narrows the canonical Platform EventEnvelope
+    v1 and pins the exact JSON Schema 2020-12 ID, version and RFC 8785 registry digest.
+    Producers and consumers must also apply the normative cross-field envelope
+    binding table in contracts/README.md before inbox version/gap sequencing.
+    Exactly one QueueEntry event is emitted per new QueueEntry revision:
+    queue.control.changed for a control-caused revision, otherwise
+    queue.projection.updated. Exactly one admission event is emitted per decision:
+    capacity.over-limit-detected only for NON_DISCRETIONARY_OVERFLOW, otherwise
+    capacity.admission.decided. The alternatives are never dual-published.
+    Payloads contain derived facts, never credentials, raw request content,
+    hidden-Project aggregates, an AI total score or an authorization grant.
+defaultContentType: application/json
+channels:
+  queueProjectionEvents:
+    address: awp.core.queue-projection.events.v1
+    messages:
+      projectionUpdated:
+        $ref: '#/components/messages/QueueProjectionUpdated'
+      controlChanged:
+        $ref: '#/components/messages/QueueControlChanged'
+      stageChanged:
+        $ref: '#/components/messages/QueueStageChanged'
+  queueControlEvents:
+    address: awp.core.queue-control.events.v1
+    description: >-
+      Project-lane order invalidations after an exact control/move is consumed.
+      QueueEntry control-caused revisions use the complete queueProjectionEvents
+      stream so one entity-version stream cannot be split across addresses. The
+      internal PlatformAction capacity witness is not published.
+    messages:
+      orderChanged:
+        $ref: '#/components/messages/QueueOrderChanged'
+  qaQueueFactsEvents:
+    address: awp.qa.queue-facts.events.v1
+    description: >-
+      QA-owned invalidation facts emitted only after the queue-fact head commits.
+      Consumers re-read current local facts; source business content is not copied.
+    messages:
+      factsChanged:
+        $ref: '#/components/messages/QaQueueFactsChanged'
+  qaAutomationSourceEvents:
+    address: awp.qa.automated-session.events.v1
+    description: >-
+      QA-owned source event whose existing physical payload becomes explicitly
+      schema-registered by competency-qa@1.3.0. Core consumes it only as an
+      invalidation input and re-reads current local QA facts.
+    messages:
+      automatedSessionReady:
+        $ref: '#/components/messages/QaAutomatedSessionReady'
+  capacityEvents:
+    address: awp.core.capacity.events.v1
+    description: >-
+      Project-scoped admission and capacity-projection facts. There is no
+      subscriber-personalized Workspace event and no global count/head version.
+    messages:
+      admissionDecided:
+        $ref: '#/components/messages/CapacityAdmissionDecided'
+      occupancyChanged:
+        $ref: '#/components/messages/CapacityOccupancyChanged'
+      overLimitDetected:
+        $ref: '#/components/messages/CapacityOverLimitDetected'
+  slaClockEvents:
+    address: awp.core.sla-clock.events.v1
+    messages:
+      started:
+        $ref: '#/components/messages/SlaClockStarted'
+      paused:
+        $ref: '#/components/messages/SlaClockPaused'
+      resumed:
+        $ref: '#/components/messages/SlaClockResumed'
+      stopped:
+        $ref: '#/components/messages/SlaClockStopped'
+      warning:
+        $ref: '#/components/messages/SlaWarning'
+      breached:
+        $ref: '#/components/messages/SlaBreached'
+operations:
+  publishQueueProjectionEvents:
+    action: send
+    channel:
+      $ref: '#/channels/queueProjectionEvents'
+  consumeQueueProjectionEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/queueProjectionEvents'
+  publishQueueControlEvents:
+    action: send
+    channel:
+      $ref: '#/channels/queueControlEvents'
+  consumeQueueControlEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/queueControlEvents'
+  publishQaQueueFactsEvents:
+    action: send
+    channel:
+      $ref: '#/channels/qaQueueFactsEvents'
+  consumeQaQueueFactsEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/qaQueueFactsEvents'
+  publishQaAutomationSourceEvents:
+    action: send
+    channel:
+      $ref: '#/channels/qaAutomationSourceEvents'
+  consumeQaAutomationSourceEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/qaAutomationSourceEvents'
+  publishCapacityEvents:
+    action: send
+    channel:
+      $ref: '#/channels/capacityEvents'
+  consumeCapacityEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/capacityEvents'
+  publishSlaClockEvents:
+    action: send
+    channel:
+      $ref: '#/channels/slaClockEvents'
+  consumeSlaClockEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/slaClockEvents'
+components:
+  messages:
+    QueueProjectionUpdated:
+      name: queue.projection.updated
+      title: Current queue projection changed semantically
+      description: >-
+        Emitted for a new QueueEntry revision unless that revision is caused by a
+        Work Item queue-control transition; that mutually exclusive case emits
+        queue.control.changed on this same channel.
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          allOf:
+            - $ref: '#/components/schemas/ProjectEnvelope/schema'
+            - type: object
+              required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+              properties:
+                eventType: { const: queue.projection.updated }
+                entityType: { const: queue-entry }
+                payloadVersion: { const: 1 }
+                payloadSchemaRef:
+                  $ref: '#/components/schemas/QueueEntrySchemaRef/schema'
+                payload:
+                  $ref: '../schemas/queue-entry.v1.schema.json'
+    QueueStageChanged:
+      name: queue.stage.changed
+      title: Derived queue stage changed from one exact revision to another
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          allOf:
+            - $ref: '#/components/schemas/ProjectEnvelope/schema'
+            - type: object
+              required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+              properties:
+                eventType: { const: queue.stage.changed }
+                entityType: { const: queue-stage-transition }
+                payloadVersion: { const: 1 }
+                payloadSchemaRef:
+                  $ref: '#/components/schemas/QueueStageTransitionSchemaRef/schema'
+                payload:
+                  $ref: '../schemas/queue-stage-transition.v1.schema.json'
+    QueueControlChanged:
+      name: queue.control.changed
+      title: A Work Item queue-control transition changed the redacted projection
+      description: >-
+        Emitted instead of, never in addition to, queue.projection.updated for the
+        same QueueEntry revision. Acceptance, clear, expiry or supersession may be
+        the control cause; private action/capacity witnesses remain absent.
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          allOf:
+            - $ref: '#/components/schemas/ProjectEnvelope/schema'
+            - type: object
+              required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+              properties:
+                eventType: { const: queue.control.changed }
+                entityType: { const: queue-entry }
+                payloadVersion: { const: 1 }
+                payloadSchemaRef:
+                  $ref: '#/components/schemas/QueueEntrySchemaRef/schema'
+                payload:
+                  $ref: '../schemas/queue-entry.v1.schema.json'
+    QueueOrderChanged:
+      name: queue.order.changed
+      title: The named Project lane order changed
+      description: >-
+        Emitted only for PROJECT-lane effects. A PORTFOLIO-only move or expiry is
+        observed through its scoped receipt/head and authorized polling; it is not
+        fanned out to target-Project subscribers.
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          allOf:
+            - $ref: '#/components/schemas/ProjectEnvelope/schema'
+            - type: object
+              required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+              properties:
+                eventType: { const: queue.order.changed }
+                entityType: { const: queue-order-view-invalidation }
+                payloadVersion: { const: 1 }
+                payloadSchemaRef:
+                  $ref: '#/components/schemas/QueueOrderViewInvalidatedSchemaRef/schema'
+                payload:
+                  $ref: '../schemas/queue-order-view-invalidated.v1.schema.json'
+    QaQueueFactsChanged:
+      name: qa.queue-facts.changed
+      title: QA queue-fact heads changed and require local projection re-read
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          allOf:
+            - $ref: '#/components/schemas/ProjectEnvelope/schema'
+            - type: object
+              required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+              properties:
+                eventType: { const: qa.queue-facts.changed }
+                entityType: { const: qa-queue-facts }
+                payloadVersion: { const: 1 }
+                payloadSchemaRef:
+                  $ref: '#/components/schemas/QaQueueFactsSchemaRef/schema'
+                payload:
+                  $ref: '../schemas/qa-queue-facts-changed.v1.schema.json'
+    QaAutomatedSessionReady:
+      name: qa.automated-session.ready
+      title: Existing automated Session reached READY with immutable pins
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          allOf:
+            - $ref: '#/components/schemas/ProjectEnvelope/schema'
+            - type: object
+              required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+              properties:
+                eventType: { const: qa.automated-session.ready }
+                entityType: { const: qa-automated-session }
+                payloadVersion: { const: 1 }
+                payloadSchemaRef:
+                  $ref: '#/components/schemas/QaAutomatedSessionReadySchemaRef/schema'
+                payload:
+                  $ref: '../schemas/qa-automated-session-ready.v1.schema.json'
+    CapacityAdmissionDecided:
+      name: capacity.admission.decided
+      title: Serialized capacity admission reached an immutable outcome
+      description: >-
+        Emitted for every decision except NON_DISCRETIONARY_OVERFLOW, whose
+        mutually exclusive event type is capacity.over-limit-detected.
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          allOf:
+            - $ref: '#/components/schemas/ProjectEnvelope/schema'
+            - type: object
+              required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+              properties:
+                eventType: { const: capacity.admission.decided }
+                entityType: { const: capacity-admission }
+                payloadVersion: { const: 1 }
+                payloadSchemaRef:
+                  $ref: '#/components/schemas/CapacityAdmissionSchemaRef/schema'
+                payload:
+                  $ref: '../schemas/capacity-admission.v1.schema.json'
+    CapacityOccupancyChanged:
+      name: capacity.occupancy.changed
+      title: One Project's authorization-neutral occupancy projection changed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          allOf:
+            - $ref: '#/components/schemas/ProjectEnvelope/schema'
+            - type: object
+              required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+              properties:
+                eventType: { const: capacity.occupancy.changed }
+                entityType: { const: capacity-projection }
+                payloadVersion: { const: 1 }
+                payloadSchemaRef:
+                  $ref: '#/components/schemas/CapacitySnapshotSchemaRef/schema'
+                payload:
+                  allOf:
+                    - $ref: '../schemas/capacity-snapshot.v1.schema.json'
+                    - type: object
+                      properties:
+                        scope:
+                          type: object
+                          properties:
+                            kind: { const: PROJECT }
+                          required: [kind, projectId]
+                      required: [scope]
+    CapacityOverLimitDetected:
+      name: capacity.over-limit-detected
+      title: Non-discretionary external fact created explicit capacity debt
+      description: >-
+        Emitted instead of, never in addition to, capacity.admission.decided for
+        the same NON_DISCRETIONARY_OVERFLOW decision.
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        schemaFormat: application/schema+json;version=draft-2020-12
+        schema:
+          allOf:
+            - $ref: '#/components/schemas/ProjectEnvelope/schema'
+            - type: object
+              required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+              properties:
+                eventType: { const: capacity.over-limit-detected }
+                entityType: { const: capacity-admission }
+                payloadVersion: { const: 1 }
+                payloadSchemaRef:
+                  $ref: '#/components/schemas/CapacityAdmissionSchemaRef/schema'
+                payload:
+                  allOf:
+                    - $ref: '../schemas/capacity-admission.v1.schema.json'
+                    - type: object
+                      properties:
+                        outcome: { const: NON_DISCRETIONARY_OVERFLOW }
+                      required: [outcome]
+    SlaClockStarted:
+      name: sla.clock.started
+      title: Confirmed Jira-owned state started a pinned SLA clock
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '#/components/schemas/SlaStartedEvent'
+    SlaClockPaused:
+      name: sla.clock.paused
+      title: Confirmed mapped operational reason paused a clock
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '#/components/schemas/SlaPausedEvent'
+    SlaClockResumed:
+      name: sla.clock.resumed
+      title: Confirmed operational state resumed a paused clock
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '#/components/schemas/SlaResumedEvent'
+    SlaClockStopped:
+      name: sla.clock.stopped
+      title: Exact configured goal fact stopped a clock
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '#/components/schemas/SlaStoppedEvent'
+    SlaWarning:
+      name: sla.warning
+      title: Configured idempotent SLA warning threshold was crossed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '#/components/schemas/SlaWarningEvent'
+    SlaBreached:
+      name: sla.breached
+      title: Configured idempotent SLA target was crossed
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '#/components/schemas/SlaBreachedEvent'
+  schemas:
+    ProjectEnvelope:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      x-canonical-schema: '../../../001-extension-kernel-local-skeleton/contracts/schemas/events/event-envelope.v1.schema.json'
+      x-canonical-parity-required: true
+      schema:
+        $schema: 'https://json-schema.org/draft/2020-12/schema'
+        type: object
+        additionalProperties: false
+        required:
+          - envelopeVersion
+          - eventId
+          - eventType
+          - occurredAt
+          - recordedAt
+          - producer
+          - producerVersion
+          - workspaceId
+          - projectId
+          - entityType
+          - entityId
+          - entityVersion
+          - correlationId
+          - causationId
+          - actor
+          - dataClassificationKey
+          - payloadVersion
+          - payloadSchemaRef
+          - payload
+        properties:
+          envelopeVersion: { const: 1 }
+          eventId: { type: string, format: uuid }
+          eventType:
+            $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+          occurredAt: { type: string, format: date-time }
+          recordedAt: { type: string, format: date-time }
+          producer:
+            $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+          producerVersion:
+            $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/SemVer'
+          workspaceId: { type: string, format: uuid }
+          projectId: { type: string, format: uuid }
+          entityType:
+            $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+          entityId: { type: string, format: uuid }
+          entityVersion: { type: integer, minimum: 1 }
+          correlationId: { type: string, format: uuid }
+          causationId: { type: string, format: uuid }
+          actor:
+            $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/common/actor-ref.v1.schema.json'
+          dataClassificationKey:
+            type: string
+            pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+          payloadVersion: { type: integer, minimum: 1 }
+          payloadSchemaRef:
+            $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/common/versioned-ref.v1.schema.json#/$defs/SchemaRef'
+          payload: true
+    QueueEntrySchemaRef:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        additionalProperties: false
+        required: [id, version, digest]
+        properties:
+          id: { const: 'urn:awp:schemas:006:queue-entry:v1' }
+          version: { const: 1 }
+          digest: { const: 'sha256:b7a0b1362563b4d57bedf8418df8e7591c2da597ce336b912d229cafbfa95bbe' }
+    QueueStageTransitionSchemaRef:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        additionalProperties: false
+        required: [id, version, digest]
+        properties:
+          id: { const: 'urn:awp:schemas:006:queue-stage-transition:v1' }
+          version: { const: 1 }
+          digest: { const: 'sha256:708fde97221d747680e3a4c70282adb7eeaf006be6074beb3b9cd7a6cfb33c0b' }
+    QueueOrderViewInvalidatedSchemaRef:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        additionalProperties: false
+        required: [id, version, digest]
+        properties:
+          id: { const: 'urn:awp:schemas:006:queue-order-view-invalidated:v1' }
+          version: { const: 1 }
+          digest: { const: 'sha256:27e21f9a5bf4226521920b97448441dbc50f6677fe6c7de044b02350acdd638a' }
+    QaQueueFactsSchemaRef:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        additionalProperties: false
+        required: [id, version, digest]
+        properties:
+          id: { const: 'urn:awp:schemas:006:qa-queue-facts-changed:v1' }
+          version: { const: 1 }
+          digest: { const: 'sha256:73db51fe616e5c5e332dfd50dafa1442823ff3c5f7638991e68994c51cdfb0ca' }
+    QaAutomatedSessionReadySchemaRef:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        additionalProperties: false
+        required: [id, version, digest]
+        properties:
+          id: { const: 'urn:awp:schemas:qa:event-payload:automated-session-ready:v1' }
+          version: { const: 1 }
+          digest: { const: 'sha256:bae78a03a4505087921f17fc06ac6533b46c2a78597b6e24e02be1ec2a2d628e' }
+    CapacityAdmissionSchemaRef:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        additionalProperties: false
+        required: [id, version, digest]
+        properties:
+          id: { const: 'urn:awp:schemas:006:capacity-admission:v1' }
+          version: { const: 1 }
+          digest: { const: 'sha256:9676f576cc1a6fd8561862aca82f1c2d3d19dba462aaaf3eb5aa104f329115b9' }
+    CapacitySnapshotSchemaRef:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        additionalProperties: false
+        required: [id, version, digest]
+        properties:
+          id: { const: 'urn:awp:schemas:006:capacity-snapshot:v1' }
+          version: { const: 1 }
+          digest: { const: 'sha256:2defac589635c89189a24bac6d51e4598bc9d85b4bfe98c0ff6b4df078aec4ee' }
+    SlaClockTransitionSchemaRef:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        additionalProperties: false
+        required: [id, version, digest]
+        properties:
+          id: { const: 'urn:awp:schemas:006:sla-clock-transition:v1' }
+          version: { const: 1 }
+          digest: { const: 'sha256:39a0122a052a611fc817a63a245080481c8c05a727bb1690314d53e848788274' }
+    SlaThresholdEmissionSchemaRef:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        additionalProperties: false
+        required: [id, version, digest]
+        properties:
+          id: { const: 'urn:awp:schemas:006:sla-threshold-emission:v1' }
+          version: { const: 1 }
+          digest: { const: 'sha256:fc3db628391931e73fcdf158ca99ce394452ce6cb5df86b2d5bfe2e1a33d00f7' }
+    SlaClockEnvelopeFields:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+        properties:
+          entityType: { const: sla-clock }
+          payloadVersion: { const: 1 }
+          payloadSchemaRef:
+            $ref: '#/components/schemas/SlaClockTransitionSchemaRef/schema'
+          payload:
+            $ref: '../schemas/sla-clock-transition.v1.schema.json'
+    SlaThresholdEnvelopeFields:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        type: object
+        required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+        properties:
+          entityType: { const: sla-threshold-emission }
+          payloadVersion: { const: 1 }
+          payloadSchemaRef:
+            $ref: '#/components/schemas/SlaThresholdEmissionSchemaRef/schema'
+          payload:
+            $ref: '../schemas/sla-threshold-emission.v1.schema.json'
+    SlaStartedEvent:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope/schema'
+          - $ref: '#/components/schemas/SlaClockEnvelopeFields/schema'
+          - type: object
+            properties:
+              eventType: { const: sla.clock.started }
+              payload:
+                allOf:
+                  - $ref: '../schemas/sla-clock-transition.v1.schema.json'
+                  - type: object
+                    properties:
+                      currentClockState: { const: RUNNING }
+                      transition: { const: START }
+                    required: [currentClockState, transition]
+    SlaPausedEvent:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope/schema'
+          - $ref: '#/components/schemas/SlaClockEnvelopeFields/schema'
+          - type: object
+            properties:
+              eventType: { const: sla.clock.paused }
+              payload:
+                allOf:
+                  - $ref: '../schemas/sla-clock-transition.v1.schema.json'
+                  - type: object
+                    properties:
+                      currentClockState: { const: PAUSED }
+                      transition: { const: PAUSE }
+                    required: [currentClockState, transition]
+    SlaResumedEvent:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope/schema'
+          - $ref: '#/components/schemas/SlaClockEnvelopeFields/schema'
+          - type: object
+            properties:
+              eventType: { const: sla.clock.resumed }
+              payload:
+                allOf:
+                  - $ref: '../schemas/sla-clock-transition.v1.schema.json'
+                  - type: object
+                    properties:
+                      currentClockState: { const: RUNNING }
+                      transition: { const: RESUME }
+                    required: [currentClockState, transition]
+    SlaStoppedEvent:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope/schema'
+          - $ref: '#/components/schemas/SlaClockEnvelopeFields/schema'
+          - type: object
+            properties:
+              eventType: { const: sla.clock.stopped }
+              payload:
+                allOf:
+                  - $ref: '../schemas/sla-clock-transition.v1.schema.json'
+                  - type: object
+                    properties:
+                      currentClockState: { const: STOPPED }
+                      transition: { const: STOP }
+                    required: [currentClockState, transition]
+    SlaWarningEvent:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope/schema'
+          - $ref: '#/components/schemas/SlaThresholdEnvelopeFields/schema'
+          - type: object
+            properties:
+              eventType: { const: sla.warning }
+              payload:
+                allOf:
+                  - $ref: '../schemas/sla-threshold-emission.v1.schema.json'
+                  - type: object
+                    properties:
+                      threshold:
+                        type: object
+                        properties:
+                          kind: { const: WARNING }
+                        required: [kind]
+                      targetState: { const: AT_RISK }
+                    required: [threshold, targetState]
+    SlaBreachedEvent:
+      schemaFormat: application/schema+json;version=draft-2020-12
+      schema:
+        allOf:
+          - $ref: '#/components/schemas/ProjectEnvelope/schema'
+          - $ref: '#/components/schemas/SlaThresholdEnvelopeFields/schema'
+          - type: object
+            properties:
+              eventType: { const: sla.breached }
+              payload:
+                allOf:
+                  - $ref: '../schemas/sla-threshold-emission.v1.schema.json'
+                  - type: object
+                    properties:
+                      threshold:
+                        type: object
+                        properties:
+                          kind: { const: BREACH }
+                        required: [kind]
+                      targetState: { const: BREACHED }
+                    required: [threshold, targetState]

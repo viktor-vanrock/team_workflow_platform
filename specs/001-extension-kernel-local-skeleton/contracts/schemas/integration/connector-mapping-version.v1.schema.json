@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:integration:connector-mapping-version:v1",
+  "title": "Connector Mapping Version",
+  "description": "Immutable schema-bound mapping resource. Core stores and versions the payload but does not interpret vendor mapping semantics.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mappingId",
+    "workspaceId",
+    "key",
+    "connectorRef",
+    "version",
+    "state",
+    "dataClassificationKey",
+    "mappingDefinition",
+    "contentHash",
+    "resourceVersion",
+    "createdAt"
+  ],
+  "properties": {
+    "mappingId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "key": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "connectorRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemanticVersionRef" },
+    "version": { "type": "integer", "minimum": 1 },
+    "state": { "type": "string", "enum": ["DRAFT", "VALIDATED", "PUBLISHED", "RETIRED"] },
+    "dataClassificationKey": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "mappingDefinition": { "$ref": "../common/schema-bound-value.v1.schema.json" },
+    "contentHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "validationReportId": {
+      "description": "Exact successful immutable Validation Report that authorized the transition out of DRAFT; excluded from contentHash to avoid a circular fingerprint.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "validatedAt": { "type": "string", "format": "date-time" },
+    "publishedAt": { "type": "string", "format": "date-time" },
+    "retiredAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "VALIDATED" } }, "required": ["state"] },
+      "then": { "required": ["validationReportId", "validatedAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "PUBLISHED" } }, "required": ["state"] },
+      "then": { "required": ["validationReportId", "validatedAt", "publishedAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "RETIRED" } }, "required": ["state"] },
+      "then": { "required": ["validationReportId", "validatedAt", "publishedAt", "retiredAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "DRAFT" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["validationReportId"] }, { "required": ["validatedAt"] }, { "required": ["publishedAt"] }, { "required": ["retiredAt"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "VALIDATED" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["publishedAt"] }, { "required": ["retiredAt"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "PUBLISHED" } }, "required": ["state"] },
+      "then": { "not": { "required": ["retiredAt"] } }
+    }
+  ]
+}

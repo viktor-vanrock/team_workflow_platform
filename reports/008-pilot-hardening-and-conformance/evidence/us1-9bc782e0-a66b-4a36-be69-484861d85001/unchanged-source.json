@@ -1,0 +1,11 @@
+{
+  "fingerprints": {
+    "source": "sha256:75e66f247c0f649fd6fcdff2b48a8d5129b1cd6e8758adc7bce3a4f0caf3cf13",
+    "contracts": "sha256:31f801fd62dc5e846aafc3e0081d6edb1aa45617eee0d2541faccb1ce93c5cb7",
+    "migrations": "sha256:940fc30830b391d5e9a7f3d2bf94fd3fd7c35ae21fbb5e990dcf551ba4b36e9d",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:6f07208129605f40cb4fa060569d3c9eef22e25cdae0ccfbd7a84e018756d144",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:10a98d1e080bbf6901dc241ae495a499ace591e434ccfcd14487cb46cb178dcc"
+  }
+}

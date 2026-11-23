@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:plan-item:v1",
+  "title": "Manual QA Plan Item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "planItemId", "workspaceId", "projectId", "workItemId", "sessionId", "ordinal", "mode", "title", "expectedOutcome", "definition", "state", "resourceVersion", "createdBy", "createdAt", "updatedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "planItemId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "ordinal": { "type": "integer", "minimum": 1 },
+    "mode": { "const": "MANUAL" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "instructions": { "type": "string", "maxLength": 10000 },
+    "expectedOutcome": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "definition": {
+      "oneOf": [
+        { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "snapshotHash"],
+          "properties": {
+            "kind": { "const": "session-plan-item-snapshot" },
+            "snapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+          }
+        }
+      ]
+    },
+    "state": { "type": "string", "enum": ["PLANNED", "RUNNING", "TERMINAL", "WAIVED"] },
+    "latestResultRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "waiverRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" },
+    "frozenAt": { "type": "string", "format": "date-time" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "TERMINAL" } }, "required": ["state"] },
+      "then": { "required": ["latestResultRevisionRef"], "not": { "required": ["waiverRef"] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "WAIVED" } }, "required": ["state"] },
+      "then": { "required": ["waiverRef", "latestResultRevisionRef"] }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["PLANNED", "RUNNING"] } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["waiverRef"] }, { "required": ["latestResultRevisionRef"] }] } }
+    }
+  ]
+}

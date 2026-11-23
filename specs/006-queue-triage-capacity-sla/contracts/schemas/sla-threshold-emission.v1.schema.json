@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:sla-threshold-emission:v1",
+  "title": "SlaThresholdEmission v1",
+  "$comment": "Immutable Project-scoped threshold crossing and notification intent link. slaClockId plus clockRevisionRef identify the stored immutable transition revision; they do not pretend that the dynamic sla-snapshot read DTO is itself a revision. notificationIntentRef binds the durable intent ID to a hash of its immutable creation tuple and deliberately excludes its mutable delivery state/row version. Composed semantic validation resolves the exact internal clock/policy/calendar pins while publishing only the matching Project policy facet; verifies scope, clock cycle, target and elapsed business-second calculation; matches WARNING.warningIndex to the pinned ordered threshold; requires BREACH elapsedBusinessSeconds >= targetBusinessSeconds; and proves idempotencyHash from the canonical crossing identity. This payload contains no global capacity facts, source content or authorization grant.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "thresholdEmissionId",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "goal",
+    "slaClockId",
+    "clockRevisionRef",
+    "clockCycle",
+    "threshold",
+    "targetState",
+    "elapsedBusinessSeconds",
+    "targetBusinessSeconds",
+    "policyFacetRef",
+    "calendarRef",
+    "idempotencyHash",
+    "notificationIntentRef",
+    "emittedAt",
+    "semanticHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "sla-threshold-emission@1.0.0" },
+    "thresholdEmissionId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "workItemId": { "$ref": "#/$defs/id" },
+    "goal": {
+      "enum": [
+        "READY_TO_FIRST_QA_START",
+        "READY_TO_SIGNED_VERDICT"
+      ]
+    },
+    "slaClockId": { "$ref": "#/$defs/id" },
+    "clockRevisionRef": {
+      "description": "Exact immutable SLA clock transition revision. Its id equals slaClockId and its hash excludes read-time SLA evaluation fields.",
+      "$ref": "#/$defs/versionedContentRef"
+    },
+    "clockCycle": { "type": "integer", "minimum": 1 },
+    "threshold": { "$ref": "#/$defs/threshold" },
+    "targetState": { "enum": ["AT_RISK", "BREACHED"] },
+    "elapsedBusinessSeconds": { "type": "integer", "minimum": 0 },
+    "targetBusinessSeconds": { "type": "integer", "minimum": 1 },
+    "policyFacetRef": {
+      "description": "Project-scoped public policy facet matching the clock snapshot; the internal clock keeps the full source policy revision.",
+      "$ref": "#/$defs/versionedContentRef"
+    },
+    "calendarRef": { "$ref": "#/$defs/versionedContentRef" },
+    "idempotencyHash": { "$ref": "#/$defs/hash" },
+    "notificationIntentRef": { "$ref": "#/$defs/notificationIntentRef" },
+    "emittedAt": { "$ref": "#/$defs/timestamp" },
+    "semanticHash": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["threshold"],
+        "properties": {
+          "threshold": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": { "kind": { "const": "WARNING" } }
+          }
+        }
+      },
+      "then": {
+        "properties": { "targetState": { "const": "AT_RISK" } }
+      },
+      "else": {
+        "properties": { "targetState": { "const": "BREACHED" } }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "threshold": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "warningIndex"],
+          "properties": {
+            "kind": { "const": "WARNING" },
+            "warningIndex": { "type": "integer", "minimum": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": { "const": "BREACH" }
+          }
+        }
+      ]
+    },
+    "notificationIntentRef": {
+      "description": "Stable reference to the existing mutable NotificationIntent header. creationHash is SHA-256 over the JCS immutable creation tuple (notificationIntentId, workspaceId, projectId, dedupeKey, sourceEventRef, targetHash, payloadHash, renderHash, commandId, expiresAt); mutable state, attempts and rowVersion are excluded.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["notificationIntentId", "creationHash"],
+      "properties": {
+        "notificationIntentId": { "$ref": "#/$defs/id" },
+        "creationHash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

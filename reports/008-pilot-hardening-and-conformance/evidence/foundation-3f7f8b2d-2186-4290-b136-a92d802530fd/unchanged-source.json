@@ -1,0 +1,20 @@
+{
+  "before": {
+    "source": "sha256:0dbfc8367e516255016cad1e6dcb02f980d4e1138a6fc7bfb266839088a3f513",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:2174d662c3c3cdc9eff69414e822cc819b46f70716df91c0c07226fd72007310",
+    "lockfile": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7",
+    "configuration": "sha256:6ced27d907d8fb05007dd7ae7d30050dcb4bfd77b3d9d0449ac18ef22afa1067",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:a12e4cb789bd2ccef0681dfb9d008db0b61f1e2d39fcfb0183df246ce755ee2a"
+  },
+  "after": {
+    "source": "sha256:0dbfc8367e516255016cad1e6dcb02f980d4e1138a6fc7bfb266839088a3f513",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:2174d662c3c3cdc9eff69414e822cc819b46f70716df91c0c07226fd72007310",
+    "lockfile": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7",
+    "configuration": "sha256:6ced27d907d8fb05007dd7ae7d30050dcb4bfd77b3d9d0449ac18ef22afa1067",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:a12e4cb789bd2ccef0681dfb9d008db0b61f1e2d39fcfb0183df246ce755ee2a"
+  }
+}

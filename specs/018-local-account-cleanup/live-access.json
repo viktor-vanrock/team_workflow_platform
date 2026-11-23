@@ -1,0 +1,137 @@
+{
+  "retired": [
+    {
+      "key": "limited.alpha",
+      "status": 403
+    },
+    {
+      "key": "outsider.delta",
+      "status": 403
+    },
+    {
+      "key": "auditor.local",
+      "status": 403
+    },
+    {
+      "key": "worker.local",
+      "status": 403
+    }
+  ],
+  "users": [
+    {
+      "key": "owner.local",
+      "label": "Администратор · 1",
+      "roles": [
+        "system-administrator"
+      ],
+      "projects": [
+        "ALPHA",
+        "BETA"
+      ],
+      "ui": "passed",
+      "failures": []
+    },
+    {
+      "key": "integration-admin.alpha",
+      "label": "Администратор · 2",
+      "roles": [
+        "system-administrator"
+      ],
+      "projects": [
+        "ALPHA",
+        "BETA"
+      ],
+      "ui": "passed",
+      "failures": []
+    },
+    {
+      "key": "requester.alpha",
+      "label": "Requester",
+      "roles": [
+        "requester"
+      ],
+      "projects": [
+        "ALPHA",
+        "BETA"
+      ],
+      "ui": "passed",
+      "failures": []
+    },
+    {
+      "key": "executor.alpha",
+      "label": "QA Executor · QA 1",
+      "roles": [
+        "qa-executor"
+      ],
+      "projects": [
+        "ALPHA",
+        "BETA"
+      ],
+      "ui": "passed",
+      "failures": []
+    },
+    {
+      "key": "executor.qa2",
+      "label": "QA Executor · QA 2",
+      "roles": [
+        "qa-executor"
+      ],
+      "projects": [
+        "ALPHA",
+        "BETA"
+      ],
+      "ui": "passed",
+      "failures": []
+    },
+    {
+      "key": "lead.alpha",
+      "label": "QA Lead",
+      "roles": [
+        "qa-lead"
+      ],
+      "projects": [
+        "ALPHA",
+        "BETA"
+      ],
+      "ui": "passed",
+      "failures": []
+    },
+    {
+      "key": "viewer.beta",
+      "label": "Читатель",
+      "roles": [
+        "reader"
+      ],
+      "projects": [
+        "ALPHA",
+        "BETA"
+      ],
+      "ui": "passed",
+      "failures": []
+    },
+    {
+      "key": "writer.docs",
+      "label": "Технический писатель",
+      "roles": [
+        "technical-writer"
+      ],
+      "projects": [
+        "ALPHA-DOCS"
+      ],
+      "ui": "passed",
+      "failures": []
+    },
+    {
+      "key": "lead.docs",
+      "label": "Лид технических писателей",
+      "roles": [
+        "technical-writing-lead"
+      ],
+      "projects": [
+        "ALPHA-DOCS"
+      ],
+      "ui": "passed",
+      "failures": []
+    }
+  ]
+}

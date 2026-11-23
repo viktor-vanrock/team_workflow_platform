@@ -1,0 +1,728 @@
+{
+  "schemaVersion": 2,
+  "feature": "003-jira-operational-authority",
+  "gate": "feature-003-final",
+  "startedAt": "2026-09-03T10:02:46.872Z",
+  "processGateCompletedAt": "2026-09-03T10:18:48.154Z",
+  "stages": [
+    {
+      "id": "prerequisites",
+      "category": "prerequisites",
+      "args": [
+        "tools/verification/feature-003-prerequisites.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-003-prerequisites.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 95,
+      "exitCode": 0
+    },
+    {
+      "id": "setup-contracts",
+      "category": "contract",
+      "args": [
+        "tools/ci/feature-003.mts",
+        "--setup"
+      ],
+      "timeoutMs": 240000,
+      "command": [
+        "node",
+        "tools/ci/feature-003.mts",
+        "--setup"
+      ],
+      "status": "PASS",
+      "durationMs": 9675,
+      "exitCode": 0
+    },
+    {
+      "id": "foundation",
+      "category": "contract+integration+security",
+      "args": [
+        "tools/verification/003-foundation-checkpoint.mts"
+      ],
+      "timeoutMs": 360000,
+      "command": [
+        "node",
+        "tools/verification/003-foundation-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 30416,
+      "exitCode": 0
+    },
+    {
+      "id": "us1",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/003-us1-checkpoint.mts"
+      ],
+      "timeoutMs": 240000,
+      "command": [
+        "node",
+        "tools/verification/003-us1-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 2177,
+      "exitCode": 0
+    },
+    {
+      "id": "us2",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/003-us2-checkpoint.mts"
+      ],
+      "timeoutMs": 240000,
+      "command": [
+        "node",
+        "tools/verification/003-us2-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 2214,
+      "exitCode": 0
+    },
+    {
+      "id": "us3",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/003-us3-checkpoint.mts"
+      ],
+      "timeoutMs": 300000,
+      "command": [
+        "node",
+        "tools/verification/003-us3-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 2640,
+      "exitCode": 0
+    },
+    {
+      "id": "us4",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/003-us4-checkpoint.mts"
+      ],
+      "timeoutMs": 240000,
+      "command": [
+        "node",
+        "tools/verification/003-us4-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 1880,
+      "exitCode": 0
+    },
+    {
+      "id": "unit-feature-001",
+      "category": "unit",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run",
+        "feature-001:test-unit"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "node_modules/nx/dist/bin/nx.js",
+        "run",
+        "feature-001:test-unit"
+      ],
+      "status": "PASS",
+      "durationMs": 2267,
+      "exitCode": 0
+    },
+    {
+      "id": "unit-qa",
+      "category": "unit",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "packages/competency-qa/src/application/readiness-evaluator.spec.ts",
+        "packages/competency-qa/src/domain/test-session.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "packages/competency-qa/src/application/readiness-evaluator.spec.ts",
+        "packages/competency-qa/src/domain/test-session.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "durationMs": 1994,
+      "exitCode": 0
+    },
+    {
+      "id": "openapi-registry-drift",
+      "category": "contract",
+      "args": [
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "durationMs": 285,
+      "exitCode": 0
+    },
+    {
+      "id": "registry-drift",
+      "category": "contract",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "durationMs": 289,
+      "exitCode": 0
+    },
+    {
+      "id": "hardening",
+      "category": "architecture+contract+integration+security",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/architecture/003-jira-boundaries.spec.ts",
+        "tests/contract/003/openapi-runtime-drift.spec.ts",
+        "tests/contract/003/asyncapi-events.spec.ts",
+        "tests/contract/003/schema-registry-parity.spec.ts",
+        "tests/integration/security/003/isolation-hardening.spec.ts",
+        "tests/integration/security/003/connector-hardening.spec.ts",
+        "tests/integration/003/jira-error-matrix.spec.ts",
+        "tests/integration/003/jira-chaos-recovery.spec.ts",
+        "tests/integration/003/jira-rate-freshness.spec.ts",
+        "tests/integration/security/003/audit-lineage.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "timeoutMs": 300000,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/architecture/003-jira-boundaries.spec.ts",
+        "tests/contract/003/openapi-runtime-drift.spec.ts",
+        "tests/contract/003/asyncapi-events.spec.ts",
+        "tests/contract/003/schema-registry-parity.spec.ts",
+        "tests/integration/security/003/isolation-hardening.spec.ts",
+        "tests/integration/security/003/connector-hardening.spec.ts",
+        "tests/integration/003/jira-error-matrix.spec.ts",
+        "tests/integration/003/jira-chaos-recovery.spec.ts",
+        "tests/integration/003/jira-rate-freshness.spec.ts",
+        "tests/integration/security/003/audit-lineage.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "durationMs": 1836,
+      "exitCode": 0
+    },
+    {
+      "id": "migrations-postgres-17-18",
+      "category": "integration",
+      "args": [
+        "tools/ci/verify-003-migrations.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/ci/verify-003-migrations.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 12652,
+      "exitCode": 0
+    },
+    {
+      "id": "smoke-e2e",
+      "category": "e2e",
+      "args": [
+        "tools/smoke/feature-003.mts"
+      ],
+      "timeoutMs": 3600000,
+      "command": [
+        "node",
+        "tools/smoke/feature-003.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 385478,
+      "exitCode": 0
+    },
+    {
+      "id": "browser-journey",
+      "category": "e2e",
+      "args": [
+        "tools/smoke/feature-003-browser-process.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/smoke/feature-003-browser-process.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 46371,
+      "exitCode": 0
+    },
+    {
+      "id": "quickstart",
+      "category": "documentation+e2e",
+      "args": [
+        "tools/verification/003-quickstart.mts"
+      ],
+      "timeoutMs": 3600000,
+      "command": [
+        "node",
+        "tools/verification/003-quickstart.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 411303,
+      "exitCode": 0
+    },
+    {
+      "id": "typecheck",
+      "category": "typecheck",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "--all"
+      ],
+      "timeoutMs": 360000,
+      "command": [
+        "node",
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "--all"
+      ],
+      "status": "PASS",
+      "durationMs": 623,
+      "exitCode": 0
+    },
+    {
+      "id": "lint",
+      "category": "lint",
+      "args": [
+        "node_modules/eslint/bin/eslint.js",
+        "."
+      ],
+      "timeoutMs": 360000,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "."
+      ],
+      "status": "PASS",
+      "durationMs": 48179,
+      "exitCode": 0
+    },
+    {
+      "id": "build",
+      "category": "build",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "build",
+        "--all"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "build",
+        "--all"
+      ],
+      "status": "PASS",
+      "durationMs": 535,
+      "exitCode": 0
+    },
+    {
+      "id": "nonprod-metadata",
+      "category": "nonprod",
+      "args": [
+        "tools/verification/feature-003-nonprod-metadata.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-003-nonprod-metadata.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 103,
+      "exitCode": 0
+    },
+    {
+      "id": "nonprod-conformance",
+      "category": "nonprod",
+      "args": [
+        "tools/verification/feature-003-nonprod.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-003-nonprod.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 174,
+      "exitCode": 0
+    },
+    {
+      "id": "traceability",
+      "category": "trace",
+      "args": [
+        "tools/verification/feature-003-trace.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-003-trace.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 79,
+      "exitCode": 0
+    }
+  ],
+  "categories": {
+    "prerequisites": "PASS",
+    "contract": "PASS",
+    "contract+integration+security": "PASS",
+    "contract+integration+security+e2e": "PASS",
+    "unit": "PASS",
+    "architecture+contract+integration+security": "PASS",
+    "integration": "PASS",
+    "e2e": "PASS",
+    "documentation+e2e": "PASS",
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "build": "PASS",
+    "nonprod": "PASS",
+    "trace": "PASS"
+  },
+  "evidence": [
+    {
+      "name": "prerequisites.json",
+      "stageId": "prerequisites",
+      "status": "PASS",
+      "sha256": "sha256:5e44f134f47ce9ab0195ceb12d106b82484720afdeaa1bfe9b33f23af6652d10"
+    },
+    {
+      "name": "setup-gate.json",
+      "stageId": "setup-contracts",
+      "status": "PASS",
+      "sha256": "sha256:91ccbc0d6ed22e54b700290368af6f783aef1b1112dbffc4b43b3824cdf336bb"
+    },
+    {
+      "name": "foundation.json",
+      "stageId": "foundation",
+      "status": "PASS",
+      "sha256": "sha256:7d1c4bbfc41fc432febc702e4b0cc3fa15087a7c157396d017f52c3b58db9a66"
+    },
+    {
+      "name": "us1.json",
+      "stageId": "us1",
+      "status": "PASS",
+      "sha256": "sha256:d7e360909b2b995d9082eb1cb61117ea98f83685310527aa34fc47994f83d134"
+    },
+    {
+      "name": "us2.json",
+      "stageId": "us2",
+      "status": "PASS",
+      "sha256": "sha256:16bd6864d029ba27426dd1350b33e9cabe53fa369c140f9a5b8344da15bfc49b"
+    },
+    {
+      "name": "us3.json",
+      "stageId": "us3",
+      "status": "PASS",
+      "sha256": "sha256:3808dac67ed17e3f6aea0c428113552697cde6745a99533e0d2c7c2819eb527d"
+    },
+    {
+      "name": "us4.json",
+      "stageId": "us4",
+      "status": "PASS",
+      "sha256": "sha256:3decc81bb612f36e5b615e593b53135e4a7e099ce77f8ea66c6ef9c3a4268657"
+    },
+    {
+      "name": "migrations.json",
+      "stageId": "migrations-postgres-17-18",
+      "status": "PASS",
+      "sha256": "sha256:1f4d2c0cfd6441571c44334f80a5760995a06b5c6c419b515c5341c9e03cd322"
+    },
+    {
+      "name": "smoke.json",
+      "stageId": "smoke-e2e",
+      "status": "PASS",
+      "sha256": "sha256:79deaa080b500cd77d47d9f3dc3950df55d5500b4301dda4d420f3e9841f69c7"
+    },
+    {
+      "name": "quickstart.json",
+      "stageId": "quickstart",
+      "status": "PASS",
+      "sha256": "sha256:f6887b435abddc348186b92d736f1fb7f3d7b53a07bcbe24d95164e81bb67ebe"
+    },
+    {
+      "name": "traceability.json",
+      "stageId": "traceability",
+      "status": "PASS",
+      "sha256": "sha256:a4aae54405b0a362a21c568cfb3265f456384da0fa2dfd298d131de879122080"
+    },
+    {
+      "name": "nonprod-metadata.json",
+      "stageId": "nonprod-metadata",
+      "status": "SKIPPED_GATED",
+      "sha256": "sha256:79f43126400a86d807b4db5332bec7dcb3edc24166b7465593b9fa08797c5827"
+    },
+    {
+      "name": "nonprod.json",
+      "stageId": "nonprod-conformance",
+      "status": "SKIPPED_GATED",
+      "sha256": "sha256:560283b643ca8cd630f825f6a6843e187f443a98ae229ba5a8aac89fc679cc20"
+    }
+  ],
+  "nonprod": {
+    "metadata": "SKIPPED_GATED",
+    "conformance": "SKIPPED_GATED",
+    "livePassRequiredForLocalRelease": false
+  },
+  "constitution": {
+    "postDesignDecision": "PASS",
+    "constitutionalExceptions": 0,
+    "amendmentRequired": false,
+    "decisionDocument": "specs/003-jira-operational-authority/release-readiness.md"
+  },
+  "productionWritesSupported": false,
+  "finishedAt": "2026-09-03T10:18:48.399Z",
+  "status": "PASS",
+  "handoff": {
+    "status": "BOUND",
+    "generatedAfterAllProcessGates": true,
+    "generatedAt": "2026-09-03T10:18:48.399Z",
+    "verificationCommand": "pnpm verify:003:evidence",
+    "toolchain": {
+      "node": "24.20.0",
+      "packageManager": "pnpm@11.21.0"
+    },
+    "taskSnapshot": {
+      "path": "specs/003-jira-operational-authority/tasks.md",
+      "sha256": "sha256:15b2066a500cb671086dd5fde94a8678f931fd236512459a1aee272143c5bbd2",
+      "taskCount": 163,
+      "completedTaskIds": [
+        "T001",
+        "T002",
+        "T003",
+        "T004",
+        "T005",
+        "T006",
+        "T007",
+        "T008",
+        "T009",
+        "T010",
+        "T011",
+        "T012",
+        "T013",
+        "T014",
+        "T015",
+        "T016",
+        "T017",
+        "T018",
+        "T019",
+        "T020",
+        "T021",
+        "T022",
+        "T023",
+        "T024",
+        "T025",
+        "T026",
+        "T027",
+        "T028",
+        "T029",
+        "T030",
+        "T031",
+        "T032",
+        "T033",
+        "T034",
+        "T035",
+        "T036",
+        "T037",
+        "T038",
+        "T039",
+        "T040",
+        "T041",
+        "T042",
+        "T043",
+        "T044",
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T049",
+        "T050",
+        "T051",
+        "T052",
+        "T053",
+        "T054",
+        "T055",
+        "T056",
+        "T057",
+        "T058",
+        "T059",
+        "T060",
+        "T061",
+        "T062",
+        "T063",
+        "T064",
+        "T065",
+        "T066",
+        "T067",
+        "T068",
+        "T069",
+        "T070",
+        "T071",
+        "T072",
+        "T073",
+        "T074",
+        "T075",
+        "T076",
+        "T077",
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T082",
+        "T083",
+        "T084",
+        "T085",
+        "T086",
+        "T087",
+        "T088",
+        "T089",
+        "T090",
+        "T091",
+        "T092",
+        "T093",
+        "T094",
+        "T095",
+        "T096",
+        "T097",
+        "T098",
+        "T099",
+        "T100",
+        "T101",
+        "T102",
+        "T103",
+        "T104",
+        "T105",
+        "T106",
+        "T107",
+        "T108",
+        "T109",
+        "T110",
+        "T111",
+        "T112",
+        "T113",
+        "T114",
+        "T115",
+        "T116",
+        "T117",
+        "T118",
+        "T119",
+        "T120",
+        "T121",
+        "T122",
+        "T123",
+        "T124",
+        "T125",
+        "T126",
+        "T127",
+        "T128",
+        "T129",
+        "T130",
+        "T131",
+        "T132",
+        "T133",
+        "T134",
+        "T135",
+        "T136",
+        "T137",
+        "T138",
+        "T139",
+        "T140",
+        "T141",
+        "T142",
+        "T143",
+        "T144",
+        "T145",
+        "T146",
+        "T147",
+        "T148",
+        "T149",
+        "T150",
+        "T151",
+        "T152",
+        "T153",
+        "T154",
+        "T155",
+        "T156",
+        "T157",
+        "T158",
+        "T159",
+        "T160",
+        "T161",
+        "T162",
+        "T163"
+      ],
+      "pendingTaskIds": []
+    },
+    "runtimeSnapshot": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          ".github",
+          "apps",
+          "config",
+          "docs",
+          "infra",
+          "packages",
+          "specs/003-jira-operational-authority",
+          "tests",
+          "tools"
+        ],
+        "rootFiles": [
+          ".dockerignore",
+          ".node-version",
+          ".npmrc",
+          "Dockerfile",
+          "README.md",
+          "eslint.config.mjs",
+          "nx.json",
+          "package.json",
+          "playwright.config.ts",
+          "pnpm-lock.yaml",
+          "pnpm-workspace.yaml",
+          "tsconfig.base.json"
+        ],
+        "excludedTaskFile": "specs/003-jira-operational-authority/tasks.md",
+        "excludedDownstreamBindingFiles": [
+          "tools/verification/feature-004-prerequisites.mts",
+          "tools/verification/feature-005-prerequisites.mts",
+          "tools/verification/feature-006-prerequisites.mts"
+        ]
+      },
+      "fileCount": 1532,
+      "sha256": "sha256:3e33fa97ca2a015e30bc4b1f7e60dea0451968c97950b17eff3bcae5c9d7e0c5"
+    }
+  }
+}

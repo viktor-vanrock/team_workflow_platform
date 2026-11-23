@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:mattermost:normalized-post-action:v1",
+  "title": "Mattermost Normalized Post Action v1",
+  "description": "Bounded callback envelope after one-time token resolution. Only the server-side InteractionIntent reference and safe provider identifiers are retained; raw token, context, text, body and credentials are forbidden.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "interactionIntentRef",
+    "connectionId",
+    "externalUserId",
+    "channelId",
+    "postId"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "mattermost-normalized-post-action@1.0.0" },
+    "interactionIntentRef": { "$ref": "#/$defs/providerRef" },
+    "connectionId": { "$ref": "#/$defs/providerRef" },
+    "externalUserId": { "$ref": "#/$defs/providerRef" },
+    "teamId": { "$ref": "#/$defs/providerRef" },
+    "channelId": { "$ref": "#/$defs/providerRef" },
+    "postId": { "$ref": "#/$defs/providerRef" },
+    "triggerId": { "$ref": "#/$defs/triggerRef" }
+  },
+  "$defs": {
+    "providerRef": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "triggerRef": { "type": "string", "minLength": 1, "maxLength": 512 }
+  }
+}

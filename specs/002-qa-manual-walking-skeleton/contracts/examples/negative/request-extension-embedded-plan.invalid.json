@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "extensionId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "definitionRef": { "key": "qa.validation", "version": "1.0.0" },
+  "requestKind": "smoke",
+  "goal": "Run the manual smoke path",
+  "scope": "Checkout",
+  "acceptanceOutcome": "Smoke path completes",
+  "sourceRefs": [
+    {
+      "kind": "work-item",
+      "id": "feature-42",
+      "version": "7",
+      "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "blockers": [],
+  "dependencies": [],
+  "requestedTarget": {
+    "environmentId": "88888888-8888-4888-8888-888888888888",
+    "environmentRevision": 3,
+    "buildRef": {
+      "kind": "build",
+      "id": "checkout-web",
+      "version": "2026.08.27.1",
+      "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "testDataRef": {
+      "kind": "test-data",
+      "id": "checkout-fixtures",
+      "version": "3",
+      "contentHash": "sha256:bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc"
+    },
+    "accountLeaseRef": {
+      "kind": "account-lease",
+      "id": "qa-checkout-user",
+      "version": "8",
+      "contentHash": "sha256:bdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbd"
+    }
+  },
+  "requestRisk": "LOW",
+  "businessImpact": "Pilot validation",
+  "roleMetadataRefs": [
+    {
+      "kind": "role-metadata",
+      "id": "checkout-manual-executor",
+      "version": "2",
+      "contentHash": "sha256:bebebebebebebebebebebebebebebebebebebebebebebebebebebebebebebe"
+    }
+  ],
+  "dataClassificationKey": "INTERNAL",
+  "responseChannelRef": {
+    "channelKind": "PLATFORM_WEB",
+    "channelId": "abababab-abab-4bab-8bab-abababababab",
+    "version": 1,
+    "contentHash": "sha256:abababababababababababababababababababababababababababababababab"
+  },
+  "projectContextRef": {
+    "id": "13131313-1313-4313-8313-131313131313",
+    "version": 2,
+    "contentHash": "sha256:1313131313131313131313131313131313131313131313131313131313131313"
+  },
+  "dorRuleSetRef": {
+    "key": "qa.dor",
+    "version": "1.0.0",
+    "contentHash": "sha256:1414141414141414141414141414141414141414141414141414141414141414"
+  },
+  "dodRuleSetRef": {
+    "key": "qa.dod",
+    "version": "1.0.0",
+    "contentHash": "sha256:1515151515151515151515151515151515151515151515151515151515151515"
+  },
+  "evidencePolicyRef": {
+    "key": "qa.evidence",
+    "version": "1.0.0",
+    "contentHash": "sha256:1616161616161616161616161616161616161616161616161616161616161616"
+  },
+  "riskReviewPolicyRef": {
+    "id": "17171717-1717-4717-8717-171717171717",
+    "version": 1,
+    "contentHash": "sha256:1717171717171717171717171717171717171717171717171717171717171717"
+  },
+  "requiredSessionPlan": [
+    {
+      "slotKey": "manual-smoke",
+      "mode": "MANUAL",
+      "purpose": "Mutable embedded plan is forbidden",
+      "required": true
+    }
+  ],
+  "resourceVersion": 4,
+  "contentHash": "sha256:6767676767676767676767676767676767676767676767676767676767676767",
+  "createdBy": {
+    "type": "HUMAN",
+    "principalId": "77777777-7777-4777-8777-777777777777",
+    "issuer": "https://id.example.test",
+    "subject": "qa-executor-1"
+  },
+  "createdAt": "2026-08-27T12:00:00Z",
+  "updatedAt": "2026-08-27T12:05:00Z",
+  "correlationId": "70707070-7070-4070-8070-707070707070"
+}

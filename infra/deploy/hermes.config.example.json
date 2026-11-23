@@ -1,0 +1,28 @@
+{
+  "mode": "openai-compatible",
+  "endpoint": "https://llm.example.org/v1/chat/completions",
+  "model": "REPLACE_WITH_APPROVED_MODEL",
+  "tokenFile": "/run/hermes/model-token",
+  "caFile": "/run/hermes/model-ca.pem",
+  "network": {
+    "ref": {
+      "id": "hermes-model-network",
+      "version": 1,
+      "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "mode": "CORPORATE",
+    "validUntil": "2026-12-01T00:00:00.000Z",
+    "deadlineMs": 2000,
+    "maximumRequestBytes": 16384,
+    "maximumResponseBytes": 32768,
+    "endpoints": [
+      {
+        "origin": "https://llm.example.org",
+        "addressRanges": ["192.0.2.10/32"],
+        "routes": [
+          { "path": "/v1/chat/completions", "match": "EXACT", "methods": ["POST"], "queryKeys": [] }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/unit/008",
+    "tests/integration/008",
+    "tests/integration/security/008",
+    "tests/contract/008",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 1,
+  "durationMs": 94413,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n{\"timestamp\":\"2026-09-04T01:54:34.524Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"3b34be63-a46d-4b9a-9317-ff988e771451\",\"projectId\":\"6ebe73e6-ed73-4441-b296-76a4cdc83b49\",\"correlationId\":\"d897d1bc-4aea-468c-b6da-0ab0fbed0061\",\"causationId\":\"65b814ef-3a54-4298-a835-cb4b1381e05f\",\"operation\":\"http.request\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":6}\n{\"timestamp\":\"2026-09-04T01:54:34.549Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"worker\",\"workspaceId\":\"3b34be63-a46d-4b9a-9317-ff988e771451\",\"projectId\":\"6ebe73e6-ed73-4441-b296-76a4cdc83b49\",\"correlationId\":\"d897d1bc-4aea-468c-b6da-0ab0fbed0061\",\"causationId\":\"65b814ef-3a54-4298-a835-cb4b1381e05f\",\"operation\":\"worker.commands\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":0}\n ❯ tests/unit/008/pilot-authorization.spec.ts (2 tests | 1 failed) 8ms\n   × registers confidential pilot classification and deny-only project/human contributions 4ms\n\n Test Files  1 failed | 43 passed (44)\n      Tests  1 failed | 250 passed (251)\n   Start at  05:53:16\n   Duration  93.76s (transform 4.92s, setup 0ms, import 40.42s, tests 141.26s, environment 3ms)\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/unit/008/pilot-authorization.spec.ts > registers confidential pilot classification and deny-only project/human contributions\nAssertionError: expected { key: 'CONFIDENTIAL', rank: 30 } to deeply equal { key: 'CONFIDENTIAL', rank: 20 }\n\n- Expected\n+ Received\n\n  {\n    \"key\": \"CONFIDENTIAL\",\n-   \"rank\": 20,\n+   \"rank\": 30,\n  }\n\n ❯ tests/unit/008/pilot-authorization.spec.ts:22:137\n     20|   expect((await registry.authorize({ ...request, permission: \"pilot.re…\n     21|   expect((await registry.authorize({ ...request, permission: \"pilot.re…\n     22|   expect(await new ResourceClassificationResolver().resolve({ permissi…\n       |                                                                                                                                         ^\n     23| });\n     24|\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "gate": "feature-002-prerequisites",
+  "startedAt": "2026-08-30T22:58:39.385Z",
+  "finishedAt": "2026-08-30T22:58:39.844Z",
+  "status": "PASS",
+  "evidence": {
+    "feature001Final": "./artifacts/verification/feature-001-gate.json",
+    "smoke001": "./artifacts/verification/smoke-001-gate.json"
+  },
+  "checks": [
+    {
+      "id": "feature-001-final-report",
+      "status": "PASS",
+      "detail": "19/19 acceptance entries PASS; 3 final stages PASS"
+    },
+    {
+      "id": "smoke-001-clean-report",
+      "status": "PASS",
+      "detail": "cleanBootstrap=true; 9 smoke stages PASS"
+    },
+    {
+      "id": "toolchain-node-24-pnpm-11",
+      "status": "PASS",
+      "detail": "Node 24.20.0 (pin 24.20.0); pnpm 11.21.0"
+    },
+    {
+      "id": "public-contract-command-v1",
+      "status": "PASS",
+      "detail": "@awp/platform-contracts@1.0.0; public urn:awp:contracts:commands:external-command-envelope:v1 v1 surface present"
+    },
+    {
+      "id": "public-contract-approval-v1",
+      "status": "PASS",
+      "detail": "@awp/platform-contracts@1.0.0; public urn:awp:contracts:commands:approval-subject:v1 v1 surface present"
+    },
+    {
+      "id": "public-contract-artifact-v1",
+      "status": "PASS",
+      "detail": "@awp/platform-core@1.0.0; public TypeScript v1 surface present"
+    },
+    {
+      "id": "public-contract-event-v1",
+      "status": "PASS",
+      "detail": "@awp/platform-contracts@1.0.0; public urn:awp:contracts:events:event-envelope:v1 v1 surface present"
+    },
+    {
+      "id": "public-contract-confirmation-v1",
+      "status": "PASS",
+      "detail": "@awp/platform-contracts@1.0.0; public TypeScript v1 surface present"
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:intake-candidate-decision-recorded:v1",
+  "title": "Intake Candidate Decision Recorded Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision",
+    "decisionVersion",
+    "sourceObservationVersion",
+    "reasonCode",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "decision": {
+      "enum": [
+        "CREATE",
+        "SNOOZE",
+        "IGNORE"
+      ]
+    },
+    "decisionVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "sourceObservationVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "reasonCode": {
+      "enum": [
+        "USER_SELECTED",
+        "DUPLICATE",
+        "OUT_OF_SCOPE",
+        "NOT_ACTIONABLE",
+        "DEFERRED"
+      ]
+    },
+    "snoozedUntil": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "required": [
+          "decision"
+        ],
+        "properties": {
+          "decision": {
+            "const": "SNOOZE"
+          }
+        }
+      },
+      "then": {
+        "type": "object",
+        "required": [
+          "snoozedUntil"
+        ],
+        "properties": {
+          "snoozedUntil": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "else": {
+        "type": "object",
+        "properties": {
+          "snoozedUntil": false
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["decision"],
+        "properties": { "decision": { "const": "CREATE" } }
+      },
+      "then": {
+        "type": "object",
+        "properties": { "reasonCode": { "const": "USER_SELECTED" } }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["decision"],
+        "properties": { "decision": { "const": "SNOOZE" } }
+      },
+      "then": {
+        "type": "object",
+        "properties": { "reasonCode": { "const": "DEFERRED" } }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["decision"],
+        "properties": { "decision": { "const": "IGNORE" } }
+      },
+      "then": {
+        "type": "object",
+        "properties": { "reasonCode": { "enum": ["DUPLICATE", "OUT_OF_SCOPE", "NOT_ACTIONABLE"] } }
+      }
+    }
+  ]
+}

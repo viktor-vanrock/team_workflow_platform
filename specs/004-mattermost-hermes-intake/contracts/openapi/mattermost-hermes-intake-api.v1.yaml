@@ -1,0 +1,797 @@
+openapi: 3.1.0
+info:
+  title: AWP Mattermost and Hermes Intake API
+  version: 1.0.0
+  description: >-
+    Feature 004 static Mattermost bootstrap, project-scoped callback ingress,
+    immutable Mattermost administration and project-scoped Candidate, Draft,
+    Agent and notification surfaces. No caller-supplied Workspace or Project
+    value is accepted as authority.
+servers:
+  - url: http://127.0.0.1:3000
+    description: Required local contour
+tags:
+  - name: Mattermost bootstrap
+  - name: Mattermost ingress
+  - name: Mattermost administration
+  - name: Intake
+  - name: Hermes
+  - name: Notifications
+paths:
+  /api/v1/public/mattermost/awp-bootstrap:
+    post:
+      tags: [Mattermost bootstrap]
+      operationId: getMattermostAwpBootstrap
+      description: >-
+        Stateless and authority-free /awp create response. The handler validates
+        only a bounded command shape, ignores every provider actor/scope/response
+        field, performs no identity or Project lookup, creates no receipt, intent,
+        audit or product state, and returns one fixed first-party OIDC continuation.
+        It is deliberately not a ConnectorIngressContract route.
+      x-awp-max-body-bytes: 16384
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MattermostBootstrapEnvelope'
+      responses:
+        '200':
+          description: Deterministic ephemeral text containing the fixed first-party OIDC continuation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MattermostBootstrapAcknowledgement'
+        '400': { $ref: '#/components/responses/IngressRejected' }
+        '413': { $ref: '#/components/responses/IngressRejected' }
+        '415': { $ref: '#/components/responses/IngressRejected' }
+  /api/v1/intake/mattermost/project-option-sets:
+    post:
+      tags: [Intake]
+      operationId: issueMattermostIntakeProjectOptionSet
+      security:
+        - oidc: []
+      description: >-
+        After canonical OIDC authentication, computes the complete current
+        qa.request.create authorization decision and returns bounded safe labels.
+        Each option owns a separately issued project-scoped WEB PROJECT_SELECT
+        intent; no request parameter supplies Workspace or Project authority.
+        Issuance atomically invalidates prior PENDING option intents for the same
+        principal, OIDC session and continuation version and returns a fresh set,
+        so raw tokens are never retained merely to reconstruct an earlier response.
+      responses:
+        '201':
+          description: Fresh authorized project options and one-time project-scoped intent tokens.
+          headers:
+            Cache-Control:
+              required: true
+              schema: { type: string, const: 'no-store' }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSelectionOptionsResponse'
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/intake/mattermost/project-selections:
+    post:
+      tags: [Intake]
+      operationId: selectMattermostIntakeProject
+      security:
+        - oidc: []
+      description: >-
+        Claims one exact WEB PROJECT_SELECT intent under the current OIDC HUMAN,
+        reauthorizes its pinned Project/configuration, creates or replays Draft
+        revision 1 with {schemaVersion: 1}, consumes the intent with a stable
+        result reference, and may enqueue a project-scoped DM NotificationIntent.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebProjectSelectionRequest'
+      responses:
+        '200':
+          description: Stable direct-Draft result for an exact replay.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSelectionResult'
+        '201':
+          description: New project-scoped Draft revision 1.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSelectionResult'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /api/v1/connectors/mattermost/connections/{connectionId}/dialog-submissions:
+    post:
+      tags: [Mattermost ingress]
+      operationId: acceptMattermostDialogSubmission
+      description: >-
+        Authentication, one-time intent resolution and replay are mandatory
+        under the immutable mattermost.dialog-submission
+        ConnectorIngressContract; this route does not use human OIDC.
+      x-awp-ingress-contract-key: mattermost.dialog-submission
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/ConnectionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DialogSubmissionEnvelope'
+      responses:
+        '200':
+          description: >-
+            Transport accepted durably or exact replay acknowledged using the
+            Mattermost dialog-submission acknowledgement dialect.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DialogSubmissionAcknowledgement'
+        '400': { $ref: '#/components/responses/IngressRejected' }
+        '401': { $ref: '#/components/responses/IngressRejected' }
+        '409': { $ref: '#/components/responses/IngressConflict' }
+        '413': { $ref: '#/components/responses/IngressRejected' }
+        '415': { $ref: '#/components/responses/IngressRejected' }
+  /api/v1/connectors/mattermost/connections/{connectionId}/post-actions:
+    post:
+      tags: [Mattermost ingress]
+      operationId: acceptMattermostPostAction
+      description: >-
+        Authentication, one-time intent resolution and replay are mandatory
+        under the immutable mattermost.post-action ConnectorIngressContract;
+        this route does not use human OIDC.
+      x-awp-ingress-contract-key: mattermost.post-action
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/ConnectionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostActionEnvelope'
+      responses:
+        '200':
+          description: >-
+            Transport accepted durably or exact replay acknowledged using the
+            Mattermost interactive-message response dialect.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostActionAcknowledgement'
+        '400': { $ref: '#/components/responses/IngressRejected' }
+        '401': { $ref: '#/components/responses/IngressRejected' }
+        '409': { $ref: '#/components/responses/IngressConflict' }
+        '413': { $ref: '#/components/responses/IngressRejected' }
+        '415': { $ref: '#/components/responses/IngressRejected' }
+  /api/v1/integrations/mattermost/connections/{connectionId}/versions/{connectionVersion}/discover:
+    post:
+      tags: [Mattermost administration]
+      operationId: discoverMattermostConnection
+      parameters:
+        - $ref: '#/components/parameters/ConnectionId'
+        - $ref: '#/components/parameters/ConnectionVersion'
+      responses:
+        '200':
+          description: Safe immutable discovery snapshot; no secret value.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/integrations/mattermost/profiles/{profileId}/versions/{profileVersion}/validate:
+    post:
+      tags: [Mattermost administration]
+      operationId: validateMattermostProfile
+      parameters:
+        - $ref: '#/components/parameters/ProfileId'
+        - $ref: '#/components/parameters/ProfileVersion'
+      responses:
+        '200':
+          description: Profile compatibility, membership and policy result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/integrations/mattermost/profiles/{profileId}/versions/{profileVersion}/preview:
+    post:
+      tags: [Mattermost administration]
+      operationId: previewMattermostProfile
+      parameters:
+        - $ref: '#/components/parameters/ProfileId'
+        - $ref: '#/components/parameters/ProfileVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplatePreviewRequest'
+      responses:
+        '200':
+          description: Redacted logical preview; no provider send.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplatePreviewResult'
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/integrations/mattermost/profiles/{profileId}/versions/{profileVersion}/dry-run:
+    post:
+      tags: [Mattermost administration]
+      operationId: dryRunMattermostProfile
+      parameters:
+        - $ref: '#/components/parameters/ProfileId'
+        - $ref: '#/components/parameters/ProfileVersion'
+      responses:
+        '200':
+          description: Read-only target/membership/reconciliation validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/intake-candidates:
+    get:
+      tags: [Intake]
+      operationId: listIntakeCandidates
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [PENDING_CONFIRMATION, SNOOZED, CONVERTED, IGNORED, EXPIRED]
+      responses:
+        '200':
+          description: Authorized project-scoped Candidate page.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    maxItems: 100
+                    items:
+                      $ref: '../schemas/intake-candidate.v1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/intake-candidates/{candidateId}:
+    get:
+      tags: [Intake]
+      operationId: getIntakeCandidate
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/CandidateId'
+      responses:
+        '200':
+          description: Exact Candidate projection.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/intake-candidate.v1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/intake-candidates/{candidateId}/decisions:
+    post:
+      tags: [Intake]
+      operationId: recordIntakeCandidateDecision
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/CandidateId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidateDecisionRequest'
+      responses:
+        '200':
+          description: Stable result for a new decision or exact replay.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResult'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/intake-drafts/{draftId}/revisions:
+    get:
+      tags: [Intake]
+      operationId: listIntakeDraftRevisions
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/DraftId'
+      responses:
+        '200':
+          description: Append-only revision history.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    maxItems: 500
+                    items:
+                      $ref: '../schemas/intake-draft-revision.v1.1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      tags: [Intake]
+      operationId: appendIntakeDraftRevision
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/DraftId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppendDraftRevisionRequest'
+      responses:
+        '201':
+          description: New immutable Draft revision.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/intake-draft-revision.v1.1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/intake-drafts/{draftId}/commands/validate:
+    post:
+      tags: [Intake]
+      operationId: validateIntakeDraftRevision
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/DraftId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExactRevisionRequest'
+      responses:
+        '200':
+          description: Deterministic pre-confirmation completeness result.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/intake-completeness.v1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/agent-runs:
+    post:
+      tags: [Hermes]
+      operationId: startHermesAgentRun
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartAgentRunRequest'
+      responses:
+        '202':
+          description: Exact Run created or idempotently resolved.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/hermes-agent-run.v1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/agent-runs/{runId}:
+    get:
+      tags: [Hermes]
+      operationId: getHermesAgentRun
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RunId'
+      responses:
+        '200':
+          description: Redacted Agent Run projection.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/hermes-agent-run.v1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/triage-assessments/{assessmentId}:
+    get:
+      tags: [Hermes]
+      operationId: getTriageAssessment
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/AssessmentId'
+      responses:
+        '200':
+          description: Current or explicitly stale QA proposal.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/triage-assessment.v1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/session-plan-proposals/{proposalId}:
+    get:
+      tags: [Hermes]
+      operationId: getSessionPlanProposal
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/ProposalId'
+      responses:
+        '200':
+          description: Current, stale, superseded or accepted QA plan proposal.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/session-plan-proposal.v1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/notification-intents/{notificationIntentId}:
+    get:
+      tags: [Notifications]
+      operationId: getNotificationIntent
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/NotificationIntentId'
+      responses:
+        '200':
+          description: Durable delivery state and safe provider references.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/notification-intent.v1.schema.json'
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+components:
+  securitySchemes:
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: https://identity.invalid/.well-known/openid-configuration
+  parameters:
+    ConnectionId: { name: connectionId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    ConnectionVersion: { name: connectionVersion, in: path, required: true, schema: { type: integer, minimum: 1 } }
+    ProfileId: { name: profileId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    ProfileVersion: { name: profileVersion, in: path, required: true, schema: { type: integer, minimum: 1 } }
+    WorkspaceId: { name: workspaceId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    ProjectId: { name: projectId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    CandidateId: { name: candidateId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    DraftId: { name: draftId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    RunId: { name: runId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    AssessmentId: { name: assessmentId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    ProposalId: { name: proposalId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    NotificationIntentId: { name: notificationIntentId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+    IdempotencyKey: { name: Idempotency-Key, in: header, required: true, schema: { type: string, minLength: 16, maxLength: 256 } }
+    IfMatch: { name: If-Match, in: header, required: true, schema: { type: string, minLength: 1, maxLength: 128 } }
+  responses:
+    Forbidden:
+      description: Generic authorization denial without resource enumeration.
+      content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } }
+    NotFound:
+      description: Resource unavailable in the authorized scope.
+      content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } }
+    Conflict:
+      description: Expected state, version, content hash or idempotency conflict.
+      content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } }
+    IngressRejected:
+      description: Generic transport rejection with no project information.
+      content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } }
+    IngressConflict:
+      description: Same delivery identity with a different exact body hash.
+      content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } }
+  schemas:
+    Hash:
+      type: string
+      pattern: '^sha256:[a-f0-9]{64}$'
+    SchemaRef:
+      type: object
+      additionalProperties: false
+      required: [id, version, digest]
+      properties:
+        id:
+          type: string
+          pattern: '^urn:awp:schemas:[A-Za-z0-9:._-]+$'
+          maxLength: 512
+        version: { type: integer, minimum: 1 }
+        digest: { $ref: '#/components/schemas/Hash' }
+    TemplateVariableValue:
+      oneOf:
+        - { type: string, maxLength: 4000 }
+        - { type: number, minimum: -1000000000000000, maximum: 1000000000000000 }
+        - { type: boolean }
+        - { type: 'null' }
+        - type: array
+          maxItems: 50
+          items: { type: string, maxLength: 1000 }
+    MattermostBootstrapEnvelope:
+      type: object
+      additionalProperties: false
+      description: >-
+        Bounded protocol shape for the authority-free static bootstrap. Optional
+        Mattermost fields are accepted only for protocol compatibility and are
+        ignored; they are never authenticated, persisted, logged as identity or
+        used to derive Workspace, Project, actor, callback URL or state.
+      required: [command, text]
+      properties:
+        token: { type: string, maxLength: 512, writeOnly: true }
+        team_id: { type: string, maxLength: 128 }
+        team_domain: { type: string, maxLength: 256 }
+        channel_id: { type: string, maxLength: 128 }
+        channel_name: { type: string, maxLength: 256 }
+        user_id: { type: string, maxLength: 128 }
+        user_name: { type: string, minLength: 1, maxLength: 256 }
+        command: { type: string, const: /awp }
+        text: { type: string, const: create }
+        response_url: { type: string, format: uri, maxLength: 2048, writeOnly: true }
+        trigger_id: { type: string, maxLength: 512 }
+    ProjectSelectionOptionsResponse:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required: [intentId, intentToken, workspaceLabel, projectLabel, expiresAt]
+            properties:
+              intentId: { type: string, minLength: 1, maxLength: 128 }
+              intentToken:
+                type: string
+                minLength: 32
+                maxLength: 1024
+                description: One-time opaque token; every authority claim is server-side.
+              workspaceLabel: { type: string, minLength: 1, maxLength: 256 }
+              projectLabel: { type: string, minLength: 1, maxLength: 256 }
+              expiresAt: { type: string, format: date-time }
+    WebProjectSelectionRequest:
+      type: object
+      additionalProperties: false
+      required: [intentId, intentToken, requestKey]
+      properties:
+        intentId: { type: string, minLength: 1, maxLength: 128 }
+        intentToken: { type: string, minLength: 32, maxLength: 1024, writeOnly: true }
+        requestKey: { type: string, minLength: 16, maxLength: 256 }
+    ProjectSelectionResult:
+      type: object
+      additionalProperties: false
+      required: [draft, replayed]
+      properties:
+        draft: { $ref: '../schemas/intake-draft-revision.v1.1.schema.json' }
+        replayed: { type: boolean }
+        notificationIntentRef: { type: string, minLength: 1, maxLength: 512 }
+    DialogSubmissionEnvelope:
+      type: object
+      additionalProperties: false
+      required: [type, callback_id, state, user_id, channel_id, submission]
+      properties:
+        type: { type: string, const: dialog_submission }
+        callback_id: { type: string, minLength: 1, maxLength: 128 }
+        state: { type: string, minLength: 32, maxLength: 1024, writeOnly: true }
+        user_id: { type: string, minLength: 1, maxLength: 128 }
+        channel_id: { type: string, minLength: 1, maxLength: 128 }
+        team_id: { type: string, maxLength: 128 }
+        file_ids:
+          description: >-
+            Provider file identifiers are accepted for protocol compatibility;
+            attachment bodies remain outside the Feature 004 boundary.
+          type: array
+          maxItems: 10
+          uniqueItems: true
+          items: { type: string, minLength: 1, maxLength: 128 }
+        cancelled: { type: boolean }
+        submission:
+          type: object
+          additionalProperties:
+            oneOf:
+              - { type: string, maxLength: 4000 }
+              - { type: number, minimum: -1000000000000000, maximum: 1000000000000000 }
+              - { type: boolean }
+              - { type: 'null' }
+              - type: array
+                maxItems: 50
+                uniqueItems: true
+                items: { type: string, maxLength: 4000 }
+          maxProperties: 50
+    PostActionEnvelope:
+      type: object
+      additionalProperties: false
+      required: [user_id, channel_id, post_id, context]
+      properties:
+        user_id: { type: string, minLength: 1, maxLength: 128 }
+        channel_id: { type: string, minLength: 1, maxLength: 128 }
+        team_id: { type: string, maxLength: 128 }
+        type: { type: string, const: message }
+        user_name: { type: string, minLength: 1, maxLength: 256 }
+        channel_name: { type: string, maxLength: 256 }
+        team_domain: { type: string, maxLength: 256 }
+        trigger_id: { type: string, minLength: 1, maxLength: 512 }
+        post_id: { type: string, minLength: 1, maxLength: 128 }
+        context:
+          type: object
+          additionalProperties: false
+          required: [intent_token]
+          properties:
+            intent_token:
+              description: >-
+                Opaque one-time value originally injected into the provider action
+                only by the fenced Core presentation materializer. It is accepted
+                here as inbound callback proof and is never part of an API/Broker
+                caller request, durable command, log or audit record.
+              type: string
+              minLength: 32
+              maxLength: 1024
+              writeOnly: true
+    MattermostBootstrapAcknowledgement:
+      $ref: ../schemas/ingress/slash-command-acknowledgement.v1.schema.json
+    DialogSubmissionAcknowledgement:
+      $ref: ../schemas/ingress/dialog-submission-acknowledgement.v1.schema.json
+    PostActionAcknowledgement:
+      $ref: ../schemas/ingress/post-action-acknowledgement.v1.schema.json
+    CandidateDecisionRequest:
+      type: object
+      additionalProperties: false
+      required: [decision, expectedCandidateVersion, expectedSourceObservationVersion, reasonCode, requestKey]
+      properties:
+        decision: { type: string, enum: [CREATE, SNOOZE, IGNORE] }
+        expectedCandidateVersion: { type: integer, minimum: 1 }
+        expectedSourceObservationVersion: { type: integer, minimum: 1 }
+        snoozedUntil:
+          type: string
+          format: date-time
+          description: Must be earlier than the Candidate expiresAt; expiry wins when both thresholds have elapsed.
+        reasonCode:
+          type: string
+          enum: [USER_SELECTED, DUPLICATE, OUT_OF_SCOPE, NOT_ACTIONABLE, DEFERRED]
+        requestKey: { type: string, minLength: 1, maxLength: 256 }
+      allOf:
+        - if:
+            type: object
+            properties: { decision: { const: SNOOZE } }
+            required: [decision]
+          then:
+            type: object
+            required: [snoozedUntil]
+            properties:
+              snoozedUntil: { type: string, format: date-time }
+          else:
+            type: object
+            properties: { snoozedUntil: false }
+        - if:
+            type: object
+            properties: { decision: { const: CREATE } }
+            required: [decision]
+          then:
+            type: object
+            properties: { reasonCode: { const: USER_SELECTED } }
+        - if:
+            type: object
+            properties: { decision: { const: SNOOZE } }
+            required: [decision]
+          then:
+            type: object
+            properties: { reasonCode: { const: DEFERRED } }
+        - if:
+            type: object
+            properties: { decision: { const: IGNORE } }
+            required: [decision]
+          then:
+            type: object
+            properties:
+              reasonCode: { enum: [DUPLICATE, OUT_OF_SCOPE, NOT_ACTIONABLE] }
+    AppendDraftRevisionRequest:
+      type: object
+      additionalProperties: false
+      required: [expectedRevision, expectedContentHash, content, requestKey]
+      properties:
+        expectedRevision: { type: integer, minimum: 1 }
+        expectedContentHash: { $ref: '#/components/schemas/Hash' }
+        content: { $ref: '../schemas/qa-intake-partial-content.v1.schema.json' }
+        requestKey: { type: string, minLength: 1, maxLength: 256 }
+    ExactRevisionRequest:
+      type: object
+      additionalProperties: false
+      required: [revision, contentHash]
+      properties:
+        revision: { type: integer, minimum: 1 }
+        contentHash: { $ref: '#/components/schemas/Hash' }
+    StartAgentRunRequest:
+      type: object
+      additionalProperties: false
+      required: [skillRef, subject, requestKey]
+      properties:
+        skillRef: { type: string, pattern: '^[a-z0-9._-]+@[0-9]+\.[0-9]+\.[0-9]+$' }
+        subject:
+          type: object
+          additionalProperties: false
+          required: [kind, id, version, contentHash]
+          properties:
+            kind: { type: string, enum: [DRAFT, CANDIDATE, WORK_ITEM] }
+            id: { type: string, minLength: 1, maxLength: 128 }
+            version: { type: integer, minimum: 1 }
+            contentHash: { $ref: '#/components/schemas/Hash' }
+        requestKey: { type: string, minLength: 1, maxLength: 256 }
+    TemplatePreviewRequest:
+      type: object
+      additionalProperties: false
+      required: [templateRef, variablesSchemaRef, variables, variablesHash, audience, classification]
+      properties:
+        templateRef: { type: string, minLength: 1, maxLength: 256 }
+        variablesSchemaRef: { $ref: '#/components/schemas/SchemaRef' }
+        variables:
+          type: object
+          maxProperties: 32
+          propertyNames: { pattern: '^[a-z][A-Za-z0-9_]{0,63}$' }
+          additionalProperties: { $ref: '#/components/schemas/TemplateVariableValue' }
+        variablesHash: { $ref: '#/components/schemas/Hash' }
+        audience: { type: string, enum: [REQUESTER, QA_PROJECT_MEMBERS, QA_LEADS] }
+        classification: { type: string, enum: [PUBLIC, INTERNAL, CONFIDENTIAL, RESTRICTED] }
+    TemplatePreviewResult:
+      type: object
+      additionalProperties: false
+      required: [templateRef, renderHash, redactedPreview]
+      properties:
+        templateRef: { type: string, minLength: 1, maxLength: 256 }
+        renderHash: { $ref: '#/components/schemas/Hash' }
+        redactedPreview: { type: string, maxLength: 4096 }
+    ValidationResult:
+      type: object
+      additionalProperties: false
+      required: [status, checks]
+      properties:
+        status: { type: string, enum: [VALID, INVALID, SKIPPED_GATED] }
+        checks:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required: [code, status]
+            properties:
+              code: { type: string, minLength: 1, maxLength: 128 }
+              status: { type: string, enum: [PASS, FAIL, SKIP] }
+              detail: { type: string, maxLength: 512 }
+    MutationResult:
+      type: object
+      additionalProperties: false
+      required: [resultRef, replayed]
+      properties:
+        resultRef: { type: string, minLength: 1, maxLength: 512 }
+        replayed: { type: boolean }
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [type, title, status, code]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string, minLength: 1, maxLength: 256 }
+        status: { type: integer, minimum: 400, maximum: 599 }
+        code: { type: string, minLength: 1, maxLength: 128 }
+        correlationId: { type: string, minLength: 1, maxLength: 128 }
+security:
+  - oidc: []

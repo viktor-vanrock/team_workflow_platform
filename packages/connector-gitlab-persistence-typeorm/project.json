@@ -1,0 +1,21 @@
+{
+  "name": "connector-gitlab-persistence-typeorm",
+  "root": "packages/connector-gitlab-persistence-typeorm",
+  "sourceRoot": "packages/connector-gitlab-persistence-typeorm/src",
+  "projectType": "library",
+  "tags": ["type:adapter", "runtime:node", "domain:gitlab"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/connector-gitlab-persistence-typeorm/tsconfig.json --noEmit"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/connector-gitlab-persistence-typeorm/tsconfig.json --noEmit"
+      }
+    }
+  }
+}

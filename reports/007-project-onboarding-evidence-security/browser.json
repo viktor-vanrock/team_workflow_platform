@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "checkpoint": "BROWSER",
+  "status": "PASS",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "startedAt": "2026-09-03T18:41:04.269Z",
+  "finishedAt": "2026-09-03T18:41:06.539Z",
+  "taskSourceHash": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62",
+  "journey": {
+    "independentlyNavigablePath": "/projects/project-a/onboarding",
+    "stories": [
+      "US1",
+      "US2",
+      "US3",
+      "US4",
+      "US5"
+    ],
+    "forbiddenProjectIdentifiersRendered": 0,
+    "exactRefsVisible": true,
+    "modeAndStateVisible": true,
+    "approvalAndProbeExplanationsVisible": true,
+    "signatureAndRetentionVisible": true
+  },
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/e2e/007/project-onboarding-browser.spec.ts",
+        "sha256": "sha256:6ed0969781b01d965b3e76f96388b94d9a29a43b921fc700b2a74e78d7e63727"
+      },
+      {
+        "path": "tests/e2e/007/us1-manual-onboarding-browser.spec.ts",
+        "sha256": "sha256:10a0bf41d72216c53ea75390993183da065bf290686e531ef9eebe240e99f4fb"
+      },
+      {
+        "path": "tests/e2e/007/us2-full-qa-browser.spec.ts",
+        "sha256": "sha256:0188bdbafb84d15fc41ccef2a0b39479aa35d3f81060d3ab3bc1ee0e8843b8cd"
+      },
+      {
+        "path": "tests/e2e/007/us3-project-scope-browser.spec.ts",
+        "sha256": "sha256:c48cbcf42b9e68c2339ad14a29ae6ca81c175aec0a7e442fba4a93caa62ec35e"
+      },
+      {
+        "path": "tests/e2e/007/us4-evidence-browser.spec.ts",
+        "sha256": "sha256:f174d493693c25d8080b027a1dee0eb951e91e228031fb5ab3e8d2fcfd8c100b"
+      },
+      {
+        "path": "tests/e2e/007/us5-suspend-resume-browser.spec.ts",
+        "sha256": "sha256:a72f1556b14432f5d0644f63fc14e888d450cde23a4c253574ca2fe058e75b17"
+      }
+    ],
+    "aggregateSha256": "sha256:2ba544c885a2dc5fd935391dfa0109e7d1737f91bc9ff05a8999dda49285eff4"
+  },
+  "exitCode": 0,
+  "outputHash": "sha256:c10dc56bcf675fb473c11cac2158c5c58917a7989923c5ec6df731e64bda45bb"
+}

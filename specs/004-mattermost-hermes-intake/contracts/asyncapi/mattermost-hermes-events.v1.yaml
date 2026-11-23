@@ -1,0 +1,409 @@
+asyncapi: 3.0.0
+info:
+  title: AWP Mattermost and Hermes events
+  version: 1.0.0
+  description: >-
+    Normalized Feature 004 events carried by the existing durable project
+    event outbox/inbox envelope. Provider request bodies, tokens, prompts and
+    completions are never event payloads. The public bootstrap creates no event;
+    rejected callbacks may create records only in the existing generic
+    project-scoped security-audit facility, outside ActionProvenance and domain
+    EventEnvelope messages.
+defaultContentType: application/json
+channels:
+  candidateEvents:
+    address: awp.intake.candidate.events.v1
+    messages:
+      sourceObserved: { $ref: '#/components/messages/CandidateSourceObserved' }
+      discovered: { $ref: '#/components/messages/CandidateDiscovered' }
+      decisionRecorded: { $ref: '#/components/messages/CandidateDecisionRecorded' }
+      converted: { $ref: '#/components/messages/CandidateConverted' }
+  draftEvents:
+    address: awp.intake.draft.events.v1
+    messages:
+      revised: { $ref: '#/components/messages/DraftRevised' }
+      validationCompleted: { $ref: '#/components/messages/DraftValidationCompleted' }
+      confirmed: { $ref: '#/components/messages/DraftConfirmed' }
+  agentEvents:
+    address: awp.agent.run.events.v1
+    messages:
+      started: { $ref: '#/components/messages/AgentRunStarted' }
+      completed: { $ref: '#/components/messages/AgentRunCompleted' }
+      failed: { $ref: '#/components/messages/AgentRunFailed' }
+      fallbackUsed: { $ref: '#/components/messages/AgentRunFallbackUsed' }
+      actionDenied: { $ref: '#/components/messages/AgentActionDenied' }
+  qaProposalEvents:
+    address: awp.qa.proposal.events.v1
+    messages:
+      triageCreated: { $ref: '#/components/messages/TriageAssessmentCreated' }
+      triageStale: { $ref: '#/components/messages/TriageAssessmentStale' }
+      sessionPlanCreated: { $ref: '#/components/messages/SessionPlanProposalCreated' }
+      sessionPlanStale: { $ref: '#/components/messages/SessionPlanProposalStale' }
+  notificationEvents:
+    address: awp.messaging.notification.events.v1
+    messages:
+      queued: { $ref: '#/components/messages/NotificationQueued' }
+      delivered: { $ref: '#/components/messages/NotificationDelivered' }
+      failed: { $ref: '#/components/messages/NotificationFailed' }
+      expired: { $ref: '#/components/messages/NotificationExpired' }
+operations:
+  publishCandidateEvents:
+    action: send
+    channel: { $ref: '#/channels/candidateEvents' }
+  publishDraftEvents:
+    action: send
+    channel: { $ref: '#/channels/draftEvents' }
+  publishAgentEvents:
+    action: send
+    channel: { $ref: '#/channels/agentEvents' }
+  publishQaProposalEvents:
+    action: send
+    channel: { $ref: '#/channels/qaProposalEvents' }
+  publishNotificationEvents:
+    action: send
+    channel: { $ref: '#/channels/notificationEvents' }
+components:
+  messages:
+    CandidateSourceObserved:
+      name: intake.candidate.source-observed
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: intake.candidate.source-observed }
+              entityType: { const: intake-candidate }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:intake-candidate-source-observed:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/intake-candidate-source-observed.v1.schema.json' }
+    CandidateDiscovered:
+      name: intake.candidate.discovered
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: intake.candidate.discovered }
+              entityType: { const: intake-candidate }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:intake-candidate-discovered:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/intake-candidate-discovered.v1.schema.json' }
+    CandidateDecisionRecorded:
+      name: intake.candidate.decision-recorded
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: intake.candidate.decision-recorded }
+              entityType: { const: intake-candidate }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:intake-candidate-decision-recorded:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/intake-candidate-decision-recorded.v1.schema.json' }
+    CandidateConverted:
+      name: intake.candidate.converted
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: intake.candidate.converted }
+              entityType: { const: intake-candidate }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:intake-candidate-converted:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/intake-candidate-converted.v1.schema.json' }
+    DraftRevised:
+      name: intake.draft.revised
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: intake.draft.revised }
+              entityType: { const: intake-draft }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:intake-draft-revised:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/intake-draft-revised.v1.schema.json' }
+    DraftValidationCompleted:
+      name: intake.draft.validation-completed
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: intake.draft.validation-completed }
+              entityType: { const: intake-draft }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:intake-draft-validation-completed:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/intake-draft-validation-completed.v1.schema.json' }
+    DraftConfirmed:
+      name: intake.draft.confirmed
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: intake.draft.confirmed }
+              entityType: { const: intake-draft }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:intake-draft-confirmed:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/intake-draft-confirmed.v1.schema.json' }
+    AgentRunStarted:
+      name: agent.run.started
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: agent.run.started }
+              entityType: { const: agent-run }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:agent-run-started:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/agent-run-started.v1.schema.json' }
+    AgentRunCompleted:
+      name: agent.run.completed
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: agent.run.completed }
+              entityType: { const: agent-run }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:agent-run-completed:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/agent-run-completed.v1.schema.json' }
+    AgentRunFailed:
+      name: agent.run.failed
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: agent.run.failed }
+              entityType: { const: agent-run }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:agent-run-failed:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/agent-run-failed.v1.schema.json' }
+    AgentRunFallbackUsed:
+      name: agent.run.fallback-used
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: agent.run.fallback-used }
+              entityType: { const: agent-run }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:agent-run-fallback-used:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/agent-run-fallback-used.v1.schema.json' }
+    AgentActionDenied:
+      name: agent.action.denied
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: agent.action.denied }
+              entityType: { const: agent-run }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:agent-action-denied:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/agent-action-denied.v1.schema.json' }
+    TriageAssessmentCreated:
+      name: qa.triage-assessment.created
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: qa.triage-assessment.created }
+              entityType: { const: qa-triage-assessment }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:qa-triage-assessment-created:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/qa-triage-assessment-created.v1.schema.json' }
+    TriageAssessmentStale:
+      name: qa.triage-assessment.stale
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: qa.triage-assessment.stale }
+              entityType: { const: qa-triage-assessment }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:qa-triage-assessment-stale:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/qa-triage-assessment-stale.v1.schema.json' }
+    SessionPlanProposalCreated:
+      name: qa.session-plan-proposal.created
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: qa.session-plan-proposal.created }
+              entityType: { const: qa-session-plan-proposal }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:qa-session-plan-proposal-created:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/qa-session-plan-proposal-created.v1.schema.json' }
+    SessionPlanProposalStale:
+      name: qa.session-plan-proposal.stale
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: qa.session-plan-proposal.stale }
+              entityType: { const: qa-session-plan-proposal }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:qa-session-plan-proposal-stale:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/qa-session-plan-proposal-stale.v1.schema.json' }
+    NotificationQueued:
+      name: messaging.notification.queued
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: messaging.notification.queued }
+              entityType: { const: notification-intent }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:messaging-notification-queued:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/messaging-notification-queued.v1.schema.json' }
+    NotificationDelivered:
+      name: messaging.notification.delivered
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: messaging.notification.delivered }
+              entityType: { const: notification-intent }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:messaging-notification-delivered:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/messaging-notification-delivered.v1.schema.json' }
+    NotificationFailed:
+      name: messaging.notification.failed
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: messaging.notification.failed }
+              entityType: { const: notification-intent }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:messaging-notification-failed:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/messaging-notification-failed.v1.schema.json' }
+    NotificationExpired:
+      name: messaging.notification.expired
+      payload:
+        allOf:
+          - { $ref: '#/components/schemas/ProjectEnvelope' }
+          - type: object
+            required: [eventType, entityType, payloadVersion, payloadSchemaRef, payload]
+            properties:
+              eventType: { const: messaging.notification.expired }
+              entityType: { const: notification-intent }
+              payloadVersion: { const: 1 }
+              payloadSchemaRef:
+                type: object
+                properties:
+                  id: { const: 'urn:awp:schemas:004:events:messaging-notification-expired:v1' }
+                  version: { const: 1 }
+              payload: { $ref: '../schemas/events/messaging-notification-expired.v1.schema.json' }
+  schemas:
+    ProjectEnvelope:
+      $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/events/event-envelope.v1.schema.json'

@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "us4-420d74e4-0a8a-491f-9d81-e975cdffcaf5",
+  "gate": "us4",
+  "status": "PASS",
+  "deploymentProfile": "local",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": [
+      "fixture-project-web"
+    ]
+  },
+  "startedAt": "2026-09-04T23:59:52.257Z",
+  "finishedAt": "2026-09-05T00:00:01.829Z",
+  "fingerprints": {
+    "source": "sha256:27b55bd1d347c4c4ed41cd176590689cb54cb0bba510d7a3bc78cd63cd804741",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:5fc0af1bea362d651725f32fc9ca09377a5c053d7cbeb6e8560505878cc041cf",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:c7416e37dba569ade2f7b061bdf656961938f07b36457e8b5fc811f5c2f6eec9"
+  },
+  "executorIdentity": "local-cli",
+  "checks": [
+    {
+      "id": "foundation-prerequisite",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us4-420d74e4-0a8a-491f-9d81-e975cdffcaf5/foundation-prerequisite.json",
+          "sha256": "sha256:06fa937e1aefd9b037f550e2437b59231dc8a4197e7a4ff589bf952c302615a9"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "recovery-suite",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us4-420d74e4-0a8a-491f-9d81-e975cdffcaf5/recovery-suite.json",
+          "sha256": "sha256:135ef96d40d2b145e55421388f24af6cfa72166a60a8ebb9f771395cb7dda40c"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "actual-isolated-restore",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us4-420d74e4-0a8a-491f-9d81-e975cdffcaf5/actual-isolated-restore.json",
+          "sha256": "sha256:2f0f3f55c4682ce2e38c9ebb1f9a54e1cab0bbac05d5747df8354bacc48af57d"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "backup-manifest",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us4-420d74e4-0a8a-491f-9d81-e975cdffcaf5/backup-manifest.json",
+          "sha256": "sha256:7ee9a825e3dccb9c9c2ce2104e887808be11280a0b56fda541026edcd7289440"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "post-backup-reconciliation",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us4-420d74e4-0a8a-491f-9d81-e975cdffcaf5/post-backup-reconciliation.json",
+          "sha256": "sha256:c4e556c0cd32e352b9f550416dcbbe2ebeaaed3577dd0bf3e6de210971f3799d"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "integrity-and-measurements",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us4-420d74e4-0a8a-491f-9d81-e975cdffcaf5/integrity-and-measurements.json",
+          "sha256": "sha256:9bee6c4b07ccb3ef4af2c19c7e0d883c13250c4a07219490bbe4f3717c7c8e56"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "unchanged-source",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us4-420d74e4-0a8a-491f-9d81-e975cdffcaf5/unchanged-source.json",
+          "sha256": "sha256:2e1f24fe77da4ff2470914fc42a7de24166f26ee8afc833656f7f56bad13f468"
+        }
+      ],
+      "reasonCodes": []
+    }
+  ],
+  "prerequisites": [
+    {
+      "path": "reports/008-pilot-hardening-and-conformance/runs/foundation-a8a76bfe-92cf-4676-98b7-276fbb92ef83.json",
+      "sha256": "sha256:9f4724cf05aa0f53e902a13309c5e41cf10cd5b5f0d7e173e5fe1e65b527357b"
+    }
+  ],
+  "reasonCodes": []
+}

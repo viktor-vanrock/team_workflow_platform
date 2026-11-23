@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "gate": "project-regression",
+  "status": "PASS",
+  "startedAt": "2026-09-07T15:18:57.154Z",
+  "finishedAt": "2026-09-07T15:34:04.712Z",
+  "fingerprints": {
+    "source": "sha256:21a103e13ad96e3e3ca241a7ef9adf341c70ebbff912c8c92a2b7c369c41ee53",
+    "contracts": "sha256:1806f35d0a561383e953c04c3db3ff09fef497b722f45b33898ad0a74c025c92",
+    "migrations": "sha256:46191a588d4a9464a3940bfee2f52e45ae10f01fbe21b37fc6fb5d0e2ea3cb7b",
+    "lockfile": "sha256:99ad8b2f5c2cd75a33b5ca257af11ac54a5bd456e062560c87e600b823dfc1ba",
+    "configuration": "sha256:0040950bf6f4230248a18e62b45ac12702bd3ef152da7a06d70284e976685a4b",
+    "inputs": "sha256:3cb806b900a81ae61c721aaab9e40e71cf279d2c567620d89e212768a74de4ad",
+    "suite": "sha256:793491a0efec8a6c37e9620ce2a71d3803c57830e86bad3978053b4925076790"
+  },
+  "unchangedSource": true,
+  "tests": {
+    "total": 2167,
+    "passed": 2167,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "stages": [
+    {
+      "id": "format",
+      "status": "PASS",
+      "exitCode": 0,
+      "logPath": "reports/project/format.log",
+      "logSha256": "sha256:8bec7f0496f355d66ef935065e0432d3cb002aa5c5ac7d9e1965a32fdcabdcb3"
+    },
+    {
+      "id": "lint",
+      "status": "PASS",
+      "exitCode": 0,
+      "logPath": "reports/project/lint.log",
+      "logSha256": "sha256:bc2d4ec86c22f3109d1c5de89de70e26a8d8c015cedabb7792c54a101d795864"
+    },
+    {
+      "id": "typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "logPath": "reports/project/typecheck.log",
+      "logSha256": "sha256:b64531f4e8b01ada76714373fcf8c951152c64cb3ad2241a60faffc9705d8dc1"
+    },
+    {
+      "id": "build",
+      "status": "PASS",
+      "exitCode": 0,
+      "logPath": "reports/project/build.log",
+      "logSha256": "sha256:4939b108bdd0097f1f1ffb4d7db352043ce9f0347584cb51287904886c870dda"
+    },
+    {
+      "id": "architecture",
+      "status": "PASS",
+      "exitCode": 0,
+      "logPath": "reports/project/architecture.log",
+      "logSha256": "sha256:3862262aa53e193426e0ea30d7c6f39232b98d8337e97cfb36569169084118b6"
+    },
+    {
+      "id": "contracts",
+      "status": "PASS",
+      "exitCode": 0,
+      "logPath": "reports/project/contracts.log",
+      "logSha256": "sha256:3f3b099fd010e47593c096e7eebe2dafc61f72db3da98f5d94bcf8b58dfebd36"
+    },
+    {
+      "id": "openapi",
+      "status": "PASS",
+      "exitCode": 0,
+      "logPath": "reports/project/openapi.log",
+      "logSha256": "sha256:c0ddd7875a5c017a96858363f84237364e6596fa92dacfb70b34fbd0f4c1b47c"
+    },
+    {
+      "id": "dependency-audit",
+      "status": "PASS",
+      "exitCode": 0,
+      "logPath": "reports/project/dependency-audit.log",
+      "logSha256": "sha256:b9f08f6934ccca8cecff0e15e4dc77c941e06a77fecf7b929694f97551abbd0a"
+    },
+    {
+      "id": "tests",
+      "status": "PASS",
+      "exitCode": 0,
+      "logPath": "reports/project/tests.log",
+      "logSha256": "sha256:ddf85eb84a44432474425ec7ac3ad75489aaa4ae148cb760a1d8307097e87adf"
+    }
+  ],
+  "corporateReady": false
+}

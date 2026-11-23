@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:events:automation-retry-decided:v1",
+  "title": "Automation Retry Decided Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "automationAttemptId",
+    "decision",
+    "policyHash",
+    "reasonCode",
+    "decidedAt"
+  ],
+  "properties": {
+    "automationAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "decision": { "enum": ["NOT_APPLICABLE", "DENIED", "SCHEDULED"] },
+    "policyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "reasonCode": {
+      "enum": [
+        "OUTCOME_INELIGIBLE",
+        "INFRA_CODE_MISSING",
+        "INFRA_CODE_NOT_ALLOWLISTED",
+        "RETRY_BUDGET_EXHAUSTED",
+        "AUTHORIZATION_DENIED",
+        "QUARANTINE_ACTIVE",
+        "POLICY_DENIED",
+        "CONFIGURATION_PIN_CHANGED",
+        "TARGET_CHANGED",
+        "SCHEDULED_ALLOWLISTED_INFRA"
+      ]
+    },
+    "successorAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "decidedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "decision": { "const": "SCHEDULED" } },
+        "required": ["decision"]
+      },
+      "then": {
+        "required": ["successorAttemptId"],
+        "properties": {
+          "reasonCode": { "const": "SCHEDULED_ALLOWLISTED_INFRA" },
+          "successorAttemptId": {}
+        }
+      },
+      "else": {
+        "properties": {
+          "successorAttemptId": false
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "decision": { "const": "NOT_APPLICABLE" } },
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "reasonCode": {
+            "enum": [
+              "OUTCOME_INELIGIBLE",
+              "INFRA_CODE_MISSING",
+              "INFRA_CODE_NOT_ALLOWLISTED",
+              "RETRY_BUDGET_EXHAUSTED"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "decision": { "const": "DENIED" } },
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "reasonCode": {
+            "enum": [
+              "AUTHORIZATION_DENIED",
+              "QUARANTINE_ACTIVE",
+              "POLICY_DENIED",
+              "CONFIGURATION_PIN_CHANGED",
+              "TARGET_CHANGED"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

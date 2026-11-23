@@ -1,0 +1,12 @@
+{
+  "expectedPreviousResultRevisionRef": null,
+  "expectedAttemptSetHash": "sha256:7373737373737373737373737373737373737373737373737373737373737373",
+  "expectedMaximumAttemptNo": 1,
+  "expectedObservationSetHash": "sha256:7474747474747474747474747474747474747474747474747474747474747474",
+  "expectedObservationCount": 1,
+  "reviewFlags": [],
+  "result": "PASS",
+  "actualOutcome": "The caller loaded a clean pass before another repeat completed.",
+  "decisionReason": "Semantic negative: a second finalized Attempt now exists, so both CAS hints are stale.",
+  "artifactIds": []
+}

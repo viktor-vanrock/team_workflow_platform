@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-governance",
+  "startedAt": "2026-09-03T10:37:00.337Z",
+  "finishedAt": "2026-09-03T10:37:00.339Z",
+  "manifest": {
+    "schemaVersion": 1,
+    "constitution": {
+      "path": ".specify/memory/constitution.md",
+      "sha256": "sha256:d448f4586b3d798e9fd27a44471d9ad5ad1a6852db4b5255b6ee1d8c7ea7630f",
+      "version": "2.0.0"
+    },
+    "specification": {
+      "path": "specs/005-gitlab-automated-validation/spec.md",
+      "sha256": "sha256:5769cb7b249db96a63953e73a574a4f6acdef66c20ee2cdc7260468e0c5401b9"
+    },
+    "plan": {
+      "path": "specs/005-gitlab-automated-validation/plan.md",
+      "sha256": "sha256:fe3c2445a164db4577327e6e74d29682652f062d355b9cf980a550554dfe3725"
+    },
+    "standaloneContour": "qa-jira-gitlab-local",
+    "pilotReleaseContours": [
+      "qa-jira-gitlab-mattermost-development",
+      "qa-jira-gitlab-mattermost-test"
+    ]
+  },
+  "deploymentAuthority": {
+    "standalone": "LOCAL_CONFORMANCE_ONLY",
+    "pilotRelease": "SEPARATE_GATE_REQUIRED",
+    "production": "DENIED",
+    "technicalResultMaySignVerdict": false
+  },
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "constitution",
+      "status": "PASS",
+      "code": "CONSTITUTION_2_0_AUTHORITY_ACCEPTED",
+      "detail": ".specify/memory/constitution.md sha256:d448f4586b3d798e9fd27a44471d9ad5ad1a6852db4b5255b6ee1d8c7ea7630f"
+    },
+    {
+      "id": "technical-result-authority",
+      "status": "PASS",
+      "code": "TECHNICAL_RESULT_AUTHORITY_ACCEPTED",
+      "detail": "specs/005-gitlab-automated-validation/spec.md sha256:5769cb7b249db96a63953e73a574a4f6acdef66c20ee2cdc7260468e0c5401b9"
+    },
+    {
+      "id": "pilot-contours",
+      "status": "PASS",
+      "code": "PILOT_CONTOUR_AUTHORITY_ACCEPTED",
+      "detail": "qa-jira-gitlab-local; qa-jira-gitlab-mattermost-development, qa-jira-gitlab-mattermost-test"
+    }
+  ]
+}

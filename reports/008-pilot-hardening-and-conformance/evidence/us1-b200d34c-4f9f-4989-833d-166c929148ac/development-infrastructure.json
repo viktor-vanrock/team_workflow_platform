@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "path": "infra/compose/docker-compose.local.yml",
+      "sha256": "sha256:c5a1ce089c7a4dd9175f811b9473937f52a5db8cace19449a54b96d96747c157"
+    },
+    {
+      "path": "infra/compose/docker/node-runtime.Dockerfile",
+      "sha256": "sha256:ec7f545cb5aeb0f6e17a3930361579d6d5e081cb424963be76ab931ac424249c"
+    },
+    {
+      "path": "infra/observability/otel-collector.yaml",
+      "sha256": "sha256:07a009f718f77957372af7cf855421c35a5963d19f8ace70596e08b44597755b"
+    }
+  ],
+  "mode": "DEVELOPMENT_MOCKS",
+  "corporateReady": false,
+  "corporateConformance": "BLOCKED_INPUT",
+  "requires": [
+    "C1",
+    "N2",
+    "P3"
+  ]
+}

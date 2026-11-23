@@ -1,0 +1,245 @@
+openapi: 3.1.0
+info:
+  title: Phase-1 Stateful Mock Hub API
+  version: 1.0.0
+  description: >-
+    Local/test-only deterministic external system. The sample-record route is typed. Admin routes
+    are excluded from non-local builds and cannot be used as a generic Connector execute endpoint.
+servers:
+  - url: http://mock-hub:4010
+security:
+  - mockServiceAuth: []
+paths:
+  /health/ready:
+    get:
+      operationId: getMockHubReadiness
+      description: Local orchestration probe; reports whether the state store and deterministic scenario engine are ready.
+      security: []
+      responses:
+        '200':
+          description: Mock Hub is ready for Connector contract tests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessResponse'
+        '503':
+          $ref: '#/components/responses/Problem'
+  /mock/v1/sample-records:
+    post:
+      operationId: publishSampleRecordToMock
+      description: Implements sample.record@1.0.0 operation record.publish.
+      parameters:
+        - $ref: '#/components/parameters/EffectIdempotencyKey'
+        - name: X-Correlation-Id
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MockPublishRequest'
+      responses:
+        '201':
+          description: One external effect; replays return the same receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MockPublishResponse'
+        '409':
+          $ref: '#/components/responses/Problem'
+        '401':
+          $ref: '#/components/responses/Problem'
+        '403':
+          $ref: '#/components/responses/Problem'
+        '429':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+  /mock/v1/admin/reset:
+    post:
+      operationId: resetMockHub
+      security:
+        - localAdminAuth: []
+      responses:
+        '204':
+          description: State, effects, dedupe records and scenarios cleared
+        default:
+          $ref: '#/components/responses/Problem'
+  /mock/v1/admin/seed:
+    post:
+      operationId: seedMockHub
+      security:
+        - localAdminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [seed]
+              properties:
+                seed:
+                  type: integer
+                  minimum: 0
+                  maximum: 2147483647
+      responses:
+        '204':
+          description: Deterministic seed applied
+        default:
+          $ref: '#/components/responses/Problem'
+  /mock/v1/admin/scenario:
+    put:
+      operationId: setMockHubScenario
+      security:
+        - localAdminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScenarioConfiguration'
+      responses:
+        '200':
+          description: Active deterministic scenario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioConfiguration'
+        default:
+          $ref: '#/components/responses/Problem'
+  /mock/v1/admin/effects:
+    get:
+      operationId: listMockHubEffects
+      security:
+        - localAdminAuth: []
+      parameters:
+        - name: effectIdempotencyKey
+          in: query
+          description: Gateway-generated key, not the client request key.
+          schema:
+            $ref: '../schemas/commands/capability-command-intent.v1.schema.json#/$defs/IdempotencyKey'
+      responses:
+        '200':
+          description: Effect ledger used by exactly-once conformance tests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EffectRecord'
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    mockServiceAuth:
+      type: http
+      scheme: bearer
+      description: Local service identity resolved from an opaque secret reference.
+    localAdminAuth:
+      type: http
+      scheme: bearer
+      description: Local/test bootstrap identity; route is absent outside local/test.
+  parameters:
+    EffectIdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Gateway-generated globally unique effect key, stable across Connector retries.
+      schema:
+        $ref: '../schemas/commands/capability-command-intent.v1.schema.json#/$defs/IdempotencyKey'
+  responses:
+    Problem:
+      description: Mock error using the same problem contract
+      content:
+        application/problem+json:
+          schema:
+            $ref: '../schemas/common/problem-details.v1.schema.json'
+  schemas:
+    ReadinessResponse:
+      type: object
+      additionalProperties: false
+      required: [status, stateStore, scenarioEngine]
+      properties:
+        status:
+          const: READY
+        stateStore:
+          const: READY
+        scenarioEngine:
+          const: READY
+    MockPublishRequest:
+      type: object
+      additionalProperties: false
+      required: [target, payload, expectedExternalState]
+      properties:
+        target:
+          $ref: '../schemas/sample/sample-record-target.v1.schema.json'
+        payload:
+          $ref: '../schemas/sample/sample-record-publish-input.v1.schema.json'
+        expectedExternalState:
+          $ref: '../schemas/commands/capability-command-intent.v1.schema.json#/$defs/ExpectedExternalState'
+    MockPublishResponse:
+      type: object
+      additionalProperties: false
+      required: [effectId, externalEntityId, externalVersion, result]
+      properties:
+        effectId:
+          type: string
+        externalEntityId:
+          type: string
+        externalVersion:
+          type: string
+        result:
+          $ref: '../schemas/sample/sample-record-publish-result.v1.schema.json'
+    ScenarioConfiguration:
+      type: object
+      additionalProperties: false
+      required: [scenario, appliesToNext]
+      properties:
+        scenario:
+          type: string
+          enum:
+            - SUCCESS
+            - TIMEOUT
+            - RATE_LIMITED
+            - SERVER_ERROR
+            - DUPLICATE_EVENT
+            - OUT_OF_ORDER_EVENT
+            - AUTHENTICATION_FAILED
+            - AUTHORIZATION_DENIED
+            - SCHEMA_DRIFT
+        appliesToNext:
+          type: integer
+          minimum: 1
+          maximum: 100
+        delayMs:
+          type: integer
+          minimum: 0
+          maximum: 120000
+        retryAfterSeconds:
+          type: integer
+          minimum: 1
+          maximum: 3600
+    EffectRecord:
+      type: object
+      additionalProperties: false
+      required: [effectId, effectIdempotencyKey, operation, requestHash, effectCount, createdAt]
+      properties:
+        effectId:
+          type: string
+        effectIdempotencyKey:
+          $ref: '../schemas/commands/capability-command-intent.v1.schema.json#/$defs/IdempotencyKey'
+        operation:
+          const: record.publish
+        requestHash:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+        effectCount:
+          type: integer
+          const: 1
+        createdAt:
+          type: string
+          format: date-time

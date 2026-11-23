@@ -1,0 +1,9 @@
+
+ RUN  v4.1.11 /Users/alexandr/.codex/worktrees/8635/PlatformWorkspace
+
+
+ Test Files  3 passed (3)
+      Tests  58 passed (58)
+   Start at  04:23:38
+   Duration  3.65s (transform 1.28s, setup 0ms, import 3.13s, tests 200ms, environment 0ms)
+

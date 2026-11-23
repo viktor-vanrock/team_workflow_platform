@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "us3-ffd8b74f-48f0-4a08-a161-c850edbbc207",
+  "gate": "us3",
+  "status": "FAIL",
+  "deploymentProfile": "local",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": [
+      "fixture-project-web"
+    ]
+  },
+  "startedAt": "2026-09-04T22:41:34.698Z",
+  "finishedAt": "2026-09-04T22:41:34.960Z",
+  "fingerprints": {
+    "source": "sha256:e361146e74f0d99fba72b4cc4884892f85985097d2cc308e8dda382636df326c",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:5fc0af1bea362d651725f32fc9ca09377a5c053d7cbeb6e8560505878cc041cf",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:c7416e37dba569ade2f7b061bdf656961938f07b36457e8b5fc811f5c2f6eec9"
+  },
+  "executorIdentity": "local-cli",
+  "checks": [
+    {
+      "id": "foundation-prerequisite",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/runs/foundation-566d8732-8389-421c-9a92-ab25e6168586.json",
+          "sha256": "sha256:3bfcead849d77c4830d3595d84dbc9a9894532514856d25bf44e2a34d40c421f"
+        },
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-ffd8b74f-48f0-4a08-a161-c850edbbc207/foundation-prerequisite.json",
+          "sha256": "sha256:f9adf7df7d78adee7ae5e8c1aaae65ccb9bb5ebbd19e32a570a972051ce6fea5"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "hermes-prerequisite",
+      "status": "FAIL",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-ffd8b74f-48f0-4a08-a161-c850edbbc207/hermes-prerequisite.json",
+          "sha256": "sha256:971f41b35cbb2c425915a54c4b21fd3778685c4e42438cb6001f3d2d6bad0cd9"
+        }
+      ],
+      "reasonCodes": [
+        "US3_CHECK_FAILED"
+      ]
+    },
+    {
+      "id": "security-prerequisite",
+      "status": "FAIL",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-ffd8b74f-48f0-4a08-a161-c850edbbc207/security-prerequisite.json",
+          "sha256": "sha256:971f41b35cbb2c425915a54c4b21fd3778685c4e42438cb6001f3d2d6bad0cd9"
+        }
+      ],
+      "reasonCodes": [
+        "US3_CHECK_FAILED"
+      ]
+    },
+    {
+      "id": "independent-audit-coverage",
+      "status": "FAIL",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-ffd8b74f-48f0-4a08-a161-c850edbbc207/independent-audit-coverage.json",
+          "sha256": "sha256:971f41b35cbb2c425915a54c4b21fd3778685c4e42438cb6001f3d2d6bad0cd9"
+        }
+      ],
+      "reasonCodes": [
+        "US3_CHECK_FAILED"
+      ]
+    },
+    {
+      "id": "corporate-scan-separation",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-ffd8b74f-48f0-4a08-a161-c850edbbc207/corporate-scan-separation.json",
+          "sha256": "sha256:2170c7972e85e1ca1836ebe842302d4597eaa69220238c26c850620eabb2a3c2"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "unchanged-source",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-ffd8b74f-48f0-4a08-a161-c850edbbc207/unchanged-source.json",
+          "sha256": "sha256:a117ad48bb87fe0fa428a5a9346c7c0ddcb6fd8d85a6cfc3b57ba4b635a14d96"
+        }
+      ],
+      "reasonCodes": []
+    }
+  ],
+  "prerequisites": [
+    {
+      "path": "reports/008-pilot-hardening-and-conformance/runs/foundation-566d8732-8389-421c-9a92-ab25e6168586.json",
+      "sha256": "sha256:3bfcead849d77c4830d3595d84dbc9a9894532514856d25bf44e2a34d40c421f"
+    }
+  ],
+  "reasonCodes": [
+    "US3_FAILED"
+  ]
+}

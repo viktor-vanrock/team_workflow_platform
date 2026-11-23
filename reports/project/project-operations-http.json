@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "task": "007/T163",
+  "status": "PASS",
+  "recordedAt": "2026-09-06T00:28:52.468694+00:00",
+  "sourceBinding": [
+    {
+      "path": "apps/api/src/extensions/onboarding/durable-http.ts",
+      "sha256": "sha256:9ba35bf4180a4218a05b893e7d3411bc638d046478d767d843f4698be605fe2b"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.application.ts",
+      "sha256": "sha256:0ab0ab7852c59c66dfb85f8456db268a4621b65bcfa93719abb43608b847846b"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.controller.ts",
+      "sha256": "sha256:58a97079d4c293663792a28c7edf691d13eab7990f531e01719ca679239d02b7"
+    },
+    {
+      "path": "apps/api/src/app.module.ts",
+      "sha256": "sha256:3a2421da9ade422dd13c5671d1e21fa12a4a666084ff22b8c19a7dcd32eda7fa"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/identity-access.repository.ts",
+      "sha256": "sha256:c6d4c43e22e042793d266b994115431ed0c3423eac237049c90c35d1f53d1a33"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/entities/project-onboarding.entities.ts",
+      "sha256": "sha256:7fb16f8ed37fb8e8d4fad9fa28f13f87dc6a75306499bf134d95520d74cb3aae"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/migrations/core/index.ts",
+      "sha256": "sha256:a7a9111eb151ea85751eb14a42754da1aabc6e16c33f0c87d91ce5957f1ef805"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/migrations/core/0195-project-incident-dispositions.ts",
+      "sha256": "sha256:bb132d266cdb651ef2a87211bac68d403baa110f1828f538794d017844c813a1"
+    },
+    {
+      "path": "packages/runtime-composition/src/security/local-security.ts",
+      "sha256": "sha256:eae99a20f728fcc59120a460f8f4136142a05484dd74dee1a8a31bd039c733ea"
+    },
+    {
+      "path": "tests/support/007-project-operations-fixture.ts",
+      "sha256": "sha256:d5d625e83f71b010e7fa4dfd92d8968ac89b68ed9ab74efc013371539d92dc7d"
+    },
+    {
+      "path": "tests/integration/007/us5-project-operations-http.spec.ts",
+      "sha256": "sha256:ac675bdc72f3127712b3604f8db74a64f1118dc05d80d9acbbc8a30675029191"
+    },
+    {
+      "path": "docs/runbooks/project-operations-http.md",
+      "sha256": "sha256:283672508b954bfff072cf608e7b90b94cb5e3bcabf6968001e00976bd1c5074"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7"
+    }
+  ],
+  "reports": [
+    {
+      "path": "reports/project/project-operations-http-vitest.json",
+      "sha256": "sha256:a4825da5b565a2c4f5b2246b015bc9d2f0edc3cdcb0888bb78b82c2e7f206d0f",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "reports/project/project-operations-007-regression.json",
+      "sha256": "sha256:67b83142f2bf3bcd9cf252f12265f152bfd60224b09912f6468c51107516a6ba",
+      "total": 123,
+      "passed": 123,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "reports/project/project-operations-vitest.json",
+      "sha256": "sha256:08ed5915bd04c6f29dc1628f72cdf0064dee9e9ef01fe11d2951ce7088a835d1",
+      "total": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "standaloneChecks": [
+    {
+      "command": "tsc --noEmit --project tsconfig.json",
+      "exitCode": 0,
+      "log": "reports/project/project-operations/typecheck.log"
+    },
+    {
+      "command": "eslint changed implementation, migration and test files",
+      "exitCode": 0,
+      "log": "reports/project/project-operations/lint.log"
+    }
+  ],
+  "boundaries": [
+    "Real Nest HTTP and PostgreSQL 17.7/18.6; controlled trusted identity port.",
+    "API and database connection restart; queued command/outbox and consumed approval invalidation; exact approval, current authorization, negative probes and atomic rollback.",
+    "Resume conservatively derives MANUAL_ONLY; FULL_QA suite acceptance adapter remains unimplemented.",
+    "T155 independent worker journey and T176 isolated process smoke remain open.",
+    "Full project CI was not rerun; regression reports overlap and must not be summed."
+  ],
+  "corporateReady": false
+}

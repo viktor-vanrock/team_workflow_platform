@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:test-account-lease:v1",
+  "title": "QA test account lease v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "leaseId", "version", "workspaceId", "projectId", "poolRef", "environmentRef", "subject", "leasedToPrincipalId", "opaqueAccountRef", "state", "acquiredAt", "expiresAt", "createdBy", "contentHash", "resourceVersion"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "leaseId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "poolRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "environmentRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": { "enum": ["WORK_ITEM", "SESSION"] },
+        "id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" }
+      }
+    },
+    "leasedToPrincipalId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "opaqueAccountRef": { "$ref": "../common.v1.schema.json#/$defs/nonEmpty" },
+    "state": { "enum": ["ACTIVE", "RELEASED", "EXPIRED", "REVOKED"] },
+    "acquiredAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "expiresAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "releasedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "revokedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "reasonCode": { "$ref": "../common.v1.schema.json#/$defs/stableKey" },
+    "createdBy": { "$ref": "../common.v1.schema.json#/$defs/actor" },
+    "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" },
+    "resourceVersion": { "type": "integer", "minimum": 1 }
+  }
+}

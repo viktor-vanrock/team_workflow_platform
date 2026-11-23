@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:messaging-notification-delivered:v1",
+  "title": "Messaging Notification Delivered Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "effectKey",
+    "connectorCommandId",
+    "externalPostId",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "const": "DELIVERED"
+    },
+    "effectKey": {
+      "description": "SHA-256 commitment to the exact bounded Connector effect-idempotency-key string.",
+      "$ref": "#/$defs/digest"
+    },
+    "connectorCommandId": {
+      "$ref": "#/$defs/id"
+    },
+    "externalPostId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

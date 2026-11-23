@@ -1,0 +1,252 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "checkpoint": "US4-finding-defect-publication",
+  "status": "PASS",
+  "startedAt": "2026-08-30T22:57:02.037Z",
+  "finishedAt": "2026-08-30T22:57:38.436Z",
+  "invariants": {
+    "findingLifecycle": "DRAFT→CLASSIFIED→DISPOSED→FROZEN",
+    "exactCurrentLeafCoverage": true,
+    "membershipChangeResetsDecision": true,
+    "frozenFindingSetInSingleSessionReviewed": true,
+    "observationCreatesNoDefectEffect": true,
+    "deterministicDraftAndModelFallback": true,
+    "nonProductAndHumanRejectionZeroEffect": true,
+    "exactLiveApprovalAndSeparationOfDuty": true,
+    "defectCreateProfileBindingRevision": 3,
+    "draftContentImmutable": true,
+    "oneActiveDraftHead": true,
+    "failedOrInvalidatedSuccessorOnly": true,
+    "rejectedOrLinkedChainFinal": true,
+    "crashAfterEffectRecovery": true,
+    "oneImmutableDefectLink": true,
+    "acceptedRiskAndFindingWaiverDistinctLead": true,
+    "mainComposeStarted": false,
+    "coreImportsQaSemantics": false
+  },
+  "evidence": {
+    "nonContainerSuites": 10,
+    "postgresSuites": 3,
+    "typecheckedProjects": 7,
+    "migrationsThrough": 2025,
+    "mockAndSecondConnectorConformance": true
+  },
+  "stages": [
+    {
+      "id": "typecheck:packages/competency-qa",
+      "status": "PASS",
+      "durationMs": 2565,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/connector-sdk",
+      "status": "PASS",
+      "durationMs": 917,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/connector-sdk/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/connector-mock",
+      "status": "PASS",
+      "durationMs": 898,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/connector-mock/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/runtime-composition",
+      "status": "PASS",
+      "durationMs": 2234,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/mock-hub",
+      "status": "PASS",
+      "durationMs": 834,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/mock-hub/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/api",
+      "status": "PASS",
+      "durationMs": 2548,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/web",
+      "status": "PASS",
+      "durationMs": 1795,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "us4-eslint",
+      "status": "PASS",
+      "durationMs": 5932,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "packages/competency-qa/src/domain/finding.ts",
+        "packages/competency-qa/src/domain/defect-publication.ts",
+        "packages/competency-qa/src/domain/plan-item-result.ts",
+        "packages/competency-qa/src/application/defect-draft-template.ts",
+        "packages/competency-qa/src/application/qa-draft-assistant.ts",
+        "packages/competency-qa/src/application/create-defect-draft.ts",
+        "packages/competency-qa/src/application/defect-publication.ts",
+        "packages/competency-qa/src/application/publish-defect-draft.ts",
+        "packages/competency-qa/src/application/defect-command-lifecycle.ts",
+        "packages/competency-qa/src/application/defect-confirmation-persistence.ts",
+        "packages/competency-qa/src/application/finding-action-contribution.ts",
+        "packages/competency-qa/src/application/finding-defect-events.ts",
+        "packages/competency-qa/src/application/finding-defect-detail-section.ts",
+        "packages/competency-qa/src/persistence/finding.repository.ts",
+        "packages/competency-qa/src/persistence/defect-publication.repository.ts",
+        "packages/competency-qa/src/persistence/migrations/2025-qa-findings-defect-publication.ts",
+        "packages/connector-sdk/src/operational-work-item.ts",
+        "packages/connector-mock/src/operational-work-item.connector.ts",
+        "packages/connector-mock/src/operational-work-item-confirmation.ts",
+        "apps/api/src/extensions/qa-findings.controller.ts",
+        "apps/api/src/extensions/qa-defects.controller.ts",
+        "apps/mock-hub/src/operational/operational.controller.ts",
+        "apps/mock-hub/src/operational/operational.repository.ts",
+        "packages/runtime-composition/src/qa/operational-work-item.contract.ts",
+        "packages/runtime-composition/src/qa/operational-composition.ts",
+        "packages/runtime-composition/src/qa/contributions.ts",
+        "packages/runtime-composition/src/qa/fake-qa-draft-assistant.ts",
+        "packages/runtime-composition/src/seed/qa-local-seed.ts",
+        "packages/competency-qa/src/ui/findings-defects.tsx",
+        "apps/web/src/App.tsx"
+      ]
+    },
+    {
+      "id": "us4-domain-contract-security",
+      "status": "PASS",
+      "durationMs": 2733,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/acceptance/002-at-008-findings.spec.ts",
+        "tests/integration/002-non-product-findings.spec.ts",
+        "tests/integration/002-finding-publication-matrix.spec.ts",
+        "tests/integration/security/acceptance/002-at-009-defect-approval.spec.ts",
+        "tests/integration/security/002-defect-publish-authorization.spec.ts",
+        "tests/integration/002-defect-publication-recovery.spec.ts",
+        "tests/integration/002-defect-confirmation-recovery.spec.ts",
+        "tests/integration/security/002-finding-disposition-approval.spec.ts",
+        "tests/integration/security/002-finding-risk-waiver.spec.ts",
+        "tests/contract/002-defect-draft-assistant.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "us4-postgres-route-review-publication",
+      "status": "PASS",
+      "durationMs": 9627,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/acceptance/002-at-008-finding-classification.spec.ts",
+        "tests/integration/002-qa-local-seed.spec.ts",
+        "tests/integration/migrations/002-qa-migration-order.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "us3-regression",
+      "status": "PASS",
+      "durationMs": 4964,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/002-manual-session-vertical-flow.spec.ts",
+        "tests/integration/002-negative-session-review-blocker.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "openapi-current",
+      "status": "PASS",
+      "durationMs": 234,
+      "command": [
+        "node",
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ]
+    },
+    {
+      "id": "openapi-drift",
+      "status": "PASS",
+      "durationMs": 673,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/openapi-drift.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "web-production-build",
+      "status": "PASS",
+      "durationMs": 327,
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "apps/web/vite.config.ts"
+      ]
+    },
+    {
+      "id": "architecture",
+      "status": "PASS",
+      "durationMs": 116,
+      "command": [
+        "node",
+        "tools/architecture/check-import-graph.mts",
+        "--core-only"
+      ]
+    }
+  ]
+}

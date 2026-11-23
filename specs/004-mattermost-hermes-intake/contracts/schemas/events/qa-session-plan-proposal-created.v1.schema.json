@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:qa-session-plan-proposal-created:v1",
+  "title": "QA Session Plan Proposal Created Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "subject",
+    "inputFingerprint",
+    "expiresAt",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "const": "CURRENT"
+    },
+    "subject": {
+      "$ref": "#/$defs/workItemSubject"
+    },
+    "inputFingerprint": {
+      "$ref": "#/$defs/digest"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "workItemSubject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "contentHash"
+      ],
+      "properties": {
+        "kind": {
+          "const": "WORK_ITEM"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "contentHash": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "command": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/security/008/access-boundaries.spec.ts",
+    "tests/integration/security/008/exact-approvals.spec.ts",
+    "tests/integration/security/008/secret-canaries.spec.ts",
+    "tests/integration/security/008/network-policy.spec.ts",
+    "tests/integration/security/008/secret-resolution.spec.ts",
+    "tests/integration/security/008/telemetry-redaction.spec.ts",
+    "tests/integration/security/008/identity-tokens.spec.ts",
+    "tests/integration/security/008/corporate-identity.spec.ts",
+    "tests/integration/security/008/corporate-sessions.spec.ts",
+    "tests/integration/security/008/corporate-auth-http.spec.ts",
+    "tests/unit/008/security-scans.spec.ts",
+    "tests/unit/008/hermes-evaluation.spec.ts",
+    "tests/unit/008/hermes-model-boundary.spec.ts",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 0,
+  "durationBoundMs": 600000,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  13 passed (13)\n      Tests  135 passed (135)\n   Start at  04:15:38\n   Duration  24.98s (transform 2.32s, setup 0ms, import 8.51s, tests 15.34s, environment 1ms)\n\n"
+}

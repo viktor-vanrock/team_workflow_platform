@@ -1,0 +1,81 @@
+{
+  "renderedAt": "2026-09-10T12:53:13.038Z",
+  "renderer": "mermaid@11.12.0",
+  "count": 11,
+  "diagrams": [
+    {
+      "name": "01-context",
+      "viewBox": "0 0 756.4453125 1304.6566162109375",
+      "labels": 15,
+      "parsed": true
+    },
+    {
+      "name": "02-modules",
+      "viewBox": "-27.5 0 2317.89453125 1150",
+      "labels": 57,
+      "parsed": true
+    },
+    {
+      "name": "03-extension-binding",
+      "viewBox": "0 0 2740.28125 410",
+      "labels": 25,
+      "parsed": true
+    },
+    {
+      "name": "04-domain-data",
+      "viewBox": "0 0 2436.88671875 1950",
+      "labels": 55,
+      "parsed": true
+    },
+    {
+      "name": "05-command-delivery",
+      "viewBox": "-50 -10 2297 1312",
+      "labels": 33,
+      "parsed": true
+    },
+    {
+      "name": "06-qa-workflow",
+      "viewBox": "0 0 3489.5625 263",
+      "labels": 25,
+      "parsed": true
+    },
+    {
+      "name": "07-gitlab-automation",
+      "viewBox": "-50 -10 2322.5 952",
+      "labels": 25,
+      "parsed": true
+    },
+    {
+      "name": "08-evidence",
+      "viewBox": "0 0 1147.25 1644.6566162109375",
+      "labels": 31,
+      "parsed": true
+    },
+    {
+      "name": "09-security",
+      "viewBox": "0 0 626.1171875 1803.609375",
+      "labels": 24,
+      "parsed": true
+    },
+    {
+      "name": "10-local-deployment",
+      "viewBox": "0 0 1496.58984375 804.8958740234375",
+      "labels": 28,
+      "parsed": true
+    },
+    {
+      "name": "11-corporate-deployment",
+      "viewBox": "0 0 1288.9765625 1510.6566162109375",
+      "labels": 33,
+      "parsed": true
+    }
+  ],
+  "documentCheck": {
+    "figures": 11,
+    "renderedSvgs": 11,
+    "brokenAnchors": [],
+    "externalScripts": 0,
+    "horizontalOverflow": false
+  },
+  "zoomCheck": true
+}

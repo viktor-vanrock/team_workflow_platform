@@ -1,0 +1,8 @@
+{
+  "args": [
+    "tools/architecture/check-import-graph.mts"
+  ],
+  "exitCode": 0,
+  "durationMs": 165,
+  "output": "Architecture graph accepted (24 projects; no deep imports, cycles, or dynamic loading).\n"
+}

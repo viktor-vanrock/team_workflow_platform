@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "feature-008-development-security",
+  "version": "1.1.0",
+  "contour": "DEVELOPMENT_MOCKS",
+  "reportMaximumAgeMs": 604800000,
+  "databaseMaximumAgeMs": 604800000,
+  "acceptedRiskSeverities": ["MODERATE", "LOW"],
+  "scanners": {
+    "DEPENDENCY": {
+      "id": "pnpm-audit-snapshot",
+      "version": "11.21.0"
+    },
+    "IMAGE": {
+      "id": "docker-scout-adapter-fixture",
+      "version": "0.20.0"
+    }
+  },
+  "dependencySnapshot": {
+    "path": "reports/008-pilot-hardening-and-conformance/dependency-audit-959f2faa8424.json",
+    "sha256": "sha256:959f2faa842443124f9be098c13aa7e27ddceb0b0d68e25d215a2f0003e58bee",
+    "lockDigest": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7"
+  },
+  "acceptedFindings": []
+}

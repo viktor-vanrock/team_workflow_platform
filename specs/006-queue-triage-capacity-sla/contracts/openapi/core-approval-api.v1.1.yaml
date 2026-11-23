@@ -1,0 +1,197 @@
+openapi: 3.1.0
+info:
+  title: AWP Core Approval API compatibility successor
+  version: 1.1.0
+  description: >-
+    Additive contract for the existing scoped Approval routes. It preserves the
+    frozen Feature 001 v1 resource and adds approval-subject:v2, whose
+    PLATFORM_ACTION branch has no fabricated Connector Binding/Profile refs and
+    exposes only a viewer-safe authorization-scope witness; complete authorization
+    bases remain private execution/audit evidence.
+    There is no new route: clients select by subjectSchemaId/schemaVersion and
+    Core reads both versions while Feature 006 writes v2.
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/approvals/{approvalId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ApprovalId'
+    get:
+      operationId: getApprovalV11
+      tags: [Approvals]
+      description: >-
+        Core first authorizes the path Project, then validates the stored subject
+        without serializing it. For a Feature 006 authorized-portfolio candidate,
+        the caller must currently hold matching entitlement/classification scope
+        for every Project named by target/anchor and its recomputed authorized
+        Project-set hash must equal the candidate hash. Missing, malformed and
+        unauthorized subjects share the same closed 404 shape and timing class.
+        The response never includes membership, entitlement or role-assignment
+        record IDs for a v2 PLATFORM_ACTION.
+      security:
+        - oidc: []
+      responses:
+        '200':
+          description: Exact immutable v1 or v2 subject and current decision/effect status.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalResource'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/approvals/{approvalId}/decisions:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ApprovalId'
+    post:
+      operationId: decideApprovalV11
+      tags: [Approvals]
+      description: >-
+        Applies the same subject-aware all-named-Project and exact authorized-set
+        check as GET before displaying or deciding the candidate, in addition to
+        the required Lead role and separation of duty.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalDecisionRequest'
+      responses:
+        '200':
+          description: >-
+            Decision recorded after live authorization. For a Feature 006
+            PLATFORM_ACTION APPROVE, Core atomically verifies the v2 candidate,
+            resolves and verifies the same-action internal execution witness,
+            consumes authorization, applies the mutation and completes the action.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalResource'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: http://localhost:3000/.well-known/openid-configuration
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ApprovalId:
+      name: approvalId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/commands/capability-command-intent.v1.schema.json#/$defs/IdempotencyKey'
+    CorrelationId:
+      name: X-Correlation-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      description: Exact quoted Approval resourceVersion returned by GET.
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+  headers:
+    ETag:
+      description: Quoted monotonic Approval resourceVersion.
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+  schemas:
+    NonDisclosureProblem:
+      description: >-
+        Exact closed body and timing class shared by a missing, malformed or
+        unauthorized Approval subject. It has no detail, instance or violations.
+      type: object
+      additionalProperties: false
+      required: [type, title, status, code, correlationId]
+      properties:
+        type:
+          const: 'urn:awp:problem:not-found'
+        title:
+          const: Not Found
+        status:
+          const: 404
+        code:
+          const: NOT_FOUND
+        correlationId:
+          type: string
+          format: uuid
+    ApprovalResource:
+      discriminator:
+        propertyName: subjectSchemaId
+        mapping:
+          urn:awp:contracts:commands:approval-subject:v1: '../../../001-extension-kernel-local-skeleton/contracts/schemas/commands/approval-subject.v1.schema.json'
+          urn:awp:contracts:commands:approval-subject:v2: '../schemas/approval-subject.v2.schema.json'
+      oneOf:
+        - $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/commands/approval-subject.v1.schema.json'
+        - $ref: '../schemas/approval-subject.v2.schema.json'
+    ApprovalDecisionRequest:
+      type: object
+      additionalProperties: false
+      required: [decision]
+      properties:
+        decision:
+          enum: [APPROVE, REJECT]
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+  responses:
+    NotFoundOrNotAuthorized:
+      description: Missing and unauthorized scoped subjects are indistinguishable.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/NonDisclosureProblem'
+    Problem:
+      description: Closed scoped failure; authorization is checked before resource disclosure.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '../../../001-extension-kernel-local-skeleton/contracts/schemas/common/problem-details.v1.schema.json'

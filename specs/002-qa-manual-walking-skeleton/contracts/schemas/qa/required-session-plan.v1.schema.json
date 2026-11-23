@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:required-session-plan:v1",
+  "title": "Immutable Required Session Plan Revision",
+  "description": "Content-addressed plan revision. Changes create a new revision; consumers pin {id,revision,contentHash}.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "revision", "workspaceId", "projectId", "workItemId", "previousRevisionRef", "requestExtensionSnapshotRef", "requestInputRevisionRef", "projectContextRef", "projectContextPolicySetHash", "readinessAssessmentRef", "operationalReadinessProof", "dorInputFingerprint", "dorRuleSetRef", "dodRuleSetRef", "evidencePolicyRef", "riskReviewPolicyRef", "publicationReason", "slots", "contentHash", "createdBy", "createdAt", "publishedBy", "publicationAuthorizationBasisHash", "publishedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "format": "uuid" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "previousRevisionRef": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" }
+      ]
+    },
+    "requestExtensionSnapshotRef": {
+      "description": "Exact content-addressed snapshot of the QA Request Extension inputs used to publish this plan revision.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestExtensionSnapshotRef"
+    },
+    "requestInputRevisionRef": {
+      "description": "Exact append-only DoR content revision selected by requestExtensionSnapshotRef when this plan revision was published.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef"
+    },
+    "projectContextRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "projectContextPolicySetHash": {
+      "description": "Canonical hash of the exact context target/scope/checklist allowlists used to validate every slot policy ref.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "readinessAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+    "operationalReadinessProof": { "$ref": "#/$defs/OperationalReadinessProof" },
+    "dorInputFingerprint": {
+      "description": "Exact readiness-assessment input fingerprint revalidated for publication, including any same-scope DoR waiver subject/rule/fingerprint/expiry.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "dorRuleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "dodRuleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "evidencePolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "riskReviewPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef" },
+    "publicationReason": { "type": "string", "enum": ["INITIAL", "READINESS_CHANGE", "SCOPE_CHANGE", "WAIVER_APPLIED", "CORRECTION"] },
+    "slots": {
+      "type": "array",
+      "minItems": 1,
+      "contains": {
+        "type": "object",
+        "properties": { "resolution": { "const": "REQUIRED" } },
+        "required": ["resolution"]
+      },
+      "minContains": 1,
+      "items": { "$ref": "#/$defs/Requirement" }
+    },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "publishedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "publicationAuthorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "publishedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "PublicationCommand": {
+      "description": "HUMAN publication command. INITIAL is exactly the null-predecessor branch; every revision reason requires an exact current predecessor and aggregate If-Match.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedCurrentPlanRef", "requestExtensionSnapshotRef", "requestInputRevisionRef", "projectContextRef", "projectContextPolicySetHash", "readinessAssessmentRef", "operationalReadinessProof", "dorInputFingerprint", "dorRuleSetRef", "dodRuleSetRef", "evidencePolicyRef", "riskReviewPolicyRef", "publicationReason", "requirements"],
+      "properties": {
+        "expectedCurrentPlanRef": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" }
+          ]
+        },
+        "requestExtensionSnapshotRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestExtensionSnapshotRef" },
+        "requestInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+        "projectContextRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "projectContextPolicySetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "readinessAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+        "operationalReadinessProof": { "$ref": "#/$defs/OperationalReadinessProof" },
+        "dorInputFingerprint": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "dorRuleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+        "dodRuleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+        "evidencePolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+        "riskReviewPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef" },
+        "publicationReason": { "type": "string", "enum": ["INITIAL", "READINESS_CHANGE", "SCOPE_CHANGE", "WAIVER_APPLIED", "CORRECTION"] },
+        "requirements": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Requirement" } }
+      },
+      "allOf": [{ "$ref": "#/$defs/PublicationPredecessorDecision" }]
+    },
+    "PublicationPredecessorDecision": {
+      "description": "Closed reason/predecessor truth table used by the public publication command: INITIAL iff no current plan; every other reason iff an exact current predecessor exists.",
+      "type": "object",
+      "required": ["expectedCurrentPlanRef", "publicationReason"],
+      "properties": {
+        "expectedCurrentPlanRef": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" }
+          ]
+        },
+        "publicationReason": { "type": "string", "enum": ["INITIAL", "READINESS_CHANGE", "SCOPE_CHANGE", "WAIVER_APPLIED", "CORRECTION"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "publicationReason": { "const": "INITIAL" } }, "required": ["publicationReason"] },
+          "then": { "properties": { "expectedCurrentPlanRef": { "type": "null" } } },
+          "else": { "properties": { "expectedCurrentPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" } } }
+        }
+      ]
+    },
+    "OperationalReadinessProof": {
+      "description": "Confirmed generic request.transition(READY) proof plus the current pre-DONE Core projection. The immutable confirmation remains normalizedStatus=READY; initial publication also requires currentNormalizedStatus=READY, while later revisions may retain that proof after Core advances.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessmentRef", "requestInputRevisionRef", "commandRef", "operationalResultRef", "confirmationReceiptRef", "rawExternalState", "normalizedStatus", "currentNormalizedStatus", "externalVersion", "confirmedAt"],
+      "properties": {
+        "assessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+        "requestInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+        "commandRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" },
+        "operationalResultRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+        "confirmationReceiptRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+        "rawExternalState": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "normalizedStatus": { "const": "READY" },
+        "currentNormalizedStatus": { "type": "string", "enum": ["READY", "PLANNED", "IN_PROGRESS", "REVIEW", "BLOCKED"] },
+        "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "confirmedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirementKey", "ordinal", "mode", "purpose", "minimumSessionCount", "requiredCapabilities", "targetPolicyRef", "scopePolicyRef", "checklistPolicyRefs", "resolution", "contentHash"],
+      "properties": {
+        "requirementKey": { "$ref": "../common/qa-common.v1.schema.json#/$defs/StableKey" },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "mode": { "const": "MANUAL" },
+        "purpose": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "minimumSessionCount": { "type": "integer", "minimum": 1 },
+        "requiredCapabilities": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/StableKey" } },
+        "targetPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "scopePolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "checklistPolicyRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+        "resolution": { "type": "string", "enum": ["REQUIRED", "WAIVED"] },
+        "waiverRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" },
+        "carriedForwardFromRequirementRef": {
+          "description": "Exact prior-revision requirement lineage. Prior completed Sessions count only when this ref has the same stable requirementKey, ordinal and contentHash as the current REQUIRED slot; any content change omits the ref and requires new Session coverage.",
+          "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionRequirementRef"
+        },
+        "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "resolution": { "const": "WAIVED" } }, "required": ["resolution"] },
+          "then": { "required": ["waiverRef"], "not": { "required": ["carriedForwardFromRequirementRef"] } },
+          "else": { "not": { "required": ["waiverRef"] } }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "revision": { "const": 1 } }, "required": ["revision"] },
+      "then": {
+        "properties": {
+          "previousRevisionRef": { "type": "null" },
+          "publicationReason": { "const": "INITIAL" },
+          "operationalReadinessProof": { "properties": { "currentNormalizedStatus": { "const": "READY" } } },
+          "slots": { "items": { "not": { "required": ["carriedForwardFromRequirementRef"] } } }
+        }
+      },
+      "else": {
+        "properties": {
+          "previousRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+          "publicationReason": { "enum": ["READINESS_CHANGE", "SCOPE_CHANGE", "WAIVER_APPLIED", "CORRECTION"] }
+        }
+      }
+    },
+    {
+      "description": "Requirement ordinals and keys are unique within one immutable revision; enforced by semantic conformance validation in addition to schema shape."
+    }
+  ]
+}

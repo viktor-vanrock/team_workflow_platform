@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:gitlab-profile-configuration:v1",
+  "title": "GitLab Profile connectorConfiguration content v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "numericGitLabProjectId",
+    "apiFamily",
+    "credentialRoutingMode",
+    "allowedRefs",
+    "sourceContext",
+    "trigger",
+    "suiteMappings",
+    "resultContract",
+    "artifactPolicy",
+    "webhook",
+    "reconciliation",
+    "ratePolicy",
+    "normalizedInfrastructureCodes",
+    "transportRetry",
+    "productionDenied"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "gitlab-profile-configuration@1.0.0" },
+    "numericGitLabProjectId": { "type": "integer", "minimum": 1 },
+    "apiFamily": { "const": "v4" },
+    "credentialRoutingMode": { "const": "NAMED_CONNECTION_SLOTS_V1" },
+    "allowedRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^(?!.*\\*\\*)(?!.*\\.\\.)[A-Za-z0-9._/-]{1,255}$"
+      }
+    },
+    "sourceContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mergeRequestRead", "commitRead", "buildRead"],
+      "properties": {
+        "mergeRequestRead": { "const": true },
+        "commitRead": { "const": true },
+        "buildRead": { "const": true }
+      }
+    },
+    "trigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logicalPipelineKey",
+        "sourceRefPolicyRef",
+        "dialect",
+        "ref",
+        "pipelineNameTemplate",
+        "markerInputName",
+        "allowedInputNames",
+        "inputMappings",
+        "inputMappingHash"
+      ],
+      "properties": {
+        "logicalPipelineKey": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+        },
+        "sourceRefPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "dialect": { "enum": ["TYPED_INPUTS", "BOUNDED_VARIABLES"] },
+        "ref": {
+          "type": "string",
+          "pattern": "^(?!.*\\*\\*)(?!.*\\.\\.)[A-Za-z0-9._/-]{1,255}$"
+        },
+        "pipelineNameTemplate": { "const": "awp:{attemptId}:{requestHash}" },
+        "markerInputName": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+        },
+        "allowedInputNames": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+          }
+        },
+        "inputMappings": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["logicalField", "providerInputName", "inputType", "source"],
+            "properties": {
+              "logicalField": {
+                "oneOf": [
+                  {
+                    "enum": [
+                      "REQUEST_MARKER",
+                      "SUITE_KEY",
+                      "ENVIRONMENT_REF",
+                      "COMMIT_SHA",
+                      "MERGE_REQUEST_IID",
+                      "BUILD_REF",
+                      "BROWSER"
+                    ]
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^PARAMETER\\.[a-z][A-Za-z0-9_]{0,63}$"
+                  }
+                ]
+              },
+              "providerInputName": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+              },
+              "inputType": { "enum": ["STRING", "INTEGER", "BOOLEAN"] },
+              "source": { "enum": ["SERVER_CONTEXT", "SUITE_PARAMETER"] },
+              "allowedValues": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 64,
+                "uniqueItems": true,
+                "items": {
+                  "oneOf": [
+                    { "type": "string", "maxLength": 256 },
+                    { "type": "integer" },
+                    { "type": "boolean" }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "inputMappingHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+      }
+    },
+    "suiteMappings": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "suiteKey",
+          "logicalPipelineKey",
+          "sourceRefPolicyRef",
+          "resultJobKey",
+          "logicalExecutionContractHash",
+          "resultJobName",
+          "resultArtifactPath",
+          "allowedEnvironmentRefs"
+        ],
+        "properties": {
+          "suiteKey": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$" },
+          "logicalPipelineKey": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+          },
+          "sourceRefPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+          "resultJobKey": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+          },
+          "logicalExecutionContractHash": {
+            "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+          },
+          "resultJobName": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]{1,128}$"
+          },
+          "resultArtifactPath": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9._/-]{1,512}$"
+          },
+          "allowedEnvironmentRefs": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "uniqueItems": true,
+            "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+          }
+        }
+      }
+    },
+    "resultContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaRef", "maxBytes"],
+      "properties": {
+        "schemaRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/schemaRef" },
+        "maxBytes": { "type": "integer", "minimum": 1, "maximum": 10485760 }
+      }
+    },
+    "artifactPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyRef", "maxArtifactBytes", "allowedClassifications", "checksumAlgorithm"],
+      "properties": {
+        "policyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "maxArtifactBytes": { "type": "integer", "minimum": 1, "maximum": 104857600 },
+        "allowedClassifications": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/classification" }
+        },
+        "checksumAlgorithm": { "const": "SHA-256" }
+      }
+    },
+    "webhook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verificationMode", "deliverySemantics", "eventKinds", "freshnessSeconds", "dedupeHorizonSeconds"],
+      "properties": {
+        "verificationMode": { "const": "STANDARD_WEBHOOKS_HMAC_SHA256" },
+        "deliverySemantics": { "const": "AT_LEAST_ONCE_SIGNAL_ONLY" },
+        "eventKinds": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["PIPELINE_HOOK", "JOB_HOOK"] }
+        },
+        "freshnessSeconds": { "type": "integer", "minimum": 30, "maximum": 900 },
+        "dedupeHorizonSeconds": { "type": "integer", "minimum": 300, "maximum": 604800 }
+      }
+    },
+    "reconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "webhookGraceSeconds",
+        "pollIntervalSeconds",
+        "lookupConsistencyWindowSeconds",
+        "freshnessTargetSeconds",
+        "executionTimeoutSeconds",
+        "maxConcurrentReads"
+      ],
+      "properties": {
+        "webhookGraceSeconds": { "type": "integer", "minimum": 1, "maximum": 300 },
+        "pollIntervalSeconds": { "type": "integer", "minimum": 5, "maximum": 300 },
+        "lookupConsistencyWindowSeconds": { "type": "integer", "minimum": 5, "maximum": 600 },
+        "freshnessTargetSeconds": { "type": "integer", "minimum": 5, "maximum": 600 },
+        "executionTimeoutSeconds": { "type": "integer", "minimum": 30, "maximum": 86400 },
+        "maxConcurrentReads": { "type": "integer", "minimum": 1, "maximum": 16 }
+      }
+    },
+    "ratePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rateBudgetPerMinute",
+        "maxConcurrentRequests",
+        "requestTimeoutMs",
+        "costBudgetRef"
+      ],
+      "properties": {
+        "rateBudgetPerMinute": { "type": "integer", "minimum": 1, "maximum": 600 },
+        "maxConcurrentRequests": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "requestTimeoutMs": { "type": "integer", "minimum": 100, "maximum": 60000 },
+        "costBudgetRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+      }
+    },
+    "normalizedInfrastructureCodes": {
+      "description": "Provider-error normalization vocabulary only; QA decides whether any code is retryable.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+      }
+    },
+    "transportRetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxPreEffectTransportRetries",
+        "retryableHttpStatuses",
+        "minimumBackoffMs",
+        "maximumBackoffMs"
+      ],
+      "properties": {
+        "maxPreEffectTransportRetries": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "retryableHttpStatuses": {
+          "type": "array",
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": { "enum": [429, 500, 502, 503, 504] }
+        },
+        "minimumBackoffMs": { "type": "integer", "minimum": 100, "maximum": 60000 },
+        "maximumBackoffMs": { "type": "integer", "minimum": 100, "maximum": 300000 }
+      }
+    },
+    "productionDenied": { "const": true }
+  }
+}

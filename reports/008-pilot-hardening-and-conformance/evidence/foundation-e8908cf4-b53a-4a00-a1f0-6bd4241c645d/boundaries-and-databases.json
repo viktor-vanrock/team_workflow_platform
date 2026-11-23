@@ -1,0 +1,21 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/008",
+    "--exclude",
+    "tests/integration/008/published-runtime-configuration.spec.ts",
+    "--exclude",
+    "tests/integration/008/published-deployment-startup.spec.ts",
+    "--exclude",
+    "tests/integration/008/automation-availability.spec.ts",
+    "--exclude",
+    "tests/integration/008/runtime-composition.spec.ts",
+    "--exclude",
+    "tests/integration/008/development-probes.spec.ts",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 0,
+  "durationMs": 276512,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n{\"timestamp\":\"2026-09-04T22:49:20.973Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"926da92e-7f30-4153-ad25-9a671af93d1f\",\"causationId\":\"fbb02f09-2350-407c-9da6-156764645e71\",\"operation\":\"record.publish\",\"outcome\":\"FAILED\",\"latencyMs\":1}\n{\"timestamp\":\"2026-09-04T22:49:20.990Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"8f5ad173-d1d9-4941-942e-06ab6a6a0610\",\"causationId\":\"309698d0-56a0-4025-96ef-3f159c53a286\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":14}\n{\"timestamp\":\"2026-09-04T22:49:21.002Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"14f259d9-fb54-43a9-9c6b-3cd3432e0a56\",\"causationId\":\"162cf552-518d-441a-bb90-089587661018\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":9}\n{\"timestamp\":\"2026-09-04T22:49:23.293Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"af522c49-a87e-4ca6-8453-72d7e93c164f\",\"causationId\":\"8563bdbf-4d46-4da4-a4e2-c0a3ae3213b0\",\"operation\":\"record.publish\",\"outcome\":\"FAILED\",\"latencyMs\":0}\n{\"timestamp\":\"2026-09-04T22:49:23.309Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"7db820cc-d94a-4626-9998-43b39a873c6f\",\"causationId\":\"157cb0bc-3d4e-4929-b73d-83ec5a6ac0ef\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":15}\n{\"timestamp\":\"2026-09-04T22:49:23.321Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"20805726-e481-4887-91b4-554dd27aba40\",\"causationId\":\"ee1ae5bb-8892-4170-9c11-aab8459f5619\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":10}\n{\"timestamp\":\"2026-09-04T22:50:11.962Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"664c1be2-f22a-49d7-905b-7c9f19c50c10\",\"projectId\":\"124ccf53-1983-42ff-8f08-2b213b03eff7\",\"correlationId\":\"e5a3be1f-0857-45a5-88f1-1f51c2b085eb\",\"causationId\":\"6a833182-4b69-4d7e-b669-f971c1099c49\",\"operation\":\"http.request\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":4}\n{\"timestamp\":\"2026-09-04T22:50:11.976Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"worker\",\"workspaceId\":\"664c1be2-f22a-49d7-905b-7c9f19c50c10\",\"projectId\":\"124ccf53-1983-42ff-8f08-2b213b03eff7\",\"correlationId\":\"e5a3be1f-0857-45a5-88f1-1f51c2b085eb\",\"causationId\":\"6a833182-4b69-4d7e-b669-f971c1099c49\",\"operation\":\"worker.commands\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":0}\n\n Test Files  41 passed (41)\n      Tests  240 passed (240)\n   Start at  02:45:47\n   Duration  275.95s (transform 3.34s, setup 0ms, import 44.41s, tests 227.54s, environment 5ms)\n\n"
+}

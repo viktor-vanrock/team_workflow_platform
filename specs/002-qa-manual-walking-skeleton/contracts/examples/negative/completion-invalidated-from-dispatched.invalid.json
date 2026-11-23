@@ -1,0 +1,21 @@
+{
+  "state": "INVALIDATED",
+  "terminalFromState": "DISPATCHED",
+  "terminalReason": "Invalidation after dispatch is forbidden",
+  "closeApprovalRef": {
+    "approvalId": "30303030-3030-4030-8030-303030303030",
+    "subjectHash": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  "approvedBy": {
+    "type": "HUMAN",
+    "principalId": "78787878-7878-4878-8878-787878787878",
+    "issuer": "https://id.example.test",
+    "subject": "qa-lead-1"
+  },
+  "approvedAt": "2026-08-27T12:59:00Z",
+  "commandRef": {
+    "commandId": "40404040-4040-4040-8040-404040404040"
+  },
+  "effectKeyHash": "sha256:4141414141414141414141414141414141414141414141414141414141414141"
+}
+

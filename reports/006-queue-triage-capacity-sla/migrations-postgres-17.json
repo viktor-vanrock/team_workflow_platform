@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "gate": "migration-matrix",
+  "postgresMajor": 17,
+  "image": "postgres:17.7-bookworm",
+  "status": "PASS",
+  "startedAt": "2026-09-03T11:13:38.460Z",
+  "finishedAt": "2026-09-03T11:13:50.635Z",
+  "durationMs": 12175,
+  "exitCode": 0,
+  "taskSourceHash": "sha256:bcfb30c1b9aef5b160f48c7d7361e9e27e28a0bea441bc62fd3e6fc7eca9d249",
+  "migrationCount": 4,
+  "migrationOrders": [
+    130,
+    135,
+    140,
+    2070
+  ],
+  "versions": {
+    "core": 140,
+    "qa": 2070
+  },
+  "invariants": {
+    "freshInstall": true,
+    "currentMinusOneUpgrade": true,
+    "repeatNoop": true,
+    "failedRecovery": true,
+    "transactionalPublication": true,
+    "runtimeComposition": "qa-jira-gitlab-mattermost-queue-local",
+    "rebuildingVisible": true,
+    "capacityReconciliationCheckpointed": true,
+    "enforcedActivationFailClosed": true
+  },
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/integration/006-migration-matrix.spec.ts",
+        "sha256": "sha256:bbdf0fb545a63c7f469735dbad3fc8caab24f21af18a674fad48a492ef3f971c"
+      },
+      {
+        "path": "tests/integration/006/us1-queue-projection.spec.ts",
+        "sha256": "sha256:c5d8ec9da82ddefd0227f8738e0856fdaeb02844b1147160a9bc48e6848a3a28"
+      },
+      {
+        "path": "tests/integration/006/us4-policy-publication.spec.ts",
+        "sha256": "sha256:e4e05923e65bded555e5b3feb99b82ba1bfab035fa805ef86059e717a0bc7b0b"
+      },
+      {
+        "path": "tests/integration/006/us4-jira-capacity-reconciliation.spec.ts",
+        "sha256": "sha256:32523aa02c1ae088b111795df08302bb70ef8ae32a74edb36b5d4ff21750eb33"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0130-queue-policy-calendar.ts",
+        "sha256": "sha256:fbd8ea5b840b2b268efa9867be357d18a4ffc32a1a53d9ec271c380986509c78"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0135-queue-projection-sla.ts",
+        "sha256": "sha256:bd027fb28e99df057d62c455e576ed0fff0ca0e63f87df86c8319ed2f5346f65"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0140-queue-controls-capacity.ts",
+        "sha256": "sha256:9758bbcbb2b2944718f7673f6d4bac6255c48d67b2ba1322c7ef298e5e62f907"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2070-qa-queue-facts.ts",
+        "sha256": "sha256:3b7b79c0991c3ad0002778c6130b907ae604bb7f6ac236c05ed9ccb74c008b3e"
+      },
+      {
+        "path": "packages/runtime-composition/src/queue/bootstrap.ts",
+        "sha256": "sha256:9a54ce53b1bed97dee761e3d870c40ccae00082edef33b1d62294762e5319cea"
+      }
+    ],
+    "aggregateSha256": "sha256:c16aeed7441bb6a98868c6170426ef2dbc09d035e02a8b56240db39818212362"
+  }
+}

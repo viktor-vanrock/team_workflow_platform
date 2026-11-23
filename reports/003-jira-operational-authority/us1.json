@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "feature": "003-jira-operational-authority",
+  "gate": "us1",
+  "startedAt": "2026-09-03T10:03:27.148Z",
+  "finishedAt": "2026-09-03T10:03:29.244Z",
+  "status": "PASS",
+  "hashes": {
+    "tests/contract/003/us1-request-create.spec.ts": "sha256:7b9e5d81fd60a24d00d57684bbd762ddb3e76098d1366537b40ecbb35ed5e0f5",
+    "tests/integration/003/us1-central-request.spec.ts": "sha256:a7e2088a3dfd58c799aa0908546dd4825b96ef80d6a820abd221529b6189a7cf",
+    "tests/integration/003/us1-create-idempotency.spec.ts": "sha256:29bc466aa937925c52cde4d4c33314bc1961771e0022d34d947e1f8e2fb1cc33",
+    "tests/integration/003/us1-create-ambiguity.spec.ts": "sha256:d0d7bc9320298433d140b53aba6fed02ea767936cfdf89752e4a6d7999ff33af",
+    "tests/integration/003/us1-sub-effect-recovery.spec.ts": "sha256:e0a1b8df6d6ff5395092f6079dc2efc3dffdf7836194ccce405dccda1977b35e",
+    "tests/integration/security/003/us1-create-authorization.spec.ts": "sha256:963d8d97e13b797e73a7306bd6d0a1066b2f30ce6beb018254881d156ea9e79d",
+    "tests/e2e/003-us1-central-request.spec.ts": "sha256:d56b4274151f7e05acbb6df611127d6acd4ed1545d127504816d1f2a8e39e87f"
+  }
+}

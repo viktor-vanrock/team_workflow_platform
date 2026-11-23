@@ -1,0 +1,12 @@
+{
+  "expectedPreviousResultRevisionRef": null,
+  "expectedAttemptSetHash": "sha256:7373737373737373737373737373737373737373737373737373737373737373",
+  "expectedMaximumAttemptNo": 1,
+  "expectedObservationSetHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "expectedObservationCount": 0,
+  "reviewFlags": [],
+  "result": "PASS",
+  "actualOutcome": "The caller claims PASS without any current-leaf Observation.",
+  "decisionReason": "This must be rejected before the result revision is written.",
+  "artifactIds": []
+}

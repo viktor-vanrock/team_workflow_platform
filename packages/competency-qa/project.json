@@ -1,0 +1,49 @@
+{
+  "name": "competency-qa",
+  "root": "packages/competency-qa",
+  "sourceRoot": "packages/competency-qa/src",
+  "projectType": "library",
+  "tags": ["type:pack", "runtime:universal", "domain:qa", "feature:002"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/competency-qa/tsconfig.json --noEmit"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/competency-qa/tsconfig.json --noEmit"
+      }
+    },
+    "test-e2e-002": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "playwright test tests/e2e/acceptance/002-at-014-manual-walking-skeleton.spec.ts"
+      }
+    },
+    "smoke-002": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node tools/smoke/feature-002.mts"
+      }
+    },
+    "trace-002": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node tools/verification/feature-002-trace.mts"
+      }
+    },
+    "verify-002": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node tools/verification/feature-002-gate.mts"
+      }
+    }
+  }
+}

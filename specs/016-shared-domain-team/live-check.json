@@ -1,0 +1,79 @@
+{
+  "checkedAt": "2026-09-09T12:59:19.010Z",
+  "qa": [
+    {
+      "key": "executor.alpha",
+      "role": "qa-executor",
+      "projects": [
+        {
+          "key": "ALPHA",
+          "backlogReadable": true,
+          "projectPageReadable": true,
+          "items": 2
+        },
+        {
+          "key": "BETA",
+          "backlogReadable": true,
+          "projectPageReadable": true,
+          "items": 0
+        }
+      ]
+    },
+    {
+      "key": "executor.qa2",
+      "role": "qa-executor",
+      "projects": [
+        {
+          "key": "ALPHA",
+          "backlogReadable": true,
+          "projectPageReadable": true,
+          "items": 2
+        },
+        {
+          "key": "BETA",
+          "backlogReadable": true,
+          "projectPageReadable": true,
+          "items": 0
+        }
+      ]
+    }
+  ],
+  "documentation": [
+    {
+      "key": "writer.docs",
+      "workspace": "local-tech-writing",
+      "documents": 4
+    },
+    {
+      "key": "lead.docs",
+      "workspace": "local-tech-writing",
+      "documents": 4
+    }
+  ],
+  "retiredAuditor": true,
+  "database": {
+    "before": {
+      "documents": 4,
+      "work_items": 6,
+      "base_seed": 2
+    },
+    "after": {
+      "documents": 4,
+      "work_items": 6,
+      "base_seed": 3,
+      "auditor_assignments": 0,
+      "auditor_memberships": 0,
+      "auditor_active_entitlements": 0
+    }
+  },
+  "browser": {
+    "checked": true,
+    "qa1SwitchObserved": true,
+    "qa2SwitchObserved": true,
+    "projectPageLoaded": true,
+    "homeLink": true,
+    "projectLink": true,
+    "catalogLink": true,
+    "url": "http://localhost:55173/projects"
+  }
+}

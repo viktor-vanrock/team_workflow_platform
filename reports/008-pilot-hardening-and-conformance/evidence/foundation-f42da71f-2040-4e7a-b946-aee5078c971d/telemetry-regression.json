@@ -1,0 +1,11 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/security/002-secret-redaction-scan.spec.ts",
+    "tests/integration/security/request-trust-boundary.spec.ts"
+  ],
+  "exitCode": 0,
+  "durationMs": 1196,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  2 passed (2)\n      Tests  13 passed (13)\n   Start at  22:37:07\n   Duration  667ms (transform 376ms, setup 0ms, import 680ms, tests 11ms, environment 0ms)\n\n"
+}

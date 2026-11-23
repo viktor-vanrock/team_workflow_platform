@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "checkpoint": "US2-manual-session",
+  "status": "PASS",
+  "startedAt": "2026-08-30T22:55:52.368Z",
+  "finishedAt": "2026-08-30T22:56:20.203Z",
+  "invariants": {
+    "mode": "MANUAL",
+    "lifecycle": "PLANNED→READY→RUNNING",
+    "planRequirementPinned": true,
+    "targetAndScopeSnapshotsPinned": true,
+    "readyAgainstStructureHashExact": true,
+    "structuralEditResetsReady": true,
+    "startedSessionStructureLocked": true,
+    "parentScopeAndAcyclic": true,
+    "linkedReplacementOnlyForLockedOriginal": true,
+    "nativeQaRetestLineageAvailable": false,
+    "executionAndReviewIntroduced": false,
+    "coreImportsQaSemantics": false
+  },
+  "evidence": {
+    "sessionNonContainerSuites": 5,
+    "sessionNonContainerTests": 16,
+    "postgresSuites": 1,
+    "postgresTests": 3,
+    "readinessRegressionSuites": 6,
+    "readinessRegressionTests": 20,
+    "typecheckedProjects": 4
+  },
+  "stages": [
+    {
+      "id": "typecheck:packages/competency-qa",
+      "status": "PASS",
+      "durationMs": 3225,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/runtime-composition",
+      "status": "PASS",
+      "durationMs": 2866,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/api",
+      "status": "PASS",
+      "durationMs": 3082,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/web",
+      "status": "PASS",
+      "durationMs": 2351,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "session-eslint",
+      "status": "PASS",
+      "durationMs": 4796,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "packages/competency-qa/src/domain/test-session.ts",
+        "packages/competency-qa/src/domain/snapshots.ts",
+        "packages/competency-qa/src/domain/plan-item.ts",
+        "packages/competency-qa/src/application/target-snapshot-builder.ts",
+        "packages/competency-qa/src/application/scope-snapshot-builder.ts",
+        "packages/competency-qa/src/application/plan-manual-session.ts",
+        "packages/competency-qa/src/application/manage-plan-items.ts",
+        "packages/competency-qa/src/application/prepare-session.ts",
+        "packages/competency-qa/src/application/session-start-guards.ts",
+        "packages/competency-qa/src/application/create-linked-session.ts",
+        "packages/competency-qa/src/application/session-planning-events.ts",
+        "packages/competency-qa/src/persistence/manual-session.repository.ts",
+        "packages/competency-qa/src/persistence/manual-execution.uow.ts",
+        "apps/api/src/extensions/qa-sessions.controller.ts",
+        "packages/competency-qa/src/ui/session-planner.tsx",
+        "packages/competency-qa/src/ui/contribution.tsx"
+      ]
+    },
+    {
+      "id": "session-domain-contract-security",
+      "status": "PASS",
+      "durationMs": 1640,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "packages/competency-qa/src/domain/test-session.spec.ts",
+        "tests/integration/002-session-snapshot-immutability.spec.ts",
+        "tests/integration/security/002-session-start-guards.spec.ts",
+        "tests/integration/002-required-session-plan-session-coverage.spec.ts",
+        "tests/contract/openapi-drift.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "session-postgres-api-lineage-locks",
+      "status": "PASS",
+      "durationMs": 7132,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/002-session-lineage.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "readiness-prerequisite-regression",
+      "status": "PASS",
+      "durationMs": 2052,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "packages/competency-qa/src/application/readiness-evaluator.spec.ts",
+        "tests/contract/002-readiness-model-independence.spec.ts",
+        "tests/integration/002-readiness-staleness.spec.ts",
+        "tests/integration/002-required-session-plan-revisions.spec.ts",
+        "tests/integration/security/002-readiness-authorization.spec.ts",
+        "tests/integration/acceptance/002-readiness-operational-sync.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "openapi-current",
+      "status": "PASS",
+      "durationMs": 224,
+      "command": [
+        "node",
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ]
+    },
+    {
+      "id": "web-production-build",
+      "status": "PASS",
+      "durationMs": 346,
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "apps/web/vite.config.ts"
+      ]
+    },
+    {
+      "id": "architecture",
+      "status": "PASS",
+      "durationMs": 120,
+      "command": [
+        "node",
+        "tools/architecture/check-import-graph.mts",
+        "--core-only"
+      ]
+    }
+  ]
+}

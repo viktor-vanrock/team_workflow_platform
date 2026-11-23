@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node_modules/@playwright/test/cli.js",
+    "test",
+    "tests/e2e/008/pilot-readiness-browser.spec.ts",
+    "--project=chromium",
+    "--workers=1"
+  ],
+  "exitCode": 0,
+  "output": "\nRunning 6 tests using 1 worker\n······\n  6 passed (9.0s)\n(node:24705) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

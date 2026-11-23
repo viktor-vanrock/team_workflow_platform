@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:session-plan-proposal:v1",
+  "title": "SessionPlanProposal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "proposalId",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "workItemVersion",
+    "workItemContentHash",
+    "revision",
+    "sessionSlices",
+    "facts",
+    "explanation",
+    "confidence",
+    "inputFingerprint",
+    "rulesRef",
+    "skillRef",
+    "policyRef",
+    "agentRunRef",
+    "actionProvenanceRef",
+    "state",
+    "expiresAt",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "session-plan-proposal@1.0.0" },
+    "proposalId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "workItemId": { "$ref": "#/$defs/id" },
+    "workItemVersion": { "type": "integer", "minimum": 1 },
+    "workItemContentHash": { "$ref": "#/$defs/hash" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "previousProposalRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "sessionSlices": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["mode", "goal", "environmentRef", "definitionRefs"],
+        "properties": {
+          "mode": { "enum": ["MANUAL", "AUTOMATED"] },
+          "goal": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "environmentRef": { "type": "string", "minLength": 1, "maxLength": 256 },
+          "definitionRefs": {
+            "type": "array",
+            "maxItems": 100,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+          }
+        }
+      }
+    },
+    "facts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceRef", "sourceVersion", "contentHash"],
+        "properties": {
+          "sourceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "sourceVersion": { "type": "string", "minLength": 1, "maxLength": 256 },
+          "contentHash": { "$ref": "#/$defs/hash" }
+        }
+      }
+    },
+    "explanation": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+    "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+    "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+    "agentRunRef": { "$ref": "#/$defs/id" },
+    "actionProvenanceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "modelRef": { "$ref": "#/$defs/versionedHashRef" },
+    "state": { "enum": ["CURRENT", "STALE", "SUPERSEDED", "ACCEPTED"] },
+    "acceptedPlanRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "acceptedBy": { "$ref": "#/$defs/id" },
+    "acceptedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "staleAt": { "type": "string", "format": "date-time" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["revision"], "properties": { "revision": { "const": 1 } } },
+      "then": { "properties": { "previousProposalRef": false } },
+      "else": { "required": ["previousProposalRef"], "properties": { "previousProposalRef": true } }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "CURRENT" } } },
+      "then": {
+        "properties": { "staleAt": false, "acceptedPlanRef": false, "acceptedBy": false, "acceptedAt": false }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "STALE" } } },
+      "then": {
+        "required": ["staleAt"],
+        "properties": { "staleAt": true, "acceptedPlanRef": false, "acceptedBy": false, "acceptedAt": false }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "SUPERSEDED" } } },
+      "then": {
+        "properties": { "staleAt": false, "acceptedPlanRef": false, "acceptedBy": false, "acceptedAt": false }
+      }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "ACCEPTED" } } },
+      "then": {
+        "required": ["acceptedPlanRef", "acceptedBy", "acceptedAt"],
+        "properties": { "acceptedPlanRef": true, "acceptedBy": true, "acceptedAt": true, "staleAt": false }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

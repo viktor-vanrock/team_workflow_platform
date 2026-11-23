@@ -1,0 +1,13 @@
+{
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "findingId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "findingReviewRevisionRef": {
+    "id": "42424242-4242-4242-8242-424242424242",
+    "version": 1,
+    "contentHash": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  "classification": "ACCEPTED_RISK",
+  "dispositionDecision": "ACCEPTED_RISK"
+}
+

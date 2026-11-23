@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:intake:v1",
+  "title": "QA Validation Intake Payload",
+  "description": "Client-supplied Pack payload. Workspace, Project, actor, role, entitlement and the exact confirmed response channel are derived by the server and are therefore forbidden here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "title", "requestKind", "requestedClassificationKey"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "requestKind": { "type": "string", "enum": ["feature-validation", "smoke", "regression", "retest", "investigation"] },
+    "goal": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "scope": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "acceptanceOutcome": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "sourceRefs": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+    },
+    "blockers": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/DeclaredBlocker" }
+    },
+    "dependencies": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+    },
+    "requestedTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "environmentId": { "type": "string", "format": "uuid" },
+        "environmentRevision": { "type": "integer", "minimum": 1 },
+        "buildRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "targetPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "testDataRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "accountLeaseRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+      }
+    },
+    "requestRisk": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "businessImpact": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "desiredDate": { "type": "string", "format": "date" },
+    "checklistRefs": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+    },
+    "roleMetadataRefs": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+    },
+    "requestedClassificationKey": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ClassificationKey" },
+    "defectRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+    "previousSessionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/PreviousSessionRef" },
+    "sourceBuildRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "requestKind": { "const": "retest" } }, "required": ["requestKind"] },
+      "then": true,
+      "else": { "not": { "anyOf": [{ "required": ["defectRef"] }, { "required": ["previousSessionRef"] }, { "required": ["sourceBuildRef"] }] } }
+    }
+  ]
+}

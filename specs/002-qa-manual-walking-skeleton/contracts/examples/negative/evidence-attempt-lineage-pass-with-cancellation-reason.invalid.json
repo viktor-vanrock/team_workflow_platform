@@ -1,0 +1,19 @@
+{
+  "attemptRef": {
+    "id": "62626262-6262-4262-8262-626262626262",
+    "contentHash": "sha256:6262626262626262626262626262626262626262626262626262626262626262"
+  },
+  "attemptNo": 2,
+  "technicalResult": "PASS",
+  "cancellationReason": "This field is illegal because the attempt passed.",
+  "actor": {
+    "type": "HUMAN",
+    "principalId": "77777777-7777-4777-8777-777777777777",
+    "issuer": "https://id.example.test",
+    "subject": "qa-executor-1"
+  },
+  "startedAt": "2026-08-27T12:10:00Z",
+  "endedAt": "2026-08-27T12:12:00Z",
+  "observationRefs": [],
+  "evidenceLinkRefs": []
+}

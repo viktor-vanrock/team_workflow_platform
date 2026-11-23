@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-us1",
+  "contour": "qa-jira-gitlab-local",
+  "startedAt": "2026-09-03T10:38:26.168Z",
+  "finishedAt": "2026-09-03T10:40:28.337Z",
+  "status": "PASS",
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "apps/api/src/extensions/gitlab-automation/qa-automation-availability.controller.ts",
+        "sha256": "sha256:372732da793500103bd990e36e58bf43c96c8a861eaf76d4a295e3df6d4c3b92"
+      },
+      {
+        "path": "apps/api/src/extensions/gitlab-automation/qa-automation-suite-bindings.controller.ts",
+        "sha256": "sha256:8b9b5629cdcef9356846f65a9a7bd95f59c50f124a4d2218da7a2c10878e59be"
+      },
+      {
+        "path": "apps/api/src/extensions/gitlab-automation/qa-automated-sessions.controller.ts",
+        "sha256": "sha256:030b6aa4738684de0be71ed2ce4afc5865831780795929d82471ec537f682fa9"
+      },
+      {
+        "path": "apps/api/src/extensions/gitlab-automation/qa-automation-local.adapters.ts",
+        "sha256": "sha256:44135339136747c0bb6168104befecf269cda1ba2b2bb94e7ab15aa33bb89c32"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/scenarios/gitlab-scenarios.ts",
+        "sha256": "sha256:c8cf27b1c751bbcb729f7198ffeb219bcb1a6a188221bf258f02df2e8239fec0"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/state/gitlab.repository.ts",
+        "sha256": "sha256:90d023402144df5dc01ffdb9546a311732b2438baffb166d2ae37458f42e4bad"
+      },
+      {
+        "path": "packages/competency-qa/src/application/plan-automated-session.ts",
+        "sha256": "sha256:ca8614639feb5bea7f5d066274bcdb8164c318c886aac5b50b69f228a361cc33"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/automated-session.uow.ts",
+        "sha256": "sha256:204cb0a4ff3f0303e58bf1ef960bd7fce8643ab928d8e7f9c46bd9a42fff499d"
+      },
+      {
+        "path": "packages/competency-qa/src/ui/automated-session.tsx",
+        "sha256": "sha256:c8b32c9de19694768c83edf72f1da5d5aba85a82b1501b40a110e20038005a9e"
+      },
+      {
+        "path": "apps/web/src/routes/qa/automated-session.tsx",
+        "sha256": "sha256:90cb1f4d9b5ed8aa2ce95ebbad10518f20fa889ac430d36198e89ff1126e199e"
+      },
+      {
+        "path": "tests/e2e/005-us1-automated-session.spec.ts",
+        "sha256": "sha256:3df120d308a3d279f3eccea800b1e9830b91d962be553b7b3d01ecfeab00a32c"
+      },
+      {
+        "path": "tools/local/gitlab-scenario-catalog.mts",
+        "sha256": "sha256:adf11894da837d42701d28d51e3728b5e5f682d72a3ac1f6ac85f61991a14ec3"
+      }
+    ],
+    "aggregateSha256": "sha256:570ab6719363979117a481e5c66b274f2471a00a851c946d3a8be6ef1e9c5c91"
+  },
+  "scenarios": [
+    {
+      "id": "us1-automated-session",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us1-automated-session",
+        "expectedCapabilityMode": "FULL_QA",
+        "expectedAutomatedSessions": 1,
+        "expectedLinkedSessions": 0,
+        "expectedDenial": null,
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "exactPersistenceEvidence": "tests/e2e/005-us1-automated-session.spec.ts",
+      "behaviorEvidence": "tests/e2e/005-us1-automated-session.spec.ts",
+      "zeroTriggerEvidence": {
+        "mockHubPipelineTriggerCalls": 0,
+        "connectorPipelineTriggerCommands": 0
+      }
+    },
+    {
+      "id": "us1-suite-denied",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us1-suite-denied",
+        "expectedCapabilityMode": "FULL_QA",
+        "expectedAutomatedSessions": 0,
+        "expectedLinkedSessions": 0,
+        "expectedDenial": "SUITE_ALLOWLIST",
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "exactPersistenceEvidence": "tests/e2e/005-us1-automated-session.spec.ts",
+      "behaviorEvidence": "tests/e2e/005-us1-automated-session.spec.ts",
+      "zeroTriggerEvidence": {
+        "mockHubPipelineTriggerCalls": 0,
+        "connectorPipelineTriggerCommands": 0
+      }
+    },
+    {
+      "id": "us1-environment-denied",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us1-environment-denied",
+        "expectedCapabilityMode": "FULL_QA",
+        "expectedAutomatedSessions": 0,
+        "expectedLinkedSessions": 0,
+        "expectedDenial": "ENVIRONMENT_ALLOWLIST",
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "exactPersistenceEvidence": "tests/e2e/005-us1-automated-session.spec.ts",
+      "behaviorEvidence": "tests/e2e/005-us1-automated-session.spec.ts",
+      "zeroTriggerEvidence": {
+        "mockHubPipelineTriggerCalls": 0,
+        "connectorPipelineTriggerCommands": 0
+      }
+    },
+    {
+      "id": "us1-manual-only",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us1-manual-only",
+        "expectedCapabilityMode": "MANUAL_ONLY",
+        "expectedAutomatedSessions": 0,
+        "expectedLinkedSessions": 0,
+        "expectedDenial": "NO_PUBLISHED_SUITE",
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "exactPersistenceEvidence": "tests/e2e/005-us1-automated-session.spec.ts",
+      "behaviorEvidence": "tests/integration/005/us1-availability-and-target-lineage.spec.ts",
+      "zeroTriggerEvidence": {
+        "mockHubPipelineTriggerCalls": 0,
+        "connectorPipelineTriggerCommands": 0
+      }
+    },
+    {
+      "id": "us1-target-change-linked-session",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us1-target-change-linked-session",
+        "expectedCapabilityMode": "FULL_QA",
+        "expectedAutomatedSessions": 2,
+        "expectedLinkedSessions": 1,
+        "expectedDenial": null,
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "exactPersistenceEvidence": "tests/e2e/005-us1-automated-session.spec.ts",
+      "behaviorEvidence": "tests/integration/005/us1-availability-and-target-lineage.spec.ts",
+      "zeroTriggerEvidence": {
+        "mockHubPipelineTriggerCalls": 0,
+        "connectorPipelineTriggerCommands": 0
+      }
+    }
+  ],
+  "invariants": {
+    "exactPublishedSuiteRequired": true,
+    "automatedSessionState": "READY",
+    "automatedPlanItemCount": 1,
+    "configurationPinCount": 3,
+    "manualFlowPreserved": true,
+    "providerTriggerCalls": 0,
+    "inlineApiProviderCalls": 0,
+    "production": "DENIED"
+  },
+  "stages": [
+    {
+      "id": "foundation",
+      "description": "Fresh source-bound Feature 005 foundation",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 78842,
+      "outputHash": "sha256:91adf32cf8089fcb1d1ed8cfd33a01c05d60219f462e6563ff12fbe03072c873"
+    },
+    {
+      "id": "scenario-catalog",
+      "description": "Exactly five documented US1 scenarios with zero-trigger expectations",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 74,
+      "outputHash": "sha256:21f2af6f69fe2af868797d3fc1c45565a9d3545a4dca19dc141b27298b17d5c4"
+    },
+    {
+      "id": "contracts",
+      "description": "US1 schemas, eight API operations, capability intersection and bounded source reads",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 5260,
+      "outputHash": "sha256:61ccefe3fa520b8a86f5638a8ad899680fbce89002bcc01663f074b290791eb5"
+    },
+    {
+      "id": "domain",
+      "description": "Suite lifecycle and immutable automated Session primitives",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1893,
+      "outputHash": "sha256:b80976adb8aceff9418eca72f33e7fc0ccb530ad77bbdf1b62ea08957e508882"
+    },
+    {
+      "id": "integration",
+      "description": "Suite publication, READY persistence, availability/manual fallback and target lineage",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 11675,
+      "outputHash": "sha256:c57177f6720ab28c6db94385192fe405107e1f014760a0d41b1726f3cd61ba8c"
+    },
+    {
+      "id": "authorization",
+      "description": "All denials occur before secret resolution or trigger",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 683,
+      "outputHash": "sha256:4c38271a6b31391200a39139cf9331df682ba00c71fea32ef794898e711daf5f"
+    },
+    {
+      "id": "scenario-persistence",
+      "description": "API/PostgreSQL/Mock Hub journey and all five restart-persistent zero-trigger scenarios",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 7084,
+      "outputHash": "sha256:fda9bcea6dc90ee5b06c3a4cd50e290311e137988df76092c007deddd349cdd7"
+    },
+    {
+      "id": "typecheck-qa",
+      "description": "QA domain, persistence and UI typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3668,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-runtime",
+      "description": "GitLab runtime composition typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4300,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-api",
+      "description": "GitLab automation API typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4898,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-mock-hub",
+      "description": "Stateful Mock Hub typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 981,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-web",
+      "description": "Automated Session route typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2438,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "web-build",
+      "description": "Production web bundle with the automated Session route",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 362,
+      "outputHash": "sha256:48e98825e452ec640ea7abb6e83f4b8f33fceab528400e4f791be3060cd83c96"
+    }
+  ]
+}

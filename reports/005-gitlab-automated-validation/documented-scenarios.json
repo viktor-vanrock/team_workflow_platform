@@ -1,0 +1,757 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "documented-scenarios",
+  "contour": "qa-jira-gitlab-local",
+  "generatedAt": "2026-09-03T10:53:25.370Z",
+  "status": "PASS",
+  "cardinality": {
+    "foundation": 2,
+    "us1": 5,
+    "us2": 7,
+    "us3": 10,
+    "us4": 6,
+    "total": 30
+  },
+  "undocumentedRuntimeIds": [],
+  "missingRuntimeIds": [],
+  "missingQuickstartIds": [],
+  "scenarios": [
+    {
+      "id": "setup-profile-deploy-denied",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "setup-profile-deploy-denied",
+        "expectedDiscovery": "DENIED",
+        "expectedDryRun": true,
+        "expectedDeploySurface": true,
+        "expectedTriggerCalls": 0
+      },
+      "statefulFixtureHash": "sha256:6b862eb75e5cdb5f07a0997a6d36add5aa8e9f846fa4cd0f0a3a5e80d176356d",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "setup-profile-discovery-dry-run",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "setup-profile-discovery-dry-run",
+        "expectedDiscovery": "BOUNDED_READ_ONLY",
+        "expectedDryRun": true,
+        "expectedDeploySurface": false,
+        "expectedTriggerCalls": 0
+      },
+      "statefulFixtureHash": "sha256:a1da89281b7af5bd4d1d97d48cd8e751f3714bef5de0502e6a818f51d7e6ea11",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us1-automated-session",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us1-automated-session",
+        "expectedCapabilityMode": "FULL_QA",
+        "expectedAutomatedSessions": 1,
+        "expectedLinkedSessions": 0,
+        "expectedDenial": null,
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "statefulFixtureHash": "sha256:385d4caeb004f3cd324d34f8b69accc9f8c9007ad4cd79e276fc2f061896f91b",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us1-environment-denied",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us1-environment-denied",
+        "expectedCapabilityMode": "FULL_QA",
+        "expectedAutomatedSessions": 0,
+        "expectedLinkedSessions": 0,
+        "expectedDenial": "ENVIRONMENT_ALLOWLIST",
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "statefulFixtureHash": "sha256:0e38821e4d65508398b43b23ff417dc036c33d373331096c0a71376133872a17",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us1-manual-only",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us1-manual-only",
+        "expectedCapabilityMode": "MANUAL_ONLY",
+        "expectedAutomatedSessions": 0,
+        "expectedLinkedSessions": 0,
+        "expectedDenial": "NO_PUBLISHED_SUITE",
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "statefulFixtureHash": "sha256:06249207c2a1e8591afd8e0b68e12bbdb1eb56474d3aa34ecd514d27d3295f69",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us1-suite-denied",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us1-suite-denied",
+        "expectedCapabilityMode": "FULL_QA",
+        "expectedAutomatedSessions": 0,
+        "expectedLinkedSessions": 0,
+        "expectedDenial": "SUITE_ALLOWLIST",
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "statefulFixtureHash": "sha256:29922c238b61175badf3840d071bcc1ffa5534191cf49c3161e7e3430f113a62",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us1-target-change-linked-session",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us1-target-change-linked-session",
+        "expectedCapabilityMode": "FULL_QA",
+        "expectedAutomatedSessions": 2,
+        "expectedLinkedSessions": 1,
+        "expectedDenial": null,
+        "manualFlowPreserved": true,
+        "expectedTriggerCalls": 0
+      },
+      "statefulFixtureHash": "sha256:39bc34b40756f85886d4dc050802f6b78613bc820d3cc135347c8a1e777c5423",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us2-command-replay",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us2-command-replay",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "CONFIRMED"
+      },
+      "statefulFixtureHash": "sha256:4b517045c40b64b04485491dcd2d571ae9bd72405dcd88d5f270febb8db40aae",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us2-lookup-multiple",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us2-lookup-multiple",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "BOUNDED_AMBIGUITY"
+      },
+      "statefulFixtureHash": "sha256:c3e6287ca44ea3dd35f58813abf25e8742f2e9c4dcea065c14315d05de52d43c",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "LOOKUP_MULTIPLE",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us2-lookup-zero",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us2-lookup-zero",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "BOUNDED_AMBIGUITY"
+      },
+      "statefulFixtureHash": "sha256:3ae39f546383b59d42fed0f38487039f5f3316f8484f8f3b65d549824bff34bb",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "LOOKUP_ZERO",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us2-mismatched-confirmation",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us2-mismatched-confirmation",
+        "expectedLaunchAccepted": false,
+        "expectedRequestClaims": 0,
+        "expectedEffects": 0,
+        "expectedTriggerCalls": 0,
+        "expectedProviderPipelines": 0,
+        "expectedResolution": "REJECTED"
+      },
+      "statefulFixtureHash": "sha256:c0f0e88e28e25d334b47cc3bcb07184b84a8ae318beda35422f685f619ec89a3",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us2-stale-confirmation",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us2-stale-confirmation",
+        "expectedLaunchAccepted": false,
+        "expectedRequestClaims": 0,
+        "expectedEffects": 0,
+        "expectedTriggerCalls": 0,
+        "expectedProviderPipelines": 0,
+        "expectedResolution": "REJECTED"
+      },
+      "statefulFixtureHash": "sha256:7980508d3a617dc449596f0c1af217da41c3513640801e3f52c1352668f63c08",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us2-timeout-after-trigger",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us2-timeout-after-trigger",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "CONFIRMED_BY_LOOKUP"
+      },
+      "statefulFixtureHash": "sha256:9b4b03508c82f4e397bfd8ae57730afcf7490ab39538ed6c373a2b6d24131cdb",
+      "persistedControls": {
+        "triggerFault": "TIMEOUT_AFTER_POSSIBLE_EFFECT",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us2-trigger-once",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us2-trigger-once",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "CONFIRMED"
+      },
+      "statefulFixtureHash": "sha256:582fdf96b16477bcd89d65d2a56032d120368ce9aafd486c9f935c6a527cc803",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-allowlisted-infra-retry",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-allowlisted-infra-retry",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "INFRA_FAILED",
+          "PASS"
+        ],
+        "expectedRetryDecision": "SCHEDULED",
+        "expectedAutomaticSuccessors": 1,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "statefulFixtureHash": "sha256:9a8b669b61876d3b8a9c5e670466221713a570c137793733367d9f2c0ef13391",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-artifact-checksum-mismatch",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-artifact-checksum-mismatch",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "PASS"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "CHECKSUM_MISMATCH",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "statefulFixtureHash": "sha256:031301313d2b06d03a9a110d42ff4a5a3a8a66a2e1a8fb1108ef3a84ca1f8ec9",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-assertion-failed-no-auto-retry",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-assertion-failed-no-auto-retry",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "ASSERTION_FAILED"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "statefulFixtureHash": "sha256:c6762113c370a6a984df849c9969abf6154c4ac2237bdd71cc931b4b80d4fb52",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-explicit-rerun-pass-flaky",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-explicit-rerun-pass-flaky",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "ASSERTION_FAILED",
+          "PASS"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": true,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "statefulFixtureHash": "sha256:c7d69f8b57a3e82d7a17d7439c0378865476c17625da9a22eed91c548c7d5a0c",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-pass-review-required",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-pass-review-required",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "PASS"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "statefulFixtureHash": "sha256:07463561befd6144d577a3b4994bb059c49ef3e1e04b04b0bac0006bfb0f7b3b",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-post-review-linked-session",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-post-review-linked-session",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "PASS",
+          "PASS"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 1
+      },
+      "statefulFixtureHash": "sha256:8f7c9470788d9ca75bae1892668b2d40ebcda756f69f9d72c0c7ffaf23e2478d",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-quarantine-lifecycle",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-quarantine-lifecycle",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "INFRA_FAILED"
+        ],
+        "expectedRetryDecision": "DENIED",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 2,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "statefulFixtureHash": "sha256:5fe44e3e1af93a24348383344e6d89dc101dab524dc574f90b3271a5667cea27",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-result-schema-drift",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-result-schema-drift",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "INCOMPLETE"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "statefulFixtureHash": "sha256:edc175dff24e6adb8c2093819747210894aa52bb1b15c3c103858980502880f0",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-review-packet-proposal-only",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-review-packet-proposal-only",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "ASSERTION_FAILED"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "PROPOSAL_ONLY",
+        "expectedLinkedSessions": 0
+      },
+      "statefulFixtureHash": "sha256:a8dcc1ecb845364b9f8425d531a33d525421bb4ec9ca96459d205a8fcbf02717",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us3-unknown-infra-no-retry",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us3-unknown-infra-no-retry",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "INFRA_FAILED"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "statefulFixtureHash": "sha256:9a4f4e13e1807253bf51dbb201e7fa39b7be91635a8dd91d4660273c9a05c145",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us4-auth-revoked",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us4-auth-revoked",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "NORMAL",
+        "expectedDeliveryAttempts": 1,
+        "expectedAuthoritativeRecovery": "RETRY_STOPPED",
+        "expectedReadFault": "AUTHENTICATION_401",
+        "expectedConnectionHealth": "AUTH_DEGRADED"
+      },
+      "statefulFixtureHash": "sha256:079f08b2416909e64b606c95042ed64538bcb6d53303be532da799ecaf1001ab",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "AUTHENTICATION_401",
+        "readFaultRemaining": 1
+      }
+    },
+    {
+      "id": "us4-duplicate-webhook",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us4-duplicate-webhook",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "WEBHOOK_DUPLICATE",
+        "expectedDeliveryAttempts": 2,
+        "expectedAuthoritativeRecovery": "ONE_EFFECT",
+        "expectedReadFault": "NORMAL",
+        "expectedConnectionHealth": "HEALTHY"
+      },
+      "statefulFixtureHash": "sha256:6d4bcf4df1eed57188ea26eca476947c9dda3b10b8b8a527a223db007045250a",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "WEBHOOK_DUPLICATE",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us4-gitlab-outage-manual-flow",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us4-gitlab-outage-manual-flow",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "NORMAL",
+        "expectedDeliveryAttempts": 1,
+        "expectedAuthoritativeRecovery": "BOUNDED_RECONCILIATION",
+        "expectedReadFault": "SERVER_500",
+        "expectedConnectionHealth": "BACKOFF"
+      },
+      "statefulFixtureHash": "sha256:101bc521003356d5cd0bbc6d88e6468a1d403175e59dc75f962f0f3a4048092a",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "SERVER_500",
+        "readFaultRemaining": 1
+      }
+    },
+    {
+      "id": "us4-lost-webhook-reconciliation",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us4-lost-webhook-reconciliation",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "WEBHOOK_DROP",
+        "expectedDeliveryAttempts": 0,
+        "expectedAuthoritativeRecovery": "BOUNDED_RECONCILIATION",
+        "expectedReadFault": "NORMAL",
+        "expectedConnectionHealth": "HEALTHY"
+      },
+      "statefulFixtureHash": "sha256:c600cdfdca5445ec661f8bd10f9cd25e1622eea53a36b7197e20e1188ecdcb75",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "WEBHOOK_DROP",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us4-out-of-order-webhook",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us4-out-of-order-webhook",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "WEBHOOK_OUT_OF_ORDER",
+        "expectedDeliveryAttempts": 2,
+        "expectedAuthoritativeRecovery": "MONOTONIC_HEAD",
+        "expectedReadFault": "NORMAL",
+        "expectedConnectionHealth": "HEALTHY"
+      },
+      "statefulFixtureHash": "sha256:995f19cd86d76f04cc024f87edcc9791be15874b5c7cc794fe81f5e03580c72d",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "WEBHOOK_OUT_OF_ORDER",
+        "readFault": "NORMAL",
+        "readFaultRemaining": 0
+      }
+    },
+    {
+      "id": "us4-rate-limit-recovery",
+      "status": "PASS",
+      "documented": {
+        "scenarioId": "us4-rate-limit-recovery",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "manualFlowPreserved": true,
+        "expectedWebhookFault": "NORMAL",
+        "expectedDeliveryAttempts": 1,
+        "expectedAuthoritativeRecovery": "RETRY_AFTER_11_SECONDS",
+        "expectedReadFault": "RATE_LIMIT_429",
+        "expectedConnectionHealth": "BACKOFF"
+      },
+      "statefulFixtureHash": "sha256:90dcff6aa957989055db9cfd489554e3d1b6f3d002db9780a0cc0325d146c74f",
+      "persistedControls": {
+        "triggerFault": "NORMAL",
+        "lookupFault": "NORMAL",
+        "webhookFault": "NORMAL",
+        "readFault": "RATE_LIMIT_429",
+        "readFaultRemaining": 1
+      }
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tools/local/gitlab-scenario-catalog.mts",
+        "sha256": "sha256:adf11894da837d42701d28d51e3728b5e5f682d72a3ac1f6ac85f61991a14ec3"
+      },
+      {
+        "path": "tools/local/gitlab-scenario.mts",
+        "sha256": "sha256:f592eb65ea72dbe5b7fdb114a8ecb16eed598358a578b583ec2c2be6211d8562"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/scenarios/gitlab-scenarios.ts",
+        "sha256": "sha256:c8cf27b1c751bbcb729f7198ffeb219bcb1a6a188221bf258f02df2e8239fec0"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/state/gitlab.repository.ts",
+        "sha256": "sha256:90d023402144df5dc01ffdb9546a311732b2438baffb166d2ae37458f42e4bad"
+      },
+      {
+        "path": "specs/005-gitlab-automated-validation/quickstart.md",
+        "sha256": "sha256:ac17efe9dc6c1248f1a8051394a7e9b9d2b8732ea2a4034b7b031a773b6966f6"
+      }
+    ],
+    "aggregateSha256": "sha256:728cc0a476a37b3cb32fb67407c112d800258fb09c6754b50dc41d80e7dbd0e0"
+  }
+}

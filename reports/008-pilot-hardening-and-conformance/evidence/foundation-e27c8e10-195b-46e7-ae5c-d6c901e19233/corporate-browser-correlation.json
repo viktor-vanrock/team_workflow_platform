@@ -1,0 +1,11 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/e2e/008/corporate-bindings.spec.ts",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 1,
+  "durationMs": 6212,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n ❯ tests/e2e/008/corporate-bindings.spec.ts (1 test | 1 failed) 11ms\n     × binds PKCE login, scoped health, one evidence audit and actual mTLS trace correlation 10ms\n\n Test Files  1 failed (1)\n      Tests  1 failed (1)\n   Start at  04:56:41\n   Duration  5.57s (transform 2.88s, setup 0ms, import 5.45s, tests 11ms, environment 0ms)\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/e2e/008/corporate-bindings.spec.ts > 008 real browser/session/evidence/Collector journey > binds PKCE login, scoped health, one evidence audit and actual mTLS trace correlation\nError: Could not find a working container runtime strategy\n ❯ getContainerRuntimeClient node_modules/.pnpm/testcontainers@12.1.0_supports-color@7.2.0/node_modules/testcontainers/build/container-runtime/clients/client.js:67:11\n ❯ GenericContainer.start node_modules/.pnpm/testcontainers@12.1.0_supports-color@7.2.0/node_modules/testcontainers/build/generic-container/generic-container.js:62:24\n ❯ startPostgres packages/platform-testkit/src/postgres.ts:11:21\n      9| export async function startPostgres(image = process.env.AWP_TEST_POSTG…\n     10|   const password = \"awp-test-only\";\n     11|   const container = await new GenericContainer(image)\n       |                     ^\n     12|     .withEnvironment({ POSTGRES_DB: \"awp_test\", POSTGRES_USER: \"awp_te…\n     13|     .withExposedPorts(5432)\n ❯ startUs3DatabaseFixture tests/support/002-us3-database.ts:47:20\n ❯ tests/e2e/008/corporate-bindings.spec.ts:40:11\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+}

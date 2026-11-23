@@ -1,0 +1,54 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+exporters:
+  debug:
+    verbosity: basic
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 128
+    spike_limit_mib: 32
+  filter/privacy:
+    error_mode: propagate
+    traces:
+      spanevent: ["true"]
+    metrics:
+      metric:
+        - 'name != "awp.operation.latency" and name != "awp.operation.outcomes"'
+  transform/privacy:
+    error_mode: propagate
+    trace_statements:
+      - context: resource
+        statements:
+          - 'keep_keys(attributes, ["service.name", "service.namespace"])'
+      - context: span
+        statements:
+          - 'keep_keys(attributes, ["workspaceId", "projectId", "correlationId", "causationId", "operation", "component", "outcome", "reasonCode", "classificationKey", "latencyMs", "version"])'
+          - 'set(status.message, "")'
+          - 'set(name, "other") where not IsMatch(name, "^(other|runtime\\.heartbeat|http\\.request|worker\\.(recovery|dispatcher|commands)|connector\\.(read|write)|artifact\\.retention|evidence\\.sign|identity\\.authenticate|record\\.publish|qa\\.(complete|approval))$")'
+    metric_statements:
+      - context: resource
+        statements:
+          - 'keep_keys(attributes, ["service.name", "service.namespace"])'
+      - context: datapoint
+        statements:
+          - 'keep_keys(attributes, ["operation", "component", "outcome"])'
+  batch:
+    send_batch_size: 64
+    send_batch_max_size: 128
+    timeout: 1s
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, filter/privacy, transform/privacy, batch]
+      exporters: [debug]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, filter/privacy, transform/privacy, batch]
+      exporters: [debug]

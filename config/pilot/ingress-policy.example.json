@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "subject": {
+    "workspaceId": "10000000-0000-4000-8000-000000000001",
+    "projectId": "20000000-0000-4000-8000-000000000001",
+    "bindingRef": {
+      "id": "30000000-0000-4000-8000-000000000001",
+      "version": 1,
+      "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "profileRef": {
+      "id": "40000000-0000-4000-8000-000000000001",
+      "version": 1,
+      "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "connectionRef": {
+      "id": "50000000-0000-4000-8000-000000000001",
+      "version": 1,
+      "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "provider": "MATTERMOST",
+    "edition": "Development fixture",
+    "providerVersion": "fixture-2026-09-04",
+    "ingressDialect": "MATTERMOST_SIGNED_PROXY_INTENT",
+    "externalScopeId": "team-development",
+    "mode": "DEVELOPMENT_MOCK"
+  },
+  "conformanceRef": {
+    "id": "60000000-0000-4000-8000-000000000001",
+    "version": 1,
+    "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "route": "/api/v1/pilot/ingress/mattermost-post-action",
+  "sourceIdentity": "mattermost:development-instance",
+  "transport": "TRUSTED_PROXY",
+  "maxRawBytes": 262144,
+  "freshnessSeconds": 300,
+  "maximumClockSkewSeconds": 30,
+  "retryHorizonSeconds": 86400,
+  "receiptRetentionSeconds": 90000,
+  "sourceKeys": [
+    {
+      "ref": {
+        "id": "70000000-0000-4000-8000-000000000001",
+        "version": 1,
+        "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "role": "ACTIVE",
+      "notBefore": "2026-09-04T00:00:00Z",
+      "verifyUntil": "2026-09-05T00:00:00Z"
+    }
+  ],
+  "proxyKeys": [
+    {
+      "ref": {
+        "id": "80000000-0000-4000-8000-000000000001",
+        "version": 1,
+        "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "role": "ACTIVE",
+      "notBefore": "2026-09-04T00:00:00Z",
+      "verifyUntil": "2026-09-05T00:00:00Z"
+    }
+  ]
+}

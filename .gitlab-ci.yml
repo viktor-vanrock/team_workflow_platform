@@ -1,0 +1,81 @@
+include:
+  - project: "rndml-public/devops/job-templates"
+    ref: main
+    file: ".deploy.yml"
+  - local: ".deploy.yml"
+
+workflow:
+  rules:
+    # У main и dev есть собственный branch pipeline с деплоем; MR-pipeline с тем же
+    # source branch дублировал бы его сборку.
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && ($CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "dev")'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_BRANCH'
+    - when: never
+
+stages: [prepare, verify, pack, deploy]
+
+default:
+  interruptible: true
+
+variables:
+  CI: "true"
+  NX_DAEMON: "false"
+  NX_ISOLATE_PLUGINS: "false"
+  NPM_REGISTRY: https://nexus.sberdevices.ru/repository/npm-proxy/
+  npm_config_registry: https://nexus.sberdevices.ru/repository/npm-proxy/
+
+.rules:
+  rules-dev:
+    - if: $CI_COMMIT_BRANCH == "dev"
+  rules-main:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+get_version:
+  extends: .getversion
+  tags: [d-rndml-build]
+  before_script: []
+  script:
+    - printf '%s\n' "$CI_COMMIT_SHA-$CI_PIPELINE_IID" > version.txt
+
+verify:
+  stage: verify
+  tags: [d-rndml-build]
+  image: registry.sberdevices.ru/rndml/devops/dockerfiles/nodejs-runtime-24-20:24.20.0-bookworm-slim
+  variables:
+    NODE_OPTIONS: --max-old-space-size=8192
+  before_script:
+    - npm config set registry "$NPM_REGISTRY"
+    - npm install --global pnpm@11.21.0
+    # The local preinstall requires Docker/Compose; this job only checks code.
+    - pnpm install --frozen-lockfile --ignore-scripts
+  script:
+    - pnpm exec nx show projects
+    - pnpm lint
+    - pnpm typecheck
+    - pnpm architecture
+    - pnpm exec vitest run tests/unit/024 tests/unit/hermes-service --maxWorkers=2
+
+verify_deploy:
+  stage: verify
+  tags: [d-rndml-build]
+  image: registry.sberdevices.ru/rndml/devops/dockerfiles/kubedeploy:06-2026
+  script:
+    - git clone --depth 1 --branch master "https://gitlab-ci-token:$CI_JOB_TOKEN@git.sberdevices.ru/rndml/devops/helm-template.git" /tmp/helm-template
+    - sh tools/deploy/check-kubernetes.sh /tmp/helm-template
+
+# One image contains API/web, Hermes and the one-shot bootstrap entry point.
+build_workspace:
+  extends: .kaniko
+  stage: pack
+  tags: [d-rndml-build]
+  dependencies: [get_version]
+  variables:
+    PROJECT_NAME: workspace
+    DOCKERFILE: ${CI_PROJECT_DIR}/infra/deploy/workspace.Dockerfile
+    KANIKO_CACHE_ENABLED: "true"
+    DOCKER_ADDITION_ARGS_LIST: >-
+      --cache-repo=${CI_REGISTRY_IMAGE}/workspace/cache
+      --build-arg NPM_REGISTRY=${NPM_REGISTRY}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-authority:projection:v1",
+  "title": "Operational Authority Projection Revision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "projectionRevisionId", "revision", "workspaceId", "projectId", "workItemId", "bindingRef", "externalEntityId", "externalDisplayKey", "externalRevisionToken", "authorityFieldsHash", "rawStatus", "normalizedStatus", "requester", "profileRef", "mappingRef", "connectionRef", "adapter", "observation", "freshness", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "projectionRevisionId": { "type": "string", "format": "uuid" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "bindingRef": { "$ref": "#/$defs/Ref" },
+    "externalEntityId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "externalDisplayKey": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "externalWebUrl": { "type": "string", "format": "uri" },
+    "externalRevisionToken": { "$ref": "#/$defs/Digest" },
+    "authorityFieldsHash": { "$ref": "#/$defs/Digest" },
+    "rawStatus": { "type": "object", "additionalProperties": false, "required": ["id", "name"], "properties": { "id": { "type": "string", "minLength": 1 }, "name": { "type": "string", "minLength": 1 } } },
+    "normalizedStatus": { "$ref": "#/$defs/NormalizedStatus" },
+    "requester": { "$ref": "#/$defs/PrincipalProjection" },
+    "assignee": { "oneOf": [{ "$ref": "#/$defs/PrincipalProjection" }, { "type": "null" }] },
+    "priority": { "oneOf": [{ "type": "object", "additionalProperties": false, "required": ["rawId", "rawName", "normalizedKey"], "properties": { "rawId": { "type": "string" }, "rawName": { "type": "string" }, "normalizedKey": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$" } } }, { "type": "null" }] },
+    "dueDate": { "type": ["string", "null"], "format": "date" },
+    "profileRef": { "$ref": "#/$defs/Ref" },
+    "mappingRef": { "$ref": "#/$defs/Ref" },
+    "connectionRef": { "$ref": "#/$defs/Ref" },
+    "adapter": { "type": "object", "additionalProperties": false, "required": ["family", "contractVersion"], "properties": { "family": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" }, "contractVersion": { "type": "string", "minLength": 1 } } },
+    "observation": { "type": "object", "additionalProperties": false, "required": ["id", "source", "providerUpdatedAt", "observedAt", "appliedAt", "hash"], "properties": { "id": { "type": "string", "format": "uuid" }, "source": { "enum": ["CREATE_READ_BACK", "IMPORT_READ", "COMMAND_CONFIRMATION", "WEBHOOK_READ", "RECONCILIATION_READ", "CONFLICT_READ"] }, "providerUpdatedAt": { "type": "string", "format": "date-time" }, "providerChangelogId": { "type": "string" }, "observedAt": { "type": "string", "format": "date-time" }, "appliedAt": { "type": "string", "format": "date-time" }, "hash": { "$ref": "#/$defs/Digest" } } },
+    "freshness": { "type": "object", "additionalProperties": false, "required": ["state", "freshUntil"], "properties": { "state": { "enum": ["CURRENT", "STALE", "UNKNOWN"] }, "freshUntil": { "type": "string", "format": "date-time" } } },
+    "contentHash": { "$ref": "#/$defs/Digest" }
+  },
+  "$defs": {
+    "Digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "Ref": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "integer", "minimum": 1 } } },
+    "NormalizedStatus": { "enum": ["NEW", "NEEDS_INFO", "READY", "PLANNED", "IN_PROGRESS", "REVIEW", "BLOCKED", "DONE", "CANCELLED"] },
+    "PrincipalProjection": { "type": "object", "additionalProperties": false, "required": ["externalPrincipalId"], "properties": { "externalPrincipalId": { "type": "string", "minLength": 1 }, "canonicalPrincipalId": { "type": "string", "format": "uuid" }, "bindingRef": { "$ref": "#/$defs/Ref" } } }
+  }
+}

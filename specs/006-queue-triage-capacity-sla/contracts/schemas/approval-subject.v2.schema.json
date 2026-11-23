@@ -1,0 +1,429 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:commands:approval-subject:v2",
+  "title": "Exact Approval Resource v2",
+  "$comment": "Additive successor to the frozen Approval v1 contract. EXTERNAL_COMMAND still requires exact Binding/Profile refs, external state and the full authorization basis. PLATFORM_ACTION instead requires its immutable queue-action-candidate@1.0.0/header snapshot plus a viewer-safe authorization-scope witness and explicitly forbids fabricated Connector refs or public entitlement/role-assignment record IDs. Its composed validator requires action.actionId = target.value.actionId = expectedLocalState.resourceRef.id; target.schemaRef is the exact registered candidate schema; payloadHash is the candidate JCS content hash; targetHash is the JCS hash of the complete SchemaBoundValue; expectedLocalState is the same candidate at version/resourceVersion/headerVersion 1, contentHash=payloadHash and currentPublishedVersion 0; Approval workspace/project, action command mapping, permission, separation policy, expiry and scope witness equal the candidate declarations. PROJECT witnesses equal candidate scope/target Workspace and Project plus requiredPermission; AUTHORIZED_PORTFOLIO witnesses equal candidate Workspace/authorizedProjectSetHash and the Approval Project equals the candidate target Project. A decision witness repeats that exact scope/permission for the current approver, and SELF_APPROVAL_FORBIDDEN requires a distinct HUMAN. subjectHash is recomputed from the documented immutable projection. The complete initiator/approver authorization basis remains private audit/execution evidence. Existing v1 bytes/readers remain unchanged; Core reads both schema IDs and creates v2 for new Feature 006 platform actions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "approvalId",
+    "schemaVersion",
+    "subjectSchemaId",
+    "subjectSchemaVersion",
+    "workspaceId",
+    "projectId",
+    "initiator",
+    "action",
+    "target",
+    "targetHash",
+    "payloadHash",
+    "requiredPermission",
+    "separationOfDutyPolicy",
+    "effectIdempotencyKey",
+    "dataClassificationKey",
+    "expiresAt",
+    "subjectHash",
+    "decisionStatus",
+    "effectAuthorizationStatus",
+    "resourceVersion",
+    "createdAt"
+  ],
+  "properties": {
+    "approvalId": { "type": "string", "format": "uuid" },
+    "schemaVersion": { "const": 2 },
+    "subjectSchemaId": { "const": "urn:awp:contracts:commands:approval-subject:v2" },
+    "subjectSchemaVersion": { "const": 2 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "initiator": { "$ref": "urn:awp:contracts:common:actor-ref:v1" },
+    "initiatorAuthorizationBasis": { "$ref": "#/$defs/ProjectAuthorizationBasis" },
+    "initiatorAuthorizationScopeWitness": { "$ref": "#/$defs/AuthorizationScopeWitness" },
+    "action": { "$ref": "#/$defs/Action" },
+    "target": {
+      "description": "For Feature 006 PLATFORM_ACTION this SchemaBoundValue uses queue-action-candidate:v1 and contains only the public immutable candidate.",
+      "$ref": "#/$defs/SchemaBoundValue"
+    },
+    "targetHash": {
+      "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/Digest"
+    },
+    "payloadHash": {
+      "description": "EXTERNAL_COMMAND: digest of the full payload SchemaBoundValue. PLATFORM_ACTION: semantic contentHash of the immutable candidate revision. For Feature 006 this is publicIntentHash, never the internal queue execution-witness actionHash.",
+      "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/Digest"
+    },
+    "expectedExternalState": {
+      "$ref": "#/$defs/ExpectedExternalState"
+    },
+    "expectedLocalState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resourceRef", "resourceVersion", "contentHash", "aggregateResourceVersion", "currentPublishedVersion"],
+      "properties": {
+        "resourceRef": {
+          "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/IntegerVersionRef"
+        },
+        "resourceVersion": { "type": "integer", "minimum": 1 },
+        "contentHash": {
+          "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/Digest"
+        },
+        "aggregateResourceVersion": { "type": "integer", "minimum": 1 },
+        "currentPublishedVersion": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "0 means that this aggregate has no current published/effective revision. Feature 006 pending action candidates use 0; action-specific internal witnesses are revalidated separately under the same transaction."
+        }
+      }
+    },
+    "bindingRef": {
+      "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/IntegerVersionRef"
+    },
+    "profileRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/IntegerVersionRef"
+      }
+    },
+    "requiredPermission": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.:_-][a-z0-9][a-z0-9_-]*)+$",
+      "maxLength": 128
+    },
+    "separationOfDutyPolicy": {
+      "enum": ["SELF_APPROVAL_FORBIDDEN", "SELF_APPROVAL_ALLOWED"]
+    },
+    "effectIdempotencyKey": {
+      "$ref": "#/$defs/IdempotencyKey"
+    },
+    "dataClassificationKey": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "subjectHash": {
+      "description": "SHA-256 over RFC 8785/JCS of the immutable subject projection: schema ID/version, scope, initiator plus branch-specific authorization evidence, action, target/targetHash/payloadHash, branch-specific expected state and Connector refs where applicable, permission, separation-of-duty, effect key, classification and expiry. It excludes subjectHash itself and decision/effect/resource lifecycle fields.",
+      "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/Digest"
+    },
+    "decisionStatus": {
+      "enum": ["PENDING", "APPROVED", "REJECTED", "EXPIRED", "CANCELLED"]
+    },
+    "effectAuthorizationStatus": {
+      "enum": ["NOT_AUTHORIZED", "AUTHORIZED", "INVALIDATED", "CONSUMED"]
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approver", "approverRole", "decidedAt"],
+      "properties": {
+        "approver": {
+          "$ref": "urn:awp:contracts:common:actor-ref:v1#/$defs/HumanActorRef"
+        },
+        "approverRole": {
+          "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/LogicalRoleKey"
+        },
+        "authorizationBasis": {
+          "$ref": "#/$defs/ProjectAuthorizationBasis"
+        },
+        "authorizationScopeWitness": {
+          "$ref": "#/$defs/AuthorizationScopeWitness"
+        },
+        "decidedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "invalidationReason": {
+      "enum": [
+        "SUBJECT_CHANGED",
+        "TARGET_CHANGED",
+        "PAYLOAD_CHANGED",
+        "EXPECTED_STATE_CHANGED",
+        "BINDING_CHANGED",
+        "PROFILE_CHANGED",
+        "APPROVER_AUTH_REVOKED",
+        "APPROVER_ROLE_CHANGED",
+        "SCOPE_REVOKED",
+        "EXPIRED",
+        "COMMAND_CANCELLED"
+      ]
+    },
+    "invalidatedAt": { "type": "string", "format": "date-time" },
+    "consumedAt": { "type": "string", "format": "date-time" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "required": ["actionKind"],
+            "properties": { "actionKind": { "const": "EXTERNAL_COMMAND" } }
+          }
+        }
+      },
+      "then": {
+        "required": ["initiatorAuthorizationBasis", "expectedExternalState", "bindingRef", "profileRefs"],
+        "allOf": [
+          { "not": { "required": ["initiatorAuthorizationScopeWitness"] } },
+          { "not": { "required": ["expectedLocalState"] } }
+        ],
+        "properties": {
+          "decision": {
+            "required": ["authorizationBasis"],
+            "not": { "required": ["authorizationScopeWitness"] }
+          }
+        }
+      },
+      "else": {
+        "required": ["initiatorAuthorizationScopeWitness", "expectedLocalState"],
+        "allOf": [
+          { "not": { "required": ["initiatorAuthorizationBasis"] } },
+          { "not": { "required": ["expectedExternalState"] } },
+          { "not": { "required": ["bindingRef"] } },
+          { "not": { "required": ["profileRefs"] } }
+        ],
+        "properties": {
+          "target": {
+            "required": ["schemaRef", "value"],
+            "properties": {
+              "schemaRef": {
+                "required": ["id", "version", "digest"],
+                "properties": {
+                  "id": { "const": "urn:awp:schemas:006:queue-action-candidate:v1" },
+                  "version": { "const": 1 },
+                  "digest": { "const": "sha256:15100bb9367d8a2e6c573fbdffc5de1417727fe53d5ac404e1ba1a909eae9d13" }
+                }
+              },
+              "value": {
+                "allOf": [
+                  { "$ref": "urn:awp:schemas:006:queue-action-candidate:v1" },
+                  {
+                    "properties": { "approvalPolicy": { "const": "SELF_APPROVAL_FORBIDDEN" } },
+                    "required": ["approvalPolicy"]
+                  }
+                ]
+              }
+            }
+          },
+          "expectedLocalState": {
+            "properties": {
+              "resourceRef": {
+                "properties": { "version": { "const": 1 } },
+                "required": ["version"]
+              },
+              "resourceVersion": { "const": 1 },
+              "aggregateResourceVersion": { "const": 1 },
+              "currentPublishedVersion": { "const": 0 }
+            }
+          },
+          "separationOfDutyPolicy": { "const": "SELF_APPROVAL_FORBIDDEN" },
+          "decision": {
+            "required": ["authorizationScopeWitness"],
+            "not": { "required": ["authorizationBasis"] }
+          }
+        }
+      }
+    },
+    {
+      "if": { "required": ["decisionStatus"], "properties": { "decisionStatus": { "enum": ["APPROVED", "REJECTED"] } } },
+      "then": { "required": ["decision"] },
+      "else": { "not": { "required": ["decision"] } }
+    },
+    {
+      "if": { "required": ["effectAuthorizationStatus"], "properties": { "effectAuthorizationStatus": { "const": "INVALIDATED" } } },
+      "then": { "required": ["invalidationReason", "invalidatedAt"] },
+      "else": {
+        "allOf": [
+          { "not": { "required": ["invalidationReason"] } },
+          { "not": { "required": ["invalidatedAt"] } }
+        ]
+      }
+    },
+    {
+      "if": { "required": ["decisionStatus"], "properties": { "decisionStatus": { "const": "APPROVED" } } },
+      "then": { "properties": { "effectAuthorizationStatus": { "enum": ["AUTHORIZED", "INVALIDATED", "CONSUMED"] } } },
+      "else": { "properties": { "effectAuthorizationStatus": { "const": "NOT_AUTHORIZED" } } }
+    },
+    {
+      "if": { "required": ["effectAuthorizationStatus"], "properties": { "effectAuthorizationStatus": { "const": "CONSUMED" } } },
+      "then": { "required": ["consumedAt"] },
+      "else": { "not": { "required": ["consumedAt"] } }
+    }
+  ],
+  "$defs": {
+    "IdempotencyKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$"
+    },
+    "SchemaBoundValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaRef", "value"],
+      "properties": {
+        "schemaRef": { "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/SchemaRef" },
+        "value": true
+      }
+    },
+    "ExpectedExternalState": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": { "mode": { "const": "MUST_NOT_EXIST" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "version"],
+          "properties": {
+            "mode": { "const": "MATCH_VERSION" },
+            "version": { "type": "string", "minLength": 1, "maxLength": 255 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "valueHash"],
+          "properties": {
+            "mode": { "const": "MATCH_VALUE_HASH" },
+            "valueHash": { "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/Digest" }
+          }
+        }
+      ]
+    },
+    "AuthorizationBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyRef", "membershipRef", "entitlementRefs", "roleAssignmentRefs", "skillContext", "evaluatedAt"],
+      "properties": {
+        "policyRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "version"],
+          "properties": {
+            "id": { "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/StableKey" },
+            "version": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "membershipRef": { "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/IntegerVersionRef" },
+        "entitlementRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/IntegerVersionRef" }
+        },
+        "roleAssignmentRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/IntegerVersionRef" }
+        },
+        "skillContext": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": { "kind": { "const": "NOT_APPLICABLE" } }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "key", "version", "manifestDigest"],
+              "properties": {
+                "kind": { "const": "SKILL" },
+                "key": { "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/StableKey" },
+                "version": { "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/SemVer" },
+                "manifestDigest": { "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/Digest" }
+              }
+            }
+          ]
+        },
+        "evaluatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ProjectAuthorizationBasis": {
+      "description": "Private/external-command authorization provenance. Feature 006 PLATFORM_ACTION subjects never serialize this structure in the public Approval resource.",
+      "$ref": "#/$defs/AuthorizationBasis"
+    },
+    "AuthorizationScopeWitness": {
+      "description": "Viewer-safe authorization evidence. It names no membership, entitlement or role-assignment record. Core retains the complete basis in private audit/execution storage and recomputes the current authorized Project set before every disclosure, decision and consumption.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scopeKind", "workspaceId", "requiredPermission", "evaluatedAt"],
+      "properties": {
+        "scopeKind": { "enum": ["PROJECT", "AUTHORIZED_PORTFOLIO"] },
+        "workspaceId": { "type": "string", "format": "uuid" },
+        "projectId": { "type": "string", "format": "uuid" },
+        "projectAuthorizationFacetHash": {
+          "description": "Hash of the target-Project-only authorization outcome {workspaceId, projectId, requiredPermission, classificationDecision}; it never covers the actor's wider entitlement set.",
+          "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/Digest"
+        },
+        "requiredPermission": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.:_-][a-z0-9][a-z0-9_-]*)+$",
+          "maxLength": 128
+        },
+        "authorizedProjectSetHash": {
+          "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/Digest"
+        },
+        "evaluatedAt": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["scopeKind"], "properties": { "scopeKind": { "const": "PROJECT" } } },
+          "then": {
+            "required": ["projectId", "projectAuthorizationFacetHash"],
+            "not": { "required": ["authorizedProjectSetHash"] }
+          },
+          "else": {
+            "required": ["authorizedProjectSetHash"],
+            "allOf": [
+              { "not": { "required": ["projectId"] } },
+              { "not": { "required": ["projectAuthorizationFacetHash"] } }
+            ]
+          }
+        }
+      ]
+    },
+    "Action": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["actionKind", "actionId", "commandType", "capabilityKey", "capabilityVersion", "operation"],
+          "properties": {
+            "actionKind": { "const": "EXTERNAL_COMMAND" },
+            "actionId": { "type": "string", "format": "uuid" },
+            "commandType": {
+              "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/StableKey"
+            },
+            "capabilityKey": {
+              "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/StableKey"
+            },
+            "capabilityVersion": {
+              "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/SemVer"
+            },
+            "operation": {
+              "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/StableKey"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["actionKind", "commandType", "actionId"],
+          "properties": {
+            "actionKind": { "const": "PLATFORM_ACTION" },
+            "commandType": {
+              "$ref": "urn:awp:contracts:common:versioned-ref:v1#/$defs/StableKey"
+            },
+            "actionId": { "type": "string", "format": "uuid" }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "state": "INVALIDATED",
+  "terminalFromState": "AUTHORIZED",
+  "terminalReason": "Exact approved subject became stale before dispatch",
+  "closeApprovalRef": {
+    "approvalId": "30303030-3030-4030-8030-303030303030",
+    "subjectHash": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  }
+}
+

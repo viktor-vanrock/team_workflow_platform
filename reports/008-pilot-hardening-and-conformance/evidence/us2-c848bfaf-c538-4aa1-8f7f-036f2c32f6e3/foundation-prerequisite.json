@@ -1,0 +1,4 @@
+{
+  "reasonCode": "FRESH_FOUNDATION_REQUIRED",
+  "command": "pnpm verify:008:foundation"
+}

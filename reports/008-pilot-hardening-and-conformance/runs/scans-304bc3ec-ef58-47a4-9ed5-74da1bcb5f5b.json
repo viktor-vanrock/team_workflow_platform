@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "scans-304bc3ec-ef58-47a4-9ed5-74da1bcb5f5b",
+  "gate": "security-scans",
+  "status": "PASS",
+  "deploymentProfile": "local",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": [
+      "fixture-project-web"
+    ]
+  },
+  "startedAt": "2026-09-05T01:21:52.836Z",
+  "finishedAt": "2026-09-05T01:21:53.174Z",
+  "fingerprints": {
+    "source": "sha256:4c4fed65e04218ee154b707949c95a5ef9a39405ff1455d04055bf818ff22de1",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:5fc0af1bea362d651725f32fc9ca09377a5c053d7cbeb6e8560505878cc041cf",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:55fabfd1027e8ace3d005eee5fb80ddd6534ba4b4f12c0fd995c7c34042e736b",
+    "image": "sha256:f9134eb99bdde183384301192c0f21b6dbea8a8775aa813790f1127aab08e9d8",
+    "scannerDatabase": "sha256:5ab91473dd8470ca7ef506314a8f424e861c4fc41445742a790953d1b259027e"
+  },
+  "executorIdentity": "local-cli",
+  "prerequisites": [],
+  "reasonCodes": [],
+  "checks": [
+    {
+      "id": "dependency-scan-adapter",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/scans-304bc3ec-ef58-47a4-9ed5-74da1bcb5f5b/security-scans.json",
+          "sha256": "sha256:917c89273436af18c3c07ff22cf6e0dd0cf773436f57aed65a91c5b451030176"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "image-scan-adapter",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/scans-304bc3ec-ef58-47a4-9ed5-74da1bcb5f5b/security-scans.json",
+          "sha256": "sha256:917c89273436af18c3c07ff22cf6e0dd0cf773436f57aed65a91c5b451030176"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "unchanged-source",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/scans-304bc3ec-ef58-47a4-9ed5-74da1bcb5f5b/security-scans.json",
+          "sha256": "sha256:917c89273436af18c3c07ff22cf6e0dd0cf773436f57aed65a91c5b451030176"
+        }
+      ],
+      "reasonCodes": []
+    }
+  ]
+}

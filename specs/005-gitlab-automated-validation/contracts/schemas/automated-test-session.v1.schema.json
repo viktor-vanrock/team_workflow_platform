@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automated-test-session:v1",
+  "title": "AutomatedTestSession v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "testSessionId",
+    "planItemId",
+    "mode",
+    "state",
+    "executionActivity",
+    "suiteBindingRef",
+    "suiteBindingHash",
+    "configurationPinSetHash",
+    "scopeSnapshotRef",
+    "scopeSnapshotHash",
+    "targetSnapshotRef",
+    "targetSnapshotHash",
+    "attemptCount",
+    "attemptSetHash",
+    "resourceVersion",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automated-test-session@1.0.0" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workItemId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "testSessionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "planItemId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "mode": { "const": "AUTOMATED" },
+    "state": { "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED", "COMPLETED", "BLOCKED", "CANCELLED"] },
+    "executionActivity": {
+      "enum": ["IDLE", "TRIGGER_PENDING", "RUNNING", "RETRY_PENDING", "RECONCILING", "TERMINAL"]
+    },
+    "suiteBindingRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/versionedRef" },
+    "suiteBindingHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "configurationPinSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "scopeSnapshotRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "scopeSnapshotHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "targetSnapshotRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "targetSnapshotHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "attemptCount": { "type": "integer", "minimum": 0 },
+    "attemptSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "reviewFrozenAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "replacesSession": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testSessionId", "reason", "priorTargetSnapshotHash"],
+      "properties": {
+        "testSessionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+        "reason": { "enum": ["TARGET_CHANGED", "REVIEW_FROZEN"] },
+        "priorTargetSnapshotHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+      }
+    },
+    "launchConfirmation": {
+      "description": "Current server-issued launch/rerun summary. It is omitted when no action is currently permitted and is echoed unchanged with If-Match.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason",
+        "targetSnapshotHash",
+        "suiteBindingHash",
+        "configurationPinSetHash",
+        "sessionResourceVersion",
+        "actionHash",
+        "confirmationHash"
+      ],
+      "properties": {
+        "reason": { "enum": ["INITIAL", "HUMAN_RERUN"] },
+        "targetSnapshotHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "suiteBindingHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "configurationPinSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "sessionResourceVersion": { "type": "integer", "minimum": 1 },
+        "actionHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "confirmationHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+      }
+    },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "updatedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+  }
+}

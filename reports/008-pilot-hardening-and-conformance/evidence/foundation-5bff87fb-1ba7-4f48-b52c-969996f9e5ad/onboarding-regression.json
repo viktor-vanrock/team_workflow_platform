@@ -1,0 +1,15 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/architecture/007",
+    "tests/unit/007",
+    "tests/contract/007/historical-contract-compatibility.spec.ts",
+    "tests/integration/authorization-contributions.spec.ts",
+    "tests/integration/security/authorization-surface-catalog.spec.ts",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 0,
+  "durationMs": 3085,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  12 passed (12)\n      Tests  34 passed (34)\n   Start at  01:50:21\n   Duration  2.50s (transform 1.49s, setup 0ms, import 3.71s, tests 90ms, environment 1ms)\n\n"
+}

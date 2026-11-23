@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "gate": "readiness",
+  "generatedAt": "2026-09-05T21:05:55.338Z",
+  "status": "BLOCKED_INPUT",
+  "localEngineering": {
+    "path": "reports/008-pilot-hardening-and-conformance/local.json",
+    "sha256": "sha256:06d8527c62aafd0dda2d7e4ffa1f8215301ba79472d0dc6b417fd0435c15160f",
+    "status": "PASS",
+    "ready": true
+  },
+  "corporate": {
+    "status": "BLOCKED_INPUT",
+    "ready": false,
+    "evidence": {
+      "inputs": {
+        "path": "reports/008-pilot-hardening-and-conformance/input-validation.json",
+        "sha256": "sha256:663ceba8064238063e50d0e375cae08cbaa778ed6dc9210bf9683c394b884366",
+        "status": "BLOCKED_INPUT"
+      },
+      "integration": {
+        "path": "reports/008-pilot-hardening-and-conformance/integration.json",
+        "sha256": "sha256:dafca2e745d4a5a6637f6f89129a15b34c9cf3d08bacca0060ce9196574a858b",
+        "status": "BLOCKED_INPUT"
+      },
+      "security": {
+        "path": "reports/008-pilot-hardening-and-conformance/security.json",
+        "sha256": "sha256:4e3774b8976f77486cc522df427097c91b56ef0d2500a4269f6dbd330765f8e1",
+        "status": "BLOCKED_INPUT"
+      },
+      "recovery": {
+        "path": "reports/008-pilot-hardening-and-conformance/recovery.json",
+        "sha256": "sha256:3a3aed0677f797e43f8cb573426f68699a82993e4c8d62d3c32229eced95b691",
+        "status": "BLOCKED_INPUT"
+      },
+      "shadow": {
+        "path": "reports/008-pilot-hardening-and-conformance/shadow.json",
+        "sha256": "sha256:13e9513d878f8d2691e8dcb28de2c95840911f81e2440bf6eb0f18e0f358c603",
+        "status": "BLOCKED_INPUT"
+      },
+      "limitedPilot": {
+        "path": null,
+        "sha256": null,
+        "status": "BLOCKED_INPUT",
+        "reasonCode": "EVIDENCE_MISSING"
+      },
+      "review": {
+        "path": "reports/008-pilot-hardening-and-conformance/review.json",
+        "sha256": "sha256:3a9d5f61345b5d3abff195fd471c0a44163e88cd2da6bd23c95030e714e87ca8",
+        "status": "BLOCKED_INPUT"
+      }
+    }
+  },
+  "reasonCodes": [
+    "CORPORATE_C1_INPUT_REQUIRED",
+    "CORPORATE_N2_CONFORMANCE_REQUIRED",
+    "CORPORATE_RELEASE_SCAN_REQUIRED",
+    "CORPORATE_RECOVERY_DRILL_REQUIRED",
+    "CORPORATE_SHADOW_REQUIRED",
+    "OBSERVED_LIMITED_PILOT_REQUIRED",
+    "HUMAN_PILOT_REVIEW_REQUIRED"
+  ],
+  "fullFeatureClosure": false
+}

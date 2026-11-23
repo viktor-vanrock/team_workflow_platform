@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "us3-62ea3404-d928-4170-b4d4-611f2e03c240",
+  "gate": "us3",
+  "status": "FAIL",
+  "deploymentProfile": "local",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": [
+      "fixture-project-web"
+    ]
+  },
+  "startedAt": "2026-09-04T23:42:06.380Z",
+  "finishedAt": "2026-09-04T23:42:06.652Z",
+  "fingerprints": {
+    "source": "sha256:9fc441a7640a68a509f5798ccecc3a50627603c55a7a0999f5020a9a4153bb37",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:5fc0af1bea362d651725f32fc9ca09377a5c053d7cbeb6e8560505878cc041cf",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:c7416e37dba569ade2f7b061bdf656961938f07b36457e8b5fc811f5c2f6eec9"
+  },
+  "executorIdentity": "local-cli",
+  "checks": [
+    {
+      "id": "foundation-prerequisite",
+      "status": "FAIL",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-62ea3404-d928-4170-b4d4-611f2e03c240/foundation-prerequisite.json",
+          "sha256": "sha256:9a0b3732caedf25dae1b3e9013801cc9bb8330b5d96cd954e424d94a42a8f12b"
+        }
+      ],
+      "reasonCodes": [
+        "US3_CHECK_FAILED"
+      ]
+    },
+    {
+      "id": "hermes-prerequisite",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/runs/hermes-f36228e7-bd81-4264-8367-87f56a8b7aa7.json",
+          "sha256": "sha256:39fb3cb310cc00b861b6073f9892fd2eab8e8163c5fed689e3079ca94ceecc9a"
+        },
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-62ea3404-d928-4170-b4d4-611f2e03c240/hermes-prerequisite.json",
+          "sha256": "sha256:688c5fe08b51ff2d891d16d22f5da03ff2e4a346a4e5ded069656562dda2bc36"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "security-prerequisite",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/runs/security-ede2feae-b62b-48b6-b71c-ea5d56047f34.json",
+          "sha256": "sha256:87355e2b3e8f391d9288ec255dd04759afb67969a24256924698308e02759485"
+        },
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-62ea3404-d928-4170-b4d4-611f2e03c240/security-prerequisite.json",
+          "sha256": "sha256:0e725103f8878314aa3f80c139c843164d92214e7b9997316b643b046909e15c"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "independent-audit-coverage",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/runs/audit-43104bc0-40ec-4afc-add2-72182428161a.json",
+          "sha256": "sha256:1dbbb7911a858f685240280c2ea5b031a5d371d0616e16b46a6d9da1ebf080c3"
+        },
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-62ea3404-d928-4170-b4d4-611f2e03c240/independent-audit-coverage.json",
+          "sha256": "sha256:f8fba4a7581bd0acff90df8249a24dff62de5103997bdd8b233578b82a01a5be"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "corporate-scan-separation",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-62ea3404-d928-4170-b4d4-611f2e03c240/corporate-scan-separation.json",
+          "sha256": "sha256:2170c7972e85e1ca1836ebe842302d4597eaa69220238c26c850620eabb2a3c2"
+        }
+      ],
+      "reasonCodes": []
+    },
+    {
+      "id": "unchanged-source",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us3-62ea3404-d928-4170-b4d4-611f2e03c240/unchanged-source.json",
+          "sha256": "sha256:3e49f31198b3d6146fb69d0988ef7b509941e96b46a3edf1eadd9a7e0e3a8295"
+        }
+      ],
+      "reasonCodes": []
+    }
+  ],
+  "prerequisites": [
+    {
+      "path": "reports/008-pilot-hardening-and-conformance/runs/hermes-f36228e7-bd81-4264-8367-87f56a8b7aa7.json",
+      "sha256": "sha256:39fb3cb310cc00b861b6073f9892fd2eab8e8163c5fed689e3079ca94ceecc9a"
+    },
+    {
+      "path": "reports/008-pilot-hardening-and-conformance/runs/security-ede2feae-b62b-48b6-b71c-ea5d56047f34.json",
+      "sha256": "sha256:87355e2b3e8f391d9288ec255dd04759afb67969a24256924698308e02759485"
+    }
+  ],
+  "reasonCodes": [
+    "US3_FAILED"
+  ]
+}

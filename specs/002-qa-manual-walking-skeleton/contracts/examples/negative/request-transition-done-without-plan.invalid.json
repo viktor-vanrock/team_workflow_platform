@@ -1,0 +1,47 @@
+{
+  "externalEntityId": "mock-request-42",
+  "expectedExternalVersion": "41",
+  "expectedNormalizedStatus": "READY",
+  "requestedNormalizedStatus": "DONE",
+  "reason": "Attempt to close without the exact Required Session Plan revision",
+  "sourceWorkItemId": "33333333-3333-4333-8333-333333333333",
+  "completionSummary": {
+    "scopeSummary": "Manual checkout smoke scope for build 2026.08.27.1 in NON_PROD",
+    "scopeSnapshotRefs": [
+      {
+        "id": "21212121-2121-4121-8121-212121212121",
+        "contentHash": "sha256:2121212121212121212121212121212121212121212121212121212121212121"
+      }
+    ],
+    "verdict": "FAIL",
+    "verdictRef": {
+      "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+      "version": 1,
+      "contentHash": "sha256:2828282828282828282828282828282828282828282828282828282828282828"
+    },
+    "residualRisk": "Known checkout validation defect is linked",
+    "evidenceReferences": [
+      {
+        "manifestRevisionRef": {
+          "id": "31313131-3131-4131-8131-313131313131",
+          "version": 1,
+          "contentHash": "sha256:2323232323232323232323232323232323232323232323232323232323232323"
+        },
+        "displayLabel": "Signed checkout smoke evidence",
+        "platformPath": "/qa/evidence/31313131-3131-4131-8131-313131313131"
+      }
+    ],
+    "defectReferences": []
+  },
+  "completionSummaryHash": "sha256:2626262626262626262626262626262626262626262626262626262626262626",
+  "verdictRef": {
+    "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+    "version": 1,
+    "contentHash": "sha256:2828282828282828282828282828282828282828282828282828282828282828"
+  },
+  "dodAssessmentRef": {
+    "id": "10101010-1010-4010-8010-101010101010",
+    "version": 1,
+    "contentHash": "sha256:2929292929292929292929292929292929292929292929292929292929292929"
+  }
+}

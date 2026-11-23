@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:completion-candidate:v1",
+  "title": "QA Completion Candidate with CAS Delivery Projection",
+  "description": "The close-intent content, including the server-derived adjudicativeAggregateHash, is immutable and exact-approved by a distinct, currently authorized QA Lead. State and generic approval/command/confirmation refs form the mutable CAS delivery projection; final confirmation also creates a separate append-only record. HUMAN REJECTED is reachable only from AWAITING_APPROVAL through the exact generic Approval rejection; a pre-approval aggregate change uses CANDIDATE to INVALIDATED instead. Dispatch succeeds only when the extension-owned aggregate hash still matches and the extension completion guard is atomically moved to DISPATCHED before outbox publication.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "completionCandidateId", "version", "workspaceId", "projectId", "workItemId", "state", "adjudicativeAggregateHash", "requiredSessionPlanRef", "dodAssessmentRef", "verdictRef", "sessionReviewRefs", "adjudicativeManifestRevisionRefs", "findingReviewRefs", "defectDraftRefs", "scopeSummary", "residualRisk", "defectLinkIds", "externalRequestId", "expectedExternalVersion", "expectedRawExternalState", "expectedNormalizedStatus", "requestedNormalizedStatus", "bindingRef", "profileRefs", "chainFingerprint", "transitionInput", "completionSummaryHash", "transitionInputSchemaRef", "transitionInputHash", "contentHash", "initiatedBy", "initiatorRole", "initiatorPermissionKey", "initiationAuthorizationBasisHash", "resourceVersion", "createdAt", "updatedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "completionCandidateId": { "type": "string", "format": "uuid" },
+    "version": { "const": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "state": { "type": "string", "enum": ["CANDIDATE", "AWAITING_APPROVAL", "AUTHORIZED", "DISPATCHED", "CONFIRMED", "REJECTED", "INVALIDATED", "FAILED"] },
+    "adjudicativeAggregateHash": {
+      "description": "Server-derived extension aggregate digest pinned when the immutable candidate is created. Dispatch atomically rechecks equality with QaRequestExtension.adjudicativeAggregateHash; mismatch invalidates a pre-dispatch candidate with zero Connector call.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+    "dodAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "verdictRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "scopeSummary": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "residualRisk": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "sessionReviewRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" }
+    },
+    "adjudicativeManifestRevisionRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" }
+    },
+    "findingReviewRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "defectDraftRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "defectLinkIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "format": "uuid" } },
+    "externalRequestId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "expectedExternalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "expectedRawExternalState": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "expectedNormalizedStatus": { "type": "string", "enum": ["NEW", "NEEDS_INFO", "READY", "PLANNED", "IN_PROGRESS", "REVIEW", "BLOCKED"] },
+    "requestedNormalizedStatus": { "const": "DONE" },
+    "bindingRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/BindingRef" },
+    "profileRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ProfileRef" } },
+    "chainFingerprint": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "transitionInput": { "$ref": "../operational-work-item/request-transition.v1.schema.json" },
+    "completionSummaryHash": {
+      "description": "Must equal transitionInput.completionSummaryHash. Semantic conformance also deep-compares the top-level plan/DoD/Verdict/manifest/Finding/defect/scope/residual-risk projection to the same full transitionInput.completionSummary bytes before Approval creation and dispatch.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "transitionInputSchemaRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SchemaRef" },
+    "transitionInputHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "contentHash": {
+      "description": "Hash of immutable close-intent fields, including adjudicativeAggregateHash; excludes state, closeApprovalRef, commandRef, finalCloseConfirmationRef and terminalReason delivery projection fields.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "initiatedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "initiatorRole": {
+      "description": "Server-derived authorization projection. Only the current HUMAN Executor may initiate final close; a QA Lead cannot initiate even when the same person could otherwise approve another subject.",
+      "const": "EXECUTOR"
+    },
+    "initiatorPermissionKey": { "const": "qa.completion.initiate" },
+    "initiationAuthorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "closeApprovalRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericApprovalRef" },
+    "approvedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "approvedAt": { "type": "string", "format": "date-time" },
+    "commandRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" },
+    "effectKeyHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "confirmationReceiptRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+    "finalCloseConfirmationRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+    "terminalReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "terminalFromState": {
+      "description": "Exact pre-dispatch state invalidated by drift. DISPATCHED is deliberately excluded: after dispatch only confirmation, failure or reconciliation may follow.",
+      "type": "string",
+      "enum": ["CANDIDATE", "AWAITING_APPROVAL", "AUTHORIZED"]
+    }
+    ,"resourceVersion": { "type": "integer", "minimum": 1 },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "DispatchedDeliveryProjection": {
+      "description": "The exact approved command is durably DISPATCHED and owns the extension aggregate lock. No terminal/confirmation projection exists yet.",
+      "properties": { "state": { "const": "DISPATCHED" } },
+      "required": ["state", "closeApprovalRef", "approvedBy", "approvedAt", "commandRef", "effectKeyHash"],
+      "not": {
+        "anyOf": [
+          { "required": ["confirmationReceiptRef"] },
+          { "required": ["finalCloseConfirmationRef"] },
+          { "required": ["terminalReason"] },
+          { "required": ["terminalFromState"] }
+        ]
+      }
+    },
+    "ConfirmedDeliveryProjection": {
+      "description": "Confirmed close projection. A terminal reason is impossible because generic confirmation succeeded.",
+      "properties": { "state": { "const": "CONFIRMED" } },
+      "required": ["state", "closeApprovalRef", "approvedBy", "approvedAt", "commandRef", "effectKeyHash", "confirmationReceiptRef", "finalCloseConfirmationRef"],
+      "not": { "required": ["terminalReason"] }
+    },
+    "FailedDeliveryProjection": {
+      "description": "FAILED is reachable only after dispatch and preserves the exact approved command/effect provenance while forbidding any confirmation projection. The same reconciliation transaction releases QaRequestExtension.completionDispatchGuard back to OPEN; it never rewrites this terminal candidate history.",
+      "properties": { "state": { "const": "FAILED" } },
+      "required": ["state", "closeApprovalRef", "approvedBy", "approvedAt", "commandRef", "effectKeyHash", "terminalReason"],
+      "not": { "anyOf": [{ "required": ["confirmationReceiptRef"] }, { "required": ["finalCloseConfirmationRef"] }] }
+    },
+    "InvalidatedDeliveryProjection": {
+      "description": "Pre-dispatch invalidation preserves exactly the projection owned by its predecessor state and forbids confirmation/dispatch provenance not yet reached.",
+      "properties": { "state": { "const": "INVALIDATED" } },
+      "required": ["state", "terminalFromState", "terminalReason"],
+      "not": { "anyOf": [
+        { "required": ["commandRef"] }, { "required": ["effectKeyHash"] },
+        { "required": ["confirmationReceiptRef"] }, { "required": ["finalCloseConfirmationRef"] }
+      ] },
+      "allOf": [
+        {
+          "if": { "properties": { "terminalFromState": { "const": "CANDIDATE" } }, "required": ["terminalFromState"] },
+          "then": { "not": { "anyOf": [{ "required": ["closeApprovalRef"] }, { "required": ["approvedBy"] }, { "required": ["approvedAt"] }] } }
+        },
+        {
+          "if": { "properties": { "terminalFromState": { "const": "AWAITING_APPROVAL" } }, "required": ["terminalFromState"] },
+          "then": { "required": ["closeApprovalRef"], "not": { "anyOf": [{ "required": ["approvedBy"] }, { "required": ["approvedAt"] }] } }
+        },
+        {
+          "if": { "properties": { "terminalFromState": { "const": "AUTHORIZED" } }, "required": ["terminalFromState"] },
+          "then": { "required": ["closeApprovalRef", "approvedBy", "approvedAt"] }
+        }
+      ]
+    },
+    "RejectedDeliveryProjection": {
+      "description": "Exact generic Approval rejection. This is the sole HUMAN rejection branch and therefore proves AWAITING_APPROVAL as its predecessor; CANDIDATE is invalidated, never rejected.",
+      "properties": { "state": { "const": "REJECTED" } },
+      "required": ["state", "closeApprovalRef", "terminalReason"],
+      "not": { "anyOf": [
+        { "required": ["approvedBy"] }, { "required": ["approvedAt"] },
+        { "required": ["commandRef"] }, { "required": ["effectKeyHash"] },
+        { "required": ["confirmationReceiptRef"] }, { "required": ["finalCloseConfirmationRef"] },
+        { "required": ["terminalFromState"] }
+      ] }
+    }
+  },
+  "allOf": [
+    {
+      "description": "Cross-field semantic invariant: requiredSessionPlanRef, verdictRef and dodAssessmentRef equal their transitionInput refs; scopeSummary and residualRisk equal completionSummary text; adjudicativeManifestRevisionRefs equal completionSummary evidence manifest refs; findingReviewRefs/defectDraftRefs/defectLinkIds equal the flattened completionSummary defect refs; completionSummaryHash equals the nested digest. Any mismatch is a conformance failure before exact Approval subject creation."
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["AWAITING_APPROVAL", "AUTHORIZED", "DISPATCHED", "CONFIRMED"] } }, "required": ["state"] },
+      "then": { "required": ["closeApprovalRef"] }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["DISPATCHED", "CONFIRMED"] } }, "required": ["state"] },
+      "then": { "required": ["commandRef", "effectKeyHash"] }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["AUTHORIZED", "DISPATCHED", "CONFIRMED"] } }, "required": ["state"] },
+      "then": { "required": ["approvedBy", "approvedAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "CONFIRMED" } }, "required": ["state"] },
+      "then": { "$ref": "#/$defs/ConfirmedDeliveryProjection" }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["REJECTED", "INVALIDATED", "FAILED"] } }, "required": ["state"] },
+      "then": { "required": ["terminalReason"] }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["REJECTED", "FAILED"] } }, "required": ["state"] },
+      "then": { "required": ["closeApprovalRef"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "CANDIDATE" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["closeApprovalRef"] }, { "required": ["approvedBy"] }, { "required": ["approvedAt"] },
+        { "required": ["commandRef"] }, { "required": ["effectKeyHash"] }, { "required": ["confirmationReceiptRef"] },
+        { "required": ["finalCloseConfirmationRef"] }, { "required": ["terminalReason"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "AWAITING_APPROVAL" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["approvedBy"] }, { "required": ["approvedAt"] }, { "required": ["commandRef"] },
+        { "required": ["effectKeyHash"] }, { "required": ["confirmationReceiptRef"] },
+        { "required": ["finalCloseConfirmationRef"] }, { "required": ["terminalReason"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "AUTHORIZED" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["commandRef"] }, { "required": ["effectKeyHash"] }, { "required": ["confirmationReceiptRef"] },
+        { "required": ["finalCloseConfirmationRef"] }, { "required": ["terminalReason"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "DISPATCHED" } }, "required": ["state"] },
+      "then": { "$ref": "#/$defs/DispatchedDeliveryProjection" }
+    },
+    {
+      "if": { "properties": { "state": { "const": "REJECTED" } }, "required": ["state"] },
+      "then": { "$ref": "#/$defs/RejectedDeliveryProjection" }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["INVALIDATED", "FAILED"] } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["confirmationReceiptRef"] }, { "required": ["finalCloseConfirmationRef"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "INVALIDATED" } }, "required": ["state"] },
+      "then": { "$ref": "#/$defs/InvalidatedDeliveryProjection" },
+      "else": { "not": { "required": ["terminalFromState"] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "FAILED" } }, "required": ["state"] },
+      "then": { "$ref": "#/$defs/FailedDeliveryProjection" }
+    }
+  ]
+}

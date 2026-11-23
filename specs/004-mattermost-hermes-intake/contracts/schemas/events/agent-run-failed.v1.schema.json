@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:agent-run-failed:v1",
+  "title": "Agent Run Failed Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "reasonCode",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "const": "FAILED"
+    },
+    "reasonCode": {
+      "enum": [
+        "INPUT_INVALID",
+        "SUBJECT_STALE",
+        "AUTHORIZATION_DENIED",
+        "GRANT_DENIED",
+        "TOOL_FAILED",
+        "FALLBACK_FAILED",
+        "OUTPUT_INVALID",
+        "BUDGET_EXCEEDED",
+        "INTERNAL_ERROR"
+      ]
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:work-item-detail:v1",
+  "title": "Scoped QA Work Item Detail and History Projection",
+  "description": "One reload-safe read model for the walking-skeleton UI. Every array is same Workspace/Project/Work Item scope and preserves append-only histories rather than only latest values. requestExtension.completionDispatchGuard is the single authoritative aggregate-lock projection; completionCandidates is history and never a competing lock authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "workspaceId", "projectId", "workItemId", "requestExtension", "requestInputHistory", "operationalReadiness", "readinessAssessments", "waivers", "requiredSessionPlanHistory", "sessions", "sessionReviews", "planItems", "manualAttempts", "observations", "planItemResultRevisions", "evidenceArtifactLinks", "evidenceManifestHistories", "postCloseCorrectionMarkers", "findings", "findingReviewRevisions", "defectDrafts", "defectLinks", "verdicts", "verdictSignatures", "dodAssessments", "completionCandidates", "finalCloseConfirmations"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "requestExtension": {
+      "description": "Includes adjudicativeAggregateHash and the authoritative OPEN|DISPATCHED|DONE_FROZEN completionDispatchGuard used to explain mutation availability after reload.",
+      "$ref": "./qa-request-extension.v1.schema.json"
+    },
+    "requestInputHistory": { "$ref": "./qa-request-input-history.v1.schema.json" },
+    "operationalReadiness": { "$ref": "#/$defs/OperationalReadinessProjection" },
+    "readinessAssessments": { "type": "array", "items": { "$ref": "./readiness-assessment.v1.schema.json" } },
+    "waivers": { "type": "array", "items": { "$ref": "./qa-waiver.v1.schema.json" } },
+    "requiredSessionPlanHistory": { "oneOf": [{ "type": "null" }, { "$ref": "./required-session-plan-history.v1.schema.json" }] },
+    "sessions": { "type": "array", "items": { "$ref": "./test-session.v1.schema.json" } },
+    "sessionReviews": { "type": "array", "items": { "$ref": "./session-review.v1.schema.json" } },
+    "planItems": { "type": "array", "items": { "$ref": "./plan-item.v1.schema.json" } },
+    "manualAttempts": { "type": "array", "items": { "$ref": "./manual-attempt.v1.schema.json" } },
+    "observations": { "type": "array", "items": { "$ref": "./observation.v1.schema.json" } },
+    "planItemResultRevisions": { "type": "array", "items": { "$ref": "./plan-item-result-revision.v1.schema.json" } },
+    "evidenceArtifactLinks": { "type": "array", "items": { "$ref": "./evidence-artifact-link.v1.schema.json" } },
+    "evidenceManifestHistories": { "type": "array", "items": { "$ref": "./evidence-manifest-history.v1.schema.json" } },
+    "postCloseCorrectionMarkers": { "type": "array", "items": { "$ref": "./post-close-correction-marker.v1.schema.json" } },
+    "findings": { "type": "array", "items": { "$ref": "./finding.v1.schema.json" } },
+    "findingReviewRevisions": { "type": "array", "items": { "$ref": "./finding-review-revision.v1.schema.json" } },
+    "defectDrafts": { "type": "array", "items": { "$ref": "./defect-draft.v1.schema.json" } },
+    "defectLinks": { "type": "array", "items": { "$ref": "./defect-link.v1.schema.json" } },
+    "verdicts": { "type": "array", "items": { "$ref": "./qa-verdict.v1.schema.json" } },
+    "verdictSignatures": { "type": "array", "items": { "$ref": "./verdict-signature.v1.schema.json" } },
+    "dodAssessments": { "type": "array", "items": { "$ref": "./dod-assessment.v1.schema.json" } },
+    "completionCandidates": { "type": "array", "items": { "$ref": "./completion-candidate.v1.schema.json" } },
+    "finalCloseConfirmations": { "type": "array", "items": { "$ref": "./final-close-confirmation.v1.schema.json" } }
+  },
+  "$defs": {
+    "OperationalReadinessProjection": {
+      "description": "Derived UI projection only: canonical readiness authority remains the immutable assessment. The closed state matrix is normative: NOT_EVALUATED and NEEDS_INFO remain Core NEW without effects; READY_PENDING_SYNC and SYNC_ERROR remain NEW; confirmed READY preserves the readiness fact while Core may advance through READY or any later canonical lifecycle state.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessmentRef", "assessmentState", "normalizedStatus", "syncStage"],
+      "properties": {
+        "assessmentRef": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" }
+          ]
+        },
+        "assessmentState": { "type": "string", "enum": ["NOT_EVALUATED", "NEEDS_INFO", "READY", "READY_WITH_WAIVER"] },
+        "normalizedStatus": { "type": "string", "enum": ["NEW", "READY", "PLANNED", "IN_PROGRESS", "REVIEW", "BLOCKED", "DONE", "CANCELLED"] },
+        "syncStage": { "type": "string", "enum": ["NOT_EVALUATED", "NEEDS_INFO", "READY_PENDING_SYNC", "READY", "SYNC_ERROR"] },
+        "readinessCommandRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" },
+        "readinessResultRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+        "syncErrorCode": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "assessmentRef": { "type": "null" },
+            "assessmentState": { "const": "NOT_EVALUATED" },
+            "normalizedStatus": { "const": "NEW" },
+            "syncStage": { "const": "NOT_EVALUATED" }
+          },
+          "not": { "anyOf": [
+            { "required": ["readinessCommandRef"] }, { "required": ["readinessResultRef"] },
+            { "required": ["syncErrorCode"] }
+          ] }
+        },
+        {
+          "properties": {
+            "assessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+            "assessmentState": { "const": "NEEDS_INFO" },
+            "normalizedStatus": { "const": "NEW" },
+            "syncStage": { "const": "NEEDS_INFO" }
+          },
+          "not": { "anyOf": [
+            { "required": ["readinessCommandRef"] }, { "required": ["readinessResultRef"] },
+            { "required": ["syncErrorCode"] }
+          ] }
+        },
+        {
+          "properties": {
+            "assessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+            "assessmentState": { "enum": ["READY", "READY_WITH_WAIVER"] },
+            "normalizedStatus": { "const": "NEW" },
+            "syncStage": { "const": "READY_PENDING_SYNC" }
+          },
+          "required": ["readinessCommandRef"],
+          "not": { "anyOf": [{ "required": ["readinessResultRef"] }, { "required": ["syncErrorCode"] }] }
+        },
+        {
+          "description": "002 models SYNC_ERROR before a confirmed result; terminal result payloads remain in command/result history and are not projected here.",
+          "properties": {
+            "assessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+            "assessmentState": { "enum": ["READY", "READY_WITH_WAIVER"] },
+            "normalizedStatus": { "const": "NEW" },
+            "syncStage": { "const": "SYNC_ERROR" }
+          },
+          "required": ["readinessCommandRef", "syncErrorCode"],
+          "not": { "required": ["readinessResultRef"] }
+        },
+        {
+          "properties": {
+            "assessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+            "assessmentState": { "enum": ["READY", "READY_WITH_WAIVER"] },
+            "normalizedStatus": { "enum": ["READY", "PLANNED", "IN_PROGRESS", "REVIEW", "BLOCKED", "DONE", "CANCELLED"] },
+            "syncStage": { "const": "READY" }
+          },
+          "required": ["readinessCommandRef", "readinessResultRef"],
+          "not": { "required": ["syncErrorCode"] }
+        }
+      ]
+    }
+  }
+}

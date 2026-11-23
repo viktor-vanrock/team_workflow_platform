@@ -1,0 +1,1039 @@
+[
+  {
+    "key": "owner.local",
+    "label": "Администратор · 1",
+    "roles": [
+      "system-administrator"
+    ],
+    "workspace": "local-functional",
+    "projects": [
+      {
+        "key": "ALPHA",
+        "permissions": [
+          "project.register",
+          "project.catalog.read",
+          "project.onboarding.read",
+          "project.onboarding.activate",
+          "project.resume",
+          "integration.publish",
+          "project.entitlement.grant",
+          "project.entitlement.revoke",
+          "qa.evidence.read",
+          "qa.evidence.verify",
+          "qa.evidence.export",
+          "approval.decide",
+          "project.admin",
+          "artifact.read",
+          "audit.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "queue.policy.read",
+          "queue.calendar.read",
+          "project.onboarding.evaluate",
+          "project.suspend",
+          "qa.environment.publish",
+          "qa.context.publish",
+          "qa.resource.publish",
+          "integration.validate",
+          "integration.binding.request-publication",
+          "qa.automation.read",
+          "qa.automation.suite.manage",
+          "work-item.read"
+        ]
+      },
+      {
+        "key": "BETA",
+        "permissions": [
+          "project.register",
+          "project.catalog.read",
+          "project.onboarding.read",
+          "project.onboarding.activate",
+          "project.resume",
+          "integration.publish",
+          "project.entitlement.grant",
+          "project.entitlement.revoke",
+          "qa.evidence.read",
+          "qa.evidence.verify",
+          "qa.evidence.export",
+          "approval.decide",
+          "project.admin",
+          "artifact.read",
+          "audit.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "queue.policy.read",
+          "queue.calendar.read",
+          "project.onboarding.evaluate",
+          "project.suspend",
+          "qa.environment.publish",
+          "qa.context.publish",
+          "qa.resource.publish",
+          "integration.validate",
+          "integration.binding.request-publication",
+          "qa.automation.read",
+          "qa.automation.suite.manage",
+          "work-item.read"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": [
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          }
+        ]
+      },
+      {
+        "kind": "queue",
+        "status": 200,
+        "count": 0,
+        "projects": []
+      },
+      {
+        "kind": "backlog",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "backlog",
+        "project": "BETA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "BETA",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "key": "integration-admin.alpha",
+    "label": "Администратор · 2",
+    "roles": [
+      "system-administrator"
+    ],
+    "workspace": "local-functional",
+    "projects": [
+      {
+        "key": "ALPHA",
+        "permissions": [
+          "project.register",
+          "project.catalog.read",
+          "project.onboarding.read",
+          "project.onboarding.activate",
+          "project.resume",
+          "integration.publish",
+          "project.entitlement.grant",
+          "project.entitlement.revoke",
+          "qa.evidence.read",
+          "qa.evidence.verify",
+          "qa.evidence.export",
+          "approval.decide",
+          "project.admin",
+          "artifact.read",
+          "audit.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "queue.policy.read",
+          "queue.calendar.read",
+          "project.onboarding.evaluate",
+          "project.suspend",
+          "qa.environment.publish",
+          "qa.context.publish",
+          "qa.resource.publish",
+          "integration.validate",
+          "integration.binding.request-publication",
+          "qa.automation.read",
+          "qa.automation.suite.manage",
+          "work-item.read"
+        ]
+      },
+      {
+        "key": "BETA",
+        "permissions": [
+          "project.register",
+          "project.catalog.read",
+          "project.onboarding.read",
+          "project.onboarding.activate",
+          "project.resume",
+          "integration.publish",
+          "project.entitlement.grant",
+          "project.entitlement.revoke",
+          "qa.evidence.read",
+          "qa.evidence.verify",
+          "qa.evidence.export",
+          "approval.decide",
+          "project.admin",
+          "artifact.read",
+          "audit.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "queue.policy.read",
+          "queue.calendar.read",
+          "project.onboarding.evaluate",
+          "project.suspend",
+          "qa.environment.publish",
+          "qa.context.publish",
+          "qa.resource.publish",
+          "integration.validate",
+          "integration.binding.request-publication",
+          "qa.automation.read",
+          "qa.automation.suite.manage",
+          "work-item.read"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": [
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          }
+        ]
+      },
+      {
+        "kind": "queue",
+        "status": 200,
+        "count": 0,
+        "projects": []
+      },
+      {
+        "kind": "backlog",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "backlog",
+        "project": "BETA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "BETA",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "key": "requester.alpha",
+    "label": "Requester",
+    "roles": [
+      "requester"
+    ],
+    "workspace": "local-functional",
+    "projects": [
+      {
+        "key": "ALPHA",
+        "permissions": [
+          "project.onboarding.read",
+          "project.catalog.read",
+          "work-item.create",
+          "work-item.read",
+          "artifact.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "qa.request.create",
+          "qa.request.confirm",
+          "qa.request.input.revise"
+        ]
+      },
+      {
+        "key": "BETA",
+        "permissions": [
+          "project.onboarding.read",
+          "project.catalog.read",
+          "work-item.create",
+          "work-item.read",
+          "artifact.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "qa.request.create",
+          "qa.request.confirm",
+          "qa.request.input.revise"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": [
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          }
+        ]
+      },
+      {
+        "kind": "queue",
+        "status": 200,
+        "count": 0,
+        "projects": []
+      },
+      {
+        "kind": "backlog",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "backlog",
+        "project": "BETA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "BETA",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "key": "limited.alpha",
+    "label": "Читатель · 1",
+    "roles": [
+      "reader"
+    ],
+    "workspace": "local-functional",
+    "projects": [
+      {
+        "key": "ALPHA",
+        "permissions": [
+          "project.onboarding.read",
+          "project.catalog.read",
+          "work-item.read",
+          "artifact.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": [
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          }
+        ]
+      },
+      {
+        "kind": "queue",
+        "status": 200,
+        "count": 0,
+        "projects": []
+      },
+      {
+        "kind": "backlog",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "ALPHA",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "key": "executor.alpha",
+    "label": "QA Executor · QA 1",
+    "roles": [
+      "qa-executor"
+    ],
+    "workspace": "local-functional",
+    "projects": [
+      {
+        "key": "ALPHA",
+        "permissions": [
+          "project.catalog.read",
+          "project.onboarding.read",
+          "qa.account-lease.acquire",
+          "qa.account-lease.release",
+          "qa.evidence.verify",
+          "command.execute",
+          "integration.use",
+          "work-item.read",
+          "artifact.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "qa.request.input.revise",
+          "qa.readiness.evaluate",
+          "qa.readiness.confirm",
+          "qa.required-session-plan.publish",
+          "qa.session.plan",
+          "qa.session.execute",
+          "qa.session.review",
+          "qa.plan-item.result",
+          "qa.finding.classify",
+          "qa.defect.draft",
+          "qa.defect.publish",
+          "qa.evidence.write",
+          "qa.evidence.read",
+          "qa.evidence.post-close-correction.record",
+          "qa.verdict.sign",
+          "qa.completion.request",
+          "qa.automation.read",
+          "qa.automation.session.plan",
+          "qa.automation.quarantine.manage"
+        ]
+      },
+      {
+        "key": "BETA",
+        "permissions": [
+          "project.catalog.read",
+          "project.onboarding.read",
+          "qa.account-lease.acquire",
+          "qa.account-lease.release",
+          "qa.evidence.verify",
+          "command.execute",
+          "integration.use",
+          "work-item.read",
+          "artifact.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "qa.request.input.revise",
+          "qa.readiness.evaluate",
+          "qa.readiness.confirm",
+          "qa.required-session-plan.publish",
+          "qa.session.plan",
+          "qa.session.execute",
+          "qa.session.review",
+          "qa.plan-item.result",
+          "qa.finding.classify",
+          "qa.defect.draft",
+          "qa.defect.publish",
+          "qa.evidence.write",
+          "qa.evidence.read",
+          "qa.evidence.post-close-correction.record",
+          "qa.verdict.sign",
+          "qa.completion.request",
+          "qa.automation.read",
+          "qa.automation.session.plan",
+          "qa.automation.quarantine.manage"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": [
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          }
+        ]
+      },
+      {
+        "kind": "queue",
+        "status": 200,
+        "count": 0,
+        "projects": []
+      },
+      {
+        "kind": "backlog",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "backlog",
+        "project": "BETA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "BETA",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "key": "executor.qa2",
+    "label": "QA Executor · QA 2",
+    "roles": [
+      "qa-executor"
+    ],
+    "workspace": "local-functional",
+    "projects": [
+      {
+        "key": "ALPHA",
+        "permissions": [
+          "project.catalog.read",
+          "project.onboarding.read",
+          "qa.account-lease.acquire",
+          "qa.account-lease.release",
+          "qa.evidence.verify",
+          "command.execute",
+          "integration.use",
+          "work-item.read",
+          "artifact.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "qa.request.input.revise",
+          "qa.readiness.evaluate",
+          "qa.readiness.confirm",
+          "qa.required-session-plan.publish",
+          "qa.session.plan",
+          "qa.session.execute",
+          "qa.session.review",
+          "qa.plan-item.result",
+          "qa.finding.classify",
+          "qa.defect.draft",
+          "qa.defect.publish",
+          "qa.evidence.write",
+          "qa.evidence.read",
+          "qa.evidence.post-close-correction.record",
+          "qa.verdict.sign",
+          "qa.completion.request",
+          "qa.automation.read",
+          "qa.automation.session.plan",
+          "qa.automation.quarantine.manage"
+        ]
+      },
+      {
+        "key": "BETA",
+        "permissions": [
+          "project.catalog.read",
+          "project.onboarding.read",
+          "qa.account-lease.acquire",
+          "qa.account-lease.release",
+          "qa.evidence.verify",
+          "command.execute",
+          "integration.use",
+          "work-item.read",
+          "artifact.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "qa.request.input.revise",
+          "qa.readiness.evaluate",
+          "qa.readiness.confirm",
+          "qa.required-session-plan.publish",
+          "qa.session.plan",
+          "qa.session.execute",
+          "qa.session.review",
+          "qa.plan-item.result",
+          "qa.finding.classify",
+          "qa.defect.draft",
+          "qa.defect.publish",
+          "qa.evidence.write",
+          "qa.evidence.read",
+          "qa.evidence.post-close-correction.record",
+          "qa.verdict.sign",
+          "qa.completion.request",
+          "qa.automation.read",
+          "qa.automation.session.plan",
+          "qa.automation.quarantine.manage"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": [
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          }
+        ]
+      },
+      {
+        "kind": "queue",
+        "status": 200,
+        "count": 0,
+        "projects": []
+      },
+      {
+        "kind": "backlog",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "backlog",
+        "project": "BETA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "BETA",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "key": "lead.alpha",
+    "label": "QA Lead",
+    "roles": [
+      "qa-lead"
+    ],
+    "workspace": "local-functional",
+    "projects": [
+      {
+        "key": "ALPHA",
+        "permissions": [
+          "project.catalog.read",
+          "project.onboarding.read",
+          "integration.accept",
+          "qa.evidence.verify",
+          "qa.evidence.export",
+          "approval.decide",
+          "connector.effect.approve",
+          "work-item.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "queue.policy.read",
+          "queue.calendar.read",
+          "queue.order.move",
+          "queue.control.request",
+          "queue.control.approve",
+          "queue.control.reject",
+          "qa.readiness.confirm",
+          "qa.readiness.waive",
+          "qa.required-session-plan.publish",
+          "qa.session.review",
+          "qa.finding.classify",
+          "qa.finding.accept-risk",
+          "qa.defect.publish",
+          "qa.evidence.read",
+          "qa.evidence.post-close-correction.record",
+          "qa.verdict.cosign",
+          "qa.waiver.approve",
+          "qa.completion.approve",
+          "qa.automation.read",
+          "qa.automation.quarantine.manage"
+        ]
+      },
+      {
+        "key": "BETA",
+        "permissions": [
+          "project.catalog.read",
+          "project.onboarding.read",
+          "integration.accept",
+          "qa.evidence.verify",
+          "qa.evidence.export",
+          "approval.decide",
+          "connector.effect.approve",
+          "work-item.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read",
+          "queue.policy.read",
+          "queue.calendar.read",
+          "queue.order.move",
+          "queue.control.request",
+          "queue.control.approve",
+          "queue.control.reject",
+          "qa.readiness.confirm",
+          "qa.readiness.waive",
+          "qa.required-session-plan.publish",
+          "qa.session.review",
+          "qa.finding.classify",
+          "qa.finding.accept-risk",
+          "qa.defect.publish",
+          "qa.evidence.read",
+          "qa.evidence.post-close-correction.record",
+          "qa.verdict.cosign",
+          "qa.waiver.approve",
+          "qa.completion.approve",
+          "qa.automation.read",
+          "qa.automation.quarantine.manage"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": [
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          }
+        ]
+      },
+      {
+        "kind": "queue",
+        "status": 200,
+        "count": 0,
+        "projects": []
+      },
+      {
+        "kind": "backlog",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "backlog",
+        "project": "BETA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "BETA",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "key": "viewer.beta",
+    "label": "Читатель · 2",
+    "roles": [
+      "reader"
+    ],
+    "workspace": "local-functional",
+    "projects": [
+      {
+        "key": "ALPHA",
+        "permissions": [
+          "project.onboarding.read",
+          "project.catalog.read",
+          "work-item.read",
+          "artifact.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read"
+        ]
+      },
+      {
+        "key": "BETA",
+        "permissions": [
+          "project.onboarding.read",
+          "project.catalog.read",
+          "work-item.read",
+          "artifact.read",
+          "queue.project.read",
+          "queue.portfolio.read",
+          "queue.capacity.read",
+          "queue.sla.read"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": [
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "DRAFT"
+          },
+          {
+            "title": "Development smoke 3351f847-fc3c-4d96-bb51-3716bbb16ca7",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          },
+          {
+            "title": "Проверка интерфейса — путь первого запроса",
+            "project": "ALPHA",
+            "kind": "WORK_ITEM"
+          }
+        ]
+      },
+      {
+        "kind": "queue",
+        "status": 200,
+        "count": 0,
+        "projects": []
+      },
+      {
+        "kind": "backlog",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "ALPHA",
+        "status": 200
+      },
+      {
+        "kind": "backlog",
+        "project": "BETA",
+        "status": 200
+      },
+      {
+        "kind": "project",
+        "project": "BETA",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "key": "worker.local",
+    "label": "Worker Service",
+    "roles": [
+      "worker"
+    ],
+    "workspace": "local-functional",
+    "projects": [
+      {
+        "key": "ALPHA",
+        "permissions": [
+          "command.execute",
+          "work-item.read"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": []
+      },
+      {
+        "kind": "backlog",
+        "project": "ALPHA",
+        "status": 403
+      }
+    ]
+  },
+  {
+    "key": "outsider.delta",
+    "label": "Outsider",
+    "roles": [
+      "requester"
+    ],
+    "workspace": "local-isolated",
+    "projects": [
+      {
+        "key": "DELTA",
+        "permissions": [
+          "work-item.create",
+          "work-item.read"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "subjects",
+        "status": 200,
+        "items": []
+      },
+      {
+        "kind": "backlog",
+        "project": "DELTA",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "key": "writer.docs",
+    "label": "Технический писатель",
+    "roles": [
+      "technical-writer"
+    ],
+    "workspace": "local-tech-writing",
+    "projects": [
+      {
+        "key": "ALPHA-DOCS",
+        "permissions": [
+          "docs.read",
+          "docs.create",
+          "docs.edit",
+          "docs.submit"
+        ]
+      }
+    ],
+    "checks": []
+  },
+  {
+    "key": "lead.docs",
+    "label": "Лид технических писателей",
+    "roles": [
+      "technical-writing-lead"
+    ],
+    "workspace": "local-tech-writing",
+    "projects": [
+      {
+        "key": "ALPHA-DOCS",
+        "permissions": [
+          "docs.read",
+          "docs.review"
+        ]
+      }
+    ],
+    "checks": []
+  }
+]

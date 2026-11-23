@@ -1,0 +1,402 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-us2",
+  "contour": "qa-jira-gitlab-local",
+  "startedAt": "2026-09-03T10:40:28.412Z",
+  "finishedAt": "2026-09-03T10:42:50.731Z",
+  "status": "PASS",
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts",
+        "sha256": "sha256:b5a79517e87d227a77c7bd010efdb4e2e6162aef0f34e8d23a4c3c6f8e537355"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/api/gitlab.controller.ts",
+        "sha256": "sha256:7c41aef582b0d650fc47960742d906c0926de2ca2a401ac5614742581b3d2554"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/scenarios/gitlab-scenarios.ts",
+        "sha256": "sha256:c8cf27b1c751bbcb729f7198ffeb219bcb1a6a188221bf258f02df2e8239fec0"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/state/gitlab.repository.ts",
+        "sha256": "sha256:90d023402144df5dc01ffdb9546a311732b2438baffb166d2ae37458f42e4bad"
+      },
+      {
+        "path": "apps/web/src/routes/qa/automated-session.tsx",
+        "sha256": "sha256:90cb1f4d9b5ed8aa2ce95ebbad10518f20fa889ac430d36198e89ff1126e199e"
+      },
+      {
+        "path": "packages/competency-qa/src/application/trigger-automation.ts",
+        "sha256": "sha256:9e7f5e93dd14772cd42cf41de7886ff62d1c675e60b396e8e8debf65e6578d7f"
+      },
+      {
+        "path": "packages/competency-qa/src/domain/automation-attempt.ts",
+        "sha256": "sha256:7166405c62472be01f94a7078a115dba3e440d645e975002135791ed8b35308b"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/automation-execution.repository.ts",
+        "sha256": "sha256:55c94ca94f44a76701f851ecc69bcfa4d9a01dfe8434ec67dbd4f6d5f8848719"
+      },
+      {
+        "path": "packages/competency-qa/src/ui/automated-session-executor.tsx",
+        "sha256": "sha256:8e5484a78d9a4336a56eda1f766baa4e338ef329ee69d86f9674cc7558e09b83"
+      },
+      {
+        "path": "packages/connector-gitlab/src/pipeline/gitlab-pipeline-trigger.ts",
+        "sha256": "sha256:4b14158698e043aa88a9ba693a4c40b81abcddc2cb0953e566db9949ba412af0"
+      },
+      {
+        "path": "packages/connector-gitlab/src/reconciliation/gitlab-trigger-reconciliation.ts",
+        "sha256": "sha256:87d8e29e9775ac0b32478108bea88fa258cb174a81160380eed7f36544434f09"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/repositories/gitlab-effect.repository.ts",
+        "sha256": "sha256:f3865bc49abfb096b10d98b79fec9ca557e3f8184428b439fc8f106fc98ff44d"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-attempt-query.ts",
+        "sha256": "sha256:66b3443ed20150e2ee9c7477bbba0f6e1d9c006795f4e9a3718ae9202a7e566c"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-launch-service.ts",
+        "sha256": "sha256:a0fbe10037172e2c80d9c764a5fc8a7a3a8e970629f2d61168365b36f2a5822b"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-worker-authority.ts",
+        "sha256": "sha256:cb69f706cb2071c806d253772dd0fb91a980c2f45ba38fe272a623387974a425"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-worker.ts",
+        "sha256": "sha256:ca1458829ea4eebcf7681af695991cd909822450193900fcf3ab39d6f8744493"
+      },
+      {
+        "path": "tests/e2e/005-us2-trigger-once.spec.ts",
+        "sha256": "sha256:31602a6e715dccba81fdf2156d99d902a1e54cb75331a7a1ca853caff6f20279"
+      },
+      {
+        "path": "tests/integration/005/us2-trigger-once.spec.ts",
+        "sha256": "sha256:291f125213d7f48ddebbc29cd54bbeb060fb9841718f644357e3e239518d289b"
+      },
+      {
+        "path": "tests/integration/005/us2-trigger-reconciliation.spec.ts",
+        "sha256": "sha256:ac146bd9b12242d94f0e8d0676fdc6bf6c8012bb4c8eaccf90d0285b4dbdf010"
+      },
+      {
+        "path": "tests/integration/security/005/us2-launch-boundary.spec.ts",
+        "sha256": "sha256:b38a457acff3ea6754a74ce5c5290a1ec9c05c29a312126e9ad69767b0ced77c"
+      },
+      {
+        "path": "tools/local/gitlab-scenario-catalog.mts",
+        "sha256": "sha256:adf11894da837d42701d28d51e3728b5e5f682d72a3ac1f6ac85f61991a14ec3"
+      },
+      {
+        "path": "tools/local/gitlab-scenario.mts",
+        "sha256": "sha256:f592eb65ea72dbe5b7fdb114a8ecb16eed598358a578b583ec2c2be6211d8562"
+      }
+    ],
+    "aggregateSha256": "sha256:39ae60b6d7b4c8ae91d4b12a534b6296ddbdf9615f1a329cd13f10678034dfbf"
+  },
+  "scenarios": [
+    {
+      "id": "us2-trigger-once",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us2-trigger-once",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "CONFIRMED"
+      },
+      "scenarioPersistenceEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "behaviorEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "durableEvidence": {
+        "requestClaims": 1,
+        "effects": 1,
+        "maximumTriggerPosts": 1,
+        "maximumProviderPipelines": 1
+      }
+    },
+    {
+      "id": "us2-command-replay",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us2-command-replay",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "CONFIRMED"
+      },
+      "scenarioPersistenceEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "behaviorEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "durableEvidence": {
+        "requestClaims": 1,
+        "effects": 1,
+        "maximumTriggerPosts": 1,
+        "maximumProviderPipelines": 1
+      }
+    },
+    {
+      "id": "us2-stale-confirmation",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us2-stale-confirmation",
+        "expectedLaunchAccepted": false,
+        "expectedRequestClaims": 0,
+        "expectedEffects": 0,
+        "expectedTriggerCalls": 0,
+        "expectedProviderPipelines": 0,
+        "expectedResolution": "REJECTED"
+      },
+      "scenarioPersistenceEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "behaviorEvidence": "tests/integration/security/005/us2-launch-boundary.spec.ts",
+      "durableEvidence": {
+        "requestClaims": 0,
+        "effects": 0,
+        "triggerPosts": 0,
+        "providerPipelines": 0
+      }
+    },
+    {
+      "id": "us2-mismatched-confirmation",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us2-mismatched-confirmation",
+        "expectedLaunchAccepted": false,
+        "expectedRequestClaims": 0,
+        "expectedEffects": 0,
+        "expectedTriggerCalls": 0,
+        "expectedProviderPipelines": 0,
+        "expectedResolution": "REJECTED"
+      },
+      "scenarioPersistenceEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "behaviorEvidence": "tests/integration/security/005/us2-launch-boundary.spec.ts",
+      "durableEvidence": {
+        "requestClaims": 0,
+        "effects": 0,
+        "triggerPosts": 0,
+        "providerPipelines": 0
+      }
+    },
+    {
+      "id": "us2-timeout-after-trigger",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us2-timeout-after-trigger",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "CONFIRMED_BY_LOOKUP"
+      },
+      "scenarioPersistenceEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "behaviorEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "durableEvidence": {
+        "requestClaims": 1,
+        "effects": 1,
+        "maximumTriggerPosts": 1,
+        "maximumProviderPipelines": 1
+      }
+    },
+    {
+      "id": "us2-lookup-zero",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us2-lookup-zero",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "BOUNDED_AMBIGUITY"
+      },
+      "scenarioPersistenceEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "behaviorEvidence": "tests/integration/005/us2-trigger-reconciliation.spec.ts",
+      "durableEvidence": {
+        "requestClaims": 1,
+        "effects": 1,
+        "maximumTriggerPosts": 1,
+        "maximumProviderPipelines": 1
+      }
+    },
+    {
+      "id": "us2-lookup-multiple",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us2-lookup-multiple",
+        "expectedLaunchAccepted": true,
+        "expectedRequestClaims": 1,
+        "expectedEffects": 1,
+        "expectedTriggerCalls": 1,
+        "expectedProviderPipelines": 1,
+        "expectedResolution": "BOUNDED_AMBIGUITY"
+      },
+      "scenarioPersistenceEvidence": "tests/e2e/005-us2-trigger-once.spec.ts",
+      "behaviorEvidence": "tests/integration/005/us2-trigger-reconciliation.spec.ts",
+      "durableEvidence": {
+        "requestClaims": 1,
+        "effects": 1,
+        "maximumTriggerPosts": 1,
+        "maximumProviderPipelines": 1
+      }
+    }
+  ],
+  "invariants": {
+    "launchAuthority": "EXACT_SERVER_CONFIRMATION_PLUS_CURRENT_ETAG",
+    "requestUniqueness": "WORKSPACE_PROJECT_SESSION_REQUEST_KEY_ACTOR_INDEPENDENT",
+    "coreAuthority": "POSTGRESQL_COMMAND_AND_OUTBOX",
+    "redisAuthority": "RECONSTRUCTIBLE_HINT_ONLY",
+    "effectMarkerPersistedBeforePost": true,
+    "postMarkerRecovery": "LOOKUP_ONLY",
+    "exactOneReceiptRequired": true,
+    "ambiguityVisible": true,
+    "maximumProviderTriggerPostsPerEffect": 1,
+    "inlineApiProviderCalls": 0,
+    "secondApprovalRequired": false
+  },
+  "stages": [
+    {
+      "id": "foundation",
+      "description": "Current Feature 005 foundation remains green",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 77250,
+      "outputHash": "sha256:05f351cf2bd15605f2a839327ae377874a648a98004f98a01f6bdc7929e9827d"
+    },
+    {
+      "id": "scenario-catalog",
+      "description": "Exactly seven documented US2 scenarios are registered",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 74,
+      "outputHash": "sha256:21f2af6f69fe2af868797d3fc1c45565a9d3545a4dca19dc141b27298b17d5c4"
+    },
+    {
+      "id": "contracts",
+      "description": "Closed launch/status schema and Profile-only trigger/lookup mapping",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3164,
+      "outputHash": "sha256:59cda28f1e59842d9607cb39148078053489dc2b09e9bddacf33c6ca2c346478"
+    },
+    {
+      "id": "domain",
+      "description": "Immutable Attempt identity, confirmation commitments and status rules",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1049,
+      "outputHash": "sha256:6414d6be0723cff5c4b653e341f51e85f975d3917d3fc232b936865508436969"
+    },
+    {
+      "id": "migrations",
+      "description": "QA 2055 uniqueness, shared child, append-only status and atomic references",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 5652,
+      "outputHash": "sha256:a3243fded572ae6f2468a7c274ac09e03448538ac3044081dc1ae10239ab43d7"
+    },
+    {
+      "id": "launch-boundary",
+      "description": "Human confirmation, actor-independent replay and zero-write denials",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 10114,
+      "outputHash": "sha256:03d5332b199ed70cfeba33453a28a0d85217c6e0aa871c6a8c033c036dc3a55f"
+    },
+    {
+      "id": "worker-reconciliation",
+      "description": "Concurrent delivery, Redis loss, durable marker and bounded lookup-only recovery",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 15268,
+      "outputHash": "sha256:1f0315a4f305786a138dccde8ba2f03e219136cc5053768112ef0f2b0b46e751"
+    },
+    {
+      "id": "full-process",
+      "description": "API replay plus real HTTP Mock Hub timeout-after-effect with one POST/pipeline",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 7037,
+      "outputHash": "sha256:b751cd005e3552120001fc4b6b5d72ff89cf2cc37f58ebf6e89225f8dd675586"
+    },
+    {
+      "id": "typecheck-connector",
+      "description": "GitLab adapter static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1252,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-effect-store",
+      "description": "GitLab effect persistence static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1189,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-qa",
+      "description": "QA domain, persistence and executor UI static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3280,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-runtime",
+      "description": "Durable GitLab worker/query composition static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4247,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-api",
+      "description": "Automation launch/query API static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4823,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-worker",
+      "description": "Worker process composition static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4153,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-mock-hub",
+      "description": "Stateful GitLab Mock Hub static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 993,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-web",
+      "description": "Automated Session executor route static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2446,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "web-build",
+      "description": "Production web bundle includes the automated Session executor",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 317,
+      "outputHash": "sha256:c78aadccc4f5513b4521a46becff278b2a785d26dd88f27e3bc13f66f3308799"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "args": [
+    "node_modules/typescript/bin/tsc",
+    "-p",
+    "apps/api/tsconfig.json",
+    "--pretty",
+    "false"
+  ],
+  "exitCode": 2,
+  "durationMs": 6034,
+  "output": "apps/api/src/app.module.ts(246,84): error TS2552: Cannot find name 'QA_DATA_SOURCE'. Did you mean 'DataSource'?\napps/api/src/app.module.ts(340,84): error TS2552: Cannot find name 'QA_DATA_SOURCE'. Did you mean 'DataSource'?\n"
+}

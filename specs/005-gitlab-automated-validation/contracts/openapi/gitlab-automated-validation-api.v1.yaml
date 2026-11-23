@@ -1,0 +1,945 @@
+openapi: 3.1.0
+info:
+  title: AWP GitLab Automated Validation API
+  version: 1.0.0
+  description: >-
+    Feature 005 administration, automated Test Session, immutable Attempt,
+    artifact projection and verified GitLab webhook surfaces. Workspace and
+    Project path values are scope selectors only and are always reauthorized;
+    callers never supply GitLab Profile IDs, credentials, arbitrary variables,
+    raw job names or provider targets as execution authority.
+servers:
+  - url: http://127.0.0.1:3000
+    description: Required local contour
+tags:
+  - name: Automation availability
+  - name: Suite bindings
+  - name: Automated sessions
+  - name: Automation quarantine
+  - name: GitLab ingress
+paths:
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automation/availability:
+    get:
+      tags: [Automation availability]
+      operationId: getQaAutomationAvailability
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: >-
+            Current derived capabilityMode plus independent liveAvailability;
+            transient GitLab health never rewrites configured FULL_QA mode.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-availability.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automation/suite-bindings:
+    get:
+      tags: [Suite bindings]
+      operationId: listAutomationSuiteBindings
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: Authorized Suite Binding versions for this exact Project.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 200
+                items:
+                  $ref: '../schemas/automation-suite-binding.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Suite bindings]
+      operationId: createAutomationSuiteBinding
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSuiteBindingRequest'
+      responses:
+        '201':
+          description: New immutable DRAFT Suite Binding version.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-suite-binding.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automation/suite-bindings/{bindingId}/versions/{version}/validate:
+    post:
+      tags: [Suite bindings]
+      operationId: validateAutomationSuiteBindingVersion
+      description: >-
+        Performs composed GitLab discovery and CI lint/dry-run validation and
+        proves the exact Suite/Profile chain cannot target production or deploy.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/BindingId'
+        - $ref: '#/components/parameters/Version'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: >-
+            Completed validation. VALID advances the Binding to VALIDATED;
+            INVALID leaves it DRAFT and returns closed safe diagnostics.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuiteBindingValidationOutcome'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automation/suite-bindings/{bindingId}/versions/{version}/validation-reports:
+    get:
+      tags: [Suite bindings]
+      operationId: listAutomationSuiteValidationReports
+      description: Immutable validation attempts in creation order, including INVALID diagnostics.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/BindingId'
+        - $ref: '#/components/parameters/Version'
+      responses:
+        '200':
+          description: Authorized append-only validation reports for the exact version.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 100
+                items:
+                  $ref: '../schemas/automation-suite-validation-report.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automation/suite-bindings/{bindingId}/versions/{version}/publish:
+    post:
+      tags: [Suite bindings]
+      operationId: publishAutomationSuiteBindingVersion
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/BindingId'
+        - $ref: '#/components/parameters/Version'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: Published exact validated version.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-suite-binding.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automated-sessions:
+    post:
+      tags: [Automated sessions]
+      operationId: createAutomatedTestSession
+      description: >-
+        Creates one AUTOMATED Session for one published Suite Binding. The server
+        resolves and pins the active Binding/Profile/Connection chain and exact
+        target snapshot; a target change after start requires a linked Session.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAutomatedSessionRequest'
+      responses:
+        '201':
+          description: New READY automated Test Session.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automated-test-session.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automated-sessions/{sessionId}:
+    get:
+      tags: [Automated sessions]
+      operationId: getAutomatedTestSession
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: Authorized automated Session projection.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automated-test-session.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automated-sessions/{sessionId}/attempts:
+    get:
+      tags: [Automated sessions]
+      operationId: listAutomationAttempts
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: Immutable Attempts in contiguous attempt number order.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 100
+                items:
+                  $ref: '../schemas/automation-attempt.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      tags: [Automated sessions]
+      operationId: launchAutomationAttempt
+      description: >-
+        Explicitly launches an initial Attempt or HUMAN rerun. Same
+        testSessionId plus Idempotency-Key and same canonical request hash
+        replays the existing Attempt. The request cannot contain GitLab
+        variables, job names, Profile IDs, secret refs or raw provider IDs.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SessionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LaunchAttemptRequest'
+      responses:
+        '200':
+          description: Exact idempotent replay of an existing Attempt.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-attempt.v1.schema.json'
+        '201':
+          description: New immutable Attempt and durable ConnectorCommand.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-attempt.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automated-sessions/{sessionId}/attempts/{attemptId}:
+    get:
+      tags: [Automated sessions]
+      operationId: getAutomationAttempt
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SessionId'
+        - $ref: '#/components/parameters/AttemptId'
+      responses:
+        '200':
+          description: Attempt identity/configuration with status/result links.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-attempt.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automated-sessions/{sessionId}/attempts/{attemptId}/status-revisions:
+    get:
+      tags: [Automated sessions]
+      operationId: listAutomationAttemptStatusRevisions
+      description: Append-only monotonic status timeline for one exact Attempt.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SessionId'
+        - $ref: '#/components/parameters/AttemptId'
+      responses:
+        '200':
+          description: Status revisions in ascending contiguous revision order.
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                maxItems: 1000
+                items:
+                  $ref: '../schemas/automation-attempt-status-revision.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automated-sessions/{sessionId}/attempts/{attemptId}/result:
+    get:
+      tags: [Automated sessions]
+      operationId: getAutomationAttemptResult
+      description: Immutable normalized technical result for a terminal Attempt.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SessionId'
+        - $ref: '#/components/parameters/AttemptId'
+      responses:
+        '200':
+          description: Exact schema-validated or synthetic-incomplete result.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-attempt-result.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automated-sessions/{sessionId}/attempts/{attemptId}/retry-decision:
+    get:
+      tags: [Automated sessions]
+      operationId: getAutomationAttemptRetryDecision
+      description: Settled deterministic retry decision for a terminal Attempt.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SessionId'
+        - $ref: '#/components/parameters/AttemptId'
+      responses:
+        '200':
+          description: NOT_APPLICABLE, DENIED or SCHEDULED with exact provenance.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-retry-decision.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automated-sessions/{sessionId}/artifacts:
+    get:
+      tags: [Automated sessions]
+      operationId: listAutomationArtifacts
+      description: >-
+        Returns authorized metadata only. Raw content is streamed separately
+        through the existing Core Artifact API after current entitlement and
+        classification checks; raw GitLab URLs are never returned as authority.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '200':
+          description: Authorized artifact metadata for exact Session Attempts.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 500
+                items:
+                  $ref: '../schemas/automation-artifact-descriptor.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automation/quarantines:
+    get:
+      tags: [Automation quarantine]
+      operationId: listAutomationQuarantines
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: Current authorized quarantine projections.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 500
+                items:
+                  $ref: '../schemas/automation-quarantine.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Automation quarantine]
+      operationId: activateAutomationQuarantine
+      description: Creates the first accountable HUMAN activation revision.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivateAutomationQuarantineRequest'
+      responses:
+        '201':
+          description: Active quarantine with immutable initial revision.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-quarantine.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automation/quarantines/{quarantineId}:
+    get:
+      tags: [Automation quarantine]
+      operationId: getAutomationQuarantine
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/QuarantineId'
+      responses:
+        '200':
+          description: Current quarantine state derived from revision plus clock.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-quarantine.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automation/quarantines/{quarantineId}/revisions:
+    get:
+      tags: [Automation quarantine]
+      operationId: listAutomationQuarantineRevisions
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/QuarantineId'
+      responses:
+        '200':
+          description: Immutable quarantine revisions in ascending order.
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                maxItems: 100
+                items:
+                  $ref: '../schemas/automation-quarantine-revision.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/automation/quarantines/{quarantineId}/lift:
+    post:
+      tags: [Automation quarantine]
+      operationId: liftAutomationQuarantine
+      description: Appends an accountable HUMAN lift revision; history remains.
+      security:
+        - oidc: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/QuarantineId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LiftAutomationQuarantineRequest'
+      responses:
+        '200':
+          description: Inactive quarantine after immutable lift revision.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/automation-quarantine.v1.schema.json'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /api/v1/connectors/gitlab/connections/{connectionId}/webhooks:
+    post:
+      tags: [GitLab ingress]
+      operationId: acceptGitLabWebhook
+      description: >-
+        Verifies exact project-scoped Connection, Standard Webhooks
+        HMAC-SHA256 headers, freshness, replay and body hash before durable
+        acknowledgement. The webhook is only a reconciliation signal; terminal
+        QA result follows an authoritative provider read.
+      security: []
+      x-awp-max-body-bytes: 1048576
+      parameters:
+        - $ref: '#/components/parameters/ConnectionId'
+        - name: webhook-id
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 128
+        - name: webhook-timestamp
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 32
+        - name: webhook-signature
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 512
+        - name: X-Gitlab-Event
+          in: header
+          required: true
+          schema:
+            enum: [Pipeline Hook, Job Hook]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              maxProperties: 128
+      responses:
+        '202':
+          description: New or exact replay durably accepted for asynchronous authoritative read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookAcknowledgement'
+        '400':
+          $ref: '#/components/responses/IngressRejected'
+        '401':
+          $ref: '#/components/responses/IngressRejected'
+        '409':
+          $ref: '#/components/responses/IngressConflict'
+        '413':
+          $ref: '#/components/responses/IngressRejected'
+        '415':
+          $ref: '#/components/responses/IngressRejected'
+components:
+  securitySchemes:
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: http://127.0.0.1:3000/.well-known/openid-configuration
+  headers:
+    ResourceVersionETag:
+      description: Exact quoted positive resourceVersion used by If-Match.
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    SessionId:
+      name: sessionId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    AttemptId:
+      name: attemptId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    QuarantineId:
+      name: quarantineId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    BindingId:
+      name: bindingId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    ConnectionId:
+      name: connectionId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    Version:
+      name: version
+      in: path
+      required: true
+      schema: { type: integer, minimum: 1 }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 16
+        maxLength: 128
+        pattern: '^[A-Za-z0-9._:-]+$'
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+  schemas:
+    ActivateAutomationQuarantineRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - subject
+        - ownerPrincipalId
+        - reason
+        - evidenceRefs
+        - policyRef
+        - policyHash
+        - expiresAt
+      properties:
+        subject:
+          $ref: '../schemas/common.v1.schema.json#/$defs/automationQuarantineSubject'
+        ownerPrincipalId: { type: string, format: uuid }
+        reason: { type: string, minLength: 1, maxLength: 1024 }
+        evidenceRefs:
+          type: array
+          minItems: 1
+          maxItems: 32
+          uniqueItems: true
+          items: { type: string, minLength: 1, maxLength: 512 }
+        policyRef: { type: string, minLength: 1, maxLength: 512 }
+        policyHash: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+        expiresAt: { type: string, format: date-time }
+    LiftAutomationQuarantineRequest:
+      type: object
+      additionalProperties: false
+      required: [reason, evidenceRefs]
+      properties:
+        reason: { type: string, minLength: 1, maxLength: 1024 }
+        evidenceRefs:
+          type: array
+          minItems: 1
+          maxItems: 32
+          uniqueItems: true
+          items: { type: string, minLength: 1, maxLength: 512 }
+    CreateSuiteBindingRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - suiteKey
+        - ownerPrincipalId
+        - suiteDefinition
+        - logicalExecutionContract
+        - allowedTargetTypes
+        - allowedEnvironmentRefs
+        - parameterSchemaRef
+        - resultSchemaRef
+        - artifactPolicyRef
+        - artifactPolicyHash
+        - retryPolicyRef
+        - retryPolicyHash
+        - quarantinePolicyRef
+        - quarantinePolicyHash
+      properties:
+        suiteKey:
+          type: string
+          pattern: '^[a-z][a-z0-9._-]{0,127}$'
+        ownerPrincipalId: { type: string, format: uuid }
+        suiteDefinition:
+          type: object
+          additionalProperties: false
+          required: [key, version, digest]
+          properties:
+            key: { type: string, minLength: 1, maxLength: 128 }
+            version: { type: integer, minimum: 1 }
+            digest: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+        logicalExecutionContract:
+          description: >-
+            Provider-neutral pipeline/ref/result-job selectors. The resolved
+            Connector Profile maps them to exact GitLab ref, job and artifact
+            path values.
+          type: object
+          additionalProperties: false
+          required: [pipelineKey, sourceRefPolicyRef, resultJobKey, contractHash]
+          properties:
+            pipelineKey:
+              type: string
+              pattern: '^[a-z][a-z0-9._-]{0,127}$'
+            sourceRefPolicyRef: { type: string, minLength: 1, maxLength: 512 }
+            resultJobKey:
+              type: string
+              pattern: '^[a-z][a-z0-9._-]{0,127}$'
+            contractHash: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+        allowedTargetTypes:
+          type: array
+          minItems: 1
+          maxItems: 3
+          uniqueItems: true
+          items: { enum: [MERGE_REQUEST, COMMIT, BUILD] }
+        allowedEnvironmentRefs:
+          type: array
+          minItems: 1
+          maxItems: 32
+          uniqueItems: true
+          items: { type: string, minLength: 1, maxLength: 512 }
+        parameterSchemaRef:
+          $ref: '#/components/schemas/SchemaRef'
+        resultSchemaRef:
+          $ref: '#/components/schemas/SchemaRef'
+        artifactPolicyRef: { type: string, minLength: 1, maxLength: 512 }
+        artifactPolicyHash: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+        retryPolicyRef: { type: string, minLength: 1, maxLength: 512 }
+        retryPolicyHash: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+        quarantinePolicyRef: { type: string, minLength: 1, maxLength: 512 }
+        quarantinePolicyHash: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+    CreateAutomatedSessionRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - workItemId
+        - suiteBindingRef
+        - target
+        - environmentRef
+        - parameters
+      properties:
+        workItemId: { type: string, format: uuid }
+        suiteBindingRef:
+          $ref: '#/components/schemas/VersionedRef'
+        target:
+          oneOf:
+            - type: object
+              additionalProperties: false
+              required: [type, mergeRequestRef, commitSha]
+              properties:
+                type: { const: MERGE_REQUEST }
+                mergeRequestRef: { type: string, minLength: 1, maxLength: 512 }
+                commitSha: { type: string, pattern: '^[a-f0-9]{40}$' }
+            - type: object
+              additionalProperties: false
+              required: [type, commitSha]
+              properties:
+                type: { const: COMMIT }
+                commitSha: { type: string, pattern: '^[a-f0-9]{40}$' }
+            - type: object
+              additionalProperties: false
+              required: [type, buildRef, commitSha]
+              properties:
+                type: { const: BUILD }
+                buildRef: { type: string, minLength: 1, maxLength: 512 }
+                commitSha: { type: string, pattern: '^[a-f0-9]{40}$' }
+        environmentRef: { type: string, minLength: 1, maxLength: 512 }
+        parameters:
+          $ref: '../schemas/common.v1.schema.json#/$defs/acceptedParameters'
+        browser: { enum: [chromium, firefox, webkit] }
+        replacesSession:
+          type: object
+          additionalProperties: false
+          required: [testSessionId, reason, priorTargetSnapshotHash]
+          properties:
+            testSessionId: { type: string, format: uuid }
+            reason: { enum: [TARGET_CHANGED, REVIEW_FROZEN] }
+            priorTargetSnapshotHash: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+    LaunchAttemptRequest:
+      type: object
+      additionalProperties: false
+      required: [confirmation]
+      properties:
+        confirmation:
+          description: >-
+            Exact server-issued Session launchConfirmation echoed unchanged by
+            the HUMAN action. If-Match and current authorization are rechecked;
+            this is confirmation, not a second approval.
+          $ref: '../schemas/automated-test-session.v1.schema.json#/properties/launchConfirmation'
+    SuiteBindingValidationOutcome:
+      type: object
+      additionalProperties: false
+      required: [status, binding, report]
+      properties:
+        status: { enum: [VALID, INVALID] }
+        binding:
+          $ref: '../schemas/automation-suite-binding.v1.schema.json'
+        report:
+          $ref: '../schemas/automation-suite-validation-report.v1.schema.json'
+      allOf:
+        - if:
+            properties: { status: { const: VALID } }
+            required: [status]
+          then:
+            properties:
+              binding:
+                properties: { state: { const: VALIDATED } }
+                required: [state]
+              report:
+                properties: { status: { const: VALID } }
+                required: [status]
+          else:
+            properties:
+              binding:
+                properties: { state: { const: DRAFT } }
+                required: [state]
+              report:
+                properties: { status: { const: INVALID } }
+                required: [status]
+    VersionedRef:
+      type: object
+      additionalProperties: false
+      required: [id, version]
+      properties:
+        id: { type: string, format: uuid }
+        version: { type: integer, minimum: 1 }
+    SchemaRef:
+      type: object
+      additionalProperties: false
+      required: [id, version, digest]
+      properties:
+        id: { type: string, minLength: 1, maxLength: 512 }
+        version: { type: integer, minimum: 1 }
+        digest: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+    WebhookAcknowledgement:
+      type: object
+      additionalProperties: false
+      required: [status, receiptId, replayed]
+      properties:
+        status: { const: ACCEPTED }
+        receiptId: { type: string, format: uuid }
+        replayed: { type: boolean }
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [type, title, status, code, correlationId]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string, minLength: 1, maxLength: 256 }
+        status: { type: integer, minimum: 400, maximum: 599 }
+        code: { type: string, pattern: '^[A-Z][A-Z0-9_]{0,63}$' }
+        correlationId: { type: string, format: uuid }
+  responses:
+    Forbidden:
+      description: Current HUMAN is not authorized for this exact scope/action.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: Resource is absent or not visible in the current scope.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Conflict:
+      description: Idempotency hash, state, configuration or resource version conflict.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    IngressRejected:
+      description: Webhook authentication, freshness, shape or scope rejected.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    IngressConflict:
+      description: Same delivery identity was observed with different body bytes.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'

@@ -1,0 +1,59 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "moduleDetection": "force",
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "ignoreDeprecations": "6.0",
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "useUnknownInCatchVariables": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "jsx": "react-jsx",
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@awp/platform-contracts": ["packages/platform-contracts/src/index.ts"],
+      "@awp/platform-core": ["packages/platform-core/src/index.ts"],
+      "@awp/platform-runtime-nest": ["packages/platform-runtime-nest/src/index.ts"],
+      "@awp/platform-persistence-typeorm": ["packages/platform-persistence-typeorm/src/index.ts"],
+      "@awp/platform-ui": ["packages/platform-ui/src/index.ts"],
+      "@awp/platform-testkit": ["packages/platform-testkit/src/index.ts"],
+      "@awp/competency-sdk": ["packages/competency-sdk/src/index.ts"],
+      "@awp/competency-ui-sdk": ["packages/competency-ui-sdk/src/index.ts"],
+      "@awp/competency-qa": ["packages/competency-qa/src/index.ts"],
+      "@awp/competency-qa/node": ["packages/competency-qa/src/node.ts"],
+      "@awp/competency-qa/ui": ["packages/competency-qa/src/ui.ts"],
+      "@awp/connector-sdk": ["packages/connector-sdk/src/index.ts"],
+      "@awp/connector-jira": ["packages/connector-jira/src/index.ts"],
+      "@awp/connector-mattermost": ["packages/connector-mattermost/src/index.ts"],
+      "@awp/connector-gitlab": ["packages/connector-gitlab/src/index.ts"],
+      "@awp/connector-jira-persistence-typeorm": [
+        "packages/connector-jira-persistence-typeorm/src/index.ts"
+      ],
+      "@awp/connector-gitlab-persistence-typeorm": [
+        "packages/connector-gitlab-persistence-typeorm/src/index.ts"
+      ],
+      "@awp/competency-dummy": ["packages/competency-dummy/src/index.ts"],
+      "@awp/connector-mock": ["packages/connector-mock/src/index.ts"],
+      "@awp/runtime-composition": ["packages/runtime-composition/src/index.ts"],
+      "@awp/competency-tech-writing": ["packages/competency-tech-writing/src/index.ts"],
+      "@awp/competency-tech-writing/node": ["packages/competency-tech-writing/src/node.ts"],
+      "@awp/competency-tech-writing/ui": ["packages/competency-tech-writing/src/ui.ts"]
+    }
+  }
+}

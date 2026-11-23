@@ -1,0 +1,10 @@
+{
+  "status": "BLOCKED_INPUT",
+  "releaseEligible": false,
+  "reasonCodes": [
+    "RELEASE_IMAGE_DIGEST_MISSING"
+  ],
+  "imageDigest": null,
+  "scannerDatabase": null,
+  "inputRef": null
+}

@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-09-09T00:27:15.219Z",
+  "demoUrl": "http://localhost:55173/docs/documents?document=7ad1c3f7-71a7-4792-a2d3-6d811e47ebe4",
+  "checks": {
+    "writerLogin": true,
+    "writerHomeAndNavigation": true,
+    "saveSurvivesReload": true,
+    "submit": true,
+    "leadLogin": true,
+    "leadQueueAndNavigation": true,
+    "leadCannotEdit": true,
+    "returnRequiresFeedback": true,
+    "return": true,
+    "rework": true,
+    "resubmit": true,
+    "approveRevision": 3,
+    "historyEvents": 7,
+    "qaWorkspaceAndTwoRequests": true,
+    "postRestartPreserved": true,
+    "browserConsoleErrors": 0,
+    "finalBuildApprovedExamplePreserved": true
+  },
+  "finalCheckedAt": "2026-09-09T00:45:00.734Z"
+}

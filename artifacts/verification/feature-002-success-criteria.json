@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "generatedAt": "2026-08-30T23:05:38.964Z",
+  "status": "PASS",
+  "constitutionalExceptions": 0,
+  "exactCommands": [
+    "pnpm install --frozen-lockfile",
+    "pnpm lint",
+    "pnpm typecheck",
+    "pnpm build",
+    "pnpm test:e2e:002",
+    "pnpm smoke:002",
+    "pnpm trace:002",
+    "pnpm verify:002"
+  ],
+  "evidence": [
+    {
+      "id": "trace",
+      "path": "artifacts/verification/feature-002-trace.json",
+      "command": "pnpm trace:002",
+      "status": "PASS"
+    },
+    {
+      "id": "smoke",
+      "path": "artifacts/verification/feature-002-smoke.json",
+      "command": "pnpm smoke:002",
+      "status": "PASS"
+    },
+    {
+      "id": "regression",
+      "path": "artifacts/verification/feature-002-regression-gate.json",
+      "command": "node tools/verification/feature-002-regression-gate.mts",
+      "status": "PASS"
+    }
+  ]
+}

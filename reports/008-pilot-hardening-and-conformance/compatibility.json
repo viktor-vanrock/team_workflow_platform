@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "gate": "transitive-compatibility",
+  "startedAt": "2026-09-05T20:56:40.420Z",
+  "finishedAt": "2026-09-05T20:57:39.231Z",
+  "status": "PASS",
+  "coverage": {
+    "features": [
+      "001",
+      "002",
+      "003",
+      "004",
+      "005",
+      "006",
+      "007",
+      "008"
+    ],
+    "contracts": true,
+    "approvalV1AndV2": true,
+    "evidenceV1AndV2": true,
+    "historicalMigrations": true,
+    "predecessorReportsReadOnly": true
+  },
+  "results": [
+    {
+      "id": "contracts-001-through-008",
+      "status": "PASS",
+      "exitCode": 0,
+      "outputSha256": "sha256:07f70cc06dc909cbacfcbe415702b335970d80e5fd6c78e52f3f1d39566b0110",
+      "paths": [
+        "tests/contract"
+      ]
+    },
+    {
+      "id": "historical-migration-registries",
+      "status": "PASS",
+      "exitCode": 0,
+      "outputSha256": "sha256:d5ee7faf9b868e6cd236159f4789e7741c8a74a58de3ef7549fe17cd16d5295b",
+      "paths": [
+        "tests/integration/migrations/003-migration-registry.spec.ts",
+        "tests/integration/migrations/004-migration-registry.spec.ts",
+        "tests/integration/migrations/005-migration-registry.spec.ts",
+        "tests/integration/migrations/006-migration-registry.spec.ts",
+        "tests/integration/migrations/007-migration-registry.spec.ts"
+      ]
+    }
+  ],
+  "predecessorReports": [
+    {
+      "path": "reports/003-jira-operational-authority/final-gate.json",
+      "sha256": "sha256:ff8a941316b60cb46226064e4508bc1aecaf4b31e0a1ea95573063c150c7a008"
+    },
+    {
+      "path": "reports/004-mattermost-hermes-intake/final-gate.json",
+      "sha256": "sha256:a596ed0705528d6f4f35dadad01ce05ba29228c87ef63e23fd8904497f5aeebc"
+    },
+    {
+      "path": "reports/005-gitlab-automated-validation/final-gate.json",
+      "sha256": "sha256:fd95b5c76f5a7e93424edbfc0f00344d3e365170cf76a38ef1f601f1822ea723"
+    },
+    {
+      "path": "reports/006-queue-triage-capacity-sla/final-gate.json",
+      "sha256": "sha256:55d7159fc56ecd81db5184194e84f7d8cea6c005b096d7341a012025262409ea"
+    },
+    {
+      "path": "reports/007-project-onboarding-evidence-security/final-gate.json",
+      "sha256": "sha256:a0ed15d8f77162f15e9cccb987a87c7421e128b6b30acc661483bc45acb6af95"
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/contract/008/backward-compatibility.spec.ts",
+        "sha256": "sha256:5029beb75730df9189735f3e0e31a88510c6fdcf29123cfe3afd3f05949a0a46"
+      },
+      {
+        "path": "packages/platform-contracts/src/generated/schema-documents.ts",
+        "sha256": "sha256:b733c2ee69395ab46ac0a9bb5614446ed2e5d5ae7199ceb976d25c17cd56e15e"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/index.ts",
+        "sha256": "sha256:9eaf8a9b03f0a25bca4d3b42596042eb8c0bd519c0902603fbc83daae2b4cdfa"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/index.ts",
+        "sha256": "sha256:5b3a15e502c039b6fa34f9efe95bcf3941ec9c2105a80d9aca56add7ad047d2a"
+      },
+      {
+        "path": "tests/integration/migrations/003-migration-registry.spec.ts",
+        "sha256": "sha256:b5ebfedc324296b66ab3f3ae3201ea5372749447a288457c53e759a5731fb396"
+      },
+      {
+        "path": "tests/integration/migrations/004-migration-registry.spec.ts",
+        "sha256": "sha256:3534c59735c0538929b081191c3ca4a82b675203ae239737c2c7ba99bf74e88f"
+      },
+      {
+        "path": "tests/integration/migrations/005-migration-registry.spec.ts",
+        "sha256": "sha256:078a01e5e075d90c1e9f9a0d069f6492360b1bc4ef526d64c92b4dc08832dcae"
+      },
+      {
+        "path": "tests/integration/migrations/006-migration-registry.spec.ts",
+        "sha256": "sha256:c74c80fe0c8605cbca32baa3516af60fd56da93aeb9a6f5c8ccda7213685aa30"
+      },
+      {
+        "path": "tests/integration/migrations/007-migration-registry.spec.ts",
+        "sha256": "sha256:c09dd94d60e52831e6f38dd12100a64524dd09124ef2bb6256026c38571348ee"
+      }
+    ],
+    "aggregateSha256": "sha256:e6f28d7fdff8005df15e66f32fa80379075cb91e71da7ccba35d649e442c74b7"
+  }
+}

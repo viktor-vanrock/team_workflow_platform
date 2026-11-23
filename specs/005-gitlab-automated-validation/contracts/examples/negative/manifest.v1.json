@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "feature-005-negative-example-manifest@1.0.0",
+  "cases": [
+    {
+      "fixture": "automated-session.unknown-provider-authority.v1.json",
+      "schemaId": "urn:awp:schemas:005:automated-test-session:v1",
+      "expectedKeyword": "additionalProperties"
+    },
+    {
+      "fixture": "pipeline-result.pass-with-infra-code.v1.json",
+      "schemaId": "urn:awp:schemas:005:gitlab-pipeline-result:v1",
+      "expectedKeyword": "false schema"
+    },
+    {
+      "fixture": "automation-availability.full-missing-capability.v1.json",
+      "schemaId": "urn:awp:schemas:005:automation-availability:v1",
+      "expectedKeyword": "minItems"
+    },
+    {
+      "fixture": "automation-target-snapshot.missing-resource-ref.v1.json",
+      "schemaId": "urn:awp:schemas:005:automation-target-snapshot:v1",
+      "expectedKeyword": "minItems"
+    }
+  ]
+}

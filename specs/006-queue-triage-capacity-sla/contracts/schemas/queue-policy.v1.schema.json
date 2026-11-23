@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:queue-policy:v1",
+  "title": "QueuePolicy v1",
+  "$comment": "Composed publication validation resolves all refs in the same Workspace, requires statusMappingRef to identify the exact Jira status-mapping revision, recomputes semanticHash, rejects duplicate Project/goal/mapping keys, requires ordered non-overlapping aging/warning boundaries and checks warning < target plus reservedCapacity <= softWipLimit. The referenced BusinessCalendar must be open-ended (validThrough null). No value in this schema is a production WIP or SLA default.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "queuePolicyId",
+    "policyKey",
+    "workspaceId",
+    "revision",
+    "mode",
+    "calendarRef",
+    "comparatorRef",
+    "stageRuleRef",
+    "statusMappingRef",
+    "serviceClassRules",
+    "workspaceHumanWipLimit",
+    "activeExpediteLimit",
+    "externalActiveConsumesWip",
+    "blockReasonRules",
+    "slaGoals",
+    "agingBands",
+    "projectEntries",
+    "effectiveFrom",
+    "publishedAt",
+    "publishedByPrincipalId",
+    "semanticHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "queue-policy@1.0.0" },
+    "queuePolicyId": { "$ref": "#/$defs/id" },
+    "policyKey": { "$ref": "#/$defs/key" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "previousPolicyRef": { "$ref": "#/$defs/versionedContentRef" },
+    "mode": { "enum": ["MEASURE_ONLY", "ENFORCED"] },
+    "calendarRef": { "$ref": "#/$defs/versionedContentRef" },
+    "comparatorRef": {
+      "allOf": [
+        { "$ref": "#/$defs/algorithmRef" },
+        {
+          "properties": {
+            "key": { "const": "queue-order" },
+            "version": { "const": "1.0.0" }
+          }
+        }
+      ]
+    },
+    "stageRuleRef": {
+      "allOf": [
+        { "$ref": "#/$defs/algorithmRef" },
+        {
+          "properties": {
+            "key": { "const": "queue-stage" },
+            "version": { "const": "1.0.0" }
+          }
+        }
+      ]
+    },
+    "statusMappingRef": { "$ref": "#/$defs/statusMappingRevisionRef" },
+    "serviceClassRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "initialClass",
+        "fixedDateRequiresConfirmedDueDate",
+        "expediteRequiresExactAction",
+        "overrideSeparationOfDuty"
+      ],
+      "properties": {
+        "initialClass": { "const": "STANDARD" },
+        "fixedDateRequiresConfirmedDueDate": { "const": true },
+        "expediteRequiresExactAction": { "const": true },
+        "overrideSeparationOfDuty": { "const": "SELF_APPROVAL_FORBIDDEN" }
+      }
+    },
+    "workspaceHumanWipLimit": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "integer", "minimum": 1 }
+      ]
+    },
+    "activeExpediteLimit": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "integer", "minimum": 1 }
+      ]
+    },
+    "externalActiveConsumesWip": {
+      "type": "array",
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "enum": ["IN_PROGRESS", "REVIEW", "BLOCKED"] }
+    },
+    "blockReasonRules": {
+      "type": "array",
+      "maxItems": 128,
+      "items": { "$ref": "#/$defs/blockReasonRule" }
+    },
+    "slaGoals": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2
+    },
+    "agingBands": {
+      "type": "array",
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/agingBand" }
+    },
+    "projectEntries": {
+      "type": "array",
+      "maxItems": 10000
+    },
+    "baselineEvidenceRef": { "$ref": "#/$defs/exactSourceRef" },
+    "effectiveFrom": { "$ref": "#/$defs/timestamp" },
+    "publishedAt": { "$ref": "#/$defs/timestamp" },
+    "publishedByPrincipalId": { "$ref": "#/$defs/id" },
+    "semanticHash": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["revision"],
+        "properties": { "revision": { "const": 1 } }
+      },
+      "then": { "properties": { "previousPolicyRef": false } },
+      "else": { "required": ["previousPolicyRef"] }
+    },
+    {
+      "if": {
+        "required": ["mode"],
+        "properties": { "mode": { "const": "MEASURE_ONLY" } }
+      },
+      "then": {
+        "properties": {
+          "workspaceHumanWipLimit": { "type": "null" },
+          "activeExpediteLimit": { "type": "null" },
+          "slaGoals": {
+            "items": { "$ref": "#/$defs/measureOnlyGoal" }
+          },
+          "projectEntries": {
+            "items": { "$ref": "#/$defs/measureOnlyProjectEntry" }
+          }
+        }
+      },
+      "else": {
+        "required": ["baselineEvidenceRef"],
+        "properties": {
+          "workspaceHumanWipLimit": { "type": "integer", "minimum": 1 },
+          "activeExpediteLimit": { "type": "integer", "minimum": 1 },
+          "slaGoals": {
+            "items": { "$ref": "#/$defs/enforcedGoal" }
+          },
+          "projectEntries": {
+            "items": { "$ref": "#/$defs/enforcedProjectEntry" }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "format": "uuid" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+    },
+    "reasonCode": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "versionValue": {
+      "oneOf": [
+        { "type": "integer", "minimum": 1 },
+        { "type": "string", "minLength": 1, "maxLength": 128 }
+      ]
+    },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "exactSourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Z][A-Z0-9_]{0,127}$"
+        },
+        "sourceId": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "sourceVersion": { "$ref": "#/$defs/versionValue" },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "observedAt": { "$ref": "#/$defs/timestamp" },
+        "confirmedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "statusMappingRevisionRef": {
+      "allOf": [
+        { "$ref": "#/$defs/exactSourceRef" },
+        {
+          "properties": {
+            "sourceType": { "const": "JIRA_STATUS_MAPPING_REVISION" }
+          }
+        }
+      ]
+    },
+    "algorithmRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "semanticHash"],
+      "properties": {
+        "key": { "$ref": "#/$defs/key" },
+        "version": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "blockReasonRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["normalizedStatus", "reasonCode", "wipEffect", "slaEffect"],
+      "properties": {
+        "normalizedStatus": { "const": "BLOCKED" },
+        "reasonCode": { "$ref": "#/$defs/reasonCode" },
+        "wipEffect": { "enum": ["HOLD_WIP", "RELEASE_WIP"] },
+        "slaEffect": { "enum": ["CONTINUE", "PAUSE", "RESUME"] }
+      }
+    },
+    "goalBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goal",
+        "startNormalizedStatuses",
+        "stopEvent",
+        "targetBusinessSeconds",
+        "warningThresholds"
+      ],
+      "properties": {
+        "goal": { "enum": ["READY_TO_FIRST_QA_START", "READY_TO_SIGNED_VERDICT"] },
+        "startNormalizedStatuses": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["READY", "PLANNED"] }
+        },
+        "stopEvent": { "enum": ["FIRST_CONSUMING_SESSION_STARTED", "QA_VERDICT_SIGNED"] },
+        "targetBusinessSeconds": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "integer", "minimum": 1 }
+          ]
+        },
+        "warningThresholds": {
+          "type": "array",
+          "maxItems": 16,
+          "items": { "$ref": "#/$defs/warningThreshold" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["goal"],
+            "properties": { "goal": { "const": "READY_TO_FIRST_QA_START" } }
+          },
+          "then": { "properties": { "stopEvent": { "const": "FIRST_CONSUMING_SESSION_STARTED" } } },
+          "else": { "properties": { "stopEvent": { "const": "QA_VERDICT_SIGNED" } } }
+        }
+      ]
+    },
+    "measureOnlyGoal": {
+      "allOf": [
+        { "$ref": "#/$defs/goalBase" },
+        {
+          "properties": {
+            "targetBusinessSeconds": { "type": "null" },
+            "warningThresholds": { "maxItems": 0 }
+          }
+        }
+      ]
+    },
+    "enforcedGoal": {
+      "allOf": [
+        { "$ref": "#/$defs/goalBase" },
+        {
+          "properties": {
+            "targetBusinessSeconds": { "type": "integer", "minimum": 1 },
+            "warningThresholds": { "minItems": 1 }
+          }
+        }
+      ]
+    },
+    "warningThreshold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "elapsedBusinessSeconds"],
+      "properties": {
+        "key": { "$ref": "#/$defs/key" },
+        "elapsedBusinessSeconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "agingBand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "upperBoundBusinessSeconds"],
+      "properties": {
+        "key": { "$ref": "#/$defs/key" },
+        "upperBoundBusinessSeconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "measureOnlyProjectEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectId", "softWipLimit", "reservedCapacity", "explanation"],
+      "properties": {
+        "projectId": { "$ref": "#/$defs/id" },
+        "softWipLimit": { "type": "null" },
+        "reservedCapacity": { "type": "null" },
+        "explanation": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "enforcedProjectEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectId", "softWipLimit", "reservedCapacity", "explanation"],
+      "properties": {
+        "projectId": { "$ref": "#/$defs/id" },
+        "softWipLimit": { "type": "integer", "minimum": 0 },
+        "reservedCapacity": { "type": "integer", "minimum": 0 },
+        "explanation": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    }
+  }
+}

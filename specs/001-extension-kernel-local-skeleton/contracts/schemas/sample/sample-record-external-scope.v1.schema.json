@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:sample:record-external-scope:v1",
+  "title": "Sample Record External Scope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["namespace", "allowedRecordPrefix"],
+  "properties": {
+    "namespace": { "const": "phase1" },
+    "allowedRecordPrefix": { "const": "phase1-" }
+  }
+}

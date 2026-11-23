@@ -1,0 +1,12 @@
+{
+  "expectedPreviousResultRevisionRef": null,
+  "expectedAttemptSetHash": "sha256:6767676767676767676767676767676767676767676767676767676767676767",
+  "expectedMaximumAttemptNo": 2,
+  "expectedObservationSetHash": "sha256:5252525252525252525252525252525252525252525252525252525252525252",
+  "expectedObservationCount": 1,
+  "reviewFlags": [],
+  "result": "PASS",
+  "actualOutcome": "The retry passed.",
+  "decisionReason": "Semantic negative: caller fingerprints only the retry and omits the earlier finalized failure.",
+  "artifactIds": []
+}

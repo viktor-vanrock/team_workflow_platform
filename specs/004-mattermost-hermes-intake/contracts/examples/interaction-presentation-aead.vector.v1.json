@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "interaction-presentation-aead-vector@1.0.0",
+  "testOnly": true,
+  "keyHex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "aeadNonceHex": "000102030405060708090a0b",
+  "plaintextUtf8": "TEST_ONLY_AWP_INTERACTION_TOKEN_0001",
+  "plaintextHex": "544553545f4f4e4c595f4157505f494e544552414354494f4e5f544f4b454e5f30303031",
+  "aad": {
+    "schemaVersion": "interaction-presentation-aad@1.0.0",
+    "schemaRef": {
+      "id": "urn:awp:schemas:004:interaction-presentation-aad:v1",
+      "version": 1,
+      "digest": "sha256:89f1f1a2efb432575f9537dd1d2926dbe10decb1e30004895ceb2d8a0c513109"
+    },
+    "capsuleFormat": "AWP_INTERACTION_TOKEN_AEAD_V1",
+    "plaintextEncoding": "UTF8_NO_NORMALIZATION",
+    "aeadAlgorithm": "AES_256_GCM",
+    "aeadNonceBytes": 12,
+    "aeadTagBytes": 16,
+    "aadCanonicalization": "AWP_CANONICAL_JSON_V1",
+    "intent": {
+      "schemaVersion": "interaction-intent@1.0.0",
+      "intentId": "intent-vector-1",
+      "workspaceId": "workspace-vector",
+      "projectId": "project-vector",
+      "actionKind": "CANDIDATE_CREATE",
+      "actionParameters": {
+        "expectedCandidateVersion": 1,
+        "expectedSourceObservationVersion": 1,
+        "reasonCode": "USER_SELECTED"
+      },
+      "subject": {
+        "kind": "CANDIDATE",
+        "id": "candidate-vector",
+        "version": 1,
+        "contentHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "aggregateSnapshotHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "actor": {
+        "principalId": "principal-vector",
+        "externalUserId": "mattermost-user-vector",
+        "bindingRef": {
+          "id": "binding-vector",
+          "version": 1,
+          "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      },
+      "transport": {
+        "kind": "MATTERMOST",
+        "target": {
+          "kind": "PRINCIPAL_DM",
+          "principalId": "principal-vector"
+        }
+      },
+      "configuration": {
+        "projectBindingRef": {
+          "id": "project-binding-vector",
+          "version": 1,
+          "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        "profileRef": {
+          "id": "profile-vector",
+          "version": 1,
+          "digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+        },
+        "connectionRef": {
+          "id": "connection-vector",
+          "version": 1,
+          "digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+        }
+      },
+      "initialAuthorizationBasisHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "nonceHash": "sha256:ec2e0e9c191f3a40313eee3718aa840ba36d9f885ba5dd8cc614fd0c7ff743ff",
+      "expiresAt": "2026-09-01T12:15:00Z",
+      "createdAt": "2026-09-01T12:00:00Z",
+      "correlationId": "correlation-vector",
+      "causationId": "causation-vector"
+    },
+    "capsule": {
+      "kind": "SEALED_PRESENTATION",
+      "capsuleId": "capsule-vector-1",
+      "encryptionKeyVersionRef": {
+        "keyId": "key-vector-1",
+        "version": 1,
+        "purpose": "INTERACTION_PRESENTATION_AEAD",
+        "workspaceId": "workspace-vector",
+        "projectId": "project-vector",
+        "environmentClass": "TEST",
+        "keyIdentityFingerprint": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+        "metadataHash": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+        "decryptUntil": "2026-09-01T12:20:00Z"
+      },
+      "presentationNotificationIntentId": "notification-vector-1",
+      "presentationSlot": 0,
+      "presentationCommandId": "command-vector-1",
+      "presentationCapabilityKey": "messaging.callback@1.0.0",
+      "presentationEffectKeyHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "presentationTargetHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "presentationPayloadHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "presentationRenderHash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "retainUntil": "2026-09-01T12:10:00Z"
+    }
+  },
+  "aadHash": "sha256:a208212f0f7a0dbf1cc3d80a74e1724a7eab9d2029daef195a8e542468c07619",
+  "ciphertextHex": "1347854f9aaa8c57d41ed6dce1b63123d793d575b32f16337638b1ca562c4eed31209ecd",
+  "authTagHex": "6cb93f3cbb1781ecc06d9bf3c70c429e",
+  "ciphertextHash": "sha256:931e7fd22d9d49be2445d07cf4f0735fb05e48cd91a75c7dc412843f0d3e1b6f",
+  "tokenHash": "sha256:ec2e0e9c191f3a40313eee3718aa840ba36d9f885ba5dd8cc614fd0c7ff743ff"
+}

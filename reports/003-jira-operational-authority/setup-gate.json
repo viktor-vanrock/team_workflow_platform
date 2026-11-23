@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "feature": "003-jira-operational-authority",
+  "gate": "setup",
+  "startedAt": "2026-09-03T10:02:47.099Z",
+  "finishedAt": "2026-09-03T10:02:56.651Z",
+  "status": "PASS",
+  "localC1": {
+    "status": "PASS",
+    "path": "config/local/jira-pilot-metadata.v1.json"
+  },
+  "nonProdC1": {
+    "status": "NON_PROD_SKIPPED_GATED",
+    "reasonCode": "C1_METADATA_NOT_SUPPLIED"
+  },
+  "stages": [
+    {
+      "id": "prerequisites",
+      "description": "Exact Feature 001/002 reports and implemented runtime surfaces",
+      "executable": "node",
+      "args": [
+        "tools/verification/feature-003-prerequisites.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 81
+    },
+    {
+      "id": "registry",
+      "description": "Immutable 001/002/003 offline schema registry",
+      "executable": "node",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 346
+    },
+    {
+      "id": "design-contracts",
+      "description": "Feature 003 JSON/OpenAPI/AsyncAPI refs and closed action bodies",
+      "executable": "node",
+      "args": [
+        "tools/contracts/verify-003-contracts.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 152
+    },
+    {
+      "id": "phase-1-tests",
+      "description": "Prerequisite, C1 and production-boundary tests",
+      "executable": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/003",
+        "tests/integration/security/003",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 7281
+    },
+    {
+      "id": "architecture",
+      "description": "Workspace import graph including the Jira package shells",
+      "executable": "node",
+      "args": [
+        "tools/architecture/check-import-graph.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 254
+    },
+    {
+      "id": "phase-1-typecheck",
+      "description": "Feature 003 package and composition typechecks",
+      "executable": "node",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "-p",
+        "platform-contracts",
+        "connector-jira",
+        "connector-jira-persistence-typeorm",
+        "runtime-composition"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1434
+    }
+  ]
+}

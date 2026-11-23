@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:jira:normalized-webhook-event:v1",
+  "title": "Normalized Jira Webhook Invalidation Signal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "receiptRef", "connectionRef", "adapterFamily", "verification", "dedupeIdentity", "eventType", "externalEntityId", "receivedAt", "rawBodyHash", "action"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "receiptRef": { "$ref": "#/$defs/Ref" },
+    "connectionRef": { "$ref": "#/$defs/Ref" },
+    "adapterFamily": { "enum": ["jira-cloud-v3", "jira-dc-9-v2", "jira-dc-10-v2", "jira-dc-11-v2"] },
+    "verification": { "enum": ["HMAC_VERIFIED", "OPAQUE_SECRET_VERIFIED", "LOCAL_HMAC_VERIFIED"] },
+    "dedupeIdentity": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "providerRetryNumber": { "type": "integer", "minimum": 0 },
+    "eventType": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "externalEntityId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "externalDisplayKeyHint": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "changelogId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "providerTimestamp": { "type": "string", "format": "date-time" },
+    "receivedAt": { "type": "string", "format": "date-time" },
+    "rawBodyHash": { "$ref": "#/$defs/Digest" },
+    "action": { "const": "AUTHORITATIVE_REREAD_REQUIRED" }
+  },
+  "$defs": {
+    "Digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "Ref": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "integer", "minimum": 1 } } }
+  }
+}

@@ -1,0 +1,1931 @@
+openapi: 3.1.0
+info:
+  title: Agentic Workspace Platform Core API
+  version: 1.0.0
+  description: >-
+    Phase-1 Core API. Project-scoped routes enforce Workspace membership, Project Entitlement,
+    role permission and data classification on the backend. There is intentionally no public
+    generic endpoint for submitting arbitrary Connector commands.
+servers:
+  - url: http://localhost:3000
+    description: Local composition
+security:
+  - bearerAuth: []
+tags:
+  - name: Health
+  - name: Registry
+  - name: Workspace
+  - name: Intake
+  - name: Integration
+  - name: Commands
+  - name: Approvals
+  - name: Audit
+  - name: Artifacts
+  - name: Webhooks
+paths:
+  /local/v1/auth/persona-session:
+    post:
+      operationId: createLocalPersonaSession
+      tags: [Health]
+      security: []
+      x-awp-local-only: true
+      description: >-
+        Local-only persona switch. The API talks to https://fake-idp:4443/oidc using the
+        repository test CA; the browser does not contact the issuer directly. Route is absent in
+        non-local composition and the UI must display development mode.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [personaKey]
+              properties:
+                personaKey:
+                  $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+      responses:
+        '200':
+          description: Short-lived local session for a predefined seeded persona
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalPersonaSession'
+        default:
+          $ref: '#/components/responses/Problem'
+  /health/live:
+    get:
+      operationId: getLiveness
+      tags: [Health]
+      security: []
+      responses:
+        '200':
+          description: Process is alive
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /health/ready:
+    get:
+      operationId: getReadiness
+      tags: [Health]
+      security: []
+      responses:
+        '200':
+          description: Required local components are ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          $ref: '#/components/responses/Problem'
+  /api/v1/extension-registry/packs:
+    get:
+      operationId: listPackRegistrations
+      tags: [Registry]
+      responses:
+        '200':
+          description: Current accepted Pack registrations plus append-only reconciliation attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtensionRegistrationCollection'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/extension-registry/connectors:
+    get:
+      operationId: listConnectorRegistrations
+      tags: [Registry]
+      responses:
+        '200':
+          description: Current accepted Connector registrations plus append-only reconciliation attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtensionRegistrationCollection'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/extension-registry/capabilities:
+    get:
+      operationId: listCapabilityContracts
+      tags: [Registry]
+      responses:
+        '200':
+          description: Registered typed capability contracts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CapabilitySummary'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      operationId: listVisibleProjects
+      tags: [Workspace]
+      responses:
+        '200':
+          description: Projects visible through explicit entitlement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectSummary'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/work-types:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      operationId: listWorkspaceWorkTypes
+      tags: [Workspace]
+      responses:
+        '200':
+          description: Registered Work Types and Workspace enablement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkTypeSummary'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/work-types/{workTypeKey}/enablement:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/WorkTypeKey'
+    put:
+      operationId: setWorkTypeEnablement
+      tags: [Workspace]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkTypeEnablementRequest'
+      responses:
+        '200':
+          description: Updated enablement. Existing history remains readable when disabled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkTypeSummary'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/intake-drafts:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: createIntakeDraft
+      tags: [Intake]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntakeDraftCreateRequest'
+      responses:
+        '201':
+          description: Draft created after Work Type intake schema validation
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntakeDraft'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/intake-drafts/{draftId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/DraftId'
+    get:
+      operationId: getIntakeDraft
+      tags: [Intake]
+      responses:
+        '200':
+          description: Scoped draft
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntakeDraft'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/intake-drafts/{draftId}/commands/submit:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/DraftId'
+    post:
+      operationId: submitIntakeDraft
+      tags: [Intake]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitDraftRequest'
+      responses:
+        '202':
+          description: >-
+            Exact draft and current Binding confirmed; Pack submission created a durable external
+            command. Work Item and operational binding do not exist until the external result is confirmed.
+          headers:
+            Location:
+              description: Scoped Core command status URL
+              schema:
+                type: string
+                format: uri-reference
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalCommandAccepted'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/WorkItemId'
+    get:
+      operationId: getWorkItem
+      tags: [Intake]
+      responses:
+        '200':
+          description: Scoped generic Work Item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkItem'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connections:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+    post:
+      operationId: createConnection
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionCreateRequest'
+      responses:
+        '201':
+          description: Immutable DRAFT Connection version with opaque secret reference
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connection.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connections/{connectionId}/versions/{version}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ConnectionId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    get:
+      operationId: getConnectionVersion
+      tags: [Integration]
+      responses:
+        '200':
+          description: Exact immutable Connection version; secret value is never returned
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connection.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connections/{connectionId}/versions/{version}/commands/validate:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ConnectionId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    post:
+      operationId: validateConnectionVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: Validation is bound to exact Connection content, policies and local environment gates
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/validation-report.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connections/{connectionId}/versions/{version}/health:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ConnectionId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    get:
+      operationId: getConnectionVersionHealth
+      tags: [Integration]
+      responses:
+        '200':
+          description: Mutable health projection for an exact immutable Connection version
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connection-health.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connections/{connectionId}/versions/{version}/commands/publish:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ConnectionId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    post:
+      operationId: publishConnectionVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: Authorized atomic RETIRE-current/PUBLISH-candidate transition under Connection header lock
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connection.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connector-mappings:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+    post:
+      operationId: createConnectorMappingVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectorMappingCreateRequest'
+      responses:
+        '201':
+          description: Immutable DRAFT schema-bound Mapping version
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connector-mapping-version.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connector-mappings/{mappingId}/versions/{version}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/MappingId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    get:
+      operationId: getConnectorMappingVersion
+      tags: [Integration]
+      responses:
+        '200':
+          description: Exact immutable schema-bound Mapping version
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connector-mapping-version.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connector-mappings/{mappingId}/versions/{version}/commands/validate:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/MappingId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    post:
+      operationId: validateConnectorMappingVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: Validation is bound to exact Mapping schema, content hash and Connector registration
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/validation-report.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connector-mappings/{mappingId}/versions/{version}/commands/publish:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/MappingId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    post:
+      operationId: publishConnectorMappingVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: Authorized atomic RETIRE-current/PUBLISH-candidate transition under Mapping header lock
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connector-mapping-version.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connector-profiles:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+    post:
+      operationId: createConnectorProfileVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectorProfileCreateRequest'
+      responses:
+        '201':
+          description: Immutable DRAFT Profile version
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connector-profile-version.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connector-profiles/{profileId}/versions/{version}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProfileId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    get:
+      operationId: getConnectorProfileVersion
+      tags: [Integration]
+      responses:
+        '200':
+          description: Exact immutable Profile version
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connector-profile-version.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connector-profiles/{profileId}/versions/{version}/commands/validate:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProfileId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    post:
+      operationId: validateConnectorProfileVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: Validation is bound to the exact content hash
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/validation-report.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/connector-profiles/{profileId}/versions/{version}/commands/publish:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProfileId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    post:
+      operationId: publishConnectorProfileVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: Authorized atomic RETIRE-current/PUBLISH-candidate transition under Profile header lock
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/connector-profile-version.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/integration-bindings:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: createProjectIntegrationBindingVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BindingCreateRequest'
+      responses:
+        '201':
+          description: Immutable DRAFT Binding version
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/project-integration-binding-version.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/integration-bindings/{bindingId}/versions/{version}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/BindingId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    get:
+      operationId: getProjectIntegrationBindingVersion
+      tags: [Integration]
+      responses:
+        '200':
+          description: Exact immutable Binding version
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/project-integration-binding-version.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/integration-bindings/{bindingId}/versions/{version}/commands/validate:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/BindingId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    post:
+      operationId: validateProjectIntegrationBindingVersion
+      tags: [Integration]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: Required capabilities resolve exactly once
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/validation-report.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/integration-bindings/{bindingId}/versions/{version}/commands/request-publication:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/BindingId'
+      - $ref: '#/components/parameters/IntegerVersion'
+    post:
+      operationId: requestProjectIntegrationBindingPublication
+      tags: [Integration, Approvals]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '202':
+          description: Core atomically creates a durable platform action and exact approval for immutable Binding content and all Profile versions
+          headers:
+            Location:
+              description: Scoped exact Approval resource
+              schema:
+                type: string
+                format: uri-reference
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/commands/approval-subject.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/integration-validation-reports/{validationReportId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ValidationReportId'
+    get:
+      operationId: getIntegrationValidationReport
+      tags: [Integration]
+      responses:
+        '200':
+          description: Durable immutable validation report with subject-scope authorization reapplied
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/integration/validation-report.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/capability-availability:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: getProjectCapabilityAvailability
+      tags: [Integration]
+      responses:
+        '200':
+          description: Feature-scoped availability without domain interpretation by Core
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/integration/validation-report.v1.schema.json#/$defs/Availability'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/connector-commands/{commandId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/CommandId'
+    get:
+      operationId: getExternalCommand
+      tags: [Commands]
+      responses:
+        '200':
+          description: Resolved command status; this route cannot create commands
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/commands/external-command-envelope.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/approvals/{approvalId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ApprovalId'
+    get:
+      operationId: getApproval
+      tags: [Approvals]
+      responses:
+        '200':
+          description: Exact approval subject and current decision/effect status
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/commands/approval-subject.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/approvals/{approvalId}/decisions:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ApprovalId'
+    post:
+      operationId: decideApproval
+      tags: [Approvals]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CorrelationId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalDecisionRequest'
+      responses:
+        '200':
+          description: >-
+            Decision recorded after current authorization revalidation. For PLATFORM_ACTION approval,
+            APPROVE atomically consumes authorization and applies the local mutation, including
+            RETIRE-current/PUBLISH-candidate under the stable Binding header lock; for
+            EXTERNAL_COMMAND it only releases the durable connector command for worker execution.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/commands/approval-subject.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/audit-events:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+    get:
+      operationId: listWorkspaceAuditEvents
+      tags: [Audit]
+      description: >-
+        Returns only WORKSPACE-scoped append-only events, including webhook security rejection
+        recorded before a Project can be resolved. Project-scoped content is available only from
+        the Project route and is never widened by this endpoint.
+      parameters:
+        - name: correlationId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 512
+      responses:
+        '200':
+          description: Workspace-scoped append-only redacted audit events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceAuditPage'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/audit-events:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listAuditEvents
+      tags: [Audit]
+      parameters:
+        - name: correlationId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 512
+      responses:
+        '200':
+          description: Append-only redacted audit events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectAuditPage'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/artifacts/{artifactId}:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ArtifactId'
+    get:
+      operationId: getArtifactMetadata
+      tags: [Artifacts]
+      description: Revalidates membership, entitlement, permission and classification at read time.
+      responses:
+        '200':
+          description: Artifact metadata without provider locator or object URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtifactMetadata'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/artifacts/{artifactId}/content:
+    parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ArtifactId'
+    get:
+      operationId: streamArtifactContent
+      tags: [Artifacts]
+      description: >-
+        Revalidates access for every request and streams through the backend. Implementations MUST
+        NOT redirect to, expose or return a provider locator or presigned object URL.
+      responses:
+        '200':
+          description: Backend-proxied artifact bytes
+          headers:
+            X-Content-SHA256:
+              description: Immutable artifact checksum
+              schema:
+                $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '410':
+          description: Binary expired while immutable metadata remains available
+          content:
+            application/problem+json:
+              schema:
+                $ref: '../schemas/common/problem-details.v1.schema.json'
+        default:
+          $ref: '#/components/responses/Problem'
+  /api/v1/webhooks/{connectorKey}/{connectionId}:
+    parameters:
+      - name: connectorKey
+        in: path
+        required: true
+        schema:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+      - $ref: '#/components/parameters/ConnectionId'
+      - name: X-Webhook-Delivery-Id
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 255
+      - name: X-Webhook-Timestamp
+        in: header
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: X-Webhook-Signature
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+          maxLength: 1024
+    post:
+      operationId: ingestConnectorWebhook
+      tags: [Webhooks]
+      security: []
+      description: >-
+        Raw bytes are authenticated and replay-checked before connector-specific parsing. The
+        resolved Connection supplies explicit Workspace context. Project may remain unresolved
+        for a quarantined transport receipt; only a uniquely project-resolved normalized event
+        can enter a project-scoped consumer inbox.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: true
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '202':
+          description: Delivery stored durably; synchronous response does not mean projection applied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookAccepted'
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Human identity is canonicalized by issuer plus subject.
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    WorkTypeKey:
+      name: workTypeKey
+      in: path
+      required: true
+      schema:
+        $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+    DraftId:
+      name: draftId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    WorkItemId:
+      name: workItemId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ConnectionId:
+      name: connectionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProfileId:
+      name: profileId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    MappingId:
+      name: mappingId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ValidationReportId:
+      name: validationReportId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    BindingId:
+      name: bindingId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    CommandId:
+      name: commandId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ApprovalId:
+      name: approvalId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ArtifactId:
+      name: artifactId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IntegerVersion:
+      name: version
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        $ref: '../schemas/commands/capability-command-intent.v1.schema.json#/$defs/IdempotencyKey'
+    CorrelationId:
+      name: X-Correlation-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+  headers:
+    ETag:
+      description: Strong resource version tag
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+    Location:
+      description: Scoped URL of the durable resource created or returned by the operation
+      schema:
+        type: string
+        format: uri-reference
+  responses:
+    Problem:
+      description: RFC 9457 error with stable machine code
+      content:
+        application/problem+json:
+          schema:
+            $ref: '../schemas/common/problem-details.v1.schema.json'
+  schemas:
+    LocalPersonaSession:
+      type: object
+      additionalProperties: false
+      required: [accessToken, tokenType, expiresIn, issuer, subject, developmentMode]
+      properties:
+        accessToken:
+          type: string
+          minLength: 1
+        tokenType:
+          const: Bearer
+        expiresIn:
+          type: integer
+          minimum: 1
+          maximum: 3600
+        issuer:
+          const: https://fake-idp:4443/oidc
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 255
+        developmentMode:
+          const: true
+    HealthResponse:
+      type: object
+      additionalProperties: false
+      required: [status, components]
+      properties:
+        status:
+          type: string
+          enum: [HEALTHY, DEGRADED, UNHEALTHY]
+        components:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [key, status]
+            properties:
+              key:
+                type: string
+              status:
+                type: string
+                enum: [HEALTHY, DEGRADED, UNHEALTHY]
+              code:
+                type: string
+    ExtensionRegistration:
+      type: object
+      additionalProperties: false
+      required: [kind, key, version, status, contentHash, registeredAt]
+      properties:
+        kind:
+          type: string
+          enum: [COMPETENCY_PACK, CONNECTOR]
+        key:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+        version:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemVer'
+        status:
+          type: string
+          enum: [REGISTERED, DISABLED]
+        contentHash:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+        registeredAt:
+          type: string
+          format: date-time
+    RegistrationAttempt:
+      type: object
+      additionalProperties: false
+      required: [attemptId, sourceComponentRef, observedHash, outcome, diagnostics, bootInstanceId, observedAt]
+      properties:
+        attemptId:
+          type: string
+          format: uuid
+        sourceComponentRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/ComponentRef'
+          description: Trusted compile-time composition source; never parsed from the manifest body.
+        observedKind:
+          type: [string, 'null']
+          enum: [COMPETENCY_PACK, CONNECTOR, null]
+        observedKey:
+          type: [string, 'null']
+          maxLength: 255
+        observedVersion:
+          type: [string, 'null']
+          maxLength: 255
+        observedHash:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+        outcome:
+          type: string
+          enum: [ACCEPTED, REJECTED]
+        diagnostics:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [code, message]
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+        bootInstanceId:
+          type: string
+          format: uuid
+        observedAt:
+          type: string
+          format: date-time
+      allOf:
+        - if:
+            properties:
+              outcome:
+                const: REJECTED
+            required: [outcome]
+          then:
+            properties:
+              diagnostics:
+                minItems: 1
+    ExtensionRegistrationCollection:
+      type: object
+      additionalProperties: false
+      required: [registrations, attempts]
+      properties:
+        registrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExtensionRegistration'
+        attempts:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistrationAttempt'
+    CapabilitySummary:
+      type: object
+      additionalProperties: false
+      required: [key, version, operations]
+      properties:
+        key:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+        version:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemVer'
+        operations:
+          type: array
+          items:
+            type: string
+    ProjectSummary:
+      type: object
+      additionalProperties: false
+      required: [id, workspaceId, key, name, status, dataClassificationKey]
+      properties:
+        id:
+          type: string
+          format: uuid
+        workspaceId:
+          type: string
+          format: uuid
+        key:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [DRAFT, ACTIVE, SUSPENDED, ARCHIVED]
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+    WorkTypeSummary:
+      type: object
+      additionalProperties: false
+      required: [key, definitionVersion, packRef, enabled, resourceVersion]
+      properties:
+        key:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+        definitionVersion:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemVer'
+        packRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemanticVersionRef'
+        enabled:
+          type: boolean
+        disabledReason:
+          type: string
+          maxLength: 500
+        resourceVersion:
+          type: integer
+          minimum: 1
+    WorkTypeEnablementRequest:
+      type: object
+      additionalProperties: false
+      required: [enabled]
+      properties:
+        enabled:
+          type: boolean
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 500
+    IntakeDraftCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [workTypeKey, workTypeDefinitionVersion, dataClassificationKey, formData]
+      properties:
+        workTypeKey:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+        workTypeDefinitionVersion:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemVer'
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+        formData:
+          $ref: '../schemas/common/schema-bound-value.v1.schema.json'
+    IntakeDraft:
+      type: object
+      additionalProperties: false
+      required: [id, workspaceId, projectId, workTypeKey, workTypeDefinitionVersion, dataClassificationKey, formData, state, resourceVersion]
+      properties:
+        id:
+          type: string
+          format: uuid
+        workspaceId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        workTypeKey:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+        workTypeDefinitionVersion:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemVer'
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+        formData:
+          $ref: '../schemas/common/schema-bound-value.v1.schema.json'
+        state:
+          type: string
+          enum:
+            - DRAFT
+            - VALIDATING
+            - NEEDS_INFO
+            - READY_FOR_CONFIRMATION
+            - CONFIRMED
+            - OPERATIONAL_CREATE_PENDING
+            - LINKED
+            - FAILED_RETRYABLE
+            - FAILED_FINAL
+            - CANCELLED
+        confirmedBindingRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef'
+        linkedWorkItemId:
+          type: string
+          format: uuid
+        resourceVersion:
+          type: integer
+          minimum: 1
+      allOf:
+        - if:
+            properties:
+              state:
+                const: LINKED
+            required: [state]
+          then:
+            required: [confirmedBindingRef, linkedWorkItemId]
+          else:
+            not:
+              required: [linkedWorkItemId]
+        - if:
+            properties:
+              state:
+                enum: [CONFIRMED, OPERATIONAL_CREATE_PENDING, FAILED_RETRYABLE, FAILED_FINAL]
+            required: [state]
+          then:
+            required: [confirmedBindingRef]
+        - if:
+            properties:
+              state:
+                enum: [DRAFT, VALIDATING, NEEDS_INFO, READY_FOR_CONFIRMATION]
+            required: [state]
+          then:
+            not:
+              required: [confirmedBindingRef]
+    SubmitDraftRequest:
+      type: object
+      additionalProperties: false
+      required: [expectedBindingRef]
+      properties:
+        expectedBindingRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef'
+          description: Optimistic assertion of the current effective Binding; caller cannot select another Profile or stale Binding.
+    WorkItem:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - workspaceId
+        - projectId
+        - workTypeKey
+        - workTypeDefinitionVersion
+        - operationalBindingId
+        - integrationBindingRef
+        - dataClassificationKey
+        - title
+        - normalizedStatus
+        - resourceVersion
+      properties:
+        id:
+          type: string
+          format: uuid
+        workspaceId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        workTypeKey:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+        workTypeDefinitionVersion:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemVer'
+        operationalBindingId:
+          type: string
+          format: uuid
+        integrationBindingRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef'
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+        title:
+          type: string
+        normalizedStatus:
+          type: string
+          enum: [NEW, NEEDS_INFO, READY, PLANNED, IN_PROGRESS, REVIEW, BLOCKED, DONE, CANCELLED]
+        resourceVersion:
+          type: integer
+          minimum: 1
+    ConnectionCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [key, connectorRef, environmentClass, endpoint, serviceIdentitySecretRef, quarantineClassificationKey, dataClassificationKey]
+      properties:
+        connectionId:
+          type: string
+          format: uuid
+          description: Omit for a new Connection; provide to create a new immutable version.
+        key:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+        connectorRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemanticVersionRef'
+        environmentClass:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/EnvironmentScope'
+        endpoint:
+          type: string
+          format: uri
+        serviceIdentitySecretRef:
+          type: string
+          pattern: "^secretref://[A-Za-z0-9._~:/?#@!$&'()*+,;=%-]+$"
+        quarantineClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+          description: >-
+            Conservative classification applied to raw webhook bytes before connector parsing or
+            Project resolution. It must resolve in the Workspace classification catalog.
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+          description: Classification of the Connection configuration resource itself.
+        tlsPolicyRef:
+          type: string
+        networkPolicyRef:
+          type: string
+        connectorConfiguration:
+          $ref: '../schemas/common/schema-bound-value.v1.schema.json'
+    ConnectorMappingCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [key, connectorRef, dataClassificationKey, mappingDefinition]
+      properties:
+        mappingId:
+          type: string
+          format: uuid
+          description: Omit for a new Mapping; provide to create a new immutable version.
+        key:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+          description: Required stable header key; immutable and must match when mappingId is supplied.
+        connectorRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemanticVersionRef'
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+        mappingDefinition:
+          $ref: '../schemas/common/schema-bound-value.v1.schema.json'
+    ConnectorProfileCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [key, dataClassificationKey, connectorRef, connectionRef, capabilityConfigurations]
+      properties:
+        profileId:
+          type: string
+          format: uuid
+          description: Omit for a new Profile; provide to create a new immutable version.
+        key:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+          description: Required stable header key; immutable and must match when profileId is supplied.
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+        connectorRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/SemanticVersionRef'
+        connectionRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef'
+        connectorConfiguration:
+          $ref: '../schemas/common/schema-bound-value.v1.schema.json'
+        capabilityConfigurations:
+          type: array
+          minItems: 1
+          items:
+            $ref: '../schemas/integration/connector-profile-version.v1.schema.json#/$defs/CapabilityConfiguration'
+    BindingCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [dataClassificationKey, entries]
+      properties:
+        bindingId:
+          type: string
+          format: uuid
+          description: Omit for a new Binding; provide to create a new immutable version.
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+        entries:
+          type: array
+          minItems: 1
+          items:
+            $ref: '../schemas/integration/project-integration-binding-version.v1.schema.json#/$defs/BindingEntry'
+        configurationRefs:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '../schemas/integration/project-integration-binding-version.v1.schema.json#/$defs/SchemaBoundResourceRef'
+        resourceRefs:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '../schemas/integration/project-integration-binding-version.v1.schema.json#/$defs/SchemaBoundResourceRef'
+    ApprovalDecisionRequest:
+      type: object
+      additionalProperties: false
+      required: [decision]
+      properties:
+        decision:
+          type: string
+          enum: [APPROVE, REJECT]
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    WorkspaceAuditPage:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceAuditEvent'
+        nextCursor:
+          type: string
+    ProjectAuditPage:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectAuditEvent'
+        nextCursor:
+          type: string
+    WorkspaceAuditEvent:
+      allOf:
+        - $ref: '#/components/schemas/AuditEvent'
+        - type: object
+          required: [scopeKind]
+          properties:
+            scopeKind:
+              const: WORKSPACE
+    ProjectAuditEvent:
+      allOf:
+        - $ref: '#/components/schemas/AuditEvent'
+        - type: object
+          required: [scopeKind, projectId]
+          properties:
+            scopeKind:
+              const: PROJECT
+    AuditEvent:
+      type: object
+      additionalProperties: false
+      required: [sequenceId, eventId, workspaceId, scopeKind, type, action, entityType, entityId, actor, sourceProcess, dataClassificationKey, correlationId, causationId, occurredAt, details]
+      properties:
+        sequenceId:
+          type: integer
+          format: int64
+          minimum: 1
+        eventId:
+          type: string
+          format: uuid
+        workspaceId:
+          type: string
+          format: uuid
+        scopeKind:
+          type: string
+          enum: [WORKSPACE, PROJECT]
+        projectId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - ACTION_REQUESTED
+            - POLICY_DECIDED
+            - APPROVAL_DECIDED
+            - APPROVAL_INVALIDATED
+            - APPROVAL_CONSUMED
+            - OUTBOX_ENQUEUED
+            - OUTBOX_ACKNOWLEDGED
+            - COMMAND_RETRY_SCHEDULED
+            - CONNECTOR_INVOKED
+            - CONNECTOR_CONFIRMED
+            - CONNECTOR_CONFLICT
+            - CONNECTOR_FAILED
+            - PLATFORM_ACTION_COMPLETED
+            - SECURITY_ENVELOPE_REJECTED
+        action:
+          type: string
+          minLength: 1
+          maxLength: 255
+        entityType:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+        entityId:
+          type: string
+          minLength: 1
+          maxLength: 255
+        actor:
+          $ref: '../schemas/common/actor-ref.v1.schema.json'
+        sourceProcess:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/ComponentRef'
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+        correlationId:
+          type: string
+          format: uuid
+        causationId:
+          type: string
+          format: uuid
+        commandId:
+          type: string
+          format: uuid
+        platformActionId:
+          type: string
+          format: uuid
+        approvalId:
+          type: string
+          format: uuid
+        bindingRef:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef'
+        profileRefs:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef'
+        authorizationBasis:
+          $ref: '../schemas/commands/external-command-envelope.v1.schema.json#/$defs/AuthorizationBasis'
+        authorizationBasisHash:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+        requestHash:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+        resultHash:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+        occurredAt:
+          type: string
+          format: date-time
+        details:
+          type: object
+          additionalProperties: false
+          properties:
+            policyDecision:
+              type: string
+              enum: [ALLOW, DENY]
+            reasonCode:
+              type: string
+              pattern: '^[A-Z][A-Z0-9_]{2,127}$'
+            targetHash:
+              $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+            payloadHash:
+              $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+            resultCode:
+              type: string
+      allOf:
+        - if:
+            properties:
+              scopeKind:
+                const: PROJECT
+            required: [scopeKind]
+          then:
+            required: [projectId]
+            properties:
+              authorizationBasis:
+                $ref: '../schemas/commands/external-command-envelope.v1.schema.json#/$defs/ProjectAuthorizationBasis'
+          else:
+            allOf:
+              - not:
+                  required: [projectId]
+              - not:
+                  anyOf:
+                    - required: [authorizationBasis]
+                    - required: [authorizationBasisHash]
+            properties:
+              type:
+                const: SECURITY_ENVELOPE_REJECTED
+              actor:
+                properties:
+                  type:
+                    const: SYSTEM
+                required: [type]
+        - if:
+            properties:
+              type:
+                enum: [OUTBOX_ENQUEUED, OUTBOX_ACKNOWLEDGED, COMMAND_RETRY_SCHEDULED, CONNECTOR_INVOKED, CONNECTOR_CONFIRMED, CONNECTOR_CONFLICT, CONNECTOR_FAILED]
+            required: [type]
+          then:
+            required: [commandId, bindingRef, profileRefs, authorizationBasis, authorizationBasisHash]
+            not:
+              required: [platformActionId]
+        - if:
+            properties:
+              type:
+                const: PLATFORM_ACTION_COMPLETED
+            required: [type]
+          then:
+            required: [platformActionId, approvalId, bindingRef, profileRefs, authorizationBasis, authorizationBasisHash]
+            not:
+              required: [commandId]
+        - if:
+            properties:
+              type:
+                enum: [APPROVAL_DECIDED, APPROVAL_INVALIDATED, APPROVAL_CONSUMED]
+            required: [type]
+          then:
+            required: [approvalId, bindingRef, profileRefs, authorizationBasis, authorizationBasisHash]
+            oneOf:
+              - required: [commandId]
+                not:
+                  required: [platformActionId]
+              - required: [platformActionId]
+                not:
+                  required: [commandId]
+        - if:
+            properties:
+              type:
+                enum: [ACTION_REQUESTED, POLICY_DECIDED]
+            required: [type]
+          then:
+            required: [bindingRef, profileRefs, authorizationBasis, authorizationBasisHash]
+            oneOf:
+              - required: [commandId]
+                not:
+                  required: [platformActionId]
+              - required: [platformActionId]
+                not:
+                  required: [commandId]
+        - if:
+            properties:
+              type:
+                const: POLICY_DECIDED
+            required: [type]
+          then:
+            properties:
+              details:
+                required: [policyDecision]
+        - if:
+            properties:
+              type:
+                enum: [CONNECTOR_CONFIRMED, CONNECTOR_CONFLICT, CONNECTOR_FAILED]
+            required: [type]
+          then:
+            required: [resultHash]
+            properties:
+              details:
+                required: [resultCode]
+        - if:
+            properties:
+              type:
+                enum: [CONNECTOR_CONFLICT, CONNECTOR_FAILED]
+            required: [type]
+          then:
+            properties:
+              details:
+                required: [reasonCode, resultCode]
+        - if:
+            properties:
+              type:
+                const: POLICY_DECIDED
+              details:
+                properties:
+                  policyDecision:
+                    const: DENY
+                required: [policyDecision]
+            required: [type, details]
+          then:
+            properties:
+              details:
+                required: [policyDecision, reasonCode]
+        - if:
+            properties:
+              type:
+                const: SECURITY_ENVELOPE_REJECTED
+            required: [type]
+          then:
+            properties:
+              details:
+                required: [reasonCode, resultCode]
+            not:
+              anyOf:
+                - required: [commandId]
+                - required: [platformActionId]
+    ArtifactMetadata:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - workspaceId
+        - projectId
+        - kind
+        - fileName
+        - mediaType
+        - sizeBytes
+        - checksum
+        - dataClassificationKey
+        - availability
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        workspaceId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        kind:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/StableKey'
+        fileName:
+          type: string
+          minLength: 1
+          maxLength: 255
+        mediaType:
+          type: string
+          minLength: 1
+          maxLength: 255
+        sizeBytes:
+          type: integer
+          minimum: 0
+        checksum:
+          $ref: '../schemas/common/versioned-ref.v1.schema.json#/$defs/Digest'
+        dataClassificationKey:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{1,63}$'
+        availability:
+          type: string
+          enum: [AVAILABLE, EXPIRED, QUARANTINED, UNAVAILABLE]
+        expiresAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    WebhookAccepted:
+      type: object
+      additionalProperties: false
+      required: [deliveryId, status, correlationId]
+      properties:
+        deliveryId:
+          type: string
+        status:
+          type: string
+          enum: [STORED, DUPLICATE]
+        correlationId:
+          type: string
+          format: uuid
+    ExternalCommandAccepted:
+      type: object
+      additionalProperties: false
+      required: [commandId, status, correlationId]
+      properties:
+        commandId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [AWAITING_APPROVAL, QUEUED]
+        approvalId:
+          type: string
+          format: uuid
+        correlationId:
+          type: string
+          format: uuid
+      allOf:
+        - if:
+            properties:
+              status:
+                const: AWAITING_APPROVAL
+            required: [status]
+          then:
+            required: [approvalId]

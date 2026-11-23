@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-work-item:action-result:v1.1",
+  "title": "Operational Work Item 1.1 Normalized Action Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "operation", "outcome", "effectId", "authoritySnapshot", "subEffects", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": "1.1" },
+    "operation": { "enum": ["request.transition", "request.assign", "request.set-priority", "request.set-due-date"] },
+    "outcome": { "const": "CONFIRMED" },
+    "effectId": { "type": "string", "format": "uuid" },
+    "authoritySnapshot": { "$ref": "urn:awp:schemas:operational-authority:projection:v1" },
+    "subEffects": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sequence", "kind", "semanticHash", "state", "receiptHash"],
+        "properties": {
+          "sequence": { "type": "integer", "minimum": 0 },
+          "kind": { "enum": ["FIELD_EDIT", "TRANSITION", "ISSUE_LINK", "REMOTE_LINK", "COMMENT", "PROPERTY"] },
+          "semanticHash": { "$ref": "#/$defs/Digest" },
+          "state": { "const": "CONFIRMED" },
+          "externalEntityId": { "type": "string", "minLength": 1, "maxLength": 255 },
+          "receiptHash": { "$ref": "#/$defs/Digest" }
+        }
+      }
+    },
+    "contentHash": { "$ref": "#/$defs/Digest" }
+  },
+  "$defs": {
+    "Digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  }
+}

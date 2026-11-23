@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:mattermost:normalized-dialog-submission:v1",
+  "title": "Mattermost Normalized Dialog Submission v1",
+  "description": "Bounded callback envelope after one-time token resolution. It retains schema-valid normalized input plus safe provider identifiers; the raw request body, raw token, transcript and credentials are excluded.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "interactionIntentRef",
+    "connectionId",
+    "externalUserId",
+    "channelId",
+    "cancelled"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "mattermost-normalized-dialog-submission@1.0.0" },
+    "interactionIntentRef": { "$ref": "#/$defs/opaqueRef" },
+    "connectionId": { "$ref": "#/$defs/opaqueRef" },
+    "externalUserId": { "$ref": "#/$defs/opaqueRef" },
+    "teamId": { "$ref": "#/$defs/opaqueRef" },
+    "channelId": { "$ref": "#/$defs/opaqueRef" },
+    "cancelled": { "type": "boolean" },
+    "fileIds": {
+      "type": "array",
+      "maxItems": 10,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/opaqueRef" }
+    },
+    "input": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 50,
+      "propertyNames": { "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string", "maxLength": 4000 },
+          { "type": "number", "minimum": -1000000000000000, "maximum": 1000000000000000 },
+          { "type": "boolean" },
+          { "type": "null" },
+          {
+            "type": "array",
+            "maxItems": 50,
+            "uniqueItems": true,
+            "items": { "type": "string", "maxLength": 4000 }
+          }
+        ]
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "properties": { "cancelled": { "const": true } },
+        "required": ["cancelled"]
+      },
+      "then": {
+        "type": "object",
+        "properties": { "input": false }
+      },
+      "else": {
+        "type": "object",
+        "required": ["input"]
+      }
+    }
+  ],
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 128 }
+  }
+}

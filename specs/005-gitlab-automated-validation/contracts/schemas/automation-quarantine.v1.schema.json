@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automation-quarantine:v1",
+  "title": "AutomationQuarantine v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "quarantineId",
+    "workspaceId",
+    "projectId",
+    "subject",
+    "currentRevisionId",
+    "currentRevisionNo",
+    "currentRevisionHash",
+    "effectiveState",
+    "resourceVersion",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automation-quarantine@1.0.0" },
+    "quarantineId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "subject": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/automationQuarantineSubject" },
+    "currentRevisionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "currentRevisionNo": { "type": "integer", "minimum": 1 },
+    "currentRevisionHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "effectiveState": { "enum": ["ACTIVE", "INACTIVE", "EXPIRED"] },
+    "expiresAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "updatedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "effectiveState": { "enum": ["ACTIVE", "EXPIRED"] }
+        },
+        "required": ["effectiveState"]
+      },
+      "then": {
+        "required": ["expiresAt"],
+        "properties": {
+          "expiresAt": {}
+        }
+      },
+      "else": {
+        "properties": {
+          "expiresAt": false
+        }
+      }
+    }
+  ]
+}

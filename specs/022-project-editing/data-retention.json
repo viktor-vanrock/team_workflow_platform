@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-09-09T21:33:48.772Z",
+  "status": "PASS",
+  "checks": [
+    "documents",
+    "workItems",
+    "documentHistory",
+    "seed",
+    "identities",
+    "activeHumans",
+    "retiredMemberships",
+    "retiredRoles",
+    "retiredActiveEntitlements",
+    "worker",
+    "existing audit records preserved",
+    "memberships unchanged",
+    "registryHistory",
+    "onboardingHistory",
+    "entitlementHistory",
+    "roles: only metadata capability added to existing administrator grants",
+    "entitlements: only metadata capability added to existing administrator grants",
+    "project metadata unchanged; only legacy docs registry initialized",
+    "repeat deployment leaves grants and existing data unchanged"
+  ],
+  "changedRoleCount": 5,
+  "changedEntitlementCount": 8,
+  "documents": 4,
+  "workItems": 6,
+  "documentHistory": 15,
+  "activeHumans": 9,
+  "priorAuditRecords": 76,
+  "repeatDeployment": "PASS: grants, membership, projects and all existing history unchanged"
+}

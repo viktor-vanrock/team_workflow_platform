@@ -1,0 +1,522 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:events:v1",
+  "title": "QA Project-scoped Event Variants",
+  "oneOf": [
+    { "$ref": "#/$defs/RequestAcceptedEvent" },
+    { "$ref": "#/$defs/RequestInputRevisedEvent" },
+    { "$ref": "#/$defs/ReadinessAssessedEvent" },
+    { "$ref": "#/$defs/ReadinessConfirmedEvent" },
+    { "$ref": "#/$defs/RequiredSessionPlanPublishedEvent" },
+    { "$ref": "#/$defs/SessionStateChangedEvent" },
+    { "$ref": "#/$defs/SessionReviewedEvent" },
+    { "$ref": "#/$defs/PlanItemResultRecordedEvent" },
+    { "$ref": "#/$defs/FindingClassifiedEvent" },
+    { "$ref": "#/$defs/FindingDisposedEvent" },
+    { "$ref": "#/$defs/DefectLinkedEvent" },
+    { "$ref": "#/$defs/EvidenceManifestSignedEvent" },
+    { "$ref": "#/$defs/VerdictSignedEvent" },
+    { "$ref": "#/$defs/DodAssessedEvent" },
+    { "$ref": "#/$defs/DodSatisfiedEvent" },
+    { "$ref": "#/$defs/PostCloseCorrectionRecordedEvent" }
+  ],
+  "$defs": {
+    "BaseEnvelope": {
+      "type": "object",
+      "required": ["envelopeVersion", "eventId", "eventType", "occurredAt", "recordedAt", "producer", "producerVersion", "workspaceId", "projectId", "entityType", "entityId", "entityVersion", "correlationId", "causationId", "actor", "dataClassificationKey", "payloadVersion", "payloadSchemaRef", "payload"],
+      "properties": {
+        "envelopeVersion": { "const": 1 },
+        "eventId": { "type": "string", "format": "uuid" },
+        "eventType": { "$ref": "../common/qa-common.v1.schema.json#/$defs/StableKey" },
+        "occurredAt": { "type": "string", "format": "date-time" },
+        "recordedAt": { "type": "string", "format": "date-time" },
+        "producer": { "const": "competency-qa" },
+        "producerVersion": { "const": "1.0.0" },
+        "workspaceId": { "type": "string", "format": "uuid" },
+        "projectId": { "type": "string", "format": "uuid" },
+        "entityType": { "$ref": "../common/qa-common.v1.schema.json#/$defs/StableKey" },
+        "entityId": { "type": "string", "format": "uuid" },
+        "entityVersion": { "type": "integer", "minimum": 1 },
+        "correlationId": { "type": "string", "format": "uuid" },
+        "causationId": { "type": "string", "format": "uuid" },
+        "actor": { "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/common/actor-ref.v1.schema.json" },
+        "dataClassificationKey": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ClassificationKey" },
+        "payloadVersion": { "const": 1 },
+        "payloadSchemaRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "version", "digest"],
+          "properties": {
+            "id": { "type": "string", "pattern": "^urn:awp:schemas:qa:event-payload:[A-Za-z0-9:._-]+:v1$" },
+            "version": { "const": 1 },
+            "digest": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+          }
+        },
+        "payload": true
+      }
+    },
+    "RequestAcceptedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "qaRequestExtensionId", "initialRequestInputRevisionRef", "externalRequestId", "externalVersion", "rawExternalState", "normalizedStatus", "bindingRef", "profileRefs"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "qaRequestExtensionId": { "type": "string", "format": "uuid" },
+        "initialRequestInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+        "externalRequestId": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "rawExternalState": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "normalizedStatus": { "const": "NEW" },
+        "bindingRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/BindingRef" },
+        "profileRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ProfileRef" } }
+      }
+    },
+    "RequestInputRevisedPayload": {
+      "description": "Emitted in the same transaction that advances the stable current-input pointer and invalidates stale pre-READY decisions/candidates.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "previousRequestInputRevisionRef", "requestInputRevisionRef", "responseChannelState", "invalidatedReadinessAssessmentRefs", "invalidatedWaiverRefs", "invalidatedPendingReadyCommandRefs", "changeReasonCode", "changeReason"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "previousRequestInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+        "requestInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+        "responseChannelState": { "type": "string", "enum": ["CONFIRMED", "MISSING"] },
+        "invalidatedReadinessAssessmentRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" } },
+        "invalidatedWaiverRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" } },
+        "invalidatedPendingReadyCommandRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" } },
+        "changeReasonCode": { "type": "string", "enum": ["MISSING_INFO_SUPPLIED", "REQUESTER_CORRECTION"] },
+        "changeReason": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      }
+    },
+    "ReadinessAssessedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "assessmentRef", "state", "inputFingerprint", "blockerCodes"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "assessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+        "state": { "type": "string", "enum": ["NEEDS_INFO", "READY", "READY_WITH_WAIVER"] },
+        "inputFingerprint": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "blockerCodes": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" } }
+      }
+    },
+    "ReadinessConfirmedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "assessmentRef", "rawExternalState", "normalizedStatus", "externalVersion", "commandId"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "assessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+        "rawExternalState": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "normalizedStatus": { "const": "READY" },
+        "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "commandId": { "type": "string", "format": "uuid" }
+      }
+    },
+    "RequiredSessionPlanPublishedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "requiredSessionPlanRef", "previousRevisionRef", "readinessAssessmentRef", "publicationReason", "requirementCount"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+        "previousRevisionRef": { "oneOf": [{ "type": "null" }, { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" }] },
+        "readinessAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" },
+        "publicationReason": { "type": "string", "enum": ["INITIAL", "READINESS_CHANGE", "SCOPE_CHANGE", "WAIVER_APPLIED", "CORRECTION"] },
+        "requirementCount": { "type": "integer", "minimum": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "publicationReason": { "const": "INITIAL" } }, "required": ["publicationReason"] },
+          "then": { "properties": { "previousRevisionRef": { "type": "null" } } },
+          "else": { "properties": { "previousRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" } } }
+        }
+      ]
+    },
+    "SessionStateChangedPayload": {
+      "description": "Closed legal transition event. Envelope actor/occurredAt plus authorizationBasisHash provide human transition provenance; reachedMilestone preserves terminal history.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "sessionId", "requiredSessionPlanRef", "previousState", "state", "authorizationBasisHash"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "sessionId": { "type": "string", "format": "uuid" },
+        "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+        "previousState": { "type": "string", "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED", "BLOCKED"] },
+        "state": { "type": "string", "enum": ["READY", "RUNNING", "REVIEW_REQUIRED", "COMPLETED", "BLOCKED", "CANCELLED"] },
+        "reachedMilestone": { "type": "string", "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED"] },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "sessionOutcome": { "type": "string", "enum": ["PASSED", "FAILED", "BLOCKED", "INCONCLUSIVE"] },
+        "targetSnapshotRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" },
+        "scopeSnapshotRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" },
+        "targetSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "scopeSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "sessionReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "evidenceManifestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "authorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+      },
+      "allOf": [
+        {
+          "oneOf": [
+            { "properties": { "previousState": { "const": "PLANNED" }, "state": { "enum": ["READY", "BLOCKED", "CANCELLED"] } } },
+            { "properties": { "previousState": { "const": "READY" }, "state": { "enum": ["RUNNING", "BLOCKED", "CANCELLED"] } } },
+            { "properties": { "previousState": { "const": "RUNNING" }, "state": { "enum": ["REVIEW_REQUIRED", "BLOCKED", "CANCELLED"] } } },
+            { "properties": { "previousState": { "const": "REVIEW_REQUIRED" }, "state": { "enum": ["COMPLETED", "BLOCKED", "CANCELLED"] } } },
+            { "properties": { "previousState": { "const": "BLOCKED" }, "state": { "enum": ["READY", "RUNNING", "REVIEW_REQUIRED", "CANCELLED"] } } }
+          ]
+        },
+        {
+          "if": { "properties": { "state": { "enum": ["READY", "RUNNING", "REVIEW_REQUIRED", "COMPLETED"] } }, "required": ["state"] },
+          "then": { "required": ["targetSnapshotRef", "scopeSnapshotRef", "targetSnapshotHash", "scopeSnapshotHash"] }
+        },
+        {
+          "if": { "properties": { "state": { "enum": ["BLOCKED", "CANCELLED"] } }, "required": ["state"] },
+          "then": { "required": ["reason", "reachedMilestone"] },
+          "else": { "not": { "anyOf": [{ "required": ["reason"] }, { "required": ["reachedMilestone"] }] } }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": { "enum": ["BLOCKED", "CANCELLED"] },
+              "previousState": { "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED"] }
+            },
+            "required": ["state", "previousState"]
+          },
+          "then": {
+            "oneOf": [
+              { "properties": { "previousState": { "const": "PLANNED" }, "reachedMilestone": { "const": "PLANNED" } } },
+              { "properties": { "previousState": { "const": "READY" }, "reachedMilestone": { "const": "READY" } } },
+              { "properties": { "previousState": { "const": "RUNNING" }, "reachedMilestone": { "const": "RUNNING" } } },
+              { "properties": { "previousState": { "const": "REVIEW_REQUIRED" }, "reachedMilestone": { "const": "REVIEW_REQUIRED" } } }
+            ]
+          }
+        },
+        {
+          "if": { "properties": { "state": { "enum": ["BLOCKED", "CANCELLED"] }, "reachedMilestone": { "enum": ["READY", "RUNNING", "REVIEW_REQUIRED"] } }, "required": ["state", "reachedMilestone"] },
+          "then": { "required": ["targetSnapshotRef", "scopeSnapshotRef", "targetSnapshotHash", "scopeSnapshotHash"] }
+        },
+        {
+          "if": { "properties": { "state": { "enum": ["BLOCKED", "CANCELLED"] }, "reachedMilestone": { "const": "PLANNED" } }, "required": ["state", "reachedMilestone"] },
+          "then": { "not": { "anyOf": [
+            { "required": ["targetSnapshotRef"] }, { "required": ["scopeSnapshotRef"] },
+            { "required": ["targetSnapshotHash"] }, { "required": ["scopeSnapshotHash"] }
+          ] } }
+        },
+        {
+          "if": { "properties": { "state": { "const": "COMPLETED" } }, "required": ["state"] },
+          "then": { "required": ["sessionOutcome", "sessionReviewRef", "evidenceManifestRevisionRef"] },
+          "else": { "not": { "anyOf": [
+            { "required": ["sessionOutcome"] }, { "required": ["sessionReviewRef"] },
+            { "required": ["evidenceManifestRevisionRef"] }
+          ] } }
+        }
+      ]
+    },
+    "SessionReviewedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "sessionId", "requiredSessionPlanRef", "sessionReviewRef", "adjudicativeManifestRevisionRef", "frozenFindingReviewRefs", "sessionOutcome"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "sessionId": { "type": "string", "format": "uuid" },
+        "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+        "sessionReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "adjudicativeManifestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "frozenFindingReviewRefs": {
+          "description": "Canonical ordered unique complete set frozen by the same Session-review UoW. Empty for a clean US3 review; once Findings are installed it contains every exact FROZEN successor created atomically with the review and manifest.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" }
+        },
+        "sessionOutcome": { "type": "string", "enum": ["PASSED", "FAILED", "BLOCKED", "INCONCLUSIVE"] }
+      }
+    },
+    "PlanItemResultRecordedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "sessionId", "planItemId", "resultRevisionRef", "attemptMembershipMode", "consideredAttemptRefs", "consideredAttemptSetHash", "observationMembershipMode", "consideredObservationRefs", "consideredObservationSetHash", "maximumAttemptNo", "result", "reviewFlags"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "sessionId": { "type": "string", "format": "uuid" },
+        "planItemId": { "type": "string", "format": "uuid" },
+        "resultRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "attemptMembershipMode": { "const": "ALL_FINALIZED_CONTIGUOUS" },
+        "consideredAttemptRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" } },
+        "consideredAttemptSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "observationMembershipMode": { "const": "ALL_CURRENT_LEAVES" },
+        "consideredObservationRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" } },
+        "consideredObservationSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "maximumAttemptNo": { "type": "integer", "minimum": 0 },
+        "result": { "type": "string", "enum": ["PASS", "FAIL", "BLOCKED", "NOT_RUN", "INCONCLUSIVE"] },
+        "reasonCode": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" },
+        "reviewFlags": { "type": "array", "uniqueItems": true, "items": { "const": "FLAKY_SUSPECTED" } },
+        "flakyDispositionBasis": { "$ref": "../qa/plan-item-result-revision.v1.schema.json#/$defs/FlakyDispositionBasis" },
+        "artifactRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ArtifactRef" } },
+        "waiverRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" }
+      },
+      "allOf": [
+        { "$ref": "../qa/plan-item-result-revision.v1.schema.json#/$defs/FlakyDispositionDecision" },
+        { "$ref": "../qa/plan-item-result-revision.v1.schema.json#/$defs/NegativeObservationDecision" },
+        { "if": { "properties": { "result": { "enum": ["FAIL", "BLOCKED", "INCONCLUSIVE"] } }, "required": ["result"] }, "then": { "properties": { "artifactRefs": { "minItems": 1 } }, "required": ["artifactRefs"] } },
+        {
+          "if": { "properties": { "result": { "const": "NOT_RUN" } }, "required": ["result"] },
+          "then": { "properties": { "consideredAttemptRefs": { "maxItems": 0 }, "consideredObservationRefs": { "maxItems": 0 }, "maximumAttemptNo": { "const": 0 }, "artifactRefs": { "maxItems": 0 } }, "required": ["waiverRef"] },
+          "else": { "properties": { "consideredAttemptRefs": { "minItems": 1 }, "maximumAttemptNo": { "minimum": 1 } }, "not": { "required": ["waiverRef"] } }
+        }
+      ]
+    },
+    "FindingClassifiedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "sessionId", "findingId", "findingReviewRevisionRef", "classification"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "sessionId": { "type": "string", "format": "uuid" },
+        "findingId": { "type": "string", "format": "uuid" },
+        "findingReviewRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "classification": { "type": "string", "enum": ["PRODUCT", "INFRA", "INCONCLUSIVE", "DUPLICATE", "ACCEPTED_RISK"] }
+      }
+    },
+    "FindingDisposedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "sessionId", "findingId", "findingReviewRevisionRef", "classification", "dispositionDecision"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "sessionId": { "type": "string", "format": "uuid" },
+        "findingId": { "type": "string", "format": "uuid" },
+        "findingReviewRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "classification": { "type": "string", "enum": ["PRODUCT", "INFRA", "INCONCLUSIVE", "DUPLICATE", "ACCEPTED_RISK"] },
+        "dispositionDecision": { "type": "string", "enum": ["CREATE_DEFECT", "DUPLICATE", "NOT_A_BUG", "ACCEPTED_RISK", "DEFERRED", "WAIVED"] },
+        "platformActionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericPlatformActionRef" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "dispositionDecision": { "enum": ["ACCEPTED_RISK", "WAIVED"] } }, "required": ["dispositionDecision"] },
+          "then": { "required": ["platformActionRef"] },
+          "else": { "not": { "required": ["platformActionRef"] } }
+        }
+      ]
+    },
+    "DefectLinkedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "findingId", "defectDraftId", "defectLinkId", "externalDefectId", "externalVersion", "commandId"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "findingId": { "type": "string", "format": "uuid" },
+        "defectDraftId": { "type": "string", "format": "uuid" },
+        "defectLinkId": { "type": "string", "format": "uuid" },
+        "externalDefectId": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "commandId": { "type": "string", "format": "uuid" }
+      }
+    },
+    "EvidenceManifestSignedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "sessionId", "requiredSessionPlanRef", "manifestRevisionId", "version", "contentHash", "artifactIds"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "sessionId": { "type": "string", "format": "uuid" },
+        "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+        "manifestRevisionId": { "type": "string", "format": "uuid" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "artifactIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "format": "uuid" } }
+      }
+    },
+    "VerdictSignedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "requiredSessionPlanRef", "verdictId", "version", "verdict", "effectiveRisk", "contentHash", "signatureIds"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+        "verdictId": { "type": "string", "format": "uuid" },
+        "version": { "type": "integer", "minimum": 1 },
+        "verdict": { "type": "string", "enum": ["PASS", "FAIL", "BLOCKED", "INCONCLUSIVE"] },
+        "effectiveRisk": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "signatureIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "format": "uuid" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "effectiveRisk": { "enum": ["LOW", "MEDIUM"] } }, "required": ["effectiveRisk"] },
+          "then": { "properties": { "signatureIds": { "minItems": 1, "maxItems": 1 } } },
+          "else": { "properties": { "signatureIds": { "minItems": 2, "maxItems": 2 } } }
+        }
+      ]
+    },
+    "DodAssessedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "dodAssessmentId", "state", "inputFingerprint", "blockerCodes"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "dodAssessmentId": { "type": "string", "format": "uuid" },
+        "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+        "state": { "type": "string", "enum": ["BLOCKED", "READY_TO_CLOSE"] },
+        "inputFingerprint": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "blockerCodes": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "BLOCKED" } }, "required": ["state"] },
+          "then": { "properties": { "blockerCodes": { "minItems": 1 } } },
+          "else": { "required": ["requiredSessionPlanRef"], "properties": { "blockerCodes": { "maxItems": 0 } } }
+        }
+      ]
+    },
+    "DodSatisfiedPayload": {
+      "description": "Emitted only by the generic confirmation UoW after the distinct-QA-Lead-approved transition is externally confirmed as DONE.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "satisfiedDodAssessmentRef", "completionCandidateRef", "finalCloseConfirmationRef", "requiredSessionPlanRef", "verdictRef", "completionCommandId", "closeApprovalRef", "completionSummaryReceipt", "rawExternalState", "normalizedStatus", "externalVersion"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "satisfiedDodAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "completionCandidateRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "finalCloseConfirmationRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+        "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+        "verdictRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "completionCommandId": { "type": "string", "format": "uuid" },
+        "closeApprovalRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericApprovalRef" },
+        "completionSummaryReceipt": { "$ref": "../operational-work-item/completion-summary.v1.schema.json#/$defs/Receipt" },
+        "rawExternalState": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "normalizedStatus": { "const": "DONE" },
+        "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 }
+      }
+    },
+    "PostCloseCorrectionRecordedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workItemId", "markerId", "finalCloseConfirmationRef", "manifestRevisionRef", "adjudicativeManifestRevisionRef", "clericalAnnotations", "marker", "resolution", "requestedBy", "permissionKey", "authorizationBasisHash"],
+      "properties": {
+        "workItemId": { "type": "string", "format": "uuid" },
+        "markerId": { "type": "string", "format": "uuid" },
+        "finalCloseConfirmationRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+        "manifestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "adjudicativeManifestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "clericalAnnotations": { "type": "array", "minItems": 1, "maxItems": 8, "items": { "$ref": "../qa/evidence-manifest.v1.schema.json#/$defs/ClericalAnnotation" } },
+        "marker": { "const": "POST_CLOSE_NOT_EVALUATED" },
+        "resolution": { "const": "NEW_LINKED_QA_REQUEST_REQUIRED" },
+        "requestedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+        "permissionKey": { "const": "qa.evidence.post-close-correction.record" },
+        "authorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+      }
+    },
+    "RequestAcceptedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.request.accepted" }, "entityType": { "const": "qa-request" }, "payload": { "$ref": "#/$defs/RequestAcceptedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "RequestInputRevisedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.request.input-revised" }, "entityType": { "const": "qa-request-input" }, "payload": { "$ref": "#/$defs/RequestInputRevisedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "ReadinessAssessedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.readiness.assessed" }, "entityType": { "const": "qa-readiness-assessment" }, "payload": { "$ref": "#/$defs/ReadinessAssessedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "ReadinessConfirmedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.readiness.confirmed" }, "entityType": { "const": "qa-request" }, "payload": { "$ref": "#/$defs/ReadinessConfirmedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "RequiredSessionPlanPublishedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.required-session-plan.published" }, "entityType": { "const": "qa-required-session-plan" }, "payload": { "$ref": "#/$defs/RequiredSessionPlanPublishedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "SessionStateChangedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.test-session.state-changed" }, "entityType": { "const": "qa-test-session" }, "payload": { "$ref": "#/$defs/SessionStateChangedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "SessionReviewedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.test-session.reviewed" }, "entityType": { "const": "qa-test-session" }, "payload": { "$ref": "#/$defs/SessionReviewedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "PlanItemResultRecordedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.plan-item.result-recorded" }, "entityType": { "const": "qa-plan-item" }, "payload": { "$ref": "#/$defs/PlanItemResultRecordedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "FindingClassifiedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.finding.classified" }, "entityType": { "const": "qa-finding" }, "payload": { "$ref": "#/$defs/FindingClassifiedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "FindingDisposedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.finding.disposed" }, "entityType": { "const": "qa-finding" }, "payload": { "$ref": "#/$defs/FindingDisposedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "DefectLinkedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.defect.linked" }, "entityType": { "const": "qa-defect-link" }, "payload": { "$ref": "#/$defs/DefectLinkedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "EvidenceManifestSignedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.evidence.manifest-signed" }, "entityType": { "const": "qa-evidence-manifest" }, "payload": { "$ref": "#/$defs/EvidenceManifestSignedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "VerdictSignedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.verdict.signed" }, "entityType": { "const": "qa-verdict" }, "payload": { "$ref": "#/$defs/VerdictSignedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "DodAssessedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.dod.assessed" }, "entityType": { "const": "qa-dod-assessment" }, "payload": { "$ref": "#/$defs/DodAssessedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "DodSatisfiedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.dod.satisfied" }, "entityType": { "const": "qa-dod-assessment" }, "payload": { "$ref": "#/$defs/DodSatisfiedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "PostCloseCorrectionRecordedEvent": {
+      "allOf": [
+        { "$ref": "#/$defs/BaseEnvelope" },
+        { "type": "object", "properties": { "eventType": { "const": "qa.post-close-correction.recorded" }, "entityType": { "const": "qa-post-close-correction" }, "payload": { "$ref": "#/$defs/PostCloseCorrectionRecordedPayload" } } }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "command": [
+    "node_modules/eslint/bin/eslint.js",
+    "tools/verification/feature-008-prerequisites.mts",
+    "tools/verification/feature-008-command-catalog.mts",
+    "tools/verification/feature-008-inputs.mts",
+    "tools/verification/feature-008-reports.mts",
+    "tools/verification/feature-008-trace.mts",
+    "tools/verification/008-setup-gate.mts",
+    "tests/contract/008/prerequisites.spec.ts",
+    "tests/contract/008/inputs.spec.ts",
+    "tests/contract/008/gate-reports.spec.ts"
+  ],
+  "exitCode": 0,
+  "signal": null,
+  "durationMs": 4841,
+  "output": ""
+}

@@ -1,0 +1,70 @@
+{
+  "mode": "DEVELOPMENT_MOCKS",
+  "files": [
+    {
+      "path": "tests/integration/008/uncertain-effects.spec.ts",
+      "assertions": [
+        {
+          "text": "expect(posts).toBe(1)",
+          "present": true
+        },
+        {
+          "text": "state.pipelines).toHaveLength(1)",
+          "present": true
+        }
+      ],
+      "sha256": "sha256:26a10154562508c5f38e1456161127466d037d5b301304cff458bf42db8ddaf4"
+    },
+    {
+      "path": "tests/integration/008/notification-delivery.spec.ts",
+      "assertions": [
+        {
+          "text": "effectCalls).toBe(1)",
+          "present": false
+        },
+        {
+          "text": "expect(posts).toBe(1)",
+          "present": false
+        }
+      ],
+      "sha256": "sha256:f19e43e3a7cf1af458add37db9ca96555de0d98307e46c3af9afe77fec0a6a56"
+    },
+    {
+      "path": "tests/integration/008/completion-runtime.spec.ts",
+      "assertions": [
+        {
+          "text": "expect(provider.posts).toBe(1)",
+          "present": true
+        },
+        {
+          "text": "purposes.filter(purpose => purpose === \"WRITE\")",
+          "present": true
+        }
+      ],
+      "sha256": "sha256:c3ec20774207faad5add423b4e7882bf056d3be83d4efa17e273f52064896820"
+    },
+    {
+      "path": "tests/integration/008/dead-letter-replay.spec.ts",
+      "assertions": [
+        {
+          "text": "expect(invocations).toBe(1)",
+          "present": true
+        },
+        {
+          "text": "COMMAND_REPLAY_AUTHORIZATION_EXPIRED",
+          "present": true
+        }
+      ],
+      "sha256": "sha256:215987f4f5205e89db7151924712d5ccdeba3629855693417ea8259c7f718c78"
+    }
+  ],
+  "observations": [
+    "Jira issue ledger",
+    "GitLab pipeline ledger",
+    "Mattermost message ledger",
+    "completion effect ledger"
+  ],
+  "lostResponse": true,
+  "workerRestart": true,
+  "corporateN2": "BLOCKED_INPUT"
+}

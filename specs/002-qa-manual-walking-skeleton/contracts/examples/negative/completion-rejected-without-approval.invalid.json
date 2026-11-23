@@ -1,0 +1,4 @@
+{
+  "state": "REJECTED",
+  "terminalReason": "A candidate cannot be rejected before an exact generic Approval exists."
+}

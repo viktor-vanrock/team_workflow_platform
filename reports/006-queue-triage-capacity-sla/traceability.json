@@ -1,0 +1,989 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "checkpoint": "TRACEABILITY",
+  "status": "PASS",
+  "generatedAt": "2026-09-03T11:18:34.962Z",
+  "summary": {
+    "required": 32,
+    "declared": 32,
+    "passed": 32,
+    "failed": 0,
+    "missingDeclared": [],
+    "unexpectedDeclared": []
+  },
+  "entries": [
+    {
+      "id": "FR-001",
+      "kind": "requirement",
+      "tasks": [
+        "T039",
+        "T048"
+      ],
+      "evidence": [
+        "tests/architecture/006-queue-boundaries.spec.ts",
+        "tests/contract/006/design-contracts.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "contracts.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:45a2a1c486357c471f90273814bb9cdb39abf1882ece5238665e5aa56a6a90c5"
+        },
+        {
+          "name": "architecture.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:24431939a12c6a307fd39cb88bb7cf7bad2bdf32df42a0059e6a13bdd643b4c6"
+        },
+        {
+          "name": "unit-matrices.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:b16ed8158f1b0ac5fa89304a7fb617194c31e34dbaa9a6ceca30c7d58f6fdc10"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-002",
+      "kind": "requirement",
+      "tasks": [
+        "T039",
+        "T048"
+      ],
+      "evidence": [
+        "tests/architecture/006-queue-boundaries.spec.ts",
+        "tests/contract/006/design-contracts.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "contracts.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:45a2a1c486357c471f90273814bb9cdb39abf1882ece5238665e5aa56a6a90c5"
+        },
+        {
+          "name": "architecture.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:24431939a12c6a307fd39cb88bb7cf7bad2bdf32df42a0059e6a13bdd643b4c6"
+        },
+        {
+          "name": "unit-matrices.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:b16ed8158f1b0ac5fa89304a7fb617194c31e34dbaa9a6ceca30c7d58f6fdc10"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-003",
+      "kind": "requirement",
+      "tasks": [
+        "T039",
+        "T048"
+      ],
+      "evidence": [
+        "tests/architecture/006-queue-boundaries.spec.ts",
+        "tests/contract/006/design-contracts.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "contracts.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:45a2a1c486357c471f90273814bb9cdb39abf1882ece5238665e5aa56a6a90c5"
+        },
+        {
+          "name": "architecture.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:24431939a12c6a307fd39cb88bb7cf7bad2bdf32df42a0059e6a13bdd643b4c6"
+        },
+        {
+          "name": "unit-matrices.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:b16ed8158f1b0ac5fa89304a7fb617194c31e34dbaa9a6ceca30c7d58f6fdc10"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-004",
+      "kind": "requirement",
+      "tasks": [
+        "T039",
+        "T048"
+      ],
+      "evidence": [
+        "tests/architecture/006-queue-boundaries.spec.ts",
+        "tests/contract/006/design-contracts.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "contracts.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:45a2a1c486357c471f90273814bb9cdb39abf1882ece5238665e5aa56a6a90c5"
+        },
+        {
+          "name": "architecture.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:24431939a12c6a307fd39cb88bb7cf7bad2bdf32df42a0059e6a13bdd643b4c6"
+        },
+        {
+          "name": "unit-matrices.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:b16ed8158f1b0ac5fa89304a7fb617194c31e34dbaa9a6ceca30c7d58f6fdc10"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-005",
+      "kind": "requirement",
+      "tasks": [
+        "T051",
+        "T069"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-stage.spec.ts",
+        "tests/e2e/006/us1-distinct-stages.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:387924569e3c1bae76ad75f1efc4a337d170d3eac21837b48a25653f4a17735d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-006",
+      "kind": "requirement",
+      "tasks": [
+        "T051",
+        "T069"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-stage.spec.ts",
+        "tests/e2e/006/us1-distinct-stages.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:387924569e3c1bae76ad75f1efc4a337d170d3eac21837b48a25653f4a17735d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-007",
+      "kind": "requirement",
+      "tasks": [
+        "T051",
+        "T069"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-stage.spec.ts",
+        "tests/e2e/006/us1-distinct-stages.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:387924569e3c1bae76ad75f1efc4a337d170d3eac21837b48a25653f4a17735d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-008",
+      "kind": "requirement",
+      "tasks": [
+        "T051",
+        "T069"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-stage.spec.ts",
+        "tests/e2e/006/us1-distinct-stages.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:387924569e3c1bae76ad75f1efc4a337d170d3eac21837b48a25653f4a17735d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-009",
+      "kind": "requirement",
+      "tasks": [
+        "T051",
+        "T069"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-stage.spec.ts",
+        "tests/e2e/006/us1-distinct-stages.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:387924569e3c1bae76ad75f1efc4a337d170d3eac21837b48a25653f4a17735d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-010",
+      "kind": "requirement",
+      "tasks": [
+        "T070",
+        "T089"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-ordering.spec.ts",
+        "tests/e2e/006/us2-project-portfolio.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:66ffef31927052819a6a647ea74981876ec5dc6e7f68624eb97fb955d636e94d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-011",
+      "kind": "requirement",
+      "tasks": [
+        "T070",
+        "T089"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-ordering.spec.ts",
+        "tests/e2e/006/us2-project-portfolio.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:66ffef31927052819a6a647ea74981876ec5dc6e7f68624eb97fb955d636e94d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-012",
+      "kind": "requirement",
+      "tasks": [
+        "T070",
+        "T089"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-ordering.spec.ts",
+        "tests/e2e/006/us2-project-portfolio.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:66ffef31927052819a6a647ea74981876ec5dc6e7f68624eb97fb955d636e94d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-013",
+      "kind": "requirement",
+      "tasks": [
+        "T090",
+        "T107"
+      ],
+      "evidence": [
+        "tests/contract/006/us3-triage-assessment.spec.ts",
+        "tests/e2e/006/us3-triage-controls.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:3fc4d9798a77592926e0913501377fb4515a2ec983e70dcbbacd34ed794027fd"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-014",
+      "kind": "requirement",
+      "tasks": [
+        "T090",
+        "T107"
+      ],
+      "evidence": [
+        "tests/contract/006/us3-triage-assessment.spec.ts",
+        "tests/e2e/006/us3-triage-controls.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:3fc4d9798a77592926e0913501377fb4515a2ec983e70dcbbacd34ed794027fd"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-015",
+      "kind": "requirement",
+      "tasks": [
+        "T090",
+        "T107"
+      ],
+      "evidence": [
+        "tests/contract/006/us3-triage-assessment.spec.ts",
+        "tests/e2e/006/us3-triage-controls.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:3fc4d9798a77592926e0913501377fb4515a2ec983e70dcbbacd34ed794027fd"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-016",
+      "kind": "requirement",
+      "tasks": [
+        "T090",
+        "T107"
+      ],
+      "evidence": [
+        "tests/contract/006/us3-triage-assessment.spec.ts",
+        "tests/e2e/006/us3-triage-controls.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:3fc4d9798a77592926e0913501377fb4515a2ec983e70dcbbacd34ed794027fd"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-017",
+      "kind": "requirement",
+      "tasks": [
+        "T108",
+        "T133"
+      ],
+      "evidence": [
+        "tests/unit/006/capacity-accounting.spec.ts",
+        "tests/e2e/006/us4-capacity-expedite.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:6b51f8b6da21e98b3119314d158ec0b8dd9e54931fb12dfa19a5c2c3fc86a8e4"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:cbdbdbe927303c2fc2876ca9c278a08a0dc2e8ddd02869777c37d946f02f42db"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-018",
+      "kind": "requirement",
+      "tasks": [
+        "T108",
+        "T133"
+      ],
+      "evidence": [
+        "tests/unit/006/capacity-accounting.spec.ts",
+        "tests/e2e/006/us4-capacity-expedite.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:6b51f8b6da21e98b3119314d158ec0b8dd9e54931fb12dfa19a5c2c3fc86a8e4"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:cbdbdbe927303c2fc2876ca9c278a08a0dc2e8ddd02869777c37d946f02f42db"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-019",
+      "kind": "requirement",
+      "tasks": [
+        "T108",
+        "T133"
+      ],
+      "evidence": [
+        "tests/unit/006/capacity-accounting.spec.ts",
+        "tests/e2e/006/us4-capacity-expedite.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:6b51f8b6da21e98b3119314d158ec0b8dd9e54931fb12dfa19a5c2c3fc86a8e4"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:cbdbdbe927303c2fc2876ca9c278a08a0dc2e8ddd02869777c37d946f02f42db"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-020",
+      "kind": "requirement",
+      "tasks": [
+        "T108",
+        "T133"
+      ],
+      "evidence": [
+        "tests/unit/006/capacity-accounting.spec.ts",
+        "tests/e2e/006/us4-capacity-expedite.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:6b51f8b6da21e98b3119314d158ec0b8dd9e54931fb12dfa19a5c2c3fc86a8e4"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:cbdbdbe927303c2fc2876ca9c278a08a0dc2e8ddd02869777c37d946f02f42db"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-021",
+      "kind": "requirement",
+      "tasks": [
+        "T108",
+        "T133"
+      ],
+      "evidence": [
+        "tests/unit/006/capacity-accounting.spec.ts",
+        "tests/e2e/006/us4-capacity-expedite.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:6b51f8b6da21e98b3119314d158ec0b8dd9e54931fb12dfa19a5c2c3fc86a8e4"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:cbdbdbe927303c2fc2876ca9c278a08a0dc2e8ddd02869777c37d946f02f42db"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-022",
+      "kind": "requirement",
+      "tasks": [
+        "T134",
+        "T154"
+      ],
+      "evidence": [
+        "tests/unit/006/business-calendar.spec.ts",
+        "tests/e2e/006/us5-sla-transparency.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us5.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:0ee9ad9e93c2b312faee335735a21967e0c86cdc94fd584ce193684ac61e95ac"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-023",
+      "kind": "requirement",
+      "tasks": [
+        "T134",
+        "T154"
+      ],
+      "evidence": [
+        "tests/unit/006/business-calendar.spec.ts",
+        "tests/e2e/006/us5-sla-transparency.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us5.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:0ee9ad9e93c2b312faee335735a21967e0c86cdc94fd584ce193684ac61e95ac"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-024",
+      "kind": "requirement",
+      "tasks": [
+        "T134",
+        "T154"
+      ],
+      "evidence": [
+        "tests/unit/006/business-calendar.spec.ts",
+        "tests/e2e/006/us5-sla-transparency.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us5.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:0ee9ad9e93c2b312faee335735a21967e0c86cdc94fd584ce193684ac61e95ac"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "FR-025",
+      "kind": "requirement",
+      "tasks": [
+        "T134",
+        "T154"
+      ],
+      "evidence": [
+        "tests/unit/006/business-calendar.spec.ts",
+        "tests/e2e/006/us5-sla-transparency.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us5.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:0ee9ad9e93c2b312faee335735a21967e0c86cdc94fd584ce193684ac61e95ac"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-001",
+      "kind": "success-criterion",
+      "tasks": [
+        "T051",
+        "T069"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-stage.spec.ts",
+        "tests/e2e/006/us1-distinct-stages.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us1.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:387924569e3c1bae76ad75f1efc4a337d170d3eac21837b48a25653f4a17735d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-002",
+      "kind": "success-criterion",
+      "tasks": [
+        "T070",
+        "T089"
+      ],
+      "evidence": [
+        "tests/unit/006/queue-ordering.spec.ts",
+        "tests/e2e/006/us2-project-portfolio.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us2.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:66ffef31927052819a6a647ea74981876ec5dc6e7f68624eb97fb955d636e94d"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-003",
+      "kind": "success-criterion",
+      "tasks": [
+        "T090",
+        "T107"
+      ],
+      "evidence": [
+        "tests/contract/006/us3-triage-assessment.spec.ts",
+        "tests/e2e/006/us3-triage-controls.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us3.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:3fc4d9798a77592926e0913501377fb4515a2ec983e70dcbbacd34ed794027fd"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-004",
+      "kind": "success-criterion",
+      "tasks": [
+        "T108",
+        "T133"
+      ],
+      "evidence": [
+        "tests/unit/006/capacity-accounting.spec.ts",
+        "tests/e2e/006/us4-capacity-expedite.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us4.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:6b51f8b6da21e98b3119314d158ec0b8dd9e54931fb12dfa19a5c2c3fc86a8e4"
+        },
+        {
+          "name": "concurrency.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:cbdbdbe927303c2fc2876ca9c278a08a0dc2e8ddd02869777c37d946f02f42db"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-005",
+      "kind": "success-criterion",
+      "tasks": [
+        "T134",
+        "T154"
+      ],
+      "evidence": [
+        "tests/unit/006/business-calendar.spec.ts",
+        "tests/e2e/006/us5-sla-transparency.spec.ts"
+      ],
+      "reports": [
+        {
+          "name": "us5.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:0ee9ad9e93c2b312faee335735a21967e0c86cdc94fd584ce193684ac61e95ac"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-006",
+      "kind": "success-criterion",
+      "tasks": [
+        "T155",
+        "T156",
+        "T157",
+        "T158",
+        "T162",
+        "T163"
+      ],
+      "evidence": [
+        "tests/integration/006-migration-matrix.spec.ts",
+        "tests/integration/security/006/production-and-scope-boundary.spec.ts",
+        "tests/e2e/006/queue-browser.spec.ts",
+        "tools/smoke/feature-006.mts"
+      ],
+      "reports": [
+        {
+          "name": "migrations-postgres-17.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:2d8e5f928e3e768fba33f3842b3deab19ce56e67433ecd8f735a06ebb7c74be0"
+        },
+        {
+          "name": "migrations-postgres-18.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:7d0f313109e984381e4eb7f3fa145ce458891daeec48f564166d186e05cac0b3"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c60893852caf79577128478dcffaf5383ee1c1ef4027588a579093ec129f3db8"
+        },
+        {
+          "name": "rebuild.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:1b8ebbe709ccd1ece91f3e853d332d6551a5ce75a4e20d562923c645c063a2db"
+        },
+        {
+          "name": "observability.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:9216558b0d4063863fc94bb313293cf2aedfc4f92f3c2711fb09000c8b4b485b"
+        },
+        {
+          "name": "browser.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:eebc1cf4c2f2ee073830a7029fabdaf9184e554ad9f52bd30cc7fb2101a52837"
+        },
+        {
+          "name": "smoke.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:efd8bbc26ce39683f4544ab98870e39fdc2a8f4c6c1c053904d37c5f58e5e9a2"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    },
+    {
+      "id": "SC-007",
+      "kind": "success-criterion",
+      "tasks": [
+        "T155",
+        "T156",
+        "T157",
+        "T158",
+        "T162",
+        "T163"
+      ],
+      "evidence": [
+        "tests/integration/006-migration-matrix.spec.ts",
+        "tests/integration/security/006/production-and-scope-boundary.spec.ts",
+        "tests/e2e/006/queue-browser.spec.ts",
+        "tools/smoke/feature-006.mts"
+      ],
+      "reports": [
+        {
+          "name": "migrations-postgres-17.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:2d8e5f928e3e768fba33f3842b3deab19ce56e67433ecd8f735a06ebb7c74be0"
+        },
+        {
+          "name": "migrations-postgres-18.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:7d0f313109e984381e4eb7f3fa145ce458891daeec48f564166d186e05cac0b3"
+        },
+        {
+          "name": "security.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:c60893852caf79577128478dcffaf5383ee1c1ef4027588a579093ec129f3db8"
+        },
+        {
+          "name": "rebuild.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:1b8ebbe709ccd1ece91f3e853d332d6551a5ce75a4e20d562923c645c063a2db"
+        },
+        {
+          "name": "observability.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:9216558b0d4063863fc94bb313293cf2aedfc4f92f3c2711fb09000c8b4b485b"
+        },
+        {
+          "name": "browser.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:eebc1cf4c2f2ee073830a7029fabdaf9184e554ad9f52bd30cc7fb2101a52837"
+        },
+        {
+          "name": "smoke.json",
+          "status": "PASS",
+          "fresh": true,
+          "sha256": "sha256:efd8bbc26ce39683f4544ab98870e39fdc2a8f4c6c1c053904d37c5f58e5e9a2"
+        }
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": [],
+      "failedReports": []
+    }
+  ],
+  "sourceBinding": {
+    "spec": "sha256:4424e97b5a915832007b88e2d8b77756ffd98f0f055c87847aaf2f3d98c4e478",
+    "tasks": "sha256:bcfb30c1b9aef5b160f48c7d7361e9e27e28a0bea441bc62fd3e6fc7eca9d249"
+  }
+}

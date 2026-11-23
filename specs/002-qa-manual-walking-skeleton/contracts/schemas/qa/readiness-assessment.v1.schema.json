@@ -1,0 +1,409 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:readiness-assessment:v1",
+  "title": "Append-only QA Readiness Assessment with Exact DoR Inputs",
+  "description": "Deterministic human-evaluated DoR snapshot. It never stores the derived external sync stage; the read model combines this canonical assessment with Core operational projection.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "assessmentId", "version", "workspaceId", "projectId", "workItemId", "extensionId", "qaRequestExtensionVersion", "state", "inputFingerprint", "inputs", "ruleSetRef", "blockers", "warnings", "acknowledgements", "waivedRuleCodes", "contentHash", "evaluatedBy", "authorizationBasisHash", "dataClassificationKey", "evaluatedAt", "correlationId", "causationId"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "assessmentId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "extensionId": { "type": "string", "format": "uuid" },
+    "qaRequestExtensionVersion": { "type": "integer", "minimum": 1 },
+    "state": { "type": "string", "enum": ["NEEDS_INFO", "READY", "READY_WITH_WAIVER"] },
+    "inputFingerprint": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "inputs": { "$ref": "#/$defs/InputBundle" },
+    "ruleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "blockers": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/ReadinessBlocker" } },
+    "warnings": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/StructuredIssue" } },
+    "acknowledgements": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" } },
+    "waivedRuleCodes": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/WaivableReadinessBlockerCode" } },
+    "waiverRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" },
+    "waiverActionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericPlatformActionRef" },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "evaluatedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "authorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "dataClassificationKey": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ClassificationKey" },
+    "evaluatedAt": { "type": "string", "format": "date-time" },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "causationId": { "type": "string", "format": "uuid" }
+  },
+  "$defs": {
+    "ReadinessBlockerCode": {
+      "type": "string",
+      "enum": ["PROJECT_INACTIVE", "PROJECT_REGISTRY_NEEDS_REVIEW", "EXTERNAL_QA_REQUEST_UNCONFIRMED", "REQUESTER_ENTITLEMENT_MISSING", "RESPONSE_CHANNEL_UNCONFIRMED", "RETEST_LINEAGE_INCOMPLETE", "REQUEST_AUTHORITY_BINDING_MISSING", "REQUEST_AUTHORITY_PROFILE_MISSING", "REQUEST_AUTHORITY_MAPPING_INVALID", "INTAKE_DECLARATIONS_MISSING", "SOURCE_CONTEXT_INSUFFICIENT", "TARGET_INCOMPLETE", "ROLE_TEST_DATA_METADATA_INCOMPLETE", "DESIRED_DATE_MISSING", "CHECKLIST_SELECTION_MISSING", "CLASSIFICATION_INVALID"]
+    },
+    "WaivableReadinessBlockerCode": {
+      "description": "Feature-002 hardcoded DoR waiver allowlist. Every structural/content, scope, security, classification, entitlement, channel, RETEST and Binding/Profile rule remains non-waivable.",
+      "type": "string",
+      "const": "PROJECT_REGISTRY_NEEDS_REVIEW"
+    },
+    "ReadinessBlocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "field", "severity", "remediation"],
+      "properties": {
+        "code": { "$ref": "#/$defs/ReadinessBlockerCode" },
+        "field": { "type": "string", "pattern": "^(?:/[^/~]*(?:~[01][^/~]*)*)*$", "maxLength": 512 },
+        "severity": { "const": "BLOCKER" },
+        "remediation": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    },
+    "AcceptedRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": { "type": "string", "enum": ["CONFIRMED", "UNCONFIRMED"] },
+        "commandRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" },
+        "confirmationReceiptRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+        "operationalResultRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+        "externalEntityId": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "rawExternalState": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "normalizedStatus": { "type": "string", "enum": ["NEW", "READY"] },
+        "confirmationContentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "confirmedAt": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "CONFIRMED" } }, "required": ["state"] },
+          "then": { "required": ["commandRef", "confirmationReceiptRef", "operationalResultRef", "externalEntityId", "externalVersion", "rawExternalState", "normalizedStatus", "confirmationContentHash", "confirmedAt"] },
+          "else": { "not": { "anyOf": [{ "required": ["commandRef"] }, { "required": ["confirmationReceiptRef"] }, { "required": ["operationalResultRef"] }, { "required": ["externalEntityId"] }, { "required": ["externalVersion"] }, { "required": ["rawExternalState"] }, { "required": ["normalizedStatus"] }, { "required": ["confirmationContentHash"] }, { "required": ["confirmedAt"] }] } }
+        }
+      ]
+    },
+    "ProjectRegistryInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectRef", "lifecycleState", "verificationState", "verificationRef"],
+      "properties": {
+        "projectRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "lifecycleState": { "type": "string", "enum": ["ACTIVE", "INACTIVE"] },
+        "verificationState": { "type": "string", "enum": ["CURRENT", "NEEDS_REVIEW"] },
+        "verificationRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "dorLeadWaiverRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" }
+      },
+      "allOf": [
+        { "if": { "properties": { "verificationState": { "const": "CURRENT" } }, "required": ["verificationState"] }, "then": { "not": { "required": ["dorLeadWaiverRef"] } } }
+      ]
+    },
+    "ReadyWithWaiverProjectRegistryInput": {
+      "description": "READY_WITH_WAIVER specialization. A pre-waiver NEEDS_INFO assessment may carry NEEDS_REVIEW without this ref; only the new waived-ready assessment requires the exact approved DoR waiver.",
+      "allOf": [
+        { "$ref": "#/$defs/ProjectRegistryInput" },
+        {
+          "properties": { "verificationState": { "const": "NEEDS_REVIEW" } },
+          "required": ["dorLeadWaiverRef"]
+        }
+      ]
+    },
+    "RequesterEntitlementInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": { "type": "string", "enum": ["ACTIVE", "MISSING", "EXPIRED"] },
+        "entitlementRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+      },
+      "allOf": [
+        { "if": { "properties": { "state": { "const": "ACTIVE" } }, "required": ["state"] }, "then": { "required": ["entitlementRef"] }, "else": { "not": { "required": ["entitlementRef"] } } }
+      ]
+    },
+    "ResponseChannelInput": {
+      "description": "DoR projection of the exact pinned QaRequestInputRevision responseChannelResolution. Source CONFIRMED maps to CONFIRMED; source MISSING maps to UNCONFIRMED. requesterPrincipal, resolutionPolicyRef and evaluatedAt are byte-for-byte equal. CONFIRMED preserves the exact responseChannelRef and forbids missingReasonCode; UNCONFIRMED preserves the exact source missingReasonCode and forbids responseChannelRef.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "requesterPrincipal", "resolutionPolicyRef", "evaluatedAt"],
+      "properties": {
+        "state": { "type": "string", "enum": ["CONFIRMED", "UNCONFIRMED"] },
+        "requesterPrincipal": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+        "resolutionPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+        "responseChannelRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ResponseChannelRef" },
+        "evaluatedAt": { "type": "string", "format": "date-time" },
+        "missingReasonCode": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "CONFIRMED" } }, "required": ["state"] },
+          "then": { "required": ["responseChannelRef"], "not": { "required": ["missingReasonCode"] } },
+          "else": { "required": ["missingReasonCode"], "not": { "required": ["responseChannelRef"] } }
+        }
+      ]
+    },
+    "RequestLineageInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestKind", "sourceRefs", "blockersDeclared", "dependenciesDeclared", "lineageHash"],
+      "properties": {
+        "requestKind": { "type": "string", "enum": ["feature-validation", "smoke", "regression", "retest", "investigation"] },
+        "sourceRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+        "blockersDeclared": { "type": "boolean" },
+        "dependenciesDeclared": { "type": "boolean" },
+        "scheduledTargetPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "defectRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "previousSessionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/PreviousSessionRef" },
+        "sourceBuildRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "lineageHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+      },
+      "allOf": [
+        { "if": { "properties": { "requestKind": { "const": "retest" } }, "required": ["requestKind"] }, "else": { "not": { "anyOf": [{ "required": ["defectRef"] }, { "required": ["previousSessionRef"] }, { "required": ["sourceBuildRef"] }] } } }
+      ]
+    },
+    "MappingHealthInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "blockingErrors"],
+      "properties": {
+        "state": { "type": "string", "enum": ["VALID", "INVALID", "MISSING"] },
+        "bindingRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/BindingRef" },
+        "profileRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ProfileRef" } },
+        "validationReportRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "blockingErrors": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/StructuredIssue" } }
+      },
+      "allOf": [
+        { "if": { "properties": { "state": { "const": "VALID" } }, "required": ["state"] }, "then": { "required": ["bindingRef", "profileRefs", "validationReportRef"], "properties": { "blockingErrors": { "maxItems": 0 } } }, "else": { "properties": { "blockingErrors": { "minItems": 1 } } } }
+      ]
+    },
+    "ContentCompletenessInput": {
+      "description": "Closed projection over the exact request-input revision so a READY assessment cannot hide absent non-waivable DoR facts behind an opaque fingerprint.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goalPresent", "scopePresent", "acceptanceOutcomePresent", "requestRiskPresent", "businessImpactPresent", "classificationState", "desiredDate", "checklistSelection", "target"],
+      "properties": {
+        "goalPresent": { "type": "boolean" },
+        "scopePresent": { "type": "boolean" },
+        "acceptanceOutcomePresent": { "type": "boolean" },
+        "requestRiskPresent": { "type": "boolean" },
+        "businessImpactPresent": { "type": "boolean" },
+        "classificationState": { "type": "string", "enum": ["VALID", "INVALID"] },
+        "desiredDate": {
+          "description": "Typed projection of the exact request-input revision desiredDate; absence remains explicit and is a non-waivable DoR blocker.",
+          "oneOf": [
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["state", "value"],
+              "properties": { "state": { "const": "PRESENT" }, "value": { "type": "string", "format": "date" } }
+            },
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["state"],
+              "properties": { "state": { "const": "MISSING" } }
+            }
+          ]
+        },
+        "checklistSelection": {
+          "description": "Closed checklist provenance. REQUEST_INPUT refs must be byte-equal to the pinned request-input revision checklistRefs; PROJECT_CONTEXT_DEFAULTS refs must be byte-equal to the pinned context defaultChecklistRefs. MISSING is the only empty branch and is a non-waivable blocker.",
+          "oneOf": [
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["source", "requestInputRevisionRef", "checklistRefs"],
+              "properties": {
+                "source": { "const": "REQUEST_INPUT" },
+                "requestInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+                "checklistRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } }
+              }
+            },
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["source", "projectContextRef", "checklistRefs"],
+              "properties": {
+                "source": { "const": "PROJECT_CONTEXT_DEFAULTS" },
+                "projectContextRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+                "checklistRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } }
+              }
+            },
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["source", "checklistRefs"],
+              "properties": {
+                "source": { "const": "MISSING" },
+                "checklistRefs": { "type": "array", "maxItems": 0 }
+              }
+            }
+          ]
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "roleMetadataRefs"],
+          "properties": {
+            "state": { "type": "string", "enum": ["COMPLETE", "INCOMPLETE"] },
+            "environmentId": { "type": "string", "format": "uuid" },
+            "environmentRevision": { "type": "integer", "minimum": 1 },
+            "buildRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+            "targetPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+            "testDataRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+            "accountLeaseRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+            "roleMetadataRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "state": { "const": "COMPLETE" } }, "required": ["state"] },
+              "then": {
+                "required": ["environmentId", "environmentRevision", "testDataRef", "accountLeaseRef"],
+                "properties": { "roleMetadataRefs": { "minItems": 1 } },
+                "anyOf": [{ "required": ["buildRef"] }, { "required": ["targetPolicyRef"] }]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "InputBundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestExtensionSnapshotRef", "requestInputRevisionRef", "projectContextRef", "acceptedRequest", "projectRegistry", "requesterEntitlement", "responseChannel", "requestLineage", "contentCompleteness", "mappingHealth"],
+      "properties": {
+        "requestExtensionSnapshotRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestExtensionSnapshotRef" },
+        "requestInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+        "projectContextRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+        "acceptedRequest": { "$ref": "#/$defs/AcceptedRequest" },
+        "projectRegistry": { "$ref": "#/$defs/ProjectRegistryInput" },
+        "requesterEntitlement": { "$ref": "#/$defs/RequesterEntitlementInput" },
+        "responseChannel": { "$ref": "#/$defs/ResponseChannelInput" },
+        "requestLineage": { "$ref": "#/$defs/RequestLineageInput" },
+        "contentCompleteness": { "$ref": "#/$defs/ContentCompletenessInput" },
+        "mappingHealth": { "$ref": "#/$defs/MappingHealthInput" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "NEEDS_INFO" } }, "required": ["state"] },
+      "then": { "properties": { "blockers": { "minItems": 1 }, "waivedRuleCodes": { "maxItems": 0 } }, "not": { "anyOf": [{ "required": ["waiverRef"] }, { "required": ["waiverActionRef"] }] } },
+      "else": { "properties": { "blockers": { "maxItems": 0 } } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "READY" } }, "required": ["state"] },
+      "then": {
+        "properties": {
+          "waivedRuleCodes": { "maxItems": 0 },
+          "inputs": {
+            "type": "object",
+            "properties": {
+              "projectRegistry": { "type": "object", "properties": { "lifecycleState": { "const": "ACTIVE" }, "verificationState": { "const": "CURRENT" } } },
+              "acceptedRequest": { "type": "object", "properties": { "state": { "const": "CONFIRMED" } } },
+              "requesterEntitlement": { "type": "object", "properties": { "state": { "const": "ACTIVE" } } },
+              "responseChannel": { "type": "object", "properties": { "state": { "const": "CONFIRMED" } } },
+              "requestLineage": { "type": "object", "properties": { "blockersDeclared": { "const": true }, "dependenciesDeclared": { "const": true } } },
+              "contentCompleteness": {
+                "type": "object",
+                "properties": {
+                  "goalPresent": { "const": true }, "scopePresent": { "const": true },
+                  "acceptanceOutcomePresent": { "const": true }, "requestRiskPresent": { "const": true },
+                  "businessImpactPresent": { "const": true }, "classificationState": { "const": "VALID" },
+                  "desiredDate": { "properties": { "state": { "const": "PRESENT" } } },
+                  "checklistSelection": { "properties": { "source": { "enum": ["REQUEST_INPUT", "PROJECT_CONTEXT_DEFAULTS"] } } },
+                  "target": { "properties": { "state": { "const": "COMPLETE" } } }
+                }
+              },
+              "mappingHealth": { "type": "object", "properties": { "state": { "const": "VALID" }, "blockingErrors": { "maxItems": 0 } } }
+            }
+          }
+        },
+        "not": { "anyOf": [{ "required": ["waiverRef"] }, { "required": ["waiverActionRef"] }] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "READY_WITH_WAIVER" } }, "required": ["state"] },
+      "then": {
+        "required": ["waiverRef", "waiverActionRef"],
+        "properties": {
+          "waivedRuleCodes": { "minItems": 1, "maxItems": 1, "contains": { "const": "PROJECT_REGISTRY_NEEDS_REVIEW" } },
+          "inputs": {
+            "type": "object",
+            "properties": {
+              "projectRegistry": { "$ref": "#/$defs/ReadyWithWaiverProjectRegistryInput", "properties": { "lifecycleState": { "const": "ACTIVE" } } },
+              "acceptedRequest": { "type": "object", "properties": { "state": { "const": "CONFIRMED" } } },
+              "requesterEntitlement": { "type": "object", "properties": { "state": { "const": "ACTIVE" } } },
+              "responseChannel": { "type": "object", "properties": { "state": { "const": "CONFIRMED" } } },
+              "requestLineage": { "type": "object", "properties": { "blockersDeclared": { "const": true }, "dependenciesDeclared": { "const": true } } },
+              "contentCompleteness": {
+                "type": "object",
+                "properties": {
+                  "goalPresent": { "const": true }, "scopePresent": { "const": true },
+                  "acceptanceOutcomePresent": { "const": true }, "requestRiskPresent": { "const": true },
+                  "businessImpactPresent": { "const": true }, "classificationState": { "const": "VALID" },
+                  "desiredDate": { "properties": { "state": { "const": "PRESENT" } } },
+                  "checklistSelection": { "properties": { "source": { "enum": ["REQUEST_INPUT", "PROJECT_CONTEXT_DEFAULTS"] } } },
+                  "target": { "properties": { "state": { "const": "COMPLETE" } } }
+                }
+              },
+              "mappingHealth": { "type": "object", "properties": { "state": { "const": "VALID" }, "blockingErrors": { "maxItems": 0 } } }
+            }
+          }
+        }
+      },
+      "else": { "not": { "anyOf": [{ "required": ["waiverRef"] }, { "required": ["waiverActionRef"] }] } }
+    },
+    {
+      "if": {
+        "properties": { "waivedRuleCodes": { "contains": { "const": "PROJECT_REGISTRY_NEEDS_REVIEW" } } },
+        "required": ["waivedRuleCodes"]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "type": "object",
+            "properties": {
+              "projectRegistry": { "$ref": "#/$defs/ReadyWithWaiverProjectRegistryInput" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": { "enum": ["READY", "READY_WITH_WAIVER"] },
+          "inputs": {
+            "properties": {
+              "requestLineage": { "properties": { "requestKind": { "const": "retest" } } }
+            }
+          }
+        },
+        "required": ["state", "inputs"]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "properties": {
+              "requestLineage": { "required": ["defectRef", "previousSessionRef", "sourceBuildRef"] }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": { "enum": ["READY", "READY_WITH_WAIVER"] },
+          "inputs": {
+            "properties": {
+              "requestLineage": { "properties": { "sourceRefs": { "maxItems": 0 } }, "required": ["sourceRefs"] }
+            }
+          }
+        },
+        "required": ["state", "inputs"]
+      },
+      "then": {
+        "properties": {
+          "inputs": {
+            "properties": {
+              "requestLineage": {
+                "properties": { "requestKind": { "enum": ["smoke", "regression"] } },
+                "required": ["scheduledTargetPolicyRef"]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

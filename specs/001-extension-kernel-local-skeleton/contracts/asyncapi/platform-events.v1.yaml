@@ -1,0 +1,66 @@
+asyncapi: 3.0.0
+info:
+  title: Agentic Workspace Platform Phase-1 Messages
+  version: 1.0.0
+  description: >-
+    Durable project-scoped operational events and resolved Connector command delivery. Producers
+    use an outbox. Consumers use a transactional inbox keyed by consumer, producer and event ID.
+defaultContentType: application/json
+channels:
+  platformEvents:
+    address: awp.platform.events.v1
+    description: >-
+      Versioned events such as work-item.created, connector.command.confirmed,
+      connector.command.failed, approval.decided and approval.invalidated.
+    messages:
+      operationalEvent:
+        $ref: '#/components/messages/OperationalEvent'
+  connectorCommands:
+    address: awp.connector.commands.v1
+    description: >-
+      Minimal BullMQ delivery notification for an already authorized, exact-version-resolved
+      command. Worker reloads the durable envelope and compares scope, actor, correlation and causation.
+    messages:
+      resolvedExternalCommand:
+        $ref: '#/components/messages/ResolvedExternalCommand'
+operations:
+  publishOperationalEvent:
+    action: send
+    channel:
+      $ref: '#/channels/platformEvents'
+    messages:
+      - $ref: '#/channels/platformEvents/messages/operationalEvent'
+  consumeOperationalEvent:
+    action: receive
+    channel:
+      $ref: '#/channels/platformEvents'
+    messages:
+      - $ref: '#/channels/platformEvents/messages/operationalEvent'
+  dispatchResolvedExternalCommand:
+    action: send
+    channel:
+      $ref: '#/channels/connectorCommands'
+    messages:
+      - $ref: '#/channels/connectorCommands/messages/resolvedExternalCommand'
+  executeResolvedExternalCommand:
+    action: receive
+    channel:
+      $ref: '#/channels/connectorCommands'
+    messages:
+      - $ref: '#/channels/connectorCommands/messages/resolvedExternalCommand'
+components:
+  messages:
+    OperationalEvent:
+      name: OperationalEvent
+      title: Project-scoped operational event
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/events/event-envelope.v1.schema.json'
+    ResolvedExternalCommand:
+      name: ResolvedExternalCommand
+      title: External command delivery job
+      correlationId:
+        location: $message.payload#/correlationId
+      payload:
+        $ref: '../schemas/commands/external-command-job.v1.schema.json'

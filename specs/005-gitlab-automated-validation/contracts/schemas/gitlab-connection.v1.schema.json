@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:gitlab-connection-configuration:v1",
+  "title": "GitLab Connection connectorConfiguration content v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "identityReferences",
+    "operationIdentityRouting",
+    "identitySeparationEvidenceHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "gitlab-connection-configuration@1.0.0" },
+    "identityReferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["read", "trigger", "webhook"],
+      "properties": {
+        "read": { "$ref": "#/$defs/readCredential" },
+        "trigger": { "$ref": "#/$defs/triggerCredential" },
+        "webhook": { "$ref": "#/$defs/webhookCredential" }
+      }
+    },
+    "operationIdentityRouting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mergeRequestRead",
+        "commitRead",
+        "buildRead",
+        "pipelineTrigger",
+        "pipelineRead",
+        "pipelineLookup",
+        "artifactMetadata",
+        "artifactStream",
+        "webhookVerify"
+      ],
+      "properties": {
+        "mergeRequestRead": { "const": "READ" },
+        "commitRead": { "const": "READ" },
+        "buildRead": { "const": "READ" },
+        "pipelineTrigger": { "const": "TRIGGER" },
+        "pipelineRead": { "const": "READ" },
+        "pipelineLookup": { "const": "READ" },
+        "artifactMetadata": { "const": "READ" },
+        "artifactStream": { "const": "READ" },
+        "webhookVerify": { "const": "WEBHOOK" }
+      }
+    },
+    "identitySeparationEvidenceHash": {
+      "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+    }
+  },
+  "$defs": {
+    "baseCredential": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference",
+        "referenceFingerprint",
+        "ownerRef",
+        "rotationPolicyRef",
+        "revocationRunbookRef"
+      ],
+      "properties": {
+        "identityKind": { "const": "NON_HUMAN_PROJECT" },
+        "scope": { "enum": ["read_api", "pipeline_trigger"] },
+        "nonHumanIdentityEvidenceRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "identityMaterialKind": { "const": "STANDARD_WEBHOOK_HMAC_KEY" },
+        "keyVersionRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "reference": {
+          "type": "string",
+          "pattern": "^secretref://[a-z0-9][a-z0-9._/-]*$",
+          "maxLength": 1024
+        },
+        "referenceFingerprint": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "ownerRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "rotationPolicyRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "revocationRunbookRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        }
+      }
+    },
+    "readCredential": {
+      "allOf": [
+        { "$ref": "#/$defs/baseCredential" },
+        {
+          "type": "object",
+          "properties": {
+            "identityKind": { "const": "NON_HUMAN_PROJECT" },
+            "scope": { "const": "read_api" },
+            "nonHumanIdentityEvidenceRef": {
+              "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+            },
+            "identityMaterialKind": false,
+            "keyVersionRef": false
+          },
+          "required": [
+            "identityKind",
+            "scope",
+            "nonHumanIdentityEvidenceRef"
+          ]
+        }
+      ]
+    },
+    "triggerCredential": {
+      "allOf": [
+        { "$ref": "#/$defs/baseCredential" },
+        {
+          "type": "object",
+          "properties": {
+            "identityKind": { "const": "NON_HUMAN_PROJECT" },
+            "scope": { "const": "pipeline_trigger" },
+            "nonHumanIdentityEvidenceRef": {
+              "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+            },
+            "identityMaterialKind": false,
+            "keyVersionRef": false
+          },
+          "required": [
+            "identityKind",
+            "scope",
+            "nonHumanIdentityEvidenceRef"
+          ]
+        }
+      ]
+    },
+    "webhookCredential": {
+      "allOf": [
+        { "$ref": "#/$defs/baseCredential" },
+        {
+          "type": "object",
+          "properties": {
+            "identityMaterialKind": { "const": "STANDARD_WEBHOOK_HMAC_KEY" },
+            "keyVersionRef": {
+              "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+            },
+            "identityKind": false,
+            "scope": false,
+            "nonHumanIdentityEvidenceRef": false
+          },
+          "required": ["identityMaterialKind", "keyVersionRef"]
+        }
+      ]
+    }
+  }
+}

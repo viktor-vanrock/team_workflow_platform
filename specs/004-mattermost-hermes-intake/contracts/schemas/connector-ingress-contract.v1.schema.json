@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:connector-ingress-contract:v1",
+  "title": "ConnectorIngressContract v1",
+  "$comment": "Feature 004 Connector ingress is project-scoped and callback-only. The public /awp create bootstrap is stateless, authority-free, and is not a Connector ingress contract. Publication additionally verifies minimum < maximumExclusive and retentionSeconds >= retryHorizonSeconds + clockSkewSeconds.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contractKey",
+    "contractVersion",
+    "routeKind",
+    "method",
+    "contentTypes",
+    "maxBodyBytes",
+    "authentication",
+    "replay",
+    "normalizedSchemaRef",
+    "acknowledgementSchemaRef",
+    "profileCompatibility"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "connector-ingress-contract@1.0.0" },
+    "contractKey": {
+      "type": "string",
+      "enum": ["mattermost.dialog-submission", "mattermost.post-action"]
+    },
+    "contractVersion": { "const": "1.0.0" },
+    "routeKind": {
+      "type": "string",
+      "enum": ["DIALOG_SUBMISSION", "POST_ACTION"]
+    },
+    "method": { "const": "POST" },
+    "contentTypes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": { "const": "application/json" }
+    },
+    "maxBodyBytes": { "type": "integer", "minimum": 1, "maximum": 1048576 },
+    "authentication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dialect", "constantTimeComparison", "secretRefRequired"],
+      "properties": {
+        "dialect": {
+          "enum": ["AWP_OPAQUE_INTENT", "SIGNED_PROXY_HMAC_PLUS_AWP_INTENT"]
+        },
+        "constantTimeComparison": { "const": true },
+        "secretRefRequired": { "type": "boolean" },
+        "signatureHeader": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "timestampHeader": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "deliveryIdHeader": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "replay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identityMode", "deliveryIdExtractor", "freshnessSeconds", "retryHorizonSeconds", "clockSkewSeconds", "retentionSeconds"],
+      "properties": {
+        "identityMode": { "enum": ["PROVIDER_DELIVERY_ID", "EXACT_BODY_FINGERPRINT"] },
+        "deliveryIdExtractor": { "enum": ["SIGNED_PROXY_DELIVERY_ID", "NONE"] },
+        "freshnessSeconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+        "retryHorizonSeconds": { "type": "integer", "minimum": 1, "maximum": 2592000 },
+        "clockSkewSeconds": { "type": "integer", "minimum": 0, "maximum": 3600 },
+        "retentionSeconds": { "type": "integer", "minimum": 1, "maximum": 31536000 }
+      }
+    },
+    "normalizedSchemaRef": { "$ref": "#/$defs/schemaRef" },
+    "acknowledgementSchemaRef": { "$ref": "#/$defs/schemaRef" },
+    "profileCompatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum", "maximumExclusive"],
+      "properties": {
+        "minimum": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "maximumExclusive": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "properties": { "contractKey": { "const": "mattermost.dialog-submission" } },
+        "required": ["contractKey"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "routeKind": { "const": "DIALOG_SUBMISSION" },
+          "contentTypes": { "const": ["application/json"] },
+          "normalizedSchemaRef": {
+            "type": "object",
+            "properties": {
+              "id": { "const": "urn:awp:schemas:004:mattermost:normalized-dialog-submission:v1" },
+              "version": { "const": 1 }
+            }
+          },
+          "acknowledgementSchemaRef": {
+            "type": "object",
+            "properties": {
+              "id": { "const": "urn:awp:schemas:004:mattermost:dialog-submission-ack:v1" },
+              "version": { "const": 1 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "contractKey": { "const": "mattermost.post-action" } },
+        "required": ["contractKey"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "routeKind": { "const": "POST_ACTION" },
+          "contentTypes": { "const": ["application/json"] },
+          "normalizedSchemaRef": {
+            "type": "object",
+            "properties": {
+              "id": { "const": "urn:awp:schemas:004:mattermost:normalized-post-action:v1" },
+              "version": { "const": 1 }
+            }
+          },
+          "acknowledgementSchemaRef": {
+            "type": "object",
+            "properties": {
+              "id": { "const": "urn:awp:schemas:004:mattermost:post-action-ack:v1" },
+              "version": { "const": 1 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": {
+          "authentication": {
+            "type": "object",
+            "properties": { "dialect": { "const": "AWP_OPAQUE_INTENT" } },
+            "required": ["dialect"]
+          }
+        },
+        "required": ["authentication"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "authentication": {
+            "type": "object",
+            "properties": {
+              "secretRefRequired": { "const": false },
+              "signatureHeader": false,
+              "timestampHeader": false,
+              "deliveryIdHeader": false
+            }
+          },
+          "replay": {
+            "type": "object",
+            "properties": {
+              "identityMode": { "const": "EXACT_BODY_FINGERPRINT" },
+              "deliveryIdExtractor": { "const": "NONE" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": {
+          "authentication": {
+            "type": "object",
+            "properties": { "dialect": { "const": "SIGNED_PROXY_HMAC_PLUS_AWP_INTENT" } },
+            "required": ["dialect"]
+          }
+        },
+        "required": ["authentication"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "authentication": {
+            "type": "object",
+            "required": ["signatureHeader", "timestampHeader", "deliveryIdHeader"],
+            "properties": {
+              "secretRefRequired": { "const": true },
+              "signatureHeader": { "type": "string", "minLength": 1, "maxLength": 128 },
+              "timestampHeader": { "type": "string", "minLength": 1, "maxLength": 128 },
+              "deliveryIdHeader": { "type": "string", "minLength": 1, "maxLength": 128 }
+            }
+          },
+          "replay": {
+            "type": "object",
+            "properties": {
+              "identityMode": { "const": "PROVIDER_DELIVERY_ID" },
+              "deliveryIdExtractor": { "const": "SIGNED_PROXY_DELIVERY_ID" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": {
+          "replay": {
+            "type": "object",
+            "properties": { "identityMode": { "const": "PROVIDER_DELIVERY_ID" } },
+            "required": ["identityMode"]
+          }
+        },
+        "required": ["replay"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "replay": {
+            "type": "object",
+            "properties": { "deliveryIdExtractor": { "const": "SIGNED_PROXY_DELIVERY_ID" } }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": {
+          "replay": {
+            "type": "object",
+            "properties": { "identityMode": { "const": "EXACT_BODY_FINGERPRINT" } },
+            "required": ["identityMode"]
+          }
+        },
+        "required": ["replay"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "replay": {
+            "type": "object",
+            "properties": { "deliveryIdExtractor": { "const": "NONE" } }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^urn:awp:schemas:[A-Za-z0-9:._-]+$", "maxLength": 512 },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

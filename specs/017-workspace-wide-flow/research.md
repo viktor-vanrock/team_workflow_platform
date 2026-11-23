@@ -1,0 +1,10 @@
+# Research
+
+- Decision: use existing workspace queue endpoint and authorized portfolio projection by default. Rationale: pagination, exact ordering and per-project visibility already exist. Fix local authority's extra project-level portfolio check. Alternative of concatenating project queues loses ordering/authorization-set semantics.
+- Decision: shared requests and Hermes chooser load only projects/permissions authorized by server session and revalidate every project request. Entity links carry their project; no mutable session project in UI. Creation chooses its project in the form. Alternative of hidden last-used project remains confusing and breaks direct links.
+- Decision: canonical roles system-administrator and reader, with a core legacy-key normalization function for historical lower/uppercase representations. Existing administrator and reader identities remain distinct; reader clearances are separate from roles. Permissions, exact entitlements, DENY and independent approval remain mandatory.
+- Decision: migrate live role assignments and local revisioned grants, increment authorization basis versions, preserve immutable history. Pending approvals with changed rights must be reconfirmed rather than rewritten.
+- Decision: breadcrumbs are derived solely from URL hierarchy and loaded entity metadata. One current element, links only to real parents, no phantom selected project. Preserve destination through login and browser history.
+- Decision: Hermes selects named WORK_ITEM, CANDIDATE and DRAFT subjects from authorized project lists; explain purpose and empty states. No mandatory free-text ID.
+- Research found active queue reorder buttons for readers, unconditional onboarding suspend/resume, candidate actions exposed to readers, mismatched notification permission, automation choosing first work item, and ungated detail action children. Address these during role-by-role UI review.
+- Research sources: repository code; read-only Spec Kit research agents role_merge_research and workspace_access_research. No external service credentials or production systems needed.

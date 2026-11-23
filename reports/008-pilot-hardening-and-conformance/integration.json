@@ -1,0 +1,8 @@
+{
+  "status": "BLOCKED_INPUT",
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/integration-ccdeaa56-2d0f-46fd-84da-d26f2352bb41.json",
+    "sha256": "sha256:5dcbd121bc9205b24ad247c3942db86e7d9bf3cfb8e278c005dabc3a09b1ccff"
+  },
+  "actualCorporateExecution": false
+}

@@ -1,0 +1,453 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "checkpoint": "SMOKE",
+  "status": "FAIL",
+  "startedAt": "2026-09-06T20:15:02.677Z",
+  "finishedAt": "2026-09-06T20:15:51.113Z",
+  "isolatedProjectName": "awp-local-007-smoke-mtq93le3-34316",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "production": "DENIED",
+  "externalNetwork": "DENIED",
+  "deterministicEffectCounts": false,
+  "signingVerification": false,
+  "restarts": [],
+  "cleanShutdown": true,
+  "stages": [
+    {
+      "id": "isolated-compose-up",
+      "status": "PASS",
+      "durationMs": 39091,
+      "details": {
+        "projectName": "awp-local-007-smoke-mtq93le3-34316",
+        "ports": [
+          63829,
+          63830,
+          63831,
+          63832,
+          63833,
+          63834
+        ],
+        "identities": [
+          {
+            "service": "postgres",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 36577,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:15:06.927881885Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:15:32.062835883Z",
+                  "End": "2026-09-06T20:15:32.168463716Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:15:34.173113592Z",
+                  "End": "2026-09-06T20:15:34.2716453Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:15:36.279030968Z",
+                  "End": "2026-09-06T20:15:36.482093926Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:15:38.495546261Z",
+                  "End": "2026-09-06T20:15:38.562119636Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:15:40.566113178Z",
+                  "End": "2026-09-06T20:15:40.63435522Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                }
+              ]
+            }
+          },
+          {
+            "service": "redis",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 36342,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:15:06.780141218Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:15:31.431691924Z",
+                  "End": "2026-09-06T20:15:31.481316466Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:15:33.486299967Z",
+                  "End": "2026-09-06T20:15:33.525629008Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:15:35.537541426Z",
+                  "End": "2026-09-06T20:15:35.783629926Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:15:37.811141719Z",
+                  "End": "2026-09-06T20:15:37.853849469Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:15:39.856896636Z",
+                  "End": "2026-09-06T20:15:39.891097386Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                }
+              ]
+            }
+          },
+          {
+            "service": "mock-hub",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 37778,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:15:15.603212541Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:15:30.837717549Z",
+                  "End": "2026-09-06T20:15:31.094078216Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:33.097963091Z",
+                  "End": "2026-09-06T20:15:33.287521425Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:35.294070843Z",
+                  "End": "2026-09-06T20:15:35.840771968Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:37.865028802Z",
+                  "End": "2026-09-06T20:15:38.075502719Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:40.090163928Z",
+                  "End": "2026-09-06T20:15:40.237810553Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          {
+            "service": "worker",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 38787,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:15:25.535563421Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:15:31.871377841Z",
+                  "End": "2026-09-06T20:15:32.176549841Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:34.1801108Z",
+                  "End": "2026-09-06T20:15:34.356849384Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:36.361941968Z",
+                  "End": "2026-09-06T20:15:36.770435593Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:38.786417136Z",
+                  "End": "2026-09-06T20:15:38.901380844Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:40.906253845Z",
+                  "End": "2026-09-06T20:15:41.082651804Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          {
+            "service": "api",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 38813,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:15:25.569828005Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:15:31.884293466Z",
+                  "End": "2026-09-06T20:15:32.094093591Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:34.101247217Z",
+                  "End": "2026-09-06T20:15:34.355597509Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:36.360666093Z",
+                  "End": "2026-09-06T20:15:36.948485885Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:38.961381511Z",
+                  "End": "2026-09-06T20:15:39.130688469Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:41.134213512Z",
+                  "End": "2026-09-06T20:15:41.411001887Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          {
+            "service": "web",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 39701,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:15:34.793517301Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:15:36.797227593Z",
+                  "End": "2026-09-06T20:15:37.145591343Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:39.151973136Z",
+                  "End": "2026-09-06T20:15:39.370069761Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:41.37485247Z",
+                  "End": "2026-09-06T20:15:41.660897262Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          {
+            "service": "s3mock",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 36480,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:15:06.873151427Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:15:28.202824381Z",
+                  "End": "2026-09-06T20:15:28.243635048Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:31.246229632Z",
+                  "End": "2026-09-06T20:15:31.291836549Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:34.305709092Z",
+                  "End": "2026-09-06T20:15:34.349757967Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:37.360421885Z",
+                  "End": "2026-09-06T20:15:37.443288844Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:15:40.469453678Z",
+                  "End": "2026-09-06T20:15:40.509134637Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          }
+        ],
+        "image": "sha256:a9d5aeb9023480fe7a709e64544a1fd2bb3a9f5568f3d28dad8ce72b32a28d5c"
+      }
+    },
+    {
+      "id": "onboarding-evidence-http",
+      "status": "FAIL",
+      "durationMs": 7003
+    },
+    {
+      "id": "clean-shutdown",
+      "status": "PASS",
+      "durationMs": 0,
+      "details": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      }
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tools/smoke/feature-007.mts",
+        "sha256": "sha256:659f9e5b1bb073520bd8f17caa4f53bd827479baef9b5e949ffb7bce635a445a"
+      },
+      {
+        "path": "tools/smoke/feature-007-browser-process.mts",
+        "sha256": "sha256:1d1da927a565d534926509be1f8abdeec0a7fa8d4e98b49db6ccaf438ce61cdb"
+      },
+      {
+        "path": "tools/smoke/007-compose-runtime.mts",
+        "sha256": "sha256:6e66a7ded48d89b2bfcf5544a12813cec8de22af1c7112c626dd10cd4ba19b5f"
+      },
+      {
+        "path": "tools/smoke/007-http-journey.mts",
+        "sha256": "sha256:18b2a7926d1c1fab43a94ce0f997fef2410d200491f77224219fac0e466631c6"
+      },
+      {
+        "path": "tools/smoke/007-runtime-fixture.mts",
+        "sha256": "sha256:66633293f087a8b66554c043b633ca5f8f84b2d763baeab0715647045fd6106f"
+      },
+      {
+        "path": "tests/e2e/007/compose-live-browser.spec.ts",
+        "sha256": "sha256:c9181f4e83d1998b32fa936411f5ab516e463827e33c235de8140604e3f019ae"
+      },
+      {
+        "path": "tests/support/007-evidence-http-fixture.ts",
+        "sha256": "sha256:3a55ce3c46e9920f1cf7b92967a5ef76680ed3ab29ed26f57d3c838b2c24c1a6"
+      },
+      {
+        "path": "apps/api/src/local/local-persona.controller.ts",
+        "sha256": "sha256:24425bcc66fe92c3cf3d7ef317f07a46142768438fada83cc69209253cc4e108"
+      },
+      {
+        "path": "apps/fake-idp/src/oidc.controller.ts",
+        "sha256": "sha256:3c23d14b321ddcf7d69280cfff2acf504241f37a176b6039fd000b4a9021329c"
+      },
+      {
+        "path": "apps/worker/src/app.module.ts",
+        "sha256": "sha256:52bd0a7b48e0247faca7488c0dfee4072b3705b2c06cb0de58d0c28297e61919"
+      },
+      {
+        "path": "apps/web/src/App.tsx",
+        "sha256": "sha256:7395e28ef510c388cc3cb355f7f55a9b2a82eb34984732a153cc24e8485253f0"
+      },
+      {
+        "path": "infra/compose/docker-compose.local.yml",
+        "sha256": "sha256:c5a1ce089c7a4dd9175f811b9473937f52a5db8cace19449a54b96d96747c157"
+      },
+      {
+        "path": "infra/compose/docker/node-runtime.Dockerfile",
+        "sha256": "sha256:ec7f545cb5aeb0f6e17a3930361579d6d5e081cb424963be76ab931ac424249c"
+      }
+    ],
+    "aggregateSha256": "sha256:a9f11ec1877aa097fd74daf337a9496dbe24614bab71e0835532c3c740f7cc53"
+  },
+  "logs": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq93le3-34316",
+  "limits": [
+    "Controlled starting IAM roles and signed evidence; local Fake IdP step-up is not corporate MFA.",
+    "Jira effects target only the isolated Mock Hub; this does not satisfy corporate N2/pilot acceptance."
+  ],
+  "failure": "controlled-evidence-input_FAILED:1; log=/Users/alexandr/Desktop/projects/PlatformWorkspace/reports/project/compose-smoke-007/awp-local-007-smoke-mtq93le3-34316/controlled-evidence-input.log"
+}

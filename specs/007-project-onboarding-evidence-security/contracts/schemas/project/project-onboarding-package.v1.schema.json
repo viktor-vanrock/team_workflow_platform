@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:project-onboarding-package:v1",
+  "title": "Project onboarding package v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "workspaceId", "projectId", "version", "stage", "qaCapabilityMode", "operationalState", "intendedCapabilityMode", "projectRegistryRef", "starterEntitlementSetHash", "gateResultRefs", "ownerSetHash", "actor", "reason", "correlationId", "createdAt", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "stage": { "enum": ["DRAFT", "VALIDATING", "NEEDS_FIX", "SHADOW", "PILOT_ACTIVE"] },
+    "qaCapabilityMode": { "enum": ["MANUAL_ONLY", "FULL_QA"] },
+    "operationalState": { "enum": ["ACTIVE", "SUSPENDED"] },
+    "intendedCapabilityMode": { "enum": ["MANUAL_ONLY", "FULL_QA"] },
+    "projectRegistryRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "bindingRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "qaProjectContextRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "starterEntitlementSetHash": { "$ref": "../common.v1.schema.json#/$defs/hash" },
+    "gateResultRefs": {
+      "type": "array",
+      "items": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+      "uniqueItems": true
+    },
+    "ownerSetHash": { "$ref": "../common.v1.schema.json#/$defs/hash" },
+    "incidentRef": { "$ref": "../common.v1.schema.json#/$defs/nonEmpty" },
+    "actor": { "$ref": "../common.v1.schema.json#/$defs/humanActor" },
+    "reasonCode": { "$ref": "../common.v1.schema.json#/$defs/stableKey" },
+    "reason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "correlationId": { "$ref": "../common.v1.schema.json#/$defs/correlationId" },
+    "causationId": { "$ref": "../common.v1.schema.json#/$defs/correlationId" },
+    "createdAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "stage": { "enum": ["SHADOW", "PILOT_ACTIVE"] } }, "required": ["stage"] },
+      "then": { "required": ["bindingRef", "qaProjectContextRef"] }
+    },
+    {
+      "if": { "properties": { "operationalState": { "const": "SUSPENDED" } }, "required": ["operationalState"] },
+      "then": { "required": ["incidentRef"] }
+    }
+  ]
+}

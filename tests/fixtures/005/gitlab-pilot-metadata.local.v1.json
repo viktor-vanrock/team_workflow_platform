@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "gitlab-pilot-metadata-fixtures@1.0.0",
+  "baseMetadataRef": "config/local/gitlab-pilot-metadata.v1.json",
+  "validCases": [
+    {
+      "id": "local-conformance",
+      "patch": {},
+      "validation": "METADATA_VALID",
+      "liveDisposition": "LOCAL_ONLY"
+    },
+    {
+      "id": "live-development-conformance",
+      "patch": {
+        "deploymentPurpose": "CONFORMANCE_VALIDATION",
+        "contourKey": "qa-jira-gitlab-development",
+        "environmentClass": "DEVELOPMENT",
+        "server": { "baseUrl": "https://gitlab.dev.example.invalid" }
+      },
+      "validation": "METADATA_VALID",
+      "liveDisposition": "LIVE_NONPROD"
+    }
+  ]
+}

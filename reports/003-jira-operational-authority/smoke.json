@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 2,
+  "feature": "003-jira-operational-authority",
+  "gate": "smoke",
+  "composition": "qa-jira-local",
+  "startedAt": "2026-09-03T10:11:49.179Z",
+  "finishedAt": "2026-09-03T10:17:58.425Z",
+  "status": "PASS",
+  "stages": [
+    {
+      "id": "documented-scenarios",
+      "command": [
+        "node",
+        "tools/smoke/feature-003-scenario-process.mts"
+      ],
+      "composition": "qa-jira-local",
+      "projectName": "awp-local-003-scenarios-mtld8abf-9394",
+      "evidenceSources": [
+        "MOCK_HUB"
+      ],
+      "successCriteria": [],
+      "documentedScenarios": [
+        "profile-lifecycle",
+        "cloud-pagination",
+        "dc-pagination",
+        "failures",
+        "freshness",
+        "security-matrix",
+        "us1-create",
+        "us1-duplicate-submit",
+        "us1-timeout-after-create",
+        "us1-timeout-after-source-link",
+        "us1-worker-restart",
+        "us1-redis-loss",
+        "us1-jira-unavailable",
+        "us1-marker-search-ambiguous",
+        "us2-direct-import",
+        "us2-out-of-scope-issue",
+        "us2-create-import-race",
+        "us2-ambiguous-discriminator",
+        "us2-cross-project-substitution",
+        "us2-missing-discriminator",
+        "us2-unverified-creator",
+        "us3-assignment",
+        "us3-due-date",
+        "us3-duplicate-webhook",
+        "us3-human-change",
+        "us3-lost-webhook-reconciliation",
+        "us3-mapping-drift",
+        "us3-out-of-order-webhook",
+        "us3-permission-revoked",
+        "us3-post-read-mismatch",
+        "us3-priority",
+        "us3-profile-drift-before-effect",
+        "us3-same-token-different-hash",
+        "us3-stale-command",
+        "us3-transition",
+        "us4-defect",
+        "us4-defect-replay",
+        "us4-duplicate-candidates",
+        "us4-profile-drift",
+        "us4-timeout-after-defect",
+        "us4-timeout-after-link",
+        "us4-wrong-project"
+      ],
+      "status": "PASS",
+      "durationMs": 73441,
+      "exitCode": 0
+    },
+    {
+      "id": "us1-durable-effects",
+      "command": [
+        "node",
+        "tools/smoke/feature-003-us1-process.mts"
+      ],
+      "composition": "qa-jira-local",
+      "projectName": "awp-local-003-us1-mtld8abf-9394",
+      "evidenceSources": [
+        "POSTGRESQL",
+        "MOCK_HUB",
+        "PROCESS_HTTP"
+      ],
+      "successCriteria": [
+        "SC-001",
+        "SC-002",
+        "SC-004",
+        "SC-007"
+      ],
+      "documentedScenarios": [],
+      "status": "PASS",
+      "durationMs": 117276,
+      "exitCode": 0
+    },
+    {
+      "id": "us2-direct-import",
+      "command": [
+        "node",
+        "tools/smoke/feature-003-us2-process.mts"
+      ],
+      "composition": "qa-jira-local",
+      "projectName": "awp-local-003-us2-mtld8abf-9394",
+      "evidenceSources": [
+        "POSTGRESQL",
+        "MOCK_HUB",
+        "PROCESS_HTTP"
+      ],
+      "successCriteria": [
+        "SC-001",
+        "SC-002",
+        "SC-004",
+        "SC-006"
+      ],
+      "documentedScenarios": [],
+      "status": "PASS",
+      "durationMs": 40139,
+      "exitCode": 0
+    },
+    {
+      "id": "us3-action-conflict",
+      "command": [
+        "node",
+        "tools/smoke/feature-003-us3-process.mts"
+      ],
+      "composition": "qa-jira-local",
+      "projectName": "awp-local-003-us3-mtld8abf-9394",
+      "evidenceSources": [
+        "POSTGRESQL",
+        "MOCK_HUB",
+        "PROCESS_HTTP"
+      ],
+      "successCriteria": [
+        "SC-002",
+        "SC-003",
+        "SC-004",
+        "SC-007"
+      ],
+      "documentedScenarios": [],
+      "status": "PASS",
+      "durationMs": 39702,
+      "exitCode": 0
+    },
+    {
+      "id": "us4-defect-publication",
+      "command": [
+        "node",
+        "tools/smoke/feature-003-us4-process.mts"
+      ],
+      "composition": "qa-jira-local",
+      "projectName": "awp-local-003-us4-mtld8abf-9394",
+      "evidenceSources": [
+        "POSTGRESQL",
+        "MOCK_HUB",
+        "PROCESS_HTTP"
+      ],
+      "successCriteria": [
+        "SC-001",
+        "SC-005",
+        "SC-007"
+      ],
+      "documentedScenarios": [],
+      "status": "PASS",
+      "durationMs": 96758,
+      "exitCode": 0
+    },
+    {
+      "id": "security-audit-evidence",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/security/003/jira-auth-egress.spec.ts",
+        "tests/integration/security/003/connector-hardening.spec.ts",
+        "tests/integration/security/003/isolation-hardening.spec.ts",
+        "tests/integration/security/003/audit-lineage.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "composition": "qa-jira-local",
+      "evidenceSources": [
+        "SECURITY_TEST_EVIDENCE"
+      ],
+      "successCriteria": [
+        "SC-006",
+        "SC-007"
+      ],
+      "documentedScenarios": [],
+      "status": "PASS",
+      "durationMs": 1924,
+      "exitCode": 0
+    }
+  ],
+  "executionCoverage": {
+    "executedSuccessCriteria": [
+      "SC-001",
+      "SC-002",
+      "SC-003",
+      "SC-004",
+      "SC-005",
+      "SC-006",
+      "SC-007"
+    ],
+    "unexecutedSuccessCriteria": [],
+    "unexecutedStages": []
+  },
+  "durableEffectInspection": {
+    "platform": "US1-US4 process tests query the awp PostgreSQL database",
+    "provider": "US1-US4 process tests query awp_mock effects/issues/links/comments",
+    "evidenceSources": [
+      "POSTGRESQL",
+      "MOCK_HUB",
+      "PROCESS_HTTP"
+    ]
+  },
+  "documentedScenarios": {
+    "status": "PASS",
+    "report": "reports/003-jira-operational-authority/documented-scenarios.json",
+    "executed": 42,
+    "required": 42,
+    "unexecutedScenarios": []
+  }
+}

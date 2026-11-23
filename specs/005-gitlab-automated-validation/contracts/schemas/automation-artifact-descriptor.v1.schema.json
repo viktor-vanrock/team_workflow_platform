@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automation-artifact-descriptor:v1",
+  "title": "AutomationArtifactDescriptor v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "artifactReferenceId",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "testSessionId",
+    "automationAttemptId",
+    "automationAttemptResultId",
+    "ordinal",
+    "externalAuthorityHash",
+    "externalPipelineId",
+    "externalJobId",
+    "logicalPath",
+    "externalDescriptorHash",
+    "artifactKind",
+    "mediaType",
+    "byteSize",
+    "checksum",
+    "checksumSource",
+    "classification",
+    "sourceProfileRef",
+    "sourceProfileHash",
+    "retentionPolicyRef",
+    "availabilityAtResult",
+    "opaqueLocatorHash",
+    "expiresAt",
+    "registeredAt",
+    "correlationId",
+    "causationId",
+    "descriptorContentHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automation-artifact-descriptor@1.0.0" },
+    "artifactReferenceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workItemId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "testSessionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "automationAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "automationAttemptResultId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "ordinal": { "type": "integer", "minimum": 1, "maximum": 64 },
+    "externalAuthorityHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "externalPipelineId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "externalJobId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "logicalPath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9._/-]+$"
+    },
+    "externalDescriptorHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "artifactKind": {
+      "enum": ["RESULT", "REPORT", "LOG", "SCREENSHOT", "TRACE", "OTHER"]
+    },
+    "mediaType": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "byteSize": { "type": "integer", "minimum": 0, "maximum": 104857600 },
+    "checksum": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "checksumSource": {
+      "enum": ["MACHINE_RESULT_MANIFEST", "CONNECTOR_CONTENT_SHA256"]
+    },
+    "classification": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/classification" },
+    "sourceProfileRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/versionedRef" },
+    "sourceProfileHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "retentionPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "availabilityAtResult": {
+      "enum": ["AVAILABLE", "MISSING", "EXPIRED", "CHECKSUM_MISMATCH"]
+    },
+    "opaqueLocatorHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "expiresAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "registeredAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "correlationId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "causationId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "descriptorContentHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "artifactKind": { "const": "RESULT" } },
+        "required": ["artifactKind"]
+      },
+      "then": {
+        "properties": { "checksumSource": { "const": "CONNECTOR_CONTENT_SHA256" } }
+      },
+      "else": {
+        "properties": { "checksumSource": { "const": "MACHINE_RESULT_MANIFEST" } }
+      }
+    }
+  ]
+}

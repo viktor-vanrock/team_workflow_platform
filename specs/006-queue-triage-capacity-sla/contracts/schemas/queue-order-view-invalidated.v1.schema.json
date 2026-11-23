@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:queue-order-view-invalidated:v1",
+  "title": "QueueOrderViewInvalidated v1",
+  "$comment": "Project-safe invalidation emitted only when the named Project lane order changed. A portfolio-only move/expiry never fans out this event to the target Project because that would disclose wider-scope activity. The payload carries no anchor, authorized Project-set hash, ordinal, action hash or free-text reason. invalidationRef.semanticHash is RFC 8785 over the complete payload excluding invalidationRef itself; envelope entityId/entityVersion equal workItemId/invalidationRef.version.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "invalidationRef",
+    "reasonCode",
+    "occurredAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "queue-order-view-invalidated@1.0.0" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "workItemId": { "$ref": "#/$defs/id" },
+    "invalidationRef": {
+      "description": "Monotonic Project/WorkItem invalidation revision and non-circular public payload hash.",
+      "$ref": "#/$defs/versionedContentRef"
+    },
+    "reasonCode": {
+      "enum": [
+        "ORDER_OVERRIDE_ACCEPTED",
+        "ORDER_OVERRIDE_EXPIRED",
+        "ORDER_OVERRIDE_SUPERSEDED",
+        "BASE_VISIBLE_SET_CHANGED"
+      ]
+    },
+    "occurredAt": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "id": { "type": "string", "format": "uuid" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

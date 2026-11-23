@@ -1,0 +1,1157 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "traceability",
+  "generatedAt": "2026-09-03T10:55:48.460Z",
+  "status": "PASS",
+  "summary": {
+    "required": 32,
+    "declared": 32,
+    "passed": 32,
+    "failed": 0,
+    "documentedScenarios": 30,
+    "missingDeclared": [],
+    "unexpectedDeclared": []
+  },
+  "taskSource": {
+    "path": "specs/005-gitlab-automated-validation/tasks.md",
+    "sha256": "sha256:7f15792712dc0ac42f9d0631fd0d37ef8794cb85142699f371c3047c3bd29ab9",
+    "taskCount": 159,
+    "completedTaskIds": [
+      "T001",
+      "T002",
+      "T003",
+      "T004",
+      "T005",
+      "T006",
+      "T007",
+      "T008",
+      "T009",
+      "T010",
+      "T011",
+      "T012",
+      "T013",
+      "T014",
+      "T015",
+      "T016",
+      "T017",
+      "T018",
+      "T019",
+      "T020",
+      "T021",
+      "T022",
+      "T023",
+      "T024",
+      "T025",
+      "T026",
+      "T027",
+      "T028",
+      "T029",
+      "T030",
+      "T031",
+      "T032",
+      "T033",
+      "T034",
+      "T035",
+      "T036",
+      "T037",
+      "T038",
+      "T039",
+      "T040",
+      "T041",
+      "T042",
+      "T043",
+      "T044",
+      "T045",
+      "T046",
+      "T047",
+      "T048",
+      "T049",
+      "T050",
+      "T051",
+      "T052",
+      "T053",
+      "T054",
+      "T055",
+      "T056",
+      "T057",
+      "T058",
+      "T059",
+      "T060",
+      "T061",
+      "T062",
+      "T063",
+      "T064",
+      "T065",
+      "T066",
+      "T067",
+      "T068",
+      "T069",
+      "T070",
+      "T071",
+      "T072",
+      "T073",
+      "T074",
+      "T075",
+      "T076",
+      "T077",
+      "T078",
+      "T079",
+      "T080",
+      "T081",
+      "T082",
+      "T083",
+      "T084",
+      "T085",
+      "T086",
+      "T087",
+      "T088",
+      "T089",
+      "T090",
+      "T091",
+      "T092",
+      "T093",
+      "T094",
+      "T095",
+      "T096",
+      "T097",
+      "T098",
+      "T099",
+      "T100",
+      "T101",
+      "T102",
+      "T103",
+      "T104",
+      "T105",
+      "T106",
+      "T107",
+      "T108",
+      "T109",
+      "T110",
+      "T111",
+      "T112",
+      "T113",
+      "T114",
+      "T115",
+      "T116",
+      "T117",
+      "T118",
+      "T119",
+      "T120",
+      "T121",
+      "T122",
+      "T123",
+      "T124",
+      "T125",
+      "T126",
+      "T127",
+      "T128",
+      "T129",
+      "T130",
+      "T131",
+      "T132",
+      "T133",
+      "T134",
+      "T135",
+      "T136",
+      "T137",
+      "T138",
+      "T139",
+      "T140",
+      "T141",
+      "T142",
+      "T143",
+      "T144",
+      "T145",
+      "T146",
+      "T147",
+      "T148",
+      "T149",
+      "T150",
+      "T151",
+      "T152",
+      "T153",
+      "T154",
+      "T155",
+      "T156",
+      "T157",
+      "T158",
+      "T159"
+    ],
+    "pendingTaskIds": []
+  },
+  "hashes": {
+    "source": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          "apps",
+          "packages",
+          "config",
+          "infra",
+          "docs",
+          "specs/005-gitlab-automated-validation"
+        ],
+        "files": [],
+        "exclusions": [
+          "specs/005-gitlab-automated-validation/tasks.md"
+        ]
+      },
+      "fileCount": 932,
+      "sha256": "sha256:a71fb0942ce8adf009420df06a19cdcdb3f3491ed7618bef3dd2fb78a1380825"
+    },
+    "contract": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          "specs/005-gitlab-automated-validation/contracts"
+        ],
+        "files": [
+          "packages/platform-contracts/src/generated/schema-documents.ts",
+          "apps/api/openapi.generated.json",
+          "apps/mock-hub/openapi.generated.json"
+        ],
+        "exclusions": []
+      },
+      "fileCount": 48,
+      "sha256": "sha256:b7dc459c1c31fce815c0286c4f286921effa13aa91bf43b53ad0ee98bb25f55c"
+    },
+    "runtime": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          "tests/contract/005",
+          "tests/unit/005",
+          "tests/integration/005",
+          "tests/integration/security/005",
+          "tools"
+        ],
+        "files": [
+          "tests/architecture/005-gitlab-boundaries.spec.ts",
+          "tests/architecture/005-gitlab-runtime-wiring.spec.ts",
+          "tests/e2e/005-us1-automated-session.spec.ts",
+          "tests/e2e/005-us2-trigger-once.spec.ts",
+          "tests/e2e/005-us3-technical-result-review.spec.ts",
+          "tests/e2e/005-us4-outage-recovery.spec.ts",
+          "playwright.config.ts",
+          "package.json",
+          "pnpm-lock.yaml",
+          "tsconfig.base.json"
+        ],
+        "exclusions": [
+          "tools/verification/feature-006-prerequisites.mts"
+        ]
+      },
+      "fileCount": 219,
+      "sha256": "sha256:a4061d48c9444ec2d5181add9b5941073b05d1d866b6525f9f119c19427029be"
+    }
+  },
+  "entries": [
+    {
+      "id": "FR-001",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T056"
+      ],
+      "evidence": [
+        "tests/contract/005/design-contracts.spec.ts",
+        "tests/contract/005/gitlab-connector-conformance.spec.ts",
+        "tests/integration/security/005/production-boundary.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-002",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T056"
+      ],
+      "evidence": [
+        "tests/contract/005/design-contracts.spec.ts",
+        "tests/contract/005/gitlab-connector-conformance.spec.ts",
+        "tests/integration/security/005/production-boundary.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-003",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T056"
+      ],
+      "evidence": [
+        "tests/contract/005/design-contracts.spec.ts",
+        "tests/contract/005/gitlab-connector-conformance.spec.ts",
+        "tests/integration/security/005/production-boundary.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-004",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T056"
+      ],
+      "evidence": [
+        "tests/contract/005/design-contracts.spec.ts",
+        "tests/contract/005/gitlab-connector-conformance.spec.ts",
+        "tests/integration/security/005/production-boundary.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-005",
+      "kind": "requirement",
+      "tasks": [
+        "T016",
+        "T056"
+      ],
+      "evidence": [
+        "tests/contract/005/design-contracts.spec.ts",
+        "tests/contract/005/gitlab-connector-conformance.spec.ts",
+        "tests/integration/security/005/production-boundary.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-006",
+      "kind": "requirement",
+      "tasks": [
+        "T057",
+        "T078"
+      ],
+      "evidence": [
+        "tests/contract/005/us1-availability-suite-session.spec.ts",
+        "tests/integration/005/us1-automated-session.spec.ts",
+        "tests/e2e/005-us1-automated-session.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-007",
+      "kind": "requirement",
+      "tasks": [
+        "T057",
+        "T078"
+      ],
+      "evidence": [
+        "tests/contract/005/us1-availability-suite-session.spec.ts",
+        "tests/integration/005/us1-automated-session.spec.ts",
+        "tests/e2e/005-us1-automated-session.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-008",
+      "kind": "requirement",
+      "tasks": [
+        "T057",
+        "T078"
+      ],
+      "evidence": [
+        "tests/contract/005/us1-availability-suite-session.spec.ts",
+        "tests/integration/005/us1-automated-session.spec.ts",
+        "tests/e2e/005-us1-automated-session.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-009",
+      "kind": "requirement",
+      "tasks": [
+        "T057",
+        "T078"
+      ],
+      "evidence": [
+        "tests/contract/005/us1-availability-suite-session.spec.ts",
+        "tests/integration/005/us1-automated-session.spec.ts",
+        "tests/e2e/005-us1-automated-session.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-010",
+      "kind": "requirement",
+      "tasks": [
+        "T079",
+        "T098"
+      ],
+      "evidence": [
+        "tests/contract/005/us2-trigger-contract.spec.ts",
+        "tests/integration/005/us2-trigger-once.spec.ts",
+        "tests/integration/security/005/us2-launch-boundary.spec.ts",
+        "tests/e2e/005-us2-trigger-once.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-011",
+      "kind": "requirement",
+      "tasks": [
+        "T079",
+        "T098"
+      ],
+      "evidence": [
+        "tests/contract/005/us2-trigger-contract.spec.ts",
+        "tests/integration/005/us2-trigger-once.spec.ts",
+        "tests/integration/security/005/us2-launch-boundary.spec.ts",
+        "tests/e2e/005-us2-trigger-once.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-012",
+      "kind": "requirement",
+      "tasks": [
+        "T079",
+        "T098"
+      ],
+      "evidence": [
+        "tests/contract/005/us2-trigger-contract.spec.ts",
+        "tests/integration/005/us2-trigger-once.spec.ts",
+        "tests/integration/security/005/us2-launch-boundary.spec.ts",
+        "tests/e2e/005-us2-trigger-once.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-013",
+      "kind": "requirement",
+      "tasks": [
+        "T122",
+        "T137"
+      ],
+      "evidence": [
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-014",
+      "kind": "requirement",
+      "tasks": [
+        "T122",
+        "T137"
+      ],
+      "evidence": [
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-015",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-016",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-017",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-018",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-019",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-020",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-021",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121",
+        "T137"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts",
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-022",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121",
+        "T137"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts",
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-023",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121",
+        "T137"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts",
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-024",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121",
+        "T137"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts",
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "FR-025",
+      "kind": "requirement",
+      "tasks": [
+        "T099",
+        "T121",
+        "T137"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts",
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "SC-001",
+      "kind": "success-criterion",
+      "tasks": [
+        "T098"
+      ],
+      "evidence": [
+        "tests/contract/005/us2-trigger-contract.spec.ts",
+        "tests/integration/005/us2-trigger-once.spec.ts",
+        "tests/integration/security/005/us2-launch-boundary.spec.ts",
+        "tests/e2e/005-us2-trigger-once.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "SC-002",
+      "kind": "success-criterion",
+      "tasks": [
+        "T121"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "SC-003",
+      "kind": "success-criterion",
+      "tasks": [
+        "T121"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "SC-004",
+      "kind": "success-criterion",
+      "tasks": [
+        "T121"
+      ],
+      "evidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "SC-005",
+      "kind": "success-criterion",
+      "tasks": [
+        "T137",
+        "T141"
+      ],
+      "evidence": [
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts",
+        "tests/integration/security/005/production-and-scope-boundary.spec.ts",
+        "tests/integration/005/observability-slo.spec.ts",
+        "tools/smoke/feature-005.mts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "SC-006",
+      "kind": "success-criterion",
+      "tasks": [
+        "T137",
+        "T141"
+      ],
+      "evidence": [
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts",
+        "tests/integration/security/005/production-and-scope-boundary.spec.ts",
+        "tests/integration/005/observability-slo.spec.ts",
+        "tools/smoke/feature-005.mts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    },
+    {
+      "id": "SC-007",
+      "kind": "success-criterion",
+      "tasks": [
+        "T137",
+        "T141"
+      ],
+      "evidence": [
+        "tests/integration/security/005/webhook-ingress.spec.ts",
+        "tests/integration/005/us4-outage-reconciliation.spec.ts",
+        "tests/e2e/005-us4-outage-recovery.spec.ts",
+        "tests/integration/security/005/production-and-scope-boundary.spec.ts",
+        "tests/integration/005/observability-slo.spec.ts",
+        "tools/smoke/feature-005.mts"
+      ],
+      "status": "PASS",
+      "missingTasks": [],
+      "pendingTasks": [],
+      "missingEvidence": []
+    }
+  ],
+  "scenarioTrace": [
+    {
+      "id": "setup-profile-deploy-denied",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "setup-profile-discovery-dry-run",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us1-automated-session",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us1-environment-denied",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us1-manual-only",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us1-suite-denied",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us1-target-change-linked-session",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us2-command-replay",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us2-lookup-multiple",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us2-lookup-zero",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us2-mismatched-confirmation",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us2-stale-confirmation",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us2-timeout-after-trigger",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us2-trigger-once",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-allowlisted-infra-retry",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-artifact-checksum-mismatch",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-assertion-failed-no-auto-retry",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-explicit-rerun-pass-flaky",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-pass-review-required",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-post-review-linked-session",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-quarantine-lifecycle",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-result-schema-drift",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-review-packet-proposal-only",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us3-unknown-infra-no-retry",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us4-auth-revoked",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us4-duplicate-webhook",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us4-gitlab-outage-manual-flow",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us4-lost-webhook-reconciliation",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us4-out-of-order-webhook",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    },
+    {
+      "id": "us4-rate-limit-recovery",
+      "status": "PASS",
+      "report": "documented-scenarios.json",
+      "smokeStage": "stateful-scenario-execution"
+    }
+  ],
+  "evidenceReports": [
+    {
+      "name": "prerequisites.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:37:00.267Z",
+      "sha256": "sha256:31fa3331ca69d74595bc6f5f13de1263147bd8ce5087e41ef46872977377d7ba",
+      "bindingFailures": []
+    },
+    {
+      "name": "governance.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:37:00.339Z",
+      "sha256": "sha256:7b46de70e92927aad6393b2015ed2d331c91d69f00ebb75a93ff5aa299035e0e",
+      "bindingFailures": []
+    },
+    {
+      "name": "setup-gate.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:37:03.214Z",
+      "sha256": "sha256:48d6d77a82e32e51fa1edd77031a236524f2b1715d06a48143a939bd2ba46142",
+      "bindingFailures": []
+    },
+    {
+      "name": "foundation.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:46:26.692Z",
+      "sha256": "sha256:f98be43c8e1561ddf1170c91bf36819a7bfb9c67b7d90b03cfcb0490754e0715",
+      "bindingFailures": []
+    },
+    {
+      "name": "us1.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:40:28.337Z",
+      "sha256": "sha256:1f1e6ac0e0f363f0d0f17ba7f5a1e15b5eab05adf69017775098f0c52484e2fe",
+      "bindingFailures": []
+    },
+    {
+      "name": "us2.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:42:50.731Z",
+      "sha256": "sha256:625a2d39d94890a55f3b59aa2aef1a8445119e21a56c2f60ca076f659ed5685a",
+      "bindingFailures": []
+    },
+    {
+      "name": "us3.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:45:07.399Z",
+      "sha256": "sha256:40a14acaf9c4b4209ed15ad5fe56f8ff37446f1e6a26e920ccb172d8a0388219",
+      "bindingFailures": []
+    },
+    {
+      "name": "us4.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:47:18.565Z",
+      "sha256": "sha256:17d5de6a5ceb85c1f488b7224a009e6b4596f33a5c8f4518de6a7e5d32afeec7",
+      "bindingFailures": []
+    },
+    {
+      "name": "migrations.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:49:36.617Z",
+      "sha256": "sha256:4cb9d3ed01b5b5598450e148bf1b74a353a042e1c0f0b080d278e737d5a36adb",
+      "bindingFailures": []
+    },
+    {
+      "name": "observability.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:53:24.926Z",
+      "sha256": "sha256:22b99d53c6f8a2e3224b1e8d1887cfad4938440973a3bdb659f50c69732106dd",
+      "bindingFailures": []
+    },
+    {
+      "name": "documented-scenarios.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:53:25.370Z",
+      "sha256": "sha256:b0bfd991a8c14d30129f170e44e56c52b0dc93b581e08e3533b17694a076e850",
+      "bindingFailures": []
+    },
+    {
+      "name": "smoke.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:54:57.601Z",
+      "sha256": "sha256:434fdc4dd8d0bce945bc0ada0c8419d9c5310ba51faac080188996f5d4928ad8",
+      "bindingFailures": []
+    },
+    {
+      "name": "quickstart.json",
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:54:57.615Z",
+      "sha256": "sha256:6fafa64b39481810135c5a3588a4d327392928f3271d19a25040f62b171b29c8",
+      "bindingFailures": []
+    },
+    {
+      "name": "nonprod-metadata.json",
+      "status": "PASS",
+      "evidenceStatus": "SKIPPED_GATED",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:55:48.167Z",
+      "sha256": "sha256:feb423d8f6b7b19762a1761dda8cd898f5d74e203f8d39014a72bc373c93b498",
+      "bindingFailures": []
+    },
+    {
+      "name": "nonprod.json",
+      "status": "PASS",
+      "evidenceStatus": "SKIPPED_GATED",
+      "fresh": true,
+      "timestamp": "2026-09-03T10:55:48.177Z",
+      "sha256": "sha256:49cbb7895a8c98671b5ae56614b225dc3412dd7f44b5a98b13c8503644e530c6",
+      "bindingFailures": []
+    }
+  ]
+}

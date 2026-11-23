@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "sla-snapshot@1.0.0",
+  "workspaceId": "31000000-0000-4000-8000-000000000001",
+  "projectId": "31000000-0000-4000-8000-000000000002",
+  "workItemId": "31000000-0000-4000-8000-000000000003",
+  "goal": "READY_TO_SIGNED_VERDICT",
+  "clockState": "NOT_STARTED",
+  "targetState": "NOT_STARTED",
+  "targetConfiguration": {
+    "state": "NOT_CONFIGURED"
+  },
+  "notStartedReason": "NO_CONFIRMED_START_EVENT",
+  "policyFacetRef": {
+    "id": "31000000-0000-4000-8000-000000000004",
+    "version": 2,
+    "semanticHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+  },
+  "calendarRef": {
+    "id": "31000000-0000-4000-8000-000000000005",
+    "version": 1,
+    "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "mappingRef": {
+    "sourceType": "JIRA_STATUS_MAPPING_REVISION",
+    "sourceId": "31000000-0000-4000-8000-000000000006",
+    "sourceVersion": 3,
+    "semanticHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+  },
+  "algorithmRef": {
+    "key": "sla-business-time",
+    "version": "1.0.0",
+    "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "pause": {
+    "state": "NOT_PAUSED"
+  },
+  "elapsedBusinessSeconds": 0,
+  "inputFingerprint": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+  "freshness": "CURRENT",
+  "asOf": "2026-09-02T09:00:00Z",
+  "evaluationHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

@@ -1,0 +1,18 @@
+{
+  "command": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/008/uncertain-effects.spec.ts",
+    "tests/integration/008/retry-worker.spec.ts",
+    "tests/integration/008/notification-delivery.spec.ts",
+    "tests/integration/008/completion-runtime.spec.ts",
+    "tests/integration/008/dead-letter-replay.spec.ts",
+    "tests/integration/008/degradation-matrix.spec.ts",
+    "tests/contract/008/provider-ingress.spec.ts",
+    "tests/unit/008/retry-policy.spec.ts",
+    "tests/unit/008/degradation-policy.spec.ts",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 0,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  9 passed (9)\n      Tests  110 passed (110)\n   Start at  01:01:05\n   Duration  106.39s (transform 2.67s, setup 0ms, import 12.02s, tests 93.42s, environment 0ms)\n\n"
+}

@@ -1,0 +1,21 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/008",
+    "--exclude",
+    "tests/integration/008/published-runtime-configuration.spec.ts",
+    "--exclude",
+    "tests/integration/008/published-deployment-startup.spec.ts",
+    "--exclude",
+    "tests/integration/008/automation-availability.spec.ts",
+    "--exclude",
+    "tests/integration/008/runtime-composition.spec.ts",
+    "--exclude",
+    "tests/integration/008/development-probes.spec.ts",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 143,
+  "durationMs": 599536,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n{\"timestamp\":\"2026-09-04T23:29:12.174Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"454af3e3-0936-4abe-998d-cc2ccb7f522a\",\"causationId\":\"e13835c4-9e5d-4848-ba8f-6a26321c7dee\",\"operation\":\"record.publish\",\"outcome\":\"FAILED\",\"latencyMs\":1}\n{\"timestamp\":\"2026-09-04T23:29:12.195Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"f689d1f8-c22b-4e54-b4ab-3ee004507ff9\",\"causationId\":\"a743eef8-6d7d-488e-b46f-155358a0c03d\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":19}\n{\"timestamp\":\"2026-09-04T23:29:12.210Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"f8f9a26f-3c71-43e9-8c49-95c336eec52e\",\"causationId\":\"2d18e92e-e726-40b8-8f7a-c91f33478c0d\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":11}\n{\"timestamp\":\"2026-09-04T23:29:15.215Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"6397f825-7c0a-4e0d-afa8-be9c15367a2c\",\"causationId\":\"525c49ce-9d75-444a-bbbf-f8886ee5cd51\",\"operation\":\"record.publish\",\"outcome\":\"FAILED\",\"latencyMs\":0}\n{\"timestamp\":\"2026-09-04T23:29:15.233Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"25bee253-cea1-4094-99ea-df7307e29626\",\"causationId\":\"8c9aeb41-8ed8-4821-9309-e5f2b32e12be\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":16}\n{\"timestamp\":\"2026-09-04T23:29:15.245Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"10000000-0000-4000-8000-000000000001\",\"projectId\":\"20000000-0000-4000-8000-000000000001\",\"correlationId\":\"853078c9-b08f-4ea5-b8dc-11e6432a0ed4\",\"causationId\":\"13d3492d-855c-40bc-9826-9b3bf65738fa\",\"operation\":\"record.publish\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":10}\n ❯ tests/integration/008/defect-proposal-restart.spec.ts (2 tests | 1 failed) 130455ms\n     × survives API restart and keeps exact scope/hash/source when accepted on postgres:18.6-bookworm 125387ms\n{\"timestamp\":\"2026-09-04T23:33:48.926Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"326033d1-b5e1-49da-b0c3-4281c7b49573\",\"projectId\":\"4054bb00-7d79-4274-bc92-257b4423770f\",\"correlationId\":\"d2e8cca3-85eb-4cc7-99c9-752339c32612\",\"causationId\":\"da382414-b88e-42bd-9412-06ec8b4e98c3\",\"operation\":\"http.request\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":12}\n{\"timestamp\":\"2026-09-04T23:33:48.965Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"worker\",\"workspaceId\":\"326033d1-b5e1-49da-b0c3-4281c7b49573\",\"projectId\":\"4054bb00-7d79-4274-bc92-257b4423770f\",\"correlationId\":\"d2e8cca3-85eb-4cc7-99c9-752339c32612\",\"causationId\":\"da382414-b88e-42bd-9412-06ec8b4e98c3\",\"operation\":\"worker.commands\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":1}\n"
+}

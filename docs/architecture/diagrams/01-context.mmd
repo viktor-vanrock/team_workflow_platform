@@ -1,0 +1,16 @@
+flowchart TB
+  user["Заказчик · QA · администраторы<br/>Читатель · писатель · лид"]
+  web["Web · React / Vite<br/>QA · очередь · проекты<br/>доступы · документация"]
+  idp["Identity<br/>LOCAL: Fake IdP<br/>Corporate: OIDC adapter"]
+  api["API · NestJS<br/>Identity / policy · QA / evidence<br/>HTTP / webhook ingress · proposals"]
+  pg[("PostgreSQL · awp<br/>Core + QA + Tech Writing + ledgers<br/>commands · events · audit")]
+  worker["Worker · NestJS<br/>recovery → dispatcher → commands<br/>PostgreSQL polling, 10 contributions"]
+  ext["Typed Connectors → providers<br/>Jira: operational authority<br/>GitLab: CI / source / artifacts<br/>Mattermost: intake / notifications"]
+  user --> web
+  web -->|"HTTP JSON / Bearer"| api
+  api -->|"verify identity"| idp
+  api <-->|"scoped transactions"| pg
+  pg -->|"durable commands / events"| worker
+  worker -->|"claims / confirmations"| pg
+  worker <-->|"typed effects / exact readback"| ext
+  ext -->|"webhooks / callbacks"| api

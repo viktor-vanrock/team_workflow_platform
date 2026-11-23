@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "production": "DENIED",
+  "externalNetwork": "DENIED",
+  "startedAt": "2026-09-03T18:34:32.852Z",
+  "finishedAt": "2026-09-03T18:35:05.651Z",
+  "runtime": {
+    "node": "v24.20.0",
+    "postgresTargets": [
+      "17",
+      "18"
+    ]
+  },
+  "taskBinding": {
+    "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+    "sha256": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62"
+  },
+  "gate": "feature-007-foundation-contracts",
+  "status": "PASS",
+  "stages": [
+    {
+      "id": "strict-contracts",
+      "description": "Strict JSON Schema, OpenAPI, AsyncAPI, example and digest verification",
+      "args": [
+        "tools/contracts/verify-007-contracts.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 224
+    },
+    {
+      "id": "registry-check",
+      "description": "Generated schema registry is deterministic",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 307
+    },
+    {
+      "id": "openapi-check",
+      "description": "Generated API and Mock Hub snapshots are deterministic",
+      "args": [
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 319
+    },
+    {
+      "id": "contract-tests",
+      "description": "Feature 007 compatibility, exact-action, crypto and event contract vectors",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/007",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3520
+    }
+  ]
+}

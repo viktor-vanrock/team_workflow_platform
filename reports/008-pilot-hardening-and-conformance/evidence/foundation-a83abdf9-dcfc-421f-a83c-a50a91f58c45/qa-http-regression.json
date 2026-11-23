@@ -1,0 +1,18 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/002-qa-api-us1.spec.ts",
+    "tests/integration/002-manual-session-vertical-flow.spec.ts",
+    "tests/integration/002-session-lineage.spec.ts",
+    "tests/integration/security/002-session-review-authorization.spec.ts",
+    "tests/integration/security/005/us2-launch-boundary.spec.ts",
+    "tests/e2e/005-us1-automated-session.spec.ts",
+    "tests/integration/acceptance/002-at-008-finding-classification.spec.ts",
+    "tests/architecture/003-jira-runtime-wiring.spec.ts",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 0,
+  "durationMs": 46799,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n\n Test Files  8 passed (8)\n      Tests  21 passed (21)\n   Start at  03:16:32\n   Duration  46.18s (transform 5.38s, setup 0ms, import 27.05s, tests 57.31s, environment 1ms)\n\n"
+}

@@ -1,0 +1,2031 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "checkpoint": "SMOKE",
+  "status": "PASS",
+  "startedAt": "2026-09-06T20:36:16.796Z",
+  "finishedAt": "2026-09-06T20:37:48.231Z",
+  "isolatedProjectName": "awp-local-007-smoke-mtq9uwie-43429",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "production": "DENIED",
+  "externalNetwork": "DENIED",
+  "deterministicEffectCounts": true,
+  "signingVerification": true,
+  "restarts": [
+    {
+      "service": "postgres",
+      "before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 25187,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:36:20.327515835Z",
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:02.174257924Z",
+              "End": "2026-09-06T20:37:02.230274216Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:04.233955634Z",
+              "End": "2026-09-06T20:37:04.290991592Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:06.29523526Z",
+              "End": "2026-09-06T20:37:06.356287218Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:08.359307344Z",
+              "End": "2026-09-06T20:37:08.414257677Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:10.417802553Z",
+              "End": "2026-09-06T20:37:10.47082422Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            }
+          ]
+        }
+      },
+      "after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 31871,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:37:11.914702971Z",
+        "FinishedAt": "2026-09-06T20:37:11.676933387Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:04.233955634Z",
+              "End": "2026-09-06T20:37:04.290991592Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:06.29523526Z",
+              "End": "2026-09-06T20:37:06.356287218Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:08.359307344Z",
+              "End": "2026-09-06T20:37:08.414257677Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:10.417802553Z",
+              "End": "2026-09-06T20:37:10.47082422Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:13.915976638Z",
+              "End": "2026-09-06T20:37:13.981419263Z",
+              "ExitCode": 0,
+              "Output": "/var/run/postgresql:5432 - accepting connections\n"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "service": "redis",
+      "before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 25032,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:36:20.174579294Z",
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:05.425346217Z",
+              "End": "2026-09-06T20:37:05.456932134Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:07.460110052Z",
+              "End": "2026-09-06T20:37:07.499226052Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:09.503129553Z",
+              "End": "2026-09-06T20:37:09.536702844Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:11.539260304Z",
+              "End": "2026-09-06T20:37:11.573913304Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:13.576333555Z",
+              "End": "2026-09-06T20:37:13.604157346Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            }
+          ]
+        }
+      },
+      "after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 32361,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:37:15.353379541Z",
+        "FinishedAt": "2026-09-06T20:37:15.137833639Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:07.460110052Z",
+              "End": "2026-09-06T20:37:07.499226052Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:09.503129553Z",
+              "End": "2026-09-06T20:37:09.536702844Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:11.539260304Z",
+              "End": "2026-09-06T20:37:11.573913304Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:13.576333555Z",
+              "End": "2026-09-06T20:37:13.604157346Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            },
+            {
+              "Start": "2026-09-06T20:37:17.354486417Z",
+              "End": "2026-09-06T20:37:17.384792167Z",
+              "ExitCode": 0,
+              "Output": "PONG\n"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "service": "mock-hub",
+      "before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 26341,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:36:28.193826547Z",
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:08.938200719Z",
+              "End": "2026-09-06T20:37:09.051021553Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:11.054923345Z",
+              "End": "2026-09-06T20:37:11.151190387Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:13.155073179Z",
+              "End": "2026-09-06T20:37:13.250972055Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:15.255179639Z",
+              "End": "2026-09-06T20:37:15.352849333Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:17.3574955Z",
+              "End": "2026-09-06T20:37:17.453669084Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      },
+      "after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 32891,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:37:18.672656543Z",
+        "FinishedAt": "2026-09-06T20:37:18.442646376Z",
+        "Health": {
+          "Status": "starting",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:08.938200719Z",
+              "End": "2026-09-06T20:37:09.051021553Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:11.054923345Z",
+              "End": "2026-09-06T20:37:11.151190387Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:13.155073179Z",
+              "End": "2026-09-06T20:37:13.250972055Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:15.255179639Z",
+              "End": "2026-09-06T20:37:15.352849333Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:17.3574955Z",
+              "End": "2026-09-06T20:37:17.453669084Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "service": "worker",
+      "before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 31029,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:37:05.645038509Z",
+        "FinishedAt": "2026-09-06T20:36:57.220074047Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 1,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:09.747990636Z",
+              "End": "2026-09-06T20:37:09.874021553Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:11.877403471Z",
+              "End": "2026-09-06T20:37:12.075752721Z",
+              "ExitCode": 1,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:14.080244597Z",
+              "End": "2026-09-06T20:37:14.237537847Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:16.240555042Z",
+              "End": "2026-09-06T20:37:16.369842208Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:18.374644376Z",
+              "End": "2026-09-06T20:37:19.609911752Z",
+              "ExitCode": 1,
+              "Output": ""
+            }
+          ]
+        }
+      },
+      "after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 33195,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:37:20.915853377Z",
+        "FinishedAt": "2026-09-06T20:37:20.723633835Z",
+        "Health": {
+          "Status": "starting",
+          "FailingStreak": 1,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:11.877403471Z",
+              "End": "2026-09-06T20:37:12.075752721Z",
+              "ExitCode": 1,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:14.080244597Z",
+              "End": "2026-09-06T20:37:14.237537847Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:16.240555042Z",
+              "End": "2026-09-06T20:37:16.369842208Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:18.374644376Z",
+              "End": "2026-09-06T20:37:19.609911752Z",
+              "ExitCode": 1,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:22.916482003Z",
+              "End": "2026-09-06T20:37:23.028605253Z",
+              "ExitCode": 1,
+              "Output": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "service": "api",
+      "before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 27139,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:36:36.352698885Z",
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:14.028792722Z",
+              "End": "2026-09-06T20:37:14.209804222Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:16.21399625Z",
+              "End": "2026-09-06T20:37:16.396698833Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:18.400433418Z",
+              "End": "2026-09-06T20:37:19.652175168Z",
+              "ExitCode": 1,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:21.655129336Z",
+              "End": "2026-09-06T20:37:21.800698669Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:23.803717504Z",
+              "End": "2026-09-06T20:37:23.947230629Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      },
+      "after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 33672,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:37:24.834786629Z",
+        "FinishedAt": "2026-09-06T20:37:24.597593462Z",
+        "Health": {
+          "Status": "starting",
+          "FailingStreak": 1,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:16.21399625Z",
+              "End": "2026-09-06T20:37:16.396698833Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:18.400433418Z",
+              "End": "2026-09-06T20:37:19.652175168Z",
+              "ExitCode": 1,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:21.655129336Z",
+              "End": "2026-09-06T20:37:21.800698669Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:23.803717504Z",
+              "End": "2026-09-06T20:37:23.947230629Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:26.835975672Z",
+              "End": "2026-09-06T20:37:26.956725297Z",
+              "ExitCode": 1,
+              "Output": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "service": "web",
+      "before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 27916,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:36:43.540464805Z",
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:18.436428834Z",
+              "End": "2026-09-06T20:37:18.635276168Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:20.639978419Z",
+              "End": "2026-09-06T20:37:20.794736544Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:22.798156336Z",
+              "End": "2026-09-06T20:37:22.966938878Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:24.969998921Z",
+              "End": "2026-09-06T20:37:25.160760838Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:27.164903214Z",
+              "End": "2026-09-06T20:37:27.328782672Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      },
+      "after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 34237,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:37:29.132531756Z",
+        "FinishedAt": "2026-09-06T20:37:28.908940923Z",
+        "Health": {
+          "Status": "starting",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:18.436428834Z",
+              "End": "2026-09-06T20:37:18.635276168Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:20.639978419Z",
+              "End": "2026-09-06T20:37:20.794736544Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:22.798156336Z",
+              "End": "2026-09-06T20:37:22.966938878Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:24.969998921Z",
+              "End": "2026-09-06T20:37:25.160760838Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:27.164903214Z",
+              "End": "2026-09-06T20:37:27.328782672Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "service": "s3mock",
+      "before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 25162,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:36:20.305722585Z",
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:18.403437293Z",
+              "End": "2026-09-06T20:37:18.444019334Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:21.448873377Z",
+              "End": "2026-09-06T20:37:21.483716336Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:24.489588087Z",
+              "End": "2026-09-06T20:37:24.543469087Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:27.548157422Z",
+              "End": "2026-09-06T20:37:27.588457172Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:30.591263757Z",
+              "End": "2026-09-06T20:37:30.651234799Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      },
+      "after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 34639,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-06T20:37:31.609987091Z",
+        "FinishedAt": "2026-09-06T20:37:31.101596632Z",
+        "Health": {
+          "Status": "healthy",
+          "FailingStreak": 0,
+          "Log": [
+            {
+              "Start": "2026-09-06T20:37:27.548157422Z",
+              "End": "2026-09-06T20:37:27.588457172Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:30.591263757Z",
+              "End": "2026-09-06T20:37:30.651234799Z",
+              "ExitCode": 0,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:34.611391092Z",
+              "End": "2026-09-06T20:37:34.8066238Z",
+              "ExitCode": 1,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:37.856237219Z",
+              "End": "2026-09-06T20:37:37.95621526Z",
+              "ExitCode": 1,
+              "Output": ""
+            },
+            {
+              "Start": "2026-09-06T20:37:40.974894012Z",
+              "End": "2026-09-06T20:37:41.010217887Z",
+              "ExitCode": 0,
+              "Output": ""
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "cleanShutdown": true,
+  "stages": [
+    {
+      "id": "isolated-compose-up",
+      "status": "PASS",
+      "durationMs": 33168,
+      "details": {
+        "projectName": "awp-local-007-smoke-mtq9uwie-43429",
+        "ports": [
+          49396,
+          49397,
+          49398,
+          49399,
+          49400,
+          49401
+        ],
+        "identities": [
+          {
+            "service": "postgres",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 25187,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:20.327515835Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:36:41.116231387Z",
+                  "End": "2026-09-06T20:36:41.235384387Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:36:43.247010138Z",
+                  "End": "2026-09-06T20:36:43.298188305Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:36:45.302916625Z",
+                  "End": "2026-09-06T20:36:45.36138575Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:36:47.364142459Z",
+                  "End": "2026-09-06T20:36:47.419210334Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:36:49.423018085Z",
+                  "End": "2026-09-06T20:36:49.638987377Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                }
+              ]
+            }
+          },
+          {
+            "service": "redis",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 25032,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:20.174579294Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:36:40.777967678Z",
+                  "End": "2026-09-06T20:36:40.82379172Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:36:42.827466388Z",
+                  "End": "2026-09-06T20:36:42.875604388Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:36:44.935895597Z",
+                  "End": "2026-09-06T20:36:45.011879347Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:36:47.018632209Z",
+                  "End": "2026-09-06T20:36:47.051955375Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:36:49.056400043Z",
+                  "End": "2026-09-06T20:36:49.09194346Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                }
+              ]
+            }
+          },
+          {
+            "service": "mock-hub",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 26341,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:28.193826547Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:36:41.12985047Z",
+                  "End": "2026-09-06T20:36:41.303608262Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:43.312009346Z",
+                  "End": "2026-09-06T20:36:43.422346346Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:45.449912416Z",
+                  "End": "2026-09-06T20:36:45.548721625Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:47.553190292Z",
+                  "End": "2026-09-06T20:36:47.702460792Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:49.711758168Z",
+                  "End": "2026-09-06T20:36:49.885061877Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          {
+            "service": "worker",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 27174,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:36.381422551Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:36:40.49896347Z",
+                  "End": "2026-09-06T20:36:40.704972262Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:42.709171263Z",
+                  "End": "2026-09-06T20:36:42.960477471Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:44.964746264Z",
+                  "End": "2026-09-06T20:36:45.20845418Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:47.215902667Z",
+                  "End": "2026-09-06T20:36:47.357698709Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:49.366428168Z",
+                  "End": "2026-09-06T20:36:49.69755846Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          {
+            "service": "api",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 27139,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:36.352698885Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:36:40.462195887Z",
+                  "End": "2026-09-06T20:36:40.652220262Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:42.659336388Z",
+                  "End": "2026-09-06T20:36:42.997297763Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:45.001360805Z",
+                  "End": "2026-09-06T20:36:45.314318208Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:47.318352584Z",
+                  "End": "2026-09-06T20:36:47.509956792Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:49.51569321Z",
+                  "End": "2026-09-06T20:36:49.85492221Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          {
+            "service": "web",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 27916,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:43.540464805Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:36:45.541274791Z",
+                  "End": "2026-09-06T20:36:45.698417166Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:47.702879876Z",
+                  "End": "2026-09-06T20:36:47.850246042Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          {
+            "service": "s3mock",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 25162,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:20.305722585Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:36:35.632330968Z",
+                  "End": "2026-09-06T20:36:35.664225718Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:38.669643052Z",
+                  "End": "2026-09-06T20:36:38.699727427Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:41.703684095Z",
+                  "End": "2026-09-06T20:36:41.772784304Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:44.782092055Z",
+                  "End": "2026-09-06T20:36:44.821108555Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:36:47.827048459Z",
+                  "End": "2026-09-06T20:36:47.859348459Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          }
+        ],
+        "image": "sha256:3b54ccd25406c47f1195db1e28c4369c580c84126066f1db4e7dc6a38c0291cf"
+      }
+    },
+    {
+      "id": "onboarding-evidence-http",
+      "status": "PASS",
+      "durationMs": 6988,
+      "details": {
+        "projectId": "246ab0f4-2cfb-47e2-a973-181f1796a86f",
+        "manifestId": "146f412e-2375-48d3-8155-7acc3776785d",
+        "packageId": "70ddae99-cd3a-488e-92a5-ca7b53f15542",
+        "ordinaryStepUpDenied": true,
+        "unauthenticatedStepUpDenied": true
+      }
+    },
+    {
+      "id": "independent-worker-effect",
+      "status": "PASS",
+      "durationMs": 12082,
+      "details": {
+        "beforeWorker": {
+          "commandState": "QUEUED",
+          "commandsForDraft": 1,
+          "workItems": 0,
+          "operationalState": "ACTIVE",
+          "manifestHash": "sha256:5ffceb155b1d404156b9b539ed5a1b364fee7d497886bd04aa05f284dd71fbb1",
+          "exportCount": 1,
+          "onboardingEvents": 3,
+          "eventReceipts": 3,
+          "jiraIssues": 0
+        },
+        "afterWorker": {
+          "commandState": "CONFIRMED",
+          "commandsForDraft": 1,
+          "workItems": 1,
+          "operationalState": "ACTIVE",
+          "manifestHash": "sha256:5ffceb155b1d404156b9b539ed5a1b364fee7d497886bd04aa05f284dd71fbb1",
+          "exportCount": 1,
+          "onboardingEvents": 3,
+          "eventReceipts": 3,
+          "jiraIssues": 1
+        }
+      }
+    },
+    {
+      "id": "suspension-event-replay",
+      "status": "PASS",
+      "durationMs": 2148,
+      "details": {
+        "events": {
+          "total": 4,
+          "acknowledged": 4,
+          "inbox": 4
+        },
+        "replay": {
+          "total": 4,
+          "acknowledged": 4,
+          "inbox": 4
+        },
+        "durable": {
+          "commandState": "CONFIRMED",
+          "commandsForDraft": 1,
+          "workItems": 1,
+          "operationalState": "SUSPENDED",
+          "manifestHash": "sha256:5ffceb155b1d404156b9b539ed5a1b364fee7d497886bd04aa05f284dd71fbb1",
+          "exportCount": 1,
+          "onboardingEvents": 4,
+          "eventReceipts": 4,
+          "jiraIssues": 1
+        }
+      }
+    },
+    {
+      "id": "service-restarts",
+      "status": "PASS",
+      "durationMs": 30313,
+      "details": [
+        {
+          "service": "postgres",
+          "before": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 25187,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:20.327515835Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:02.174257924Z",
+                  "End": "2026-09-06T20:37:02.230274216Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:04.233955634Z",
+                  "End": "2026-09-06T20:37:04.290991592Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:06.29523526Z",
+                  "End": "2026-09-06T20:37:06.356287218Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:08.359307344Z",
+                  "End": "2026-09-06T20:37:08.414257677Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:10.417802553Z",
+                  "End": "2026-09-06T20:37:10.47082422Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                }
+              ]
+            }
+          },
+          "after": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 31871,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:37:11.914702971Z",
+            "FinishedAt": "2026-09-06T20:37:11.676933387Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:04.233955634Z",
+                  "End": "2026-09-06T20:37:04.290991592Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:06.29523526Z",
+                  "End": "2026-09-06T20:37:06.356287218Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:08.359307344Z",
+                  "End": "2026-09-06T20:37:08.414257677Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:10.417802553Z",
+                  "End": "2026-09-06T20:37:10.47082422Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:13.915976638Z",
+                  "End": "2026-09-06T20:37:13.981419263Z",
+                  "ExitCode": 0,
+                  "Output": "/var/run/postgresql:5432 - accepting connections\n"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "service": "redis",
+          "before": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 25032,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:20.174579294Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:05.425346217Z",
+                  "End": "2026-09-06T20:37:05.456932134Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:07.460110052Z",
+                  "End": "2026-09-06T20:37:07.499226052Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:09.503129553Z",
+                  "End": "2026-09-06T20:37:09.536702844Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:11.539260304Z",
+                  "End": "2026-09-06T20:37:11.573913304Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:13.576333555Z",
+                  "End": "2026-09-06T20:37:13.604157346Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                }
+              ]
+            }
+          },
+          "after": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 32361,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:37:15.353379541Z",
+            "FinishedAt": "2026-09-06T20:37:15.137833639Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:07.460110052Z",
+                  "End": "2026-09-06T20:37:07.499226052Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:09.503129553Z",
+                  "End": "2026-09-06T20:37:09.536702844Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:11.539260304Z",
+                  "End": "2026-09-06T20:37:11.573913304Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:13.576333555Z",
+                  "End": "2026-09-06T20:37:13.604157346Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                },
+                {
+                  "Start": "2026-09-06T20:37:17.354486417Z",
+                  "End": "2026-09-06T20:37:17.384792167Z",
+                  "ExitCode": 0,
+                  "Output": "PONG\n"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "service": "mock-hub",
+          "before": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 26341,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:28.193826547Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:08.938200719Z",
+                  "End": "2026-09-06T20:37:09.051021553Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:11.054923345Z",
+                  "End": "2026-09-06T20:37:11.151190387Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:13.155073179Z",
+                  "End": "2026-09-06T20:37:13.250972055Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:15.255179639Z",
+                  "End": "2026-09-06T20:37:15.352849333Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:17.3574955Z",
+                  "End": "2026-09-06T20:37:17.453669084Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          "after": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 32891,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:37:18.672656543Z",
+            "FinishedAt": "2026-09-06T20:37:18.442646376Z",
+            "Health": {
+              "Status": "starting",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:08.938200719Z",
+                  "End": "2026-09-06T20:37:09.051021553Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:11.054923345Z",
+                  "End": "2026-09-06T20:37:11.151190387Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:13.155073179Z",
+                  "End": "2026-09-06T20:37:13.250972055Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:15.255179639Z",
+                  "End": "2026-09-06T20:37:15.352849333Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:17.3574955Z",
+                  "End": "2026-09-06T20:37:17.453669084Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "service": "worker",
+          "before": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 31029,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:37:05.645038509Z",
+            "FinishedAt": "2026-09-06T20:36:57.220074047Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 1,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:09.747990636Z",
+                  "End": "2026-09-06T20:37:09.874021553Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:11.877403471Z",
+                  "End": "2026-09-06T20:37:12.075752721Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:14.080244597Z",
+                  "End": "2026-09-06T20:37:14.237537847Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:16.240555042Z",
+                  "End": "2026-09-06T20:37:16.369842208Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:18.374644376Z",
+                  "End": "2026-09-06T20:37:19.609911752Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          "after": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 33195,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:37:20.915853377Z",
+            "FinishedAt": "2026-09-06T20:37:20.723633835Z",
+            "Health": {
+              "Status": "starting",
+              "FailingStreak": 1,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:11.877403471Z",
+                  "End": "2026-09-06T20:37:12.075752721Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:14.080244597Z",
+                  "End": "2026-09-06T20:37:14.237537847Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:16.240555042Z",
+                  "End": "2026-09-06T20:37:16.369842208Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:18.374644376Z",
+                  "End": "2026-09-06T20:37:19.609911752Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:22.916482003Z",
+                  "End": "2026-09-06T20:37:23.028605253Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "service": "api",
+          "before": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 27139,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:36.352698885Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:14.028792722Z",
+                  "End": "2026-09-06T20:37:14.209804222Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:16.21399625Z",
+                  "End": "2026-09-06T20:37:16.396698833Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:18.400433418Z",
+                  "End": "2026-09-06T20:37:19.652175168Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:21.655129336Z",
+                  "End": "2026-09-06T20:37:21.800698669Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:23.803717504Z",
+                  "End": "2026-09-06T20:37:23.947230629Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          "after": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 33672,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:37:24.834786629Z",
+            "FinishedAt": "2026-09-06T20:37:24.597593462Z",
+            "Health": {
+              "Status": "starting",
+              "FailingStreak": 1,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:16.21399625Z",
+                  "End": "2026-09-06T20:37:16.396698833Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:18.400433418Z",
+                  "End": "2026-09-06T20:37:19.652175168Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:21.655129336Z",
+                  "End": "2026-09-06T20:37:21.800698669Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:23.803717504Z",
+                  "End": "2026-09-06T20:37:23.947230629Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:26.835975672Z",
+                  "End": "2026-09-06T20:37:26.956725297Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "service": "web",
+          "before": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 27916,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:43.540464805Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:18.436428834Z",
+                  "End": "2026-09-06T20:37:18.635276168Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:20.639978419Z",
+                  "End": "2026-09-06T20:37:20.794736544Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:22.798156336Z",
+                  "End": "2026-09-06T20:37:22.966938878Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:24.969998921Z",
+                  "End": "2026-09-06T20:37:25.160760838Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:27.164903214Z",
+                  "End": "2026-09-06T20:37:27.328782672Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          "after": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 34237,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:37:29.132531756Z",
+            "FinishedAt": "2026-09-06T20:37:28.908940923Z",
+            "Health": {
+              "Status": "starting",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:18.436428834Z",
+                  "End": "2026-09-06T20:37:18.635276168Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:20.639978419Z",
+                  "End": "2026-09-06T20:37:20.794736544Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:22.798156336Z",
+                  "End": "2026-09-06T20:37:22.966938878Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:24.969998921Z",
+                  "End": "2026-09-06T20:37:25.160760838Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:27.164903214Z",
+                  "End": "2026-09-06T20:37:27.328782672Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "service": "s3mock",
+          "before": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 25162,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:36:20.305722585Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:18.403437293Z",
+                  "End": "2026-09-06T20:37:18.444019334Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:21.448873377Z",
+                  "End": "2026-09-06T20:37:21.483716336Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:24.489588087Z",
+                  "End": "2026-09-06T20:37:24.543469087Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:27.548157422Z",
+                  "End": "2026-09-06T20:37:27.588457172Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:30.591263757Z",
+                  "End": "2026-09-06T20:37:30.651234799Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          },
+          "after": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 34639,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-06T20:37:31.609987091Z",
+            "FinishedAt": "2026-09-06T20:37:31.101596632Z",
+            "Health": {
+              "Status": "healthy",
+              "FailingStreak": 0,
+              "Log": [
+                {
+                  "Start": "2026-09-06T20:37:27.548157422Z",
+                  "End": "2026-09-06T20:37:27.588457172Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:30.591263757Z",
+                  "End": "2026-09-06T20:37:30.651234799Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:34.611391092Z",
+                  "End": "2026-09-06T20:37:34.8066238Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:37.856237219Z",
+                  "End": "2026-09-06T20:37:37.95621526Z",
+                  "ExitCode": 1,
+                  "Output": ""
+                },
+                {
+                  "Start": "2026-09-06T20:37:40.974894012Z",
+                  "End": "2026-09-06T20:37:41.010217887Z",
+                  "ExitCode": 0,
+                  "Output": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "post-restart-replay-and-signature",
+      "status": "PASS",
+      "durationMs": 628,
+      "details": {
+        "before": {
+          "commandState": "CONFIRMED",
+          "commandsForDraft": 1,
+          "workItems": 1,
+          "operationalState": "SUSPENDED",
+          "manifestHash": "sha256:5ffceb155b1d404156b9b539ed5a1b364fee7d497886bd04aa05f284dd71fbb1",
+          "exportCount": 1,
+          "onboardingEvents": 4,
+          "eventReceipts": 4,
+          "jiraIssues": 1
+        },
+        "after": {
+          "commandState": "CONFIRMED",
+          "commandsForDraft": 1,
+          "workItems": 1,
+          "operationalState": "SUSPENDED",
+          "manifestHash": "sha256:5ffceb155b1d404156b9b539ed5a1b364fee7d497886bd04aa05f284dd71fbb1",
+          "exportCount": 1,
+          "onboardingEvents": 4,
+          "eventReceipts": 4,
+          "jiraIssues": 1
+        },
+        "signature": "PASS",
+        "integrity": "PASS",
+        "artifactHash": "sha256:d6dba027e1a723c019d52dd5886a17559b5b8fccf24c0d749ee4bbf170484dd6",
+        "idempotencyReplay": true
+      }
+    },
+    {
+      "id": "durable-cli-status",
+      "status": "PASS",
+      "durationMs": 677,
+      "details": {
+        "projectId": "246ab0f4-2cfb-47e2-a973-181f1796a86f",
+        "state": "SUSPENDED"
+      }
+    },
+    {
+      "id": "live-browser",
+      "status": "PASS",
+      "durationMs": 3692,
+      "details": {
+        "exports": 2,
+        "audits": 2
+      }
+    },
+    {
+      "id": "clean-shutdown",
+      "status": "PASS",
+      "durationMs": 0,
+      "details": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      }
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "packages/runtime-composition/src/onboarding/worker.ts",
+        "sha256": "sha256:16ca0b4a7d0b9503a08a9d524a48a8269498c30c2349e5ee4df7713e17c3f099"
+      },
+      {
+        "path": "tests/unit/007/onboarding-event-worker.spec.ts",
+        "sha256": "sha256:ed8f046dbdde518fa738dc333d11f8d7a8273650c6e1f53555e584dc897d30a6"
+      },
+      {
+        "path": "tools/local/onboarding-cli.mts",
+        "sha256": "sha256:139ee4a1193fc6c9ae1be1513119d4d645b288384f2b2bfdcdd256ebf6d03c9a"
+      },
+      {
+        "path": "packages/runtime-composition/src/pilot/development-seed.ts",
+        "sha256": "sha256:cc8852ec03dc8e665af1a54d265dd5643f6266bba9656f2ace931cf35bb618c3"
+      },
+      {
+        "path": "packages/runtime-composition/src/cli/seed.ts",
+        "sha256": "sha256:ea1979b2a84301bfeb5f72d66c1798c96b29a83495a6db15d33d8f0c5071517c"
+      },
+      {
+        "path": "tests/integration/007/local-project-bootstrap.spec.ts",
+        "sha256": "sha256:a8adc8901dd0c0b7c303c29bd0ae4383622e7645f6d0dde05cff29f59b5bf6ce"
+      },
+      {
+        "path": ".dockerignore",
+        "sha256": "sha256:7ce65b8878c713ef1a71ae2ccef3dab120a0a9ce27e2f4caefca1e2ad6367d87"
+      },
+      {
+        "path": ".gitlab-ci.yml",
+        "sha256": "sha256:e0b0a064b6d37a4f914c3bb6423ec745968d0b79456e74bdd2e5ee5ff02b62a3"
+      },
+      {
+        "path": "package.json",
+        "sha256": "sha256:43379c19a6b740b2864f61784b0dbf44fe9ce07316df7a7f28eb664eded7a151"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7"
+      },
+      {
+        "path": "tests/browser-test-files.ts",
+        "sha256": "sha256:48fcda6e8b2860b97920ea239b5a3ac4b523c8fbe1b9e7b55adaf2e7c729457d"
+      },
+      {
+        "path": "tests/integration/fake-idp-oidc.spec.ts",
+        "sha256": "sha256:58fa4c3f981571b8cebcccfcb0f74a529b81428423f8644eb1726da267a7df08"
+      },
+      {
+        "path": "tools/smoke/feature-007.mts",
+        "sha256": "sha256:fd2ed253c184b3220f3bc0d79763b1561156deecd3608fe0b3d909bd81cbee41"
+      },
+      {
+        "path": "tools/smoke/feature-007-browser-process.mts",
+        "sha256": "sha256:bcad7053bf7001d9ac93027cee1d7d7106182dab968f36203186bbc6bf6d22d1"
+      },
+      {
+        "path": "tools/smoke/007-compose-runtime.mts",
+        "sha256": "sha256:4316b11ee690b29a00ec264c2df026040d72d1ed4ef785c2110a6c7a1ec224da"
+      },
+      {
+        "path": "tools/smoke/007-http-journey.mts",
+        "sha256": "sha256:2d68f33a85d3b2c9e73a4a8617d28529fe296bf9ad15b06d87363ce8f8505a8b"
+      },
+      {
+        "path": "tools/smoke/007-runtime-fixture.mts",
+        "sha256": "sha256:0bb3e48821138f259365f0be69b10c0673ecf163abff76f6055e73b36856bf74"
+      },
+      {
+        "path": "tests/e2e/007/compose-live.spec.ts",
+        "sha256": "sha256:2dcf5bbb5b3afbd28aa5f33dad2b823d343fa0835bed65463d7e25b85ea6e8d3"
+      },
+      {
+        "path": "tests/support/007-evidence-http-fixture.ts",
+        "sha256": "sha256:3a55ce3c46e9920f1cf7b92967a5ef76680ed3ab29ed26f57d3c838b2c24c1a6"
+      },
+      {
+        "path": "apps/api/src/local/local-persona.controller.ts",
+        "sha256": "sha256:24425bcc66fe92c3cf3d7ef317f07a46142768438fada83cc69209253cc4e108"
+      },
+      {
+        "path": "apps/fake-idp/src/oidc.controller.ts",
+        "sha256": "sha256:3c23d14b321ddcf7d69280cfff2acf504241f37a176b6039fd000b4a9021329c"
+      },
+      {
+        "path": "apps/worker/src/app.module.ts",
+        "sha256": "sha256:f461a10c68539670f5bc7808a6497e46851ada688d33cb6c7fc2a61f8a590606"
+      },
+      {
+        "path": "apps/web/src/App.tsx",
+        "sha256": "sha256:7395e28ef510c388cc3cb355f7f55a9b2a82eb34984732a153cc24e8485253f0"
+      },
+      {
+        "path": "infra/compose/docker-compose.local.yml",
+        "sha256": "sha256:c5a1ce089c7a4dd9175f811b9473937f52a5db8cace19449a54b96d96747c157"
+      },
+      {
+        "path": "infra/compose/docker/node-runtime.Dockerfile",
+        "sha256": "sha256:ec7f545cb5aeb0f6e17a3930361579d6d5e081cb424963be76ab931ac424249c"
+      }
+    ],
+    "aggregateSha256": "sha256:ba18dc05c7b0ea43c8791e62ee186d3f6af274fd08abdf3bac4712a6a828c7f0"
+  },
+  "logs": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429",
+  "limits": [
+    "Controlled starting IAM roles and signed evidence; local Fake IdP step-up is not corporate MFA.",
+    "Jira effects target only the isolated Mock Hub; this does not satisfy corporate N2/pilot acceptance."
+  ]
+}

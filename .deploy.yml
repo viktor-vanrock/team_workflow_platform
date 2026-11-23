@@ -1,0 +1,67 @@
+.deploy_dev:
+  extends: .kube_deploy
+  stage: deploy
+  tags: [kubernetes-std]
+  interruptible: false
+  needs: [get_version, verify, verify_deploy, build_workspace]
+  rules:
+    - !reference [.rules, rules-dev]
+  when: manual
+  variables:
+    ENVIRONMENT: develop
+    APP_NAMESPACE: d-rndml-infra
+    CHART_DIR: ./helm
+    CHART_NAME: "."
+    CHART_REF: master
+    CHART_REPO: https://gitlab-ci-token:$CI_JOB_TOKEN@git.sberdevices.ru/rndml/devops/helm-template.git
+    HELM_TIMEOUT: "15m0s"
+
+.deploy_prod:
+  extends: .kube_deploy
+  stage: deploy
+  tags: [p-deployer]
+  interruptible: false
+  needs: [get_version, verify, verify_deploy, build_workspace]
+  rules:
+    - !reference [.rules, rules-main]
+  when: manual
+  variables:
+    ENVIRONMENT: production
+    APP_NAMESPACE: p-rndml-infra
+    CHART_DIR: ./helm
+    CHART_NAME: "."
+    CHART_REF: master
+    CHART_REPO: https://gitlab-ci-token:$CI_JOB_TOKEN@git.sberdevices.ru/rndml/devops/helm-template.git
+    HELM_TIMEOUT: "15m0s"
+
+deploy_dev_hermes:
+  extends: .deploy_dev
+  variables:
+    APP_NAME: hermes
+    VALUES_PATH: envs/hermes-advosd-dev.yaml
+
+deploy_dev_workspace:
+  extends: .deploy_dev
+  needs: [get_version, verify, verify_deploy, build_workspace, deploy_dev_hermes]
+  variables:
+    APP_NAME: workspace
+    VALUES_PATH: envs/workspace-advosd-dev.yaml
+  before_script:
+    - !reference [.kube_deploy, before_script]
+    - cp infra/deploy/workspace-bootstrap.job.tpl "$CHART_PATH/templates/workspace-bootstrap.yaml"
+
+deploy_prod_hermes:
+  extends: .deploy_prod
+  variables:
+    APP_NAME: hermes
+    VALUES_PATH: envs/hermes-advosp-prod.yaml
+
+deploy_prod_workspace:
+  extends: .deploy_prod
+  needs: [get_version, verify, verify_deploy, build_workspace, deploy_prod_hermes]
+  variables:
+    APP_NAME: workspace
+    VALUES_PATH: envs/workspace-advosp-prod.yaml
+  before_script:
+    - !reference [.kube_deploy, before_script]
+    - cp infra/deploy/workspace-bootstrap.job.tpl "$CHART_PATH/templates/workspace-bootstrap.yaml"

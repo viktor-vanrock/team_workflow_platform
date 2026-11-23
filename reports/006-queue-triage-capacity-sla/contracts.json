@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "production": "DENIED",
+  "externalNetwork": "DENIED",
+  "startedAt": "2026-09-03T11:09:38.411Z",
+  "finishedAt": "2026-09-03T11:10:40.648Z",
+  "runtime": {
+    "node": "v24.20.0",
+    "postgres": [
+      "17.7",
+      "18.6"
+    ]
+  },
+  "taskBinding": {
+    "path": "specs/006-queue-triage-capacity-sla/tasks.md",
+    "sha256": "sha256:bcfb30c1b9aef5b160f48c7d7361e9e27e28a0bea441bc62fd3e6fc7eca9d249"
+  },
+  "gate": "feature-006-foundation-contracts",
+  "status": "PASS",
+  "stages": [
+    {
+      "id": "registry-check",
+      "description": "Generated schema registry remains deterministic",
+      "command": "node",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 344
+    },
+    {
+      "id": "openapi-check",
+      "description": "Generated OpenAPI snapshots remain deterministic",
+      "command": "node",
+      "args": [
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 297
+    },
+    {
+      "id": "contract-tests",
+      "description": "Feature 006 contracts, compatibility and event binding",
+      "command": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/006",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 12581
+    }
+  ]
+}

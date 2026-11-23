@@ -1,0 +1,751 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "feature-004-final",
+  "contour": "qa-jira-mattermost-local",
+  "startedAt": "2026-09-03T10:20:23.050Z",
+  "processGateCompletedAt": "2026-09-03T10:35:49.784Z",
+  "stages": [
+    {
+      "id": "prerequisites",
+      "category": "prerequisites",
+      "args": [
+        "tools/verification/feature-004-prerequisites.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-004-prerequisites.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 76,
+      "exitCode": 0
+    },
+    {
+      "id": "governance",
+      "category": "governance",
+      "args": [
+        "tools/verification/feature-004-governance.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-004-governance.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 74,
+      "exitCode": 0
+    },
+    {
+      "id": "setup-contracts",
+      "category": "contract",
+      "args": [
+        "tools/ci/feature-004.mts",
+        "--setup"
+      ],
+      "timeoutMs": 300000,
+      "command": [
+        "node",
+        "tools/ci/feature-004.mts",
+        "--setup"
+      ],
+      "status": "PASS",
+      "durationMs": 2354,
+      "exitCode": 0
+    },
+    {
+      "id": "foundation",
+      "category": "contract+integration+security",
+      "args": [
+        "tools/verification/004-foundation-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/004-foundation-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 71142,
+      "exitCode": 0
+    },
+    {
+      "id": "us1",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/004-us1-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/004-us1-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 17187,
+      "exitCode": 0
+    },
+    {
+      "id": "us2",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/004-us2-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/004-us2-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 18580,
+      "exitCode": 0
+    },
+    {
+      "id": "us3",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/004-us3-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/004-us3-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 30511,
+      "exitCode": 0
+    },
+    {
+      "id": "us4",
+      "category": "contract+integration+security+e2e",
+      "args": [
+        "tools/verification/004-us4-checkpoint.mts"
+      ],
+      "timeoutMs": 600000,
+      "command": [
+        "node",
+        "tools/verification/004-us4-checkpoint.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 29641,
+      "exitCode": 0
+    },
+    {
+      "id": "openapi-drift",
+      "category": "contract",
+      "args": [
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "durationMs": 305,
+      "exitCode": 0
+    },
+    {
+      "id": "registry-drift",
+      "category": "contract",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "durationMs": 295,
+      "exitCode": 0
+    },
+    {
+      "id": "feature-tests",
+      "category": "architecture+contract+integration+security+e2e",
+      "args": [
+        "tools/ci/feature-004-tests.mts"
+      ],
+      "timeoutMs": 900000,
+      "command": [
+        "node",
+        "tools/ci/feature-004-tests.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 49047,
+      "exitCode": 0
+    },
+    {
+      "id": "migrations-postgres-17-18",
+      "category": "integration",
+      "args": [
+        "tools/ci/verify-004-migrations.mts"
+      ],
+      "timeoutMs": 900000,
+      "command": [
+        "node",
+        "tools/ci/verify-004-migrations.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 16728,
+      "exitCode": 0
+    },
+    {
+      "id": "smoke",
+      "category": "process+e2e",
+      "args": [
+        "tools/smoke/feature-004.mts"
+      ],
+      "timeoutMs": 3600000,
+      "command": [
+        "node",
+        "tools/smoke/feature-004.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 285306,
+      "exitCode": 0
+    },
+    {
+      "id": "quickstart",
+      "category": "documentation+e2e",
+      "args": [
+        "tools/verification/004-quickstart.mts"
+      ],
+      "timeoutMs": 3600000,
+      "command": [
+        "node",
+        "tools/verification/004-quickstart.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 353989,
+      "exitCode": 0
+    },
+    {
+      "id": "typecheck",
+      "category": "typecheck",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "--all"
+      ],
+      "timeoutMs": 900000,
+      "command": [
+        "node",
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "--all"
+      ],
+      "status": "PASS",
+      "durationMs": 708,
+      "exitCode": 0
+    },
+    {
+      "id": "lint",
+      "category": "lint",
+      "args": [
+        "node_modules/eslint/bin/eslint.js",
+        "."
+      ],
+      "timeoutMs": 900000,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "."
+      ],
+      "status": "PASS",
+      "durationMs": 49557,
+      "exitCode": 0
+    },
+    {
+      "id": "build",
+      "category": "build",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "build",
+        "--all"
+      ],
+      "timeoutMs": 1200000,
+      "command": [
+        "node",
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "build",
+        "--all"
+      ],
+      "status": "PASS",
+      "durationMs": 548,
+      "exitCode": 0
+    },
+    {
+      "id": "nonprod-metadata",
+      "category": "nonprod",
+      "args": [
+        "tools/verification/feature-004-nonprod-metadata.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-004-nonprod-metadata.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 102,
+      "exitCode": 0
+    },
+    {
+      "id": "nonprod",
+      "category": "nonprod",
+      "args": [
+        "tools/verification/feature-004-nonprod.mts"
+      ],
+      "timeoutMs": 120000,
+      "command": [
+        "node",
+        "tools/verification/feature-004-nonprod.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 171,
+      "exitCode": 0
+    },
+    {
+      "id": "traceability",
+      "category": "trace",
+      "args": [
+        "tools/verification/feature-004-trace.mts"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "tools/verification/feature-004-trace.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 71,
+      "exitCode": 0
+    },
+    {
+      "id": "evidence-aggregation",
+      "category": "evidence",
+      "args": [
+        "tools/verification/feature-004-evidence.mts",
+        "--collect"
+      ],
+      "timeoutMs": 180000,
+      "command": [
+        "node",
+        "tools/verification/feature-004-evidence.mts",
+        "--collect"
+      ],
+      "status": "PASS",
+      "durationMs": 264,
+      "exitCode": 0
+    }
+  ],
+  "categories": {
+    "prerequisites": "PASS",
+    "governance": "PASS",
+    "contract": "PASS",
+    "contract+integration+security": "PASS",
+    "contract+integration+security+e2e": "PASS",
+    "architecture+contract+integration+security+e2e": "PASS",
+    "integration": "PASS",
+    "process+e2e": "PASS",
+    "documentation+e2e": "PASS",
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "build": "PASS",
+    "nonprod": "PASS",
+    "trace": "PASS",
+    "evidence": "PASS"
+  },
+  "evidence": [
+    {
+      "name": "prerequisites.json",
+      "status": "PASS",
+      "sha256": "sha256:8758766d8a816d0664f6f238c66f70890591f62885df4ee1cfe2319e26b0f7ee"
+    },
+    {
+      "name": "setup-gate.json",
+      "status": "PASS",
+      "sha256": "sha256:9f28a75731d3ebbfea745985436afdec82e402dfe7bede1bd4f94041281171e2"
+    },
+    {
+      "name": "foundation.json",
+      "status": "PASS",
+      "sha256": "sha256:6516276aa5cde5037811c144b191d7712e46a8cd7ba80d748e894b04bb824712"
+    },
+    {
+      "name": "us1.json",
+      "status": "PASS",
+      "sha256": "sha256:9ed2287a83c07e6a8e2ffd279dfd4309814043691f9bdbffe8900d98a75f0908"
+    },
+    {
+      "name": "us2.json",
+      "status": "PASS",
+      "sha256": "sha256:dcfec546e79dc655d33bf50a352dd374e238850e01f8c9bde49da427df0cdc52"
+    },
+    {
+      "name": "us3.json",
+      "status": "PASS",
+      "sha256": "sha256:3e3329d35ac1d7d3f9c15c625dfac8b7ba20a0b964b40df274a8860d5a1961a4"
+    },
+    {
+      "name": "us4.json",
+      "status": "PASS",
+      "sha256": "sha256:c5a6c9fc8209c2a7e2efd1319fd70c92aa9a0b28b33ecd8eed90522d54691940"
+    },
+    {
+      "name": "migrations.json",
+      "status": "PASS",
+      "sha256": "sha256:34a8c42b9907b7ac15e6ed59d222fe1791883d76cbc95c3c705464ef47fd0565"
+    },
+    {
+      "name": "documented-scenarios.json",
+      "status": "PASS",
+      "sha256": "sha256:abf023f5f6bdf362085a9f287ae4c8df9c910271693b7c8313efe69fdab00df9"
+    },
+    {
+      "name": "smoke.json",
+      "status": "PASS",
+      "sha256": "sha256:2e344d4d9b8ac8b25fc5120ca8610450b5cc73160d1661a5efaad8deb2b2a8c2"
+    },
+    {
+      "name": "quickstart.json",
+      "status": "PASS",
+      "sha256": "sha256:8ddf33a2ffe252d272615e67f495acbc5a13066ca825862c28682ecff9c31b5e"
+    },
+    {
+      "name": "traceability.json",
+      "status": "PASS",
+      "sha256": "sha256:2779014a97394206025c47ec5c4ad335baeeca0cfd0fb3e83f0d3f4e3eda1ddd"
+    },
+    {
+      "name": "nonprod-metadata.json",
+      "status": "SKIPPED_GATED",
+      "sha256": "sha256:3b8bb26416e0241906a26d67ee0bd5326477e9a4d8b9be56641e31569a463986"
+    },
+    {
+      "name": "nonprod.json",
+      "status": "SKIPPED_GATED",
+      "sha256": "sha256:d24f06aa228532d4b37071e63e638b3bfd8c2e65dd568a89e3ba372d9b479041"
+    },
+    {
+      "name": "evidence.json",
+      "status": "PASS",
+      "sha256": "sha256:1bbf6156d7c59b940418b6065050241f4f9bda150c3b62af36520f269b27ddd5"
+    }
+  ],
+  "local": "PASS",
+  "liveMattermost": "SKIPPED_GATED",
+  "liveModel": "SKIPPED_GATED",
+  "optionalMetadata": "SKIPPED_GATED",
+  "production": "DENIED",
+  "productionWritesSupported": false,
+  "releaseReadiness": {
+    "path": "specs/004-mattermost-hermes-intake/release-readiness.md",
+    "status": "PASS"
+  },
+  "finishedAt": "2026-09-03T10:35:49.833Z",
+  "status": "PASS",
+  "handoff": {
+    "status": "BOUND",
+    "generatedAfterAllProcessGates": true,
+    "generatedAt": "2026-09-03T10:35:49.833Z",
+    "verificationCommand": "pnpm verify:004:evidence",
+    "toolchain": {
+      "node": "24.20.0",
+      "packageManager": "pnpm@11.21.0"
+    },
+    "taskSnapshot": {
+      "path": "specs/004-mattermost-hermes-intake/tasks.md",
+      "sha256": "sha256:898061c3ce6c367812c7b11520f6888d641012d3cd50f0d67357e8eb740040f8",
+      "taskCount": 215,
+      "completedTaskIds": [
+        "T001",
+        "T002",
+        "T003",
+        "T004",
+        "T005",
+        "T006",
+        "T007",
+        "T008",
+        "T009",
+        "T010",
+        "T011",
+        "T012",
+        "T013",
+        "T014",
+        "T015",
+        "T016",
+        "T017",
+        "T018",
+        "T019",
+        "T020",
+        "T021",
+        "T022",
+        "T023",
+        "T024",
+        "T025",
+        "T026",
+        "T027",
+        "T028",
+        "T029",
+        "T030",
+        "T031",
+        "T032",
+        "T033",
+        "T034",
+        "T035",
+        "T036",
+        "T037",
+        "T038",
+        "T039",
+        "T040",
+        "T041",
+        "T042",
+        "T043",
+        "T044",
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T049",
+        "T050",
+        "T051",
+        "T052",
+        "T053",
+        "T054",
+        "T055",
+        "T056",
+        "T057",
+        "T058",
+        "T059",
+        "T060",
+        "T061",
+        "T062",
+        "T063",
+        "T064",
+        "T065",
+        "T066",
+        "T067",
+        "T068",
+        "T069",
+        "T070",
+        "T071",
+        "T072",
+        "T073",
+        "T074",
+        "T075",
+        "T076",
+        "T077",
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T082",
+        "T083",
+        "T084",
+        "T085",
+        "T086",
+        "T087",
+        "T088",
+        "T089",
+        "T090",
+        "T091",
+        "T092",
+        "T093",
+        "T094",
+        "T095",
+        "T096",
+        "T097",
+        "T098",
+        "T099",
+        "T100",
+        "T101",
+        "T102",
+        "T103",
+        "T104",
+        "T105",
+        "T106",
+        "T107",
+        "T108",
+        "T109",
+        "T110",
+        "T111",
+        "T112",
+        "T113",
+        "T114",
+        "T115",
+        "T116",
+        "T117",
+        "T118",
+        "T119",
+        "T120",
+        "T121",
+        "T122",
+        "T123",
+        "T124",
+        "T125",
+        "T126",
+        "T127",
+        "T128",
+        "T129",
+        "T130",
+        "T131",
+        "T132",
+        "T133",
+        "T134",
+        "T135",
+        "T136",
+        "T137",
+        "T138",
+        "T139",
+        "T140",
+        "T141",
+        "T142",
+        "T143",
+        "T144",
+        "T145",
+        "T146",
+        "T147",
+        "T148",
+        "T149",
+        "T150",
+        "T151",
+        "T152",
+        "T153",
+        "T154",
+        "T155",
+        "T156",
+        "T157",
+        "T158",
+        "T159",
+        "T160",
+        "T161",
+        "T162",
+        "T163",
+        "T164",
+        "T165",
+        "T166",
+        "T167",
+        "T168",
+        "T169",
+        "T170",
+        "T171",
+        "T172",
+        "T173",
+        "T174",
+        "T175",
+        "T176",
+        "T177",
+        "T178",
+        "T179",
+        "T180",
+        "T181",
+        "T182",
+        "T183",
+        "T184",
+        "T185",
+        "T186",
+        "T187",
+        "T188",
+        "T189",
+        "T190",
+        "T191",
+        "T192",
+        "T193",
+        "T194",
+        "T195",
+        "T196",
+        "T197",
+        "T198",
+        "T199",
+        "T200",
+        "T201",
+        "T202",
+        "T203",
+        "T204",
+        "T205",
+        "T206",
+        "T207",
+        "T208",
+        "T209",
+        "T210",
+        "T211",
+        "T212",
+        "T213",
+        "T214",
+        "T215"
+      ],
+      "pendingTaskIds": []
+    },
+    "sourceSnapshot": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          "apps",
+          "packages",
+          "config",
+          "infra",
+          "docs",
+          "specs/004-mattermost-hermes-intake"
+        ],
+        "files": [],
+        "exclusions": [
+          "specs/004-mattermost-hermes-intake/tasks.md"
+        ]
+      },
+      "fileCount": 938,
+      "sha256": "sha256:5bf3ccce0d9a4ddd1540eeab426bcae189579893bf27f64c4f9bf9777762066b"
+    },
+    "contractSnapshot": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          "specs/004-mattermost-hermes-intake/contracts"
+        ],
+        "files": [
+          "packages/platform-contracts/src/generated/schema-documents.ts",
+          "apps/api/openapi.generated.json",
+          "apps/mock-hub/openapi.generated.json"
+        ],
+        "exclusions": []
+      },
+      "fileCount": 53,
+      "sha256": "sha256:7c80f1c80bba649e1a100ea9753d6344655f0cd3d8c157a052f2e8b6e179b255"
+    },
+    "runtimeSnapshot": {
+      "algorithm": "sha256(path\\0sha256(content)\\n)",
+      "scope": {
+        "directories": [
+          "tests/contract/004",
+          "tests/integration/004",
+          "tests/integration/security/004",
+          "tests/integration/migrations",
+          "tools"
+        ],
+        "files": [
+          "tests/architecture/004-mattermost-boundaries.spec.ts",
+          "tests/architecture/004-mattermost-runtime-wiring.spec.ts",
+          "playwright.config.ts",
+          "package.json",
+          "pnpm-lock.yaml",
+          "tsconfig.base.json"
+        ],
+        "exclusions": [
+          "tools/verification/feature-005-prerequisites.mts",
+          "tools/verification/feature-006-prerequisites.mts"
+        ]
+      },
+      "fileCount": 235,
+      "sha256": "sha256:229adeecff7bfa066c12ad971103b1d121741ee3af2f07fa43449286a990f871"
+    }
+  }
+}

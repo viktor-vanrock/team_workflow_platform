@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "stage": "C1",
+  "corporateReady": false,
+  "validInputIds": [
+    "IN-01",
+    "IN-02",
+    "IN-03",
+    "IN-04",
+    "IN-05",
+    "IN-06",
+    "IN-07",
+    "IN-08",
+    "IN-09",
+    "IN-10",
+    "IN-11",
+    "IN-12"
+  ],
+  "missingInputIds": [],
+  "reasonCodes": [],
+  "inputHash": "sha256:b8320fbacbe3133636e40aca1982ead790f8247a8a34d975088cf39b0258061f"
+}

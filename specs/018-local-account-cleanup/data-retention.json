@@ -1,0 +1,62 @@
+{
+  "before": {
+    "seed": 4,
+    "audit": {
+      "count": 70
+    },
+    "worker": {
+      "kind": "SERVICE",
+      "roles": 1,
+      "memberships": 1
+    },
+    "documents": {
+      "count": 4,
+      "digest": "f52123b315787c7e80ecccd78c37bef4"
+    },
+    "workItems": {
+      "count": 6,
+      "digest": "f36202402e36d7d161a4bef3edb3f32f"
+    },
+    "identities": 13,
+    "activeHumans": 11,
+    "retiredRoles": 2,
+    "documentHistory": {
+      "count": 15,
+      "digest": "0177442b144c08a64c24a59eaf19c6ef"
+    },
+    "retiredMemberships": 2,
+    "retainedEntitlements": "99b72075269432c700f988dbd691bea1",
+    "retiredActiveEntitlements": 4
+  },
+  "after": {
+    "seed": 5,
+    "audit": {
+      "count": 74
+    },
+    "worker": {
+      "kind": "SERVICE",
+      "roles": 1,
+      "memberships": 1
+    },
+    "documents": {
+      "count": 4,
+      "digest": "f52123b315787c7e80ecccd78c37bef4"
+    },
+    "workItems": {
+      "count": 6,
+      "digest": "f36202402e36d7d161a4bef3edb3f32f"
+    },
+    "identities": 13,
+    "activeHumans": 9,
+    "retiredRoles": 0,
+    "documentHistory": {
+      "count": 15,
+      "digest": "0177442b144c08a64c24a59eaf19c6ef"
+    },
+    "retiredMemberships": 0,
+    "retainedEntitlements": "99b72075269432c700f988dbd691bea1",
+    "retiredActiveEntitlements": 0
+  },
+  "existingDataAndHistoryUnchanged": true,
+  "repeatedSeedUnchanged": true
+}

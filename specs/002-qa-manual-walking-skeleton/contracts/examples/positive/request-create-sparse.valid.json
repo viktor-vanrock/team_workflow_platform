@@ -1,0 +1,9 @@
+{
+  "sourceDraftId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "workTypeKey": "qa.validation",
+  "workTypeVersion": "1.0.0",
+  "requestKind": "feature-validation",
+  "summary": "Validate checkout behavior",
+  "requestedNormalizedStatus": "NEW",
+  "dataClassificationKey": "INTERNAL"
+}

@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:dod-assessment:v1",
+  "title": "Append-only Definition of Done Assessment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "dodAssessmentId", "version", "workspaceId", "projectId", "workItemId", "state", "inputFingerprint", "ruleSetRef", "evidencePolicyRef", "riskReviewPolicyRef", "findingReviewRefs", "defectDraftRefs", "defectLinkIds", "checks", "blockers", "waiverRefs", "contentHash", "evaluatedBy", "evaluatedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "dodAssessmentId": { "type": "string", "format": "uuid" },
+    "version": { "const": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "state": { "type": "string", "enum": ["BLOCKED", "READY_TO_CLOSE", "SATISFIED"] },
+    "inputFingerprint": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "ruleSetRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "evidencePolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+    "riskReviewPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RiskReviewPolicyRef" },
+    "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+    "verdictRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "sessionReviewRefs": { "description": "Exact input inventory; may be absent or empty only while BLOCKED. READY_TO_CLOSE and SATISFIED require at least one reviewed Session.", "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "adjudicativeManifestRevisionRefs": { "description": "Exact input inventory; may be absent or empty only while BLOCKED. READY_TO_CLOSE and SATISFIED require adjudicative evidence.", "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "findingReviewRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "defectDraftRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" } },
+    "defectLinkIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "format": "uuid" } },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "status"],
+        "properties": {
+          "code": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" },
+          "status": { "type": "string", "enum": ["PASS", "FAIL", "WAIVED"] },
+          "subjectId": { "type": "string", "format": "uuid" }
+        }
+      }
+    },
+    "blockers": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" } },
+    "waiverRefs": { "description": "Exact immutable QaWaiver decision refs only. Semantic dereference accepts approved/unexpired SESSION, PLAN_ITEM or REQUIRED_SESSION kinds; the generic platform action remains reachable through each waiver and is not a substitute ref.", "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" } },
+    "completionCandidateHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "completionCandidateRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "commandRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" },
+    "operationalResultRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+    "finalCloseConfirmationRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+    "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "evaluatedBy": { "$ref": "../../../../001-extension-kernel-local-skeleton/contracts/schemas/common/actor-ref.v1.schema.json" },
+    "evaluatedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "EvaluationCommand": {
+      "description": "Server-derived DoD inventory trigger. DISCOVER_BLOCKERS permits evaluation when Verdict/plan/evidence are absent and forbids caller-authored closure hints. ASSERT_READY_TO_CLOSE pins exact plan/Verdict hints, but the server still derives and revalidates the complete same-scope inventory under aggregate CAS.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evaluationIntent", "expectedAggregateVersion", "expectedInputFingerprint"],
+      "properties": {
+        "evaluationIntent": { "type": "string", "enum": ["DISCOVER_BLOCKERS", "ASSERT_READY_TO_CLOSE"] },
+        "expectedAggregateVersion": { "type": "integer", "minimum": 1 },
+        "expectedInputFingerprint": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+        "verdictRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "evaluationIntent": { "const": "ASSERT_READY_TO_CLOSE" } }, "required": ["evaluationIntent"] },
+          "then": { "required": ["requiredSessionPlanRef", "verdictRef"] },
+          "else": { "not": { "anyOf": [{ "required": ["requiredSessionPlanRef"] }, { "required": ["verdictRef"] }] } }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "BLOCKED" } }, "required": ["state"] },
+      "then": { "properties": { "blockers": { "minItems": 1 } }, "not": { "anyOf": [{ "required": ["completionCandidateHash"] }, { "required": ["completionCandidateRef"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "READY_TO_CLOSE" } }, "required": ["state"] },
+      "then": {
+        "required": ["requiredSessionPlanRef", "verdictRef", "sessionReviewRefs", "adjudicativeManifestRevisionRefs"],
+        "properties": {
+          "blockers": { "maxItems": 0 },
+          "sessionReviewRefs": { "minItems": 1 },
+          "adjudicativeManifestRevisionRefs": { "minItems": 1 }
+        },
+        "not": { "anyOf": [{ "required": ["completionCandidateHash"] }, { "required": ["completionCandidateRef"] }] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "SATISFIED" } }, "required": ["state"] },
+      "then": {
+        "properties": {
+          "blockers": { "maxItems": 0 },
+          "sessionReviewRefs": { "minItems": 1 },
+          "adjudicativeManifestRevisionRefs": { "minItems": 1 }
+        },
+        "required": ["requiredSessionPlanRef", "verdictRef", "sessionReviewRefs", "adjudicativeManifestRevisionRefs", "completionCandidateHash", "completionCandidateRef", "commandRef", "operationalResultRef", "finalCloseConfirmationRef", "externalVersion"]
+      }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["BLOCKED", "READY_TO_CLOSE"] } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["completionCandidateHash"] }, { "required": ["completionCandidateRef"] },
+        { "required": ["commandRef"] }, { "required": ["operationalResultRef"] },
+        { "required": ["finalCloseConfirmationRef"] }, { "required": ["externalVersion"] }
+      ] } }
+    }
+  ]
+}

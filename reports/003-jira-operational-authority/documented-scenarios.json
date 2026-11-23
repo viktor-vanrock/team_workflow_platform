@@ -1,0 +1,567 @@
+{
+  "schemaVersion": 1,
+  "feature": "003-jira-operational-authority",
+  "gate": "documented-scenarios-process",
+  "composition": "qa-jira-local",
+  "startedAt": "2026-09-03T10:11:49.250Z",
+  "finishedAt": "2026-09-03T10:13:02.612Z",
+  "status": "PASS",
+  "durableInspection": "awp_mock.jira_mock_scenario",
+  "executedLifecycleCommands": [
+    "local:jira:down",
+    "local:jira:up",
+    "local:jira:migrate",
+    "local:jira:seed",
+    "local:jira:status",
+    "local:jira:down"
+  ],
+  "results": [
+    {
+      "name": "profile-lifecycle",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "profile-lifecycle"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "cloud-pagination",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "cloud-pagination"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "dc-pagination",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "dc-pagination"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "failures",
+      "expected": "SERVER_500",
+      "observed": "SERVER_500",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "failures"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "freshness",
+      "expected": "OUT_OF_ORDER_WEBHOOK",
+      "observed": "OUT_OF_ORDER_WEBHOOK",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "freshness"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "security-matrix",
+      "expected": "PERMISSION_403",
+      "observed": "PERMISSION_403",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "security-matrix"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us1-create",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us1-create"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us1-duplicate-submit",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us1-duplicate-submit"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us1-timeout-after-create",
+      "expected": "TIMEOUT_AFTER_EFFECT",
+      "observed": "TIMEOUT_AFTER_EFFECT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us1-timeout-after-create"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us1-timeout-after-source-link",
+      "expected": "TIMEOUT_AFTER_EFFECT",
+      "observed": "TIMEOUT_AFTER_EFFECT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us1-timeout-after-source-link"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us1-worker-restart",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us1-worker-restart"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us1-redis-loss",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us1-redis-loss"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us1-jira-unavailable",
+      "expected": "SERVER_500",
+      "observed": "SERVER_500",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us1-jira-unavailable"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us1-marker-search-ambiguous",
+      "expected": "EVENTUAL_SEARCH_ZERO",
+      "observed": "EVENTUAL_SEARCH_ZERO",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us1-marker-search-ambiguous"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us2-direct-import",
+      "expected": "VERIFIED_DIRECT_IMPORT",
+      "observed": "VERIFIED_DIRECT_IMPORT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us2-direct-import"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us2-out-of-scope-issue",
+      "expected": "OUT_OF_SCOPE_IMPORT",
+      "observed": "OUT_OF_SCOPE_IMPORT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us2-out-of-scope-issue"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us2-create-import-race",
+      "expected": "CREATE_IMPORT_RACE",
+      "observed": "CREATE_IMPORT_RACE",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us2-create-import-race"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us2-ambiguous-discriminator",
+      "expected": "OUT_OF_SCOPE_IMPORT",
+      "observed": "OUT_OF_SCOPE_IMPORT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us2-ambiguous-discriminator"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us2-cross-project-substitution",
+      "expected": "OUT_OF_SCOPE_IMPORT",
+      "observed": "OUT_OF_SCOPE_IMPORT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us2-cross-project-substitution"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us2-missing-discriminator",
+      "expected": "OUT_OF_SCOPE_IMPORT",
+      "observed": "OUT_OF_SCOPE_IMPORT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us2-missing-discriminator"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us2-unverified-creator",
+      "expected": "OUT_OF_SCOPE_IMPORT",
+      "observed": "OUT_OF_SCOPE_IMPORT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us2-unverified-creator"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-assignment",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-assignment"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-due-date",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-due-date"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-duplicate-webhook",
+      "expected": "DUPLICATE_WEBHOOK",
+      "observed": "DUPLICATE_WEBHOOK",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-duplicate-webhook"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-human-change",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-human-change"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-lost-webhook-reconciliation",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-lost-webhook-reconciliation"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-mapping-drift",
+      "expected": "SCHEMA_DRIFT",
+      "observed": "SCHEMA_DRIFT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-mapping-drift"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-out-of-order-webhook",
+      "expected": "OUT_OF_ORDER_WEBHOOK",
+      "observed": "OUT_OF_ORDER_WEBHOOK",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-out-of-order-webhook"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-permission-revoked",
+      "expected": "PERMISSION_403",
+      "observed": "PERMISSION_403",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-permission-revoked"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-post-read-mismatch",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-post-read-mismatch"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-priority",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-priority"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-profile-drift-before-effect",
+      "expected": "SCHEMA_DRIFT",
+      "observed": "SCHEMA_DRIFT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-profile-drift-before-effect"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-same-token-different-hash",
+      "expected": "OUT_OF_ORDER_WEBHOOK",
+      "observed": "OUT_OF_ORDER_WEBHOOK",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-same-token-different-hash"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-stale-command",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-stale-command"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us3-transition",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us3-transition"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us4-defect",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us4-defect"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us4-defect-replay",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us4-defect-replay"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us4-duplicate-candidates",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us4-duplicate-candidates"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us4-profile-drift",
+      "expected": "SCHEMA_DRIFT",
+      "observed": "SCHEMA_DRIFT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us4-profile-drift"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us4-timeout-after-defect",
+      "expected": "TIMEOUT_AFTER_EFFECT",
+      "observed": "TIMEOUT_AFTER_EFFECT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us4-timeout-after-defect"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us4-timeout-after-link",
+      "expected": "TIMEOUT_AFTER_EFFECT",
+      "observed": "TIMEOUT_AFTER_EFFECT",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us4-timeout-after-link"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "us4-wrong-project",
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "command": [
+        "node",
+        "/Users/alexandr/.nvm/versions/node/v24.20.0/lib/node_modules/corepack/dist/corepack.js",
+        "pnpm",
+        "jira:scenario",
+        "us4-wrong-project"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "unexecutedScenarios": []
+}

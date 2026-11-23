@@ -1,0 +1,7 @@
+# Research
+- Decision: отдельный stateless process. Rationale: имеющийся Hermes — библиотека внутри API/worker, готового внешнего adapter нет. Alternatives: пустой контейнер не обеспечит реальный flow; перенос DB authority усложнит grants и approvals.
+- Decision: reuse advanceProjectDialogue и PinnedNetworkTransport. Rationale: сохранение локального поведения и HTTPS/CIDR/response limits. Generic modelWithDeterministicFallback отклонён: нет hard deadline и наружу передаёт exception.message.
+- Decision: двухфазный API flow. Rationale: текущий command держит workspace advisory lock; ожидание модели снаружи предотвращает блокировку регистрации. После ожидания повторяются authority/version/idempotency checks.
+- Decision: отдельный внутренний HTTP клиент с фиксированным operator-configured origin, token, deadline, redirect:error, bounded body. HTTP разрешён только для hostname hermes и loopback; внешний адрес только HTTPS. Общая корпоративная policy не изменяется.
+- Decision: OpenAI-compatible POST chat completions, JSON object output; точная схема проверяется локально, state/reply рассчитываются локально. Только текущие draft/message; no tools/history/authority. Provider details: https://platform.openai.com/docs/api-reference/chat/create.
+- Plan research agent независимо подтвердил границы; исходники не менял. Все design unknowns разрешены. Провайдера, CIDR, CA и credentials задаёт оператор.

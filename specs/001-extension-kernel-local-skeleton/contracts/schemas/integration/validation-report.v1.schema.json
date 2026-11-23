@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:integration:validation-report:v1",
+  "title": "Configuration Validation Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reportId", "workspaceId", "requestedBy", "authorizationBasis", "authorizationBasisHash", "correlationId", "dataClassificationKey", "subject", "contentHash", "status", "checks", "capabilityAvailability", "validatedAt", "createdAt"],
+  "properties": {
+    "reportId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "requestedBy": { "$ref": "../common/actor-ref.v1.schema.json" },
+    "authorizationBasis": { "$ref": "../commands/external-command-envelope.v1.schema.json#/$defs/AuthorizationBasis" },
+    "authorizationBasisHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "dataClassificationKey": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,63}$" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id", "version"],
+      "properties": {
+        "type": { "type": "string", "enum": ["CONNECTION", "CONNECTOR_MAPPING", "CONNECTOR_PROFILE", "PROJECT_INTEGRATION_BINDING"] },
+        "id": { "type": "string", "format": "uuid" },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "contentHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+    "status": { "type": "string", "enum": ["VALID", "INVALID"] },
+    "checks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Check" }
+    },
+    "capabilityAvailability": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Availability" }
+    },
+    "validatedAt": { "type": "string", "format": "date-time" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "subject": {
+            "properties": { "type": { "const": "PROJECT_INTEGRATION_BINDING" } },
+            "required": ["type"]
+          }
+        },
+        "required": ["subject"]
+      },
+      "then": {
+        "required": ["projectId"],
+        "properties": {
+          "authorizationBasis": {
+            "$ref": "../commands/external-command-envelope.v1.schema.json#/$defs/ProjectAuthorizationBasis"
+          }
+        }
+      },
+      "else": {
+        "not": { "required": ["projectId"] },
+        "properties": {
+          "authorizationBasis": {
+            "$ref": "../commands/external-command-envelope.v1.schema.json#/$defs/WorkspaceAuthorizationBasis"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "Check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "status", "message"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$" },
+        "severity": { "type": "string", "enum": ["ERROR", "WARNING", "INFO"] },
+        "status": { "type": "string", "enum": ["PASSED", "FAILED", "SKIPPED"] },
+        "path": { "type": "string", "maxLength": 512 },
+        "message": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "Availability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirementKey", "featureKey", "status", "reasonCode"],
+      "properties": {
+        "requirementKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "featureKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "status": { "type": "string", "enum": ["AVAILABLE", "UNAVAILABLE", "INCOMPATIBLE", "DISABLED"] },
+        "reasonCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$" },
+        "bindingEntryIndex": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

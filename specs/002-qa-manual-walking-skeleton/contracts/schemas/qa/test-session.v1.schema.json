@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:test-session:v1",
+  "title": "Manual QA Test Session",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sessionId", "workspaceId", "projectId", "workItemId", "requiredSessionPlanRef", "requiredSessionRequirementRef", "ordinal", "mode", "purpose", "state", "owner", "requiredCapabilities", "structureRevision", "structureHash", "readyAgainstStructureHash", "resourceVersion", "createdBy", "createdAt", "updatedAt", "correlationId"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+    "requiredSessionRequirementRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionRequirementRef" },
+    "ordinal": { "type": "integer", "minimum": 1 },
+    "parentSessionId": { "type": "string", "format": "uuid" },
+    "mode": { "const": "MANUAL" },
+    "purpose": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "state": { "type": "string", "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED", "COMPLETED", "BLOCKED", "CANCELLED"] },
+    "sessionOutcome": { "type": "string", "enum": ["PASSED", "FAILED", "BLOCKED", "INCONCLUSIVE"] },
+    "targetSnapshotRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" },
+    "scopeSnapshotRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" },
+    "targetSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "scopeSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "owner": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "requiredCapabilities": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/StableKey" } },
+    "structureRevision": {
+      "description": "Monotonic revision of every pre-start structural input: target, scope, owner, required capabilities and ordered Plan Items.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "structureHash": {
+      "description": "Digest of the current structural revision. A structural edit advances both structureRevision and this hash.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "readyAgainstStructureHash": {
+      "description": "Null while PLANNED. READY and every later reached milestone pin the exact structureHash against which readiness was established; start requires byte equality with current structureHash.",
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+      ]
+    },
+    "latestStructureChange": { "$ref": "#/$defs/StructureChangeProvenance" },
+    "readyBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "readyAt": { "type": "string", "format": "date-time" },
+    "startedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "reviewRequiredAt": { "type": "string", "format": "date-time" },
+    "completedAt": { "type": "string", "format": "date-time" },
+    "blockedReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "blockedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "blockedAt": { "type": "string", "format": "date-time" },
+    "cancelledReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "cancelledBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "cancelledAt": { "type": "string", "format": "date-time" },
+    "interruptedFromState": {
+      "description": "Immediate predecessor for BLOCKED/CANCELLED. CANCELLED may follow BLOCKED; reachedMilestone separately preserves the furthest nonterminal execution stage.",
+      "type": "string",
+      "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED", "BLOCKED"]
+    },
+    "reachedMilestone": { "type": "string", "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED"] },
+    "reviewedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "latestSessionReviewRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "evidenceManifestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "correlationId": { "type": "string", "format": "uuid" }
+  },
+  "$defs": {
+    "StructureChangeProvenance": {
+      "description": "Server-produced provenance for the latest structural edit. If the prior state was READY, the same transaction returns the Session to PLANNED and clears readyAgainstStructureHash.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reasonCode", "previousStructureRevision", "previousStructureHash", "previousState", "changedBy", "changedAt"],
+      "properties": {
+        "reasonCode": { "const": "STRUCTURE_CHANGED" },
+        "previousStructureRevision": { "type": "integer", "minimum": 1 },
+        "previousStructureHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "previousState": { "type": "string", "enum": ["PLANNED", "READY"] },
+        "previousReadyAgainstStructureHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+        "changedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+        "changedAt": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "previousState": { "const": "READY" } }, "required": ["previousState"] },
+          "then": { "required": ["previousReadyAgainstStructureHash"] },
+          "else": { "not": { "required": ["previousReadyAgainstStructureHash"] } }
+        }
+      ]
+    },
+    "StructureMutationResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mutationResult", "session", "planItem"],
+      "properties": {
+        "mutationResult": { "const": "STRUCTURE_CHANGED" },
+        "session": { "$ref": "#" },
+        "planItem": { "$ref": "./plan-item.v1.schema.json" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "structureRevision": { "minimum": 2 } }, "required": ["structureRevision"] },
+      "then": { "required": ["latestStructureChange"] },
+      "else": { "not": { "required": ["latestStructureChange"] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "PLANNED" } }, "required": ["state"] },
+      "then": {
+        "properties": { "readyAgainstStructureHash": { "type": "null" } },
+        "not": { "anyOf": [
+          { "required": ["targetSnapshotRef"] }, { "required": ["scopeSnapshotRef"] },
+          { "required": ["targetSnapshotHash"] }, { "required": ["scopeSnapshotHash"] },
+          { "required": ["readyBy"] }, { "required": ["readyAt"] },
+          { "required": ["startedBy"] }, { "required": ["startedAt"] },
+          { "required": ["reviewRequiredAt"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "READY" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["startedBy"] }, { "required": ["startedAt"] }, { "required": ["reviewRequiredAt"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "RUNNING" } }, "required": ["state"] },
+      "then": { "not": { "required": ["reviewRequiredAt"] } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["READY", "RUNNING", "REVIEW_REQUIRED", "COMPLETED"] } }, "required": ["state"] },
+      "then": {
+        "required": ["readyBy", "readyAt"],
+        "properties": { "readyAgainstStructureHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" } }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["READY", "RUNNING", "REVIEW_REQUIRED", "COMPLETED"] } }, "required": ["state"] },
+      "then": { "required": ["targetSnapshotRef", "scopeSnapshotRef", "targetSnapshotHash", "scopeSnapshotHash"] }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["RUNNING", "REVIEW_REQUIRED", "COMPLETED"] } }, "required": ["state"] },
+      "then": { "required": ["startedBy", "startedAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["REVIEW_REQUIRED", "COMPLETED"] } }, "required": ["state"] },
+      "then": { "required": ["reviewRequiredAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "COMPLETED" } }, "required": ["state"] },
+      "then": { "required": ["sessionOutcome", "reviewedBy", "latestSessionReviewRef", "evidenceManifestRevisionRef", "completedAt"] },
+      "else": { "not": { "anyOf": [
+        { "required": ["sessionOutcome"] }, { "required": ["reviewedBy"] },
+        { "required": ["latestSessionReviewRef"] }, { "required": ["evidenceManifestRevisionRef"] },
+        { "required": ["completedAt"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "BLOCKED" } }, "required": ["state"] },
+      "then": {
+        "required": ["blockedReason", "blockedBy", "blockedAt", "interruptedFromState", "reachedMilestone"],
+        "properties": { "interruptedFromState": { "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED"] } },
+        "oneOf": [
+          { "properties": { "interruptedFromState": { "const": "PLANNED" }, "reachedMilestone": { "const": "PLANNED" } } },
+          { "properties": { "interruptedFromState": { "const": "READY" }, "reachedMilestone": { "const": "READY" } } },
+          { "properties": { "interruptedFromState": { "const": "RUNNING" }, "reachedMilestone": { "const": "RUNNING" } } },
+          { "properties": { "interruptedFromState": { "const": "REVIEW_REQUIRED" }, "reachedMilestone": { "const": "REVIEW_REQUIRED" } } }
+        ]
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "CANCELLED" } }, "required": ["state"] },
+      "then": {
+        "required": ["cancelledReason", "cancelledBy", "cancelledAt", "interruptedFromState", "reachedMilestone"],
+        "oneOf": [
+          { "properties": { "interruptedFromState": { "const": "PLANNED" }, "reachedMilestone": { "const": "PLANNED" } } },
+          { "properties": { "interruptedFromState": { "const": "READY" }, "reachedMilestone": { "const": "READY" } } },
+          { "properties": { "interruptedFromState": { "const": "RUNNING" }, "reachedMilestone": { "const": "RUNNING" } } },
+          { "properties": { "interruptedFromState": { "const": "REVIEW_REQUIRED" }, "reachedMilestone": { "const": "REVIEW_REQUIRED" } } },
+          { "properties": { "interruptedFromState": { "const": "BLOCKED" } } }
+        ]
+      },
+      "else": { "not": { "anyOf": [
+        { "required": ["cancelledReason"] }, { "required": ["cancelledBy"] },
+        { "required": ["cancelledAt"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["BLOCKED", "CANCELLED"] } }, "required": ["state"] },
+      "then": true,
+      "else": { "not": { "anyOf": [{ "required": ["interruptedFromState"] }, { "required": ["reachedMilestone"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "CANCELLED" }, "interruptedFromState": { "const": "BLOCKED" } }, "required": ["state", "interruptedFromState"] },
+      "then": { "required": ["blockedReason", "blockedBy", "blockedAt"] }
+    },
+    {
+      "if": {
+        "properties": { "state": { "const": "CANCELLED" }, "interruptedFromState": { "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED"] } },
+        "required": ["state", "interruptedFromState"]
+      },
+      "then": { "not": { "anyOf": [{ "required": ["blockedReason"] }, { "required": ["blockedBy"] }, { "required": ["blockedAt"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED", "COMPLETED"] } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["blockedReason"] }, { "required": ["blockedBy"] }, { "required": ["blockedAt"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["BLOCKED", "CANCELLED"] }, "reachedMilestone": { "const": "PLANNED" } }, "required": ["state", "reachedMilestone"] },
+      "then": {
+        "properties": { "readyAgainstStructureHash": { "type": "null" } },
+        "not": { "anyOf": [
+          { "required": ["targetSnapshotRef"] }, { "required": ["scopeSnapshotRef"] },
+          { "required": ["targetSnapshotHash"] }, { "required": ["scopeSnapshotHash"] },
+          { "required": ["readyBy"] }, { "required": ["readyAt"] },
+          { "required": ["startedBy"] }, { "required": ["startedAt"] },
+          { "required": ["reviewRequiredAt"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["BLOCKED", "CANCELLED"] }, "reachedMilestone": { "const": "READY" } }, "required": ["state", "reachedMilestone"] },
+      "then": {
+        "required": ["targetSnapshotRef", "scopeSnapshotRef", "targetSnapshotHash", "scopeSnapshotHash", "readyBy", "readyAt"],
+        "properties": { "readyAgainstStructureHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" } },
+        "not": { "anyOf": [{ "required": ["startedBy"] }, { "required": ["startedAt"] }, { "required": ["reviewRequiredAt"] }] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["BLOCKED", "CANCELLED"] }, "reachedMilestone": { "const": "RUNNING" } }, "required": ["state", "reachedMilestone"] },
+      "then": {
+        "required": ["targetSnapshotRef", "scopeSnapshotRef", "targetSnapshotHash", "scopeSnapshotHash", "readyBy", "readyAt", "startedBy", "startedAt"],
+        "properties": { "readyAgainstStructureHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" } },
+        "not": { "required": ["reviewRequiredAt"] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["BLOCKED", "CANCELLED"] }, "reachedMilestone": { "const": "REVIEW_REQUIRED" } }, "required": ["state", "reachedMilestone"] },
+      "then": {
+        "required": ["targetSnapshotRef", "scopeSnapshotRef", "targetSnapshotHash", "scopeSnapshotHash", "readyBy", "readyAt", "startedBy", "startedAt", "reviewRequiredAt"],
+        "properties": { "readyAgainstStructureHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" } }
+      }
+    }
+  ]
+}

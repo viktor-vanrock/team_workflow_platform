@@ -1,0 +1,1 @@
+export const QUEUE_HTTP_AUTHORITY = Symbol("QUEUE_HTTP_AUTHORITY");

@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "feature": "001-extension-kernel-local-skeleton",
+  "gate": "provider-neutral-ci",
+  "provider": "neutral",
+  "runtime": {
+    "node": "v24.20.0",
+    "platform": "darwin",
+    "architecture": "arm64"
+  },
+  "startedAt": "2026-08-29T23:30:57.528Z",
+  "finishedAt": "2026-08-29T23:36:14.303Z",
+  "status": "PASS",
+  "stages": [
+    {
+      "id": "toolchain-node-24",
+      "description": "Exact Node/pnpm/Docker prerequisites",
+      "executable": "node",
+      "args": [
+        "tools/local/check-prerequisites.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 612,
+      "exitCode": 0
+    },
+    {
+      "id": "lint",
+      "description": "Repository lint gate",
+      "executable": "pnpm",
+      "args": [
+        "lint"
+      ],
+      "status": "PASS",
+      "durationMs": 20468,
+      "exitCode": 0
+    },
+    {
+      "id": "typecheck",
+      "description": "Nx workspace typecheck",
+      "executable": "pnpm",
+      "args": [
+        "typecheck"
+      ],
+      "status": "PASS",
+      "durationMs": 795,
+      "exitCode": 0
+    },
+    {
+      "id": "build",
+      "description": "Nx workspace build",
+      "executable": "pnpm",
+      "args": [
+        "build"
+      ],
+      "status": "PASS",
+      "durationMs": 604,
+      "exitCode": 0
+    },
+    {
+      "id": "unit",
+      "description": "Provider-neutral in-memory unit gate",
+      "executable": "pnpm",
+      "args": [
+        "test:unit"
+      ],
+      "status": "PASS",
+      "durationMs": 1762,
+      "exitCode": 0
+    },
+    {
+      "id": "architecture",
+      "description": "Import graph and hard-boundary gate",
+      "executable": "pnpm",
+      "args": [
+        "test:architecture"
+      ],
+      "status": "PASS",
+      "durationMs": 2147,
+      "exitCode": 0
+    },
+    {
+      "id": "contracts",
+      "description": "31 schemas, OpenAPI 48 operations, AsyncAPI and typed writes",
+      "executable": "pnpm",
+      "args": [
+        "test:contract"
+      ],
+      "status": "PASS",
+      "durationMs": 2381,
+      "exitCode": 0
+    },
+    {
+      "id": "security",
+      "description": "Authorization, redaction, append-only audit and tamper tests",
+      "executable": "node",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/security"
+      ],
+      "status": "PASS",
+      "durationMs": 6742,
+      "exitCode": 0
+    },
+    {
+      "id": "integration-postgres-matrix",
+      "description": "Full integration suite including migration recovery",
+      "executable": "pnpm",
+      "args": [
+        "test:integration"
+      ],
+      "matrix": {
+        "node": [
+          "24.20.0"
+        ],
+        "postgres": [
+          "17",
+          "18"
+        ]
+      },
+      "status": "PASS",
+      "durationMs": 49936,
+      "exitCode": 0
+    },
+    {
+      "id": "local-bootstrap",
+      "description": "Local provider-neutral Compose runtime",
+      "executable": "pnpm",
+      "args": [
+        "local:up"
+      ],
+      "status": "PASS",
+      "durationMs": 88152,
+      "exitCode": 0
+    },
+    {
+      "id": "playwright",
+      "description": "Chromium acceptance for all nine personas",
+      "executable": "pnpm",
+      "args": [
+        "test:e2e:001"
+      ],
+      "status": "PASS",
+      "durationMs": 15199,
+      "exitCode": 0
+    },
+    {
+      "id": "smoke",
+      "description": "Repeat/restart/Redis-loss/artifact gate",
+      "executable": "node",
+      "args": [
+        "tools/verification/smoke-001-gate.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 127971,
+      "exitCode": 0
+    }
+  ]
+}

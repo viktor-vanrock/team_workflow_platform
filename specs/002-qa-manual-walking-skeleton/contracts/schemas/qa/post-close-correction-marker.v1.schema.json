@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:post-close-correction-marker:v1",
+  "title": "Append-only Post-close Correction Marker",
+  "description": "Marks a clerical correction after confirmed DONE. It never supersedes or retroactively changes the signed Verdict or DoD assessment.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "markerId", "workspaceId", "projectId", "closedWorkItemId", "finalCloseConfirmationRef", "manifestRevisionRef", "adjudicativeManifestRevisionRef", "adjudicativePointerChanged", "marker", "reason", "requestedBy", "permissionKey", "authorizationBasisHash", "recordedAt", "resolution"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "markerId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "closedWorkItemId": { "type": "string", "format": "uuid" },
+    "finalCloseConfirmationRef": {
+      "description": "Exact append-only confirmation ID proving that this Work Item was externally observed as DONE before the clerical correction was accepted.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef"
+    },
+    "manifestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "adjudicativeManifestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "adjudicativePointerChanged": { "const": false },
+    "marker": { "const": "POST_CLOSE_NOT_EVALUATED" },
+    "reason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "requestedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "permissionKey": { "const": "qa.evidence.post-close-correction.record" },
+    "authorizationBasisHash": {
+      "description": "Server-derived live HUMAN authorization snapshot. It is never accepted from the mutation body.",
+      "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest"
+    },
+    "recordedAt": { "type": "string", "format": "date-time" },
+    "resolution": { "const": "NEW_LINKED_QA_REQUEST_REQUIRED" },
+    "linkedIntakeDraftId": { "type": "string", "format": "uuid" },
+    "newWorkItemId": { "type": "string", "format": "uuid" }
+  }
+}

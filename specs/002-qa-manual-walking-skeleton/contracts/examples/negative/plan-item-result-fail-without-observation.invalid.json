@@ -1,0 +1,12 @@
+{
+  "expectedPreviousResultRevisionRef": null,
+  "expectedAttemptSetHash": "sha256:4747474747474747474747474747474747474747474747474747474747474747",
+  "expectedMaximumAttemptNo": 1,
+  "expectedObservationSetHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "expectedObservationCount": 0,
+  "reviewFlags": [],
+  "result": "FAIL",
+  "actualOutcome": "The assertion failed.",
+  "decisionReason": "A human negative result cannot be recorded without an exact negative Observation.",
+  "artifactIds": ["99999999-9999-4999-8999-999999999999"]
+}

@@ -1,0 +1,23 @@
+{
+  "before": {
+    "documents": 4,
+    "workItems": 6,
+    "identities": 13,
+    "seedVersion": 3
+  },
+  "after": {
+    "documents": 4,
+    "workItems": 6,
+    "identities": 13,
+    "seedVersion": 4,
+    "legacyRoleAssignments": 0,
+    "auditorMemberships": 0,
+    "auditorActiveEntitlements": 0
+  },
+  "liveQueue": {
+    "persona": "executor.qa2",
+    "visibleQaTasks": 2,
+    "priority": "NOT_CALCULATED",
+    "globalProjectSelector": false
+  }
+}

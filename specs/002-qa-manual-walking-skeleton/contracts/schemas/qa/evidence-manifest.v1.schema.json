@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:evidence-manifest:v1",
+  "title": "Canonical QA Evidence Manifest Content",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "manifestId", "workspaceId", "projectId", "workItemId", "sessionId", "requiredSessionPlanRef", "planItemIds", "attemptIds", "planItemExecutions", "targetSnapshotRef", "targetSnapshotHash", "scopeSnapshotRef", "scopeSnapshotHash", "expectedOutcomeSummary", "actualOutcomeSummary", "sessionOutcome", "sessionReviewId", "sessionReviewActor", "sessionReviewAuthorizationBasisHash", "sessionReviewedAt", "artifactMembers", "frozenFindingReviews", "packRef", "workTypeDefinitionRef", "ruleRefs", "bindingRef", "profileRefs", "correlationId", "provenance", "createdBy", "createdAt", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "manifestId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+    "planItemIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "format": "uuid" } },
+    "attemptIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "format": "uuid" } },
+    "planItemExecutions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["planItemId", "definition", "expectedOutcome", "resultRevisionRef", "attemptMembershipMode", "consideredAttemptSetHash", "maximumAttemptNo", "observationMembershipMode", "result", "actualOutcome", "reviewFlags", "resultEvidenceLinkRefs", "consideredObservationRefs", "consideredObservationSetHash", "decisionActor", "decidedAt", "attempts", "observations"],
+        "properties": {
+          "planItemId": { "type": "string", "format": "uuid" },
+          "definition": {
+            "oneOf": [
+              { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["kind", "snapshotHash"],
+                "properties": {
+                  "kind": { "const": "session-plan-item-snapshot" },
+                  "snapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+                }
+              }
+            ]
+          },
+          "expectedOutcome": { "type": "string", "minLength": 1, "maxLength": 4000 },
+          "resultRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+          "attemptMembershipMode": { "const": "ALL_FINALIZED_CONTIGUOUS" },
+          "consideredAttemptSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+          "maximumAttemptNo": { "type": "integer", "minimum": 0 },
+          "observationMembershipMode": { "const": "ALL_CURRENT_LEAVES" },
+          "result": { "type": "string", "enum": ["PASS", "FAIL", "BLOCKED", "NOT_RUN", "INCONCLUSIVE"] },
+          "actualOutcome": { "type": "string", "minLength": 1, "maxLength": 10000 },
+          "reviewFlags": { "type": "array", "uniqueItems": true, "items": { "type": "string", "enum": ["FLAKY_SUSPECTED"] } },
+          "resultEvidenceLinkRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" } },
+          "consideredObservationRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" } },
+          "consideredObservationSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+          "waiverRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" },
+          "flakyDispositionBasis": { "$ref": "./plan-item-result-revision.v1.schema.json#/$defs/FlakyDispositionBasis" },
+          "decisionActor": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+          "decidedAt": { "type": "string", "format": "date-time" },
+          "attempts": { "$ref": "#/$defs/AttemptLineageSet" },
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["observationRef", "attemptRef", "kind", "expectedOutcome", "actualOutcome", "actor", "observedAt", "artifactRefs"],
+              "properties": {
+                "observationRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" },
+                "attemptRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" },
+                "kind": { "type": "string", "enum": ["POSITIVE", "NEGATIVE", "AMBIGUOUS", "INFORMATIONAL"] },
+                "expectedOutcome": { "type": "string", "minLength": 1, "maxLength": 4000 },
+                "actualOutcome": { "type": "string", "minLength": 1, "maxLength": 10000 },
+                "actor": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+                "observedAt": { "type": "string", "format": "date-time" },
+                "artifactRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ArtifactRef" } }
+              }
+            }
+          }
+        },
+        "allOf": [
+          { "$ref": "./plan-item-result-revision.v1.schema.json#/$defs/FlakyDispositionDecision" },
+          { "$ref": "./plan-item-result-revision.v1.schema.json#/$defs/NegativeObservationDecision" },
+          {
+            "if": { "properties": { "result": { "enum": ["FAIL", "BLOCKED", "INCONCLUSIVE"] } }, "required": ["result"] },
+            "then": { "properties": { "resultEvidenceLinkRefs": { "minItems": 1 } } }
+          },
+          {
+            "if": { "properties": { "result": { "const": "NOT_RUN" } }, "required": ["result"] },
+            "then": {
+              "properties": {
+                "attempts": { "maxItems": 0 },
+                "observations": { "maxItems": 0 },
+                "consideredObservationRefs": { "maxItems": 0 },
+                "maximumAttemptNo": { "const": 0 },
+                "resultEvidenceLinkRefs": { "maxItems": 0 }
+              },
+              "required": ["waiverRef"]
+            },
+            "else": {
+              "properties": { "attempts": { "minItems": 1 }, "maximumAttemptNo": { "minimum": 1 } },
+              "not": { "required": ["waiverRef"] }
+            }
+          }
+        ]
+      }
+    },
+    "targetSnapshotRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" },
+    "targetSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "scopeSnapshotRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" },
+    "scopeSnapshotHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "expectedOutcomeSummary": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "actualOutcomeSummary": { "type": "string", "minLength": 1, "maxLength": 20000 },
+    "sessionOutcome": { "type": "string", "enum": ["PASSED", "FAILED", "BLOCKED", "INCONCLUSIVE"] },
+    "sessionReviewId": { "type": "string", "format": "uuid" },
+    "sessionReviewActor": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "sessionReviewAuthorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "sessionReviewedAt": { "type": "string", "format": "date-time" },
+    "artifactMembers": { "type": "array", "uniqueItems": true, "items": { "$ref": "./evidence-manifest-member.v1.schema.json" } },
+    "frozenFindingReviews": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["findingId", "findingReviewRevisionRef", "membershipSetHash", "observationMembershipIds", "classification", "dispositionDecision", "dispositionReason", "classificationActor", "classificationAt", "dispositionActor", "dispositionAt", "affectedTargetHash", "evidenceRefHash", "policyRef"],
+        "properties": {
+          "findingId": { "type": "string", "format": "uuid" },
+          "findingReviewRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+          "membershipSetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+          "observationMembershipIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "format": "uuid" } },
+          "classification": { "type": "string", "enum": ["PRODUCT", "INFRA", "INCONCLUSIVE", "DUPLICATE", "ACCEPTED_RISK"] },
+          "dispositionDecision": { "type": "string", "enum": ["CREATE_DEFECT", "DUPLICATE", "NOT_A_BUG", "ACCEPTED_RISK", "DEFERRED", "WAIVED"] },
+          "dispositionReason": { "description": "Exact human disposition reason from the frozen Finding review; for DUPLICATE this and duplicateDefectRef are an inseparable normalized pair.", "type": "string", "minLength": 1, "maxLength": 2000 },
+          "classificationActor": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+          "classificationAt": { "type": "string", "format": "date-time" },
+          "dispositionActor": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+          "dispositionAt": { "type": "string", "format": "date-time" },
+          "affectedTargetHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+          "evidenceRefHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+          "policyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+          "duplicateDefectRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+          "acceptedRiskActionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericPlatformActionRef" },
+          "waiverActionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericPlatformActionRef" }
+        },
+        "allOf": [
+          { "if": { "properties": { "classification": { "const": "PRODUCT" } }, "required": ["classification"] }, "then": { "properties": { "dispositionDecision": { "enum": ["CREATE_DEFECT", "DEFERRED", "WAIVED"] } } } },
+          { "if": { "properties": { "classification": { "const": "INFRA" } }, "required": ["classification"] }, "then": { "properties": { "dispositionDecision": { "enum": ["NOT_A_BUG", "DEFERRED", "WAIVED"] } } } },
+          { "if": { "properties": { "classification": { "const": "INCONCLUSIVE" } }, "required": ["classification"] }, "then": { "properties": { "dispositionDecision": { "enum": ["DEFERRED", "WAIVED"] } } } },
+          { "if": { "properties": { "classification": { "const": "DUPLICATE" } }, "required": ["classification"] }, "then": { "properties": { "dispositionDecision": { "const": "DUPLICATE" } } } },
+          { "if": { "properties": { "dispositionDecision": { "const": "DUPLICATE" } }, "required": ["dispositionDecision"] }, "then": { "required": ["duplicateDefectRef", "dispositionReason"] }, "else": { "not": { "required": ["duplicateDefectRef"] } } },
+          {
+            "if": { "properties": { "classification": { "const": "ACCEPTED_RISK" } }, "required": ["classification"] },
+            "then": { "properties": { "dispositionDecision": { "const": "ACCEPTED_RISK" } }, "required": ["acceptedRiskActionRef"] },
+            "else": { "not": { "required": ["acceptedRiskActionRef"] } }
+          },
+          {
+            "if": { "properties": { "dispositionDecision": { "const": "WAIVED" } }, "required": ["dispositionDecision"] },
+            "then": { "required": ["waiverActionRef"] },
+            "else": { "not": { "required": ["waiverActionRef"] } }
+          }
+        ]
+      }
+    },
+    "packRef": {
+      "allOf": [
+        { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+        { "type": "object", "properties": { "key": { "const": "competency-qa" } } }
+      ]
+    },
+    "workTypeDefinitionRef": {
+      "allOf": [
+        { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+        { "type": "object", "properties": { "key": { "const": "qa.validation" } } }
+      ]
+    },
+    "ruleRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" } },
+    "bindingRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/BindingRef" },
+    "profileRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ProfileRef" } },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "causationId": { "type": "string", "format": "uuid" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["executionMode", "source"],
+      "properties": {
+        "executionMode": { "const": "MANUAL" },
+        "source": { "const": "QA_EXECUTOR_REVIEW" }
+      }
+    },
+    "clericalAnnotations": {
+      "description": "Ordered non-adjudicative post-close annotations. The enclosing revision permits this field only for CLERICAL_CORRECTION; these bytes are included in manifest contentHash and signature.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/ClericalAnnotation" }
+    },
+    "createdBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" }
+  },
+  "$defs": {
+    "ClericalAnnotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordinal", "kind", "text"],
+      "properties": {
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "kind": { "type": "string", "enum": ["CORRECTION_NOTE", "ARTIFACT_DISPLAY_LABEL"] },
+        "artifactId": { "type": "string", "format": "uuid" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "ARTIFACT_DISPLAY_LABEL" } }, "required": ["kind"] },
+          "then": { "required": ["artifactId"] },
+          "else": { "not": { "required": ["artifactId"] } }
+        }
+      ]
+    },
+    "AttemptLineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attemptRef", "attemptNo", "technicalResult", "actor", "startedAt", "endedAt", "observationRefs", "evidenceLinkRefs"],
+      "properties": {
+        "attemptRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" },
+        "attemptNo": { "type": "integer", "minimum": 1 },
+        "technicalResult": { "type": "string", "enum": ["PASS", "ASSERTION_FAILED", "INFRA_FAILED", "TIMEOUT", "CANCELLED", "INCOMPLETE"] },
+        "cancellationReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "actor": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "endedAt": { "type": "string", "format": "date-time" },
+        "observationRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableContentRef" } },
+        "evidenceLinkRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "technicalResult": { "const": "CANCELLED" } }, "required": ["technicalResult"] },
+          "then": { "required": ["cancellationReason"] },
+          "else": { "not": { "required": ["cancellationReason"] } }
+        },
+        {
+          "if": { "properties": { "technicalResult": { "enum": ["ASSERTION_FAILED", "INFRA_FAILED", "TIMEOUT", "INCOMPLETE"] } }, "required": ["technicalResult"] },
+          "then": { "properties": { "evidenceLinkRefs": { "minItems": 1 }, "observationRefs": { "minItems": 1 } } }
+        }
+      ]
+    },
+    "AttemptLineageSet": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/AttemptLineage" }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "sessionOutcome": { "enum": ["FAILED", "BLOCKED", "INCONCLUSIVE"] } }, "required": ["sessionOutcome"] },
+      "then": { "properties": { "artifactMembers": { "minItems": 1 } } }
+    },
+    {
+      "if": { "properties": { "attemptIds": { "maxItems": 0 } }, "required": ["attemptIds"] },
+      "then": { "properties": { "planItemExecutions": { "items": { "properties": { "result": { "const": "NOT_RUN" } } } } } }
+    }
+  ]
+}

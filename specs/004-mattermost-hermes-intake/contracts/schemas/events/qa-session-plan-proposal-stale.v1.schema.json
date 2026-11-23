@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:qa-session-plan-proposal-stale:v1",
+  "title": "QA Session Plan Proposal Stale Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "inputFingerprint",
+    "staleReasonCode",
+    "staleAt",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "const": "STALE"
+    },
+    "inputFingerprint": {
+      "$ref": "#/$defs/digest"
+    },
+    "staleReasonCode": {
+      "enum": [
+        "WORK_ITEM_CHANGED",
+        "FACT_CHANGED",
+        "POLICY_CHANGED",
+        "EXPIRED"
+      ]
+    },
+    "staleAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

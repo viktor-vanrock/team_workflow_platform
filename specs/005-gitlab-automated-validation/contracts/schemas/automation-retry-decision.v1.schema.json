@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automation-retry-decision:v1",
+  "title": "AutomationRetryDecision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "retryDecisionId",
+    "workspaceId",
+    "projectId",
+    "automationAttemptId",
+    "automationAttemptResultId",
+    "decision",
+    "policyRef",
+    "policyHash",
+    "automaticRetryBudget",
+    "reasonCode",
+    "authorizationRecheckHash",
+    "decidedByKind",
+    "decidedById",
+    "decidedAt",
+    "correlationId",
+    "causationId",
+    "contentHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automation-retry-decision@1.0.0" },
+    "retryDecisionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "automationAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "automationAttemptResultId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "decision": { "enum": ["NOT_APPLICABLE", "DENIED", "SCHEDULED"] },
+    "policyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "policyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "automaticRetryBudget": { "const": 1 },
+    "infrastructureCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "reasonCode": {
+      "enum": [
+        "OUTCOME_INELIGIBLE",
+        "INFRA_CODE_MISSING",
+        "INFRA_CODE_NOT_ALLOWLISTED",
+        "RETRY_BUDGET_EXHAUSTED",
+        "AUTHORIZATION_DENIED",
+        "QUARANTINE_ACTIVE",
+        "POLICY_DENIED",
+        "CONFIGURATION_PIN_CHANGED",
+        "TARGET_CHANGED",
+        "SCHEDULED_ALLOWLISTED_INFRA"
+      ]
+    },
+    "automaticRetryOrdinal": { "const": 1 },
+    "successorAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "successorLaunchRequestId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "authorizationRecheckHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "decidedByKind": { "const": "SERVICE" },
+    "decidedById": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "decidedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "correlationId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "causationId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "contentHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "decision": { "const": "SCHEDULED" } },
+        "required": ["decision"]
+      },
+      "then": {
+        "required": [
+          "infrastructureCode",
+          "automaticRetryOrdinal",
+          "successorAttemptId",
+          "successorLaunchRequestId"
+        ],
+        "properties": {
+          "reasonCode": { "const": "SCHEDULED_ALLOWLISTED_INFRA" },
+          "infrastructureCode": {},
+          "automaticRetryOrdinal": {},
+          "successorAttemptId": {},
+          "successorLaunchRequestId": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "decision": { "const": "NOT_APPLICABLE" } },
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "reasonCode": {
+            "enum": [
+              "OUTCOME_INELIGIBLE",
+              "INFRA_CODE_MISSING",
+              "INFRA_CODE_NOT_ALLOWLISTED",
+              "RETRY_BUDGET_EXHAUSTED"
+            ]
+          },
+          "automaticRetryOrdinal": false,
+          "successorAttemptId": false,
+          "successorLaunchRequestId": false
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "decision": { "const": "DENIED" } },
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "reasonCode": {
+            "enum": [
+              "AUTHORIZATION_DENIED",
+              "QUARANTINE_ACTIVE",
+              "POLICY_DENIED",
+              "CONFIGURATION_PIN_CHANGED",
+              "TARGET_CHANGED"
+            ]
+          },
+          "automaticRetryOrdinal": false,
+          "successorAttemptId": false,
+          "successorLaunchRequestId": false
+        }
+      }
+    }
+  ]
+}

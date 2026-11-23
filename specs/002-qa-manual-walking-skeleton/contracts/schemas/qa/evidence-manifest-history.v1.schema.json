@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:evidence-manifest-history:v1",
+  "title": "Scoped Evidence Manifest Revision History Projection",
+  "description": "Read-only projection exposing latest and adjudicative pointers separately, plus append-only post-close marker rows that explain non-adjudicative clerical revisions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "workspaceId", "projectId", "workItemId", "sessionId", "manifestId", "resourceVersion", "latestRevisionRef", "latestAdjudicativeRevisionRef", "revisions", "postCloseCorrectionMarkers"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "manifestId": { "type": "string", "format": "uuid" },
+    "resourceVersion": { "description": "Stable manifest-header CAS owner. If-Match on post-close correction compares this value; Session ETags are not used.", "type": "integer", "minimum": 1 },
+    "latestRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "latestAdjudicativeRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "revisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "./evidence-manifest-revision.v1.schema.json" }
+    },
+    "postCloseCorrectionMarkers": {
+      "type": "array",
+      "items": { "$ref": "./post-close-correction-marker.v1.schema.json" }
+    }
+  }
+}

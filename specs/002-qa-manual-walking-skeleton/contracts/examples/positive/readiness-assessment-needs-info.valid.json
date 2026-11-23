@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "assessmentId": "40404040-4040-4040-8040-404040404044",
+  "version": 1,
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "extensionId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+  "qaRequestExtensionVersion": 4,
+  "state": "NEEDS_INFO",
+  "inputFingerprint": "sha256:4141414141414141414141414141414141414141414141414141414141414141",
+  "inputs": {
+    "requestExtensionSnapshotRef": {
+      "extensionId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "resourceVersion": 4,
+      "contentHash": "sha256:6767676767676767676767676767676767676767676767676767676767676767"
+    },
+    "requestInputRevisionRef": {
+      "id": "35353535-3535-4535-8535-353535353536",
+      "version": 1,
+      "contentHash": "sha256:3535353535353535353535353535353535353535353535353535353535353536"
+    },
+    "projectContextRef": {
+      "id": "13131313-1313-4313-8313-131313131313",
+      "version": 2,
+      "contentHash": "sha256:1313131313131313131313131313131313131313131313131313131313131313"
+    },
+    "acceptedRequest": {
+      "state": "CONFIRMED",
+      "commandRef": { "commandId": "40404040-4040-4040-8040-404040404042" },
+      "confirmationReceiptRef": { "id": "45454545-4545-4545-8545-454545454547" },
+      "operationalResultRef": { "id": "46464646-4646-4646-8646-464646464647" },
+      "externalEntityId": "mock-request-42",
+      "externalVersion": "1",
+      "rawExternalState": "BACKLOG",
+      "normalizedStatus": "NEW",
+      "confirmationContentHash": "sha256:4747474747474747474747474747474747474747474747474747474747474747",
+      "confirmedAt": "2026-08-27T12:00:10Z"
+    },
+    "projectRegistry": {
+      "projectRef": {
+        "id": "48484848-4848-4848-8848-484848484848",
+        "version": 7,
+        "contentHash": "sha256:4848484848484848484848484848484848484848484848484848484848484848"
+      },
+      "lifecycleState": "ACTIVE",
+      "verificationState": "NEEDS_REVIEW",
+      "verificationRef": {
+        "id": "49494949-4949-4949-8949-494949494949",
+        "version": 3,
+        "contentHash": "sha256:4949494949494949494949494949494949494949494949494949494949494949"
+      }
+    },
+    "requesterEntitlement": { "state": "MISSING" },
+    "responseChannel": {
+      "state": "UNCONFIRMED",
+      "requesterPrincipal": {
+        "type": "HUMAN",
+        "principalId": "76767676-7676-4676-8676-767676767676",
+        "issuer": "https://id.example.test",
+        "subject": "qa-requester-1"
+      },
+      "resolutionPolicyRef": {
+        "key": "qa.response-channel-resolution",
+        "version": "1.0.0",
+        "contentHash": "sha256:3838383838383838383838383838383838383838383838383838383838383838"
+      },
+      "evaluatedAt": "2026-08-27T12:00:00Z",
+      "missingReasonCode": "REQUESTER_RESPONSE_CHANNEL_MISSING"
+    },
+    "requestLineage": {
+      "requestKind": "feature-validation",
+      "sourceRefs": [],
+      "blockersDeclared": false,
+      "dependenciesDeclared": false,
+      "lineageHash": "sha256:4242424242424242424242424242424242424242424242424242424242424242"
+    },
+    "contentCompleteness": {
+      "goalPresent": false,
+      "scopePresent": false,
+      "acceptanceOutcomePresent": false,
+      "requestRiskPresent": false,
+      "businessImpactPresent": false,
+      "classificationState": "VALID",
+      "desiredDate": { "state": "MISSING" },
+      "checklistSelection": { "source": "MISSING", "checklistRefs": [] },
+      "target": { "state": "INCOMPLETE", "roleMetadataRefs": [] }
+    },
+    "mappingHealth": {
+      "state": "MISSING",
+      "blockingErrors": [{
+        "code": "REQUEST_AUTHORITY_BINDING_MISSING",
+        "field": "/inputs/mappingHealth/bindingRef",
+        "severity": "BLOCKER",
+        "remediation": "Configure and validate a same-scope Integration Binding"
+      }]
+    }
+  },
+  "ruleSetRef": {
+    "key": "qa.dor",
+    "version": "1.0.0",
+    "contentHash": "sha256:1414141414141414141414141414141414141414141414141414141414141414"
+  },
+  "blockers": [
+    {
+      "code": "PROJECT_REGISTRY_NEEDS_REVIEW",
+      "field": "/inputs/projectRegistry/verificationState",
+      "severity": "BLOCKER",
+      "remediation": "Obtain an exact distinct-Lead DoR waiver or complete Project Registry verification"
+    },
+    {
+      "code": "RESPONSE_CHANNEL_UNCONFIRMED",
+      "field": "/inputs/responseChannel",
+      "severity": "BLOCKER",
+      "remediation": "Configure a verified PLATFORM_WEB response channel for the immutable original requester"
+    },
+    {
+      "code": "REQUEST_AUTHORITY_BINDING_MISSING",
+      "field": "/inputs/mappingHealth/bindingRef",
+      "severity": "BLOCKER",
+      "remediation": "Configure and validate a same-scope Integration Binding"
+    },
+    {
+      "code": "INTAKE_DECLARATIONS_MISSING",
+      "field": "/inputs/requestLineage",
+      "severity": "BLOCKER",
+      "remediation": "Explicitly declare blockers and dependencies, including intentionally empty arrays"
+    },
+    {
+      "code": "SOURCE_CONTEXT_INSUFFICIENT",
+      "field": "/inputs/requestLineage/sourceRefs",
+      "severity": "BLOCKER",
+      "remediation": "Supply an exact source ref for feature validation"
+    },
+    {
+      "code": "TARGET_INCOMPLETE",
+      "field": "/inputs/contentCompleteness/target",
+      "severity": "BLOCKER",
+      "remediation": "Supply exact environment, build or policy, test-data and account-lease facts"
+    },
+    {
+      "code": "DESIRED_DATE_MISSING",
+      "field": "/inputs/contentCompleteness/desiredDate",
+      "severity": "BLOCKER",
+      "remediation": "Supply the requested completion date in the current request-input revision"
+    },
+    {
+      "code": "CHECKLIST_SELECTION_MISSING",
+      "field": "/inputs/contentCompleteness/checklistSelection",
+      "severity": "BLOCKER",
+      "remediation": "Select exact request checklists or use the pinned project-context defaults"
+    }
+  ],
+  "warnings": [],
+  "acknowledgements": [],
+  "waivedRuleCodes": [],
+  "contentHash": "sha256:4343434343434343434343434343434343434343434343434343434343434343",
+  "evaluatedBy": {
+    "type": "HUMAN",
+    "principalId": "77777777-7777-4777-8777-777777777777",
+    "issuer": "https://id.example.test",
+    "subject": "qa-executor-1"
+  },
+  "authorizationBasisHash": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+  "dataClassificationKey": "INTERNAL",
+  "evaluatedAt": "2026-08-27T12:04:00Z",
+  "correlationId": "70707070-7070-4070-8070-707070707070",
+  "causationId": "71717171-7171-4171-8171-717171717171"
+}

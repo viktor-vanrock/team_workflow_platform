@@ -1,0 +1,71 @@
+replicaCount: 1
+image:
+  repository: registry.sberdevices.ru/rndbtoc/team-workflow-platform/workspace
+  pullPolicy: IfNotPresent
+  command: [pnpm, --filter, "@awp/hermes", start]
+imagePullSecrets:
+  - name: gitlab-registry-secret-rndbtoc
+serviceAccount:
+  create: false
+  automount: true
+  name: vault
+podAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/agent-pre-populate-only: "true"
+  vault.hashicorp.com/role: p-rndml
+  vault.hashicorp.com/agent-inject-secret-hermes_token: rndml/team-workflow-platform/hermes
+  vault.hashicorp.com/agent-inject-template-hermes_token: |
+    {{- with secret "rndml/team-workflow-platform/hermes" -}}
+    {{ .Data.data.HERMES_TOKEN }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-config: rndml/team-workflow-platform/hermes
+  vault.hashicorp.com/agent-inject-template-config: |
+    {{- with secret "rndml/team-workflow-platform/hermes" -}}
+    {{ .Data.data.CONFIG }}
+    {{- end -}}
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+service:
+  enabled: true
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 3020
+      targetPort: 3020
+      protocol: TCP
+ingress:
+  enabled: false
+configMap:
+  enabled: true
+  config:
+    PORT: "3020"
+    npm_config_verify_deps_before_run: "false"
+    AWP_HERMES_TOKEN_PATH: /vault/secrets/hermes_token
+    AWP_HERMES_CONFIG_PATH: /vault/secrets/config
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  initialDelaySeconds: 30
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  initialDelaySeconds: 10
+volumes:
+  - name: tmp
+    emptyDir: {}
+volumeMounts:
+  - name: tmp
+    mountPath: /tmp
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: "1"
+    memory: 512Mi

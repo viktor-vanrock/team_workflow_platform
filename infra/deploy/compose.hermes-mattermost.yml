@@ -1,0 +1,7 @@
+# Apply after compose.workspace.yml when Mattermost mappings are prepared.
+services:
+  workspace:
+    environment:
+      AWP_HERMES_MATTERMOST_CONFIG_PATH: /run/hermes-mattermost/config.json
+    volumes:
+      - ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/hermes-mattermost:/run/hermes-mattermost:ro

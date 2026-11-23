@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-observability",
+  "contour": "qa-jira-gitlab-local",
+  "startedAt": "2026-09-03T10:53:19.495Z",
+  "finishedAt": "2026-09-03T10:53:24.926Z",
+  "status": "PASS",
+  "metricNamespace": "awp.gitlab.automation",
+  "boundedLabels": [
+    "phase",
+    "outcome",
+    "reasonCode",
+    "correlationLinked"
+  ],
+  "phaseCoverage": [
+    "AMBIGUITY",
+    "ARTIFACT",
+    "DEDUPE",
+    "FLAKY",
+    "LAUNCH",
+    "POLICY_DENIAL",
+    "QUEUE",
+    "RECONCILIATION",
+    "RESULT",
+    "RETRY",
+    "TRIGGER",
+    "WEBHOOK"
+  ],
+  "slos": [
+    {
+      "name": "LAUNCH_ACKNOWLEDGEMENT",
+      "targetMs": 2000,
+      "observedP95Ms": 1500,
+      "status": "PASS"
+    },
+    {
+      "name": "WEBHOOK_VISIBILITY",
+      "targetMs": 30000,
+      "observedP95Ms": 25000,
+      "status": "PASS"
+    },
+    {
+      "name": "LOST_WEBHOOK_REPAIR",
+      "targetMs": 120000,
+      "observedP95Ms": 110000,
+      "maximumPolls": 2,
+      "observedMaximumPolls": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "TERMINAL_TO_ARTIFACT",
+      "targetMs": 120000,
+      "observedP95Ms": 115000,
+      "status": "PASS"
+    }
+  ],
+  "safetyCounters": {
+    "duplicateEffect": 0,
+    "blindRetrigger": 0,
+    "automatedVerdict": 0,
+    "productionCall": 0
+  },
+  "redaction": {
+    "credentials": "PASS",
+    "webhookRawBody": "PASS",
+    "artifactBytes": "PASS",
+    "untrustedText": "PASS",
+    "identifiersInMetricLabels": 0
+  },
+  "instrumentation": [
+    {
+      "path": "packages/runtime-composition/src/gitlab/automation-launch-service.ts",
+      "status": "PASS",
+      "markers": [
+        "phase: \"LAUNCH\"",
+        "phase: \"POLICY_DENIAL\""
+      ]
+    },
+    {
+      "path": "packages/runtime-composition/src/gitlab/automation-worker.ts",
+      "status": "PASS",
+      "markers": [
+        "phase: \"QUEUE\"",
+        "phase: \"AMBIGUITY\"",
+        "phase: \"TRIGGER\""
+      ]
+    },
+    {
+      "path": "packages/runtime-composition/src/gitlab/result-sync.ts",
+      "status": "PASS",
+      "markers": [
+        "phase: \"RESULT\"",
+        "phase: \"RETRY\""
+      ]
+    },
+    {
+      "path": "packages/runtime-composition/src/gitlab/reconciliation-worker.ts",
+      "status": "PASS",
+      "markers": [
+        "phase: \"WEBHOOK\"",
+        "phase: \"DEDUPE\"",
+        "phase: \"RECONCILIATION\""
+      ]
+    },
+    {
+      "path": "packages/runtime-composition/src/gitlab/artifact-storage.ts",
+      "status": "PASS",
+      "markers": [
+        "phase: \"ARTIFACT\""
+      ]
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "packages/runtime-composition/src/gitlab/observability.ts",
+        "sha256": "sha256:eb4db7e838ba0616091a6e4b4beffbd05548c9a4e7ff9fe3c11eef8cc7b2ab99"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-launch-service.ts",
+        "sha256": "sha256:a0fbe10037172e2c80d9c764a5fc8a7a3a8e970629f2d61168365b36f2a5822b"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-worker.ts",
+        "sha256": "sha256:ca1458829ea4eebcf7681af695991cd909822450193900fcf3ab39d6f8744493"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/result-sync.ts",
+        "sha256": "sha256:40af71702baa0612e317c6c2540e6d30d8f223f83920446eecff32bb077c8d1d"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/reconciliation-worker.ts",
+        "sha256": "sha256:4cb643a2ddbdc671de9c8b4a5f7d1d2ea31bcb6996bd04849eac42d9f26b983d"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/artifact-storage.ts",
+        "sha256": "sha256:aac20eb1edf8ba58a0d286a9e24dcdd1357627f722dd1c01e86a458cb078d99c"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/composition.ts",
+        "sha256": "sha256:25052fdde189f1ca90fe972fa89656944ddd88324b1e92e734e9f831d119c9e8"
+      },
+      {
+        "path": "packages/runtime-composition/src/index.ts",
+        "sha256": "sha256:cc040b56bb74fc22973d19f2be513d92076bebd214f2c0716c076646d809e3a1"
+      },
+      {
+        "path": "tests/integration/005/observability-slo.spec.ts",
+        "sha256": "sha256:86ad7e7635516ab251593d4ef9448ccf255a4b047680ae516fff447c7d817fb6"
+      }
+    ],
+    "aggregateSha256": "sha256:27798eaa01e1cdcbb89dfd4384ef52ab596914db928205cfd3d12b0e61499e76"
+  },
+  "stages": [
+    {
+      "id": "observability-slo",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 693,
+      "outputHash": "sha256:403f88463bdc72e7843e2a1602131cfe3bfaaf8834fa9eafb4fc334b14c9af2b"
+    },
+    {
+      "id": "runtime-typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4730,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  ]
+}

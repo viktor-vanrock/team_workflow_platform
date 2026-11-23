@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automation-suite-validation-report:v1",
+  "title": "AutomationSuiteValidationReport v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "reportId",
+    "workspaceId",
+    "projectId",
+    "suiteBindingRef",
+    "status",
+    "coreBindingRef",
+    "profilePinSetHash",
+    "gitlabDiscoverySnapshotRef",
+    "gitlabDiscoverySnapshotHash",
+    "suiteProbeRef",
+    "suiteProbeHash",
+    "checks",
+    "issues",
+    "validatedBy",
+    "authorizationBasisHash",
+    "createdAt",
+    "contentHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automation-suite-validation-report@1.0.0" },
+    "reportId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "suiteBindingRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/versionedContentRef" },
+    "status": { "enum": ["VALID", "INVALID"] },
+    "coreBindingRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/versionedContentRef" },
+    "profilePinSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "gitlabDiscoverySnapshotRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "gitlabDiscoverySnapshotHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "suiteProbeRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "suiteProbeHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "checks": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "prefixItems": [
+        { "$ref": "#/$defs/projectScopeCheck" },
+        { "$ref": "#/$defs/identitySeparationCheck" },
+        { "$ref": "#/$defs/leastPrivilegeCheck" },
+        { "$ref": "#/$defs/sourceRefPolicyCheck" },
+        { "$ref": "#/$defs/ciLintDryRunCheck" },
+        { "$ref": "#/$defs/nonProductionTargetCheck" },
+        { "$ref": "#/$defs/noDeploySurfaceCheck" },
+        { "$ref": "#/$defs/resultSchemaCheck" },
+        { "$ref": "#/$defs/artifactPolicyCheck" },
+        { "$ref": "#/$defs/retryPolicyCheck" }
+      ],
+      "items": false
+    },
+    "issues": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "path"],
+        "properties": {
+          "code": {
+            "enum": [
+              "PROJECT_SCOPE_MISMATCH",
+              "IDENTITY_SEPARATION_INVALID",
+              "LEAST_PRIVILEGE_INVALID",
+              "SOURCE_REF_POLICY_INVALID",
+              "CI_LINT_INVALID",
+              "CI_DRY_RUN_INVALID",
+              "NON_PRODUCTION_PROOF_INVALID",
+              "DEPLOY_SURFACE_DETECTED",
+              "RESULT_SCHEMA_INVALID",
+              "ARTIFACT_POLICY_INVALID",
+              "RETRY_POLICY_INVALID",
+              "DISCOVERY_UNAVAILABLE",
+              "CONFIGURATION_DRIFT"
+            ]
+          },
+          "path": { "type": "string", "pattern": "^(/([^/~]|~0|~1)*)*$", "maxLength": 512 },
+          "evidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+        }
+      }
+    },
+    "validatedBy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "principalId"],
+      "properties": {
+        "kind": { "enum": ["HUMAN", "SERVICE"] },
+        "principalId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" }
+      }
+    },
+    "authorizationBasisHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "createdAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "contentHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "$defs": {
+    "checkResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check", "status", "evidenceHash"],
+      "properties": {
+        "check": {
+          "enum": [
+            "PROJECT_SCOPE",
+            "IDENTITY_SEPARATION",
+            "LEAST_PRIVILEGE",
+            "SOURCE_REF_POLICY",
+            "CI_LINT_DRY_RUN",
+            "NON_PRODUCTION_TARGET",
+            "NO_DEPLOY_SURFACE",
+            "RESULT_SCHEMA",
+            "ARTIFACT_POLICY",
+            "RETRY_POLICY"
+          ]
+        },
+        "status": { "enum": ["PASS", "FAIL"] },
+        "evidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "evidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+      }
+    },
+    "projectScopeCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "PROJECT_SCOPE" } }, "required": ["check"] }
+      ]
+    },
+    "identitySeparationCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "IDENTITY_SEPARATION" } }, "required": ["check"] }
+      ]
+    },
+    "leastPrivilegeCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "LEAST_PRIVILEGE" } }, "required": ["check"] }
+      ]
+    },
+    "sourceRefPolicyCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "SOURCE_REF_POLICY" } }, "required": ["check"] }
+      ]
+    },
+    "ciLintDryRunCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "CI_LINT_DRY_RUN" } }, "required": ["check"] }
+      ]
+    },
+    "nonProductionTargetCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "NON_PRODUCTION_TARGET" } }, "required": ["check"] }
+      ]
+    },
+    "noDeploySurfaceCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "NO_DEPLOY_SURFACE" } }, "required": ["check"] }
+      ]
+    },
+    "resultSchemaCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "RESULT_SCHEMA" } }, "required": ["check"] }
+      ]
+    },
+    "artifactPolicyCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "ARTIFACT_POLICY" } }, "required": ["check"] }
+      ]
+    },
+    "retryPolicyCheck": {
+      "allOf": [
+        { "$ref": "#/$defs/checkResult" },
+        { "properties": { "check": { "const": "RETRY_POLICY" } }, "required": ["check"] }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "VALID" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "issues": { "maxItems": 0 },
+          "checks": {
+            "not": {
+              "contains": {
+                "type": "object",
+                "properties": { "status": { "const": "FAIL" } },
+                "required": ["status"]
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "issues": { "minItems": 1 },
+          "checks": {
+            "contains": {
+              "type": "object",
+              "properties": { "status": { "const": "FAIL" } },
+              "required": ["status"]
+            },
+            "minContains": 1
+          }
+        }
+      }
+    }
+  ]
+}

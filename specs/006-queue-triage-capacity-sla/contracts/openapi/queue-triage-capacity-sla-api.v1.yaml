@@ -1,0 +1,1690 @@
+openapi: 3.1.0
+info:
+  title: AWP Queue, Triage, Capacity and SLA API
+  version: 1.0.0
+  description: >-
+    Feature 006 read projections and exact HUMAN commands. Jira remains the
+    operational authority; queue stage, order, WIP and SLA are labelled Platform
+    Core projections. Every Project-content query is authorization-filtered before
+    aggregation, sorting and cursor construction. Queue reads perform no Jira,
+    GitLab, Mattermost or model call. Operation permission is checked before any
+    target lookup; after that, a missing or unauthorized Project/subject/ref uses
+    the same closed 404 shape and timing budget.
+servers:
+  - url: http://127.0.0.1:3000
+    description: Required local contour
+tags:
+  - name: Queue views
+  - name: Capacity
+  - name: SLA
+  - name: Queue controls
+  - name: Queue policy
+paths:
+  /api/v1/workspaces/{workspaceId}/qa/queue:
+    get:
+      tags: [Queue views]
+      operationId: getQaPortfolioQueue
+      summary: Read the caller's authorized multi-Project portfolio queue
+      description: >-
+        Requires queue.portfolio.read. The server resolves the current authorized
+        Project set and applies it before counts, facets, sorting and pagination.
+        Returned counts are visible-only; excluded Projects have no response or
+        cursor signal. The first page fixes a server asOf; cursor pages recheck
+        current authorization and read immutable revisions effective at that same
+        instant.
+      security:
+        - oidc: []
+      x-operation-identity: queue.portfolio.read@1.0.0
+      x-required-permission: queue.portfolio.read
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/StageFilter'
+        - $ref: '#/components/parameters/ServiceClassFilter'
+        - $ref: '#/components/parameters/FreshnessFilter'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Authorized portfolio page with response-local ordinals.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ProjectionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizedPortfolioQueuePage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+        '409':
+          $ref: '#/components/responses/CursorConflict'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/queue:
+    get:
+      tags: [Queue views]
+      operationId: getQaProjectQueue
+      summary: Read one authorized Project lane
+      security:
+        - oidc: []
+      x-operation-identity: queue.project-lane.read@1.0.0
+      x-required-permission: queue.project.read
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/StageFilter'
+        - $ref: '#/components/parameters/ServiceClassFilter'
+        - $ref: '#/components/parameters/FreshnessFilter'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Authorized Project-lane page.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ProjectionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectQueuePage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+        '409':
+          $ref: '#/components/responses/CursorConflict'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/queue/items/{workItemId}:
+    get:
+      tags: [Queue views]
+      operationId: getQaQueueItem
+      summary: Read one scoped queue projection and its explanation
+      description: >-
+        A missing item and an item outside the caller's current Project
+        Entitlement use the same not-found response shape.
+      security:
+        - oidc: []
+      x-operation-identity: queue.project-lane.read@1.0.0
+      x-required-permission: queue.project.read
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/WorkItemId'
+      responses:
+        '200':
+          description: Exact current authorized projection.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ProjectionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/queue-entry.v1.schema.json'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+  /api/v1/workspaces/{workspaceId}/qa/queue/capacity:
+    get:
+      tags: [Capacity]
+      operationId: getQaWorkspaceCapacity
+      summary: Read the caller's authorized-scope human-capacity projection
+      description: >-
+        Occupied human WIP and review reservations are reported separately. The
+        committed value is the distinct Work Item union, not a Session count.
+        Counts, facets and freshness cover only the authorized Project set; global
+        admission state is intentionally absent and is checked only by an exact
+        mutation under lock.
+      security:
+        - oidc: []
+      x-operation-identity: queue.capacity.read@1.0.0
+      x-required-permission: queue.capacity.read
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+      responses:
+        '200':
+          description: Current authorized capacity snapshot.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ProjectionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizedPortfolioCapacitySnapshot'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/queue/items/{workItemId}/sla:
+    get:
+      tags: [SLA]
+      operationId: getQaQueueItemSla
+      summary: Read exact current SLA goal snapshots for one Work Item
+      security:
+        - oidc: []
+      x-operation-identity: queue.sla.read@1.0.0
+      x-required-permission: queue.sla.read
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/WorkItemId'
+      responses:
+        '200':
+          description: >-
+            Current derived clock snapshots evaluated at a server-selected now,
+            echoed as one shared asOf. No tick write is performed. MEASURE_ONLY
+            returns NOT_CONFIGURED instead of a breach. Composed response
+            validation requires every snapshot scope to equal the path scope and
+            requires distinct goals. With a published Project policy facet, the
+            returned set equals its enabled goals. Without one, the response has
+            both closed v1 goals, each NOT_STARTED/POLICY_NOT_PUBLISHED.
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                maxItems: 2
+                x-composed-validation: >-
+                  All items have workspaceId/projectId/workItemId equal to the
+                  three path parameters and the same server-selected asOf; goal
+                  is unique. If an authorized Project policy facet is published,
+                  the goal set equals its enabled slaGoals[*].goal set. Otherwise
+                  it is exactly {READY_TO_FIRST_QA_START,
+                  READY_TO_SIGNED_VERDICT} and every item is
+                  NOT_STARTED/POLICY_NOT_PUBLISHED with no policyFacetRef.
+                items:
+                  $ref: '../schemas/sla-snapshot.v1.schema.json'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+  /api/v1/workspaces/{workspaceId}/qa/queue/policy:
+    get:
+      tags: [Queue policy]
+      operationId: getQaWorkspaceQueuePolicy
+      summary: Read the effective published policy and calendar reference
+      security:
+        - oidc: []
+      x-operation-identity: queue.policy.read@1.0.0
+      x-required-permission: queue.policy.read
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+      responses:
+        '200':
+          description: Effective versioned Workspace queue policy.
+          headers:
+            ETag:
+              $ref: '#/components/headers/PolicyViewETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueuePolicyView'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotConfigured'
+  /api/v1/workspaces/{workspaceId}/qa/queue/calendars/{calendarRevisionId}:
+    get:
+      tags: [Queue policy]
+      operationId: getQaWorkspaceBusinessCalendar
+      summary: Read one exact published Workspace business-calendar revision
+      description: >-
+        Returns Workspace configuration only and grants no Project-content access.
+        The revision ID is resolved only after Workspace membership and
+        queue.calendar.read permission are established.
+      security:
+        - oidc: []
+      x-operation-identity: queue.policy.read@1.0.0
+      x-required-permission: queue.calendar.read
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/CalendarRevisionId'
+      responses:
+        '200':
+          description: Exact immutable published calendar revision.
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/business-calendar.v1.schema.json'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/queue/items/{workItemId}/controls:
+    post:
+      tags: [Queue controls]
+      operationId: submitQaQueueControl
+      summary: Submit one exact Work Item queue-control action
+      description: >-
+        Accepted planning fields are copied into an immutable HUMAN decision.
+        Referencing a TriageAssessment does not delegate authority to Hermes and
+        does not mutate Jira priority or due date. If a distinct Lead decision is
+        required, the returned Location targets the existing Core Approval API;
+        approval consumption atomically invokes this PlatformAction handler.
+      security:
+        - oidc: []
+      x-operation-identity: queue.control.request@1.0.0
+      x-required-permission: queue.control.request
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/WorkItemId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatchQueueControl'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueueControlCommandRequest'
+      responses:
+        '200':
+          description: Replayed idempotent action or synchronously accepted action.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueControlActionReceipt'
+        '202':
+          description: Exact action candidate is pending the required QA Lead decision.
+          headers:
+            Location:
+              $ref: '#/components/headers/ApprovalLocation'
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueControlActionPendingApprovalReceipt'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /api/v1/workspaces/{workspaceId}/qa/queue/order-overrides:
+    post:
+      tags: [Queue controls]
+      operationId: submitQaPortfolioOrderOverride
+      summary: Submit an exact authorized portfolio move operation
+      description: >-
+        Requires portfolio-order permission and current entitlement to every
+        target Project. Placement is FIRST, LAST, BEFORE or AFTER; an absolute
+        business-priority ordinal is not accepted. An anchor is resolved only in
+        the authorized view before any Approval is created. Hidden and missing
+        anchors produce the same terminal consumed no-op candidate: the public
+        candidate contains `ANCHOR_UNAVAILABLE_NO_OP` with no anchor, the requested
+        key stays only in restricted audit/witness storage, and the response has no
+        Approval Location or existence signal.
+      security:
+        - oidc: []
+      x-operation-identity: queue.control.request@1.0.0
+      x-required-permission: queue.order.move
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatchQueueOrder'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorizedPortfolioOrderCommandRequest'
+      responses:
+        '200':
+          description: >-
+            Replayed/accepted immutable move, or terminal consumed no-op for an
+            anchor absent after authorization filtering. A no-op never creates an
+            Approval and its public candidate contains no anchor key.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueOrderActionReceipt'
+        '202':
+          description: >-
+            Exact applicable move candidate is pending a distinct authorized QA
+            Lead. This response is impossible for an unavailable anchor.
+          headers:
+            Location:
+              $ref: '#/components/headers/ApprovalLocation'
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueOrderActionPendingApprovalReceipt'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/queue/order-overrides:
+    post:
+      tags: [Queue controls]
+      operationId: submitQaProjectOrderOverride
+      summary: Submit an exact move within one authorized Project lane
+      description: >-
+        The target must be authorized. An anchor is resolved only in the already
+        authorized Project lane before any Approval is created; hidden and missing
+        anchors are the same terminal consumed no-op. Its public candidate omits
+        the requested key, which stays in restricted audit/witness storage.
+      security:
+        - oidc: []
+      x-operation-identity: queue.control.request@1.0.0
+      x-required-permission: queue.order.move
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatchQueueOrder'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectOrderCommandRequest'
+      responses:
+        '200':
+          description: >-
+            Replayed/accepted immutable move, or terminal consumed no-op for an
+            unavailable anchor; a no-op creates no Approval.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueOrderActionReceipt'
+        '202':
+          description: >-
+            Exact applicable move candidate is pending the required Lead decision.
+            This response is impossible for an unavailable anchor.
+          headers:
+            Location:
+              $ref: '#/components/headers/ApprovalLocation'
+            ETag:
+              $ref: '#/components/headers/ResourceVersionETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueOrderActionPendingApprovalReceipt'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /api/v1/workspaces/{workspaceId}/projects/{projectId}/qa/queue/items/{workItemId}/admissions:
+    post:
+      tags: [Capacity]
+      operationId: admitQaWorkItemActivity
+      summary: Atomically admit a capacity-increasing QA activity
+      description: >-
+        Orchestrates manual start/resume or automated launch through the shared
+        serializable capacity UoW. A normal denial mutates no Session. An exact
+        WIP override candidate is consumed only by the existing Core Approval
+        endpoint, which invokes the internal admission handler after every pinned
+        state is rechecked. External result ingestion does not use this
+        discretionary API.
+      security:
+        - oidc: []
+      x-operation-identity: queue.work-admit@1.0.0
+      x-required-permission: qa.session.execute
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/WorkItemId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatchSession'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdmissionRequest'
+      responses:
+        '200':
+          description: Stored admission decision without an approval candidate, including idempotent replay.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdmissionDecisionResponse'
+        '202':
+          description: >-
+            Admission was denied with no Session/claim/reservation mutation, while
+            the same transaction created one exact WIP override PlatformAction and
+            Approval candidate.
+          headers:
+            Location:
+              $ref: '#/components/headers/ApprovalLocation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdmissionOverrideCandidateResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundOrNotAuthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+components:
+  securitySchemes:
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: http://127.0.0.1:4010/.well-known/openid-configuration
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/OpaqueId'
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/OpaqueId'
+    WorkItemId:
+      name: workItemId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/OpaqueId'
+    CalendarRevisionId:
+      name: calendarRevisionId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/OpaqueId'
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 16
+        maxLength: 200
+        pattern: '^[A-Za-z0-9._:-]+$'
+    IfMatchQueueControl:
+      name: If-Match
+      in: header
+      required: true
+      description: >-
+        Exact quoted Work Item queue-control head resourceVersion returned in the
+        authorized queue entry control facet. "0" is the explicit sentinel when no
+        accepted control head exists. This is distinct from the queue projection
+        ETag; the body independently pins that projection revision and fingerprint.
+      schema:
+        type: string
+        pattern: '^"(0|[1-9][0-9]*)"$'
+    IfMatchQueueOrder:
+      name: If-Match
+      in: header
+      required: true
+      description: >-
+        Exact quoted order-scope resourceVersion returned in QueuePage.orderState.
+        "0" is the explicit sentinel when the authorized Project/portfolio order
+        scope has no override head. Body fields independently pin queue epoch,
+        comparator, generation, authorized set and visible base set.
+      schema:
+        type: string
+        pattern: '^"(0|[1-9][0-9]*)"$'
+    IfMatchSession:
+      name: If-Match
+      in: header
+      required: true
+      description: >-
+        Exact ETag returned by the existing authorized QA Session read. The
+        Feature 006 admission requires the published strong "N" form because HTTP
+        If-Match uses strong comparison; W/"N" never satisfies the precondition.
+        N must equal expectedSessionVersion in the body, so clients replay a
+        predecessor token without manufacturing one. The implementation upgrades
+        any older Session GET still emitting weak tags before enabling this route.
+        The internal capacity-head version is absent.
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+    StageFilter:
+      name: stage
+      in: query
+      schema:
+        type: string
+        enum: [CANDIDATE, BACKLOG, READY, ACTIVE, COMPLETED]
+    ServiceClassFilter:
+      name: serviceClass
+      in: query
+      schema:
+        type: string
+        enum: [EXPEDITE, FIXED_DATE, STANDARD]
+    FreshnessFilter:
+      name: freshness
+      in: query
+      schema:
+        type: string
+        enum: [CURRENT, STALE, ERROR, REBUILDING]
+    PageSize:
+      name: pageSize
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 50
+    Cursor:
+      name: cursor
+      in: query
+      description: >-
+        Opaque signed cursor bound to principal, authorized Project set, query,
+        comparator, generation and asOf.
+      schema:
+        type: string
+        minLength: 20
+        maxLength: 4096
+  headers:
+    ProjectionETag:
+      description: >-
+        Strong quoted SHA-256 of the exact returned JSON representation. For a
+        QueuePage this includes its server-selected asOf, normalized filters,
+        cursor/page boundary, authorized generation and effective order state;
+        for an item/capacity projection it includes the exact persisted body.
+        Different authorization or representation bytes cannot share this value,
+        and the internal global capacity-head version is never an input.
+      schema:
+        type: string
+        pattern: '^"sha256:[a-f0-9]{64}"$'
+    ResourceVersionETag:
+      description: Quoted monotonic resourceVersion.
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+    PolicyViewETag:
+      description: >-
+        Quoted authorization-neutral policy-view revision. It advances only when
+        a field in QueuePolicyView changes, never for projectEntries-only changes.
+      schema:
+        type: string
+        pattern: '^"[1-9][0-9]*"$'
+    ApprovalLocation:
+      description: >-
+        Scoped existing Core Approval resource
+        /api/v1/workspaces/{workspaceId}/projects/{projectId}/approvals/{approvalId}.
+        Feature 006 uses additive Approval subject v2: its payloadHash equals the
+        receipt publicIntentHash; no internal queue execution-witness hash is
+        present in the resource.
+      schema:
+        type: string
+        format: uri-reference
+  responses:
+    BadRequest:
+      description: Malformed path, filter, cursor or schema-closed request.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unauthorized:
+      description: Authentication is absent or invalid.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Forbidden:
+      description: The authenticated HUMAN lacks the required scoped permission.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFoundOrNotAuthorized:
+      description: >-
+        The scoped resource does not exist or is not visible. Shape and timing
+        budget are deliberately indistinguishable; target authorization precedes
+        lookup and no field names the missing/hidden resource.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/NonDisclosureProblem'
+    NotConfigured:
+      description: No effective published policy exists for this Workspace.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    CursorConflict:
+      description: >-
+        Cursor principal, authorization set, comparator, generation or query no
+        longer matches. Restart pagination without exposing the changed dimension.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Conflict:
+      description: Expected version, exact state, idempotency hash or approval is stale.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unprocessable:
+      description: >-
+        The exact action is well-formed but violates a deterministic policy or is
+        not admissible. Stable codes explain the violated constraints.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    OpaqueId:
+      type: string
+      format: uuid
+    Sha256:
+      type: string
+      pattern: '^sha256:[a-f0-9]{64}$'
+    JiraStatusMappingRevisionRef:
+      description: Closed public ref to the confirmed Jira status-mapping revision.
+      type: object
+      additionalProperties: false
+      required: [sourceType, sourceId, sourceVersion, semanticHash]
+      properties:
+        sourceType:
+          const: JIRA_STATUS_MAPPING_REVISION
+        sourceId:
+          type: string
+          minLength: 1
+          maxLength: 512
+        sourceVersion:
+          type: integer
+          minimum: 1
+        semanticHash:
+          $ref: '#/components/schemas/Sha256'
+    QueuePolicyView:
+      description: >-
+        Authorization-neutral Workspace configuration view. Project allocation
+        entries are deliberately absent; authorized Project facets are exposed
+        only by the filtered capacity read. policyViewRef has its own stable ID,
+        monotonic view revision and semantic hash derived only from these public
+        fields, so projectEntries-only publication cannot change this body or ETag.
+        Full baseline-evidence, publication-principal and source-policy refs remain
+        private audit/configuration data rather than generic ref escape hatches.
+      type: object
+      additionalProperties: false
+      required:
+        - schemaVersion
+        - workspaceId
+        - policyViewRef
+        - mode
+        - calendarRef
+        - comparatorRef
+        - stageRuleRef
+        - statusMappingRef
+        - serviceClassRules
+        - workspaceHumanWipLimit
+        - activeExpediteLimit
+        - externalActiveConsumesWip
+        - blockReasonRules
+        - slaGoals
+        - agingBands
+        - effectiveFrom
+        - publishedAt
+      properties:
+        schemaVersion:
+          const: 'queue-policy-view@1.0.0'
+        workspaceId:
+          $ref: '#/components/schemas/OpaqueId'
+        policyViewRef:
+          description: >-
+            semanticHash is RFC 8785 over this complete view excluding the
+            policyViewRef wrapper; id/version identify that immutable view
+            revision. This avoids a recursive self-hash.
+          $ref: '../schemas/queue-policy.v1.schema.json#/$defs/versionedContentRef'
+        mode:
+          enum: [MEASURE_ONLY, ENFORCED]
+        calendarRef:
+          $ref: '../schemas/queue-policy.v1.schema.json#/$defs/versionedContentRef'
+        comparatorRef:
+          $ref: '../schemas/queue-policy.v1.schema.json#/properties/comparatorRef'
+        stageRuleRef:
+          $ref: '../schemas/queue-policy.v1.schema.json#/properties/stageRuleRef'
+        statusMappingRef:
+          $ref: '#/components/schemas/JiraStatusMappingRevisionRef'
+        serviceClassRules:
+          $ref: '../schemas/queue-policy.v1.schema.json#/properties/serviceClassRules'
+        workspaceHumanWipLimit:
+          oneOf:
+            - type: 'null'
+            - type: integer
+              minimum: 1
+        activeExpediteLimit:
+          oneOf:
+            - type: 'null'
+            - type: integer
+              minimum: 1
+        externalActiveConsumesWip:
+          $ref: '../schemas/queue-policy.v1.schema.json#/properties/externalActiveConsumesWip'
+        blockReasonRules:
+          $ref: '../schemas/queue-policy.v1.schema.json#/properties/blockReasonRules'
+        slaGoals:
+          type: array
+          minItems: 1
+          maxItems: 2
+        agingBands:
+          $ref: '../schemas/queue-policy.v1.schema.json#/properties/agingBands'
+        effectiveFrom:
+          type: string
+          format: date-time
+        publishedAt:
+          type: string
+          format: date-time
+      allOf:
+        - if:
+            required: [mode]
+            properties:
+              mode:
+                const: MEASURE_ONLY
+          then:
+            properties:
+              workspaceHumanWipLimit:
+                type: 'null'
+              activeExpediteLimit:
+                type: 'null'
+              slaGoals:
+                items:
+                  $ref: '../schemas/queue-policy.v1.schema.json#/$defs/measureOnlyGoal'
+          else:
+            properties:
+              workspaceHumanWipLimit:
+                type: integer
+                minimum: 1
+              activeExpediteLimit:
+                type: integer
+                minimum: 1
+              slaGoals:
+                items:
+                  $ref: '../schemas/queue-policy.v1.schema.json#/$defs/enforcedGoal'
+    QueuePage:
+      x-composed-validation: >-
+        workspaceId equals the route workspace. Authorization/classification is
+        applied before joining entries: every item.entry has that workspace and a
+        projectId in the exact server-derived authorized Project set represented
+        by scope.authorizedProjectSetHash. visibleCounts.total equals the sum of
+        all five byStage counts for the full filtered authorized snapshot, not
+        merely this page. Each ordinal is the unique 1-based position in the full
+        comparator-plus-effective-override order; page items are strictly
+        increasing and the cursor boundary is consistent with that order.
+        orderState.baseVisibleSetHash is recomputed over exactly the authorized,
+        filtered pre-override rows; projectionGeneration is recomputed from the
+        same authorized set, comparator and sorted per-Project visible-set hashes.
+      type: object
+      additionalProperties: false
+      required:
+        - schemaVersion
+        - workspaceId
+        - scope
+        - asOf
+        - projectionGeneration
+        - comparatorRef
+        - orderState
+        - freshness
+        - visibleCounts
+        - items
+        - nextCursor
+      properties:
+        schemaVersion:
+          const: 'queue-page@1.0.0'
+        workspaceId:
+          $ref: '#/components/schemas/OpaqueId'
+        scope:
+          type: object
+          additionalProperties: false
+          required: [kind, authorizedProjectSetHash]
+          properties:
+            kind:
+              enum: [PROJECT, AUTHORIZED_PORTFOLIO]
+            projectId:
+              $ref: '#/components/schemas/OpaqueId'
+            authorizedProjectSetHash:
+              description: >-
+                PROJECT hashes the canonical singleton projectId;
+                AUTHORIZED_PORTFOLIO hashes the exact visible set. A Project read
+                never hashes the actor's wider entitlements.
+              $ref: '#/components/schemas/Sha256'
+          allOf:
+            - if:
+                properties:
+                  kind:
+                    const: PROJECT
+              then:
+                required: [projectId]
+              else:
+                not:
+                  required: [projectId]
+        asOf:
+          description: >-
+            Server-selected immutable queue snapshot instant reused by every
+            cursor page; it is not a client authority or a trigger for writes.
+          type: string
+          format: date-time
+        projectionGeneration:
+          description: >-
+            SHA-256 of canonical authorizedProjectSetHash, comparatorRef and
+            sorted per-Project visible QueueEntry-set hashes effective at asOf.
+            It is not the internal Workspace rebuild-generation ID and is stable
+            across a hidden-Project-only change or rebuild.
+          type: string
+          pattern: '^sha256:[a-f0-9]{64}$'
+        comparatorRef:
+          const: 'queue-order@1.0.0'
+        orderState:
+          description: >-
+            Exact mutation tokens for this already-authorized view. These values
+            are keyed by the exact authorized Project-set hash and disclose no row
+            outside it; hidden-only changes cannot advance resourceVersion or
+            queueEpoch.
+          type: object
+          additionalProperties: false
+          required: [resourceVersion, queueEpoch, baseVisibleSetHash]
+          properties:
+            resourceVersion:
+              type: integer
+              minimum: 0
+            queueEpoch:
+              type: integer
+              minimum: 1
+            baseVisibleSetHash:
+              $ref: '#/components/schemas/Sha256'
+        freshness:
+          description: >-
+            Aggregate of only the already-authorized visible entry/Project
+            statuses. REBUILDING means at least one visible Project is using its
+            prior validated revision while being recalculated; Workspace-global
+            and hidden-Project rebuild state is excluded.
+          enum: [CURRENT, STALE, ERROR, REBUILDING]
+        visibleCounts:
+          type: object
+          additionalProperties: false
+          required: [total, byStage]
+          properties:
+            total:
+              type: integer
+              minimum: 0
+            byStage:
+              type: object
+              additionalProperties: false
+              required: [CANDIDATE, BACKLOG, READY, ACTIVE, COMPLETED]
+              properties:
+                CANDIDATE: { type: integer, minimum: 0 }
+                BACKLOG: { type: integer, minimum: 0 }
+                READY: { type: integer, minimum: 0 }
+                ACTIVE: { type: integer, minimum: 0 }
+                COMPLETED: { type: integer, minimum: 0 }
+        items:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required: [ordinal, entry]
+            properties:
+              ordinal:
+                type: integer
+                minimum: 1
+              entry:
+                $ref: '../schemas/queue-entry.v1.schema.json'
+              appliedOrderOverride:
+                description: >-
+                  Requester/view-local explanation calculated only after the exact
+                  authorized Project set and order head are selected. It is not
+                  part of canonical QueueEntry or its semantic hash.
+                $ref: '#/components/schemas/AppliedOrderOverride'
+        nextCursor:
+          oneOf:
+            - type: string
+              minLength: 20
+              maxLength: 4096
+            - type: 'null'
+    ProjectQueuePage:
+      x-composed-validation: >-
+        workspaceId/projectId equal the path; scope.projectId equals the path,
+        authorizedProjectSetHash is the canonical singleton hash of that project,
+        and every item.entry has exactly that workspace/project scope.
+      allOf:
+        - $ref: '#/components/schemas/QueuePage'
+        - type: object
+          properties:
+            scope:
+              type: object
+              properties:
+                kind:
+                  const: PROJECT
+              required: [kind, projectId]
+    AuthorizedPortfolioQueuePage:
+      x-composed-validation: >-
+        workspaceId equals the path; scope.authorizedProjectSetHash equals the
+        exact current server-derived visible Project set, and every item.entry
+        projectId is a member of that set. No wider entitlement-set or hidden-row
+        identity participates in hashes, counts, ordering, cursor or timing.
+      allOf:
+        - $ref: '#/components/schemas/QueuePage'
+        - type: object
+          properties:
+            scope:
+              type: object
+              properties:
+                kind:
+                  const: AUTHORIZED_PORTFOLIO
+              required: [kind]
+              not:
+                required: [projectId]
+    AuthorizedPortfolioCapacitySnapshot:
+      allOf:
+        - $ref: '../schemas/capacity-snapshot.v1.schema.json'
+        - type: object
+          properties:
+            scope:
+              type: object
+              properties:
+                kind:
+                  const: AUTHORIZED_PORTFOLIO
+              required: [kind]
+    TriageAssessmentRevisionRef:
+      type: object
+      additionalProperties: false
+      required: [sourceType, sourceId, sourceVersion, semanticHash]
+      properties:
+        sourceType:
+          const: QA_TRIAGE_ASSESSMENT_REVISION
+        sourceId:
+          $ref: '#/components/schemas/OpaqueId'
+        sourceVersion:
+          type: integer
+          minimum: 1
+        semanticHash:
+          $ref: '#/components/schemas/Sha256'
+    ConfirmedOperationalProjectionRef:
+      type: object
+      additionalProperties: false
+      required: [sourceType, sourceId, sourceVersion, semanticHash, confirmedAt]
+      properties:
+        sourceType:
+          const: JIRA_OPERATIONAL_PROJECTION_REVISION
+        sourceId:
+          $ref: '#/components/schemas/OpaqueId'
+        sourceVersion:
+          type: integer
+          minimum: 1
+        semanticHash:
+          $ref: '#/components/schemas/Sha256'
+        observedAt:
+          type: string
+          format: date-time
+        confirmedAt:
+          type: string
+          format: date-time
+    ApprovalSubjectV2Ref:
+      description: Public Approval v2 subject ref; semanticHash is subjectHash.
+      type: object
+      additionalProperties: false
+      required: [sourceType, sourceId, sourceVersion, semanticHash]
+      properties:
+        sourceType:
+          const: APPROVAL_SUBJECT_V2
+        sourceId:
+          $ref: '#/components/schemas/OpaqueId'
+        sourceVersion:
+          type: integer
+          minimum: 1
+        semanticHash:
+          $ref: '#/components/schemas/Sha256'
+    QueueActionResultRef:
+      description: >-
+        Closed Project-safe result revision; never a full policy, capacity head
+        or private witness. A terminal unavailable-anchor no-op points back to
+        its immutable public QUEUE_ACTION_CANDIDATE; composed validation requires
+        the source ID/version/hash to equal actionId/1/publicIntentHash.
+      type: object
+      additionalProperties: false
+      required: [sourceType, sourceId, sourceVersion, semanticHash]
+      properties:
+        sourceType:
+          enum:
+            - QUEUE_ACTION_CANDIDATE
+            - WORK_ITEM_QUEUE_CONTROL_REVISION
+            - QUEUE_ORDER_OVERRIDE_REVISION
+            - CAPACITY_ADMISSION_DECISION
+        sourceId:
+          $ref: '#/components/schemas/OpaqueId'
+        sourceVersion:
+          type: integer
+          minimum: 1
+        semanticHash:
+          $ref: '#/components/schemas/Sha256'
+    AppliedOrderOverride:
+      description: >-
+        Redacted order effect for this exact authorized page. Requested anchor
+        identity is never returned; hidden and missing anchors share one no-op.
+      type: object
+      additionalProperties: false
+      required:
+        - appliedOverrideRef
+        - scopeKind
+        - placement
+        - applicationState
+        - reason
+        - acceptedAt
+      properties:
+        appliedOverrideRef:
+          description: >-
+            View-local ID/version/hash over the complete AppliedOrderOverride
+            object excluding the appliedOverrideRef wrapper itself. It is not
+            the internal action/override semantic hash and the hashed object
+            contains no requested anchor identity. The ID is deterministic UUIDv5
+            over retained order-scope/subject/effective-override identities and
+            version equals the order-scope resourceVersion used for this page.
+          $ref: '../schemas/queue-policy.v1.schema.json#/$defs/versionedContentRef'
+        scopeKind:
+          enum: [PROJECT, AUTHORIZED_PORTFOLIO]
+        placement:
+          enum: [FIRST, LAST, BEFORE, AFTER]
+        applicationState:
+          enum: [APPLIED, ANCHOR_UNAVAILABLE_NO_OP]
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        acceptedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+      allOf:
+        - if:
+            required: [applicationState]
+            properties:
+              applicationState:
+                const: APPLIED
+          then:
+            required: [expiresAt]
+          else:
+            not:
+              required: [expiresAt]
+    QueueControlCommandRequest:
+      description: >-
+        Narrow caller DTO. Scope, target, actor, authorization result,
+        idempotency hash, current capacity witness and final action hash are
+        supplied/recomputed by trusted server composition, never accepted here.
+        CLEAR_SERVICE_CLASS clears FIXED_DATE through the control head; clearing
+        EXPEDITE is mapped to an internal CLEAR_EXPEDITE action and takes the
+        Workspace capacity lock before the control lock.
+      type: object
+      additionalProperties: false
+      required:
+        - schemaVersion
+        - commandKind
+        - expectedQueueEntry
+        - reason
+      properties:
+        schemaVersion:
+          const: 'queue-control-command@1.0.0'
+        commandKind:
+          enum: [ACCEPT_PLANNING_VALUES, SET_FIXED_DATE, SET_EXPEDITE, CLEAR_SERVICE_CLASS]
+        expectedQueueEntry:
+          $ref: '#/components/schemas/QueueEntryCommandRef'
+        triageAssessmentRef:
+          $ref: '#/components/schemas/TriageAssessmentRevisionRef'
+        acceptedValues:
+          type: object
+          additionalProperties: false
+          required: [risk, businessImpact, dependencyReadiness]
+          properties:
+            risk:
+              enum: [LOW, MEDIUM, HIGH, VERY_HIGH, UNKNOWN]
+            businessImpact:
+              enum: [LOW, MEDIUM, HIGH, VERY_HIGH, UNKNOWN]
+            dependencyReadiness:
+              enum: [READY, BLOCKED, UNKNOWN, NOT_APPLICABLE]
+            effortRange:
+              $ref: '../schemas/triage-assessment.v1.1.schema.json#/$defs/effortRange'
+        requestedServiceClass:
+          enum: [STANDARD, FIXED_DATE, EXPEDITE]
+        confirmedDueDateRef:
+          $ref: '#/components/schemas/ConfirmedOperationalProjectionRef'
+        reviewAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+      allOf:
+        - if:
+            required: [commandKind]
+            properties:
+              commandKind:
+                const: ACCEPT_PLANNING_VALUES
+          then:
+            required: [acceptedValues]
+            properties:
+              requestedServiceClass: false
+              confirmedDueDateRef: false
+              reviewAt: false
+              expiresAt: false
+        - if:
+            required: [commandKind]
+            properties:
+              commandKind:
+                const: SET_FIXED_DATE
+          then:
+            required: [requestedServiceClass, confirmedDueDateRef]
+            properties:
+              requestedServiceClass:
+                const: FIXED_DATE
+              acceptedValues: false
+              triageAssessmentRef: false
+              reviewAt: false
+              expiresAt: false
+        - if:
+            required: [commandKind]
+            properties:
+              commandKind:
+                const: SET_EXPEDITE
+          then:
+            required: [requestedServiceClass, reviewAt, expiresAt]
+            properties:
+              requestedServiceClass:
+                const: EXPEDITE
+              acceptedValues: false
+              triageAssessmentRef: false
+              confirmedDueDateRef: false
+        - if:
+            required: [commandKind]
+            properties:
+              commandKind:
+                const: CLEAR_SERVICE_CLASS
+          then:
+            required: [requestedServiceClass]
+            properties:
+              requestedServiceClass:
+                const: STANDARD
+              acceptedValues: false
+              triageAssessmentRef: false
+              confirmedDueDateRef: false
+              reviewAt: false
+              expiresAt: false
+    QueueOrderCommandRequest:
+      description: >-
+        Caller move intent. Trusted composition derives and binds the current
+        authorized Project-set hash, visible-list hash and comparator/action hash.
+        For BEFORE/AFTER, the service resolves the anchor after authorization and
+        before creating any Approval; an unavailable raw key is retained only in
+        restricted idempotency/audit evidence.
+      type: object
+      additionalProperties: false
+      required:
+        - schemaVersion
+        - scopeKind
+        - subject
+        - placement
+        - expectedQueueEpoch
+        - expectedBaseVisibleSetHash
+        - expectedAuthorizedProjectSetHash
+        - expectedProjectionGeneration
+        - expectedComparatorRef
+        - reason
+        - expiresAt
+      properties:
+        schemaVersion:
+          const: 'queue-order-command@1.0.0'
+        scopeKind:
+          enum: [PROJECT, AUTHORIZED_PORTFOLIO]
+        subject:
+          $ref: '#/components/schemas/QueueOrderSubject'
+        placement:
+          enum: [FIRST, LAST, BEFORE, AFTER]
+        anchor:
+          $ref: '#/components/schemas/QueueOrderAnchor'
+        expectedQueueEpoch:
+          type: integer
+          minimum: 1
+        expectedBaseVisibleSetHash:
+          $ref: '#/components/schemas/Sha256'
+        expectedAuthorizedProjectSetHash:
+          $ref: '#/components/schemas/Sha256'
+        expectedProjectionGeneration:
+          description: >-
+            Exact authorized-view projectionGeneration copied from QueuePage;
+            never an internal Workspace rebuild identity.
+          type: string
+          pattern: '^sha256:[a-f0-9]{64}$'
+        expectedComparatorRef:
+          const: 'queue-order@1.0.0'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        expiresAt:
+          type: string
+          format: date-time
+      allOf:
+        - if:
+            required: [placement]
+            properties:
+              placement:
+                enum: [BEFORE, AFTER]
+          then:
+              required: [anchor]
+          else:
+            not:
+              required: [anchor]
+    ProjectOrderCommandRequest:
+      allOf:
+        - $ref: '#/components/schemas/QueueOrderCommandRequest'
+        - type: object
+          properties:
+            scopeKind:
+              const: PROJECT
+    AuthorizedPortfolioOrderCommandRequest:
+      allOf:
+        - $ref: '#/components/schemas/QueueOrderCommandRequest'
+        - type: object
+          properties:
+            scopeKind:
+              const: AUTHORIZED_PORTFOLIO
+    QueueOrderSubject:
+      type: object
+      additionalProperties: false
+      required: [projectId, workItemId, expectedQueueEntry]
+      properties:
+        projectId:
+          $ref: '#/components/schemas/OpaqueId'
+        workItemId:
+          $ref: '#/components/schemas/OpaqueId'
+        expectedQueueEntry:
+          $ref: '#/components/schemas/QueueEntryCommandRef'
+    QueueOrderAnchor:
+      description: >-
+        Requested relative anchor key only. The server resolves it exclusively
+        inside the already-authorized exact base view. No exact ref is accepted,
+        so a hidden and a missing anchor follow the same no-op path.
+      type: object
+      additionalProperties: false
+      required: [projectId, workItemId]
+      properties:
+        projectId:
+          $ref: '#/components/schemas/OpaqueId'
+        workItemId:
+          $ref: '#/components/schemas/OpaqueId'
+    QueueEntryCommandRef:
+      description: >-
+        Exact projection tuple copied from the preceding authorized QueueEntry.
+        It is not the queue-control/order head version used by If-Match.
+      type: object
+      additionalProperties: false
+      required: [queueEntryId, revision, semanticHash, inputFingerprint]
+      properties:
+        queueEntryId:
+          $ref: '#/components/schemas/OpaqueId'
+        revision:
+          type: integer
+          minimum: 1
+        semanticHash:
+          $ref: '#/components/schemas/Sha256'
+        inputFingerprint:
+          $ref: '#/components/schemas/Sha256'
+    QueueActionReceipt:
+      description: >-
+        Viewer-safe action receipt. CONSUMED requires a durable public resultRef;
+        for ANCHOR_UNAVAILABLE_NO_OP this is the already persisted public action
+        candidate, never the raw-anchor private audit witness.
+      x-composed-validation: >-
+        Resolve queue-action-candidate(actionId, version 1) and require identical
+        actionKind, publicIntentHash=its JCS content hash, expiresAt presence/value
+        and approvalRequired=(approvalPolicy=SELF_APPROVAL_FORBIDDEN). When
+        approvalRequired is true, approvalRef resolves the v2 PLATFORM_ACTION
+        subject whose actionId, target and payloadHash bind that same candidate;
+        receipt state must agree with the durable action/Approval lifecycle.
+      type: object
+      additionalProperties: false
+      required:
+        - schemaVersion
+        - actionId
+        - actionKind
+        - state
+        - resourceVersion
+        - publicIntentHash
+        - approvalRequired
+        - requestedAt
+      properties:
+        schemaVersion:
+          const: 'queue-action-receipt@1.0.0'
+        actionId:
+          $ref: '#/components/schemas/OpaqueId'
+        actionKind:
+          enum:
+            - QUEUE_CONTROL_ACCEPT
+            - QUEUE_ORDER_OVERRIDE
+            - SERVICE_CLASS_EXPEDITE
+            - EXPEDITE_CAPACITY_OVERRIDE
+            - WIP_ADMISSION_OVERRIDE
+        state:
+          enum: [PENDING_APPROVAL, APPROVED, REJECTED, CONSUMED, INVALIDATED, EXPIRED]
+        resourceVersion:
+          type: integer
+          minimum: 1
+        publicIntentHash:
+          description: >-
+            Exact semantic contentHash of the immutable public QueueActionCandidate.
+            The additive Core Approval subject v2 payloadHash equals this value.
+            The separately stored internal queue execution witness includes global
+            capacity state and has a different actionHash that is never public.
+          $ref: '#/components/schemas/Sha256'
+        approvalRequired:
+          type: boolean
+        approvalRef:
+          $ref: '#/components/schemas/ApprovalSubjectV2Ref'
+        resultRef:
+          $ref: '#/components/schemas/QueueActionResultRef'
+        requestedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+      allOf:
+        - if:
+            required: [approvalRequired]
+            properties:
+              approvalRequired:
+                const: true
+          then:
+            required: [approvalRef]
+          else:
+            not:
+              required: [approvalRef]
+        - if:
+            required: [state]
+            properties:
+              state:
+                const: CONSUMED
+          then:
+            required: [resultRef]
+          else:
+            not:
+              required: [resultRef]
+        - if:
+            required: [state, actionKind]
+            properties:
+              state:
+                const: CONSUMED
+              actionKind:
+                const: QUEUE_CONTROL_ACCEPT
+          then:
+            properties:
+              resultRef:
+                properties:
+                  sourceType:
+                    const: WORK_ITEM_QUEUE_CONTROL_REVISION
+                required: [sourceType]
+        - if:
+            required: [state]
+            properties:
+              state:
+                enum: [PENDING_APPROVAL, APPROVED, REJECTED, INVALIDATED, EXPIRED]
+          then:
+            required: [approvalRef]
+            properties:
+              approvalRequired:
+                const: true
+        - if:
+            required: [approvalRequired]
+            properties:
+              approvalRequired:
+                const: false
+          then:
+            properties:
+              state:
+                const: CONSUMED
+        - if:
+            required: [state, actionKind]
+            properties:
+              state:
+                const: CONSUMED
+              actionKind:
+                const: QUEUE_ORDER_OVERRIDE
+          then:
+            properties:
+              resultRef:
+                properties:
+                  sourceType:
+                    enum: [QUEUE_ACTION_CANDIDATE, QUEUE_ORDER_OVERRIDE_REVISION]
+                required: [sourceType]
+        - if:
+            required: [state, actionKind]
+            properties:
+              state:
+                const: CONSUMED
+              actionKind:
+                enum: [SERVICE_CLASS_EXPEDITE, EXPEDITE_CAPACITY_OVERRIDE, WIP_ADMISSION_OVERRIDE]
+          then:
+            properties:
+              resultRef:
+                properties:
+                  sourceType:
+                    const: CAPACITY_ADMISSION_DECISION
+                required: [sourceType]
+    QueueControlActionReceipt:
+      allOf:
+        - $ref: '#/components/schemas/QueueActionReceipt'
+        - type: object
+          properties:
+            actionKind:
+              enum: [QUEUE_CONTROL_ACCEPT, SERVICE_CLASS_EXPEDITE]
+          required: [actionKind]
+    QueueOrderActionReceipt:
+      allOf:
+        - $ref: '#/components/schemas/QueueActionReceipt'
+        - type: object
+          properties:
+            actionKind:
+              const: QUEUE_ORDER_OVERRIDE
+          required: [actionKind]
+    QueueActionPendingApprovalReceipt:
+      allOf:
+        - $ref: '#/components/schemas/QueueActionReceipt'
+        - type: object
+          properties:
+            state:
+              const: PENDING_APPROVAL
+            approvalRequired:
+              const: true
+          required: [state, approvalRequired, approvalRef]
+    QueueControlActionPendingApprovalReceipt:
+      allOf:
+        - $ref: '#/components/schemas/QueueControlActionReceipt'
+        - $ref: '#/components/schemas/QueueActionPendingApprovalReceipt'
+    QueueOrderActionPendingApprovalReceipt:
+      allOf:
+        - $ref: '#/components/schemas/QueueOrderActionReceipt'
+        - $ref: '#/components/schemas/QueueActionPendingApprovalReceipt'
+    AdmissionRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - schemaVersion
+        - activityKind
+        - sessionId
+        - expectedSessionVersion
+        - expectedQueueControlVersion
+        - expectedOperationalProjectionRef
+      properties:
+        schemaVersion:
+          const: 'capacity-admission-request@1.0.0'
+        activityKind:
+          enum: [MANUAL_SESSION_START, MANUAL_SESSION_RESUME, AUTOMATED_SESSION_LAUNCH]
+        sessionId:
+          $ref: '#/components/schemas/OpaqueId'
+        expectedSessionVersion:
+          type: integer
+          minimum: 1
+        expectedQueueControlVersion:
+          type: integer
+          minimum: 0
+        expectedOperationalProjectionRef:
+          $ref: '#/components/schemas/ConfirmedOperationalProjectionRef'
+        overrideIntent:
+          description: >-
+            Explicit request to create a WIP_ADMISSION_OVERRIDE candidate if the
+            normal admission is denied and policy permits escalation. Omission
+            records only the denial and never manufactures an Approval.
+          type: object
+          additionalProperties: false
+          required: [reason, expiresAt]
+          properties:
+            reason:
+              type: string
+              minLength: 1
+              maxLength: 2000
+            expiresAt:
+              type: string
+              format: date-time
+    AdmissionDecisionResponse:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, decision]
+      properties:
+        schemaVersion:
+          const: 'capacity-admission-response@1.0.0'
+        decision:
+          $ref: '../schemas/capacity-admission.v1.schema.json'
+    AdmissionOverrideCandidateResponse:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, decision, overrideCandidate]
+      properties:
+        schemaVersion:
+          const: 'capacity-admission-override-candidate-response@1.0.0'
+        decision:
+          allOf:
+            - $ref: '../schemas/capacity-admission.v1.schema.json'
+            - type: object
+              properties:
+                outcome:
+                  const: DENIED
+              required: [outcome]
+        overrideCandidate:
+          allOf:
+            - $ref: '#/components/schemas/QueueActionReceipt'
+            - type: object
+              properties:
+                actionKind:
+                  const: WIP_ADMISSION_OVERRIDE
+                state:
+                  const: PENDING_APPROVAL
+                approvalRequired:
+                  const: true
+              required: [actionKind, state, approvalRequired, approvalRef]
+    NonDisclosureProblem:
+      description: >-
+        Closed 404 body shared by missing and unauthorized scoped resources. It
+        intentionally has no detail or violated-constraint member.
+      type: object
+      additionalProperties: false
+      required: [type, title, status, code, correlationId]
+      properties:
+        type:
+          const: 'urn:awp:problem:not-found'
+        title:
+          const: Not Found
+        status:
+          const: 404
+        code:
+          const: NOT_FOUND
+        correlationId:
+          $ref: '#/components/schemas/OpaqueId'
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [type, title, status, code, correlationId]
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        code:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]{2,80}$'
+        detail:
+          type: string
+          maxLength: 1000
+        correlationId:
+          $ref: '#/components/schemas/OpaqueId'
+        violatedConstraints:
+          type: array
+          maxItems: 16
+          uniqueItems: true
+          items:
+            enum:
+              - HARD_WIP
+              - EXPEDITE_SINGLETON
+              - SOURCE_STALE
+              - SOURCE_CONFLICT
+              - CAPABILITY_MISSING
+              - APPROVAL_REQUIRED
+              - APPROVAL_STALE
+              - PROJECT_SOFT_LIMIT
+              - RESERVATION_PRESSURE
+              - OVER_CAPACITY_EXTERNAL

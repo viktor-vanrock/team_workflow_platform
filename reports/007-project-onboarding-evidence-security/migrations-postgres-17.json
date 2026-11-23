@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "gate": "migration-matrix",
+  "postgresMajor": 17,
+  "image": "postgres:17.7-bookworm",
+  "status": "PASS",
+  "startedAt": "2026-09-03T18:37:36.146Z",
+  "finishedAt": "2026-09-03T18:37:44.708Z",
+  "durationMs": 8562,
+  "exitCode": 0,
+  "taskSourceHash": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62",
+  "migrationOrders": {
+    "core": [
+      150,
+      155,
+      160
+    ],
+    "qa": [
+      2080,
+      2085
+    ]
+  },
+  "versions": {
+    "core": 160,
+    "qa": 2085
+  },
+  "invariants": {
+    "freshInstall": true,
+    "upgradeFrom006": true,
+    "currentMinusOneUpgrade": true,
+    "repeatNoop": true,
+    "failureRecovery": true,
+    "historicalBootstrap": true,
+    "appendOnlyPublishedRows": true
+  },
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/integration/007/migration-matrix.spec.ts",
+        "sha256": "sha256:ced7ffb34de2e810378c3b36652999c63f1d6a5892934129be16f1fe6f65a287"
+      },
+      {
+        "path": "tests/integration/migrations/007-migration-registry.spec.ts",
+        "sha256": "sha256:04df80b82c438db0de669629ad53264642e3177a187fcb6dcdf995acefd2df43"
+      },
+      {
+        "path": "tests/integration/migrations/007-onboarding-foundation.spec.ts",
+        "sha256": "sha256:3c4e8f613656d18cd0df8f2b2def5271f977035e66977f034f7b6040c9e33a8a"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0150-project-onboarding.ts",
+        "sha256": "sha256:ed5fd55333f2416a41f08335874dc60f38e18f2aff3e98d7353deb785571b228"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0155-project-binding-entitlements.ts",
+        "sha256": "sha256:ac1fa89f9c0eff2ccc8947fc533f56faa1c78e90f908c26729462cc6f8e5ab80"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0160-artifact-retention-export.ts",
+        "sha256": "sha256:84b296ea15d1691350346fa2176232fad5e6cc4aa3fd99cd435be6a2868ff821"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2080-project-resources.ts",
+        "sha256": "sha256:e04eea3d1160d9b2f164b41765bd6840f3cb3c092f2c3ce670588fc7b9a943b4"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2085-evidence-integrity.ts",
+        "sha256": "sha256:2d61f14f654d8bd98a807c2524ce232b593b23223e341ac1dd0e4a419fda703e"
+      }
+    ],
+    "aggregateSha256": "sha256:99e0038062f81e1c2201cfbaa768a955e675652687bad93705ddd93b332c56a0"
+  },
+  "outputHash": "sha256:1a46a4a73c8c44802e38ae2709eafff21ab34c11a42c35e813d8f300ecc9a743"
+}

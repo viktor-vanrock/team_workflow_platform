@@ -1,0 +1,480 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:interaction-intent:v1",
+  "title": "InteractionIntent v1",
+  "$comment": "Composed validation enforces all same-scope references and temporal inequalities; unique AEAD nonce per key version; exact key identity/purpose/decrypt horizon; contiguous unique presentation slots; equality with the parent NotificationIntent ordered action set, command, capability, effect-key hash, target/payload/render hashes; DM principal equality; and callback team/channel/post equality with the immutable presentation delivery result. These semantic/ref constraints are in addition to JSON Schema shape validation.",
+  "description": "Project-scoped server-side exact intent. PROJECT_SELECT is issued only after canonical OIDC authentication and uses WEB transport; later Mattermost callbacks use project-scoped configuration plus a safe reference to recoverable sealed presentation material. The raw opaque token is never serialized by this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "intentId",
+    "workspaceId",
+    "projectId",
+    "actionKind",
+    "actionParameters",
+    "subject",
+    "actor",
+    "transport",
+    "configuration",
+    "initialAuthorizationBasisHash",
+    "nonceHash",
+    "tokenHandling",
+    "state",
+    "expiresAt",
+    "createdAt",
+    "correlationId",
+    "causationId"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "interaction-intent@1.0.0" },
+    "intentId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "actionKind": {
+      "enum": ["PROJECT_SELECT", "CANDIDATE_CREATE", "CANDIDATE_SNOOZE", "CANDIDATE_IGNORE", "DRAFT_REVISION_SUBMIT", "DRAFT_CONFIRM", "OPEN_WEB"]
+    },
+    "actionParameters": { "type": "object" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version", "contentHash", "aggregateSnapshotHash"],
+      "properties": {
+        "kind": { "enum": ["PROJECT_SELECTION", "CANDIDATE", "DRAFT_REVISION", "WEB_ROUTE"] },
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/hash" },
+        "aggregateSnapshotHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principalId", "externalUserId", "bindingRef"],
+      "properties": {
+        "principalId": { "$ref": "#/$defs/id" },
+        "externalUserId": { "$ref": "#/$defs/id" },
+        "bindingRef": { "$ref": "#/$defs/versionedRef" }
+      }
+    },
+    "transport": {
+      "oneOf": [
+        { "$ref": "#/$defs/mattermostTransport" },
+        { "$ref": "#/$defs/webTransport" }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectBindingRef", "profileRef", "connectionRef"],
+      "properties": {
+        "projectBindingRef": { "$ref": "#/$defs/versionedRef" },
+        "profileRef": { "$ref": "#/$defs/versionedRef" },
+        "connectionRef": { "$ref": "#/$defs/versionedRef" }
+      }
+    },
+    "initialAuthorizationBasisHash": { "$ref": "#/$defs/hash" },
+    "nonceHash": { "$ref": "#/$defs/hash" },
+    "tokenHandling": {
+      "oneOf": [
+        { "$ref": "#/$defs/returnOnceTokenHandling" },
+        { "$ref": "#/$defs/sealedPresentationTokenHandling" }
+      ]
+    },
+    "state": { "enum": ["PENDING", "CLAIMED", "CONSUMED", "EXPIRED", "INVALIDATED"] },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "correlationId": { "$ref": "#/$defs/id" },
+    "causationId": { "$ref": "#/$defs/id" },
+    "claimedAt": { "type": "string", "format": "date-time" },
+    "consumedAt": { "type": "string", "format": "date-time" },
+    "invalidatedAt": { "type": "string", "format": "date-time" },
+    "resultRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "resultHash": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "properties": { "actionKind": { "const": "PROJECT_SELECT" } }, "required": ["actionKind"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "object", "properties": { "kind": { "const": "PROJECT_SELECTION" } } },
+          "actionParameters": { "$ref": "#/$defs/projectSelectActionParameters" },
+          "transport": { "type": "object", "properties": { "kind": { "const": "WEB" } } },
+          "tokenHandling": { "type": "object", "properties": { "kind": { "const": "RETURN_ONCE" } } }
+        }
+      },
+      "else": {
+        "type": "object",
+        "properties": {
+          "transport": { "type": "object", "properties": { "kind": { "const": "MATTERMOST" } } },
+          "tokenHandling": { "type": "object", "properties": { "kind": { "const": "SEALED_PRESENTATION" } } }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "actionKind": { "const": "CANDIDATE_CREATE" } }, "required": ["actionKind"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "object", "properties": { "kind": { "const": "CANDIDATE" } } },
+          "actionParameters": { "$ref": "#/$defs/candidateCreateActionParameters" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "actionKind": { "const": "CANDIDATE_IGNORE" } }, "required": ["actionKind"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "object", "properties": { "kind": { "const": "CANDIDATE" } } },
+          "actionParameters": { "$ref": "#/$defs/candidateIgnoreActionParameters" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "actionKind": { "const": "CANDIDATE_SNOOZE" } }, "required": ["actionKind"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "object", "properties": { "kind": { "const": "CANDIDATE" } } },
+          "actionParameters": { "$ref": "#/$defs/candidateSnoozeActionParameters" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "actionKind": { "const": "DRAFT_REVISION_SUBMIT" } }, "required": ["actionKind"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "object", "properties": { "kind": { "const": "DRAFT_REVISION" } } },
+          "actionParameters": { "$ref": "#/$defs/draftRevisionSubmitActionParameters" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "actionKind": { "const": "DRAFT_CONFIRM" } }, "required": ["actionKind"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "object", "properties": { "kind": { "const": "DRAFT_REVISION" } } },
+          "actionParameters": { "$ref": "#/$defs/draftConfirmActionParameters" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "actionKind": { "const": "OPEN_WEB" } }, "required": ["actionKind"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "object", "properties": { "kind": { "const": "WEB_ROUTE" } } },
+          "actionParameters": { "$ref": "#/$defs/openWebActionParameters" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "state": { "const": "PENDING" } }, "required": ["state"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "claimedAt": false,
+          "consumedAt": false,
+          "invalidatedAt": false,
+          "resultRef": false,
+          "resultHash": false
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "state": { "const": "CLAIMED" } }, "required": ["state"] },
+      "then": {
+        "type": "object",
+        "required": ["claimedAt"],
+        "properties": {
+          "claimedAt": { "type": "string", "format": "date-time" },
+          "consumedAt": false,
+          "invalidatedAt": false,
+          "resultRef": false,
+          "resultHash": false
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "state": { "const": "CONSUMED" } }, "required": ["state"] },
+      "then": {
+        "type": "object",
+        "required": ["claimedAt", "consumedAt", "resultRef", "resultHash"],
+        "properties": {
+          "claimedAt": { "type": "string", "format": "date-time" },
+          "consumedAt": { "type": "string", "format": "date-time" },
+          "invalidatedAt": false,
+          "resultRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "resultHash": { "$ref": "#/$defs/hash" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "state": { "const": "EXPIRED" } }, "required": ["state"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "consumedAt": false,
+          "invalidatedAt": false,
+          "resultRef": false,
+          "resultHash": false
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "state": { "const": "INVALIDATED" } }, "required": ["state"] },
+      "then": {
+        "type": "object",
+        "required": ["invalidatedAt"],
+        "properties": {
+          "consumedAt": false,
+          "invalidatedAt": { "type": "string", "format": "date-time" },
+          "resultRef": false,
+          "resultHash": false
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "returnOnceTokenHandling": {
+      "description": "WEB project-selection token returned only in the fresh authenticated response and never persisted in recoverable form.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": { "kind": { "const": "RETURN_ONCE" } }
+    },
+    "sealedPresentationTokenHandling": {
+      "description": "Safe commitments for one token slot in a bounded project-scoped interactive presentation. AWP_CANONICAL_JSON_V1 is RFC 8785 JCS serialized as UTF-8 without BOM/newline and must validate as InteractionPresentationAadV1, including retainUntil. The composed validator resolves the capsule and immutable key version, requires retainUntil <= intent.expiresAt <= key.decryptUntil, verifies the exact NotificationIntent/command/capability/effect/target/payload/render bindings, aadHash and post-decrypt nonceHash. Plaintext is available only through a one-shot fenced SensitiveValue lease and is never serialized here.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "capsuleId",
+        "capsuleFormat",
+        "plaintextEncoding",
+        "aeadAlgorithm",
+        "aeadNonceBytes",
+        "aeadTagBytes",
+        "aadCanonicalization",
+        "aadSchemaRef",
+        "aadHash",
+        "ciphertextHash",
+        "encryptionKeyVersionRef",
+        "presentationNotificationIntentId",
+        "presentationSlot",
+        "presentationCommandId",
+        "presentationCapabilityKey",
+        "presentationEffectKeyHash",
+        "presentationTargetHash",
+        "presentationPayloadHash",
+        "presentationRenderHash",
+        "retainUntil"
+      ],
+      "properties": {
+        "kind": { "const": "SEALED_PRESENTATION" },
+        "capsuleId": { "$ref": "#/$defs/id" },
+        "capsuleFormat": { "const": "AWP_INTERACTION_TOKEN_AEAD_V1" },
+        "plaintextEncoding": { "const": "UTF8_NO_NORMALIZATION" },
+        "aeadAlgorithm": { "const": "AES_256_GCM" },
+        "aeadNonceBytes": { "const": 12 },
+        "aeadTagBytes": { "const": 16 },
+        "aadCanonicalization": { "const": "AWP_CANONICAL_JSON_V1" },
+        "aadSchemaRef": { "$ref": "#/$defs/aadSchemaRef" },
+        "aadHash": { "$ref": "#/$defs/hash" },
+        "ciphertextHash": { "$ref": "#/$defs/hash" },
+        "encryptionKeyVersionRef": { "$ref": "#/$defs/presentationKeyVersionRef" },
+        "presentationNotificationIntentId": { "$ref": "#/$defs/id" },
+        "presentationSlot": { "type": "integer", "minimum": 0, "maximum": 7 },
+        "presentationCommandId": { "$ref": "#/$defs/id" },
+        "presentationCapabilityKey": { "const": "messaging.callback@1.0.0" },
+        "presentationEffectKeyHash": { "$ref": "#/$defs/hash" },
+        "presentationTargetHash": { "$ref": "#/$defs/hash" },
+        "presentationPayloadHash": { "$ref": "#/$defs/hash" },
+        "presentationRenderHash": { "$ref": "#/$defs/hash" },
+        "retainUntil": { "type": "string", "format": "date-time" }
+      }
+    },
+    "presentationKeyVersionRef": {
+      "description": "Immutable Core envelope-key metadata. The composed validator requires exact top-level scope/environment equality, a distinct resolved identity from every bot/gateway credential, no cross-Project alias, and decryptUntil covering the capsule recovery horizon.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["keyId", "version", "purpose", "workspaceId", "projectId", "environmentClass", "keyIdentityFingerprint", "metadataHash", "decryptUntil"],
+      "properties": {
+        "keyId": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "purpose": { "const": "INTERACTION_PRESENTATION_AEAD" },
+        "workspaceId": { "$ref": "#/$defs/id" },
+        "projectId": { "$ref": "#/$defs/id" },
+        "environmentClass": { "enum": ["LOCAL", "DEVELOPMENT", "TEST"] },
+        "keyIdentityFingerprint": { "$ref": "#/$defs/hash" },
+        "metadataHash": { "$ref": "#/$defs/hash" },
+        "decryptUntil": { "type": "string", "format": "date-time" }
+      }
+    },
+    "aadSchemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "const": "urn:awp:schemas:004:interaction-presentation-aad:v1" },
+        "version": { "const": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "mattermostTransport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "target"],
+      "properties": {
+        "kind": { "const": "MATTERMOST" },
+        "target": {
+          "oneOf": [
+            { "$ref": "#/$defs/projectChannelTarget" },
+            { "$ref": "#/$defs/principalDmTarget" },
+            { "$ref": "#/$defs/interactionResponseTarget" }
+          ]
+        }
+      }
+    },
+    "projectChannelTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "teamId", "channelId"],
+      "properties": {
+        "kind": { "const": "PROJECT_CHANNEL" },
+        "teamId": { "$ref": "#/$defs/id" },
+        "channelId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "principalDmTarget": {
+      "description": "Logical target used before the provider creates/resolves a DM channel. principalId must equal the intent actor and the delivery result later pins the provider channel/post used for callback verification.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "principalId"],
+      "properties": {
+        "kind": { "const": "PRINCIPAL_DM" },
+        "principalId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "interactionResponseTarget": {
+      "description": "Routes through the immutable delivery/result of an already consumed source interaction; it is distinct from the newly presented action intent IDs.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sourceInteractionIntentId"],
+      "properties": {
+        "kind": { "const": "INTERACTION_RESPONSE" },
+        "sourceInteractionIntentId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "webTransport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "oidcSessionHash", "continuationRef"],
+      "properties": {
+        "kind": { "const": "WEB" },
+        "oidcSessionHash": { "$ref": "#/$defs/hash" },
+        "continuationRef": { "$ref": "#/$defs/versionedHashRef" }
+      }
+    },
+    "projectSelectActionParameters": {
+      "description": "The exact selected Project and authorization snapshot are already pinned by projectId and the PROJECT_SELECTION subject.",
+      "type": "object",
+      "additionalProperties": false
+    },
+    "candidateCreateActionParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedCandidateVersion", "expectedSourceObservationVersion", "reasonCode"],
+      "properties": {
+        "expectedCandidateVersion": { "type": "integer", "minimum": 1 },
+        "expectedSourceObservationVersion": { "type": "integer", "minimum": 1 },
+        "reasonCode": { "const": "USER_SELECTED" }
+      }
+    },
+    "candidateIgnoreActionParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedCandidateVersion", "expectedSourceObservationVersion", "reasonCode"],
+      "properties": {
+        "expectedCandidateVersion": { "type": "integer", "minimum": 1 },
+        "expectedSourceObservationVersion": { "type": "integer", "minimum": 1 },
+        "reasonCode": { "enum": ["DUPLICATE", "OUT_OF_SCOPE", "NOT_ACTIONABLE"] }
+      }
+    },
+    "candidateSnoozeActionParameters": {
+      "description": "Pins the exact Candidate snapshots and bounded dialog contract; the user-entered snoozedUntil is validated on submission and is not pre-authorized by the intent.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedCandidateVersion", "expectedSourceObservationVersion", "reasonCode", "inputSchemaRef", "formHash"],
+      "properties": {
+        "expectedCandidateVersion": { "type": "integer", "minimum": 1 },
+        "expectedSourceObservationVersion": { "type": "integer", "minimum": 1 },
+        "inputSchemaRef": { "$ref": "#/$defs/schemaRef" },
+        "formHash": { "$ref": "#/$defs/hash" },
+        "reasonCode": { "const": "DEFERRED" }
+      }
+    },
+    "draftRevisionSubmitActionParameters": {
+      "description": "subject.id/version/contentHash pin revisionId, revision and contentHash; this object adds the Draft header CAS and exact rendered form hash.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedDraftRowVersion", "inputSchemaRef", "formHash"],
+      "properties": {
+        "expectedDraftRowVersion": { "type": "integer", "minimum": 1 },
+        "inputSchemaRef": { "$ref": "#/$defs/schemaRef" },
+        "formHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "draftConfirmActionParameters": {
+      "description": "subject.id/version/contentHash pin revisionId, revision and contentHash; this object adds the Draft header CAS and immutable confirmation summary hash.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedDraftRowVersion", "confirmationSummaryHash"],
+      "properties": {
+        "expectedDraftRowVersion": { "type": "integer", "minimum": 1 },
+        "confirmationSummaryHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "openWebActionParameters": {
+      "description": "The allowlisted navigation target and its exact version/hash are already pinned by the WEB_ROUTE subject.",
+      "type": "object",
+      "additionalProperties": false
+    },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^urn:awp:schemas:[A-Za-z0-9:._-]+$", "maxLength": 512 },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "versionedRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{1,255}$" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

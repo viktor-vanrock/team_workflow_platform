@@ -1,0 +1,324 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:action-provenance:v1",
+  "title": "ActionProvenance v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "actionId",
+    "actionKind",
+    "workspaceId",
+    "projectId",
+    "subject",
+    "initiator",
+    "request",
+    "requestedEffect",
+    "auditEventRef",
+    "correlationId",
+    "causationId",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "action-provenance@1.0.0" },
+    "actionId": { "$ref": "#/$defs/id" },
+    "actionKind": {
+      "enum": ["CANDIDATE_OBSERVE", "CANDIDATE_DECIDE", "DRAFT_REVISE", "DRAFT_VALIDATE", "DRAFT_CONFIRM", "AGENT_RUN_START", "AGENT_TOOL_INVOKE", "NOTIFICATION_CREATE"]
+    },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version", "contentHash"],
+      "properties": {
+        "kind": { "enum": ["CANDIDATE", "DRAFT", "DRAFT_REVISION", "AGENT_RUN", "WORK_ITEM", "NOTIFICATION_INTENT"] },
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "initiator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "principalId", "authorizationBasisHash"],
+      "properties": {
+        "kind": { "enum": ["HUMAN", "SERVICE"] },
+        "principalId": { "$ref": "#/$defs/id" },
+        "authorizationBasisHash": { "$ref": "#/$defs/hash" },
+        "delegatingHumanPrincipalId": { "$ref": "#/$defs/id" },
+        "delegatingHumanAuthorizationBasisHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaRef", "requestHash", "requestKey"],
+      "properties": {
+        "schemaRef": { "$ref": "#/$defs/schemaRef" },
+        "requestHash": { "$ref": "#/$defs/hash" },
+        "requestKey": { "type": "string", "minLength": 1, "maxLength": 256 }
+      }
+    },
+    "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+    "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+    "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+    "agentRunRef": { "$ref": "#/$defs/id" },
+    "configurationPins": { "$ref": "#/$defs/configurationPins" },
+    "requestedEffect": { "enum": ["NONE", "READ_ONLY", "PROPOSAL", "DOMAIN_MUTATION", "DRAFT_MUTATION", "NOTIFICATION_INTENT", "CONNECTOR_COMMAND"] },
+    "externalCommandRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "resultRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "resultHash": { "$ref": "#/$defs/hash" },
+    "auditEventRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "correlationId": { "$ref": "#/$defs/id" },
+    "causationId": { "$ref": "#/$defs/id" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "dependentRequired": {
+    "resultRef": ["resultHash"],
+    "resultHash": ["resultRef"]
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "required": ["actionKind"], "properties": { "actionKind": { "const": "CANDIDATE_OBSERVE" } } },
+      "then": {
+        "type": "object",
+        "required": ["rulesRef", "policyRef"],
+        "properties": {
+          "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+          "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+          "subject": { "type": "object", "properties": { "kind": { "const": "CANDIDATE" } } },
+          "initiator": { "type": "object", "properties": { "kind": { "const": "SERVICE" } } },
+          "requestedEffect": { "const": "DOMAIN_MUTATION" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "required": ["actionKind"], "properties": { "actionKind": { "const": "CANDIDATE_DECIDE" } } },
+      "then": {
+        "type": "object",
+        "required": ["policyRef"],
+        "properties": {
+          "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+          "subject": { "type": "object", "properties": { "kind": { "const": "CANDIDATE" } } },
+          "initiator": { "type": "object", "properties": { "kind": { "const": "HUMAN" } } },
+          "requestedEffect": { "const": "DOMAIN_MUTATION" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "required": ["actionKind"], "properties": { "actionKind": { "const": "DRAFT_REVISE" } } },
+      "then": {
+        "type": "object",
+        "required": ["policyRef"],
+        "properties": {
+          "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+          "subject": { "type": "object", "properties": { "kind": { "const": "DRAFT_REVISION" } } },
+          "requestedEffect": { "const": "DRAFT_MUTATION" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "required": ["actionKind"], "properties": { "actionKind": { "const": "DRAFT_VALIDATE" } } },
+      "then": {
+        "type": "object",
+        "required": ["rulesRef", "policyRef", "skillRef"],
+        "properties": {
+          "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+          "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+          "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+          "subject": { "type": "object", "properties": { "kind": { "const": "DRAFT_REVISION" } } },
+          "requestedEffect": { "const": "PROPOSAL" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "required": ["actionKind"], "properties": { "actionKind": { "const": "DRAFT_CONFIRM" } } },
+      "then": {
+        "type": "object",
+        "required": ["policyRef", "configurationPins", "externalCommandRef"],
+        "properties": {
+          "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+          "subject": { "type": "object", "properties": { "kind": { "const": "DRAFT_REVISION" } } },
+          "initiator": { "type": "object", "properties": { "kind": { "const": "HUMAN" } } },
+          "configurationPins": { "$ref": "#/$defs/draftConfirmConfigurationPins" },
+          "externalCommandRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "requestedEffect": { "const": "CONNECTOR_COMMAND" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "required": ["actionKind"], "properties": { "actionKind": { "const": "AGENT_RUN_START" } } },
+      "then": {
+        "type": "object",
+        "required": ["rulesRef", "policyRef", "skillRef"],
+        "properties": {
+          "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+          "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+          "subject": { "type": "object", "properties": { "kind": { "enum": ["DRAFT", "CANDIDATE", "WORK_ITEM"] } } },
+          "initiator": { "type": "object", "properties": { "kind": { "const": "HUMAN" } } },
+          "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+          "requestedEffect": { "const": "DOMAIN_MUTATION" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "required": ["actionKind"], "properties": { "actionKind": { "const": "AGENT_TOOL_INVOKE" } } },
+      "then": {
+        "type": "object",
+        "required": ["agentRunRef", "policyRef", "skillRef"],
+        "properties": {
+          "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+          "subject": { "type": "object", "properties": { "kind": { "enum": ["DRAFT", "CANDIDATE", "WORK_ITEM"] } } },
+          "initiator": {
+            "type": "object",
+            "required": ["delegatingHumanPrincipalId", "delegatingHumanAuthorizationBasisHash"],
+            "properties": {
+              "kind": { "const": "SERVICE" },
+              "delegatingHumanPrincipalId": { "$ref": "#/$defs/id" },
+              "delegatingHumanAuthorizationBasisHash": { "$ref": "#/$defs/hash" }
+            }
+          },
+          "agentRunRef": { "$ref": "#/$defs/id" },
+          "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+          "requestedEffect": { "enum": ["READ_ONLY", "PROPOSAL", "DRAFT_MUTATION", "NOTIFICATION_INTENT"] }
+        }
+      },
+      "else": {
+        "type": "object",
+        "properties": {
+          "agentRunRef": false,
+          "initiator": {
+            "type": "object",
+            "properties": {
+              "delegatingHumanPrincipalId": false,
+              "delegatingHumanAuthorizationBasisHash": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "required": ["actionKind"], "properties": { "actionKind": { "const": "NOTIFICATION_CREATE" } } },
+      "then": {
+        "type": "object",
+        "required": ["policyRef", "configurationPins"],
+        "properties": {
+          "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+          "subject": { "type": "object", "properties": { "kind": { "const": "NOTIFICATION_INTENT" } } },
+          "initiator": { "type": "object", "properties": { "kind": { "const": "SERVICE" } } },
+          "configurationPins": { "$ref": "#/$defs/notificationConfigurationPins" },
+          "requestedEffect": { "const": "NOTIFICATION_INTENT" }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["actionKind"],
+        "properties": {
+          "actionKind": { "enum": ["CANDIDATE_OBSERVE", "DRAFT_REVISE", "DRAFT_VALIDATE", "AGENT_RUN_START", "AGENT_TOOL_INVOKE"] }
+        }
+      },
+      "then": true,
+      "else": { "type": "object", "properties": { "rulesRef": false } }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["actionKind"],
+        "properties": {
+          "actionKind": { "enum": ["DRAFT_VALIDATE", "AGENT_RUN_START", "AGENT_TOOL_INVOKE"] }
+        }
+      },
+      "then": true,
+      "else": { "type": "object", "properties": { "skillRef": false } }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["actionKind"],
+        "properties": {
+          "actionKind": { "enum": ["DRAFT_CONFIRM", "AGENT_TOOL_INVOKE", "NOTIFICATION_CREATE"] }
+        }
+      },
+      "then": true,
+      "else": { "type": "object", "properties": { "configurationPins": false } }
+    },
+    {
+      "if": {
+        "type": "object",
+        "required": ["actionKind"],
+        "properties": { "actionKind": { "const": "DRAFT_CONFIRM" } }
+      },
+      "then": true,
+      "else": { "type": "object", "properties": { "externalCommandRef": false } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^urn:awp:schemas:[A-Za-z0-9:._-]+$", "maxLength": 512 },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "versionedRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "digest": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "configurationPins": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "projectBindingRef": { "$ref": "#/$defs/versionedRef" },
+        "profileRef": { "$ref": "#/$defs/versionedRef" },
+        "mappingRef": { "$ref": "#/$defs/versionedRef" },
+        "connectionRef": { "$ref": "#/$defs/versionedRef" }
+      }
+    },
+    "draftConfirmConfigurationPins": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectBindingRef", "profileRef", "mappingRef", "connectionRef"],
+      "properties": {
+        "projectBindingRef": { "$ref": "#/$defs/versionedRef" },
+        "profileRef": { "$ref": "#/$defs/versionedRef" },
+        "mappingRef": { "$ref": "#/$defs/versionedRef" },
+        "connectionRef": { "$ref": "#/$defs/versionedRef" }
+      }
+    },
+    "notificationConfigurationPins": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projectBindingRef", "profileRef", "connectionRef"],
+      "properties": {
+        "projectBindingRef": { "$ref": "#/$defs/versionedRef" },
+        "profileRef": { "$ref": "#/$defs/versionedRef" },
+        "connectionRef": { "$ref": "#/$defs/versionedRef" }
+      }
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

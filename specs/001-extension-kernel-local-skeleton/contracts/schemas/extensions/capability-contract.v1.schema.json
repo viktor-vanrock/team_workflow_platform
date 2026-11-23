@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:extensions:capability-contract:v1",
+  "title": "Typed Capability Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "key", "version", "operations"],
+  "properties": {
+    "apiVersion": { "const": "awp.platform/v1" },
+    "kind": { "const": "CapabilityContract" },
+    "key": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "version": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+    "description": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/Operation" }
+    }
+  },
+  "$defs": {
+    "Operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "effect",
+        "targetSchemaRef",
+        "inputSchemaRef",
+        "resultSchemaRef",
+        "externalScopeSchemaRef",
+        "idempotency",
+        "confirmationModes"
+      ],
+      "properties": {
+        "key": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "effect": { "type": "string", "enum": ["READ", "WRITE"] },
+        "targetSchemaRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SchemaRef" },
+        "inputSchemaRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SchemaRef" },
+        "resultSchemaRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SchemaRef" },
+        "externalScopeSchemaRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SchemaRef" },
+        "idempotency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "supportedStrategies"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "supportedStrategies": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": ["NATIVE_KEY", "NATURAL_KEY_LOOKUP", "RECONCILIATION"]
+              }
+            }
+          }
+        },
+        "confirmationModes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["SYNC_RECEIPT", "READ_BACK", "WEBHOOK", "RECONCILIATION"]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["effect"],
+            "properties": { "effect": { "const": "WRITE" } }
+          },
+          "then": {
+            "properties": {
+              "idempotency": {
+                "properties": {
+                  "required": { "const": true },
+                  "supportedStrategies": { "minItems": 1 }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

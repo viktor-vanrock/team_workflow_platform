@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:qa-project-context:v2",
+  "title": "QA Project Context v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "contextId", "version", "workspaceId", "projectId", "state", "environmentRefs", "testDataCatalogRefs", "accountPoolRefs", "targetPolicyRefs", "scopePolicyRefs", "checklistPolicyRefs", "defaultTargetPolicyRef", "defaultScopePolicyRef", "defaultChecklistRefs", "evidencePolicyRef", "retentionPolicyRef", "redactionPolicyRef", "exportPolicyRef", "riskReviewPolicyRef", "dorRuleSetRef", "dodRuleSetRef", "capabilityRequirementSetRef", "maximumClassificationKey", "createdBy", "publishedBy", "publishedAt", "contentHash", "resourceVersion"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "contextId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "state": { "enum": ["PUBLISHED", "RETIRED"] },
+    "environmentRefs": { "$ref": "#/$defs/refSet" },
+    "testDataCatalogRefs": { "$ref": "#/$defs/refSet" },
+    "accountPoolRefs": { "$ref": "#/$defs/refSet" },
+    "targetPolicyRefs": { "$ref": "#/$defs/refSet" },
+    "scopePolicyRefs": { "$ref": "#/$defs/refSet" },
+    "checklistPolicyRefs": { "$ref": "#/$defs/refSet" },
+    "defaultTargetPolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "defaultScopePolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "defaultChecklistRefs": { "$ref": "#/$defs/refSet" },
+    "evidencePolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "retentionPolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "redactionPolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "exportPolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "riskReviewPolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "dorRuleSetRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "dodRuleSetRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "capabilityRequirementSetRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "maximumClassificationKey": { "$ref": "../common.v1.schema.json#/$defs/classificationKey" },
+    "createdBy": { "$ref": "../common.v1.schema.json#/$defs/humanActor" },
+    "publishedBy": { "$ref": "../common.v1.schema.json#/$defs/humanActor" },
+    "publishedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "retiredAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" },
+    "resourceVersion": { "type": "integer", "minimum": 1 }
+  },
+  "$defs": {
+    "refSet": {
+      "type": "array",
+      "items": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+      "uniqueItems": true
+    }
+  }
+}

@@ -1,0 +1,13 @@
+flowchart TB
+  input["HTTP request / asynchronous command"] --> identity["Verified HUMAN / SERVICE identity<br/>issuer / audience / token or session"]
+  identity --> scope["Workspace membership<br/>∩ Project Entitlement<br/>∩ role permission<br/>∩ data classification"]
+  scope --> current["Current revisions and policy<br/>explicit DENY / expiry / revocation"]
+  current --> project["Project onboarding + operational state<br/>ACTIVE / SUSPENDED<br/>MANUAL_ONLY / FULL_QA / freshness"]
+  project --> action{"Класс действия"}
+  action -->|"read / deterministic local mutation"| read["Scoped application service"]
+  action -->|"external effect"| exact["Exact binding/profile/connection<br/>payload + expected state<br/>approval или explicit command intent"]
+  exact --> gate["Worker effect gate<br/>live human/service rights<br/>network / secret purpose / deployment fence"]
+  gate --> connector["Typed Connector Port"]
+  connector --> external["Allowlisted non-production endpoint"]
+  registry["Published integration revisions<br/>validation + acceptance + probes"] --> project
+  registry --> exact

@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "quickstart",
+  "startedAt": "2026-09-03T10:29:04.385Z",
+  "finishedAt": "2026-09-03T10:34:58.278Z",
+  "status": "PASS",
+  "documentedCommands": 39,
+  "documentedScenarios": 16,
+  "requiredSuccessCriteria": [
+    "SC-001",
+    "SC-002",
+    "SC-003",
+    "SC-004",
+    "SC-005",
+    "SC-006",
+    "SC-007"
+  ],
+  "orphanedScripts": [],
+  "orphanedScenarios": [],
+  "undocumentedScenarios": [],
+  "unclassifiedCommands": [],
+  "commandCoverage": [
+    {
+      "command": "corepack pnpm verify:003:evidence",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:004:governance",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "corepack pnpm install --frozen-lockfile",
+      "disposition": "PACKAGE_MANAGER_BUILTIN"
+    },
+    {
+      "command": "corepack pnpm test:contract:004",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "corepack pnpm test:architecture:004",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "corepack pnpm local:mattermost:up",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm local:mattermost:status",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm local:mattermost:migrate",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm local:mattermost:seed",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us1-guided-intake",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us1-repeat-callback",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us1-valid-fields-not-reasked",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm verify:004:checkpoint -- us1",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us2-jira-candidate-create",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us2-jira-candidate-snooze",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us2-jira-candidate-ignore",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us2-source-version-update",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us3-triage-valid",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us3-source-drift-stale",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us3-model-invalid-json",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us3-model-timeout",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us3-prompt-injection",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us4-outage-before-send",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us4-rate-limit-recovery",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us4-timeout-after-effect",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm mattermost:scenario -- us4-permanent-auth-failure",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm test:security:004",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "corepack pnpm test:integration:004 -- callback-concurrency",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "corepack pnpm test:integration:004 -- scope-isolation",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "corepack pnpm verify:004:migrations -- postgres=17",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:004:migrations -- postgres=18",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "corepack pnpm test:integration:004 -- durable-recovery",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "corepack pnpm test:e2e:004",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "corepack pnpm smoke:004",
+      "disposition": "EXECUTED"
+    },
+    {
+      "command": "corepack pnpm trace:004",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:004",
+      "disposition": "PARENT_GATE"
+    },
+    {
+      "command": "corepack pnpm verify:004:nonprod --metadata config/mattermost-pilot-metadata.json",
+      "disposition": "GATED_NONPROD"
+    },
+    {
+      "command": "corepack pnpm local:mattermost:down",
+      "disposition": "EXECUTED_BY_SMOKE"
+    },
+    {
+      "command": "corepack pnpm local:mattermost:reset",
+      "disposition": "OPERATOR_DESTRUCTIVE"
+    }
+  ],
+  "results": [
+    {
+      "script": "test:contract:004",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/004",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "durationMs": 11290,
+      "exitCode": 0
+    },
+    {
+      "script": "test:architecture:004",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/architecture/004-mattermost-boundaries.spec.ts",
+        "tests/architecture/004-mattermost-runtime-wiring.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "durationMs": 781,
+      "exitCode": 0
+    },
+    {
+      "script": "test:integration:004",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/004",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "durationMs": 17835,
+      "exitCode": 0
+    },
+    {
+      "script": "test:security:004",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/security/004",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "durationMs": 12163,
+      "exitCode": 0
+    },
+    {
+      "script": "test:e2e:004",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/e2e/004-",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "durationMs": 8712,
+      "exitCode": 0
+    },
+    {
+      "script": "smoke:004",
+      "command": [
+        "node",
+        "tools/smoke/feature-004.mts"
+      ],
+      "status": "PASS",
+      "durationMs": 303110,
+      "exitCode": 0
+    }
+  ],
+  "executedScenarioNames": [
+    "us1-guided-intake",
+    "us1-repeat-callback",
+    "us1-valid-fields-not-reasked",
+    "us2-jira-candidate-create",
+    "us2-jira-candidate-snooze",
+    "us2-jira-candidate-ignore",
+    "us2-source-version-update",
+    "us3-triage-valid",
+    "us3-source-drift-stale",
+    "us3-model-invalid-json",
+    "us3-model-timeout",
+    "us3-prompt-injection",
+    "us4-outage-before-send",
+    "us4-rate-limit-recovery",
+    "us4-timeout-after-effect",
+    "us4-permanent-auth-failure"
+  ],
+  "unexecutedInvariants": []
+}

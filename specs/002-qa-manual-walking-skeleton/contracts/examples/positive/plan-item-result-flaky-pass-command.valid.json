@@ -1,0 +1,41 @@
+{
+  "expectedPreviousResultRevisionRef": null,
+  "expectedAttemptSetHash": "sha256:6868686868686868686868686868686868686868686868686868686868686869",
+  "expectedMaximumAttemptNo": 2,
+  "expectedObservationSetHash": "sha256:6969696969696969696969696969696969696969696969696969696969696968",
+  "expectedObservationCount": 2,
+  "reviewFlags": ["FLAKY_SUSPECTED"],
+  "result": "PASS",
+  "actualOutcome": "Initial assertion failed with evidence; the exact retry passed.",
+  "decisionReason": "Record the fail-to-pass lineage and pin its current disposed Finding basis.",
+  "artifactIds": ["99999999-9999-4999-8999-999999999999"],
+  "flakyDispositionBasis": {
+    "findingId": "58585858-5858-4858-8858-585858585858",
+    "findingState": "DISPOSED",
+    "disposedFindingReviewRef": {
+      "id": "57575757-5757-4757-8757-575757575757",
+      "version": 2,
+      "contentHash": "sha256:5858585858585858585858585858585858585858585858585858585858585858"
+    },
+    "activeMembershipSetHash": "sha256:5353535353535353535353535353535353535353535353535353535353535353",
+    "failedAttemptRefs": [
+      {
+        "id": "66666666-6666-4666-8666-666666666666",
+        "contentHash": "sha256:4646464646464646464646464646464646464646464646464646464646464646"
+      }
+    ],
+    "failedAttemptSetHash": "sha256:6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a",
+    "flakyObservationRefs": [
+      {
+        "id": "51515151-5151-4151-8151-515151515151",
+        "contentHash": "sha256:5151515151515151515151515151515151515151515151515151515151515151"
+      }
+    ],
+    "flakyObservationSetHash": "sha256:6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+    "policyRef": {
+      "key": "qa.finding-review",
+      "version": "1.0.0",
+      "contentHash": "sha256:5656565656565656565656565656565656565656565656565656565656565656"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:evidence-attachment-session:v1",
+  "title": "Scoped QA Evidence Attachment Session",
+  "description": "Authorized proxy-upload lifecycle. contentUploadRef is opaque and never reveals a provider locator or presigned URL.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "attachmentSessionId", "workspaceId", "projectId", "workItemId", "sessionId", "owner", "mediaType", "sizeBytes", "dataClassificationKey", "contentUploadRef", "state", "capturedBy", "capturedAt", "expiresAt", "resourceVersion"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "attachmentSessionId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "sessionId": { "type": "string", "format": "uuid" },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ownerType", "ownerId"],
+      "properties": {
+        "ownerType": { "type": "string", "enum": ["SESSION", "PLAN_ITEM", "ATTEMPT", "OBSERVATION", "FINDING"] },
+        "ownerId": { "type": "string", "format": "uuid" }
+      }
+    },
+    "displayLabel": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "mediaType": { "type": "string", "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$", "maxLength": 127 },
+    "sizeBytes": { "type": "integer", "minimum": 1 },
+    "dataClassificationKey": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ClassificationKey" },
+    "contentUploadRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+    "state": { "type": "string", "enum": ["UPLOAD_PENDING", "UPLOADED", "FINALIZED", "REJECTED", "EXPIRED"] },
+    "artifactRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ArtifactRef" },
+    "evidenceArtifactLinkRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+    "capturedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "uploadedAt": { "type": "string", "format": "date-time" },
+    "finalizedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "terminalReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "resourceVersion": { "type": "integer", "minimum": 1 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "UPLOAD_PENDING" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [
+        { "required": ["uploadedAt"] }, { "required": ["finalizedAt"] },
+        { "required": ["artifactRef"] }, { "required": ["evidenceArtifactLinkRef"] },
+        { "required": ["terminalReason"] }
+      ] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "UPLOADED" } }, "required": ["state"] },
+      "then": {
+        "required": ["uploadedAt"],
+        "not": { "anyOf": [
+          { "required": ["finalizedAt"] }, { "required": ["artifactRef"] },
+          { "required": ["evidenceArtifactLinkRef"] }, { "required": ["terminalReason"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "FINALIZED" } }, "required": ["state"] },
+      "then": {
+        "required": ["uploadedAt", "artifactRef", "evidenceArtifactLinkRef", "finalizedAt"],
+        "not": { "required": ["terminalReason"] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "enum": ["REJECTED", "EXPIRED"] } }, "required": ["state"] },
+      "then": {
+        "required": ["terminalReason"],
+        "not": { "anyOf": [
+          { "required": ["uploadedAt"] }, { "required": ["finalizedAt"] },
+          { "required": ["artifactRef"] }, { "required": ["evidenceArtifactLinkRef"] }
+        ] }
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:common:problem-details:v1",
+  "title": "AWP Problem Details",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "title", "status", "code", "correlationId"],
+  "properties": {
+    "type": { "type": "string", "format": "uri-reference" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "status": { "type": "integer", "minimum": 400, "maximum": 599 },
+    "detail": { "type": "string", "maxLength": 2000 },
+    "instance": { "type": "string", "format": "uri-reference" },
+    "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$" },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "violations": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "message"],
+        "properties": {
+          "path": { "type": "string", "maxLength": 512 },
+          "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$" },
+          "message": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        }
+      }
+    }
+  }
+}

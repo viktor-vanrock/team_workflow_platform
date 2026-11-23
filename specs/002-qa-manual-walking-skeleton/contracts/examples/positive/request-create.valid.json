@@ -1,0 +1,11 @@
+{
+  "sourceDraftId": "26262626-2626-4626-8626-262626262626",
+  "workTypeKey": "qa.validation",
+  "workTypeVersion": "1.0.0",
+  "requestKind": "feature-validation",
+  "summary": "Validate checkout error handling",
+  "description": "Manual validation of the checkout API and browser path",
+  "acceptanceOutcome": "Successful retry completes",
+  "requestedNormalizedStatus": "NEW",
+  "dataClassificationKey": "INTERNAL"
+}

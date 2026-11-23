@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:evidence-signature-envelope:v1",
+  "title": "Evidence signature envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "signatureId", "version", "workspaceId", "projectId", "manifestRevisionRef", "payloadHash", "serialization", "format", "protectedHeader", "signature", "signingPolicyRef", "publicKeyRef", "signedAt", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "signatureId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "version": { "const": 1 },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "manifestRevisionRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "payloadHash": { "$ref": "../common.v1.schema.json#/$defs/hash" },
+    "serialization": { "const": "JCS_RFC8785" },
+    "format": { "const": "JWS_DETACHED" },
+    "protectedHeader": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "kid", "typ"],
+      "properties": {
+        "alg": { "const": "EdDSA" },
+        "kid": { "$ref": "../common.v1.schema.json#/$defs/nonEmpty" },
+        "typ": { "const": "application/awp-evidence+json" }
+      }
+    },
+    "signature": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" },
+    "signingPolicyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "publicKeyRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "signedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" }
+  }
+}

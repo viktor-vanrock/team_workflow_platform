@@ -1,0 +1,1 @@
+Architecture graph accepted (24 projects; no deep imports, cycles, or dynamic loading).

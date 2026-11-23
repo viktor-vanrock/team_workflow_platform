@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automation-target-snapshot:v1",
+  "title": "AutomationTargetSnapshot v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "testSessionId",
+    "sourceIssueKey",
+    "target",
+    "environment",
+    "suite",
+    "configurationPins",
+    "configurationPinSetHash",
+    "executionPolicies",
+    "testDataRefs",
+    "accountLeaseRefs",
+    "snapshotHash",
+    "capturedAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automation-target-snapshot@1.0.0" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workItemId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "testSessionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "sourceIssueKey": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]+-[1-9][0-9]*$"
+    },
+    "target": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "mergeRequestRef", "commitSha"],
+          "properties": {
+            "type": { "const": "MERGE_REQUEST" },
+            "mergeRequestRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+            "commitSha": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+            "buildRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "commitSha"],
+          "properties": {
+            "type": { "const": "COMMIT" },
+            "commitSha": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+            "buildRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "buildRef", "commitSha"],
+          "properties": {
+            "type": { "const": "BUILD" },
+            "buildRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+            "commitSha": { "type": "string", "pattern": "^[a-f0-9]{40}$" }
+          }
+        }
+      ]
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["environmentRef", "revision", "class"],
+      "properties": {
+        "environmentRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "class": { "enum": ["LOCAL", "DEVELOPMENT", "TEST"] }
+      }
+    },
+    "suite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "suiteKey",
+        "suiteBindingRef",
+        "suiteBindingHash",
+        "parameterSchemaRef",
+        "acceptedParameters",
+        "parametersHash"
+      ],
+      "properties": {
+        "suiteKey": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$" },
+        "suiteBindingRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/versionedRef" },
+        "suiteBindingHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "parameterSchemaRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/schemaRef" },
+        "acceptedParameters": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/acceptedParameters"
+        },
+        "parametersHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "browser": { "type": "string", "enum": ["chromium", "firefox", "webkit"] }
+      }
+    },
+    "configurationPins": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/configurationPin" },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "logicalRole": { "const": "SOURCE_CONTEXT" } },
+            "required": ["logicalRole"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "logicalRole": { "const": "TEST_EXECUTION" } },
+            "required": ["logicalRole"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "logicalRole": { "const": "ARTIFACT_SOURCE" } },
+            "required": ["logicalRole"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "configurationPinSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "executionPolicies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resultSchemaRef",
+        "artifactPolicyRef",
+        "artifactPolicyHash",
+        "retryPolicyRef",
+        "retryPolicyHash",
+        "quarantinePolicyRef",
+        "quarantinePolicyHash"
+      ],
+      "properties": {
+        "resultSchemaRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/schemaRef" },
+        "artifactPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "artifactPolicyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "retryPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "retryPolicyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "quarantinePolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "quarantinePolicyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+      }
+    },
+    "testDataRefs": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/immutableExternalRef" }
+    },
+    "accountLeaseRefs": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/immutableExternalRef" }
+    },
+    "snapshotHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "capturedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" }
+  },
+  "anyOf": [
+    {
+      "properties": {
+        "testDataRefs": { "minItems": 1 }
+      },
+      "required": ["testDataRefs"]
+    },
+    {
+      "properties": {
+        "accountLeaseRefs": { "minItems": 1 }
+      },
+      "required": ["accountLeaseRefs"]
+    }
+  ]
+}

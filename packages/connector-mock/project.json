@@ -1,0 +1,17 @@
+{
+  "name": "connector-mock",
+  "root": "packages/connector-mock",
+  "sourceRoot": "packages/connector-mock/src",
+  "projectType": "library",
+  "tags": ["type:connector", "runtime:node", "domain:mock"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-mock/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/connector-mock/tsconfig.json --noEmit" }
+    }
+  }
+}

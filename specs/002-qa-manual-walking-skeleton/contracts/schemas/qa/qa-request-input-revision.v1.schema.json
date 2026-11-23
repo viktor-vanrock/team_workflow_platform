@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:request-input-revision:v1",
+  "title": "Append-only QA Request Input Revision",
+  "description": "Scope-safe, content-addressed pre-READY input revision. Revision 1 freezes the structural identity tuple (scope/work item, definition, accepted draft, external request, operational Binding, original requester, title, request kind and classification). Later public commands expose only DoR-semantic fields; the server carries this tuple byte-for-byte and application plus insert-time DB guards reject drift. DoR-semantic fields may be absent so NEEDS_INFO is representable. The server, never the client, records the response-channel resolution. Revision after confirmed operational READY or Session creation is forbidden by the domain service.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "inputRevisionId", "version", "previousRevisionRef", "workspaceId", "projectId", "workItemId", "definitionRef", "acceptedDraftRef", "externalRequestRef", "operationalBindingRef", "originalRequesterRef", "title", "requestKind", "blockersDeclared", "blockers", "dependenciesDeclared", "dependencies", "dataClassificationKey", "responseChannelResolution", "readyEffectGuard", "invalidatedState", "changeReasonCode", "contentHash", "recordedBy", "authorizationBasisHash", "recordedAt", "correlationId"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "inputRevisionId": { "type": "string", "format": "uuid" },
+    "version": { "type": "integer", "minimum": 1 },
+    "previousRevisionRef": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" }
+      ]
+    },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "definitionRef": { "$ref": "#/$defs/QaDefinitionRef" },
+    "acceptedDraftRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+    "externalRequestRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+    "operationalBindingRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/BindingRef" },
+    "originalRequesterRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "requestKind": { "type": "string", "enum": ["feature-validation", "smoke", "regression", "retest", "investigation"] },
+    "goal": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "scope": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "acceptanceOutcome": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "sourceRefs": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+    "blockersDeclared": { "type": "boolean" },
+    "blockers": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/DeclaredBlocker" } },
+    "dependenciesDeclared": { "type": "boolean" },
+    "dependencies": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+    "requestedTarget": { "$ref": "#/$defs/PartialRequestedTarget" },
+    "requestRisk": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "businessImpact": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "desiredDate": { "type": "string", "format": "date" },
+    "checklistRefs": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+    "roleMetadataRefs": { "type": "array", "maxItems": 16, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+    "dataClassificationKey": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ClassificationKey" },
+    "defectRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+    "previousSessionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/PreviousSessionRef" },
+    "sourceBuildRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+    "responseChannelResolution": { "$ref": "#/$defs/ResponseChannelResolution" },
+    "readyEffectGuard": { "$ref": "#/$defs/ReadyEffectGuard" },
+    "invalidatedState": { "$ref": "#/$defs/InvalidatedState" },
+    "changeReasonCode": { "type": "string", "enum": ["INITIAL_CONFIRMED_DRAFT", "MISSING_INFO_SUPPLIED", "REQUESTER_CORRECTION"] },
+    "changeReason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "contentHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "recordedBy": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+    "authorizationBasisHash": { "$ref": "../common/qa-common.v1.schema.json#/$defs/Digest" },
+    "recordedAt": { "type": "string", "format": "date-time" },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "causationId": { "type": "string", "format": "uuid" }
+  },
+  "$defs": {
+    "RevisionCommand": {
+      "description": "HUMAN DoR-semantic replacement command. It deliberately cannot carry authoritative scope/work-item/definition/draft/external-request/Binding/original-requester/title/request-kind/classification fields. The server reads the exact expected predecessor, copies its frozen structural identity tuple, re-resolves the original requester's response channel and compares the tuple with revision 1 in the application and DB insert guard. reason is mandatory and persists as changeReason.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expectedCurrentInputRevisionRef", "reasonCode", "reason", "input"],
+      "properties": {
+        "expectedCurrentInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+        "reasonCode": { "type": "string", "enum": ["MISSING_INFO_SUPPLIED", "REQUESTER_CORRECTION"] },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "input": {
+          "$ref": "#/$defs/DorSemanticInput"
+        }
+      },
+      "allOf": [{ "$ref": "#/$defs/RevisionReason" }]
+    },
+    "RevisionReason": {
+      "description": "Request-side audit tuple reused by conformance vectors; every human revision has both a closed reason code and bounded free text.",
+      "type": "object",
+      "required": ["expectedCurrentInputRevisionRef", "reasonCode", "reason"],
+      "properties": {
+        "expectedCurrentInputRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+        "reasonCode": { "type": "string", "enum": ["MISSING_INFO_SUPPLIED", "REQUESTER_CORRECTION"] },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      }
+    },
+    "QaDefinitionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version"],
+      "properties": {
+        "key": { "const": "qa.validation" },
+        "version": { "const": "1.0.0" }
+      }
+    },
+    "DorSemanticInput": {
+      "description": "Closed full-replacement body for mutable DoR semantics only. Omission remains meaningful for post-confirmation NEEDS_INFO. Frozen structural identity and response-channel authority are intentionally absent.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blockersDeclared", "blockers", "dependenciesDeclared", "dependencies"],
+      "properties": {
+        "goal": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "scope": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "acceptanceOutcome": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "sourceRefs": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+        "blockersDeclared": { "type": "boolean" },
+        "blockers": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/DeclaredBlocker" } },
+        "dependenciesDeclared": { "type": "boolean" },
+        "dependencies": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+        "requestedTarget": { "$ref": "#/$defs/PartialRequestedTarget" },
+        "requestRisk": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "businessImpact": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "desiredDate": { "type": "string", "format": "date" },
+        "checklistRefs": { "type": "array", "maxItems": 32, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+        "roleMetadataRefs": { "type": "array", "maxItems": 16, "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" } },
+        "defectRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "previousSessionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/PreviousSessionRef" },
+        "sourceBuildRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+      }
+    },
+    "PartialRequestedTarget": {
+      "description": "May be partial before READY; readiness records exact blocker pointers for missing build/policy, test-data, lease or environment facts.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "environmentId": { "type": "string", "format": "uuid" },
+        "environmentRevision": { "type": "integer", "minimum": 1 },
+        "buildRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "targetPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "testDataRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" },
+        "accountLeaseRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ExternalImmutableRef" }
+      }
+    },
+    "ResponseChannelResolution": {
+      "description": "Immutable server-resolution result for the original requester. Readiness deterministically projects CONFIRMED to CONFIRMED and MISSING to UNCONFIRMED, preserving requesterPrincipal, resolutionPolicyRef and evaluatedAt byte-for-byte. CONFIRMED preserves the exact responseChannelRef and forbids a missing reason; MISSING preserves the exact missingReasonCode and forbids a channel ref.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "requesterPrincipal", "resolutionPolicyRef", "evaluatedAt"],
+      "properties": {
+        "state": { "type": "string", "enum": ["CONFIRMED", "MISSING"] },
+        "requesterPrincipal": { "$ref": "../common/qa-common.v1.schema.json#/$defs/HumanActorRef" },
+        "resolutionPolicyRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/SemanticRef" },
+        "responseChannelRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ResponseChannelRef" },
+        "evaluatedAt": { "type": "string", "format": "date-time" },
+        "missingReasonCode": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ErrorCode" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "CONFIRMED" } }, "required": ["state"] },
+          "then": { "required": ["responseChannelRef"], "not": { "required": ["missingReasonCode"] } },
+          "else": { "required": ["missingReasonCode"], "not": { "required": ["responseChannelRef"] } }
+        }
+      ]
+    },
+    "InvalidatedState": {
+      "description": "Exact append-only audit projection of decisions/candidates invalidated by advancing the stable current-input pointer.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["readinessAssessmentRefs", "waiverRefs", "pendingReadyCommandRefs"],
+      "properties": {
+        "readinessAssessmentRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ReadinessAssessmentRef" } },
+        "waiverRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaWaiverRef" } },
+        "pendingReadyCommandRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" } }
+      }
+    },
+    "ReadyEffectGuard": {
+      "description": "Shared aggregate CAS proof. A revision is valid only while no READY command is DISPATCHED/in-flight; a pending not-yet-dispatched command is invalidated by the same transaction.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observedState", "expectedAggregateVersion"],
+      "properties": {
+        "observedState": { "type": "string", "enum": ["NONE", "PENDING_NOT_DISPATCHED"] },
+        "expectedAggregateVersion": { "type": "integer", "minimum": 1 },
+        "pendingCommandRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "observedState": { "const": "PENDING_NOT_DISPATCHED" } }, "required": ["observedState"] },
+          "then": { "required": ["pendingCommandRef"] },
+          "else": { "not": { "required": ["pendingCommandRef"] } }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "version": { "const": 1 } }, "required": ["version"] },
+      "then": {
+        "properties": {
+          "previousRevisionRef": { "type": "null" },
+          "invalidatedState": {
+            "properties": {
+              "readinessAssessmentRefs": { "maxItems": 0 },
+              "waiverRefs": { "maxItems": 0 },
+              "pendingReadyCommandRefs": { "maxItems": 0 }
+            }
+          },
+          "readyEffectGuard": { "properties": { "observedState": { "const": "NONE" } } },
+          "changeReasonCode": { "const": "INITIAL_CONFIRMED_DRAFT" }
+        },
+        "not": { "required": ["changeReason"] }
+      },
+      "else": {
+        "required": ["changeReason"],
+        "properties": {
+          "previousRevisionRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/QaRequestInputRevisionRef" },
+          "changeReasonCode": { "enum": ["MISSING_INFO_SUPPLIED", "REQUESTER_CORRECTION"] }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "requestKind": { "const": "retest" } }, "required": ["requestKind"] },
+      "then": true,
+      "else": { "not": { "anyOf": [{ "required": ["defectRef"] }, { "required": ["previousSessionRef"] }, { "required": ["sourceBuildRef"] }] } }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-work-item:external-scope:v1",
+  "title": "Operational Work Item External Scope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["authorityScopeKey", "environmentScope", "allowedEntityKinds"],
+  "properties": {
+    "authorityScopeKey": { "type": "string", "pattern": "^[a-z][a-z0-9._:-]{1,127}$" },
+    "environmentScope": { "type": "string", "enum": ["LOCAL", "NON_PROD", "PREPROD"] },
+    "allowedEntityKinds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["REQUEST", "DEFECT"] }
+    }
+  }
+}
+

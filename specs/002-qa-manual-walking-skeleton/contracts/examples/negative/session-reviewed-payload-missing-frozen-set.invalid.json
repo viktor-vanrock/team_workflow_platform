@@ -1,0 +1,20 @@
+{
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "sessionId": "44444444-4444-4444-8444-444444444444",
+  "requiredSessionPlanRef": {
+    "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    "revision": 1,
+    "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "sessionReviewRef": {
+    "id": "30303030-3030-4030-8030-303030303030",
+    "version": 1,
+    "contentHash": "sha256:3030303030303030303030303030303030303030303030303030303030303030"
+  },
+  "adjudicativeManifestRevisionRef": {
+    "id": "31313131-3131-4131-8131-313131313131",
+    "version": 1,
+    "contentHash": "sha256:2323232323232323232323232323232323232323232323232323232323232323"
+  },
+  "sessionOutcome": "FAILED"
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:jira:connection-config:v1",
+  "title": "Immutable Jira Connection Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "configurationStage", "adapterFamily", "adapterContractVersion", "edition", "exactBuild", "apiFlavor", "baseUrl", "environment", "tenantKey", "auth", "serviceIdentitySecretRef", "quarantineClassificationKey"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "configurationStage": { "enum": ["BOOTSTRAP", "VALIDATED"] },
+    "adapterFamily": { "enum": ["jira-cloud-v3", "jira-dc-9-v2", "jira-dc-10-v2", "jira-dc-11-v2"] },
+    "adapterContractVersion": { "$ref": "#/$defs/SemVer" },
+    "edition": { "enum": ["CLOUD", "DATA_CENTER"] },
+    "exactBuild": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "apiFlavor": { "enum": ["CLOUD_REST_V3", "DC_REST_V2"] },
+    "baseUrl": { "type": "string", "format": "uri" },
+    "cloudId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "contextPath": { "type": "string", "pattern": "^/[^?#]*$", "maxLength": 256 },
+    "environment": { "enum": ["LOCAL", "NON_PROD"] },
+    "tenantKey": { "type": "string", "pattern": "^[A-Za-z0-9._-]{1,128}$" },
+    "auth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "credentialOwner", "rotationPolicyRef"],
+      "properties": {
+        "kind": { "enum": ["CLOUD_SERVICE_OAUTH2_CLIENT", "CLOUD_SERVICE_API_TOKEN", "DC_SERVICE_2LO", "DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] },
+        "credentialOwner": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "rotationPolicyRef": { "$ref": "#/$defs/VersionedRef" }
+      }
+    },
+    "serviceIdentitySecretRef": { "type": "string", "pattern": "^secretref://[A-Za-z0-9._/-]+$", "maxLength": 512 },
+    "capabilitySnapshotRef": { "$ref": "#/$defs/ContentRef" },
+    "quarantineClassificationKey": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "edition": { "const": "CLOUD" } }, "required": ["edition"] },
+      "then": { "required": ["cloudId"], "properties": { "adapterFamily": { "const": "jira-cloud-v3" }, "apiFlavor": { "const": "CLOUD_REST_V3" }, "auth": { "properties": { "kind": { "enum": ["CLOUD_SERVICE_OAUTH2_CLIENT", "CLOUD_SERVICE_API_TOKEN", "LOCAL_FAKE"] } } } } },
+      "else": { "required": ["contextPath"], "properties": { "adapterFamily": { "enum": ["jira-dc-9-v2", "jira-dc-10-v2", "jira-dc-11-v2"] }, "apiFlavor": { "const": "DC_REST_V2" }, "auth": { "properties": { "kind": { "enum": ["DC_SERVICE_2LO", "DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] } } } } }
+    },
+    {
+      "if": { "properties": { "environment": { "const": "LOCAL" } }, "required": ["environment"] },
+      "then": { "properties": { "baseUrl": { "pattern": "^https?://(?:127\\.0\\.0\\.1|localhost)(?::[0-9]{1,5})?(?:/|$)" } } },
+      "else": { "properties": { "baseUrl": { "pattern": "^https://" }, "auth": { "properties": { "kind": { "not": { "const": "LOCAL_FAKE" } } } } } }
+    },
+    {
+      "if": { "properties": { "configurationStage": { "const": "VALIDATED" } }, "required": ["configurationStage"] },
+      "then": { "required": ["capabilitySnapshotRef"] },
+      "else": { "not": { "required": ["capabilitySnapshotRef"] } }
+    },
+    {
+      "if": { "properties": { "adapterFamily": { "const": "jira-dc-9-v2" } }, "required": ["adapterFamily"] },
+      "then": { "properties": { "exactBuild": { "pattern": "^9(?:\\.|$)" }, "auth": { "properties": { "kind": { "enum": ["DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] } } } } }
+    },
+    {
+      "if": { "properties": { "adapterFamily": { "const": "jira-dc-10-v2" } }, "required": ["adapterFamily"] },
+      "then": { "properties": { "exactBuild": { "pattern": "^10(?:\\.|$)" }, "auth": { "properties": { "kind": { "enum": ["DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] } } } } }
+    },
+    {
+      "if": { "properties": { "adapterFamily": { "const": "jira-dc-11-v2" } }, "required": ["adapterFamily"] },
+      "then": { "properties": { "exactBuild": { "pattern": "^11(?:\\.|$)" }, "auth": { "properties": { "kind": { "enum": ["DC_SERVICE_2LO", "DC_TECHNICAL_ACCOUNT_PAT", "LOCAL_FAKE"] } } } } }
+    }
+  ],
+  "$defs": {
+    "SemVer": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
+    "Digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "VersionedRef": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "integer", "minimum": 1 } } },
+    "ContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "contentHash"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/Digest" }
+      }
+    }
+  }
+}

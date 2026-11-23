@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "checkpoint": "SMOKE",
+  "status": "PASS",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "startedAt": "2026-09-03T18:38:13.783Z",
+  "finishedAt": "2026-09-03T18:41:03.160Z",
+  "isolatedProjectName": "awp-local-006-smoke-mtlvbj81-98400",
+  "scenarioExecution": {
+    "required": 57,
+    "executed": 57
+  },
+  "restarts": [
+    "postgres",
+    "redis",
+    "mock-hub",
+    "worker",
+    "api",
+    "web"
+  ],
+  "durableInspection": {
+    "migrations": 44,
+    "queueSeed": 1,
+    "queuePolicies": 1,
+    "queueEntries": 0,
+    "slaClocks": 0,
+    "capacityDecisions": 0
+  },
+  "cleanShutdown": true,
+  "stages": [
+    {
+      "id": "isolated-local-up",
+      "status": "PASS",
+      "durationMs": 32891,
+      "details": {
+        "projectName": "awp-local-006-smoke-mtlvbj81-98400",
+        "ports": [
+          58812,
+          58813,
+          58814,
+          58815,
+          58816,
+          58817
+        ]
+      }
+    },
+    {
+      "id": "scenario-child-processes",
+      "status": "PASS",
+      "durationMs": 109710,
+      "details": {
+        "required": 57,
+        "executed": 57
+      }
+    },
+    {
+      "id": "durable-service-restarts",
+      "status": "PASS",
+      "durationMs": 11892,
+      "details": {
+        "services": [
+          "postgres",
+          "redis",
+          "mock-hub",
+          "worker",
+          "api",
+          "web"
+        ]
+      }
+    },
+    {
+      "id": "postgres-durable-inspection",
+      "status": "PASS",
+      "durationMs": 184,
+      "details": {
+        "migrations": 44,
+        "queueSeed": 1,
+        "queuePolicies": 1,
+        "queueEntries": 0,
+        "slaClocks": 0,
+        "capacityDecisions": 0
+      }
+    },
+    {
+      "id": "live-browser",
+      "status": "PASS",
+      "durationMs": 2449
+    },
+    {
+      "id": "clean-shutdown",
+      "status": "PASS",
+      "durationMs": 11958
+    }
+  ],
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tools/smoke/feature-006.mts",
+        "sha256": "sha256:d48db345efec7a2821ff7383cf037f66e68c951e984f351246a467ca1228f6ba"
+      },
+      {
+        "path": "tools/smoke/feature-006-browser-process.mts",
+        "sha256": "sha256:2dfd64850c9d85e5c2ee3ee5ec530b35087847ae489e815ad0ba5520d940f8ba"
+      },
+      {
+        "path": "tests/e2e/acceptance/006-queue-live-browser.spec.ts",
+        "sha256": "sha256:f51f18e03192aed717f00659d89550be3533d17c182251c4b279192faad51e88"
+      },
+      {
+        "path": "tools/local/queue-cli.mts",
+        "sha256": "sha256:f58816fbe2cdf77c44493e1fc7f26c7b95d49ff42f90b8776ab6acfa50d0e37a"
+      },
+      {
+        "path": "tools/local/queue-scenario.mts",
+        "sha256": "sha256:1f7861a1c0823394eb70df6741f620f812013f7e2791c83cb1227c556ee8010c"
+      },
+      {
+        "path": "infra/compose/docker-compose.local.yml",
+        "sha256": "sha256:a125d4178d6d3fabc61d8e0fd9c6e90d00a806c703aae96d529a48353a4b31fc"
+      }
+    ],
+    "aggregateSha256": "sha256:491577fbf4ccb11ff16240093c6692052e8ae663ee5a1d590904b51b2931448f"
+  }
+}

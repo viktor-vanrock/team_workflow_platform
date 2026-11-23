@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:common:actor-ref:v1",
+  "title": "Actor Reference",
+  "oneOf": [
+    { "$ref": "#/$defs/HumanActorRef" },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "principalId"],
+      "properties": {
+        "type": { "type": "string", "enum": ["AGENT", "SERVICE", "SYSTEM", "EXTERNAL"] },
+        "principalId": { "type": "string", "minLength": 1, "maxLength": 255 }
+      }
+    }
+  ],
+  "$defs": {
+    "HumanActorRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "principalId", "issuer", "subject"],
+      "properties": {
+        "type": { "const": "HUMAN" },
+        "principalId": { "type": "string", "format": "uuid" },
+        "issuer": { "type": "string", "format": "uri", "maxLength": 512 },
+        "subject": { "type": "string", "minLength": 1, "maxLength": 255 }
+      }
+    }
+  }
+}

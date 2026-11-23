@@ -1,0 +1,12 @@
+{
+  "operation": "request.create",
+  "entityKind": "REQUEST",
+  "externalEntityId": "mock-request-42",
+  "externalDisplayKey": "QA-42",
+  "externalVersion": "1",
+  "rawExternalState": "BACKLOG",
+  "normalizedStatus": "NEW",
+  "naturalKey": "qa-request:33333333-3333-4333-8333-333333333333",
+  "effectId": "effect-create-42",
+  "observedAt": "2026-08-27T12:00:10Z"
+}

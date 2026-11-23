@@ -1,0 +1,239 @@
+{
+  "checkedAt": "2026-09-09T21:36:49.842Z",
+  "results": [
+    {
+      "persona": "Администратор · 1",
+      "checks": [
+        {
+          "project": "ALPHA",
+          "status": 200
+        },
+        {
+          "project": "BETA",
+          "status": 200
+        },
+        {
+          "project": "GAMMA",
+          "status": 200
+        },
+        {
+          "project": "DELTA",
+          "status": 200
+        },
+        {
+          "project": "ALPHA-DOCS",
+          "status": 200
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Администратор · 2",
+      "checks": [
+        {
+          "project": "ALPHA",
+          "status": 200
+        },
+        {
+          "project": "BETA",
+          "status": 200
+        },
+        {
+          "project": "GAMMA",
+          "status": 200
+        },
+        {
+          "project": "DELTA",
+          "status": 404
+        },
+        {
+          "project": "ALPHA-DOCS",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Requester",
+      "checks": [
+        {
+          "project": "ALPHA",
+          "status": 404
+        },
+        {
+          "project": "BETA",
+          "status": 404
+        },
+        {
+          "project": "GAMMA",
+          "status": 404
+        },
+        {
+          "project": "DELTA",
+          "status": 404
+        },
+        {
+          "project": "ALPHA-DOCS",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "QA Executor · QA 1",
+      "checks": [
+        {
+          "project": "ALPHA",
+          "status": 404
+        },
+        {
+          "project": "BETA",
+          "status": 404
+        },
+        {
+          "project": "GAMMA",
+          "status": 404
+        },
+        {
+          "project": "DELTA",
+          "status": 404
+        },
+        {
+          "project": "ALPHA-DOCS",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "QA Executor · QA 2",
+      "checks": [
+        {
+          "project": "ALPHA",
+          "status": 404
+        },
+        {
+          "project": "BETA",
+          "status": 404
+        },
+        {
+          "project": "GAMMA",
+          "status": 404
+        },
+        {
+          "project": "DELTA",
+          "status": 404
+        },
+        {
+          "project": "ALPHA-DOCS",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "QA Lead",
+      "checks": [
+        {
+          "project": "ALPHA",
+          "status": 404
+        },
+        {
+          "project": "BETA",
+          "status": 404
+        },
+        {
+          "project": "GAMMA",
+          "status": 404
+        },
+        {
+          "project": "DELTA",
+          "status": 404
+        },
+        {
+          "project": "ALPHA-DOCS",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Читатель",
+      "checks": [
+        {
+          "project": "ALPHA",
+          "status": 404
+        },
+        {
+          "project": "BETA",
+          "status": 404
+        },
+        {
+          "project": "GAMMA",
+          "status": 404
+        },
+        {
+          "project": "DELTA",
+          "status": 404
+        },
+        {
+          "project": "ALPHA-DOCS",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Технический писатель",
+      "checks": [
+        {
+          "project": "ALPHA",
+          "status": 404
+        },
+        {
+          "project": "BETA",
+          "status": 404
+        },
+        {
+          "project": "GAMMA",
+          "status": 404
+        },
+        {
+          "project": "DELTA",
+          "status": 404
+        },
+        {
+          "project": "ALPHA-DOCS",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    },
+    {
+      "persona": "Лид технических писателей",
+      "checks": [
+        {
+          "project": "ALPHA",
+          "status": 404
+        },
+        {
+          "project": "BETA",
+          "status": 404
+        },
+        {
+          "project": "GAMMA",
+          "status": 404
+        },
+        {
+          "project": "DELTA",
+          "status": 404
+        },
+        {
+          "project": "ALPHA-DOCS",
+          "status": 404
+        }
+      ],
+      "ui": "PASS"
+    }
+  ]
+}

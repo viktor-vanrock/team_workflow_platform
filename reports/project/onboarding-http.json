@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "task": "007/T071",
+  "status": "PASS",
+  "scope": "Durable local registry, entitlements, QA resources/leases, structural binding validation, QA acceptance and L0 HTTP adapters",
+  "taskClosed": false,
+  "recordedAt": "2026-09-06T10:50:29.703698+00:00",
+  "sourceBinding": [
+    {
+      "path": "apps/api/src/app.module.ts",
+      "sha256": "sha256:63f1be31dfb1467411d25015dad1108eabd6c5a49c1ee02fa3c7f9487f17f962"
+    },
+    {
+      "path": "apps/api/src/extensions/corporate-qa-http-identity.ts",
+      "sha256": "sha256:e942af7cd9cf3c8fe55b19e11ded58e9f75e45a05389e2f8f58f48c2de053eb6"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/binding-facts.ts",
+      "sha256": "sha256:250d904c141b83d1cf5b0752c5dc41929dbe47935059ec05644f255deddff19d"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.application.ts",
+      "sha256": "sha256:36b33e7288663b680e959272ba4e39f23a492562e513a34a2c40bc4fce1c617c"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/durable-http.ts",
+      "sha256": "sha256:9ba35bf4180a4218a05b893e7d3411bc638d046478d767d843f4698be605fe2b"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/onboarding.controller.ts",
+      "sha256": "sha256:2783fa2122742a80674ef425f614761e6e9e0b335d5ee09ebbce75dc944f0ce9"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.application.ts",
+      "sha256": "sha256:f39777d9bdecbac8b9c44b49abb95fd68b1a394ab83a60ae87c1d52a7f0c5ad7"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/registry.application.ts",
+      "sha256": "sha256:00bb92a5124a570b32c08e88f5d5aab4ce36029104bfe0ef822d9a4e50b10c1f"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/resources.application.ts",
+      "sha256": "sha256:acb5bc0eefd14c8168e0e53272a0fe3afe1e372645bc40ca76ba8aa1bb6bd02d"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/validation.application.ts",
+      "sha256": "sha256:df520d6aab0b9f68737ce91fe0e599c7d9582d465526266962b8716eeeb0460a"
+    },
+    {
+      "path": "apps/api/src/extensions/qa-api-authorization.ts",
+      "sha256": "sha256:10e798e0bbc30fde00c26dfbf54758c335e54d7783b42ad2c6fa1d920c7b513e"
+    },
+    {
+      "path": "apps/api/src/local/local-qa-authorization.ts",
+      "sha256": "sha256:48a832a3927b57e53234c77575b8a07fd4c991d2debae3efbea27cd9c764627d"
+    },
+    {
+      "path": "apps/api/src/local/local-qa-http-identity.ts",
+      "sha256": "sha256:9829f7b32d6d1934ca87e7c10be237b166d09b2cef64eabc7ab0e47412cf49f5"
+    },
+    {
+      "path": "apps/api/src/local/local-session.guard.ts",
+      "sha256": "sha256:434acda500e407b9d5ba6a15d1f115873060ee561ea1c34ab824b20a3504bfd9"
+    },
+    {
+      "path": "docs/runbooks/onboarding-http.md",
+      "sha256": "sha256:1c333ce45401646b9104cc352a749a223e88118272a80f9b204e631b135b7c08"
+    },
+    {
+      "path": "package.json",
+      "sha256": "sha256:43379c19a6b740b2864f61784b0dbf44fe9ce07316df7a7f28eb664eded7a151"
+    },
+    {
+      "path": "packages/competency-qa/src/application/manage-test-account-lease.ts",
+      "sha256": "sha256:f225b865b375ec4c3617336a3286fc3dd94c65a6c2bccbd40469b5cbc62b3555"
+    },
+    {
+      "path": "packages/competency-qa/src/domain/project-resources.ts",
+      "sha256": "sha256:78bd1441721fdafbd34da8f5e05def487bac549f99f319bf00ae8de4a7fcb6c5"
+    },
+    {
+      "path": "packages/competency-qa/src/domain/qa-project-context.ts",
+      "sha256": "sha256:24f121d8e69b33c1df4967ca725b4040e72a87dbed91a3848e5adf459f62e120"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/contributions.ts",
+      "sha256": "sha256:7fce4effe5c4103d8ee5720b5ce7664317c3f4a4e2e33afa1313fc0e9a7bacbd"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/migrations/2110-resource-publication-heads.ts",
+      "sha256": "sha256:da9618299179e2c3db568a8aa7a667a172ee23db090221812fd02b6ea7814c1f"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/migrations/index.ts",
+      "sha256": "sha256:b366e23e36499a48a82d1c9c8a6ea608351ed464a009a881e6f1ffe5f1e815ad"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/project-resource.repository.ts",
+      "sha256": "sha256:59c84fc652cde9249ad8621b1d9eef2c375be535ae80504c4eceb5a949abe1da"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/test-account-lease.repository.ts",
+      "sha256": "sha256:b3eab6676ed1ee9cc6f0be0d212459756df4dd3d6f2d6af0e43c429a95715d64"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/project-entitlement.repository.ts",
+      "sha256": "sha256:2e6749de8455a30042c4a4bd40bb79163f7a18020caf0c40b48b064cb974388f"
+    },
+    {
+      "path": "packages/platform-persistence-typeorm/src/project-onboarding.repository.ts",
+      "sha256": "sha256:c5ca8e282312c99a250d0645ea35dcbb25b2acbdd855b1422130eef67b8e959d"
+    },
+    {
+      "path": "packages/platform-runtime-nest/src/auth/workspace-context.ts",
+      "sha256": "sha256:333702adfbe1c6331fe2fdf4ae3221a3814aee79c518c056ab1e6568427efa4a"
+    },
+    {
+      "path": "packages/platform-runtime-nest/src/http/project-onboarding.controller.ts",
+      "sha256": "sha256:58e2b5c71109a30e200d4a4ff78dee6cd62824af212f17529d2a0ff9699b059f"
+    },
+    {
+      "path": "packages/runtime-composition/src/seed/local-seed.ts",
+      "sha256": "sha256:2dfc28263544d3702f38c9c570bfe671c8382a24955eb936f832015a96e633cc"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7"
+    },
+    {
+      "path": "tests/contract/008/backward-compatibility.spec.ts",
+      "sha256": "sha256:56d020ce50f03634f3854161184557c4f19e2eac9441ebe7b119c43119ae5bde"
+    },
+    {
+      "path": "tests/integration/007/us1-onboarding-atomicity.spec.ts",
+      "sha256": "sha256:8960b803f4a1f6011bbc14130e60cf79dcd2d9bf43cc9efebb28f9cb04597232"
+    },
+    {
+      "path": "tests/integration/007/us1-onboarding-http.spec.ts",
+      "sha256": "sha256:5367bd2c98e6c5084eb86df47b541d62b411d91aff3dd90129b3711ef29c8e9c"
+    },
+    {
+      "path": "tests/integration/007/us1-resources-http.spec.ts",
+      "sha256": "sha256:457d449198a2ca09aafd7574b813d4badc05709504997fcb4258db58cb7c55c7"
+    },
+    {
+      "path": "tests/integration/007/us1-validation-http.spec.ts",
+      "sha256": "sha256:4e8078c438bb91e47188c574b5daab7a05ad54f9f0175de25a93c44806850298"
+    },
+    {
+      "path": "tests/integration/007/us2-binding-http.spec.ts",
+      "sha256": "sha256:b5fa3c33f1c3db6c4903a1601978ac24a5764dfb1466d31719d76a7d38786a98"
+    },
+    {
+      "path": "tests/integration/008/migration-matrix.spec.ts",
+      "sha256": "sha256:42770cbc24b84a2678636c118768b654873ad446330684212ccc402f0ba1f3d1"
+    },
+    {
+      "path": "tests/integration/008/runtime-composition.spec.ts",
+      "sha256": "sha256:a5d9ec2bacc4f3e7680db23b1217ca294108e0b81ba23a11c997a855f41a2861"
+    },
+    {
+      "path": "tests/support/007-binding-http-fixture.ts",
+      "sha256": "sha256:8c358ddc21168ed14e937aa34b81fb0326e715da1cfc54486c1a01233697ff1d"
+    },
+    {
+      "path": "tests/support/007-evidence-http-fixture.ts",
+      "sha256": "sha256:518b0f55c77b123ceb396eaf2c38d4bff25d628a18dbeedbb580c561df1989f1"
+    },
+    {
+      "path": "tools/ci/verify-008-migrations.mts",
+      "sha256": "sha256:41437c4d0dd7f8564c580ea496bbf92030045879da6dc2e5ed500a62c316f854"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "sha256:49a828d8587980d05bc3ba30430bd40736c3cb69340d32eb803e26921a01717b"
+    }
+  ],
+  "sourceUnchangedAtCaptureAndCompletion": true,
+  "targeted": {
+    "path": "reports/project/onboarding-http-vitest.json",
+    "sha256": "sha256:908ef247ba63f5558ddabb2a0225663f13ac53f8e1cdca70c1f013f503d2edd5",
+    "files": 4,
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "regression": {
+    "path": "reports/project/onboarding-regression-vitest.json",
+    "sha256": "sha256:7c8844bc4594566f5e79c469f699faef869888004d1da521eb0e0e9930607ccf",
+    "files": 62,
+    "total": 150,
+    "passed": 150,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "schemaVersions": {
+    "core": 195,
+    "qa": 2110
+  },
+  "standaloneChecks": [
+    {
+      "command": "tsc --noEmit --project tsconfig.json",
+      "exitCode": 0,
+      "log": "reports/project/onboarding-http/typecheck.log"
+    },
+    {
+      "command": "eslint changed implementation and test files",
+      "exitCode": 0,
+      "log": "reports/project/onboarding-http/lint.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "boundaries": [
+    "Real Nest HTTP and isolated PostgreSQL 17.7/18.6; controlled verified identity and provider observations in fixtures.",
+    "Catalog visibility/pagination, Workspace registration MFA, target-principal grants, current role/membership/classification checks, revision CAS, durable idempotency and API/DataSource restart.",
+    "Atomic audit failure rollback for registration, entitlements, environments, validation and leases; schema validation of persisted environment/context/lease snapshots.",
+    "Binding validation is structural; QA acceptance and L0 consume exact stored facts. Requested connector probes and FULL_QA/accepted Suite integration remain open.",
+    "Final regression includes migrations/upgrade/repeat/failure recovery, backward compatibility, prior binding/operations/evidence HTTP and Chromium evidence coverage.",
+    "Response DTO/status/ETag parity with the complete published OpenAPI 007 remains open. This report does not close T071, T059/T106/T155/T176, corporate T025, or any external acceptance task.",
+    "No fresh full ci:project or corporate pipeline run is claimed."
+  ]
+}

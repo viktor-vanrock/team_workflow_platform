@@ -1,0 +1,10 @@
+{
+  "inputPath": null,
+  "evidencePath": null,
+  "status": "BLOCKED_INPUT",
+  "reasonCodes": [
+    "CORPORATE_INPUT_PACKAGE_MISSING",
+    "N2_EVIDENCE_MISSING"
+  ],
+  "actualCorporateExecution": false
+}

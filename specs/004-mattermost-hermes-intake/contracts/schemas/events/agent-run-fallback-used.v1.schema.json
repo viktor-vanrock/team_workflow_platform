@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:agent-run-fallback-used:v1",
+  "title": "Agent Run Fallback Used Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "fallbackReasonCode",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "enum": [
+        "PLANNING",
+        "EXECUTING",
+        "COMPLETED"
+      ]
+    },
+    "fallbackReasonCode": {
+      "enum": [
+        "MODEL_DISABLED",
+        "MODEL_UNAVAILABLE",
+        "MODEL_TIMEOUT",
+        "MODEL_RATE_LIMITED",
+        "MODEL_INVALID_OUTPUT",
+        "MODEL_POLICY_DENIED",
+        "LOW_CONFIDENCE",
+        "CONTRADICTORY_EVIDENCE"
+      ]
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

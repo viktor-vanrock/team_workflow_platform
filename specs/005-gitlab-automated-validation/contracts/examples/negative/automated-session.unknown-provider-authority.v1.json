@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "automated-test-session@1.0.0",
+  "workspaceId": "11111111-1111-4111-8111-111111111111",
+  "projectId": "22222222-2222-4222-8222-222222222222",
+  "workItemId": "33333333-3333-4333-8333-333333333333",
+  "testSessionId": "44444444-4444-4444-8444-444444444444",
+  "planItemId": "55555555-5555-4555-8555-555555555555",
+  "mode": "AUTOMATED",
+  "state": "READY",
+  "executionActivity": "IDLE",
+  "suiteBindingRef": {
+    "id": "66666666-6666-4666-8666-666666666666",
+    "version": 1
+  },
+  "suiteBindingHash": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+  "configurationPinSetHash": "sha256:abababababababababababababababababababababababababababababababab",
+  "scopeSnapshotRef": "qa-scope-snapshot:44444444-4444-4444-8444-444444444444:v1",
+  "scopeSnapshotHash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "targetSnapshotRef": "qa-target-snapshot:44444444-4444-4444-8444-444444444444:v1",
+  "targetSnapshotHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "attemptCount": 0,
+  "attemptSetHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "launchConfirmation": {
+    "reason": "INITIAL",
+    "targetSnapshotHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "suiteBindingHash": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+    "configurationPinSetHash": "sha256:abababababababababababababababababababababababababababababababab",
+    "sessionResourceVersion": 1,
+    "actionHash": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
+    "confirmationHash": "sha256:1313131313131313131313131313131313131313131313131313131313131313"
+  },
+  "resourceVersion": 1,
+  "createdAt": "2026-09-01T08:00:00.000Z",
+  "profileId": "77777777-7777-4777-8777-777777777777"
+}

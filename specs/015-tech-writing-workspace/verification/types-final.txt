@@ -1,0 +1,165 @@
+$ pnpm typecheck:root && nx run-many -t typecheck --all
+$ tsc --noEmit --project tsconfig.json
+
+ NX   Running target typecheck for 24 projects:
+
+- connector-gitlab-persistence-typeorm
+- connector-jira-persistence-typeorm
+- platform-persistence-typeorm
+- competency-tech-writing
+- platform-runtime-nest
+- connector-mattermost
+- runtime-composition
+- platform-contracts
+- competency-ui-sdk
+- competency-dummy
+- connector-gitlab
+- platform-testkit
+- competency-sdk
+- connector-jira
+- connector-mock
+- competency-qa
+- connector-sdk
+- platform-core
+- platform-ui
+- fake-idp
+- mock-hub
+- worker
+- api
+- web
+
+
+
+> nx run platform-contracts:typecheck
+
+> tsc -p packages/platform-contracts/tsconfig.json --noEmit
+
+
+> nx run connector-sdk:typecheck
+
+> tsc -p packages/connector-sdk/tsconfig.json --noEmit
+
+
+> nx run platform-core:typecheck
+
+> tsc -p packages/platform-core/tsconfig.json --noEmit
+
+
+> nx run competency-ui-sdk:typecheck
+
+> tsc -p packages/competency-ui-sdk/tsconfig.json --noEmit
+
+
+> nx run platform-ui:typecheck
+
+> tsc -p packages/platform-ui/tsconfig.json --noEmit
+
+
+> nx run competency-sdk:typecheck
+
+> tsc -p packages/competency-sdk/tsconfig.json --noEmit
+
+
+> nx run competency-tech-writing:typecheck
+
+> tsc -p packages/competency-tech-writing/tsconfig.json --noEmit
+
+
+> nx run competency-dummy:typecheck
+
+> tsc -p packages/competency-dummy/tsconfig.json --noEmit
+
+
+> nx run connector-gitlab:typecheck
+
+> tsc -p packages/connector-gitlab/tsconfig.json --noEmit
+
+
+> nx run competency-qa:typecheck
+
+> tsc -p packages/competency-qa/tsconfig.json --noEmit
+
+
+> nx run platform-persistence-typeorm:typecheck
+
+> tsc -p packages/platform-persistence-typeorm/tsconfig.json --noEmit
+
+
+> nx run connector-jira:typecheck
+
+> tsc -p packages/connector-jira/tsconfig.json --noEmit
+
+
+> nx run connector-gitlab-persistence-typeorm:typecheck
+
+> tsc -p packages/connector-gitlab-persistence-typeorm/tsconfig.json --noEmit
+
+
+> nx run connector-jira-persistence-typeorm:typecheck
+
+> tsc -p packages/connector-jira-persistence-typeorm/tsconfig.json --noEmit
+
+
+> nx run platform-runtime-nest:typecheck
+
+> tsc -p packages/platform-runtime-nest/tsconfig.json --noEmit
+
+
+> nx run connector-mattermost:typecheck
+
+> tsc -p packages/connector-mattermost/tsconfig.json --noEmit
+
+
+> nx run connector-mock:typecheck
+
+> tsc -p packages/connector-mock/tsconfig.json --noEmit
+
+
+> nx run runtime-composition:typecheck
+
+> tsc -p packages/runtime-composition/tsconfig.json --noEmit
+
+
+> nx run worker:typecheck
+
+> tsc -p apps/worker/tsconfig.json --noEmit
+
+
+> nx run api:typecheck
+
+> tsc -p apps/api/tsconfig.json --noEmit
+
+
+> nx run platform-testkit:typecheck
+
+> tsc -p packages/platform-testkit/tsconfig.json --noEmit
+
+
+> nx run mock-hub:typecheck
+
+> tsc -p apps/mock-hub/tsconfig.json --noEmit
+
+
+> nx run fake-idp:typecheck
+
+> tsc -p apps/fake-idp/tsconfig.json --noEmit
+
+
+> nx run web:typecheck
+
+> tsc -p apps/web/tsconfig.json --noEmit
+
+
+
+
+ NX   Successfully ran target typecheck for 24 projects
+
+
+  Run duration:      50.8s
+  Cache:             0/24 hit (0%)
+  Critical path:     18.9s (1 task)
+  Recoverable time:  31.9s (63% of the run)
+
+  Recommendations:
+    - Increase parallelism to recover up to 31.9s → https://nx.dev/docs/concepts/ci-concepts/parallelization-distribution?utm_source=nx-cli&utm_medium=cli&utm_campaign=performance-report&utm_content=parallelization.
+    - Drastically reduce your run duration by sharing a cache across your team and CI → https://nx.dev/ci/features/remote-cache?utm_source=nx-cli&utm_medium=cli&utm_campaign=performance-report&utm_content=remote-cache.

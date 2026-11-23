@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:007:capability-probe-result:v1",
+  "title": "Capability probe result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "probeId", "version", "workspaceId", "projectId", "bindingRef", "capabilityKey", "logicalRole", "environmentScope", "outcome", "safeIssueCodes", "startedAt", "finishedAt", "validUntil", "observedBy", "contentHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "probeId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "version": { "const": 1 },
+    "workspaceId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "projectId": { "$ref": "../common.v1.schema.json#/$defs/uuid" },
+    "bindingRef": { "$ref": "../common.v1.schema.json#/$defs/exactRef" },
+    "capabilityKey": { "$ref": "../common.v1.schema.json#/$defs/stableKey" },
+    "logicalRole": { "$ref": "../common.v1.schema.json#/$defs/stableKey" },
+    "environmentScope": { "$ref": "../common.v1.schema.json#/$defs/environmentScope" },
+    "outcome": { "enum": ["PASS", "FAIL", "BLOCKED_INPUT"] },
+    "safeIssueCodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "../common.v1.schema.json#/$defs/stableKey" }
+    },
+    "observationHash": { "$ref": "../common.v1.schema.json#/$defs/hash" },
+    "startedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "finishedAt": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "validUntil": { "$ref": "../common.v1.schema.json#/$defs/timestamp" },
+    "observedBy": { "$ref": "../common.v1.schema.json#/$defs/serviceActor" },
+    "contentHash": { "$ref": "../common.v1.schema.json#/$defs/hash" }
+  }
+}

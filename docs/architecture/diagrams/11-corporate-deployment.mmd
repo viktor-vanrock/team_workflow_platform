@@ -1,0 +1,20 @@
+flowchart TB
+  users["Корпоративные пользователи"] -.-> edge["Corporate ingress / TLS / DNS<br/>host infrastructure"]
+  edge -.-> web["Web: corporate login / access<br/>полный QA routing не завершён"]
+  edge -.-> api["Corporate API host<br/>Health + Pilot + Onboarding / Access<br/>основной QA / queue ещё подключить"]
+  worker["Corporate Worker host<br/>10 validated contribution keys<br/>domain handlers ещё собрать"]
+  config["Published Deployment + exact references<br/>bindings · policies · schema versions<br/>runtime registration / heartbeat / gates"] --> api
+  config --> worker
+  api --> pg[("Corporate PostgreSQL<br/>runtime / migration roles")]
+  worker --> pg
+  api -.-> idp["Corporate OIDC / JWKS"]
+  api -.-> storage[("GitLab CI artifacts<br/>pinned metadata / checksum / retention")]
+  worker -.-> storage
+  worker -.-> factories["CorporateConnectorFactories<br/>pinned network / scoped secret leases"]
+  factories --> providers["NON_PROD Jira / GitLab / Mattermost<br/>installed-provider conformance required"]
+  factories --> vault["Vault / remote signer<br/>workload auth / key versions"]
+  ingress["ProviderIngressModule<br/>native receiver или trusted gateway"] -.-> api
+  providers -.-> ingress
+  api -.-> collector["Collector + approved telemetry backend<br/>mTLS / privacy filters"]
+  worker -.-> collector
+  pg -.-> backup["Backup / PITR / restore targets<br/>approved corporate drill required"]

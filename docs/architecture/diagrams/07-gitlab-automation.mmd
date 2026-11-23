@@ -1,0 +1,26 @@
+sequenceDiagram
+  actor QA as QA-человек
+  participant API as QA API
+  participant DB as PostgreSQL
+  participant W as Automation worker
+  participant G as GitLab adapter / provider
+  participant R as Ingress + reconciliation
+  QA->>API: Start зарегистрированный suite на non-prod target
+  API->>API: Human intent, mode, fresh capability, exact pins
+  API->>DB: Session + launch request + attempt identity + command/outbox
+  W->>DB: Claim + revalidate suite/ref/SHA/rights
+  W->>DB: Durable invocation marker
+  W->>G: pipeline.trigger с bounded inputs и effect marker
+  G-->>W: Receipt или неизвестный результат
+  opt Неизвестный результат trigger
+    W->>G: pipeline.lookup по исходному marker/ref/SHA/window
+    G-->>W: Exact match либо AMBIGUOUS
+  end
+  W->>DB: Подтверждённая pipeline identity / attempt lineage
+  G->>R: Подписанный webhook о pipeline/job
+  R->>DB: Deduplicated receipt + authoritative-read hint
+  R->>G: pipeline.read / reports / artifact metadata
+  G-->>R: Авторитетные факты / machine result
+  R->>DB: Observations + result revisions + QA events
+  QA->>API: Review результата, Findings и Evidence
+  API->>DB: Human review / session outcome

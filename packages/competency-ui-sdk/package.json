@@ -1,0 +1,12 @@
+{
+  "name": "@awp/competency-ui-sdk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "react": "19.2.8"
+  }
+}

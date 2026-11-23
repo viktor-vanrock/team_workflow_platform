@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:backlog-item:v1",
+  "title": "Confirmed QA Backlog Item Projection",
+  "description": "Reload-safe list/detail item after request-input semantics moved to append-only revisions; the stable header alone intentionally does not duplicate title or DoR content.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["requestExtension", "currentRequestInputRevision", "operationalReadiness"],
+  "properties": {
+    "requestExtension": { "$ref": "./qa-request-extension.v1.schema.json" },
+    "currentRequestInputRevision": { "$ref": "./qa-request-input-revision.v1.schema.json" },
+    "operationalReadiness": { "$ref": "./qa-work-item-detail.v1.schema.json#/$defs/OperationalReadinessProjection" }
+  }
+}

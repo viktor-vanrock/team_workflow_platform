@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "workspaceId": "10000000-0000-4000-8000-000000000001",
+  "projectId": "20000000-0000-4000-8000-000000000001",
+  "version": 4,
+  "stage": "SHADOW",
+  "qaCapabilityMode": "FULL_QA",
+  "operationalState": "SUSPENDED",
+  "intendedCapabilityMode": "FULL_QA",
+  "projectRegistryRef": { "id": "registry-1", "version": 1, "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+  "bindingRef": { "id": "binding-1", "version": 2, "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+  "qaProjectContextRef": { "id": "qa-context-1", "version": 2, "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+  "starterEntitlementSetHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "gateResultRefs": [],
+  "ownerSetHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "incidentRef": "incident:SEC-007-1",
+  "actor": {
+    "principalId": "30000000-0000-4000-8000-000000000001",
+    "kind": "HUMAN",
+    "roleKey": "integration.admin",
+    "authorizationBasisHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "authenticationContextRef": "local:acr:step-up"
+  },
+  "reasonCode": "INTEGRATION_COMPROMISED",
+  "reason": "Emergency suspension for investigation.",
+  "correlationId": "corr-007-suspend-001",
+  "createdAt": "2026-09-03T13:00:00.000Z",
+  "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}

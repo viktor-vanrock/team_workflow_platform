@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:mattermost:slash-command-ack:v1",
+  "title": "Mattermost Static Bootstrap Acknowledgement v1",
+  "$comment": "The immutable $id carries the contract version; the provider wire body intentionally has no schemaVersion field. The text is a deterministic safe message containing only the configured first-party OIDC continuation URL.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["response_type", "text"],
+  "properties": {
+    "response_type": { "const": "ephemeral" },
+    "text": { "type": "string", "format": "uri", "pattern": "^https?://", "maxLength": 2048 }
+  }
+}

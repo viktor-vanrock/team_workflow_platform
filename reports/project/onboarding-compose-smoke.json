@@ -1,0 +1,895 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "generatedAt": "2026-09-06T20:40:53.991653+00:00",
+  "closedTasks": [
+    "007/T176"
+  ],
+  "scope": "Isolated local Compose API/worker/web/PostgreSQL/Redis/Mock Hub restart journey, with explicit development identity and controlled IAM/signed evidence/source-issue inputs.",
+  "smoke": {
+    "report": "reports/007-project-onboarding-evidence-security/smoke.json",
+    "project": "awp-local-007-smoke-mtq9uwie-43429",
+    "stages": 9,
+    "passedStages": 9,
+    "restarts": 7,
+    "browser": {
+      "passed": 1,
+      "failed": 0
+    },
+    "cleanShutdown": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    }
+  },
+  "regression": {
+    "report": "reports/project/onboarding-compose-smoke/regression-vitest.json",
+    "tests": 215,
+    "passed": 215,
+    "files": 91,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "quality": {
+    "rootTypecheck": {
+      "status": "PASS",
+      "exitCode": 0,
+      "log": "reports/project/onboarding-compose-smoke/typecheck.log"
+    },
+    "targetedEslint": {
+      "status": "PASS",
+      "exitCode": 0,
+      "logs": [
+        "reports/project/onboarding-compose-smoke/eslint.log",
+        "reports/project/onboarding-compose-smoke/browser-selector-eslint.log"
+      ]
+    },
+    "gitDiffCheck": {
+      "status": "PASS",
+      "exitCode": 0,
+      "log": "reports/project/onboarding-compose-smoke/git-diff-check.log"
+    }
+  },
+  "fixes": [
+    "Fresh CLI local seed now creates missing conservative onboarding heads while preserving existing suspension.",
+    "Explicit local Fake IdP step-up is guarded by a verified session and rejects client-selected identities.",
+    "Worker reads PROJECT_OPERATIONAL_STATE_CHANGED and retries failed sinks before acknowledgment.",
+    "Onboarding CLI status reads durable state; no synthetic project IDs.",
+    "Real browser smoke is registered separately from fixture browser suites.",
+    "GitLab verify:local runs smoke:007 and preserves reports; generated reports/key history excluded from Docker build context."
+  ],
+  "assertions": {
+    "before": {
+      "commandState": "CONFIRMED",
+      "commandsForDraft": 1,
+      "workItems": 1,
+      "operationalState": "SUSPENDED",
+      "manifestHash": "sha256:5ffceb155b1d404156b9b539ed5a1b364fee7d497886bd04aa05f284dd71fbb1",
+      "exportCount": 1,
+      "onboardingEvents": 4,
+      "eventReceipts": 4,
+      "jiraIssues": 1
+    },
+    "after": {
+      "commandState": "CONFIRMED",
+      "commandsForDraft": 1,
+      "workItems": 1,
+      "operationalState": "SUSPENDED",
+      "manifestHash": "sha256:5ffceb155b1d404156b9b539ed5a1b364fee7d497886bd04aa05f284dd71fbb1",
+      "exportCount": 1,
+      "onboardingEvents": 4,
+      "eventReceipts": 4,
+      "jiraIssues": 1
+    },
+    "signature": "PASS",
+    "integrity": "PASS",
+    "artifactHash": "sha256:d6dba027e1a723c019d52dd5886a17559b5b8fccf24c0d749ee4bbf170484dd6",
+    "idempotencyReplay": true
+  },
+  "browserAuditCounts": {
+    "exports": 2,
+    "audits": 2
+  },
+  "sourceBinding": [
+    {
+      "path": ".dockerignore",
+      "sha256": "sha256:7ce65b8878c713ef1a71ae2ccef3dab120a0a9ce27e2f4caefca1e2ad6367d87"
+    },
+    {
+      "path": ".gitlab-ci.yml",
+      "sha256": "sha256:e0b0a064b6d37a4f914c3bb6423ec745968d0b79456e74bdd2e5ee5ff02b62a3"
+    },
+    {
+      "path": "apps/api/openapi.generated.json",
+      "sha256": "sha256:b0edae47774f2a5a4885477389d878330a97bdf7dbffb6faa9bcbc3d15321435"
+    },
+    {
+      "path": "apps/api/src/app.module.ts",
+      "sha256": "sha256:ddb628872ea5768c7ec49fe208b4b0b2d150b4943bb8baab9c95f0ccf1d191bf"
+    },
+    {
+      "path": "apps/api/src/extensions/gitlab-automation/qa-automated-sessions.controller.ts",
+      "sha256": "sha256:2f0d3189b6e20075787f5d6e9efdd119a9ab1c81b7e3bfa2f8addcbcc71c6e00"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/automation-facts.ts",
+      "sha256": "sha256:ec171bdd7205dc214f1a4d2f33fb94ec74a18d656f720a28e192690b2b9cb951"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/binding-facts.ts",
+      "sha256": "sha256:062907276b69fcdc5b1e8a66644c88b891bbb86d56640670a866948c47efee2a"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.application.ts",
+      "sha256": "sha256:36b33e7288663b680e959272ba4e39f23a492562e513a34a2c40bc4fce1c617c"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.controller.ts",
+      "sha256": "sha256:1130518cd775aef4351c21a9d7320537304b3d89a7d95e3fa61a336efba40629"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/durable-http.ts",
+      "sha256": "sha256:b489f0ef1f168bb9169e4a99c7094c8e57c9b2db9c5a89f73c64a269533fb033"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/evidence.application.ts",
+      "sha256": "sha256:e0cc781fccfc93b64f8b5185ae783a46dea76ba2da254483690c2d66fb55d9e6"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/evidence.controller.ts",
+      "sha256": "sha256:7f132aa6c9fa5142d0a0d850b6bd915e0fb7917c53c359efec7e20f733d19ec1"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/onboarding.controller.ts",
+      "sha256": "sha256:dff52ab44c4b284fc8c3f3baaa3e3d2e9c25439945cb3de6f84c13d4562a1388"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.application.ts",
+      "sha256": "sha256:f39777d9bdecbac8b9c44b49abb95fd68b1a394ab83a60ae87c1d52a7f0c5ad7"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.controller.ts",
+      "sha256": "sha256:58a97079d4c293663792a28c7edf691d13eab7990f531e01719ca679239d02b7"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-reads.application.ts",
+      "sha256": "sha256:f78dc99e4621d721d59fddb35885145932019190393b01c342a6361455955836"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-reads.controller.ts",
+      "sha256": "sha256:6edb08c7e13f00e1e2eb892a05827417d2bb92ac22311d5a272ac7b25ebab817"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-http-context.ts",
+      "sha256": "sha256:7ca2aff2fd15e197f335e200d6e27c841c5871cb68f188c2f89964d1742f3409"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-http.ts",
+      "sha256": "sha256:211a3e1bda26d837bbd3e849a696d3d12367b3ebb4eaa760e245ec54bc260ae8"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-validation.ts",
+      "sha256": "sha256:7e004b0688a16a7f38481c78fdb6184d03649546eaf2bbce23d42e09928fc5b1"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published.controllers.ts",
+      "sha256": "sha256:b4c026331cff03e564c09e75cb7b56cfff532e6f95889d96c985b9af12554973"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/registry.application.ts",
+      "sha256": "sha256:3f96a80c3d225b0d163240eb877ac7db0ebb49003cdf626c33d25d9d01860423"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/resources.application.ts",
+      "sha256": "sha256:acb5bc0eefd14c8168e0e53272a0fe3afe1e372645bc40ca76ba8aa1bb6bd02d"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/session-facts.ts",
+      "sha256": "sha256:717b08af09ae7848219b52e25879909948a20558b25d7909ac377b8dc70c8ddc"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/validation.application.ts",
+      "sha256": "sha256:ae9cb486c3cb41238c7ab04de7e4bb1936c63efd4590b20951999f4ab6d07e09"
+    },
+    {
+      "path": "apps/api/src/extensions/qa-artifacts.controller.ts",
+      "sha256": "sha256:a75b888298061357e14699ad2e33e987183b22742d7b0c68a71b55fc5d0d47ed"
+    },
+    {
+      "path": "apps/api/src/extensions/qa-sessions.controller.ts",
+      "sha256": "sha256:5af2f0b68ed9bddf269e857047efb501b9083a635b8e2c907d1ed9a5f7bec3f7"
+    },
+    {
+      "path": "apps/api/src/extensions/queue/queue.controller.ts",
+      "sha256": "sha256:5e6e5547f06c2689bd2eb582a40ab1a7327f983dc3706cb5c2ae0d852e28b8e3"
+    },
+    {
+      "path": "apps/api/src/local/local-persona.controller.ts",
+      "sha256": "sha256:24425bcc66fe92c3cf3d7ef317f07a46142768438fada83cc69209253cc4e108"
+    },
+    {
+      "path": "apps/api/src/local/local-qa-authorization.ts",
+      "sha256": "sha256:06291ed53d3f4c1c2c4a0e265bc93dc7bf4ee8c6960aec9a2505dcaf4b4b6a14"
+    },
+    {
+      "path": "apps/api/src/local/local-qa-session-runtime.ts",
+      "sha256": "sha256:7744592c3b55a2a5abac36fc05adf3356027cdd46b4675cdece48d1eb6ea9860"
+    },
+    {
+      "path": "apps/fake-idp/src/oidc.controller.ts",
+      "sha256": "sha256:3c23d14b321ddcf7d69280cfff2acf504241f37a176b6039fd000b4a9021329c"
+    },
+    {
+      "path": "apps/mock-hub/openapi.generated.json",
+      "sha256": "sha256:95403841624e77b32c151d707a24efc270571263d9eabd87bcce98a403edba5b"
+    },
+    {
+      "path": "apps/web/src/App.tsx",
+      "sha256": "sha256:7395e28ef510c388cc3cb355f7f55a9b2a82eb34984732a153cc24e8485253f0"
+    },
+    {
+      "path": "apps/worker/src/app.module.ts",
+      "sha256": "sha256:f461a10c68539670f5bc7808a6497e46851ada688d33cb6c7fc2a61f8a590606"
+    },
+    {
+      "path": "docs/audits/2026-09-06-local-audit.md",
+      "sha256": "sha256:3289de1738d20627cd9e83280ce691fe9f588c4d858453d517a74f53ebde1a5b"
+    },
+    {
+      "path": "docs/audits/2026-09-07-compose-smoke.md",
+      "sha256": "sha256:e71a01935fbac7b0a72bc048c961e06138fd8f85bda2d9202d5c011c5a48c2b1"
+    },
+    {
+      "path": "docs/runbooks/binding-http.md",
+      "sha256": "sha256:068406142186c8ac22b245eb6e8711b5cca1848d0787b2a940dd4abb72765a42"
+    },
+    {
+      "path": "docs/runbooks/gitlab-pipeline.md",
+      "sha256": "sha256:4d061c6b5df98365d3eef21ac375b154b8ab7b48a8c5fcb05d6882fdb985ae4e"
+    },
+    {
+      "path": "docs/runbooks/manual-onboarding-journey.md",
+      "sha256": "sha256:674e6b5fb42ef5904cba3ae5cb73a2c4c6e7f91d962be78880438f209eccab22"
+    },
+    {
+      "path": "docs/runbooks/onboarding-compose-smoke.md",
+      "sha256": "sha256:ef2b2fc07ada1c712fee960e9bc782bfe55b17c12634e6c34a5eddfc2ca70f2e"
+    },
+    {
+      "path": "docs/runbooks/onboarding-http.md",
+      "sha256": "sha256:e465394dff01fc565840fc424e5b8df2a4af7039abde5279cd30b141798bb083"
+    },
+    {
+      "path": "docs/runbooks/onboarding-openapi-convergence.md",
+      "sha256": "sha256:1f0642b133315bf815c0f8961863ac464a3f40f43234dd1aeb98d16ea2691f83"
+    },
+    {
+      "path": "docs/runbooks/pilot-deployment-checklist.md",
+      "sha256": "sha256:5f7d9c8e54619e035f43cea4822608ed0755a72077b7f60d16b469c812d4967b"
+    },
+    {
+      "path": "docs/runbooks/project-operations-http.md",
+      "sha256": "sha256:2b21efd454323f439b4aec8fd6b71e6364f7203e69c394b32d4dd4ae08dc2c06"
+    },
+    {
+      "path": "docs/runbooks/project-scope-journey.md",
+      "sha256": "sha256:edb299f75b1d97b00f7e4cde507c327f30885e08aa4d6ec9f5653f2df1786c7c"
+    },
+    {
+      "path": "infra/compose/docker-compose.local.yml",
+      "sha256": "sha256:c5a1ce089c7a4dd9175f811b9473937f52a5db8cace19449a54b96d96747c157"
+    },
+    {
+      "path": "infra/compose/docker/node-runtime.Dockerfile",
+      "sha256": "sha256:ec7f545cb5aeb0f6e17a3930361579d6d5e081cb424963be76ab931ac424249c"
+    },
+    {
+      "path": "package.json",
+      "sha256": "sha256:43379c19a6b740b2864f61784b0dbf44fe9ce07316df7a7f28eb664eded7a151"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/automated-session.uow.ts",
+      "sha256": "sha256:9f3603d6a74e46e00aebdd517823cfcab01823c450b2308c6f015f8fcaf44945"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/manual-execution.uow.ts",
+      "sha256": "sha256:9ebb678f6e836d8d68166b7d4e0fbd783b5d5f0a94d1f02ecd3555a4d513780d"
+    },
+    {
+      "path": "packages/competency-qa/src/persistence/project-resource.repository.ts",
+      "sha256": "sha256:384debaf1e689e4d2b3676cdee3ba4d187708506effabf29695e4311365e3bd8"
+    },
+    {
+      "path": "packages/platform-contracts/src/generated/schema-documents.ts",
+      "sha256": "sha256:75866c716b828e65bc1b045d287a272f979dc5c77bf4f09a1c9de96d565cba95"
+    },
+    {
+      "path": "packages/platform-contracts/src/schema-contributions.ts",
+      "sha256": "sha256:234ee9f51412a32131d47c7b74e723b33e44016a39c50a011916acb4cf530787"
+    },
+    {
+      "path": "packages/runtime-composition/src/cli/seed.ts",
+      "sha256": "sha256:ea1979b2a84301bfeb5f72d66c1798c96b29a83495a6db15d33d8f0c5071517c"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/configuration-hash.ts",
+      "sha256": "sha256:62cbeb30eade441ff68f56c9ca8a0a5582eb3976703dda8494b517b69da5f77a"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/requested-probe-worker.ts",
+      "sha256": "sha256:3641452bf695479dc30d43756b796fd77d80d586e2258c1846cff83890758194"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/worker.ts",
+      "sha256": "sha256:16ca0b4a7d0b9503a08a9d524a48a8269498c30c2349e5ee4df7713e17c3f099"
+    },
+    {
+      "path": "packages/runtime-composition/src/pilot/automation-availability.ts",
+      "sha256": "sha256:a17e4d773edc5c297bf5c6020c7fc6f82146caad410e44b0a2b8ccf8178ff3d4"
+    },
+    {
+      "path": "packages/runtime-composition/src/pilot/development-seed.ts",
+      "sha256": "sha256:cc8852ec03dc8e665af1a54d265dd5643f6266bba9656f2ace931cf35bb618c3"
+    },
+    {
+      "path": "packages/runtime-composition/src/qa/composition.ts",
+      "sha256": "sha256:269af7ee171691af7b0ba0df5aa7b92968245b79d6a8517794a5ced460eb4cd7"
+    },
+    {
+      "path": "packages/runtime-composition/src/queue/approval-api.ts",
+      "sha256": "sha256:d21da50d1510d0f0eb6203a745bcedd31ea0ae3a33baa5b3710d8ccccafe5b0c"
+    },
+    {
+      "path": "packages/runtime-composition/src/queue/portfolio-query.ts",
+      "sha256": "sha256:0b01aee08a0f7b1c908c45d9b0ad171a668d6a1128f56f2683538602bce40d22"
+    },
+    {
+      "path": "packages/runtime-composition/src/queue/query-api.ts",
+      "sha256": "sha256:1659338f8338243475b2e74392296d3af5361205bd626e0f2f2fc8be667c270d"
+    },
+    {
+      "path": "packages/runtime-composition/src/security/local-queue-authority.ts",
+      "sha256": "sha256:3535b3fc5cdff8d6163fac4275af7dc4667d4283bd690ab9689e37ebfb20fd60"
+    },
+    {
+      "path": "packages/runtime-composition/src/seed/qa-local-seed.ts",
+      "sha256": "sha256:c3ff6abec6db1dd3597527ba08bdf72dec5623d59501a346ab2c82818ee8f26f"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "sha256:f38c2477ee693776090f636cc36bb132303f6e5930000df450887aac2ac5c9e7"
+    },
+    {
+      "path": "reports/project/task-status.json",
+      "sha256": "sha256:e7ac35e0da67cfeb1b6c241e4c88e161c3c3e03d9bc4722f3310e63cf81be78c"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/contracts/openapi/project-reads-api.v1.yaml",
+      "sha256": "sha256:cdca2d71e54c016e2d84babdbc5711be829ede83d6f7e6119e523d40e6e7349b"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/plan.md",
+      "sha256": "sha256:9b73f86b2e8545cef65d34d8bb5c3c8931b523e0f63633e9c071d8ff9067c959"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+      "sha256": "sha256:9674f98aebbaf315117b78b8447579dcccb79ff58eee966a6dc919128b883199"
+    },
+    {
+      "path": "specs/008-pilot-hardening-and-conformance/tasks.md",
+      "sha256": "sha256:dfca43ff8b2b7b51521678ff656488b568ed5cdcad598696e153a42a8937dca1"
+    },
+    {
+      "path": "tests/browser-test-files.ts",
+      "sha256": "sha256:48fcda6e8b2860b97920ea239b5a3ac4b523c8fbe1b9e7b55adaf2e7c729457d"
+    },
+    {
+      "path": "tests/contract/007/design-contracts.spec.ts",
+      "sha256": "sha256:ad66c6d938ee25d687b5fcd3e36f95c64369d88fc0b8e3d83c7accd7092c0f79"
+    },
+    {
+      "path": "tests/contract/openapi-drift.spec.ts",
+      "sha256": "sha256:5d8c23ca9ba034125fdb3d5ab31afedf795aa98c9ed62254350ff84cce821541"
+    },
+    {
+      "path": "tests/e2e/007/compose-live.spec.ts",
+      "sha256": "sha256:2dcf5bbb5b3afbd28aa5f33dad2b823d343fa0835bed65463d7e25b85ea6e8d3"
+    },
+    {
+      "path": "tests/e2e/007/us1-manual-onboarding.spec.ts",
+      "sha256": "sha256:307860928172503a58b80bd47d7ae80d48d8a6a691aa3e714356ca0a608c7dd2"
+    },
+    {
+      "path": "tests/e2e/007/us3-project-scope.spec.ts",
+      "sha256": "sha256:1f1c69a3fad4c374b2db37971d08a50cf8007c71fc2e5e2574f5619fb35c1275"
+    },
+    {
+      "path": "tests/integration/005/us1-automated-session.spec.ts",
+      "sha256": "sha256:b8043be51dc6ce2e4a4f11b6243d9b546d2a1c1e70a119608b31468d6cb1cd7d"
+    },
+    {
+      "path": "tests/integration/005/us2-launch-idempotency.spec.ts",
+      "sha256": "sha256:b575bc532e57b99d1951663ff51fb3a930ddf257fc4e1048557c039d0824df9d"
+    },
+    {
+      "path": "tests/integration/007/local-project-bootstrap.spec.ts",
+      "sha256": "sha256:a8adc8901dd0c0b7c303c29bd0ae4383622e7645f6d0dde05cff29f59b5bf6ce"
+    },
+    {
+      "path": "tests/integration/007/us1-full-qa-http.spec.ts",
+      "sha256": "sha256:b18048505d32bc07d145c076424d9ad77961a10c67231fec902e1bd2d80cedec"
+    },
+    {
+      "path": "tests/integration/007/us1-published-http.spec.ts",
+      "sha256": "sha256:2bc07104553fe7ab407ec36ba68694e9a67bb6d4b4f684f9a16c28622a9ba2c5"
+    },
+    {
+      "path": "tests/integration/007/us3-local-authority.spec.ts",
+      "sha256": "sha256:e934707ffbf579e074877ec75825cc83aa5aa3442bd93e779aea3c145f84bc5d"
+    },
+    {
+      "path": "tests/integration/007/us4-evidence-http.spec.ts",
+      "sha256": "sha256:99360e6f7449d96466380aacf50180c39bdcede8cda74c184df93ddba9fdde26"
+    },
+    {
+      "path": "tests/integration/008/foundation-persistence.spec.ts",
+      "sha256": "sha256:1fdb5d073f38d6d9cf6c3917939ea349c99faee231e01245d79ac5a13a78f054"
+    },
+    {
+      "path": "tests/integration/008/project-scope-migration.spec.ts",
+      "sha256": "sha256:8e8c21403d94a474f2ccdb9174554946c6a6e1376b69cebe05a4925d14e6b545"
+    },
+    {
+      "path": "tests/integration/fake-idp-oidc.spec.ts",
+      "sha256": "sha256:58fa4c3f981571b8cebcccfcb0f74a529b81428423f8644eb1726da267a7df08"
+    },
+    {
+      "path": "tests/support/005-us2-automation.ts",
+      "sha256": "sha256:9b0eb2d20a9cb2bcd7758f6dcac9777ef110b48dad9065565879f8f860399ed3"
+    },
+    {
+      "path": "tests/support/007-binding-http-fixture.ts",
+      "sha256": "sha256:0b106ae395479762de44c6d9aef022cd1dee77c33f8e55f83b53f3dbd6317695"
+    },
+    {
+      "path": "tests/support/007-evidence-http-fixture.ts",
+      "sha256": "sha256:3a55ce3c46e9920f1cf7b92967a5ef76680ed3ab29ed26f57d3c838b2c24c1a6"
+    },
+    {
+      "path": "tests/support/007-full-qa-http.ts",
+      "sha256": "sha256:928e4a2a4a3d4dfe8be1a7aa9c87de939be8321e2e442c4589c3719fd521ad98"
+    },
+    {
+      "path": "tests/support/007-manual-binding.ts",
+      "sha256": "sha256:8b7c7e25274325d1b3818e4365b1806a315843967b02bdcb0abdea5ba58eb63d"
+    },
+    {
+      "path": "tests/support/007-manual-request.ts",
+      "sha256": "sha256:fd0f4d88d18bd1fbd5b599817da67817f480e648954368d066fe83de0cfe6471"
+    },
+    {
+      "path": "tests/support/007-onboarding-child.ts",
+      "sha256": "sha256:0a14f39ab3172515ba81d91cce6091766d3b0cd34ff8ac71af6aaf969e416b07"
+    },
+    {
+      "path": "tests/support/007-onboarding-process.ts",
+      "sha256": "sha256:b9658f87d5d65e9cdfef6c23b8aed931bdf548bd704ef261197d96ef0391a73e"
+    },
+    {
+      "path": "tests/support/007-openapi.ts",
+      "sha256": "sha256:c6020c8aaa3727e13bf37026c3d2dee9c8e77b8aa27305caea2b5f29aea96a2f"
+    },
+    {
+      "path": "tests/support/007-scope-child.ts",
+      "sha256": "sha256:198268383255fb379650bccf0b6375b5c26e7a8c3715d2626baa290a12d7a439"
+    },
+    {
+      "path": "tests/support/007-scope-fixture.ts",
+      "sha256": "sha256:b566a3572dff963c0cf06c92d69a8e255deb5a573b1496aa1c156d9717c6bf56"
+    },
+    {
+      "path": "tests/support/007-scope-openapi.ts",
+      "sha256": "sha256:b9388c5932f273ddf0accd55eb7e7c730172eda75bb0d96ccb915bb6403f2851"
+    },
+    {
+      "path": "tests/support/007-scope-process.ts",
+      "sha256": "sha256:7f837f5c64447b0bf8be920b1f402209a13fcf29db1468f00564105df870c7f0"
+    },
+    {
+      "path": "tests/testcontainers.config.ts",
+      "sha256": "sha256:b7ab739d29c38d4374f7c28c14f697035c67ddd712a695de15cbca41702f8ca4"
+    },
+    {
+      "path": "tests/unit/007/onboarding-event-worker.spec.ts",
+      "sha256": "sha256:ed8f046dbdde518fa738dc333d11f8d7a8273650c6e1f53555e584dc897d30a6"
+    },
+    {
+      "path": "tools/contracts/build-openapi-snapshots.mts",
+      "sha256": "sha256:33397122ea27b6ee7c5b5275cbcd93dfcc925602901bebbc1029c0c2b0c61ea0"
+    },
+    {
+      "path": "tools/contracts/build-registry.mts",
+      "sha256": "sha256:5e5af9f26362f4aeae33995fcff6723f734c39cdf8861325998514e4c053d46d"
+    },
+    {
+      "path": "tools/contracts/verify-007-contracts.mts",
+      "sha256": "sha256:090206ca5a21b2f1da0e9162bcd51111ac35ac3106a39dab513476ae2ebdceac"
+    },
+    {
+      "path": "tools/local/onboarding-cli.mts",
+      "sha256": "sha256:139ee4a1193fc6c9ae1be1513119d4d645b288384f2b2bfdcdd256ebf6d03c9a"
+    },
+    {
+      "path": "tools/smoke/007-compose-runtime.mts",
+      "sha256": "sha256:4316b11ee690b29a00ec264c2df026040d72d1ed4ef785c2110a6c7a1ec224da"
+    },
+    {
+      "path": "tools/smoke/007-http-journey.mts",
+      "sha256": "sha256:2d68f33a85d3b2c9e73a4a8617d28529fe296bf9ad15b06d87363ce8f8505a8b"
+    },
+    {
+      "path": "tools/smoke/007-runtime-fixture.mts",
+      "sha256": "sha256:0bb3e48821138f259365f0be69b10c0673ecf163abff76f6055e73b36856bf74"
+    },
+    {
+      "path": "tools/smoke/feature-007-browser-process.mts",
+      "sha256": "sha256:bcad7053bf7001d9ac93027cee1d7d7106182dab968f36203186bbc6bf6d22d1"
+    },
+    {
+      "path": "tools/smoke/feature-007.mts",
+      "sha256": "sha256:fd2ed253c184b3220f3bc0d79763b1561156deecd3608fe0b3d909bd81cbee41"
+    }
+  ],
+  "evidenceBinding": [
+    {
+      "path": "reports/007-project-onboarding-evidence-security/smoke.json",
+      "sha256": "sha256:d0d5f1ca2ba1ecf8950ea5c0238dbed7686ce3fe863cab0f2300ddc21b8981a3"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq90b2h-32518/result.json",
+      "sha256": "sha256:6f44369eb2e795a96bc4a2c9096e495d80ae3154ac8f835c47689e3aeba4c54c"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq93le3-34316/result.json",
+      "sha256": "sha256:d0b21950bfc68339cb3b936f8154cf0c4fb349edbe725ee57e111b1897832a9b"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9b5lw-34795/result.json",
+      "sha256": "sha256:1269a1ed62b4855e4d40e8c443ee859ef05eb75d50c936150c312d523e3a1194"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9dz5g-35228/result.json",
+      "sha256": "sha256:eae460444ceab8bb3728ddd4d4fedfaea5c808e7b28b2e95f91720dececf4ebd"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9k2pm-39882/result.json",
+      "sha256": "sha256:07f9df945d767df37691c9e610f7e8ee355cd8c7d348376a8c481089ecead296"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9oqnc-41940/browser-child.log",
+      "sha256": "sha256:b10d3bdda65a900e96d1e79ea8ea876188e392000a65c27347e7c8b4b1738132"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9oqnc-41940/browser-error-context.md",
+      "sha256": "sha256:433cb6f6ea7c64acfa7d189742996a13fe13ad35d56cb7fc648db4c0bc681f79"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9oqnc-41940/browser-input.json",
+      "sha256": "sha256:fdfa42b52fca371ca1368461154cb0e2f5905d1dc5cd501da90d0d3b93ff00f9"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9oqnc-41940/browser-trace.zip",
+      "sha256": "sha256:e1c3d5ec76b762ec4234703c77de3d36f72d339996b54ea3a9b5adc0d6e19c03"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9oqnc-41940/result.json",
+      "sha256": "sha256:d12dbae12b50a7f000327e5136f5e898099f6ed010595121e0ce86bf0ddc1a0b"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/browser-child.log",
+      "sha256": "sha256:59b426ac5680e8050eea1010c27aaadd097d83434c69b6d973ba763f876fc8c0"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/browser-export-count.log",
+      "sha256": "sha256:a3927e87b91004d6cc2b2cce85420b8552e08472e8231a4f872c243d17804e63"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/browser-input.json",
+      "sha256": "sha256:096130ebb5188a6b7a4b97bf337e9b70972fb15b7b8807fa3cda6329c086aced"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/cleanup.log",
+      "sha256": "sha256:27a735fd9d24fca2eb88b68a06ac13b1911cbea01d8827497c8682d2917f0c2f"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/controlled-evidence-input.log",
+      "sha256": "sha256:1944c088b22704e82e0cb364e49d397a45bf3fb2406cd4e6ce89eabb4eab8fe3"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/event-state.log",
+      "sha256": "sha256:dd3c4d087f839ff1e5f1167e96e11585f199845365061998745a8312f622ecfd"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/health-postgres.log",
+      "sha256": "sha256:1bc64361a06b611cc14364eda56152497ce0d7d3ff6512702329a413ba8f4860"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/health-redis.log",
+      "sha256": "sha256:4ec15f95854f54cd3e4af47d00700c2874289c5c7a9a49355ddd8ea290fb868d"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/health-s3mock.log",
+      "sha256": "sha256:60a6b87f81a8f3cfb584915d83a00caaf55e484848dc8483ee59d650563772d7"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/id-api.log",
+      "sha256": "sha256:f4d4004f9e5731bb575d5753a28707376bb07a9c275964d4f335726445462741"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/id-mock-hub.log",
+      "sha256": "sha256:1e3f66ec49004d332a1379898b54dcc8e05fa7fcd57f3ed0b743b92da0e5dd36"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/id-postgres.log",
+      "sha256": "sha256:8a2679f28aaaaf116bc0047f621c0e05410c65c437d521f688238ccd2cb975bd"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/id-redis.log",
+      "sha256": "sha256:454d9c059272b683c9e6202c48dd2691dac39cb933de71cb1b608ea349b75a0f"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/id-s3mock.log",
+      "sha256": "sha256:e85967b59012eff78a4523298f6503c99fc828d9983c272fc8e16c38d35f9356"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/id-web.log",
+      "sha256": "sha256:66af260873efb951f19f67642c70f57b698a91fb7e48aa8ae551cbbc8634ad2a"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/id-worker.log",
+      "sha256": "sha256:c948dc550b1d19610653a3353ca61a02797536c50c3b7bccab080595743d7af7"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/inspect-api.log",
+      "sha256": "sha256:615941321ae35a6f4501cab60a9358e9c6e5511ee7d5e481a5ca0966b1e8d629"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/inspect-mock-hub.log",
+      "sha256": "sha256:18f28d48f80aabee8e91818f68e97f7d7b6067c2d5bfa10de50ddcf1e9edd882"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/inspect-postgres.log",
+      "sha256": "sha256:c50bfa404e6a4477f3e40efd1827a6dd98577990f95d63bd13fb1cd43ea4eda4"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/inspect-redis.log",
+      "sha256": "sha256:9794fd01c7bae6f614d6964f33c3cfcd9b7a57ff33d62ff279176c52c0d7c9dd"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/inspect-s3mock.log",
+      "sha256": "sha256:d764ea56d9b11ff58cac97cc33ea6736a8260e6e8cf239f600d525d89c0543b0"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/inspect-web.log",
+      "sha256": "sha256:493cf8aa5af022035f9efd55a527886cf0ee39b3af057a68513b86e874660a85"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/inspect-worker.log",
+      "sha256": "sha256:5960c725a8e964b3e7aa0401f682d4e2755c48b3d79977cfa09f619653cf9e4b"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/local-up.log",
+      "sha256": "sha256:7cab45d39d2d197d394519e4eef74073dccb857032dfd028b661985651232119"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/onboarding-status.log",
+      "sha256": "sha256:10cdbc98e8e1ae52c2d9676fa16539c53358a22856277742cab558f72fd0c0a2"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/platform-snapshot.log",
+      "sha256": "sha256:6c4796a519b2c93f2d23efd1c675b5ebef26204c8383126af7df589d683f10b8"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/provider-effect-count.log",
+      "sha256": "sha256:73451524dadd27729eea639581625e43f348befd3f42fb763653afdd1eb7d628"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/redeliver-onboarding-events.log",
+      "sha256": "sha256:7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/restart-api.log",
+      "sha256": "sha256:1971830a0b567d256aa796bebe351f7852fc4aade276f05832de6575deb8bb21"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/restart-mock-hub.log",
+      "sha256": "sha256:4c2bcbb861e39ee963c3951dc1f29b6a9703097d31833119abd67f412bf21e5d"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/restart-postgres.log",
+      "sha256": "sha256:054707dcefcfb82ba879df01f07c6ad1ecc6753109d1949ed1f0d7e54890f968"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/restart-redis.log",
+      "sha256": "sha256:1025a30c39a8766ed61604e3ecee25fa622aead058f26d8a520cd720e714a84a"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/restart-s3mock.log",
+      "sha256": "sha256:aa0172676f080f43d17270175051cd52d034a1c282f4b7db25b9bf5af0ecbd51"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/restart-web.log",
+      "sha256": "sha256:5456eb3bc598a7e529ea9bfe63f721c0cb03cce2879d88407df9fc7dd98412c3"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/restart-worker.log",
+      "sha256": "sha256:d3ccbdfb8c05f42d9d294bf5f566a1c388553ebb8d91f653113fc937218eafef"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/result.json",
+      "sha256": "sha256:d0d5f1ca2ba1ecf8950ea5c0238dbed7686ce3fe863cab0f2300ddc21b8981a3"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/runtime-image.log",
+      "sha256": "sha256:eb1de8adc623435bbc10006f15c09dba481e6551f5c6e77d1ac106fcde087984"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/start-worker-delivery.log",
+      "sha256": "sha256:9b9dc7c16b374b6e5efb6a3225b90dd3cf2f6f2af438deecbbe2692aa83ab96c"
+    },
+    {
+      "path": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9uwie-43429/stop-worker-before-enqueue.log",
+      "sha256": "sha256:155fab0b27191684815125bc72ec357290f0504a1cb7d87fecf72810b2bff11c"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/007-event-retry-green.log",
+      "sha256": "sha256:3d369ee1af93e790e3bdb251972fbc728be1c68405c197a2e5a48de2a8c3d7de"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/007-event-retry-red.log",
+      "sha256": "sha256:55f88e979f38f2e38b86ce7bd83fbba8799e7e3d6a26db9b2863d398a2dda157"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/007-seed-bootstrap-tests.log",
+      "sha256": "sha256:c552e126dcbb1da419cdcd8257d64518c2ef25521da054c54bbbdc1b0bfc32e3"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/007-smoke-step-up-red.log",
+      "sha256": "sha256:2ea0fda1ed15bf02d36395d1c17e7f2e7d5384a21c2322586bd58912740c8321"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/007-smoke-targeted.log",
+      "sha256": "sha256:1920fe4d3995181dfd24302294f8f1265858bbdf5bc8c5870496bcdaaaf136dd"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/browser-selector-eslint.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/eslint.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/git-diff-check.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/regression-vitest.json",
+      "sha256": "sha256:76cdf83a1bcd52e2fb6fb4bc3373920f9864dc3d4b3eeb4fb760537eca5ea26e"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/regression.log",
+      "sha256": "sha256:3bfcb3557a711651b7c1779163f3a04eb9acf766576a1902030ac8b92c2c5e6b"
+    },
+    {
+      "path": "reports/project/onboarding-compose-smoke/typecheck.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "failedAttempts": [
+    {
+      "report": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq90b2h-32518/result.json",
+      "reason": "postgres_HEALTHY_TIMEOUT:[{\"ID\":\"c648fba164884fb4b058067a54842b1c6e2239babadd30b17036929b48aa33b7\",\"Name\":\"awp-local-007-smoke-mtq90b2h-32518-postgres-1\",\"Image\":\"postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af\",\"Command\":\"docker-entrypoint.sh postgres\",\"Project\":\"awp-local-007-smoke-mtq90b2h-32518\",\"Service\":\"postgres\",\"Created\":1788725554,\"State\":\"running\",\"Status\":\"Up 2 minutes (healthy)\",\"Health\":\"healthy\",\"ExitCode\":0,\"Publishers\":null}]",
+      "cleanShutdown": true
+    },
+    {
+      "report": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq93le3-34316/result.json",
+      "reason": "controlled-evidence-input_FAILED:1; log=/Users/alexandr/Desktop/projects/PlatformWorkspace/reports/project/compose-smoke-007/awp-local-007-smoke-mtq93le3-34316/controlled-evidence-input.log",
+      "cleanShutdown": true
+    },
+    {
+      "report": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9b5lw-34795/result.json",
+      "reason": "/v1/workspaces/10000000-0000-4000-8000-000000000001/projects/e74b38f4-6c57-4000-9223-0f9766c22d47/evidence/manifests/8399a4ea-3d0a-479f-92be-33714e47c4b3/verify?revision=1: 404 {\"type\":\"urn:awp:problem:project-resource-not-available\",\"title\":\"Not Found\",\"status\":404,\"code\":\"PROJECT_RESOURCE_NOT_AVAILABLE\",\"correlationId\":\"22c1076c-ef2e-44df-8f38-6c0fe329edfb\"}",
+      "cleanShutdown": true
+    },
+    {
+      "report": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9dz5g-35228/result.json",
+      "reason": "WORKER_COMMAND_CONFIRMATION_TIMEOUT:{\"commandState\":\"QUEUED\",\"commandsForDraft\":1,\"workItems\":0,\"operationalState\":\"ACTIVE\",\"manifestHash\":\"sha256:c8e6ae67d9d370614e5345e6a8549c7d5113b11aa7bc34504b22541f4d29c52e\",\"exportCount\":1,\"onboardingEvents\":3,\"eventReceipts\":3,\"jiraIssues\":0}",
+      "cleanShutdown": true
+    },
+    {
+      "report": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9k2pm-39882/result.json",
+      "reason": "ONBOARDING_EVENTS_ACKNOWLEDGED_TIMEOUT:{\"total\":4,\"acknowledged\":3,\"inbox\":3}",
+      "cleanShutdown": true
+    },
+    {
+      "report": "reports/project/compose-smoke-007/awp-local-007-smoke-mtq9oqnc-41940/result.json",
+      "reason": "browser-child_FAILED:1; log=/Users/alexandr/Desktop/projects/PlatformWorkspace/reports/project/compose-smoke-007/awp-local-007-smoke-mtq9oqnc-41940/browser-child.log",
+      "cleanShutdown": true
+    }
+  ],
+  "taskStatus": {
+    "total": 1349,
+    "complete": 1342,
+    "open": 7,
+    "localOpen": [
+      "008/T025"
+    ],
+    "corporateOpen": [
+      "008/T040",
+      "008/T057",
+      "008/T084",
+      "008/T104",
+      "008/T105",
+      "008/T106"
+    ],
+    "features": [
+      {
+        "feature": "001-extension-kernel-local-skeleton",
+        "total": 163,
+        "complete": 163,
+        "open": 0
+      },
+      {
+        "feature": "002-qa-manual-walking-skeleton",
+        "total": 180,
+        "complete": 180,
+        "open": 0
+      },
+      {
+        "feature": "003-jira-operational-authority",
+        "total": 163,
+        "complete": 163,
+        "open": 0
+      },
+      {
+        "feature": "004-mattermost-hermes-intake",
+        "total": 215,
+        "complete": 215,
+        "open": 0
+      },
+      {
+        "feature": "005-gitlab-automated-validation",
+        "total": 159,
+        "complete": 159,
+        "open": 0
+      },
+      {
+        "feature": "006-queue-triage-capacity-sla",
+        "total": 170,
+        "complete": 170,
+        "open": 0
+      },
+      {
+        "feature": "007-project-onboarding-evidence-security",
+        "total": 184,
+        "complete": 184,
+        "open": 0
+      },
+      {
+        "feature": "008-pilot-hardening-and-conformance",
+        "total": 115,
+        "complete": 108,
+        "open": 7
+      }
+    ]
+  },
+  "limits": [
+    "Full ci:project/ci:007/ci:008 were not rerun in this continuation. The targeted regression is 215 tests; older 723/2085-test evidence remains historical.",
+    "Compose uses pinned PostgreSQL 18.6; targeted database regression also runs PostgreSQL 17.7.",
+    "IAM roles and signed manifest/package/context are controlled starting inputs. Jira worker uses seeded ALPHA; HTTP registration/suspension/evidence use the new SMOKE007.",
+    "Fake IdP development step-up, local Ed25519 signer and Mock Hub do not prove corporate MFA/KMS/provider installation or real C1/N2/P3/pilot/recovery/review.",
+    "No deployment, commit or external publication was performed."
+  ]
+}

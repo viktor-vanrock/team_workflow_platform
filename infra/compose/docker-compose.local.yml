@@ -1,0 +1,288 @@
+name: awp-local
+
+x-node-app: &node-app
+  image: awp-local-node:24.20.0
+  restart: unless-stopped
+  networks: [awp-internal]
+
+x-local-runtime: &local-runtime
+  AWP_ENVIRONMENT: LOCAL
+  AWP_RUNTIME_PROFILE: local
+  AWP_COMPOSITION: ${AWP_COMPOSITION:-foundation}
+  AWP_EXTERNAL_NETWORK_MODE: deny
+  AWP_QUEUE_STATIC_CONTOUR: ${AWP_QUEUE_STATIC_CONTOUR:-false}
+  AWP_ONBOARDING_STATIC_CONTOUR: ${AWP_ONBOARDING_STATIC_CONTOUR:-false}
+  AWP_PILOT_ADAPTER_MODE: ${AWP_PILOT_ADAPTER_MODE:-disabled}
+  AWP_OTEL_COLLECTOR_ORIGIN: ${AWP_OTEL_COLLECTOR_ORIGIN:-}
+  AWP_EVIDENCE_SIGNER: ${AWP_EVIDENCE_SIGNER:-local-ed25519}
+  AWP_EVIDENCE_SIGNER_KID: ${AWP_EVIDENCE_SIGNER_KID:-local-ed25519:1}
+  AWP_EVIDENCE_SIGNER_PRIVATE_MATERIAL: ${AWP_EVIDENCE_SIGNER_PRIVATE_MATERIAL:-true}
+  AWP_DATABASE_URL: postgresql://awp_runtime:local-runtime-only@postgres:5432/awp
+  AWP_MOCK_HUB_URL: http://mock-hub:4010
+  AWP_IDENTITY_ISSUER: https://fake-idp:4443/oidc
+  AWP_IDENTITY_AUDIENCE: awp-local
+  AWP_MODEL_PROVIDER: deterministic-fake
+  AWP_GITLAB_BASE_URL: http://mock-hub:4010
+  AWP_GITLAB_READ_SECRET_REF: secret-ref:local/gitlab/project-5001/read
+  AWP_GITLAB_TRIGGER_SECRET_REF: secret-ref:local/gitlab/project-5001/trigger
+  AWP_GITLAB_WEBHOOK_SECRET_REF: secret-ref:local/gitlab/project-5001/webhook
+  AWP_GITLAB_PRODUCTION_DENIED: "true"
+  NODE_EXTRA_CA_CERTS: /workspace/infra/compose/certs/generated/awp-local-ca.pem
+
+# Feature 006 selects this exact anchor through local:queue:*; no queue-specific
+# service, database, credential owner or external network is introduced.
+x-queue-local-runtime: &queue-local-runtime
+  <<: *local-runtime
+  AWP_COMPOSITION: qa-jira-gitlab-mattermost-local
+  AWP_QUEUE_STATIC_CONTOUR: "true"
+
+# Feature 007 reuses the exact local contour and internal-only network. Signing
+# material belongs only to the local signer adapter and is never a production key.
+x-onboarding-local-runtime: &onboarding-local-runtime
+  <<: *queue-local-runtime
+  AWP_ONBOARDING_STATIC_CONTOUR: "true"
+  AWP_EVIDENCE_SIGNER: local-ed25519
+  AWP_EVIDENCE_SIGNER_KID: local-ed25519:1
+  AWP_EVIDENCE_SIGNER_PRIVATE_MATERIAL: "true"
+
+services:
+  postgres:
+    image: postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af
+    environment:
+      POSTGRES_DB: awp
+      POSTGRES_USER: awp_bootstrap
+      POSTGRES_PASSWORD: local-bootstrap-only
+      PGDATA: /var/lib/postgresql/18/docker
+    volumes:
+      - postgres-data:/var/lib/postgresql
+      - ./postgres/001-local-roles.sql:/docker-entrypoint-initdb.d/001-local-roles.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U awp_bootstrap -d awp"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+    networks: [awp-internal]
+
+  fake-idp:
+    <<: *node-app
+    command: ["pnpm", "--filter", "@awp/fake-idp", "start"]
+    environment:
+      AWP_RUNTIME_PROFILE: local
+      AWP_IDENTITY_AUDIENCE: awp-local
+      FAKE_IDP_ISSUER: https://fake-idp:4443/oidc
+      FAKE_IDP_TLS_KEY_PATH: /workspace/infra/compose/certs/generated/fake-idp-key.pem
+      FAKE_IDP_TLS_CERT_PATH: /workspace/infra/compose/certs/generated/fake-idp.pem
+      NODE_EXTRA_CA_CERTS: /workspace/infra/compose/certs/generated/awp-local-ca.pem
+      PORT: "4443"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('https://fake-idp:4443/health/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 4s
+      retries: 30
+
+  core-migrate:
+    <<: *node-app
+    build:
+      context: ../..
+      dockerfile: infra/compose/docker/node-runtime.Dockerfile
+    restart: "no"
+    command: ["pnpm", "--filter", "@awp/runtime-composition", "migrate"]
+    environment:
+      <<: *local-runtime
+      AWP_DATABASE_URL: postgresql://awp_core_migrator:local-core-migrator-only@postgres:5432/awp
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  mock-migrate:
+    <<: *node-app
+    restart: "no"
+    command: ["pnpm", "--filter", "@awp/mock-hub", "migrate"]
+    environment:
+      MOCK_HUB_DATABASE_URL: postgresql://awp_mock_owner:local-mock-owner-only@postgres:5432/awp_mock
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  core-seed:
+    <<: *node-app
+    restart: "no"
+    command: ["pnpm", "--filter", "@awp/runtime-composition", "seed"]
+    environment:
+      <<: *local-runtime
+      AWP_DATABASE_URL: postgresql://awp_core_migrator:local-core-migrator-only@postgres:5432/awp
+    depends_on:
+      core-migrate: { condition: service_completed_successfully }
+
+  mock-seed:
+    <<: *node-app
+    restart: "no"
+    command: ["pnpm", "--filter", "@awp/mock-hub", "seed"]
+    environment:
+      MOCK_HUB_DATABASE_URL: postgresql://awp_mock_owner:local-mock-owner-only@postgres:5432/awp_mock
+      MOCK_HUB_SEED: "42"
+    depends_on:
+      mock-migrate: { condition: service_completed_successfully }
+
+  mock-hub:
+    <<: *node-app
+    command: ["pnpm", "--filter", "@awp/mock-hub", "start"]
+    environment:
+      MOCK_HUB_DATABASE_URL: postgresql://awp_mock_owner:local-mock-owner-only@postgres:5432/awp_mock
+      PORT: "4010"
+      AWP_MOCK_CONTROL_KEY: local-gitlab-control
+      AWP_PILOT_ADAPTER_MODE: ${AWP_PILOT_ADAPTER_MODE:-disabled}
+    depends_on:
+      mock-seed: { condition: service_completed_successfully }
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://mock-hub:4010/health/live').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 4s
+      retries: 30
+
+  hermes:
+    <<: *node-app
+    command: [pnpm, --filter, "@awp/hermes", start]
+    environment:
+      PORT: "3020"
+      AWP_ENVIRONMENT: LOCAL
+      AWP_HERMES_LOCAL_TOKEN: local-hermes-service-only-token-32-bytes
+    healthcheck:
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:3020/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 4s
+      retries: 30
+
+  api:
+    <<: *node-app
+    command: ["pnpm", "--filter", "@awp/api", "start"]
+    environment:
+      <<: *local-runtime
+      AWP_HERMES_URL: http://hermes:3020
+      AWP_HERMES_LOCAL_TOKEN: local-hermes-service-only-token-32-bytes
+      AWP_WEB_ORIGIN: ${AWP_WEB_ORIGIN:-http://localhost:5173}
+      PORT: "3000"
+    depends_on:
+      hermes: { condition: service_healthy }
+      core-seed: { condition: service_completed_successfully }
+      fake-idp: { condition: service_healthy }
+      mock-hub: { condition: service_healthy }
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://api:3000/health/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 4s
+      retries: 30
+
+  worker:
+    <<: *node-app
+    command: ["pnpm", "--filter", "@awp/worker", "start"]
+    environment:
+      <<: *local-runtime
+      WORKER_HEALTH_PORT: "3010"
+    depends_on:
+      core-seed: { condition: service_completed_successfully }
+      fake-idp: { condition: service_healthy }
+      mock-hub: { condition: service_healthy }
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://worker:3010/health/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 4s
+      retries: 30
+
+  web:
+    <<: *node-app
+    command: ["pnpm", "--filter", "@awp/web", "dev", "--host", "0.0.0.0"]
+    environment:
+      VITE_AWP_API_URL: ${AWP_PUBLIC_API_URL:-http://localhost:3000}
+      VITE_AWP_COMPOSITION: ${AWP_COMPOSITION:-foundation}
+    depends_on:
+      api: { condition: service_healthy }
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:5173').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 4s
+      retries: 30
+
+  edge-proxy:
+    <<: *node-app
+    command: ["node", "tools/local/tcp-edge-proxy.mts"]
+    networks: [awp-internal, awp-edge]
+    ports:
+      - "127.0.0.1:${AWP_API_HOST_PORT:-3000}:3000"
+      - "127.0.0.1:${AWP_WORKER_HOST_PORT:-3010}:3010"
+      - "127.0.0.1:${AWP_MOCK_HUB_HOST_PORT:-4010}:4010"
+      - "127.0.0.1:${AWP_IDP_HOST_PORT:-4443}:4443"
+      - "127.0.0.1:${AWP_WEB_HOST_PORT:-5173}:5173"
+    depends_on:
+      api: { condition: service_healthy }
+      worker: { condition: service_healthy }
+      web: { condition: service_healthy }
+      fake-idp: { condition: service_healthy }
+      mock-hub: { condition: service_healthy }
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "Promise.all([fetch('http://127.0.0.1:3000/health/ready'),fetch('http://127.0.0.1:5173')]).then(rs=>{if(rs.some(r=>!r.ok))process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.135.0@sha256:89107a3a8f4636a396927edf7025bb9614b8da2d92f4cc3f43109e8d115736e2
+    profiles: ["observability"]
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes: ["../observability/otel-collector.yaml:/etc/otelcol/config.yaml:ro"]
+    ports:
+      [
+        "127.0.0.1:${AWP_OTEL_GRPC_HOST_PORT:-4317}:4317",
+        "127.0.0.1:${AWP_OTEL_HTTP_HOST_PORT:-4318}:4318",
+      ]
+    networks: [awp-internal]
+
+networks:
+  awp-internal:
+    internal: true
+  awp-edge: {}
+
+volumes:
+  postgres-data:
+    name: ${AWP_LOCAL_PROJECT_NAME:-awp-local}-postgres-data

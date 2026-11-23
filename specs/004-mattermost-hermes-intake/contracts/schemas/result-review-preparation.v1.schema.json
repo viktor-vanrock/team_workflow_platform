@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:result-review-preparation:v1",
+  "title": "ResultReviewPreparation v1",
+  "description": "Non-adjudicative review preparation. It cannot contain or sign a QA verdict.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "workItemVersion",
+    "workItemContentHash",
+    "sessionReviewRefs",
+    "evidenceManifestRefs",
+    "findingReviewRefs",
+    "openQuestions",
+    "riskFlags",
+    "summary",
+    "inputFingerprint",
+    "rulesRef",
+    "skillRef",
+    "policyRef",
+    "agentRunRef",
+    "actionProvenanceRef",
+    "state",
+    "expiresAt",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "result-review-preparation@1.0.0" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "workItemId": { "$ref": "#/$defs/id" },
+    "workItemVersion": { "type": "integer", "minimum": 1 },
+    "workItemContentHash": { "$ref": "#/$defs/hash" },
+    "sessionReviewRefs": { "$ref": "#/$defs/refList" },
+    "evidenceManifestRefs": { "$ref": "#/$defs/refList" },
+    "findingReviewRefs": { "$ref": "#/$defs/refList" },
+    "openQuestions": { "type": "array", "maxItems": 50, "items": { "type": "string", "minLength": 1, "maxLength": 1000 } },
+    "riskFlags": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "severity", "factRefs"],
+        "properties": {
+          "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,127}$" },
+          "severity": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+          "factRefs": { "$ref": "#/$defs/refList" }
+        }
+      }
+    },
+    "summary": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+    "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+    "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+    "agentRunRef": { "$ref": "#/$defs/id" },
+    "actionProvenanceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "state": { "enum": ["CURRENT", "STALE"] },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "staleAt": { "type": "string", "format": "date-time" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "STALE" } } },
+      "then": { "required": ["staleAt"], "properties": { "staleAt": true } },
+      "else": { "properties": { "staleAt": false } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "refList": { "type": "array", "maxItems": 100, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 512 } },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "recordedAt": "2026-09-06T12:16:05.597622+00:00",
+  "closedTasks": [],
+  "advancedTasks": [
+    "007/T071"
+  ],
+  "sourceBinding": [
+    {
+      "path": "apps/api/src/extensions/onboarding/automation-facts.ts",
+      "sha256": "sha256:ec171bdd7205dc214f1a4d2f33fb94ec74a18d656f720a28e192690b2b9cb951"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/binding-facts.ts",
+      "sha256": "sha256:062907276b69fcdc5b1e8a66644c88b891bbb86d56640670a866948c47efee2a"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/validation.application.ts",
+      "sha256": "sha256:ae9cb486c3cb41238c7ab04de7e4bb1936c63efd4590b20951999f4ab6d07e09"
+    },
+    {
+      "path": "docs/audits/2026-09-06-local-audit.md",
+      "sha256": "sha256:ca5c03891516cd845860af600a8244a32803eacc4bf87fa2e384369352c089e7"
+    },
+    {
+      "path": "docs/runbooks/onboarding-http.md",
+      "sha256": "sha256:2dd5514f85ad73777853cda71e4bb8112eb4e883cffba6eb56cbec84288f8809"
+    },
+    {
+      "path": "docs/runbooks/onboarding-openapi-convergence.md",
+      "sha256": "sha256:0fe8c49561d770094105bb8ebb7dc69ce961ad4de75f3af6749db6ded4d90a81"
+    },
+    {
+      "path": "docs/runbooks/pilot-deployment-checklist.md",
+      "sha256": "sha256:72fe9c26f118ba1d7f4b1582b276545f6bbb7676e037a17279c7f450eee9904f"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/configuration-hash.ts",
+      "sha256": "sha256:62cbeb30eade441ff68f56c9ca8a0a5582eb3976703dda8494b517b69da5f77a"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/requested-probe-worker.ts",
+      "sha256": "sha256:3641452bf695479dc30d43756b796fd77d80d586e2258c1846cff83890758194"
+    },
+    {
+      "path": "packages/runtime-composition/src/pilot/automation-availability.ts",
+      "sha256": "sha256:a17e4d773edc5c297bf5c6020c7fc6f82146caad410e44b0a2b8ccf8178ff3d4"
+    },
+    {
+      "path": "reports/project/task-status.json",
+      "sha256": "sha256:a3345fcca2ec8bcfcf713fca5eb390ed794c8989865f0f4763dc27958c8e994b"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+      "sha256": "sha256:2921db5af35faf484cb83b06ecf7d2c534af97d2289b478aae6dae6766493222"
+    },
+    {
+      "path": "tests/integration/007/us1-full-qa-http.spec.ts",
+      "sha256": "sha256:b18048505d32bc07d145c076424d9ad77961a10c67231fec902e1bd2d80cedec"
+    },
+    {
+      "path": "tests/integration/008/automation-availability.spec.ts",
+      "sha256": "sha256:994f6295f5792e1f2aff6bdaa25c6e95b7ddd7b9f789cd505db599e0195472b5"
+    },
+    {
+      "path": "tests/support/007-binding-http-fixture.ts",
+      "sha256": "sha256:fae6b5d1ff85d55578bfa344d4e18fcf413d5b486d34706da22790ead88230d2"
+    },
+    {
+      "path": "tests/support/007-full-qa-http.ts",
+      "sha256": "sha256:928e4a2a4a3d4dfe8be1a7aa9c87de939be8321e2e442c4589c3719fd521ad98"
+    }
+  ],
+  "postgresImages": [
+    "postgres:17.7-bookworm",
+    "postgres:18.6-bookworm"
+  ],
+  "schemaVersions": {
+    "core": 200,
+    "pack:qa": 2110
+  },
+  "regression": {
+    "report": "reports/project/full-qa-http/regression-vitest.json",
+    "tests": 147,
+    "passed": 147,
+    "files": 66,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "quality": {
+    "rootTypecheck": "PASS",
+    "targetedEslint": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "proven": [
+    "HTTP-published resources, Core semantic-hashed Jira/GitLab binding, published Suite and current QA-lead acceptance drive explicit L0 FULL_QA evaluation.",
+    "A durable requested worker produces all 12 exact manual/automation observations through a controlled SERVICE observer.",
+    "Successful L0 records 12 probe refs plus Suite/version and Suite/report refs; its expiration is bounded by the source observations.",
+    "Forced audit failure rolls back FULL_QA mode, gate and receipt; retry commits once and API restart replays that same result.",
+    "New negative provider observation or loss of the current published Suite blocks FULL_QA; explicit MANUAL_ONLY evaluation remains available.",
+    "Existing NON_PROD automation availability and backward-compatibility tests pass; the prior default profile pin hash format is retained."
+  ],
+  "limits": [
+    "No top-level task is closed by this checkpoint. T071 still requires the concrete OpenAPI convergence listed in docs/runbooks/onboarding-openapi-convergence.md.",
+    "The new FULL_QA test uses controlled Suite validator and observer ports plus durable repositories. It does not certify real GitLab conformance, actual Suite execution, C1/N2/P3, corporate composition or full isolated smoke T176.",
+    "Full current ci:project/ci:008 was not run. Existing T059/T106/T176 placeholders are not promoted into independent-process evidence merely because their present tests pass."
+  ],
+  "remaining": {
+    "all": 11,
+    "local": [
+      "007/T059",
+      "007/T071",
+      "007/T106",
+      "007/T176",
+      "008/T025"
+    ],
+    "corporate": [
+      "008/T040",
+      "008/T057",
+      "008/T084",
+      "008/T104",
+      "008/T105",
+      "008/T106"
+    ]
+  }
+}

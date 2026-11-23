@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "gate": "002-foundation-checkpoint",
+  "startedAt": "2026-08-30T22:54:28.006Z",
+  "finishedAt": "2026-08-30T22:54:47.766Z",
+  "status": "PASS",
+  "invariants": {
+    "foundationDefaultQaFree": true,
+    "qaStoryMigrationsInstalled": 0,
+    "qaStoryEntitiesInstalled": 0,
+    "qaExecutableHandlersInstalled": 0
+  },
+  "stages": [
+    {
+      "id": "qa-typecheck",
+      "status": "PASS",
+      "durationMs": 3517,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "runtime-composition-typecheck",
+      "status": "PASS",
+      "durationMs": 3614,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "foundation-eslint",
+      "status": "PASS",
+      "durationMs": 7463,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "packages/competency-qa/src",
+        "packages/runtime-composition/src/qa",
+        "tests/integration/002-qa-foundation-composition.spec.ts"
+      ]
+    },
+    {
+      "id": "foundation-contracts",
+      "status": "PASS",
+      "durationMs": 4950,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/acceptance/002-at-001-qa-pack-contract.spec.ts",
+        "tests/architecture/002-qa-pack-boundaries.spec.ts",
+        "tests/integration/migrations/002-qa-migration-order.spec.ts",
+        "tests/integration/security/002-qa-scope-constraints.spec.ts",
+        "tests/integration/security/002-qa-human-authorization.spec.ts",
+        "tests/contract/002-qa-domain-primitives.spec.ts",
+        "tests/architecture/002-generic-contribution-registries.spec.ts",
+        "tests/contract/002-qa-events-and-audit.spec.ts",
+        "tests/integration/002-qa-foundation-composition.spec.ts"
+      ]
+    },
+    {
+      "id": "core-only-architecture",
+      "status": "PASS",
+      "durationMs": 214,
+      "command": [
+        "node",
+        "tools/architecture/check-import-graph.mts",
+        "--core-only"
+      ]
+    }
+  ]
+}

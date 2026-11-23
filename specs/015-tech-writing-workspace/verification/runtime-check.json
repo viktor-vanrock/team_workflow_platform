@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-09-09T00:44:10.394671+00:00",
+  "worktree": "/Users/alexandr/.codex/worktrees/8635/PlatformWorkspace",
+  "sourceHashesMatch": true,
+  "files": {
+    "apps/api/src/main.ts": "85403c9e8af85321bcc1bb8e799c176f71600cb08f3c31d1b559bcd03eaa39ce",
+    "apps/api/src/local/local-session.guard.ts": "3c674036f5fa802503aa49d8a371d4535cb665b3ad0b6ece9c109204d6c3041c",
+    "apps/api/src/local/local-persona.controller.ts": "47817955b8d6ea515c8d6b3f93bdd6c31b876216fb9ea51b63d2d1ee6b2acc6b",
+    "apps/api/src/local/tech-writing.service.ts": "0aa45ec40afa2d0fcb80fae424bab4c463992e3ee23ab9b75e9cc54e04dcee55",
+    "apps/web/src/workspace/local-workspace.tsx": "e872f0766d76e204f16aa41f1a46405799f45da36f089a45e5cb815427d2d9ec",
+    "packages/competency-tech-writing/src/workspace.tsx": "24d4d8f07c48b0ec4236be562a0856c6a3150c4d3fa26c6c0528533e3df9601f",
+    "packages/competency-tech-writing/src/manifest.ts": "a1cb3d050cfa8e807fa4a10b4dde7a2b3863f9415d175717a00b6434a0133365",
+    "packages/competency-tech-writing/src/intake.schema.json": "9e9ed4fcf13712347269570d86811b959ea028d122c93299677f36ef0050c281",
+    "packages/runtime-composition/src/seed/tech-writing-local-seed.ts": "56f6bf8a1f19dcdede5cb80f5f58e1512948194fa832b881a1613770dce11821"
+  },
+  "containers": [
+    {
+      "name": "/awp-local-pilot-dev-api-1",
+      "image": "sha256:c574ac3675516f9a44905d00510a384694e8d64cb5eae860d6949cc92191916f",
+      "health": "healthy"
+    },
+    {
+      "name": "/awp-local-pilot-dev-web-1",
+      "image": "sha256:c574ac3675516f9a44905d00510a384694e8d64cb5eae860d6949cc92191916f",
+      "health": "healthy"
+    }
+  ]
+}

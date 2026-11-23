@@ -1,0 +1,21 @@
+{
+  "name": "connector-jira-persistence-typeorm",
+  "root": "packages/connector-jira-persistence-typeorm",
+  "sourceRoot": "packages/connector-jira-persistence-typeorm/src",
+  "projectType": "library",
+  "tags": ["type:adapter", "runtime:node", "domain:jira"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/connector-jira-persistence-typeorm/tsconfig.json --noEmit"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/connector-jira-persistence-typeorm/tsconfig.json --noEmit"
+      }
+    }
+  }
+}

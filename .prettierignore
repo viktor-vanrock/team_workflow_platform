@@ -1,0 +1,37 @@
+# Tool-owned metadata and feature specifications
+/.agents/
+/.specify/
+/specs/
+
+# Generated, evidence, and report artifacts
+/artifacts/
+/reports/
+/packages/platform-contracts/src/generated/
+/apps/api/openapi.generated.json
+/apps/mock-hub/openapi.generated.json
+/docs/architecture/*.html
+/docs/architecture/inventory.json
+/docs/architecture/inventory.md
+/docs/architecture/diagrams/*.svg
+/docs/architecture/diagrams/*.png
+/infra/compose/certs/generated/
+
+# Byte-sensitive fixtures and package-manager output
+/tests/fixtures/
+/pnpm-lock.yaml
+
+# Local and build output (also covered by .gitignore)
+node_modules/
+.node_modules-broken-*/
+.nx/
+.pnpm-store/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+.pipeline-inputs/
+.local/evidence-public-keys/
+
+# Published schema bytes are referenced by the tech-writing manifest digest.
+/packages/competency-tech-writing/src/intake.schema.json

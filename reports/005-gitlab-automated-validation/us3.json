@@ -1,0 +1,662 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-us3",
+  "contour": "qa-jira-gitlab-local",
+  "startedAt": "2026-09-03T10:42:50.807Z",
+  "finishedAt": "2026-09-03T10:45:07.399Z",
+  "status": "PASS",
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts",
+        "sha256": "sha256:b5a79517e87d227a77c7bd010efdb4e2e6162aef0f34e8d23a4c3c6f8e537355"
+      },
+      {
+        "path": "apps/api/src/extensions/gitlab-automation/qa-automation-quarantines.controller.ts",
+        "sha256": "sha256:327d5ef438db64fc49161fb784cc988d6c750dbc88a29df912bd07e149f58d9e"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/scenarios/gitlab-scenarios.ts",
+        "sha256": "sha256:c8cf27b1c751bbcb729f7198ffeb219bcb1a6a188221bf258f02df2e8239fec0"
+      },
+      {
+        "path": "apps/mock-hub/src/gitlab/state/gitlab.repository.ts",
+        "sha256": "sha256:90d023402144df5dc01ffdb9546a311732b2438baffb166d2ae37458f42e4bad"
+      },
+      {
+        "path": "packages/competency-qa/src/application/automation-quarantine.ts",
+        "sha256": "sha256:3af54537913a4583b354d0dcfb4d0bfb8dd0d7071b95deac591288b0c07473cc"
+      },
+      {
+        "path": "packages/competency-qa/src/application/automation-retry-policy.ts",
+        "sha256": "sha256:a7cbb14c69b5a7dc27720afaa0741fda2a9c7b5f6277ad51248dbe054352131b"
+      },
+      {
+        "path": "packages/competency-qa/src/application/automation-review-readiness.ts",
+        "sha256": "sha256:a91b364d58b382bb8400e9ab2387ecb7e0c51360dbbc368f2abbe3e47fa23889"
+      },
+      {
+        "path": "packages/competency-qa/src/application/sync-automation-result.ts",
+        "sha256": "sha256:c8be4313e5545dee797552ee56ab603a225f1b38d0a682482616d3180e962ffd"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/result-evidence.uow.ts",
+        "sha256": "sha256:30c00ee56b4a4d20d23db2886c06de0655e81c5f7ed996a8ee907e353316ea85"
+      },
+      {
+        "path": "packages/competency-qa/src/skills/qa-result-review-prep.ts",
+        "sha256": "sha256:3aa5b848e80a0d1a95178324682eeec6143c57f043569422be2eab7f500412e4"
+      },
+      {
+        "path": "packages/competency-qa/src/ui/automated-session-executor.tsx",
+        "sha256": "sha256:8e5484a78d9a4336a56eda1f766baa4e338ef329ee69d86f9674cc7558e09b83"
+      },
+      {
+        "path": "packages/connector-gitlab/src/artifacts/gitlab-ci-artifacts.ts",
+        "sha256": "sha256:3a076a19504cbea4022b4b2dd004a02947a12711f8468991633b69e44184402a"
+      },
+      {
+        "path": "packages/connector-gitlab/src/pipeline/gitlab-pipeline-reader.ts",
+        "sha256": "sha256:dea25383ae37dc345299310ae4234f66349564e369034b5212cdefcf7e442675"
+      },
+      {
+        "path": "packages/connector-gitlab/src/pipeline/gitlab-result-normalizer.ts",
+        "sha256": "sha256:443ddee23c79bb5607eb9ebeda01f7b6137cbaf022485199b0c20f2f7c3a5b76"
+      },
+      {
+        "path": "packages/connector-gitlab-persistence-typeorm/src/repositories/gitlab-artifact.repository.ts",
+        "sha256": "sha256:fe109903ed2d83e7720b13c9d908c46f4d2b3df257c44ded88525cfdf24f300a"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/artifact-storage.ts",
+        "sha256": "sha256:aac20eb1edf8ba58a0d286a9e24dcdd1357627f722dd1c01e86a458cb078d99c"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/automation-attempt-query.ts",
+        "sha256": "sha256:66b3443ed20150e2ee9c7477bbba0f6e1d9c006795f4e9a3718ae9202a7e566c"
+      },
+      {
+        "path": "packages/runtime-composition/src/gitlab/result-sync.ts",
+        "sha256": "sha256:40af71702baa0612e317c6c2540e6d30d8f223f83920446eecff32bb077c8d1d"
+      },
+      {
+        "path": "packages/runtime-composition/src/hermes/qa-automation-review-packet.ts",
+        "sha256": "sha256:179db4fb4f41c426f4bfc23477c0de88fa0a01a1dd8ba0644d1f838ac06cf5f0"
+      },
+      {
+        "path": "tests/e2e/005-us3-technical-result-review.spec.ts",
+        "sha256": "sha256:3dc098b8d5c41b55f715c916a6e4ee5941f399341854c8af3476266eb0fc6a25"
+      },
+      {
+        "path": "tests/integration/005/us3-result-retry-review.spec.ts",
+        "sha256": "sha256:28db56c065c64119520486ecc0c38ff1942e88ce5de88cefa9a9a0364ddd2bc3"
+      },
+      {
+        "path": "tests/integration/security/005/artifact-access.spec.ts",
+        "sha256": "sha256:6b8e0bf1b7fe90177aa02d9e06168aa61c734804cad1c3e052b5a8f6112b8ac5"
+      },
+      {
+        "path": "tools/local/gitlab-scenario-catalog.mts",
+        "sha256": "sha256:adf11894da837d42701d28d51e3728b5e5f682d72a3ac1f6ac85f61991a14ec3"
+      }
+    ],
+    "aggregateSha256": "sha256:ced3b58580f83a97b6912da77fa75763d5ccc4bff2b71842223c0b63fbe84d9e"
+  },
+  "scenarios": [
+    {
+      "id": "us3-pass-review-required",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-pass-review-required",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "PASS"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "requiredStages": [
+        "normalized-result",
+        "review-readiness",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/005/automation-review-readiness.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    },
+    {
+      "id": "us3-assertion-failed-no-auto-retry",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-assertion-failed-no-auto-retry",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "ASSERTION_FAILED"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "requiredStages": [
+        "normalized-result",
+        "retry-policy",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/unit/005/automation-retry-policy.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    },
+    {
+      "id": "us3-allowlisted-infra-retry",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-allowlisted-infra-retry",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "INFRA_FAILED",
+          "PASS"
+        ],
+        "expectedRetryDecision": "SCHEDULED",
+        "expectedAutomaticSuccessors": 1,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "requiredStages": [
+        "retry-policy",
+        "result-retry-quarantine",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/unit/005/automation-retry-policy.spec.ts",
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    },
+    {
+      "id": "us3-unknown-infra-no-retry",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-unknown-infra-no-retry",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "INFRA_FAILED"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "requiredStages": [
+        "retry-policy",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/unit/005/automation-retry-policy.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    },
+    {
+      "id": "us3-explicit-rerun-pass-flaky",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-explicit-rerun-pass-flaky",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "ASSERTION_FAILED",
+          "PASS"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": true,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "requiredStages": [
+        "retry-policy",
+        "review-readiness",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/unit/005/automation-retry-policy.spec.ts",
+        "tests/integration/005/automation-review-readiness.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    },
+    {
+      "id": "us3-result-schema-drift",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-result-schema-drift",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "INCOMPLETE"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "requiredStages": [
+        "normalized-result",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    },
+    {
+      "id": "us3-artifact-checksum-mismatch",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-artifact-checksum-mismatch",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "PASS"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "CHECKSUM_MISMATCH",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "requiredStages": [
+        "normalized-result",
+        "artifact-security",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/contract/005/us3-gitlab-result-artifact-conformance.spec.ts",
+        "tests/integration/security/005/artifact-access.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    },
+    {
+      "id": "us3-quarantine-lifecycle",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-quarantine-lifecycle",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "INFRA_FAILED"
+        ],
+        "expectedRetryDecision": "DENIED",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 2,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 0
+      },
+      "requiredStages": [
+        "result-retry-quarantine",
+        "review-readiness"
+      ],
+      "behaviorEvidence": [
+        "tests/integration/005/us3-result-retry-review.spec.ts",
+        "tests/integration/005/automation-review-readiness.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    },
+    {
+      "id": "us3-review-packet-proposal-only",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-review-packet-proposal-only",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "ASSERTION_FAILED"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "PROPOSAL_ONLY",
+        "expectedLinkedSessions": 0
+      },
+      "requiredStages": [
+        "review-surface",
+        "review-readiness"
+      ],
+      "behaviorEvidence": [
+        "tests/unit/005/automation-review-packet.spec.ts",
+        "tests/integration/005/automation-review-readiness.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    },
+    {
+      "id": "us3-post-review-linked-session",
+      "status": "PASS",
+      "expected": {
+        "scenarioId": "us3-post-review-linked-session",
+        "expectedReviewState": "REVIEW_REQUIRED",
+        "expectedSignedVerdicts": 0,
+        "expectedJiraTransitions": 0,
+        "expectedOutcomes": [
+          "PASS",
+          "PASS"
+        ],
+        "expectedRetryDecision": "NOT_APPLICABLE",
+        "expectedAutomaticSuccessors": 0,
+        "expectedFlakySuspected": false,
+        "expectedArtifactAvailability": "AVAILABLE",
+        "expectedQuarantineRevisions": 0,
+        "expectedHermes": "NOT_REQUESTED",
+        "expectedLinkedSessions": 1
+      },
+      "requiredStages": [
+        "review-readiness",
+        "full-process"
+      ],
+      "behaviorEvidence": [
+        "tests/integration/005/automation-review-readiness.spec.ts",
+        "tests/e2e/005-us3-technical-result-review.spec.ts"
+      ],
+      "authorityEvidence": {
+        "signedVerdicts": 0,
+        "jiraTransitions": 0,
+        "terminalBoundary": "REVIEW_REQUIRED"
+      }
+    }
+  ],
+  "assertions": {
+    "normalizedResult": {
+      "status": "PASS",
+      "exactOutcomes": [
+        "PASS",
+        "ASSERTION_FAILED",
+        "INFRA_FAILED",
+        "TIMEOUT",
+        "CANCELLED",
+        "INCOMPLETE"
+      ],
+      "failClosedReasons": [
+        "RESULT_SCHEMA_DRIFT",
+        "TARGET_MISMATCH",
+        "ARTIFACT_CHECKSUM_MISMATCH",
+        "RESULT_ARTIFACT_MISSING"
+      ],
+      "logTextInferenceAllowed": false
+    },
+    "retry": {
+      "status": "PASS",
+      "assertionAutomaticRetry": "DENIED",
+      "allowlistedInfrastructureSuccessors": 1,
+      "maximumAutomaticSuccessorsPerLineage": 1,
+      "successorPersistence": "ATOMIC_WITH_DECISION_COMMAND_EFFECT_OUTBOX"
+    },
+    "artifact": {
+      "status": "PASS",
+      "availability": [
+        "AVAILABLE",
+        "EXPIRED",
+        "MISSING",
+        "CHECKSUM_MISMATCH"
+      ],
+      "streamRequiresScopeAuthorization": true,
+      "checksumVerifiedBeforeDelivery": true,
+      "rawLocatorExposed": false,
+      "bytesPersistedInReceipt": false
+    },
+    "quarantine": {
+      "status": "PASS",
+      "revisions": "APPEND_ONLY",
+      "accountableOwnerReasonExpiry": true,
+      "originalFailurePreserved": true,
+      "reviewEffect": "WARNING_NOT_EXCLUSION"
+    },
+    "review": {
+      "status": "PASS",
+      "completeAttemptSetCasRequired": true,
+      "technicalTerminalState": "REVIEW_REQUIRED",
+      "humanAdjudicationRequired": true,
+      "automaticVerdictSignatures": 0,
+      "automaticJiraTransitions": 0,
+      "hermesPacketAuthority": "PROPOSAL_ONLY"
+    }
+  },
+  "invariants": {
+    "technicalEvidenceIsVerdict": false,
+    "terminalSessionState": "REVIEW_REQUIRED",
+    "automaticVerdictSignatures": 0,
+    "automaticJiraTransitions": 0,
+    "retryPolicyOwner": "QA",
+    "resultAuthority": "SCHEMA_VALIDATED_MACHINE_ARTIFACT",
+    "reviewAuthority": "HUMAN_ONLY"
+  },
+  "stages": [
+    {
+      "id": "foundation",
+      "description": "Current Feature 005 foundation remains green",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 77548,
+      "outputHash": "sha256:d97186c5a7abbad64b940fc8d6270fdc88ac046bd32539eaf810883704e157d5"
+    },
+    {
+      "id": "scenario-catalog",
+      "description": "Exactly ten documented US3 scenarios and fixed terminal fixtures are registered",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 74,
+      "outputHash": "sha256:21f2af6f69fe2af868797d3fc1c45565a9d3545a4dca19dc141b27298b17d5c4"
+    },
+    {
+      "id": "normalized-result",
+      "description": "Closed result reducer and real GitLab read/result/artifact conformance",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 5939,
+      "outputHash": "sha256:974557611d7ed5a1c0bb5560c11b1e51919d2e3dd2cfb40b64a882e7fe0adb31"
+    },
+    {
+      "id": "retry-policy",
+      "description": "Assertion denial, one allowlisted infra successor, explicit rerun and flaky truth table",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1074,
+      "outputHash": "sha256:d5fd94d661cd5130550791a57a5a2ef0964ae2d6ef2f659b4c5aa0785a912cf6"
+    },
+    {
+      "id": "review-readiness",
+      "description": "Complete Attempt-set freeze, shared taxonomy, reviewer policy and HUMAN review race",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 6632,
+      "outputHash": "sha256:1308321a4f4bd7093ad2a71378556141d2163e4dfc48ae4c728152864d83668e"
+    },
+    {
+      "id": "result-retry-quarantine",
+      "description": "Atomic terminal evidence, retry lineage, quarantine revisions and durable outbox",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 6306,
+      "outputHash": "sha256:b966ca32f45377bbaf958f897ef12ffd0c104303792a3d59f178644dfa5eb6ae"
+    },
+    {
+      "id": "artifact-security",
+      "description": "Scoped checksum-verifying artifact access, expiry and append-only locator revisions",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 5320,
+      "outputHash": "sha256:53007839fe0279c11308b8853c97106959a0af34e1eacc25c5cf50ef87e98eae"
+    },
+    {
+      "id": "review-surface",
+      "description": "Proposal-only Hermes packet and executor review evidence without adjudication",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4272,
+      "outputHash": "sha256:9a61b45db7cbd9e5cea9e74e8ed9cd09239d530fee7d64484f816a661a7acbe2"
+    },
+    {
+      "id": "full-process",
+      "description": "API, result worker and stateful HTTP Mock Hub prove technical execution stops at REVIEW_REQUIRED",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 6703,
+      "outputHash": "sha256:73ae44b84acbe2da15def943686831b0aa1bbd713c5e638b65d94d81dc15f89b"
+    },
+    {
+      "id": "typecheck-connector",
+      "description": "GitLab result and artifact adapter static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1231,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-artifact-store",
+      "description": "GitLab artifact persistence static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1173,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-qa",
+      "description": "QA result, retry, quarantine, review and executor UI static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3207,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-runtime",
+      "description": "Result consumer, artifact storage and optional Hermes path static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4211,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-api",
+      "description": "Attempt, artifact and quarantine API static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4863,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-worker",
+      "description": "Result synchronization worker static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4206,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-mock-hub",
+      "description": "Stateful US3 GitLab Mock Hub static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1053,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "typecheck-web",
+      "description": "Automated Session result/review route static typecheck",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2441,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "id": "web-build",
+      "description": "Production web bundle includes technical result and HUMAN review readiness",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 326,
+      "outputHash": "sha256:d8458ac603e9208672f221d8bbb121a9718a563d282e562d3e9b4b334ae9c672"
+    }
+  ]
+}

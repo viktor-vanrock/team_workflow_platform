@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "gate": "recovery",
+  "status": "PASS",
+  "startedAt": "2026-09-03T18:38:07.501Z",
+  "finishedAt": "2026-09-03T18:38:11.188Z",
+  "taskSourceHash": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62",
+  "invariants": {
+    "duplicateEventsIdempotent": true,
+    "outOfOrderEventsSafe": true,
+    "mismatchedReplayQuarantined": true,
+    "postgresAuthorityAfterRestart": true,
+    "projectionRepairIdempotent": true,
+    "providerOutageFailClosed": true
+  },
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/integration/007/recovery-matrix.spec.ts",
+        "sha256": "sha256:4e8588fcd2576554c790dbe690a73e006854f179fbcdf8680eb93b53d2ae29e3"
+      },
+      {
+        "path": "tests/integration/007/historical-bootstrap.spec.ts",
+        "sha256": "sha256:00b21e60da2ceadecac653a19206d161cc9fab5e12b0d0478175b74b5c182533"
+      },
+      {
+        "path": "tests/integration/007/us1-entitlement-uow.spec.ts",
+        "sha256": "sha256:ecaef5b89bad943c9123fa4bbb9ae38d05e7c4eecb08b7d693753250d00c513a"
+      },
+      {
+        "path": "tests/integration/007/us2-gitlab-probes.spec.ts",
+        "sha256": "sha256:06641fa5e69cf5da4776c2be9ca1b43df7ac207fd01e4bbc75373442f0bbff6f"
+      },
+      {
+        "path": "tests/unit/007/us2-full-qa-mode.spec.ts",
+        "sha256": "sha256:8e62e78c97d1f0e249600fb2cb41857347c1dd961b76604a8418cbd166e05ebd"
+      },
+      {
+        "path": "tests/integration/007/us4-evidence-signing-uow.spec.ts",
+        "sha256": "sha256:7295c8531ccb9c4b56af39dc9e5eabc79ac93c2bd1c35d01fff1b190be0a102c"
+      },
+      {
+        "path": "tests/integration/007/us4-artifact-retention.spec.ts",
+        "sha256": "sha256:475a7534306136715cd3adb8c12b3783ca9f9ba3243938f974d87f4a0644eebb"
+      },
+      {
+        "path": "tests/integration/007/us5-suspension-recovery.spec.ts",
+        "sha256": "sha256:8691cac603adaf2fbfbee8c7806f85b5001dec04c02aaae40252825882ea1230"
+      }
+    ],
+    "aggregateSha256": "sha256:2216ad8fe4b3cfe97afae0487b8dbf6b870cdb941b66b88c6ff74bbc2027db48"
+  },
+  "exitCode": 0,
+  "outputHash": "sha256:5dd7ad660756bbaad9f6bdebbf4cb66f7eb1f87f5618d73fde325c5b9fbb0ecf"
+}

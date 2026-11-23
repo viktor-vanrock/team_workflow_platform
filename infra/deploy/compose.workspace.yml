@@ -1,0 +1,120 @@
+name: awp-qa
+
+# PostgreSQL and Keycloak are corporate services. Only the bootstrap job receives DDL credentials.
+services:
+  bootstrap:
+    image: ${AWP_WORKSPACE_IMAGE:-awp-workspace:local}
+    build:
+      context: ../..
+      dockerfile: infra/deploy/workspace.Dockerfile
+    profiles: [setup]
+    command: [pnpm, deploy:workspace:bootstrap]
+    environment:
+      AWP_WORKSPACE_DATABASE_URL_FILE: /run/secrets/database_url
+      AWP_WORKSPACE_DATABASE_TLS: verify-full
+      AWP_WORKSPACE_DATABASE_CA_PATH: /run/secrets/database_ca
+    secrets:
+      - source: database_migrator_url
+        target: database_url
+      - database_ca
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+  hermes:
+    image: ${AWP_WORKSPACE_IMAGE:-awp-workspace:local}
+    build:
+      context: ../..
+      dockerfile: infra/deploy/workspace.Dockerfile
+    command: [pnpm, --filter, "@awp/hermes", start]
+    restart: unless-stopped
+    init: true
+    environment:
+      PORT: "3020"
+      AWP_HERMES_TOKEN_PATH: /run/secrets/hermes_token
+      AWP_HERMES_CONFIG_PATH: /run/hermes/config.json
+    secrets: [hermes_token]
+    volumes:
+      - ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/hermes:/run/hermes:ro
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:3020/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 3s
+      start_period: 30s
+      retries: 3
+
+  workspace:
+    image: ${AWP_WORKSPACE_IMAGE:-awp-workspace:local}
+    build:
+      context: ../..
+      dockerfile: infra/deploy/workspace.Dockerfile
+    restart: unless-stopped
+    init: true
+    ports: ["127.0.0.1:${AWP_WORKSPACE_PORT:-3000}:3000"]
+    depends_on:
+      hermes: { condition: service_healthy }
+    environment:
+      AWP_HERMES_URL: http://hermes:3020
+      AWP_HERMES_TOKEN_PATH: /run/secrets/hermes_token
+      AWP_WORKSPACE_CONFIG_PATH: /run/secrets/workspace_config
+      AWP_WORKSPACE_DATABASE_URL_FILE: /run/secrets/database_url
+      AWP_WORKSPACE_DATABASE_TLS: verify-full
+      AWP_WORKSPACE_DATABASE_CA_PATH: /run/secrets/database_ca
+      AWP_SESSION_KEYS_PATH: /run/secrets/session_keys
+      AWP_OIDC_CLIENT_SECRET_PATH: /run/secrets/oidc_client_secret
+      AWP_OIDC_CA_PATH: /run/secrets/oidc_ca
+      AWP_WORKSPACE_WEB_ROOT: /workspace/dist/apps/web
+    secrets:
+      - hermes_token
+      - source: database_runtime_url
+        target: database_url
+      - database_ca
+      - workspace_config
+      - session_keys
+      - oidc_client_secret
+      - oidc_ca
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:3000/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+
+secrets:
+  hermes_token:
+    file: ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/hermes-token
+  database_migrator_url:
+    file: ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/database-migrator.url
+  database_runtime_url:
+    file: ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/database-runtime.url
+  database_ca:
+    file: ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/database-ca.pem
+  workspace_config:
+    file: ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/workspace.json
+  session_keys:
+    file: ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/session-keys.json
+  oidc_client_secret:
+    file: ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/oidc-client-secret
+  oidc_ca:
+    file: ${AWP_QA_SECRETS_DIR:?Set absolute AWP_QA_SECRETS_DIR}/oidc-ca.pem

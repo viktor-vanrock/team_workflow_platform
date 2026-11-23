@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "nonprod-metadata",
+  "startedAt": "2026-09-03T10:55:48.166Z",
+  "finishedAt": "2026-09-03T10:55:48.167Z",
+  "status": "SKIPPED_GATED",
+  "reasonCode": "METADATA_NOT_SUPPLIED",
+  "production": "DENIED"
+}

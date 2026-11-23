@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-09-05T20:27:39.901Z",
+  "kind": "observed-before-fixes",
+  "testFiles": 609,
+  "failedTestFiles": 31,
+  "tests": {
+    "total": 2078,
+    "passed": 2035,
+    "failed": 26,
+    "skipped": 17
+  },
+  "rootTypeScriptErrors": 230,
+  "lintErrors": 3,
+  "dependencyVulnerabilities": {
+    "moderate": 2
+  },
+  "limitations": "Nx package typechecks passed, but did not include the failing root test/tool program. Several browser suites were collected by Vitest."
+}

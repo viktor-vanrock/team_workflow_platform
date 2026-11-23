@@ -1,0 +1,10 @@
+{
+  "assessmentRef": {
+    "assessmentId": "40404040-4040-4040-8040-404040404044",
+    "version": 1,
+    "contentHash": "sha256:4343434343434343434343434343434343434343434343434343434343434343"
+  },
+  "assessmentState": "NEEDS_INFO",
+  "normalizedStatus": "NEEDS_INFO",
+  "syncStage": "NEEDS_INFO"
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-work-item:target:v1",
+  "title": "Operational Work Item Target",
+  "description": "Logical scoped target. Provider URL/project key/Profile/Connection/secret are forbidden.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["workspaceId", "projectId", "entityKind", "authorityScopeKey"],
+  "properties": {
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "entityKind": { "type": "string", "enum": ["REQUEST", "DEFECT"] },
+    "authorityScopeKey": { "type": "string", "pattern": "^[a-z][a-z0-9._:-]{1,127}$" },
+    "naturalKey": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$" },
+    "externalEntityId": { "type": "string", "minLength": 1, "maxLength": 255 }
+  },
+  "oneOf": [
+    {
+      "required": ["naturalKey"],
+      "not": { "required": ["externalEntityId"] }
+    },
+    {
+      "required": ["externalEntityId"],
+      "not": { "required": ["naturalKey"] }
+    }
+  ]
+}
+

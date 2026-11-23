@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "gate": "migration-matrix-image",
+  "image": "postgres:17.7-bookworm",
+  "startedAt": "2026-09-05T20:57:39.304Z",
+  "finishedAt": "2026-09-05T20:57:46.420Z",
+  "status": "PASS",
+  "exitCode": 0,
+  "outputSha256": "sha256:b49274648b9be12692df4e48850c43b46e3ec09553826ba4a8096e9e7ef253f8",
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/integration/008/migration-matrix.spec.ts",
+        "sha256": "sha256:872c88929d889fa964fae683dda2918f6a6e3480439fb59dba0f48d1d711e1a0"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/index.ts",
+        "sha256": "sha256:9eaf8a9b03f0a25bca4d3b42596042eb8c0bd519c0902603fbc83daae2b4cdfa"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0165-pilot-hardening.ts",
+        "sha256": "sha256:7a7674257fbeae1446f2a02ae998b8bc532da6ec90de7769cf224dc06748ee02"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0170-corporate-sessions.ts",
+        "sha256": "sha256:f1adf7e1a4a113b0deaff0d3b1d6828075c746a14f8ffdbac68b0a6bda405c99"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0175-runtime-registration.ts",
+        "sha256": "sha256:4fda092ab277b7136bb4006fbc84ffd7b62c58e48a447d508c5c01c958cccab4"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0180-runtime-configuration.ts",
+        "sha256": "sha256:6f51dacdb7e8596696d6497c084b81ebde37427dc7e31318e821b330c81732af"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0185-dead-letter-replay.ts",
+        "sha256": "sha256:ff1c9bae978f2624c3f241adfb8a132de779a472d105c1c833985371a477b8b2"
+      },
+      {
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0190-project-scope-constraints.ts",
+        "sha256": "sha256:3a622b86506a2889b6ac50d9f6fdab52b85110855872a9046df2b6bd697fea9e"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/index.ts",
+        "sha256": "sha256:5b3a15e502c039b6fa34f9efe95bcf3941ec9c2105a80d9aca56add7ad047d2a"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2090-evidence-uploads.ts",
+        "sha256": "sha256:6ad85d79ad1398162a25dd79db5550994266f1100c84012926bbe0f5098dbf83"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2095-defect-proposals.ts",
+        "sha256": "sha256:aa59a67d9a82634d16f07b70aeed89459d614f3be7457d56c7eda26ce21f46c0"
+      },
+      {
+        "path": "packages/competency-qa/src/persistence/migrations/2100-hermes-policy-fence.ts",
+        "sha256": "sha256:97fe3500e7ae065038e7c3741cbbf84043897070d9699ca1a8cfb5fe934a1533"
+      }
+    ],
+    "aggregateSha256": "sha256:4650aa3515441115f01e938917b39454548542eb33c485bebce267daa6e5e716"
+  },
+  "invariants": {
+    "freshInstall": true,
+    "upgradeFrom0160And2085": true,
+    "repeatNoop": true,
+    "historicalApprovalPreserved": true,
+    "appendOnlyEnforced": true,
+    "failedTransactionRollback": true,
+    "recoveryAfterRollback": true
+  },
+  "versions": {
+    "core": 190,
+    "qa": 2100
+  }
+}

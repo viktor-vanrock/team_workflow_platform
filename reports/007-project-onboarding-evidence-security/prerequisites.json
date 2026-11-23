@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "gate": "prerequisites",
+  "startedAt": "2026-09-03T18:34:31.687Z",
+  "finishedAt": "2026-09-03T18:34:31.690Z",
+  "status": "PASS",
+  "upstreamReport": {
+    "id": "feature-006",
+    "status": "PASS",
+    "code": "FEATURE_006_REPORT_ACCEPTED",
+    "detail": "reports/006-queue-triage-capacity-sla/final-gate.json sha256:55d7159fc56ecd81db5184194e84f7d8cea6c005b096d7341a012025262409ea"
+  },
+  "compatibilitySnapshot": {
+    "id": "feature-001-006-compatibility",
+    "status": "PASS",
+    "code": "FEATURE_001_006_COMPATIBILITY_ACCEPTED",
+    "detail": "4 immutable contracts"
+  },
+  "migrationSnapshot": {
+    "id": "published-migrations",
+    "status": "PASS",
+    "code": "PUBLISHED_MIGRATIONS_ACCEPTED",
+    "detail": "30 immutable Core/QA migrations"
+  }
+}

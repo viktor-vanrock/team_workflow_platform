@@ -1,0 +1,12 @@
+{
+  "state": "DISPATCHED",
+  "activeCompletionCandidateRef": {
+    "id": "20202020-2020-4020-8020-202020202020",
+    "version": 1,
+    "contentHash": "sha256:2727272727272727272727272727272727272727272727272727272727272727"
+  },
+  "dispatchCommandRef": {
+    "commandId": "40404040-4040-4040-8040-404040404040"
+  },
+  "lockedAt": "2026-08-27T12:56:00Z"
+}

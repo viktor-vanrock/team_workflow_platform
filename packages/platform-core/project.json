@@ -1,0 +1,23 @@
+{
+  "name": "platform-core",
+  "root": "packages/platform-core",
+  "sourceRoot": "packages/platform-core/src",
+  "projectType": "library",
+  "tags": ["type:core", "runtime:universal", "domain:platform"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/platform-core/tsconfig.json --noEmit" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "tsc -p packages/platform-core/tsconfig.json --noEmit" }
+    },
+    "core-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/architecture/check-import-graph.mts --core-only && tsc -p packages/platform-core/tsconfig.json --noEmit"
+      }
+    }
+  }
+}

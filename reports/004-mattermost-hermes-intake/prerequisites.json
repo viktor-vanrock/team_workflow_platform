@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "feature-004-prerequisites",
+  "startedAt": "2026-09-03T10:20:23.381Z",
+  "finishedAt": "2026-09-03T10:20:23.384Z",
+  "manifest": {
+    "schemaVersion": 1,
+    "feature003Report": {
+      "path": "reports/003-jira-operational-authority/final-gate.json",
+      "sha256": "sha256:ff8a941316b60cb46226064e4508bc1aecaf4b31e0a1ea95573063c150c7a008",
+      "feature": "003-jira-operational-authority",
+      "gate": "feature-003-final",
+      "schemaVersion": 2
+    },
+    "consumedContracts": [
+      {
+        "id": "schema-registry",
+        "path": "packages/platform-contracts/src/generated/schema-documents.ts",
+        "sha256": "sha256:9f18f2f8394ff9c6812984da863fbb0693ad6dfad9f23bdb1d9509f85b2df1cc"
+      },
+      {
+        "id": "operational-work-item",
+        "path": "packages/runtime-composition/src/qa/operational-work-item.contract.ts",
+        "sha256": "sha256:72a9b922fd88ac32960f57f859eb8daa50131bbd5a0d9c97f33d250c06565db3"
+      },
+      {
+        "id": "qa-manifest",
+        "path": "packages/competency-qa/src/manifest.ts",
+        "sha256": "sha256:e397d5567de2c5c7455f826afb8596282e94609a8e69f0196c61d4c51f9c77b7"
+      },
+      {
+        "id": "jira-manifest",
+        "path": "packages/connector-jira/src/manifest.ts",
+        "sha256": "sha256:09cb8e157466709175bea4242af4cba95b6b50c0eb2c5eb9544f53fd31bbed2f"
+      },
+      {
+        "id": "confirmation-hook",
+        "path": "packages/platform-contracts/src/extensions/confirmation-hook.ts",
+        "sha256": "sha256:ca619f348e2af7d99005868abdbb998e76474d174dd047796cf3c8133d09f044"
+      },
+      {
+        "id": "confirm-operational-effect",
+        "path": "packages/platform-core/src/work-management/confirm-operational-effect.ts",
+        "sha256": "sha256:58507b29e1369f400636921302d1e51fdd181c18a991e21375c477ae4f5ec146"
+      },
+      {
+        "id": "confirmation-unit-of-work",
+        "path": "packages/platform-persistence-typeorm/src/confirmation-unit-of-work.ts",
+        "sha256": "sha256:2dcc87a5c27c9619e61a173d8ad751cadc0dcc23da8fe11f1916d9541cb345e7"
+      },
+      {
+        "id": "core-migration-registry",
+        "path": "packages/platform-persistence-typeorm/src/migration-registry.ts",
+        "sha256": "sha256:dabec6d59a01e3ebf21d14cb923a5b241f6a1953a8662330a142b25a4f093fff"
+      },
+      {
+        "id": "core-0095",
+        "path": "packages/platform-persistence-typeorm/src/migrations/core/0095-external-identity-import-reconciliation.ts",
+        "sha256": "sha256:1285df088dee9df5399beef04947a733761de263ebd7bdf37bf8de0ec6a81e1a"
+      },
+      {
+        "id": "qa-2030",
+        "path": "packages/competency-qa/src/persistence/migrations/2030-qa-verdict-completion.ts",
+        "sha256": "sha256:940625a8292b8c5dc26cdaef5eb5a4a6eb4e5adc89d0569a7cddae668ee95eb4"
+      },
+      {
+        "id": "mock-hub-migration-runner",
+        "path": "apps/mock-hub/src/persistence/migration-runner.ts",
+        "sha256": "sha256:2c8f485489330a54f412ec6022c658c227f8d6e3666cc166cb320dca03d24f29"
+      },
+      {
+        "id": "mock-hub-jira-0042",
+        "path": "apps/mock-hub/src/persistence/migrations/0042-jira-effect-call-audit.ts",
+        "sha256": "sha256:6bcb46529b47818177d69084128876fdc3e0ccd7527cd63cde6d965a9a16d992"
+      }
+    ]
+  },
+  "status": "PASS",
+  "report": {
+    "id": "feature-003-final",
+    "status": "PASS",
+    "code": "FEATURE_003_REPORT_ACCEPTED",
+    "detail": "reports/003-jira-operational-authority/final-gate.json sha256:ff8a941316b60cb46226064e4508bc1aecaf4b31e0a1ea95573063c150c7a008"
+  },
+  "consumedContracts": [
+    {
+      "id": "schema-registry",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/platform-contracts/src/generated/schema-documents.ts sha256:9f18f2f8394ff9c6812984da863fbb0693ad6dfad9f23bdb1d9509f85b2df1cc"
+    },
+    {
+      "id": "operational-work-item",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/runtime-composition/src/qa/operational-work-item.contract.ts sha256:72a9b922fd88ac32960f57f859eb8daa50131bbd5a0d9c97f33d250c06565db3"
+    },
+    {
+      "id": "qa-manifest",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/competency-qa/src/manifest.ts sha256:e397d5567de2c5c7455f826afb8596282e94609a8e69f0196c61d4c51f9c77b7"
+    },
+    {
+      "id": "jira-manifest",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/connector-jira/src/manifest.ts sha256:09cb8e157466709175bea4242af4cba95b6b50c0eb2c5eb9544f53fd31bbed2f"
+    },
+    {
+      "id": "confirmation-hook",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/platform-contracts/src/extensions/confirmation-hook.ts sha256:ca619f348e2af7d99005868abdbb998e76474d174dd047796cf3c8133d09f044"
+    },
+    {
+      "id": "confirm-operational-effect",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/platform-core/src/work-management/confirm-operational-effect.ts sha256:58507b29e1369f400636921302d1e51fdd181c18a991e21375c477ae4f5ec146"
+    },
+    {
+      "id": "confirmation-unit-of-work",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/platform-persistence-typeorm/src/confirmation-unit-of-work.ts sha256:2dcc87a5c27c9619e61a173d8ad751cadc0dcc23da8fe11f1916d9541cb345e7"
+    },
+    {
+      "id": "core-migration-registry",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/platform-persistence-typeorm/src/migration-registry.ts sha256:dabec6d59a01e3ebf21d14cb923a5b241f6a1953a8662330a142b25a4f093fff"
+    },
+    {
+      "id": "core-0095",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/platform-persistence-typeorm/src/migrations/core/0095-external-identity-import-reconciliation.ts sha256:1285df088dee9df5399beef04947a733761de263ebd7bdf37bf8de0ec6a81e1a"
+    },
+    {
+      "id": "qa-2030",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/competency-qa/src/persistence/migrations/2030-qa-verdict-completion.ts sha256:940625a8292b8c5dc26cdaef5eb5a4a6eb4e5adc89d0569a7cddae668ee95eb4"
+    },
+    {
+      "id": "mock-hub-migration-runner",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "apps/mock-hub/src/persistence/migration-runner.ts sha256:2c8f485489330a54f412ec6022c658c227f8d6e3666cc166cb320dca03d24f29"
+    },
+    {
+      "id": "mock-hub-jira-0042",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "apps/mock-hub/src/persistence/migrations/0042-jira-effect-call-audit.ts sha256:6bcb46529b47818177d69084128876fdc3e0ccd7527cd63cde6d965a9a16d992"
+    }
+  ],
+  "optionalNonProdEvidence": {
+    "metadata": "SKIPPED_GATED",
+    "conformance": "SKIPPED_GATED",
+    "livePassRequiredForLocalRelease": false
+  }
+}

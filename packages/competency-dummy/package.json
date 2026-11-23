@@ -1,0 +1,17 @@
+{
+  "name": "@awp/competency-dummy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@awp/competency-sdk": "workspace:*",
+    "@awp/competency-ui-sdk": "workspace:*",
+    "@awp/platform-core": "workspace:*",
+    "@awp/platform-ui": "workspace:*",
+    "react": "catalog:",
+    "typeorm": "catalog:"
+  }
+}

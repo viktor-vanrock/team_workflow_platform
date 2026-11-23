@@ -1,0 +1,14 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/unit/008",
+    "tests/integration/008",
+    "tests/integration/security/008",
+    "tests/contract/008",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 0,
+  "durationMs": 40482,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n{\"timestamp\":\"2026-09-03T22:56:35.331Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"api\",\"workspaceId\":\"cb0a2224-919f-4fea-aa33-9731e82961e7\",\"projectId\":\"d02f9fe1-d98d-4d36-93dd-f0935589628d\",\"correlationId\":\"cf88a72f-3836-401d-9ac8-c36039c32ba0\",\"causationId\":\"8256aa0b-9383-4f8c-b44c-7bd2f521da2a\",\"operation\":\"http.request\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":11}\n{\"timestamp\":\"2026-09-03T22:56:35.421Z\",\"level\":\"info\",\"message\":\"operation.completed\",\"component\":\"worker\",\"workspaceId\":\"cb0a2224-919f-4fea-aa33-9731e82961e7\",\"projectId\":\"d02f9fe1-d98d-4d36-93dd-f0935589628d\",\"correlationId\":\"cf88a72f-3836-401d-9ac8-c36039c32ba0\",\"causationId\":\"8256aa0b-9383-4f8c-b44c-7bd2f521da2a\",\"operation\":\"worker.commands\",\"outcome\":\"SUCCEEDED\",\"latencyMs\":0}\n\n Test Files  29 passed (29)\n      Tests  204 passed (204)\n   Start at  02:56:09\n   Duration  39.80s (transform 5.91s, setup 0ms, import 21.59s, tests 54.35s, environment 2ms)\n\n"
+}

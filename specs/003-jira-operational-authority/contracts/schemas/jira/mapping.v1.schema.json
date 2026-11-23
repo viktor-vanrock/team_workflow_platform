@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:jira:mapping:v1",
+  "title": "Bounded Jira Mapping Program",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "inputSchemaRef", "outputFieldAllowlist", "limits", "expression", "lookupTables"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "inputSchemaRef": { "$ref": "#/$defs/SchemaRef" },
+    "outputFieldAllowlist": { "type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/JiraFieldId" } },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxDepth", "maxNodes", "maxOutputBytes"],
+      "properties": {
+        "maxDepth": { "type": "integer", "minimum": 1, "maximum": 24 },
+        "maxNodes": { "type": "integer", "minimum": 1, "maximum": 1024 },
+        "maxOutputBytes": { "type": "integer", "minimum": 1, "maximum": 262144 }
+      }
+    },
+    "expression": { "$ref": "#/$defs/Expression" },
+    "lookupTables": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$" },
+      "additionalProperties": { "type": "object", "maxProperties": 512, "additionalProperties": { "type": ["string", "number", "boolean", "null"] } }
+    }
+  },
+  "$defs": {
+    "Digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "SchemaRef": { "type": "object", "additionalProperties": false, "required": ["id", "version", "digest"], "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "integer", "minimum": 1 }, "digest": { "$ref": "#/$defs/Digest" } } },
+    "JiraFieldId": { "type": "string", "pattern": "^(summary|description|reporter|assignee|priority|duedate|labels|customfield_[0-9]+)$" },
+    "Expression": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["op", "value"], "properties": { "op": { "const": "literal" }, "value": {} } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "path"], "properties": { "op": { "const": "source" }, "path": { "type": "string", "pattern": "^\\$\\.[A-Za-z0-9._-]+$", "maxLength": 256 } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "expressions"], "properties": { "op": { "const": "coalesce" }, "expressions": { "type": "array", "minItems": 1, "maxItems": 32, "items": { "$ref": "#/$defs/Expression" } } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "tableKey", "expression"], "properties": { "op": { "const": "lookup" }, "tableKey": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$" }, "expression": { "$ref": "#/$defs/Expression" } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "expressions"], "properties": { "op": { "const": "concat" }, "expressions": { "type": "array", "minItems": 1, "maxItems": 32, "items": { "$ref": "#/$defs/Expression" } }, "separator": { "type": "string", "maxLength": 32 } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "expression", "format"], "properties": { "op": { "const": "format-date" }, "expression": { "$ref": "#/$defs/Expression" }, "format": { "enum": ["YYYY-MM-DD", "ISO-8601"] } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "expressions"], "properties": { "op": { "const": "array" }, "expressions": { "type": "array", "maxItems": 128, "items": { "$ref": "#/$defs/Expression" } } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "fields"], "properties": { "op": { "const": "object" }, "fields": { "type": "object", "maxProperties": 128, "propertyNames": { "$ref": "#/$defs/JiraFieldId" }, "additionalProperties": { "$ref": "#/$defs/Expression" } } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "expression"], "properties": { "op": { "const": "omit-if-null" }, "expression": { "$ref": "#/$defs/Expression" } } }
+      ]
+    }
+  }
+}

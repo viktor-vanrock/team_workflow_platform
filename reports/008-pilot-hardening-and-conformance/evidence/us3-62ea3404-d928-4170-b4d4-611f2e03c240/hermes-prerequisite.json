@@ -1,0 +1,7 @@
+{
+  "gate": "hermes",
+  "status": "PASS",
+  "requiredChecks": [
+    "hermes-corpus"
+  ]
+}

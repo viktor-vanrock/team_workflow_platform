@@ -1,0 +1,12 @@
+{
+  "args": [
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/integration/008/runtime-composition.spec.ts",
+    "tests/integration/008/development-probes.spec.ts",
+    "--maxWorkers=2"
+  ],
+  "exitCode": 1,
+  "durationMs": 9193,
+  "output": "\n RUN  v4.1.11 /Users/alexandr/Desktop/projects/PlatformWorkspace\n\n ❯ tests/integration/008/runtime-composition.spec.ts (2 tests | 2 failed) 4672ms\n     × migrates, seeds and boots every runtime contribution on postgres:17.7-bookworm 2581ms\n     × migrates, seeds and boots every runtime contribution on postgres:18.6-bookworm 2091ms\n\n Test Files  1 failed | 1 passed (2)\n      Tests  2 failed | 2 passed (4)\n   Start at  00:02:47\n   Duration  8.61s (transform 4.26s, setup 0ms, import 7.49s, tests 9.45s, environment 0ms)\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/integration/008/runtime-composition.spec.ts > 008 full developer API/worker entry points > migrates, seeds and boots every runtime contribution on postgres:17.7-bookworm\n FAIL  tests/integration/008/runtime-composition.spec.ts > 008 full developer API/worker entry points > migrates, seeds and boots every runtime contribution on postgres:18.6-bookworm\nAssertionError: expected { core: 185, 'pack:dummy': 1000, …(3) } to match object { core: 185, 'pack:qa': 2095, …(1) }\n(2 matching properties omitted from actual)\n\n- Expected\n+ Received\n\n  {\n    \"connector:gitlab\": 4020,\n    \"core\": 185,\n-   \"pack:qa\": 2095,\n+   \"pack:qa\": 2100,\n  }\n\n ❯ tests/integration/008/runtime-composition.spec.ts:29:44\n     27|     try {\n     28|       await migrateLocalDatabase(source, { profile: \"local\", expectedV…\n     29|       expect(composition.expectedVersions).toMatchObject({ core: 185, …\n       |                                            ^\n     30|       await runQaJiraGitLabMattermostQueueLocalSeed(source, environmen…\n     31|       await ensurePilotDevelopmentProjects(source, environment);\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯\n\n"
+}

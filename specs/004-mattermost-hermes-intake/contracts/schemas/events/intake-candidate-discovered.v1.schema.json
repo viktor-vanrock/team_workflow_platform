@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:intake-candidate-discovered:v1",
+  "title": "Intake Candidate Discovered Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "state",
+    "currentSourceObservationVersion",
+    "deduplicationKey",
+    "classification",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "state": {
+      "const": "PENDING_CONFIRMATION"
+    },
+    "currentSourceObservationVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "deduplicationKey": {
+      "$ref": "#/$defs/digest"
+    },
+    "classification": {
+      "enum": [
+        "PUBLIC",
+        "INTERNAL",
+        "CONFIDENTIAL",
+        "RESTRICTED"
+      ]
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

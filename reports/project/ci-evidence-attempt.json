@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-05T22:19:10.015572+00:00",
+  "status": "INTERRUPTED",
+  "reason": "ROOT_TYPECHECK_TIMEOUT",
+  "details": "Strict standalone root typecheck passed before the full attempt. During ci:008 the repeated root typecheck exceeded 600 seconds (spawnSync pnpm ETIMEDOUT); the agent stopped this CI process tree. No full current-source CI PASS is claimed.",
+  "logs": {
+    "typecheck.log": {
+      "path": "reports/project/evidence-http/typecheck.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lint.log": {
+      "path": "reports/project/evidence-http/lint.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ci-008-interrupted.log": {
+      "path": "reports/project/evidence-http/ci-008-interrupted.log",
+      "sha256": "sha256:61a9db71ef98a524fde49e34bd660611de0660dcfc58783337e8ed806cb19fdf"
+    },
+    "ci-root-typecheck-timeout.log": {
+      "path": "reports/project/evidence-http/ci-root-typecheck-timeout.log",
+      "sha256": "sha256:d094db9a3f92dfd0b72cfe9379ac4c61e45e277a062f33dd7907ac5b9ab77872"
+    }
+  },
+  "lastCompletedProjectReport": "reports/project/local.json",
+  "lastCompletedFeatureReport": "reports/008-pilot-hardening-and-conformance/local.json",
+  "previousReportsDescribeEarlierSource": true
+}

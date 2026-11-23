@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "checkpoint": "OBSERVABILITY",
+  "status": "PASS",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "startedAt": "2026-09-03T11:15:07.283Z",
+  "finishedAt": "2026-09-03T11:15:08.583Z",
+  "evidence": {
+    "fixtureVisibleItemCounts": [
+      10,
+      1000
+    ],
+    "queryCount": 3,
+    "queryCountComplexity": "O(authorized-projects)",
+    "providerReads": 0,
+    "boundedMetricLabels": true,
+    "maximumExemplars": 64,
+    "correlationAndAuditRefsAreLabels": false
+  },
+  "results": [
+    {
+      "id": "feature-006-observability-performance",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1300,
+      "outputHash": "sha256:6cfd255bdaa053ffd3e6c1dd0840a7bf7e076d9905a50e13cb99f218663cc5d6",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/006/observability-performance.spec.ts",
+        "--maxWorkers=1"
+      ]
+    }
+  ]
+}

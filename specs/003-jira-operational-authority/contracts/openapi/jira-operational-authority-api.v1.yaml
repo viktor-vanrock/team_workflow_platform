@@ -1,0 +1,549 @@
+openapi: 3.1.0
+info:
+  title: Agentic Workspace Platform — Jira Operational Authority API
+  version: 1.0.0
+  description: >-
+    Provider-neutral administration, read projection, import diagnostics and typed
+    operational command surface for feature 003. Generic command/approval status APIs
+    remain defined by Platform Core. No route accepts raw Jira fields, transition IDs,
+    endpoint, credential or arbitrary JQL.
+servers:
+  - url: http://127.0.0.1:3000
+    description: Local qa-jira-local composition
+security:
+  - oidc: []
+tags:
+  - name: Jira configuration
+  - name: Operational authority
+  - name: Operational actions
+  - name: Import diagnostics
+  - name: Reconciliation
+  - name: Connector webhook
+paths:
+  /api/v1/integrations/jira/connections/{connectionId}/versions/{connectionVersion}/discover:
+    post:
+      operationId: discoverJiraConnection
+      tags: [Jira configuration]
+      summary: Create an immutable sanitized discovery snapshot
+      parameters:
+        - $ref: '#/components/parameters/ConnectionId'
+        - $ref: '#/components/parameters/ConnectionVersion'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [metadataPackageRef]
+              properties:
+                metadataPackageRef:
+                  $ref: '#/components/schemas/ContentRef'
+      responses:
+        '202':
+          description: Discovery run accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperation'
+        '409': { $ref: '#/components/responses/Problem' }
+        '422': { $ref: '#/components/responses/Problem' }
+  /api/v1/integrations/jira/profiles/{profileId}/versions/{profileVersion}/validate:
+    post:
+      operationId: validateJiraProfile
+      tags: [Jira configuration]
+      summary: Validate a draft Profile against exact discovery and configuration refs
+      parameters:
+        - $ref: '#/components/parameters/ProfileId'
+        - $ref: '#/components/parameters/ProfileVersion'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [discoverySnapshotRef, metadataPackageRef]
+              properties:
+                discoverySnapshotRef: { $ref: '#/components/schemas/ContentRef' }
+                metadataPackageRef: { $ref: '#/components/schemas/ContentRef' }
+      responses:
+        '200':
+          description: Immutable validation report; invalid is a valid report result
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ValidationReport' }
+        '409': { $ref: '#/components/responses/Problem' }
+        '422': { $ref: '#/components/responses/Problem' }
+  /api/v1/integrations/jira/profiles/{profileId}/versions/{profileVersion}/preview:
+    post:
+      operationId: previewJiraProfile
+      tags: [Jira configuration]
+      summary: Render sanitized mapped requests without executing Jira writes
+      parameters:
+        - $ref: '#/components/parameters/ProfileId'
+        - $ref: '#/components/parameters/ProfileVersion'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [inputSchemaRef, input]
+              properties:
+                inputSchemaRef: { $ref: '#/components/schemas/SchemaRef' }
+                input: { type: object }
+      responses:
+        '200':
+          description: Deterministic redacted preview
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [inputHash, outputHash, fields, issues]
+                properties:
+                  inputHash: { $ref: '#/components/schemas/Digest' }
+                  outputHash: { $ref: '#/components/schemas/Digest' }
+                  fields: { type: object, additionalProperties: true }
+                  issues: { type: array, items: { $ref: '#/components/schemas/ValidationIssue' } }
+        '422': { $ref: '#/components/responses/Problem' }
+  /api/v1/integrations/jira/profiles/{profileId}/versions/{profileVersion}/dry-run:
+    post:
+      operationId: dryRunJiraProfile
+      tags: [Jira configuration]
+      summary: Execute read-only metadata, permission and JQL probes
+      description: This operation never creates, edits, transitions, links or comments on a Jira issue.
+      parameters:
+        - $ref: '#/components/parameters/ProfileId'
+        - $ref: '#/components/parameters/ProfileVersion'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [validationReportRef]
+              properties:
+                validationReportRef: { $ref: '#/components/schemas/ContentRef' }
+      responses:
+        '202':
+          description: Read-only dry run accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AsyncOperation' }
+        '409': { $ref: '#/components/responses/Problem' }
+  /api/v1/work-items/{workItemId}/operational-authority:
+    get:
+      operationId: getOperationalAuthority
+      tags: [Operational authority]
+      summary: Get confirmed Jira projection, freshness, pending intent and open conflict
+      parameters:
+        - $ref: '#/components/parameters/WorkItemId'
+      responses:
+        '200':
+          description: Scoped operational authority read model
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [binding, projection, syncState, freshnessState]
+                properties:
+                  binding: { $ref: '#/components/schemas/BindingSummary' }
+                  projection:
+                    $ref: '../schemas/operational-authority/projection.v1.schema.json'
+                  syncState: { enum: [SYNCED, ERROR, CONFLICT, MAPPING_REQUIRED, AUTH_BLOCKED] }
+                  freshnessState: { enum: [CURRENT, STALE, UNKNOWN] }
+                  pendingCommand: { $ref: '#/components/schemas/PendingCommand' }
+                  openConflict:
+                    $ref: '../schemas/operational-authority/conflict.v1.schema.json'
+        '404': { $ref: '#/components/responses/Problem' }
+  /api/v1/work-items/{workItemId}/operational-conflicts:
+    get:
+      operationId: listOperationalConflicts
+      tags: [Operational authority]
+      parameters:
+        - $ref: '#/components/parameters/WorkItemId'
+      responses:
+        '200':
+          description: Append-only conflict history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/operational-authority/conflict.v1.schema.json'
+  /api/v1/work-items/{workItemId}/operational-actions/transition:
+    post:
+      operationId: prepareOperationalTransition
+      tags: [Operational actions]
+      description: The expanded enum is valid only for a Profile pinned to the 1.1 transition-input schema; a 1.0 Profile continues to accept only READY or DONE.
+      parameters:
+        - $ref: '#/components/parameters/WorkItemId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransitionActionInput'
+      responses:
+        '202': { $ref: '#/components/responses/ApprovalRequiredCommand' }
+        '409': { $ref: '#/components/responses/Problem' }
+        '422': { $ref: '#/components/responses/Problem' }
+  /api/v1/work-items/{workItemId}/operational-actions/assignment:
+    post:
+      operationId: prepareOperationalAssignment
+      tags: [Operational actions]
+      parameters:
+        - $ref: '#/components/parameters/WorkItemId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentActionInput'
+      responses:
+        '202': { $ref: '#/components/responses/ApprovalRequiredCommand' }
+        '409': { $ref: '#/components/responses/Problem' }
+        '422': { $ref: '#/components/responses/Problem' }
+  /api/v1/work-items/{workItemId}/operational-actions/priority:
+    post:
+      operationId: prepareOperationalPriority
+      tags: [Operational actions]
+      parameters:
+        - $ref: '#/components/parameters/WorkItemId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriorityActionInput'
+      responses:
+        '202': { $ref: '#/components/responses/ApprovalRequiredCommand' }
+        '409': { $ref: '#/components/responses/Problem' }
+        '422': { $ref: '#/components/responses/Problem' }
+  /api/v1/work-items/{workItemId}/operational-actions/due-date:
+    post:
+      operationId: prepareOperationalDueDate
+      tags: [Operational actions]
+      parameters:
+        - $ref: '#/components/parameters/WorkItemId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DueDateActionInput'
+      responses:
+        '202': { $ref: '#/components/responses/ApprovalRequiredCommand' }
+        '409': { $ref: '#/components/responses/Problem' }
+        '422': { $ref: '#/components/responses/Problem' }
+  /api/v1/integrations/jira/import-intents:
+    get:
+      operationId: listJiraImportIntents
+      tags: [Import diagnostics]
+      parameters:
+        - in: query
+          name: state
+          schema:
+            type: array
+            items: { enum: [DISCOVERED, ROUTED, IDENTITY_VERIFIED, ADOPTED, AWAITING_CONFIRMATION, BLOCKED_MAPPING, FAILED_RETRYABLE, IGNORED_OUT_OF_SCOPE, REJECTED_SECURITY] }
+      responses:
+        '200':
+          description: Safe scoped import diagnostics; restricted issue content is absent
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/operational-authority/import-intent.v1.schema.json'
+  /api/v1/integrations/jira/reconciliation-runs:
+    post:
+      operationId: startJiraReconciliation
+      tags: [Reconciliation]
+      description: Requires integration.reconciliation.run; the backend resolves the supplied ref inside the authenticated Workspace and accepts only a published, entitled Profile.
+      x-required-permission: integration.reconciliation.run
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [profileRef, lane]
+              properties:
+                profileRef: { $ref: '#/components/schemas/VersionedRef' }
+                lane: { enum: [IMPORT_DISCOVERY, BOUND_REFRESH, FULL_DRIFT_SWEEP] }
+      responses:
+        '202':
+          description: Reconciliation run accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AsyncOperation' }
+  /api/v1/integrations/jira/reconciliation-runs/{runId}:
+    get:
+      operationId: getJiraReconciliationRun
+      tags: [Reconciliation]
+      parameters:
+        - in: path
+          name: runId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Run report
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/operational-authority/reconciliation-report.v1.schema.json'
+        '404': { $ref: '#/components/responses/Problem' }
+  /api/v1/connectors/jira/connections/{connectionId}/webhooks/{webhookKey}:
+    post:
+      operationId: ingestJiraWebhook
+      tags: [Connector webhook]
+      security: []
+      description: >-
+        Adapter receives exact raw bytes before parsing, verifies dialect-supported signature,
+        persists a durable quarantine receipt and returns without calling Jira.
+      parameters:
+        - $ref: '#/components/parameters/ConnectionId'
+        - in: path
+          name: webhookKey
+          required: true
+          schema: { type: string, minLength: 32, maxLength: 256 }
+        - in: header
+          name: X-Hub-Signature
+          schema: { type: string, maxLength: 512 }
+        - in: header
+          name: X-Atlassian-Webhook-Identifier
+          schema: { type: string, maxLength: 512 }
+        - in: header
+          name: X-Atlassian-Webhook-Retry
+          schema: { type: integer, minimum: 0 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        '202':
+          description: Accepted or duplicate invalidation signal
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [status, receiptId]
+                properties:
+                  status: { enum: [ACCEPTED, DUPLICATE] }
+                  receiptId: { type: string, format: uuid }
+        '400': { $ref: '#/components/responses/Problem' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '413': { $ref: '#/components/responses/Problem' }
+components:
+  securitySchemes:
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: http://127.0.0.1:3002/.well-known/openid-configuration
+  headers:
+    ETag:
+      schema: { type: string, pattern: '^"[A-Za-z0-9._:-]+"$' }
+  parameters:
+    ConnectionId:
+      in: path
+      name: connectionId
+      required: true
+      schema: { type: string, format: uuid }
+    ConnectionVersion:
+      in: path
+      name: connectionVersion
+      required: true
+      schema: { type: integer, minimum: 1 }
+    ProfileId:
+      in: path
+      name: profileId
+      required: true
+      schema: { type: string, format: uuid }
+    ProfileVersion:
+      in: path
+      name: profileVersion
+      required: true
+      schema: { type: integer, minimum: 1 }
+    WorkItemId:
+      in: path
+      name: workItemId
+      required: true
+      schema: { type: string, format: uuid }
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      required: true
+      schema: { type: string, minLength: 16, maxLength: 255 }
+    IfMatch:
+      in: header
+      name: If-Match
+      required: true
+      description: ETag of the current scoped server projection; Core resolves the external revision/hash from that projection and rejects any mismatch before command creation.
+      schema: { type: string, pattern: '^"[A-Za-z0-9._:-]+"$' }
+  responses:
+    Problem:
+      description: RFC 9457 problem details
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    ApprovalRequiredCommand:
+      description: Immutable typed command prepared and exact Approval required
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [commandRef, approvalRef, commandState]
+            properties:
+              commandRef: { $ref: '#/components/schemas/VersionedRef' }
+              approvalRef: { $ref: '#/components/schemas/VersionedRef' }
+              commandState: { const: AWAITING_APPROVAL }
+  schemas:
+    Digest: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+    VersionedRef:
+      type: object
+      additionalProperties: false
+      required: [id, version]
+      properties:
+        id: { type: string, minLength: 1 }
+        version: { type: integer, minimum: 1 }
+    ContentRef:
+      type: object
+      additionalProperties: false
+      required: [id, version, contentHash]
+      properties:
+        id: { type: string, minLength: 1 }
+        version: { type: integer, minimum: 1 }
+        contentHash: { $ref: '#/components/schemas/Digest' }
+    SchemaRef:
+      type: object
+      additionalProperties: false
+      required: [id, version, digest]
+      properties:
+        id: { type: string, minLength: 1 }
+        version: { type: integer, minimum: 1 }
+        digest: { $ref: '#/components/schemas/Digest' }
+    AsyncOperation:
+      type: object
+      additionalProperties: false
+      required: [operationRef, state]
+      properties:
+        operationRef: { $ref: '#/components/schemas/VersionedRef' }
+        state: { enum: [PENDING, RUNNING, SUCCEEDED, FAILED] }
+    ValidationIssue:
+      type: object
+      additionalProperties: false
+      required: [code, severity, path]
+      properties:
+        code: { type: string, pattern: '^[A-Z][A-Z0-9_]{0,127}$' }
+        severity: { enum: [ERROR, WARNING, INFO] }
+        path: { type: string, maxLength: 512 }
+    ValidationReport:
+      type: object
+      additionalProperties: false
+      required: [reportRef, subjectRef, subjectContentHash, status, issues]
+      properties:
+        reportRef: { $ref: '#/components/schemas/ContentRef' }
+        subjectRef: { $ref: '#/components/schemas/VersionedRef' }
+        subjectContentHash: { $ref: '#/components/schemas/Digest' }
+        status: { enum: [VALID, INVALID] }
+        issues: { type: array, items: { $ref: '#/components/schemas/ValidationIssue' } }
+    BindingSummary:
+      type: object
+      additionalProperties: false
+      required: [id, version, externalEntityId, externalDisplayKey, originBindingRef, originProfileRef]
+      properties:
+        id: { type: string, format: uuid }
+        version: { type: integer, minimum: 1 }
+        externalEntityId: { type: string, minLength: 1 }
+        externalDisplayKey: { type: string, minLength: 1 }
+        originBindingRef: { $ref: '#/components/schemas/VersionedRef' }
+        originProfileRef: { $ref: '#/components/schemas/VersionedRef' }
+    PendingCommand:
+      type: object
+      additionalProperties: false
+      required: [commandRef, operation, state, requestedValueHash]
+      properties:
+        commandRef: { $ref: '#/components/schemas/VersionedRef' }
+        operation: { enum: [request.transition, request.assign, request.set-priority, request.set-due-date, request.create, defect.create] }
+        state: { enum: [AWAITING_APPROVAL, QUEUED, DISPATCHED, RETRY_SCHEDULED] }
+        requestedValueHash: { $ref: '#/components/schemas/Digest' }
+    TransitionActionInput:
+      type: object
+      additionalProperties: false
+      required: [targetNormalizedStatus]
+      properties:
+        targetNormalizedStatus:
+          enum: [NEW, NEEDS_INFO, READY, PLANNED, IN_PROGRESS, REVIEW, BLOCKED, DONE, CANCELLED]
+    AssignmentActionInput:
+      type: object
+      additionalProperties: false
+      required: [assignment]
+      properties:
+        assignment:
+          oneOf:
+            - type: object
+              additionalProperties: false
+              required: [canonicalPrincipalId]
+              properties:
+                canonicalPrincipalId: { type: string, format: uuid }
+            - type: object
+              additionalProperties: false
+              required: [unassign]
+              properties:
+                unassign: { const: true }
+    PriorityActionInput:
+      type: object
+      additionalProperties: false
+      required: [normalizedPriorityKey]
+      properties:
+        normalizedPriorityKey: { type: string, pattern: '^[A-Za-z][A-Za-z0-9._-]{0,127}$' }
+    DueDateActionInput:
+      type: object
+      additionalProperties: false
+      required: [dueDate]
+      properties:
+        dueDate:
+          oneOf:
+            - type: string
+              format: date
+            - type: 'null'
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [type, title, status, code, correlationId]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer, minimum: 400, maximum: 599 }
+        detail: { type: string, maxLength: 2000 }
+        code: { type: string, pattern: '^[A-Z][A-Z0-9_]{0,127}$' }
+        correlationId: { type: string, format: uuid }

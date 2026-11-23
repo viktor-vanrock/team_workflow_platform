@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "report": {
+    "path": "reports/008-pilot-hardening-and-conformance/runs/security-4a1c0187-23a8-4fce-af02-850d923720b6.json",
+    "sha256": "sha256:78cd0057242617c41f9d62218c9a508011fb2cce5234d106d923b95a56febb48"
+  },
+  "mode": "DEVELOPMENT_MOCKS",
+  "corporateRelease": {
+    "status": "BLOCKED_INPUT",
+    "releaseEligible": false,
+    "evidence": {
+      "path": "reports/008-pilot-hardening-and-conformance/evidence/security-4a1c0187-23a8-4fce-af02-850d923720b6/corporate-release.json",
+      "sha256": "sha256:739da0d6a0a30283315212a827504f181d0a024c655bc380031306270e3fa275"
+    }
+  }
+}

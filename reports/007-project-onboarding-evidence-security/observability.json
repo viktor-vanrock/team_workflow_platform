@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "gate": "observability",
+  "status": "PASS",
+  "startedAt": "2026-09-03T18:38:11.254Z",
+  "finishedAt": "2026-09-03T18:38:11.852Z",
+  "taskSourceHash": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62",
+  "invariants": {
+    "boundedMetricFamilies": 6,
+    "lowCardinalityLabels": true,
+    "authorizedReadQueryCount": 3,
+    "queryCountIndependentOfProjectCount": true,
+    "providerReads": 0,
+    "modelReads": 0
+  },
+  "sourceBinding": {
+    "files": [
+      {
+        "path": "tests/support/007-observability-fixture.ts",
+        "sha256": "sha256:af8760129916ae571e4d4077f37d4098b36889584e4746a994d2984ebc7ca348"
+      },
+      {
+        "path": "tests/integration/007/observability-performance.spec.ts",
+        "sha256": "sha256:701b8ff72506b07892908885340c784b2e16ce8d9b6e44b053df831ededc7928"
+      }
+    ],
+    "aggregateSha256": "sha256:6bab741621efeb7aa6698e6383bdba2806b8044e8b2b47fc6680430144016d97"
+  },
+  "exitCode": 0,
+  "outputHash": "sha256:5f0b17662f494957c775656cd88b89a0ab33829fe7ca0fbd78c7b11ef615ec07"
+}

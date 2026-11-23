@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "checkpoint": "BROWSER",
+  "status": "PASS",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "startedAt": "2026-09-03T11:15:08.652Z",
+  "finishedAt": "2026-09-03T11:15:20.239Z",
+  "journey": {
+    "independentlyNavigablePath": "/qa/queue",
+    "stories": [
+      "US1",
+      "US2",
+      "US3",
+      "US4",
+      "US5"
+    ],
+    "forbiddenProjectIdentifiersRendered": 0,
+    "explanations": [
+      "STAGE",
+      "ORDER",
+      "TRIAGE",
+      "CAPACITY",
+      "SLA"
+    ],
+    "exactOverrideProvenance": true
+  },
+  "results": [
+    {
+      "id": "feature-006-browser-journey",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 11587,
+      "outputHash": "sha256:4c1a16b3bb678dbcffd61ed37ee92d0062c1b433c9b6e6eda94d5c344806be66",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/e2e/006",
+        "--maxWorkers=1"
+      ]
+    }
+  ]
+}

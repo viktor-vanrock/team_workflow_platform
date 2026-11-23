@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:events:intake-candidate-converted:v1",
+  "title": "Intake Candidate Converted Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision",
+    "decisionVersion",
+    "sourceObservationVersion",
+    "draftId",
+    "actionProvenanceRef"
+  ],
+  "properties": {
+    "decision": {
+      "const": "CREATE"
+    },
+    "decisionVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "sourceObservationVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "draftId": {
+      "$ref": "#/$defs/id"
+    },
+    "actionProvenanceRef": {
+      "$ref": "#/$defs/ref"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}

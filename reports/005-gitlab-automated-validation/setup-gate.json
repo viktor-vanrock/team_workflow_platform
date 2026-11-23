@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-setup",
+  "startedAt": "2026-09-03T10:37:00.202Z",
+  "finishedAt": "2026-09-03T10:37:03.214Z",
+  "status": "PASS",
+  "contour": "qa-jira-gitlab-local",
+  "mandatoryEntryGates": {
+    "prerequisites": "PASS",
+    "governance": "PASS"
+  },
+  "localPilotMetadata": {
+    "status": "PASS",
+    "path": "config/local/gitlab-pilot-metadata.v1.json"
+  },
+  "feature004": "NOT_REQUIRED_STANDALONE",
+  "deploymentApproval": "LOCAL_CONFORMANCE_ONLY",
+  "production": "DENIED",
+  "technicalResultMaySignVerdict": false,
+  "stages": [
+    {
+      "id": "prerequisites",
+      "description": "Fresh exact Feature 003 evidence, immutable upstream contracts and Feature 002 MANUAL V1",
+      "args": [
+        "tools/verification/feature-005-prerequisites.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 72
+    },
+    {
+      "id": "governance",
+      "description": "Constitution 2.0, human-only verdict and deployment-purpose contours",
+      "args": [
+        "tools/verification/feature-005-governance.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 72
+    },
+    {
+      "id": "registry",
+      "description": "Immutable order-500 offline schema registry",
+      "args": [
+        "tools/contracts/build-registry.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 320
+    },
+    {
+      "id": "openapi",
+      "description": "Generated API and Mock Hub snapshots include Feature 005 roots",
+      "args": [
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 275
+    },
+    {
+      "id": "design-contracts",
+      "description": "All Feature 005 JSON Schema, examples, OpenAPI, AsyncAPI, refs, digests and detached bytes",
+      "args": [
+        "tools/contracts/verify-005-contracts.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 361
+    },
+    {
+      "id": "phase-1-tests",
+      "description": "Prerequisite, governance and pilot metadata contracts",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/005/prerequisite-gate.spec.ts",
+        "tests/contract/005/governance-gate.spec.ts",
+        "tests/contract/005/pilot-metadata.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1399
+    },
+    {
+      "id": "architecture",
+      "description": "Workspace import graph including pure GitLab and TypeORM persistence shells",
+      "args": [
+        "tools/architecture/check-import-graph.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 169
+    },
+    {
+      "id": "phase-1-typecheck",
+      "description": "Feature 005 contracts, connector shells and composition package typechecks",
+      "args": [
+        "node_modules/nx/dist/bin/nx.js",
+        "run-many",
+        "-t",
+        "typecheck",
+        "-p",
+        "platform-contracts",
+        "connector-gitlab",
+        "connector-gitlab-persistence-typeorm",
+        "runtime-composition"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 341
+    }
+  ]
+}

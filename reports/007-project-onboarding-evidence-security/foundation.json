@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "production": "DENIED",
+  "externalNetwork": "DENIED",
+  "startedAt": "2026-09-03T18:34:32.852Z",
+  "finishedAt": "2026-09-03T18:35:05.651Z",
+  "runtime": {
+    "node": "v24.20.0",
+    "postgresTargets": [
+      "17",
+      "18"
+    ]
+  },
+  "taskBinding": {
+    "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+    "sha256": "sha256:4a11b9496d9f5f4fbb93128f02765ba95a2a279824983acd29e077d8fbf18b62"
+  },
+  "gate": "feature-007-foundation",
+  "status": "PASS",
+  "invariants": {
+    "immutablePublishedContracts": true,
+    "bindingV1Compatibility": true,
+    "qaContextV1Compatibility": true,
+    "evidenceV1Compatibility": true,
+    "repositoryProjectScopeRequired": true,
+    "exactPlatformActionApproval": true,
+    "staticComposition": true,
+    "productionAuthority": "DENIED"
+  },
+  "reports": [
+    {
+      "path": "contracts.json",
+      "status": "PASS"
+    },
+    {
+      "path": "architecture.json",
+      "status": "PASS"
+    },
+    {
+      "path": "unit-matrices.json",
+      "status": "PASS"
+    }
+  ]
+}

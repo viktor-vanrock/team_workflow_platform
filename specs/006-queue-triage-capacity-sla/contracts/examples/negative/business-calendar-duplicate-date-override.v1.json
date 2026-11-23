@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "business-calendar@1.0.0",
+  "calendarId": "10000000-0000-4000-8000-000000000011",
+  "calendarKey": "qa-duplicate-date",
+  "workspaceId": "10000000-0000-4000-8000-000000000002",
+  "revision": 1,
+  "timeZone": "UTC",
+  "validFrom": "2026-01-01",
+  "validThrough": null,
+  "weeklyIntervals": [
+    {
+      "dayOfWeek": "MONDAY",
+      "startLocalTime": "09:00:00",
+      "endLocalTime": "17:00:00"
+    }
+  ],
+  "dateOverrides": [
+    {
+      "kind": "CLOSED",
+      "date": "2026-05-01",
+      "reasonCode": "PUBLIC_HOLIDAY"
+    },
+    {
+      "kind": "WORKING",
+      "date": "2026-05-01",
+      "reasonCode": "WORKING_DAY_OVERRIDE",
+      "workingIntervals": [
+        {
+          "startLocalTime": "10:00:00",
+          "endLocalTime": "14:00:00"
+        }
+      ]
+    }
+  ],
+  "dstAlgorithmRef": {
+    "key": "business-calendar-dst",
+    "version": "1.0.0",
+    "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "dstRules": {
+    "nonexistentBoundary": "SHIFT_TO_FIRST_VALID_INSTANT_AFTER_GAP",
+    "ambiguousStart": "EARLIEST_MATCHING_INSTANT",
+    "ambiguousEnd": "LATEST_MATCHING_INSTANT"
+  },
+  "sourceKind": "MANUAL",
+  "sourceRef": "config://workspace/10000000-0000-4000-8000-000000000002/calendars/qa-duplicate-date/1",
+  "sourceHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+  "ownerPrincipalId": "10000000-0000-4000-8000-000000000003",
+  "effectiveFrom": "2026-01-01T00:00:00Z",
+  "publishedAt": "2025-12-15T12:00:00Z",
+  "publishedByPrincipalId": "10000000-0000-4000-8000-000000000003",
+  "semanticHash": "sha256:84b9a81b5a4229818035b051da103475199b9503a4bfad7b293271881bd9dfeb"
+}

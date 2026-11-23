@@ -1,0 +1,12 @@
+{
+  "assessmentRef": {
+    "assessmentId": "68686868-6868-4868-8868-686868686868",
+    "version": 1,
+    "contentHash": "sha256:6868686868686868686868686868686868686868686868686868686868686868"
+  },
+  "assessmentState": "READY",
+  "normalizedStatus": "DONE",
+  "syncStage": "READY",
+  "readinessCommandRef": { "commandId": "40404040-4040-4040-8040-404040404043" },
+  "readinessResultRef": { "id": "46464646-4646-4646-8646-464646464648" }
+}

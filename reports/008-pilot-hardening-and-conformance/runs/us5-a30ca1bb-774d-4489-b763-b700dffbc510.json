@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "feature": "008-pilot-hardening-and-conformance",
+  "runId": "us5-a30ca1bb-774d-4489-b763-b700dffbc510",
+  "gate": "us5",
+  "status": "FAIL",
+  "deploymentProfile": "local",
+  "scope": {
+    "workspaceId": "fixture-workspace-alpha",
+    "projectIds": [
+      "fixture-project-web"
+    ]
+  },
+  "startedAt": "2026-09-04T23:42:07.309Z",
+  "finishedAt": "2026-09-04T23:42:07.588Z",
+  "fingerprints": {
+    "source": "sha256:9fc441a7640a68a509f5798ccecc3a50627603c55a7a0999f5020a9a4153bb37",
+    "contracts": "sha256:cb802bbe462f0bf4494eb1accba8a9db5bc7ef0e4951924c358cf2eae1fad4dc",
+    "migrations": "sha256:0526a3735e84dd8651eba15d77713d82928e4ec7db77be901c2fe17057338eb1",
+    "lockfile": "sha256:18513ca26d92a9802a64e9eeab6a8e06b848d69ec259cd3e6ac018b08ca143f2",
+    "configuration": "sha256:5fc0af1bea362d651725f32fc9ca09377a5c053d7cbeb6e8560505878cc041cf",
+    "inputs": "sha256:57cc50c53da8c0fd6d1c80e7ff2cbb4ee56efa59d21e36cbd6aea62fe388e3e7",
+    "suite": "sha256:c7416e37dba569ade2f7b061bdf656961938f07b36457e8b5fc811f5c2f6eec9"
+  },
+  "executorIdentity": "local-cli",
+  "checks": [
+    {
+      "id": "foundation-prerequisite",
+      "status": "FAIL",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us5-a30ca1bb-774d-4489-b763-b700dffbc510/foundation-prerequisite.json",
+          "sha256": "sha256:9a0b3732caedf25dae1b3e9013801cc9bb8330b5d96cd954e424d94a42a8f12b"
+        }
+      ],
+      "reasonCodes": [
+        "US5_CHECK_FAILED"
+      ]
+    },
+    {
+      "id": "unchanged-source",
+      "status": "PASS",
+      "evidence": [
+        {
+          "path": "reports/008-pilot-hardening-and-conformance/evidence/us5-a30ca1bb-774d-4489-b763-b700dffbc510/unchanged-source.json",
+          "sha256": "sha256:3e49f31198b3d6146fb69d0988ef7b509941e96b46a3edf1eadd9a7e0e3a8295"
+        }
+      ],
+      "reasonCodes": []
+    }
+  ],
+  "prerequisites": [],
+  "reasonCodes": [
+    "US5_FAILED"
+  ]
+}

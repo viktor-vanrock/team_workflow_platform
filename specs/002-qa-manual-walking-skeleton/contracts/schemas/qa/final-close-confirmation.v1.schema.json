@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:final-close-confirmation:v1",
+  "title": "Append-only QA Final Close Confirmation",
+  "description": "Created only by the generic confirmation UoW after the distinct-QA-Lead-approved request.transition is externally observed as DONE.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "finalCloseConfirmationId", "workspaceId", "projectId", "workItemId", "completionCandidateRef", "requiredSessionPlanRef", "dodAssessmentRef", "verdictRef", "closeApprovalRef", "commandRef", "confirmationReceiptRef", "completionSummaryReceipt", "rawExternalState", "normalizedStatus", "externalVersion", "confirmedAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "finalCloseConfirmationId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "completionCandidateRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "requiredSessionPlanRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/RequiredSessionPlanRef" },
+    "dodAssessmentRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "verdictRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/ImmutableRevisionRef" },
+    "closeApprovalRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericApprovalRef" },
+    "commandRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/GenericCommandRef" },
+    "confirmationReceiptRef": { "$ref": "../common/qa-common.v1.schema.json#/$defs/UuidRef" },
+    "completionSummaryReceipt": { "$ref": "../operational-work-item/completion-summary.v1.schema.json#/$defs/Receipt" },
+    "rawExternalState": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "normalizedStatus": { "const": "DONE" },
+    "externalVersion": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "confirmedAt": { "type": "string", "format": "date-time" }
+  }
+}

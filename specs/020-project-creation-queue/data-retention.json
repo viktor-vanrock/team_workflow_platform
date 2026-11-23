@@ -1,0 +1,70 @@
+{
+  "checks": {
+    "seed": true,
+    "worker": true,
+    "documents": true,
+    "workItems": true,
+    "identities": true,
+    "activeHumans": true,
+    "retiredRoles": true,
+    "documentHistory": true,
+    "retiredMemberships": true,
+    "retainedEntitlements": true,
+    "retiredActiveEntitlements": true,
+    "existingAuditRowsPreserved": true
+  },
+  "before": {
+    "seed": 5,
+    "worker": {
+      "kind": "SERVICE",
+      "roles": 1,
+      "memberships": 1
+    },
+    "documents": {
+      "count": 4,
+      "digest": "f52123b315787c7e80ecccd78c37bef4"
+    },
+    "workItems": {
+      "count": 6,
+      "digest": "f36202402e36d7d161a4bef3edb3f32f"
+    },
+    "identities": 13,
+    "activeHumans": 9,
+    "retiredRoles": 0,
+    "documentHistory": {
+      "count": 15,
+      "digest": "0177442b144c08a64c24a59eaf19c6ef"
+    },
+    "retiredMemberships": 0,
+    "retainedEntitlements": "99b72075269432c700f988dbd691bea1",
+    "retiredActiveEntitlements": 0
+  },
+  "after": {
+    "seed": 5,
+    "worker": {
+      "kind": "SERVICE",
+      "roles": 1,
+      "memberships": 1
+    },
+    "documents": {
+      "count": 4,
+      "digest": "f52123b315787c7e80ecccd78c37bef4"
+    },
+    "workItems": {
+      "count": 6,
+      "digest": "f36202402e36d7d161a4bef3edb3f32f"
+    },
+    "identities": 13,
+    "activeHumans": 9,
+    "retiredRoles": 0,
+    "documentHistory": {
+      "count": 15,
+      "digest": "0177442b144c08a64c24a59eaf19c6ef"
+    },
+    "retiredMemberships": 0,
+    "retainedEntitlements": "99b72075269432c700f988dbd691bea1",
+    "retiredActiveEntitlements": 0
+  },
+  "auditBefore": 74,
+  "auditAfter": 74
+}

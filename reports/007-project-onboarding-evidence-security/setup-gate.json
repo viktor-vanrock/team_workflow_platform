@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "feature": "007-project-onboarding-evidence-security",
+  "gate": "feature-007-setup",
+  "startedAt": "2026-09-03T18:34:31.625Z",
+  "finishedAt": "2026-09-03T18:34:32.788Z",
+  "status": "PASS",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "externalNetwork": "DENIED",
+  "production": "DENIED",
+  "deploymentApproval": "LOCAL_CONFORMANCE_ONLY",
+  "corporateRuntimeOwner": "FEATURE_008",
+  "corporateInputs": "BLOCKED_INPUT",
+  "externalCorporateVerification": "SKIPPED_GATED",
+  "mandatoryEntryGates": {
+    "prerequisites": "PASS",
+    "governance": "PASS"
+  },
+  "stages": [
+    {
+      "id": "prerequisites",
+      "description": "Fresh Feature 006 evidence plus immutable Feature 001-006 contracts and migrations",
+      "args": [
+        "tools/verification/feature-007-prerequisites.mts"
+      ],
+      "entryGate": true,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 70
+    },
+    {
+      "id": "governance",
+      "description": "Constitution 2.0, authority/ownership, exact approval, evidence and local-only boundaries",
+      "args": [
+        "tools/verification/feature-007-governance.mts"
+      ],
+      "entryGate": true,
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 69
+    },
+    {
+      "id": "contour",
+      "description": "Exact local contour; corporate inputs remain Feature 008-gated; production denied",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 0,
+      "errors": []
+    },
+    {
+      "id": "design-contracts",
+      "description": "Strict offline schemas, examples, refs, JCS, OpenAPI and AsyncAPI",
+      "args": [
+        "tools/contracts/verify-007-contracts.mts"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 222
+    },
+    {
+      "id": "scenario-catalog",
+      "description": "Closed duplicate-free five-scenario quickstart catalog",
+      "args": [
+        "tools/local/onboarding-scenario-catalog.mts",
+        "--check"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 59
+    },
+    {
+      "id": "package-entrypoints",
+      "description": "All planned Feature 007 package entrypoints are wired",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 0,
+      "errors": []
+    },
+    {
+      "id": "phase-1-contract-tests",
+      "description": "Prerequisite and governance fail-closed vectors",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/007/prerequisite-gate.spec.ts",
+        "tests/contract/007/governance-gate.spec.ts",
+        "--maxWorkers=1"
+      ],
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 741
+    }
+  ]
+}

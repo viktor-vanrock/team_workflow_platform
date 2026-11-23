@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:extensions:work-type-definition:v1",
+  "title": "Work Type Definition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "definitionVersion",
+    "intakeSchemaRef",
+    "applicationComponentRef",
+    "migrationNamespace",
+    "uiContributions",
+    "capabilityRequirements"
+  ],
+  "properties": {
+    "key": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "definitionVersion": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+    "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "intakeSchemaRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SchemaRef" },
+    "applicationComponentRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/ComponentRef" },
+    "migrationNamespace": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{1,62}$"
+    },
+    "uiContributions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slot", "componentRef"],
+        "properties": {
+          "slot": {
+            "type": "string",
+            "enum": ["WORK_ITEM_DETAIL_TAB", "INTAKE_PANEL", "QUEUE_BADGE"]
+          },
+          "routeSegment": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,62}$"
+          },
+          "componentRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/ComponentRef" }
+        }
+      }
+    },
+    "capabilityRequirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/CapabilityRequirement" }
+    }
+  },
+  "$defs": {
+    "CapabilityRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirementKey",
+        "capabilityKey",
+        "versionRange",
+        "logicalRole",
+        "operations",
+        "requirement",
+        "featureKey",
+        "allowedEnvironmentScopes"
+      ],
+      "properties": {
+        "requirementKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "capabilityKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "versionRange": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVerRange" },
+        "logicalRole": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/LogicalRoleKey" },
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" }
+        },
+        "requirement": { "type": "string", "enum": ["REQUIRED", "OPTIONAL"] },
+        "featureKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "allowedEnvironmentScopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/EnvironmentScope" }
+        },
+        "maxDataClassification": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+        }
+      }
+    }
+  }
+}

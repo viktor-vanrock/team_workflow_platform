@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "title": "Retest checkout defect",
+  "requestKind": "retest",
+  "goal": "Revalidate the checkout defect after a candidate fix",
+  "scope": "Checkout validation error path",
+  "acceptanceOutcome": "The frozen defect reproduction no longer fails",
+  "sourceRefs": [
+    {
+      "kind": "work-item",
+      "id": "fix-42",
+      "version": "9",
+      "contentHash": "sha256:a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1"
+    }
+  ],
+  "blockers": [],
+  "dependencies": [],
+  "requestedTarget": {
+    "environmentId": "88888888-8888-4888-8888-888888888888",
+    "environmentRevision": 4,
+    "buildRef": {
+      "kind": "build",
+      "id": "checkout-web",
+      "version": "2026.08.28.1",
+      "contentHash": "sha256:b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1"
+    },
+    "testDataRef": {
+      "kind": "test-data",
+      "id": "checkout-defect-42",
+      "version": "4",
+      "contentHash": "sha256:b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2"
+    },
+    "accountLeaseRef": {
+      "kind": "account-lease",
+      "id": "qa-checkout-user",
+      "version": "9",
+      "contentHash": "sha256:b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3"
+    }
+  },
+  "requestRisk": "HIGH",
+  "businessImpact": "Checkout defect blocks error recovery",
+  "roleMetadataRefs": [
+    {
+      "kind": "role-metadata",
+      "id": "checkout-manual-executor",
+      "version": "2",
+      "contentHash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    }
+  ],
+  "requestedClassificationKey": "INTERNAL",
+  "defectRef": {
+    "kind": "defect",
+    "id": "DEF-42",
+    "version": "3",
+    "contentHash": "sha256:b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4"
+  },
+  "previousSessionRef": {
+    "kind": "EXTERNAL_HISTORICAL",
+    "historicalSessionRef": {
+      "kind": "qa-session-history",
+      "id": "legacy-session-42",
+      "version": "1",
+      "contentHash": "sha256:b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5"
+    }
+  },
+  "sourceBuildRef": {
+    "kind": "build",
+    "id": "checkout-web",
+    "version": "2026.08.27.1",
+    "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  }
+}

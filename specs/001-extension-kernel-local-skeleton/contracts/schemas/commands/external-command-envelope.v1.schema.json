@@ -1,0 +1,542 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:commands:external-command-envelope:v1",
+  "title": "Resolved Durable External Command",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "commandId",
+    "schemaVersion",
+    "commandType",
+    "commandPayloadVersion",
+    "workspaceId",
+    "projectId",
+    "actor",
+    "capability",
+    "target",
+    "targetHash",
+    "payload",
+    "payloadHash",
+    "expectedExternalState",
+    "bindingRef",
+    "profileRef",
+    "correlationId",
+    "causationId",
+    "idempotencyKey",
+    "effectIdempotencyKey",
+    "dataClassificationKey",
+    "initialAuthorizationBasis",
+    "initialAuthorizationBasisHash",
+    "status",
+    "effectAuthorizationStatus",
+    "outboxStatus",
+    "createdAt"
+  ],
+  "properties": {
+    "commandId": { "type": "string", "format": "uuid" },
+    "schemaVersion": { "const": 1 },
+    "commandType": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "commandPayloadVersion": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "intakeDraftId": { "type": "string", "format": "uuid" },
+    "sourceWorkItemId": { "type": "string", "format": "uuid" },
+    "resultWorkItemId": {
+      "description": "Work Item created atomically with confirmation of an intake-sourced acceptance command; absent before that transaction.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "actor": { "$ref": "../common/actor-ref.v1.schema.json" },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "exactContractVersion", "operation", "logicalRole"],
+      "properties": {
+        "key": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "exactContractVersion": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+        "operation": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "logicalRole": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/LogicalRoleKey" }
+      }
+    },
+    "target": { "$ref": "../common/schema-bound-value.v1.schema.json" },
+    "targetHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+    "payload": { "$ref": "../common/schema-bound-value.v1.schema.json" },
+    "payloadHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+    "expectedExternalState": {
+      "$ref": "./capability-command-intent.v1.schema.json#/$defs/ExpectedExternalState"
+    },
+    "bindingRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef" },
+    "profileRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef" },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "causationId": { "type": "string", "format": "uuid" },
+    "idempotencyKey": {
+      "description": "Client/application request idempotency key, interpreted only inside actor + Workspace/Project + operation scope.",
+      "$ref": "./capability-command-intent.v1.schema.json#/$defs/IdempotencyKey"
+    },
+    "effectIdempotencyKey": {
+      "description": "Gateway-generated globally unique stable key sent to the Connector for every attempt; clients cannot choose it.",
+      "$ref": "./capability-command-intent.v1.schema.json#/$defs/IdempotencyKey"
+    },
+    "dataClassificationKey": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "initialAuthorizationBasis": { "$ref": "#/$defs/ProjectAuthorizationBasis" },
+    "initialAuthorizationBasisHash": {
+      "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest"
+    },
+    "effectAuthorizationBasis": { "$ref": "#/$defs/ProjectAuthorizationBasis" },
+    "effectAuthorizationBasisHash": {
+      "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest"
+    },
+    "effectGateEvaluatedAt": { "type": "string", "format": "date-time" },
+    "effectGateDecision": { "type": "string", "enum": ["ALLOWED", "DENIED"] },
+    "effectGateReasonCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{2,127}$"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "AWAITING_APPROVAL",
+        "QUEUED",
+        "DISPATCHED",
+        "RETRY_SCHEDULED",
+        "CONFIRMED",
+        "CONFLICT",
+        "FAILED",
+        "CANCELLED"
+      ]
+    },
+    "effectAuthorizationStatus": {
+      "type": "string",
+      "enum": ["NOT_REQUIRED", "PENDING", "AUTHORIZED", "INVALIDATED", "CONSUMED"]
+    },
+    "outboxStatus": {
+      "type": "string",
+      "description": "Durable PostgreSQL delivery state. Expired LEASED/ENQUEUED may return to READY; ACKNOWLEDGED may return to READY with a new generation when a non-terminal command execution lease expires.",
+      "enum": ["HELD", "READY", "LEASED", "ENQUEUED", "ACKNOWLEDGED", "DEAD"]
+    },
+    "approvalId": { "type": "string", "format": "uuid" },
+    "attemptCount": { "type": "integer", "minimum": 0 },
+    "nextAttemptAt": { "type": "string", "format": "date-time" },
+    "executionLeaseExpiresAt": {
+      "description": "Diagnostic expiry only; the lease token is internal and never exposed.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "effectInvocationStartedAt": { "type": "string", "format": "date-time" },
+    "terminalResult": {
+      "description": "Normalized success, conflict or final failure; never a raw vendor response.",
+      "$ref": "./external-command-result.v1.schema.json"
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "required": ["intakeDraftId"],
+          "not": { "required": ["sourceWorkItemId"] }
+        },
+        {
+          "required": ["sourceWorkItemId"],
+          "not": { "required": ["intakeDraftId"] }
+        }
+      ]
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "AWAITING_APPROVAL" } },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["approvalId"],
+        "properties": {
+          "effectAuthorizationStatus": { "const": "PENDING" },
+          "outboxStatus": { "const": "HELD" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "effectAuthorizationStatus": {
+            "enum": ["PENDING", "AUTHORIZED", "INVALIDATED", "CONSUMED"]
+          }
+        },
+        "required": ["effectAuthorizationStatus"]
+      },
+      "then": { "required": ["approvalId"] }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "CONFIRMED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["terminalResult", "effectInvocationStartedAt"],
+        "properties": {
+          "effectAuthorizationStatus": { "enum": ["NOT_REQUIRED", "CONSUMED"] },
+          "outboxStatus": { "const": "ACKNOWLEDGED" },
+          "terminalResult": {
+            "properties": { "outcome": { "const": "SUCCEEDED" } },
+            "required": ["outcome"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "effectAuthorizationStatus": { "const": "CONSUMED" } },
+        "required": ["effectAuthorizationStatus"]
+      },
+      "then": {
+        "required": ["effectInvocationStartedAt"],
+        "properties": {
+          "status": {
+            "enum": ["QUEUED", "DISPATCHED", "RETRY_SCHEDULED", "CONFIRMED", "CONFLICT", "FAILED"]
+          },
+          "outboxStatus": {
+            "enum": ["READY", "LEASED", "ENQUEUED", "ACKNOWLEDGED"]
+          }
+        }
+      }
+    },
+    {
+      "if": { "required": ["effectGateEvaluatedAt"] },
+      "then": {
+        "required": ["effectGateDecision", "effectAuthorizationBasis", "effectAuthorizationBasisHash"]
+      }
+    },
+    {
+      "if": { "required": ["effectGateDecision"] },
+      "then": {
+        "required": ["effectGateEvaluatedAt", "effectAuthorizationBasis", "effectAuthorizationBasisHash"]
+      }
+    },
+    {
+      "if": { "required": ["effectAuthorizationBasis"] },
+      "then": {
+        "required": ["effectGateEvaluatedAt", "effectGateDecision", "effectAuthorizationBasisHash"]
+      }
+    },
+    {
+      "if": { "required": ["effectAuthorizationBasisHash"] },
+      "then": {
+        "required": ["effectGateEvaluatedAt", "effectGateDecision", "effectAuthorizationBasis"]
+      }
+    },
+    {
+      "if": { "required": ["effectGateReasonCode"] },
+      "then": {
+        "required": ["effectGateEvaluatedAt", "effectGateDecision", "effectAuthorizationBasis", "effectAuthorizationBasisHash"],
+        "properties": { "effectGateDecision": { "const": "DENIED" } }
+      }
+    },
+    {
+      "if": { "required": ["effectInvocationStartedAt"] },
+      "then": {
+        "required": ["effectGateEvaluatedAt", "effectGateDecision", "effectAuthorizationBasis", "effectAuthorizationBasisHash"],
+        "properties": { "effectGateDecision": { "const": "ALLOWED" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "effectGateDecision": { "const": "DENIED" } },
+        "required": ["effectGateDecision"]
+      },
+      "then": {
+        "required": ["effectGateReasonCode"],
+        "properties": { "status": { "enum": ["CONFLICT", "FAILED", "CANCELLED"] } },
+        "not": { "required": ["effectInvocationStartedAt"] }
+      }
+    },
+    {
+      "if": {
+        "required": ["resultWorkItemId"]
+      },
+      "then": {
+        "required": ["intakeDraftId"],
+        "properties": { "status": { "const": "CONFIRMED" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "CONFIRMED" } },
+        "required": ["status", "intakeDraftId"]
+      },
+      "then": {
+        "required": ["resultWorkItemId"],
+        "properties": {
+          "terminalResult": {
+            "required": ["receipt"],
+            "properties": {
+              "receipt": { "required": ["externalEntityId"] }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "effectAuthorizationStatus": { "const": "PENDING" } },
+        "required": ["effectAuthorizationStatus"]
+      },
+      "then": {
+        "properties": {
+          "status": { "const": "AWAITING_APPROVAL" },
+          "outboxStatus": { "const": "HELD" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "effectAuthorizationStatus": { "const": "AUTHORIZED" } },
+        "required": ["effectAuthorizationStatus"]
+      },
+      "then": {
+        "properties": {
+          "status": { "enum": ["QUEUED", "RETRY_SCHEDULED"] },
+          "outboxStatus": { "enum": ["READY", "LEASED", "ENQUEUED"] }
+        },
+        "not": { "required": ["effectInvocationStartedAt"] }
+      }
+    },
+    {
+      "if": {
+        "properties": { "effectAuthorizationStatus": { "const": "INVALIDATED" } },
+        "required": ["effectAuthorizationStatus"]
+      },
+      "then": {
+        "required": ["effectGateEvaluatedAt", "effectGateDecision", "effectAuthorizationBasis", "effectAuthorizationBasisHash"],
+        "properties": {
+          "status": { "enum": ["FAILED", "CANCELLED"] },
+          "outboxStatus": { "const": "DEAD" },
+          "effectGateDecision": { "const": "DENIED" }
+        },
+        "not": { "required": ["effectInvocationStartedAt"] }
+      }
+    },
+    {
+      "if": {
+        "properties": { "effectAuthorizationStatus": { "const": "NOT_REQUIRED" } },
+        "required": ["effectAuthorizationStatus"]
+      },
+      "then": { "not": { "required": ["approvalId"] } }
+    },
+    {
+      "if": {
+        "properties": { "outboxStatus": { "const": "HELD" } },
+        "required": ["outboxStatus"]
+      },
+      "then": {
+        "properties": {
+          "status": { "const": "AWAITING_APPROVAL" },
+          "effectAuthorizationStatus": { "const": "PENDING" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "DISPATCHED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["effectInvocationStartedAt"],
+        "properties": {
+          "effectAuthorizationStatus": { "enum": ["NOT_REQUIRED", "CONSUMED"] },
+          "outboxStatus": { "const": "ACKNOWLEDGED" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "QUEUED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "effectAuthorizationStatus": { "enum": ["NOT_REQUIRED", "AUTHORIZED", "CONSUMED"] },
+          "outboxStatus": { "enum": ["READY", "LEASED", "ENQUEUED"] }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "RETRY_SCHEDULED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "effectAuthorizationStatus": { "enum": ["NOT_REQUIRED", "AUTHORIZED", "CONSUMED"] },
+          "outboxStatus": { "const": "READY" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": { "enum": ["CONFLICT", "FAILED", "CANCELLED"] }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "effectAuthorizationStatus": { "enum": ["NOT_REQUIRED", "INVALIDATED", "CONSUMED"] },
+          "outboxStatus": { "enum": ["ACKNOWLEDGED", "DEAD"] }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "CONFLICT" } },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["terminalResult"],
+        "properties": {
+          "terminalResult": {
+            "properties": { "outcome": { "const": "CONFLICT" } },
+            "required": ["outcome"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "FAILED" } },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["terminalResult"],
+        "properties": {
+          "terminalResult": {
+            "properties": { "outcome": { "const": "FAILED" } },
+            "required": ["outcome"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["AWAITING_APPROVAL", "QUEUED", "DISPATCHED", "RETRY_SCHEDULED", "CANCELLED"]
+          }
+        },
+        "required": ["status"]
+      },
+      "then": { "not": { "required": ["terminalResult"] } }
+    },
+    {
+      "if": {
+        "properties": { "outboxStatus": { "const": "ACKNOWLEDGED" } },
+        "required": ["outboxStatus"]
+      },
+      "then": {
+        "properties": {
+          "status": { "enum": ["DISPATCHED", "CONFIRMED", "CONFLICT", "FAILED", "CANCELLED"] }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "outboxStatus": { "const": "DEAD" } },
+        "required": ["outboxStatus"]
+      },
+      "then": {
+        "properties": {
+          "status": { "enum": ["CONFLICT", "FAILED", "CANCELLED"] }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "AuthorizationBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyRef",
+        "membershipRef",
+        "entitlementRefs",
+        "roleAssignmentRefs",
+        "skillContext",
+        "evaluatedAt"
+      ],
+      "properties": {
+        "policyRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "version"],
+          "properties": {
+            "id": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+            "version": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "membershipRef": {
+          "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef"
+        },
+        "entitlementRefs": {
+          "description": "Empty only in an enclosing WORKSPACE-scoped contract; PROJECT-scoped contracts refine this array to at least one exact entitlement ref.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef" }
+        },
+        "roleAssignmentRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/IntegerVersionRef" }
+        },
+        "skillContext": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": { "kind": { "const": "NOT_APPLICABLE" } }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "key", "version", "manifestDigest"],
+              "properties": {
+                "kind": { "const": "SKILL" },
+                "key": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+                "version": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+                "manifestDigest": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" }
+              }
+            }
+          ]
+        },
+        "evaluatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "WorkspaceAuthorizationBasis": {
+      "description": "Closed authorization provenance for a Workspace-scoped resource. Project Entitlement is not fabricated and the exact entitlement set is empty.",
+      "allOf": [
+        { "$ref": "#/$defs/AuthorizationBasis" },
+        {
+          "type": "object",
+          "properties": {
+            "entitlementRefs": { "maxItems": 0 }
+          }
+        }
+      ]
+    },
+    "ProjectAuthorizationBasis": {
+      "description": "Closed authorization provenance for a Project-scoped resource or effect.",
+      "allOf": [
+        { "$ref": "#/$defs/AuthorizationBasis" },
+        {
+          "type": "object",
+          "properties": {
+            "entitlementRefs": { "minItems": 1 }
+          }
+        }
+      ]
+    }
+  }
+}

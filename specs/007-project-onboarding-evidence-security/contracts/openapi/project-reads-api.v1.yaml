@@ -1,0 +1,299 @@
+openapi: 3.1.0
+info:
+  title: Authorized project read surfaces
+  version: 1.0.0
+  description: Additive local HTTP contract for project search, safe onboarding notifications and
+    scoped Work Item reads. Each request and cursor replay uses current persisted membership, roles,
+    entitlements and classification before lookup/count/pagination. Notification bodies omit outbox
+    payloads and private actor/job metadata.
+servers:
+  - url: /api
+security:
+  - verifiedSession: []
+paths:
+  /v1/workspaces/{workspaceId}/project-search:
+    get:
+      operationId: searchAuthorizedProjects
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 1024
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 256
+            default: ""
+      responses:
+        "200":
+          description: Current authorized representation; private cache only.
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                const: private, no-store
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectPage"
+        default:
+          description: Safe error. Missing and forbidden resources share 404; changed principal, permissions
+            or visible snapshot invalidate a cursor with 409.
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                const: private, no-store
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /v1/workspaces/{workspaceId}/project-events:
+    get:
+      operationId: listAuthorizedProjectEvents
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 1024
+      responses:
+        "200":
+          description: Current authorized representation; private cache only.
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                const: private, no-store
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventPage"
+        default:
+          description: Safe error. Missing and forbidden resources share 404; changed principal, permissions
+            or visible snapshot invalidate a cursor with 409.
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                const: private, no-store
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /v1/workspaces/{workspaceId}/projects/{projectId}/work-items/{workItemId}:
+    get:
+      operationId: getScopedProjectWorkItem
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: workItemId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Current authorized representation; private cache only.
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                const: private, no-store
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkItem"
+        default:
+          description: Safe error. Missing and forbidden resources share 404; changed principal, permissions
+            or visible snapshot invalidate a cursor with 409.
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                const: private, no-store
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+components:
+  securitySchemes:
+    verifiedSession:
+      type: http
+      scheme: bearer
+  schemas:
+    Project:
+      type: object
+      additionalProperties: false
+      required:
+        - projectId
+        - key
+        - name
+        - classificationKey
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        key:
+          type: string
+        name:
+          type: string
+        classificationKey:
+          type: string
+    Event:
+      type: object
+      additionalProperties: false
+      required:
+        - eventId
+        - projectId
+        - eventType
+        - occurredAt
+      properties:
+        eventId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        eventType:
+          enum:
+            - PROJECT_REGISTERED
+            - PROJECT_ONBOARDING_CHANGED
+            - PROJECT_ENTITLEMENTS_CHANGED
+            - PROJECT_BINDING_CHANGED
+            - PROJECT_OPERATIONAL_STATE_CHANGED
+        occurredAt:
+          type: string
+          format: date-time
+    WorkItem:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - workspaceId
+        - projectId
+        - state
+        - classificationKey
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        workspaceId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        state:
+          type: string
+        classificationKey:
+          type: string
+        version:
+          type: integer
+          minimum: 1
+    Problem:
+      type: object
+      additionalProperties: false
+      required:
+        - type
+        - title
+        - status
+        - code
+        - correlationId
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        code:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]+$
+        correlationId:
+          type: string
+    ProjectPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - visibleCount
+      properties:
+        items:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/Project"
+        visibleCount:
+          type: integer
+          minimum: 0
+          maximum: 100
+        nextCursor:
+          type: string
+          maxLength: 1024
+    EventPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - visibleCount
+      properties:
+        items:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/Event"
+        visibleCount:
+          type: integer
+          minimum: 0
+          maximum: 100
+        nextCursor:
+          type: string
+          maxLength: 1024

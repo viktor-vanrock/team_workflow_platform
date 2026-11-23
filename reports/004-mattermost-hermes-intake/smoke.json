@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "smoke",
+  "composition": "qa-jira-mattermost-local",
+  "startedAt": "2026-09-03T10:29:55.227Z",
+  "finishedAt": "2026-09-03T10:34:58.264Z",
+  "status": "PASS",
+  "stages": [
+    {
+      "id": "documented-scenarios",
+      "args": [
+        "tools/smoke/feature-004-scenario-process.mts"
+      ],
+      "projectPrefix": "awp-local-004-scenarios-",
+      "timeoutMs": 900000,
+      "evidenceSources": [
+        "MOCK_HUB",
+        "PROCESS_HTTP"
+      ],
+      "successCriteria": [
+        "SC-004",
+        "SC-006"
+      ],
+      "documentedScenarios": [
+        "us1-guided-intake",
+        "us1-repeat-callback",
+        "us1-valid-fields-not-reasked",
+        "us2-jira-candidate-create",
+        "us2-jira-candidate-snooze",
+        "us2-jira-candidate-ignore",
+        "us2-source-version-update",
+        "us3-triage-valid",
+        "us3-source-drift-stale",
+        "us3-model-invalid-json",
+        "us3-model-timeout",
+        "us3-prompt-injection",
+        "us4-outage-before-send",
+        "us4-rate-limit-recovery",
+        "us4-timeout-after-effect",
+        "us4-permanent-auth-failure"
+      ],
+      "command": [
+        "node",
+        "tools/smoke/feature-004-scenario-process.mts"
+      ],
+      "projectName": "awp-local-004-scenarios-mtldvkbf-13496",
+      "status": "PASS",
+      "durationMs": 47905,
+      "exitCode": 0
+    },
+    {
+      "id": "us1-guided-intake",
+      "args": [
+        "tools/smoke/feature-004-us1-process.mts"
+      ],
+      "projectPrefix": "awp-local-004-us1-",
+      "timeoutMs": 900000,
+      "evidenceSources": [
+        "POSTGRESQL",
+        "PROCESS_HTTP"
+      ],
+      "successCriteria": [
+        "SC-001",
+        "SC-002",
+        "SC-007"
+      ],
+      "documentedScenarios": [],
+      "command": [
+        "node",
+        "tools/smoke/feature-004-us1-process.mts"
+      ],
+      "projectName": "awp-local-004-us1-mtldvkbf-13496",
+      "status": "PASS",
+      "durationMs": 56556,
+      "exitCode": 0
+    },
+    {
+      "id": "us2-candidates",
+      "args": [
+        "tools/smoke/feature-004-us2-process.mts"
+      ],
+      "projectPrefix": "awp-local-004-us2-",
+      "timeoutMs": 900000,
+      "evidenceSources": [
+        "POSTGRESQL",
+        "PROCESS_HTTP"
+      ],
+      "successCriteria": [
+        "SC-001",
+        "SC-003",
+        "SC-007"
+      ],
+      "documentedScenarios": [],
+      "command": [
+        "node",
+        "tools/smoke/feature-004-us2-process.mts"
+      ],
+      "projectName": "awp-local-004-us2-mtldvkbf-13496",
+      "status": "PASS",
+      "durationMs": 50993,
+      "exitCode": 0
+    },
+    {
+      "id": "us3-hermes",
+      "args": [
+        "tools/smoke/feature-004-us3-process.mts"
+      ],
+      "projectPrefix": "awp-local-004-us3-",
+      "timeoutMs": 900000,
+      "evidenceSources": [
+        "POSTGRESQL",
+        "SECURITY_TEST_EVIDENCE"
+      ],
+      "successCriteria": [
+        "SC-002",
+        "SC-005",
+        "SC-006"
+      ],
+      "documentedScenarios": [],
+      "command": [
+        "node",
+        "tools/smoke/feature-004-us3-process.mts"
+      ],
+      "projectName": "awp-local-004-us3-mtldvkbf-13496",
+      "status": "PASS",
+      "durationMs": 50982,
+      "exitCode": 0
+    },
+    {
+      "id": "us4-notifications",
+      "args": [
+        "tools/smoke/feature-004-us4-process.mts"
+      ],
+      "projectPrefix": "awp-local-004-us4-",
+      "timeoutMs": 900000,
+      "evidenceSources": [
+        "POSTGRESQL",
+        "MOCK_HUB",
+        "PROCESS_HTTP"
+      ],
+      "successCriteria": [
+        "SC-004",
+        "SC-006",
+        "SC-007"
+      ],
+      "documentedScenarios": [],
+      "command": [
+        "node",
+        "tools/smoke/feature-004-us4-process.mts"
+      ],
+      "projectName": "awp-local-004-us4-mtldvkbf-13496",
+      "status": "PASS",
+      "durationMs": 57864,
+      "exitCode": 0
+    },
+    {
+      "id": "browser",
+      "args": [
+        "tools/smoke/feature-004-browser-process.mts"
+      ],
+      "projectPrefix": "awp-local-004-browser-",
+      "timeoutMs": 900000,
+      "evidenceSources": [
+        "PROCESS_HTTP"
+      ],
+      "successCriteria": [
+        "SC-001",
+        "SC-003",
+        "SC-005"
+      ],
+      "documentedScenarios": [],
+      "command": [
+        "node",
+        "tools/smoke/feature-004-browser-process.mts"
+      ],
+      "projectName": "awp-local-004-browser-mtldvkbf-13496",
+      "status": "PASS",
+      "durationMs": 38731,
+      "exitCode": 0
+    }
+  ],
+  "executionCoverage": {
+    "executedSuccessCriteria": [
+      "SC-001",
+      "SC-002",
+      "SC-003",
+      "SC-004",
+      "SC-005",
+      "SC-006",
+      "SC-007"
+    ],
+    "unexecutedSuccessCriteria": [],
+    "unexecutedStages": []
+  },
+  "documentedScenarios": {
+    "status": "PASS",
+    "report": "reports/004-mattermost-hermes-intake/documented-scenarios.json"
+  },
+  "evidenceSources": [
+    "POSTGRESQL",
+    "MOCK_HUB",
+    "PROCESS_HTTP",
+    "SECURITY_TEST_EVIDENCE"
+  ]
+}

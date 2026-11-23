@@ -1,0 +1,21 @@
+{
+  "findingReviewRef": {
+    "id": "42424242-4242-4242-8242-424242424242",
+    "version": 3,
+    "contentHash": "sha256:4242424242424242424242424242424242424242424242424242424242424242"
+  },
+  "dispositionDecision": "CREATE_DEFECT",
+  "publicationOutcome": "LINKED",
+  "defectDraftRefs": [
+    {
+      "id": "74747474-7474-4474-8474-747474747474",
+      "version": 1,
+      "contentHash": "sha256:7474747474747474747474747474747474747474747474747474747474747474"
+    }
+  ],
+  "defectLinkIds": [
+    "79797979-7979-4979-8979-797979797979"
+  ],
+  "displayLabel": "Checkout validation defect DEF-42",
+  "platformPath": "/qa/defects/79797979-7979-4979-8979-797979797979"
+}

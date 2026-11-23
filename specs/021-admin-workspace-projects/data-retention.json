@@ -1,0 +1,104 @@
+{
+  "checkedAt": "2026-09-09T20:56:53.166Z",
+  "checks": [
+    {
+      "check": "documents",
+      "result": "PASS"
+    },
+    {
+      "check": "workItems",
+      "result": "PASS"
+    },
+    {
+      "check": "documentHistory",
+      "result": "PASS"
+    },
+    {
+      "check": "seed",
+      "result": "PASS"
+    },
+    {
+      "check": "identities",
+      "result": "PASS"
+    },
+    {
+      "check": "activeHumans",
+      "result": "PASS"
+    },
+    {
+      "check": "retiredMemberships",
+      "result": "PASS"
+    },
+    {
+      "check": "retiredRoles",
+      "result": "PASS"
+    },
+    {
+      "check": "retiredActiveEntitlements",
+      "result": "PASS"
+    },
+    {
+      "check": "worker",
+      "result": "PASS"
+    },
+    {
+      "check": "existing audit history",
+      "count": 74,
+      "result": "PASS"
+    },
+    {
+      "check": "otherRoles",
+      "result": "PASS"
+    },
+    {
+      "check": "otherEntitlements",
+      "result": "PASS"
+    },
+    {
+      "check": "ownerFunctionalRoles",
+      "result": "PASS"
+    },
+    {
+      "check": "projects",
+      "result": "PASS"
+    },
+    {
+      "check": "all original retained entitlements unchanged",
+      "result": "PASS"
+    },
+    {
+      "check": "only two narrow registrar assignments added",
+      "result": "PASS"
+    },
+    {
+      "check": "repeated deployment changed no assignments",
+      "result": "PASS"
+    }
+  ],
+  "counts": {
+    "documents": 4,
+    "workItems": 6,
+    "documentHistory": 15,
+    "activeHumans": 9
+  },
+  "additionalRoles": [
+    {
+      "role": "project-registrar",
+      "workspace": "10000000-0000-4000-8000-000000000002",
+      "permissions": [
+        "project.register",
+        "project.catalog.read",
+        "project.onboarding.read"
+      ]
+    },
+    {
+      "role": "project-registrar",
+      "workspace": "15000000-0000-4000-8000-000000000001",
+      "permissions": [
+        "project.register",
+        "project.catalog.read",
+        "project.onboarding.read"
+      ]
+    }
+  ]
+}

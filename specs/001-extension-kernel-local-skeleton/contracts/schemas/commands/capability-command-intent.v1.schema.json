@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:commands:capability-command-intent:v1",
+  "title": "Capability Command Intent",
+  "description": "Typed intent emitted by a Pack. Connector/Profile selection is intentionally absent.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "commandType",
+    "commandPayloadVersion",
+    "workspaceId",
+    "projectId",
+    "actor",
+    "requirementRef",
+    "operation",
+    "target",
+    "expectedExternalState",
+    "payload",
+    "correlationId",
+    "causationId",
+    "idempotencyKey"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "commandType": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "commandPayloadVersion": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "intakeDraftId": {
+      "description": "Source Intake Draft for an acceptance command; no Work Item exists yet.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "sourceWorkItemId": {
+      "description": "Existing source Work Item for a post-acceptance command.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "actor": { "$ref": "../common/actor-ref.v1.schema.json" },
+    "requirementRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packKey", "packVersion", "workTypeKey", "workTypeDefinitionVersion", "requirementKey"],
+      "properties": {
+        "packKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "packVersion": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+        "workTypeKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+        "workTypeDefinitionVersion": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemVer" },
+        "requirementKey": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" }
+      }
+    },
+    "operation": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "target": { "$ref": "../common/schema-bound-value.v1.schema.json" },
+    "expectedExternalState": { "$ref": "#/$defs/ExpectedExternalState" },
+    "payload": { "$ref": "../common/schema-bound-value.v1.schema.json" },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "causationId": { "type": "string", "format": "uuid" },
+    "idempotencyKey": {
+      "description": "Client/application request idempotency key. Gateway scopes it by actor, Workspace/Project and operation, then creates a separate effect key.",
+      "$ref": "#/$defs/IdempotencyKey"
+    }
+  },
+  "oneOf": [
+    {
+      "required": ["intakeDraftId"],
+      "not": { "required": ["sourceWorkItemId"] }
+    },
+    {
+      "required": ["sourceWorkItemId"],
+      "not": { "required": ["intakeDraftId"] }
+    }
+  ],
+  "$defs": {
+    "IdempotencyKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$"
+    },
+    "ExpectedExternalState": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": { "mode": { "const": "MUST_NOT_EXIST" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "version"],
+          "properties": {
+            "mode": { "const": "MATCH_VERSION" },
+            "version": { "type": "string", "minLength": 1, "maxLength": 255 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "valueHash"],
+          "properties": {
+            "mode": { "const": "MATCH_VALUE_HASH" },
+            "valueHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" }
+          }
+        }
+      ]
+    }
+  }
+}

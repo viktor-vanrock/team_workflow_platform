@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "nonprod-conformance",
+  "startedAt": "2026-09-03T10:35:49.283Z",
+  "finishedAt": "2026-09-03T10:35:49.371Z",
+  "status": "SKIPPED_GATED",
+  "production": "DENIED",
+  "reasonCode": "METADATA_NOT_SUPPLIED",
+  "liveMattermost": "SKIPPED_GATED",
+  "liveModel": "SKIPPED_GATED"
+}

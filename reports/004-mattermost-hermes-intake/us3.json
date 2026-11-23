@@ -1,0 +1,59 @@
+{
+  "feature": "004-mattermost-hermes-intake",
+  "checkpoint": "US3",
+  "status": "PASS",
+  "generatedAt": "2026-09-03T10:22:42.970Z",
+  "taskSourceHash": "sha256:898061c3ce6c367812c7b11520f6888d641012d3cd50f0d67357e8eb740040f8",
+  "assertions": {
+    "catalogSkills": 9,
+    "proposalSkills": 6,
+    "grantExpansion": 0,
+    "forbiddenEffects": 0,
+    "fallbackStatus": "FALLBACK_COMPLETED",
+    "driftState": "STALE"
+  },
+  "results": [
+    {
+      "key": "US3_CONTRACT_INTEGRATION_E2E",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 14087,
+      "outputHash": "sha256:ca437adf063ebcb52f5d01f9e7b02f1f947689c8e6f871b7688a9cc18f1a801f"
+    },
+    {
+      "key": "QA_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3156,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "PERSISTENCE_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 1750,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "RUNTIME_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4227,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "API_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 4764,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "key": "WEB_TYPECHECK",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 2459,
+      "outputHash": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    }
+  ]
+}

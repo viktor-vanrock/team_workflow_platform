@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:sample:intake-form:v1",
+  "title": "Sample Work Type Intake Form",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["title", "message"],
+  "properties": {
+    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "message": { "type": "string", "minLength": 1, "maxLength": 2000 }
+  }
+}

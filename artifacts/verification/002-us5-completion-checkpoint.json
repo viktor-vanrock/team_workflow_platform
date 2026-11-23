@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "feature": "002-qa-manual-walking-skeleton",
+  "checkpoint": "US5-verdict-dod-completion",
+  "status": "PASS",
+  "startedAt": "2026-08-30T22:57:38.502Z",
+  "finishedAt": "2026-08-30T22:58:23.799Z",
+  "invariants": {
+    "ordinaryOneSignature": true,
+    "highCriticalDistinctLeadCosign": true,
+    "signedVerdictHistoryRetained": true,
+    "deterministicDod": true,
+    "exactPlanAndCarryForwardCoverage": true,
+    "failedInvalidatedDefectHistoryNonBlocking": true,
+    "doneWithFail": true,
+    "releaseDecisionCreated": false,
+    "structuredSummaryDigestReceipt": true,
+    "exactDistinctCloseApproval": true,
+    "packProjectionBeforeOutboxReady": true,
+    "completionSelfTransitionSkipsInvalidation": true,
+    "aggregateMutationInvalidatesPredispatch": true,
+    "dispatchedBlocksMutation": true,
+    "failureReleasesInFlight": true,
+    "confirmationFreezesPlanAndSatisfiesDod": true,
+    "partialEffectReconcilesByOriginalKey": true,
+    "postDoneAggregateMutationBlocked": true,
+    "clericalCorrectionLatestOnly": true,
+    "adjudicativePointerUnchanged": true,
+    "completionProfileBindingRevision": 4,
+    "mainComposeStarted": false,
+    "coreImportsQaSemantics": false
+  },
+  "evidence": {
+    "focusedTests": 38,
+    "postgresSuites": 3,
+    "typecheckedProjects": 7,
+    "migrationsThrough": 2030,
+    "mockAndSecondConnectorConformance": true
+  },
+  "stages": [
+    {
+      "id": "typecheck:packages/competency-qa",
+      "status": "PASS",
+      "durationMs": 2457,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/competency-qa/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/connector-sdk",
+      "status": "PASS",
+      "durationMs": 850,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/connector-sdk/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/connector-mock",
+      "status": "PASS",
+      "durationMs": 925,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/connector-mock/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:packages/runtime-composition",
+      "status": "PASS",
+      "durationMs": 2176,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "packages/runtime-composition/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/mock-hub",
+      "status": "PASS",
+      "durationMs": 792,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/mock-hub/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/api",
+      "status": "PASS",
+      "durationMs": 2562,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/api/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "typecheck:apps/web",
+      "status": "PASS",
+      "durationMs": 1720,
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ]
+    },
+    {
+      "id": "us5-eslint",
+      "status": "PASS",
+      "durationMs": 10116,
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "packages/competency-qa/src/domain/verdict.ts",
+        "packages/competency-qa/src/domain/dod.ts",
+        "packages/competency-qa/src/domain/completion.ts",
+        "packages/competency-qa/src/domain/post-close-correction.ts",
+        "packages/competency-qa/src/domain/evidence-manifest.ts",
+        "packages/competency-qa/src/application/create-verdict.ts",
+        "packages/competency-qa/src/application/sign-verdict.ts",
+        "packages/competency-qa/src/application/verdict-cosign-action.ts",
+        "packages/competency-qa/src/application/dod-evaluator.ts",
+        "packages/competency-qa/src/application/request-completion-waiver.ts",
+        "packages/competency-qa/src/application/dod-waiver-action.ts",
+        "packages/competency-qa/src/application/create-completion-candidate.ts",
+        "packages/competency-qa/src/application/invalidate-completion-candidate.ts",
+        "packages/competency-qa/src/application/request-completion.ts",
+        "packages/competency-qa/src/application/completion-command-lifecycle.ts",
+        "packages/competency-qa/src/application/completion-confirmation-persistence.ts",
+        "packages/competency-qa/src/application/completion-reconciliation.ts",
+        "packages/competency-qa/src/application/record-post-close-correction.ts",
+        "packages/competency-qa/src/application/verdict-completion-detail-section.ts",
+        "packages/competency-qa/src/application/verdict-completion-events.ts",
+        "packages/competency-qa/src/persistence/migrations/2030-qa-verdict-completion.ts",
+        "packages/competency-qa/src/persistence/verdict-dod.repository.ts",
+        "packages/competency-qa/src/persistence/post-close-correction.repository.ts",
+        "packages/connector-sdk/src/operational-work-item.ts",
+        "packages/connector-mock/src/manifest.ts",
+        "packages/connector-mock/src/operational-work-item.connector.ts",
+        "packages/connector-mock/src/operational-work-item-confirmation.ts",
+        "apps/mock-hub/src/operational/operational.controller.ts",
+        "apps/mock-hub/src/operational/operational.repository.ts",
+        "apps/mock-hub/src/persistence/migrations/0030-operational-completion.ts",
+        "packages/runtime-composition/src/qa/contributions.ts",
+        "packages/runtime-composition/src/qa/confirmation-hooks.ts",
+        "packages/runtime-composition/src/qa/external-command-lifecycle-hooks.ts",
+        "packages/runtime-composition/src/qa/operational-work-item.contract.ts",
+        "packages/runtime-composition/src/seed/qa-local-seed.ts",
+        "apps/api/src/extensions/qa-verdict-completion.controller.ts",
+        "apps/api/src/extensions/qa-evidence.controller.ts",
+        "packages/competency-qa/src/ui/verdict-completion.tsx",
+        "packages/competency-qa/src/ui/evidence-review.tsx",
+        "apps/web/src/App.tsx",
+        "tests/integration/002-manual-vertical-flow.spec.ts",
+        "tests/integration/002-post-close-correction-persistence.spec.ts"
+      ]
+    },
+    {
+      "id": "us5-domain-contract-security",
+      "status": "PASS",
+      "durationMs": 2117,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/security/acceptance/002-at-010-verdict-risk-review.spec.ts",
+        "tests/integration/acceptance/002-at-011-dod.spec.ts",
+        "tests/integration/acceptance/002-done-with-fail.spec.ts",
+        "tests/integration/002-completion-recovery.spec.ts",
+        "tests/integration/002-verdict-supersession.spec.ts",
+        "tests/integration/002-manual-vertical-flow.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "us5-postgres-migrations-seed-post-close",
+      "status": "PASS",
+      "durationMs": 12559,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/002-post-close-correction-persistence.spec.ts",
+        "tests/integration/002-qa-local-seed.spec.ts",
+        "tests/integration/migrations/002-qa-migration-order.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "us4-regression",
+      "status": "PASS",
+      "durationMs": 7060,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/integration/acceptance/002-at-008-finding-classification.spec.ts",
+        "tests/integration/002-defect-confirmation-recovery.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "openapi-current",
+      "status": "PASS",
+      "durationMs": 505,
+      "command": [
+        "node",
+        "tools/contracts/build-openapi-snapshots.mts",
+        "--check"
+      ]
+    },
+    {
+      "id": "openapi-drift",
+      "status": "PASS",
+      "durationMs": 940,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/contract/openapi-drift.spec.ts",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "id": "web-production-build",
+      "status": "PASS",
+      "durationMs": 360,
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "apps/web/vite.config.ts"
+      ]
+    },
+    {
+      "id": "architecture",
+      "status": "PASS",
+      "durationMs": 155,
+      "command": [
+        "node",
+        "tools/architecture/check-import-graph.mts",
+        "--core-only"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "gate": "prerequisites",
+  "startedAt": "2026-09-03T11:09:33.142Z",
+  "finishedAt": "2026-09-03T11:09:33.341Z",
+  "status": "PASS",
+  "upstreamReports": [
+    {
+      "id": "feature-003",
+      "status": "PASS",
+      "code": "UPSTREAM_REPORT_ACCEPTED",
+      "detail": "reports/003-jira-operational-authority/final-gate.json sha256:ff8a941316b60cb46226064e4508bc1aecaf4b31e0a1ea95573063c150c7a008"
+    },
+    {
+      "id": "feature-004",
+      "status": "PASS",
+      "code": "UPSTREAM_REPORT_ACCEPTED",
+      "detail": "reports/004-mattermost-hermes-intake/final-gate.json sha256:a596ed0705528d6f4f35dadad01ce05ba29228c87ef63e23fd8904497f5aeebc"
+    },
+    {
+      "id": "feature-005",
+      "status": "PASS",
+      "code": "UPSTREAM_REPORT_ACCEPTED",
+      "detail": "reports/005-gitlab-automated-validation/final-gate.json sha256:fd95b5c76f5a7e93424edbfc0f00344d3e365170cf76a38ef1f601f1822ea723"
+    }
+  ],
+  "compatibilitySnapshot": {
+    "id": "feature-002-005-compatibility",
+    "status": "PASS",
+    "code": "FEATURE_002_005_COMPATIBILITY_ACCEPTED",
+    "detail": "8 immutable inputs"
+  },
+  "migrationSnapshot": {
+    "id": "published-migrations",
+    "status": "PASS",
+    "code": "PUBLISHED_MIGRATIONS_ACCEPTED",
+    "detail": "26 Core/QA migration inputs"
+  }
+}

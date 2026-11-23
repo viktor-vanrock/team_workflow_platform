@@ -1,0 +1,36 @@
+flowchart TB
+  api["apps/api"] --> composition["runtime-composition<br/>сборка ports, handlers, policies,<br/>entities, migrations, worker steps"]
+  worker["apps/worker"] --> composition
+  web["apps/web"] --> ui["platform-ui / competency-ui-sdk"]
+  web --> qaui["competency-qa/ui"]
+  web --> docsui["competency-tech-writing/ui"]
+  composition --> core["platform-core<br/>независимое доменное ядро"]
+  composition --> qa["competency-qa/node<br/>QA domain + application + persistence"]
+  composition --> docs["competency-tech-writing/node<br/>локальные задания, документы, review"]
+  composition --> dummy["competency-dummy<br/>extension conformance"]
+  composition --> nest["platform-runtime-nest<br/>HTTP · identity · telemetry"]
+  composition --> persist["platform-persistence-typeorm<br/>Core repositories + migrations"]
+  composition --> jira["connector-jira"]
+  composition --> gl["connector-gitlab"]
+  composition --> mm["connector-mattermost"]
+  composition --> mock["connector-mock"]
+  composition --> jp["connector-jira-persistence-typeorm"]
+  composition --> gp["connector-gitlab-persistence-typeorm"]
+  qa --> sdk["competency-sdk"]
+  dummy --> sdk
+  docs --> sdk
+  jira --> csdk["connector-sdk"]
+  gl --> csdk
+  mm --> csdk
+  mock --> csdk
+  jp --> jira
+  gp --> gl
+  sdk --> core
+  csdk --> core
+  nest --> core
+  persist --> core
+  core --> contracts["platform-contracts<br/>schemas · envelopes · hashes"]
+  sdk --> contracts
+  csdk --> contracts
+  qa --> contracts
+  testkit["platform-testkit<br/>fixtures / testcontainers"]

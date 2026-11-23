@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 1,
+  "feature": "006-queue-triage-capacity-sla",
+  "gate": "evidence-aggregation",
+  "status": "PASS",
+  "startedAt": "2026-09-03T11:19:29.712Z",
+  "finishedAt": "2026-09-03T11:19:29.852Z",
+  "contour": "qa-jira-gitlab-mattermost-local",
+  "externalNetwork": "DENIED",
+  "production": "DENIED",
+  "childReports": [
+    {
+      "name": "compatibility.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:09:33.002Z",
+      "sha256": "sha256:76d6c75f17e9085b35d17e10f413ed6b9870962f1f5960c9f593c2371d5b615a"
+    },
+    {
+      "name": "prerequisites.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:09:33.341Z",
+      "sha256": "sha256:608ffb9b69decba01e4e8db22b5f9b3926c9c9417f54c6e63c64fb8f757e0250"
+    },
+    {
+      "name": "governance.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:09:33.417Z",
+      "sha256": "sha256:a7510cc70800082ad268546475025215c48c91b3098a8e91549917be7945130e"
+    },
+    {
+      "name": "setup-gate.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:09:34.758Z",
+      "sha256": "sha256:b9dc59a7b5c5864d6d3136e5d33907e5bc80b68f8154e1f31d306951d4defa78"
+    },
+    {
+      "name": "setup-contour.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:09:38.321Z",
+      "sha256": "sha256:7595d1ef25a33673e39598c83cad953fcbc582552040cdfb141df9fa0b83e36d"
+    },
+    {
+      "name": "contracts.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:10:40.648Z",
+      "sha256": "sha256:45a2a1c486357c471f90273814bb9cdb39abf1882ece5238665e5aa56a6a90c5"
+    },
+    {
+      "name": "architecture.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:10:40.648Z",
+      "sha256": "sha256:24431939a12c6a307fd39cb88bb7cf7bad2bdf32df42a0059e6a13bdd643b4c6"
+    },
+    {
+      "name": "unit-matrices.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:10:40.648Z",
+      "sha256": "sha256:b16ed8158f1b0ac5fa89304a7fb617194c31e34dbaa9a6ceca30c7d58f6fdc10"
+    },
+    {
+      "name": "foundation.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:10:40.648Z",
+      "sha256": "sha256:b885041fd597db2f96f421de833c5df055f04841edcc38fffd59d402d7a783d0"
+    },
+    {
+      "name": "us1.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:11:04.869Z",
+      "sha256": "sha256:387924569e3c1bae76ad75f1efc4a337d170d3eac21837b48a25653f4a17735d"
+    },
+    {
+      "name": "us2.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:11:35.901Z",
+      "sha256": "sha256:66ffef31927052819a6a647ea74981876ec5dc6e7f68624eb97fb955d636e94d"
+    },
+    {
+      "name": "us3.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:12:09.797Z",
+      "sha256": "sha256:3fc4d9798a77592926e0913501377fb4515a2ec983e70dcbbacd34ed794027fd"
+    },
+    {
+      "name": "us4.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:12:54.210Z",
+      "sha256": "sha256:6b51f8b6da21e98b3119314d158ec0b8dd9e54931fb12dfa19a5c2c3fc86a8e4"
+    },
+    {
+      "name": "us5.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:13:38.353Z",
+      "sha256": "sha256:0ee9ad9e93c2b312faee335735a21967e0c86cdc94fd584ce193684ac61e95ac"
+    },
+    {
+      "name": "migrations-postgres-17.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:13:50.635Z",
+      "sha256": "sha256:2d8e5f928e3e768fba33f3842b3deab19ce56e67433ecd8f735a06ebb7c74be0"
+    },
+    {
+      "name": "migrations-postgres-18.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:14:01.701Z",
+      "sha256": "sha256:7d0f313109e984381e4eb7f3fa145ce458891daeec48f564166d186e05cac0b3"
+    },
+    {
+      "name": "concurrency.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:14:14.539Z",
+      "sha256": "sha256:cbdbdbe927303c2fc2876ca9c278a08a0dc2e8ddd02869777c37d946f02f42db"
+    },
+    {
+      "name": "integration.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:14:50.974Z",
+      "sha256": "sha256:476b745447f4581b81778de0900b8070ba1d11b7ebe85c461304465fae84165a"
+    },
+    {
+      "name": "security.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:15:00.193Z",
+      "sha256": "sha256:c60893852caf79577128478dcffaf5383ee1c1ef4027588a579093ec129f3db8"
+    },
+    {
+      "name": "rebuild.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:15:07.214Z",
+      "sha256": "sha256:1b8ebbe709ccd1ece91f3e853d332d6551a5ce75a4e20d562923c645c063a2db"
+    },
+    {
+      "name": "observability.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:15:08.583Z",
+      "sha256": "sha256:9216558b0d4063863fc94bb313293cf2aedfc4f92f3c2711fb09000c8b4b485b"
+    },
+    {
+      "name": "browser.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:15:20.239Z",
+      "sha256": "sha256:eebc1cf4c2f2ee073830a7029fabdaf9184e554ad9f52bd30cc7fb2101a52837"
+    },
+    {
+      "name": "smoke.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:18:34.777Z",
+      "sha256": "sha256:efd8bbc26ce39683f4544ab98870e39fdc2a8f4c6c1c053904d37c5f58e5e9a2"
+    },
+    {
+      "name": "quickstart.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:18:34.873Z",
+      "sha256": "sha256:56d70a5b88da2405e0c13926abbc4fc851ac38bfb95ccac98cdf7fcaf4ef2839"
+    },
+    {
+      "name": "traceability.json",
+      "status": "PASS",
+      "fresh": true,
+      "timestamp": "2026-09-03T11:18:34.962Z",
+      "sha256": "sha256:238f7a82328584beee4d6723d00e78eda09a46c729a1e0177a6f649d600f4821"
+    }
+  ],
+  "snapshots": {
+    "source": {
+      "sha256": "sha256:0aa9a4483cb4572a09f5aad53dd8140d1177761bc591e626c2dd3784325c2f92",
+      "fileCount": 760,
+      "paths": [
+        "specs/006-queue-triage-capacity-sla/spec.md",
+        "specs/006-queue-triage-capacity-sla/plan.md",
+        "specs/006-queue-triage-capacity-sla/research.md",
+        "specs/006-queue-triage-capacity-sla/data-model.md",
+        "specs/006-queue-triage-capacity-sla/quickstart.md",
+        "specs/006-queue-triage-capacity-sla/tasks.md",
+        "apps/api/src",
+        "apps/worker/src",
+        "apps/web/src",
+        "packages/competency-qa/src",
+        "packages/platform-core/src",
+        "packages/platform-persistence-typeorm/src",
+        "packages/platform-runtime-nest/src",
+        "packages/runtime-composition/src",
+        "tests/architecture/006-queue-boundaries.spec.ts",
+        "tests/architecture/006-runtime-wiring.spec.ts",
+        "tests/contract/006",
+        "tests/unit/006",
+        "tests/integration/006",
+        "tests/integration/security/006",
+        "tests/e2e/006",
+        "tests/e2e/acceptance/006-queue-live-browser.spec.ts",
+        "tests/support/006-observability-fixture.ts",
+        "tests/support/006-queue-fixture.ts",
+        "tools/ci/feature-006-tests.mts",
+        "tools/ci/verify-006-migrations.mts",
+        "tools/local/queue-cli.mts",
+        "tools/local/queue-scenario.mts",
+        "tools/local/queue-scenario-catalog.mts",
+        "tools/smoke/feature-006.mts",
+        "tools/smoke/feature-006-browser-process.mts",
+        "tools/verification"
+      ],
+      "missing": []
+    },
+    "contracts": {
+      "sha256": "sha256:41b6cde4c0505c65ac3978839a9685a09c5e56eafd919e7778607e006e027453",
+      "fileCount": 41,
+      "paths": [
+        "specs/006-queue-triage-capacity-sla/contracts",
+        "packages/platform-contracts/src"
+      ],
+      "missing": []
+    },
+    "migrations": {
+      "sha256": "sha256:b3cf1ceaac311e09f923235fdfdc09cbb21cd426395b7d24285d1ab3286892c0",
+      "fileCount": 7,
+      "paths": [
+        "packages/platform-persistence-typeorm/src/migrations/core/0130-queue-policy-calendar.ts",
+        "packages/platform-persistence-typeorm/src/migrations/core/0135-queue-projection-sla.ts",
+        "packages/platform-persistence-typeorm/src/migrations/core/0140-queue-controls-capacity.ts",
+        "packages/platform-persistence-typeorm/src/migrations/core/index.ts",
+        "packages/competency-qa/src/persistence/migrations/2070-qa-queue-facts.ts",
+        "packages/competency-qa/src/persistence/migrations/index.ts",
+        "packages/competency-qa/src/persistence/contributions.ts"
+      ],
+      "missing": []
+    },
+    "runtime": {
+      "sha256": "sha256:0025c8ef30c99729ae52b32b0eaf0e334c2d1d49ac5794a6e8bc1b8eac80a143",
+      "fileCount": 185,
+      "paths": [
+        ".node-version",
+        "package.json",
+        "pnpm-lock.yaml",
+        "infra/compose/docker-compose.local.yml",
+        "apps/api/src",
+        "apps/worker/src",
+        "apps/web/src",
+        "packages/runtime-composition/src"
+      ],
+      "missing": []
+    },
+    "tasks": {
+      "path": "specs/006-queue-triage-capacity-sla/tasks.md",
+      "sha256": "sha256:bcfb30c1b9aef5b160f48c7d7361e9e27e28a0bea441bc62fd3e6fc7eca9d249",
+      "taskCount": 170,
+      "pendingTaskIds": []
+    }
+  },
+  "failures": []
+}

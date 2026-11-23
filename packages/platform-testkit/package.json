@@ -1,0 +1,14 @@
+{
+  "name": "@awp/platform-testkit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@awp/platform-core": "workspace:*",
+    "@awp/platform-persistence-typeorm": "workspace:*",
+    "testcontainers": "12.1.0"
+  }
+}

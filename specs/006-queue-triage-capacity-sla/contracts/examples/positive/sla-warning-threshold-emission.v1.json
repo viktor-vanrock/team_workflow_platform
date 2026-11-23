@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "sla-threshold-emission@1.0.0",
+  "thresholdEmissionId": "30000000-0000-4000-8000-000000000001",
+  "workspaceId": "30000000-0000-4000-8000-000000000002",
+  "projectId": "30000000-0000-4000-8000-000000000003",
+  "workItemId": "30000000-0000-4000-8000-000000000004",
+  "goal": "READY_TO_SIGNED_VERDICT",
+  "slaClockId": "30000000-0000-4000-8000-000000000005",
+  "clockRevisionRef": {
+    "id": "30000000-0000-4000-8000-000000000005",
+    "version": 4,
+    "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "clockCycle": 1,
+  "threshold": {
+    "kind": "WARNING",
+    "warningIndex": 1
+  },
+  "targetState": "AT_RISK",
+  "elapsedBusinessSeconds": 7200,
+  "targetBusinessSeconds": 14400,
+  "policyFacetRef": {
+    "id": "30000000-0000-4000-8000-000000000006",
+    "version": 2,
+    "semanticHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+  },
+  "calendarRef": {
+    "id": "30000000-0000-4000-8000-000000000007",
+    "version": 5,
+    "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "idempotencyHash": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+  "notificationIntentRef": {
+    "notificationIntentId": "30000000-0000-4000-8000-000000000008",
+    "creationHash": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+  },
+  "emittedAt": "2026-09-02T09:00:00Z",
+  "semanticHash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

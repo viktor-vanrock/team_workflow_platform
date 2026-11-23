@@ -1,0 +1,610 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:gitlab-pilot-metadata:v1",
+  "title": "GitLabPilotMetadataPackage v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "deploymentPurpose",
+    "contourKey",
+    "environmentClass",
+    "workspaceId",
+    "projectId",
+    "server",
+    "numericGitLabProjectId",
+    "configurationPins",
+    "configurationPinSetHash",
+    "suiteBindingRefs",
+    "identities",
+    "capabilitiesEvidenceRef",
+    "sourceContextContractRef",
+    "allowedRefs",
+    "allowedEnvironmentRefs",
+    "triggerContract",
+    "resultContract",
+    "artifactContract",
+    "webhookContract",
+    "reconciliationContract",
+    "qaRetryPolicy",
+    "transportRetry",
+    "cancellationSemantics",
+    "runnerReadinessEvidenceRef",
+    "containerReadinessEvidenceRef",
+    "ciNoDeployAttestationRef",
+    "operatorOptIn",
+    "productionDenied",
+    "generatedAt",
+    "contentHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "gitlab-pilot-metadata@1.0.0" },
+    "deploymentPurpose": {
+      "enum": ["CONFORMANCE_VALIDATION", "PILOT_REHEARSAL", "PILOT_DEPLOYMENT"]
+    },
+    "contourKey": {
+      "enum": [
+        "qa-jira-gitlab-local",
+        "qa-jira-gitlab-development",
+        "qa-jira-gitlab-test",
+        "qa-jira-gitlab-mattermost-local",
+        "qa-jira-gitlab-mattermost-development",
+        "qa-jira-gitlab-mattermost-test"
+      ]
+    },
+    "environmentClass": { "enum": ["LOCAL", "DEVELOPMENT", "TEST"] },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseUrl", "edition", "exactVersion", "exactBuild", "apiFamily", "tlsOwner", "networkOwner"],
+      "properties": {
+        "baseUrl": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "edition": { "enum": ["CE", "EE"] },
+        "exactVersion": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "exactBuild": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "apiFamily": { "const": "v4" },
+        "tlsOwner": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "networkOwner": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+      }
+    },
+    "numericGitLabProjectId": { "type": "integer", "minimum": 1 },
+    "configurationPins": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/configurationPin" },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "logicalRole": { "const": "SOURCE_CONTEXT" } },
+            "required": ["logicalRole"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "logicalRole": { "const": "TEST_EXECUTION" } },
+            "required": ["logicalRole"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "logicalRole": { "const": "ARTIFACT_SOURCE" } },
+            "required": ["logicalRole"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "configurationPinSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "suiteBindingRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/versionedContentRef" }
+    },
+    "identities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "read",
+        "trigger",
+        "webhook",
+        "credentialRoutingMode",
+        "credentialSeparationEvidenceHash"
+      ],
+      "properties": {
+        "read": { "$ref": "#/$defs/readIdentity" },
+        "trigger": { "$ref": "#/$defs/triggerIdentity" },
+        "webhook": { "$ref": "#/$defs/webhookCredential" },
+        "credentialRoutingMode": { "const": "NAMED_CONNECTION_SLOTS_V1" },
+        "credentialSeparationEvidenceHash": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        }
+      }
+    },
+    "capabilitiesEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "sourceContextContractRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "allowedRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^(?!.*\\*\\*)(?!.*\\.\\.)[A-Za-z0-9._/-]{1,255}$"
+      }
+    },
+    "allowedEnvironmentRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+    },
+    "triggerContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "endpointKind",
+        "logicalPipelineKey",
+        "sourceRefPolicyRef",
+        "logicalExecutionContractHash",
+        "ref",
+        "dialect",
+        "markerInputName",
+        "allowedInputNames",
+        "inputMappingHash"
+      ],
+      "properties": {
+        "endpointKind": { "const": "PIPELINE_TRIGGER_TOKEN" },
+        "logicalPipelineKey": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+        },
+        "sourceRefPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "logicalExecutionContractHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "ref": {
+          "type": "string",
+          "pattern": "^(?!.*\\*\\*)(?!.*\\.\\.)[A-Za-z0-9._/-]{1,255}$"
+        },
+        "dialect": { "enum": ["TYPED_INPUTS", "BOUNDED_VARIABLES"] },
+        "markerInputName": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,63}$" },
+        "allowedInputNames": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,63}$" }
+        },
+        "inputMappingHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+      }
+    },
+    "resultContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaRef", "resultJobKey", "jobName", "artifactPath", "maxBytes"],
+      "properties": {
+        "schemaRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/schemaRef" },
+        "resultJobKey": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+        },
+        "jobName": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,128}$" },
+        "artifactPath": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9._/-]{1,512}$"
+        },
+        "maxBytes": { "type": "integer", "minimum": 1, "maximum": 10485760 }
+      }
+    },
+    "artifactContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowedTypes",
+        "maxBytes",
+        "checksumSource",
+        "allowedClassifications",
+        "artifactPolicyRef",
+        "artifactPolicyHash",
+        "minimumRetentionSeconds",
+        "maximumRetentionSeconds",
+        "retentionEvidenceRef",
+        "accessEvidenceRef"
+      ],
+      "properties": {
+        "allowedTypes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+        },
+        "maxBytes": { "type": "integer", "minimum": 1, "maximum": 104857600 },
+        "checksumSource": { "const": "MACHINE_RESULT_MANIFEST" },
+        "allowedClassifications": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/classification" }
+        },
+        "artifactPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "artifactPolicyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "minimumRetentionSeconds": { "type": "integer", "minimum": 60, "maximum": 31536000 },
+        "maximumRetentionSeconds": { "type": "integer", "minimum": 60, "maximum": 31536000 },
+        "retentionEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "accessEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+      }
+    },
+    "webhookContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verificationMode",
+        "identitySlot",
+        "deliverySemantics",
+        "eventKinds",
+        "freshnessSeconds",
+        "dedupeHorizonSeconds"
+      ],
+      "properties": {
+        "verificationMode": { "const": "STANDARD_WEBHOOKS_HMAC_SHA256" },
+        "identitySlot": { "const": "WEBHOOK" },
+        "deliverySemantics": { "const": "AT_LEAST_ONCE_SIGNAL_ONLY" },
+        "eventKinds": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["PIPELINE_HOOK", "JOB_HOOK"] }
+        },
+        "freshnessSeconds": { "type": "integer", "minimum": 30, "maximum": 900 },
+        "dedupeHorizonSeconds": { "type": "integer", "minimum": 300, "maximum": 604800 }
+      }
+    },
+    "reconciliationContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "webhookGraceSeconds",
+        "pollIntervalSeconds",
+        "lookupConsistencyWindowSeconds",
+        "freshnessTargetSeconds",
+        "maxConcurrentReads",
+        "rateBudgetPerMinute",
+        "requestTimeoutMs",
+        "executionTimeoutSeconds",
+        "costBudgetRef"
+      ],
+      "properties": {
+        "webhookGraceSeconds": { "type": "integer", "minimum": 1, "maximum": 300 },
+        "pollIntervalSeconds": { "type": "integer", "minimum": 5, "maximum": 300 },
+        "lookupConsistencyWindowSeconds": { "type": "integer", "minimum": 5, "maximum": 600 },
+        "freshnessTargetSeconds": { "type": "integer", "minimum": 5, "maximum": 600 },
+        "maxConcurrentReads": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "rateBudgetPerMinute": { "type": "integer", "minimum": 1, "maximum": 600 },
+        "requestTimeoutMs": { "type": "integer", "minimum": 100, "maximum": 60000 },
+        "executionTimeoutSeconds": { "type": "integer", "minimum": 30, "maximum": 86400 },
+        "costBudgetRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+      }
+    },
+    "qaRetryPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyRef", "policyHash", "allowedInfrastructureCodes", "maxAutomaticRetries"],
+      "properties": {
+        "policyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "policyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "allowedInfrastructureCodes": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,63}$" }
+        },
+        "maxAutomaticRetries": { "const": 1 }
+      }
+    },
+    "transportRetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxPreEffectTransportRetries", "retryableHttpStatuses", "minimumBackoffMs", "maximumBackoffMs"],
+      "properties": {
+        "maxPreEffectTransportRetries": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "retryableHttpStatuses": {
+          "type": "array",
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": { "enum": [429, 500, 502, 503, 504] }
+        },
+        "minimumBackoffMs": { "type": "integer", "minimum": 100, "maximum": 60000 },
+        "maximumBackoffMs": { "type": "integer", "minimum": 100, "maximum": 300000 }
+      }
+    },
+    "cancellationSemantics": { "const": "OBSERVE_ONLY" },
+    "runnerReadinessEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "containerReadinessEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "ciNoDeployAttestationRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "feature003EvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "feature003EvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "feature004EvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "feature004EvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "feature005EvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "feature005EvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "mattermostCompositionEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "mattermostCompositionEvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "pilotRehearsalEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "pilotRehearsalEvidenceHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "operatorOptIn": { "const": true },
+    "productionDenied": { "const": true },
+    "generatedAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "contentHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "contourKey": {
+            "enum": ["qa-jira-gitlab-local", "qa-jira-gitlab-mattermost-local"]
+          }
+        },
+        "required": ["contourKey"]
+      },
+      "then": {
+        "properties": {
+          "environmentClass": { "const": "LOCAL" },
+          "server": {
+            "properties": {
+              "baseUrl": {
+                "pattern": "^http://(?:127\\.0\\.0\\.1|localhost)(?::[0-9]{1,5})?(?:/|$)"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "contourKey": {
+            "enum": ["qa-jira-gitlab-development", "qa-jira-gitlab-mattermost-development"]
+          }
+        },
+        "required": ["contourKey"]
+      },
+      "then": {
+        "properties": {
+          "environmentClass": { "const": "DEVELOPMENT" },
+          "server": {
+            "properties": {
+              "baseUrl": { "pattern": "^https://" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "contourKey": {
+            "enum": ["qa-jira-gitlab-test", "qa-jira-gitlab-mattermost-test"]
+          }
+        },
+        "required": ["contourKey"]
+      },
+      "then": {
+        "properties": {
+          "environmentClass": { "const": "TEST" },
+          "server": {
+            "properties": {
+              "baseUrl": { "pattern": "^https://" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "deploymentPurpose": { "const": "PILOT_REHEARSAL" } },
+        "required": ["deploymentPurpose"]
+      },
+      "then": {
+        "required": [
+          "feature003EvidenceRef",
+          "feature003EvidenceHash",
+          "feature004EvidenceRef",
+          "feature004EvidenceHash",
+          "feature005EvidenceRef",
+          "feature005EvidenceHash",
+          "mattermostCompositionEvidenceRef",
+          "mattermostCompositionEvidenceHash"
+        ],
+        "properties": {
+          "contourKey": { "const": "qa-jira-gitlab-mattermost-local" },
+          "pilotRehearsalEvidenceRef": false,
+          "pilotRehearsalEvidenceHash": false
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "deploymentPurpose": { "const": "PILOT_DEPLOYMENT" } },
+        "required": ["deploymentPurpose"]
+      },
+      "then": {
+        "required": [
+          "feature003EvidenceRef",
+          "feature003EvidenceHash",
+          "feature004EvidenceRef",
+          "feature004EvidenceHash",
+          "feature005EvidenceRef",
+          "feature005EvidenceHash",
+          "mattermostCompositionEvidenceRef",
+          "mattermostCompositionEvidenceHash",
+          "pilotRehearsalEvidenceRef",
+          "pilotRehearsalEvidenceHash"
+        ],
+        "properties": {
+          "contourKey": {
+            "enum": [
+              "qa-jira-gitlab-mattermost-development",
+              "qa-jira-gitlab-mattermost-test"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "deploymentPurpose": { "const": "CONFORMANCE_VALIDATION" } },
+        "required": ["deploymentPurpose"]
+      },
+      "then": {
+        "properties": {
+          "contourKey": {
+            "enum": [
+              "qa-jira-gitlab-local",
+              "qa-jira-gitlab-development",
+              "qa-jira-gitlab-test"
+            ]
+          },
+          "feature003EvidenceRef": false,
+          "feature003EvidenceHash": false,
+          "feature004EvidenceRef": false,
+          "feature004EvidenceHash": false,
+          "feature005EvidenceRef": false,
+          "feature005EvidenceHash": false,
+          "mattermostCompositionEvidenceRef": false,
+          "mattermostCompositionEvidenceHash": false,
+          "pilotRehearsalEvidenceRef": false,
+          "pilotRehearsalEvidenceHash": false
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "readIdentity": {
+      "allOf": [
+        { "$ref": "#/$defs/identity" },
+        {
+          "type": "object",
+          "properties": {
+            "scopes": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "items": { "const": "read_api" }
+            }
+          }
+        }
+      ]
+    },
+    "triggerIdentity": {
+      "allOf": [
+        { "$ref": "#/$defs/identity" },
+        {
+          "type": "object",
+          "properties": {
+            "scopes": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "items": { "const": "pipeline_trigger" }
+            }
+          }
+        }
+      ]
+    },
+    "webhookCredential": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "credentialKind",
+        "secretRef",
+        "credentialFingerprint",
+        "keyVersionRef",
+        "ownerRef",
+        "rotationPolicyRef",
+        "revocationRunbookRef"
+      ],
+      "properties": {
+        "credentialKind": { "const": "STANDARD_WEBHOOK_HMAC_KEY" },
+        "secretRef": {
+          "type": "string",
+          "pattern": "^secretref://[a-z0-9][a-z0-9._/-]*$",
+          "maxLength": 1024
+        },
+        "credentialFingerprint": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash"
+        },
+        "keyVersionRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "ownerRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "rotationPolicyRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        },
+        "revocationRunbookRef": {
+          "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identityKind",
+        "scopes",
+        "secretRef",
+        "credentialFingerprint",
+        "ownerRef",
+        "nonHumanIdentityEvidenceRef",
+        "leastPrivilegeEvidenceRef",
+        "rotationPolicyRef",
+        "revocationRunbookRef"
+      ],
+      "properties": {
+        "identityKind": {
+          "enum": ["NON_HUMAN_SERVICE", "NON_HUMAN_PROJECT"]
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["api", "read_api", "read_repository", "pipeline_trigger"]
+          }
+        },
+        "secretRef": {
+          "type": "string",
+          "pattern": "^secretref://[a-z0-9][a-z0-9._/-]*$",
+          "maxLength": 1024
+        },
+        "credentialFingerprint": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+        "ownerRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "nonHumanIdentityEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "leastPrivilegeEvidenceRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "rotationPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+        "revocationRunbookRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" }
+      }
+    }
+  }
+}

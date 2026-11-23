@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:triage-assessment:v1",
+  "title": "TriageAssessment v1",
+  "$comment": "The composed semantic validator MUST require every recommendations.*.factRefs value to satisfy 0 <= ref < facts.length. JSON Schema bounds the absolute index range but cannot express this instance-relative array-length constraint. The same validator requires ESTIMATE lower <= upper.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "assessmentId",
+    "workspaceId",
+    "projectId",
+    "subject",
+    "revision",
+    "dimensions",
+    "recommendations",
+    "facts",
+    "explanation",
+    "confidence",
+    "inputFingerprint",
+    "rulesRef",
+    "skillRef",
+    "policyRef",
+    "agentRunRef",
+    "actionProvenanceRef",
+    "state",
+    "expiresAt",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "triage-assessment@1.0.0" },
+    "assessmentId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version", "contentHash"],
+      "properties": {
+        "kind": { "enum": ["DRAFT", "CANDIDATE", "WORK_ITEM"] },
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "revision": { "type": "integer", "minimum": 1 },
+    "previousAssessmentRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["businessImpact", "urgencySla", "risk", "effortRange", "scopeBreadth", "environmentDataComplexity", "uncertainty", "automationAvailability"],
+      "properties": {
+        "businessImpact": { "$ref": "#/$defs/level" },
+        "urgencySla": { "$ref": "#/$defs/level" },
+        "risk": { "$ref": "#/$defs/level" },
+        "effortRange": { "$ref": "#/$defs/effortRange" },
+        "scopeBreadth": { "$ref": "#/$defs/level" },
+        "environmentDataComplexity": { "$ref": "#/$defs/level" },
+        "uncertainty": { "$ref": "#/$defs/level" },
+        "automationAvailability": { "$ref": "#/$defs/level" }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complexity", "priority", "queueBand"],
+      "properties": {
+        "complexity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "rationale", "factRefs"],
+          "properties": {
+            "value": { "enum": ["SMALL", "MEDIUM", "LARGE", "VERY_LARGE", "UNKNOWN"] },
+            "rationale": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "factRefs": { "$ref": "#/$defs/factRefs" }
+          }
+        },
+        "priority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "rationale", "factRefs"],
+          "properties": {
+            "value": { "enum": ["LOW", "MEDIUM", "HIGH", "URGENT", "UNKNOWN"] },
+            "rationale": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "factRefs": { "$ref": "#/$defs/factRefs" }
+          }
+        },
+        "queueBand": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "rationale", "factRefs"],
+          "properties": {
+            "value": { "enum": ["DO_NOW", "NEXT", "SCHEDULED", "BACKLOG", "UNKNOWN"] },
+            "rationale": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "factRefs": { "$ref": "#/$defs/factRefs" }
+          }
+        }
+      }
+    },
+    "facts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceRef", "sourceVersion", "contentHash", "polarity"],
+        "properties": {
+          "sourceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "sourceVersion": { "type": "string", "minLength": 1, "maxLength": 256 },
+          "contentHash": { "$ref": "#/$defs/hash" },
+          "polarity": { "enum": ["SUPPORTS", "CONTRADICTS", "UNKNOWN"] }
+        }
+      }
+    },
+    "explanation": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+    "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+    "policyRef": { "$ref": "#/$defs/versionedHashRef" },
+    "agentRunRef": { "$ref": "#/$defs/id" },
+    "actionProvenanceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "modelRef": { "$ref": "#/$defs/versionedHashRef" },
+    "state": { "enum": ["CURRENT", "STALE", "SUPERSEDED"] },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "staleAt": { "type": "string", "format": "date-time" },
+    "staleReasonCode": { "enum": ["SOURCE_CHANGED", "SOURCE_REVOKED", "PROFILE_CHANGED", "BINDING_CHANGED", "EXPIRED"] },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["revision"], "properties": { "revision": { "const": 1 } } },
+      "then": { "properties": { "previousAssessmentRef": false } },
+      "else": { "required": ["previousAssessmentRef"], "properties": { "previousAssessmentRef": true } }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "STALE" } } },
+      "then": {
+        "required": ["staleAt", "staleReasonCode"],
+        "properties": { "staleAt": true, "staleReasonCode": true }
+      },
+      "else": { "properties": { "staleAt": false, "staleReasonCode": false } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "level": { "enum": ["LOW", "MEDIUM", "HIGH", "VERY_HIGH", "UNKNOWN"] },
+    "effortRange": {
+      "description": "A bounded non-authoritative estimate. Semantic validation requires lower <= upper; UNKNOWN carries no invented numeric estimate.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": { "const": "UNKNOWN" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "lower", "upper", "unit"],
+          "properties": {
+            "kind": { "const": "ESTIMATE" },
+            "lower": { "type": "number", "minimum": 0, "maximum": 100000 },
+            "upper": { "type": "number", "minimum": 0, "maximum": 100000 },
+            "unit": { "enum": ["PERSON_HOURS", "PERSON_DAYS", "SESSION_COUNT"] }
+          }
+        }
+      ]
+    },
+    "factRefs": {
+      "description": "Zero-based indexes into this assessment's facts array. Composed semantic validation rejects any index greater than or equal to facts.length.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 0, "maximum": 99 }
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

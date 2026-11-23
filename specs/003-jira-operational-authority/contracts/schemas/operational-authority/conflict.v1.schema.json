@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:operational-authority:conflict:v1",
+  "title": "Operational Sync Conflict",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "conflictId", "workspaceId", "projectId", "workItemId", "bindingRef", "commandRef", "approvalRef", "operation", "expectedExternalRevisionToken", "expectedValueHash", "observedExternalRevisionToken", "observedValueHash", "observedProjectionRevisionRef", "profileRef", "connectionRef", "reasonCode", "state", "detectedAt", "resourceVersion"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "conflictId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "projectId": { "type": "string", "format": "uuid" },
+    "workItemId": { "type": "string", "format": "uuid" },
+    "bindingRef": { "$ref": "#/$defs/Ref" },
+    "commandRef": { "$ref": "#/$defs/Ref" },
+    "approvalRef": { "$ref": "#/$defs/Ref" },
+    "operation": { "enum": ["request.transition", "request.assign", "request.set-priority", "request.set-due-date", "defect.create"] },
+    "expectedExternalRevisionToken": { "$ref": "#/$defs/Digest" },
+    "expectedValueHash": { "$ref": "#/$defs/Digest" },
+    "observedExternalRevisionToken": { "$ref": "#/$defs/Digest" },
+    "observedValueHash": { "$ref": "#/$defs/Digest" },
+    "observedProjectionRevisionRef": { "$ref": "#/$defs/Ref" },
+    "profileRef": { "$ref": "#/$defs/Ref" },
+    "connectionRef": { "$ref": "#/$defs/Ref" },
+    "reasonCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,127}$" },
+    "state": { "enum": ["OPEN", "ACKNOWLEDGED", "RESOLVED", "SUPERSEDED"] },
+    "detectedAt": { "type": "string", "format": "date-time" },
+    "resolution": { "type": "object", "additionalProperties": false, "required": ["actorId", "reason", "resolvedAt"], "properties": { "actorId": { "type": "string", "format": "uuid" }, "reason": { "type": "string", "minLength": 1, "maxLength": 2000 }, "replacementCommandRef": { "$ref": "#/$defs/Ref" }, "resolvedAt": { "type": "string", "format": "date-time" } } },
+    "resourceVersion": { "type": "integer", "minimum": 1 }
+  },
+  "allOf": [
+    { "if": { "properties": { "state": { "enum": ["RESOLVED", "SUPERSEDED"] } }, "required": ["state"] }, "then": { "required": ["resolution"] } },
+    { "if": { "properties": { "state": { "enum": ["OPEN", "ACKNOWLEDGED"] } }, "required": ["state"] }, "then": { "not": { "required": ["resolution"] } } }
+  ],
+  "$defs": {
+    "Digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "Ref": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "integer", "minimum": 1 } } }
+  }
+}

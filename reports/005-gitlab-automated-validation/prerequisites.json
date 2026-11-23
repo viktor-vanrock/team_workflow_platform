@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "feature": "005-gitlab-automated-validation",
+  "gate": "feature-005-prerequisites",
+  "startedAt": "2026-09-03T10:37:00.264Z",
+  "finishedAt": "2026-09-03T10:37:00.267Z",
+  "manifest": {
+    "schemaVersion": 1,
+    "maximumReportAgeMs": 604800000,
+    "feature003Report": {
+      "path": "reports/003-jira-operational-authority/final-gate.json",
+      "sha256": "sha256:ff8a941316b60cb46226064e4508bc1aecaf4b31e0a1ea95573063c150c7a008",
+      "schemaVersion": 2,
+      "feature": "003-jira-operational-authority",
+      "gate": "feature-003-final"
+    },
+    "consumedContracts": [
+      {
+        "id": "core-connector-command",
+        "path": "packages/platform-core/src/commanding/connector-command.ts",
+        "sha256": "sha256:d366a19caf9f6c98ce695d869698cfeb6fdc614cd9d4499005f176dc444cd850"
+      },
+      {
+        "id": "core-idempotency",
+        "path": "packages/platform-core/src/commanding/idempotency.ts",
+        "sha256": "sha256:695d834ae6afa11f96a8b6a4d66337f32c11d7c56d26a10214179573fdbf4ce8"
+      },
+      {
+        "id": "jira-manifest",
+        "path": "packages/connector-jira/src/manifest.ts",
+        "sha256": "sha256:09cb8e157466709175bea4242af4cba95b6b50c0eb2c5eb9544f53fd31bbed2f"
+      },
+      {
+        "id": "qa-2040",
+        "path": "packages/competency-qa/src/persistence/migrations/2040-hermes-proposals.ts",
+        "sha256": "sha256:9dc9a52ca90e80e2698d27fef1c9560369cc2c5fd3b43a6f5a7e1ace1dfbbc04"
+      }
+    ],
+    "feature002ManualContracts": [
+      {
+        "id": "manual-test-session-v1",
+        "path": "specs/002-qa-manual-walking-skeleton/contracts/schemas/qa/test-session.v1.schema.json",
+        "sha256": "sha256:e4730fb5ad9c658c5f31ea4eb29a12806f046578e03234c5988301b3c43212a3"
+      },
+      {
+        "id": "manual-attempt-v1",
+        "path": "specs/002-qa-manual-walking-skeleton/contracts/schemas/qa/manual-attempt.v1.schema.json",
+        "sha256": "sha256:d13634bd78b3c12ecbfe4dd8f496993742b4c31aa53a31e4738f3ca2e1def409"
+      },
+      {
+        "id": "manual-plan-item-v1",
+        "path": "specs/002-qa-manual-walking-skeleton/contracts/schemas/qa/plan-item.v1.schema.json",
+        "sha256": "sha256:27c731023b0d4834293f15ec195aa9cd65cbfd4aa9cff3248d850021935acdfb"
+      }
+    ],
+    "feature002AutomatedNegativeFixture": {
+      "path": "specs/002-qa-manual-walking-skeleton/contracts/examples/negative/automated-session.invalid.json",
+      "sha256": "sha256:a258faf283b6d275990a4b182067790bdc6aeb255c273b3b5ab4fbe33f5f233a"
+    },
+    "feature004Evidence": {
+      "path": "reports/004-mattermost-hermes-intake/final-gate.json",
+      "requiredForStandalone": false
+    }
+  },
+  "status": "PASS",
+  "feature003Report": {
+    "id": "feature-003-final",
+    "status": "PASS",
+    "code": "FEATURE_003_REPORT_ACCEPTED",
+    "detail": "reports/003-jira-operational-authority/final-gate.json sha256:ff8a941316b60cb46226064e4508bc1aecaf4b31e0a1ea95573063c150c7a008"
+  },
+  "consumedContracts": [
+    {
+      "id": "core-connector-command",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/platform-core/src/commanding/connector-command.ts sha256:d366a19caf9f6c98ce695d869698cfeb6fdc614cd9d4499005f176dc444cd850"
+    },
+    {
+      "id": "core-idempotency",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/platform-core/src/commanding/idempotency.ts sha256:695d834ae6afa11f96a8b6a4d66337f32c11d7c56d26a10214179573fdbf4ce8"
+    },
+    {
+      "id": "jira-manifest",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/connector-jira/src/manifest.ts sha256:09cb8e157466709175bea4242af4cba95b6b50c0eb2c5eb9544f53fd31bbed2f"
+    },
+    {
+      "id": "qa-2040",
+      "status": "PASS",
+      "code": "CONSUMED_CONTRACT_ACCEPTED",
+      "detail": "packages/competency-qa/src/persistence/migrations/2040-hermes-proposals.ts sha256:9dc9a52ca90e80e2698d27fef1c9560369cc2c5fd3b43a6f5a7e1ace1dfbbc04"
+    }
+  ],
+  "feature002ManualContracts": [
+    {
+      "id": "manual-test-session-v1",
+      "status": "PASS",
+      "code": "FEATURE_002_MANUAL_CONTRACT_ACCEPTED",
+      "detail": "specs/002-qa-manual-walking-skeleton/contracts/schemas/qa/test-session.v1.schema.json sha256:e4730fb5ad9c658c5f31ea4eb29a12806f046578e03234c5988301b3c43212a3"
+    },
+    {
+      "id": "manual-attempt-v1",
+      "status": "PASS",
+      "code": "FEATURE_002_MANUAL_CONTRACT_ACCEPTED",
+      "detail": "specs/002-qa-manual-walking-skeleton/contracts/schemas/qa/manual-attempt.v1.schema.json sha256:d13634bd78b3c12ecbfe4dd8f496993742b4c31aa53a31e4738f3ca2e1def409"
+    },
+    {
+      "id": "manual-plan-item-v1",
+      "status": "PASS",
+      "code": "FEATURE_002_MANUAL_CONTRACT_ACCEPTED",
+      "detail": "specs/002-qa-manual-walking-skeleton/contracts/schemas/qa/plan-item.v1.schema.json sha256:27c731023b0d4834293f15ec195aa9cd65cbfd4aa9cff3248d850021935acdfb"
+    }
+  ],
+  "feature002AutomatedNegativeFixture": {
+    "id": "feature-002-automated-negative",
+    "status": "PASS",
+    "code": "FEATURE_002_AUTOMATED_NEGATIVE_ACCEPTED",
+    "detail": "specs/002-qa-manual-walking-skeleton/contracts/examples/negative/automated-session.invalid.json sha256:a258faf283b6d275990a4b182067790bdc6aeb255c273b3b5ab4fbe33f5f233a"
+  },
+  "feature004Evidence": {
+    "id": "feature-004-evidence",
+    "status": "PASS",
+    "code": "FEATURE_004_NOT_REQUIRED_STANDALONE",
+    "detail": "reports/004-mattermost-hermes-intake/final-gate.json is reserved for the separate pilot-release gate"
+  }
+}

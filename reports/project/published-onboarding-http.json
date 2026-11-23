@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "recordedAt": "2026-09-06T16:59:01.855483+00:00",
+  "closedTasks": [
+    "007/T071"
+  ],
+  "sourceBinding": [
+    {
+      "path": "apps/api/openapi.generated.json",
+      "sha256": "sha256:3a051c07e9f85ce813f45442bee9bab1858be1b4dd647352db5faec275f733cd"
+    },
+    {
+      "path": "apps/api/src/app.module.ts",
+      "sha256": "sha256:98fa71dacf87991260c96b72542865405467c042a5ff6ea2ef9736d5199975b8"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/automation-facts.ts",
+      "sha256": "sha256:ec171bdd7205dc214f1a4d2f33fb94ec74a18d656f720a28e192690b2b9cb951"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/binding-facts.ts",
+      "sha256": "sha256:062907276b69fcdc5b1e8a66644c88b891bbb86d56640670a866948c47efee2a"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.application.ts",
+      "sha256": "sha256:36b33e7288663b680e959272ba4e39f23a492562e513a34a2c40bc4fce1c617c"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/bindings.controller.ts",
+      "sha256": "sha256:1130518cd775aef4351c21a9d7320537304b3d89a7d95e3fa61a336efba40629"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/durable-http.ts",
+      "sha256": "sha256:9ba35bf4180a4218a05b893e7d3411bc638d046478d767d843f4698be605fe2b"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/evidence.application.ts",
+      "sha256": "sha256:e0cc781fccfc93b64f8b5185ae783a46dea76ba2da254483690c2d66fb55d9e6"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/evidence.controller.ts",
+      "sha256": "sha256:19b495518469eb12290f22e197f4a3336ad250f0628594ed7e561c0267825344"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/onboarding.controller.ts",
+      "sha256": "sha256:dff52ab44c4b284fc8c3f3baaa3e3d2e9c25439945cb3de6f84c13d4562a1388"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.application.ts",
+      "sha256": "sha256:f39777d9bdecbac8b9c44b49abb95fd68b1a394ab83a60ae87c1d52a7f0c5ad7"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/project-operations.controller.ts",
+      "sha256": "sha256:58a97079d4c293663792a28c7edf691d13eab7990f531e01719ca679239d02b7"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-http-context.ts",
+      "sha256": "sha256:7ca2aff2fd15e197f335e200d6e27c841c5871cb68f188c2f89964d1742f3409"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-http.ts",
+      "sha256": "sha256:65b498dcebb4a1662c995f234121731db91ee2777c60c04a4a94e0700aa2574e"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published-validation.ts",
+      "sha256": "sha256:7e004b0688a16a7f38481c78fdb6184d03649546eaf2bbce23d42e09928fc5b1"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/published.controllers.ts",
+      "sha256": "sha256:b4c026331cff03e564c09e75cb7b56cfff532e6f95889d96c985b9af12554973"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/registry.application.ts",
+      "sha256": "sha256:753c597904b49dc042953c6ca04b87bb187bc22c152c8e78eb2344fc9bf9e538"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/resources.application.ts",
+      "sha256": "sha256:acb5bc0eefd14c8168e0e53272a0fe3afe1e372645bc40ca76ba8aa1bb6bd02d"
+    },
+    {
+      "path": "apps/api/src/extensions/onboarding/validation.application.ts",
+      "sha256": "sha256:ae9cb486c3cb41238c7ab04de7e4bb1936c63efd4590b20951999f4ab6d07e09"
+    },
+    {
+      "path": "apps/mock-hub/openapi.generated.json",
+      "sha256": "sha256:eef11cc2f69545e8c25bf827a825d3c1cd2469a355689c8d01e6ad16fdf469ad"
+    },
+    {
+      "path": "docs/audits/2026-09-06-local-audit.md",
+      "sha256": "sha256:5928ce1f0997417830eb390ea374bbe2f7e2bf0ccd02630eeca4c2c88405dbd5"
+    },
+    {
+      "path": "docs/runbooks/onboarding-http.md",
+      "sha256": "sha256:7262b2204768553f344d3b29acc713af5a24889ca16ca7f6cb834990593e5cfe"
+    },
+    {
+      "path": "docs/runbooks/onboarding-openapi-convergence.md",
+      "sha256": "sha256:3bd2b097a7a1d30e148a30e7ead697d6a0f4e6b11202c21688fb0c109e834a49"
+    },
+    {
+      "path": "docs/runbooks/pilot-deployment-checklist.md",
+      "sha256": "sha256:77f0dda5b2f2decb55b6ff63711f48dd4c8465376429734c4738c118bccc9c6f"
+    },
+    {
+      "path": "packages/platform-contracts/src/generated/schema-documents.ts",
+      "sha256": "sha256:75866c716b828e65bc1b045d287a272f979dc5c77bf4f09a1c9de96d565cba95"
+    },
+    {
+      "path": "packages/platform-contracts/src/schema-contributions.ts",
+      "sha256": "sha256:b422b83bf52338f55d5b7b39bf29c5005c13fa28837688659e82125c811c007f"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/configuration-hash.ts",
+      "sha256": "sha256:62cbeb30eade441ff68f56c9ca8a0a5582eb3976703dda8494b517b69da5f77a"
+    },
+    {
+      "path": "packages/runtime-composition/src/onboarding/requested-probe-worker.ts",
+      "sha256": "sha256:3641452bf695479dc30d43756b796fd77d80d586e2258c1846cff83890758194"
+    },
+    {
+      "path": "packages/runtime-composition/src/pilot/automation-availability.ts",
+      "sha256": "sha256:a17e4d773edc5c297bf5c6020c7fc6f82146caad410e44b0a2b8ccf8178ff3d4"
+    },
+    {
+      "path": "reports/project/task-status.json",
+      "sha256": "sha256:3169d6d2c8b1c8c0e811141caabff618594b18330b6eb6922468c507084cbf69"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/contracts/openapi/project-onboarding-api.v1.1.yaml",
+      "sha256": "sha256:75991a9831cb58f8bc86da3e3dc06c282f2a4bf2a2626f124842f968555cecc3"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/contracts/openapi/project-onboarding-evidence-api.v1.yaml",
+      "sha256": "sha256:844e0e057dd63c27e1e5e82951c54b381aa420426e2280161b12baeb2269ba1f"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/contracts/schemas/integration/binding-functional-acceptance.v1.schema.json",
+      "sha256": "sha256:eb521a4a75cfb3c4234fec204932ecb4c88a160cc35b8504dba4ac85f1a59b01"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/contracts/schemas/integration/binding-functional-acceptance.v2.schema.json",
+      "sha256": "sha256:90dbc0d1d0aab4c930a45046895928946a5c09af7aac467bd2033dd2272ac707"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/plan.md",
+      "sha256": "sha256:d9c6cfeddc2ab3cceecf6cde19e809b06007fdfdc79e078fa092422928245d6a"
+    },
+    {
+      "path": "specs/007-project-onboarding-evidence-security/tasks.md",
+      "sha256": "sha256:edf4ddfd4bf3cccb56384b16cc4cf06afcd5c5438e9fdf2648882cf3000efd73"
+    },
+    {
+      "path": "tests/contract/007/design-contracts.spec.ts",
+      "sha256": "sha256:ad66c6d938ee25d687b5fcd3e36f95c64369d88fc0b8e3d83c7accd7092c0f79"
+    },
+    {
+      "path": "tests/contract/openapi-drift.spec.ts",
+      "sha256": "sha256:93fd84b045c448bd8e56c5006c23c98bb639aa2843a89eed695b08f81a96a430"
+    },
+    {
+      "path": "tests/integration/007/us1-full-qa-http.spec.ts",
+      "sha256": "sha256:b18048505d32bc07d145c076424d9ad77961a10c67231fec902e1bd2d80cedec"
+    },
+    {
+      "path": "tests/integration/007/us1-published-http.spec.ts",
+      "sha256": "sha256:2bc07104553fe7ab407ec36ba68694e9a67bb6d4b4f684f9a16c28622a9ba2c5"
+    },
+    {
+      "path": "tests/support/007-binding-http-fixture.ts",
+      "sha256": "sha256:0b106ae395479762de44c6d9aef022cd1dee77c33f8e55f83b53f3dbd6317695"
+    },
+    {
+      "path": "tests/support/007-full-qa-http.ts",
+      "sha256": "sha256:928e4a2a4a3d4dfe8be1a7aa9c87de939be8321e2e442c4589c3719fd521ad98"
+    },
+    {
+      "path": "tests/support/007-openapi.ts",
+      "sha256": "sha256:c6020c8aaa3727e13bf37026c3d2dee9c8e77b8aa27305caea2b5f29aea96a2f"
+    },
+    {
+      "path": "tools/contracts/build-openapi-snapshots.mts",
+      "sha256": "sha256:3b07207b90218c0b3ac72e784c4d2c1cdfd85124cd85bc55c5867279826cf2e2"
+    },
+    {
+      "path": "tools/contracts/build-registry.mts",
+      "sha256": "sha256:5e5af9f26362f4aeae33995fcff6723f734c39cdf8861325998514e4c053d46d"
+    },
+    {
+      "path": "tools/contracts/verify-007-contracts.mts",
+      "sha256": "sha256:090206ca5a21b2f1da0e9162bcd51111ac35ac3106a39dab513476ae2ebdceac"
+    }
+  ],
+  "evidenceBinding": [
+    {
+      "path": "reports/project/published-onboarding-http/contract-registry-check.log",
+      "sha256": "sha256:cfe77be2dc342972fc0463b3039c218af73d0c54cd1427a8ecc09bdae09e2148"
+    },
+    {
+      "path": "reports/project/published-onboarding-http/git-diff-check.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/published-onboarding-http/initial-red.log",
+      "sha256": "sha256:61c64729b20cef4376dd3fc1149849ed9fe1c694760c7710ebe92c8aab170864"
+    },
+    {
+      "path": "reports/project/published-onboarding-http/openapi-check.log",
+      "sha256": "sha256:93461c784a657ce34c6c76cb631fcfdf638c5f508c806cbb92e244b933d9abe1"
+    },
+    {
+      "path": "reports/project/published-onboarding-http/regression-vitest.json",
+      "sha256": "sha256:01a1e06e8774182d5ca259285b72ccf8439e6aab13efea10e7d7d185c7e96fee"
+    },
+    {
+      "path": "reports/project/published-onboarding-http/regression.log",
+      "sha256": "sha256:20eef76f6487e6c6f5682bc5b0a4e2f1eacb1d24ff9428387f7665d2b4154ed5"
+    },
+    {
+      "path": "reports/project/published-onboarding-http/root-typecheck.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "reports/project/published-onboarding-http/targeted-eslint.log",
+      "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "runtime": {
+    "node": "24.20.0",
+    "vitest": "4.1.11",
+    "database": "Testcontainers PostgreSQL; actual HTTP listeners and durable repositories"
+  },
+  "postgresImages": [
+    "postgres:17.7-bookworm",
+    "postgres:18.6-bookworm"
+  ],
+  "schemaVersions": {
+    "core": 200,
+    "pack:qa": 2110
+  },
+  "contract": {
+    "path": "specs/007-project-onboarding-evidence-security/contracts/openapi/project-onboarding-api.v1.1.yaml",
+    "version": "1.1.0",
+    "serverPrefix": "/api",
+    "operations": [
+      "acceptBindingFunctionally",
+      "acquireTestAccountLease",
+      "activateProjectPilot",
+      "applyBindingLifecycleAction",
+      "emergencySuspendProject",
+      "evaluateProjectOnboarding",
+      "getProjectOnboarding",
+      "grantProjectEntitlement",
+      "listAuthorizedProjects",
+      "publishProjectEnvironment",
+      "publishQaProjectContext",
+      "publishQaProjectResource",
+      "registerProject",
+      "releaseTestAccountLease",
+      "replaceProjectEntitlement",
+      "resumeProject",
+      "revokeProjectEntitlement",
+      "validateBinding"
+    ],
+    "operationCount": 18,
+    "acceptanceSchema": "urn:awp:schemas:007:binding-functional-acceptance:v2",
+    "registrySchemas": 204,
+    "yamlDocuments": 18,
+    "legacyDesignFilesUnchanged": true
+  },
+  "regression": {
+    "report": "reports/project/published-onboarding-http/regression-vitest.json",
+    "tests": 165,
+    "passed": 165,
+    "files": 71,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "quality": {
+    "rootTypecheck": "PASS",
+    "targetedEslint": "PASS",
+    "contractRegistrySnapshot": "PASS",
+    "openapiSnapshot": "PASS",
+    "gitDiffCheck": "PASS",
+    "originalOpenapi10AndAcceptanceV1Unchanged": "PASS"
+  },
+  "commands": {
+    "regression": "CI=true AWP_RUN_CONTAINER_TESTS=true node node_modules/vitest/vitest.mjs run tests/integration/007 tests/e2e/007 tests/contract/007 tests/architecture/007 tests/architecture/onboarding-operation-ownership.spec.ts tests/integration/008/automation-availability.spec.ts tests/contract/008/backward-compatibility.spec.ts tests/unit/008/degradation-policy.spec.ts tests/contract/openapi-drift.spec.ts tests/contract/002-contract-registry-and-api-drift.spec.ts tests/contract/design-contract-fixtures.spec.ts tests/contract/contract-registry-completeness.spec.ts --maxWorkers=1",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit --project tsconfig.json",
+    "registry": "node tools/contracts/build-registry.mts --check",
+    "openapi": "node tools/contracts/build-openapi-snapshots.mts --check",
+    "eslint": "node node_modules/eslint/bin/eslint.js apps/api/src/extensions/onboarding/published-http-context.ts apps/api/src/extensions/onboarding/published-http.ts apps/api/src/extensions/onboarding/published-validation.ts apps/api/src/extensions/onboarding/published.controllers.ts apps/api/src/extensions/onboarding/onboarding.controller.ts apps/api/src/extensions/onboarding/registry.application.ts apps/api/src/app.module.ts tests/support/007-binding-http-fixture.ts tests/support/007-openapi.ts tests/integration/007/us1-published-http.spec.ts tests/contract/openapi-drift.spec.ts tests/contract/007/design-contracts.spec.ts tools/contracts/build-registry.mts tools/contracts/build-openapi-snapshots.mts tools/contracts/verify-007-contracts.mts packages/platform-contracts/src/schema-contributions.ts",
+    "whitespace": "git diff --check"
+  },
+  "proven": [
+    "The first two PostgreSQL HTTP tests failed because the published routes returned 404; the completed six-case matrix exercises all 18 operations from OpenAPI 1.1.",
+    "Registered canonical controllers reuse legacy current authorization, PostgreSQL applications, approval, audit and idempotency; legacy routes retain their response shapes.",
+    "Request and response schemas are enforced offline. Missing required fields and string numeric refs are rejected before mutation; authentication and project-scope refusals satisfy the safe Problem schema with the production global filter present.",
+    "Project, entitlement and acceptance projections carry their own canonical wire hashes and preserve original Core refs in AWP-Resource-Ref. QA environment/context/lease responses equal the exact persisted snapshots.",
+    "Strong ETag/CAS, registration and grant conflicts, entitlement replace/revoke, QA resources/leases, binding validation/acceptance/publication, blocked and successful L0, suspend/resume and controlled pilot activation pass on PostgreSQL 17/18.",
+    "API restart replays original registration, grant, environment, acceptance and suspended revisions after their current heads have advanced.",
+    "The regression includes durable requested probes, FULL_QA accepted-Suite validation, negative observations, source drift, audit rollback, independent suspension worker effects and evidence HTTP/crypto.",
+    "Original design OpenAPI 1.0 and acceptance schema v1 are unchanged. Explicit supersession permits repeated operation IDs only for the declared predecessor and same method/path."
+  ],
+  "limits": [
+    "This proves the local onboarding contract. The 1.1 document contains 18 onboarding operations; evidence has its separately documented local HTTP/crypto boundary. The global generated snapshot also includes other design slices.",
+    "Controlled Suite validator, provider observers and pilot gate fixtures do not establish real provider conformance, actual Suite execution, C1/N2/P3 or a real approved pilot.",
+    "007/T059 and T106 still need independent full journeys; current passing in-memory tests do not close them. 007/T176 full API/worker/web/PostgreSQL/Redis/Mock Hub process smoke remains open.",
+    "Corporate controller/provider assembly remains 008/T025. No corporate deployment, external business write or fresh full ci:project/ci:008 result is claimed.",
+    "Pending legacy GRANT retries must finish on their original route because the mandatory new If-Match participates in the 1.1 idempotency fingerprint. Migration and rollback rules are documented."
+  ],
+  "deploymentGuide": "docs/runbooks/onboarding-openapi-convergence.md",
+  "taskStatus": {
+    "total": 1349,
+    "complete": 1339
+  },
+  "remaining": {
+    "all": 10,
+    "local": [
+      "007/T059",
+      "007/T106",
+      "007/T176",
+      "008/T025"
+    ],
+    "corporate": [
+      "008/T040",
+      "008/T057",
+      "008/T084",
+      "008/T104",
+      "008/T105",
+      "008/T106"
+    ]
+  }
+}

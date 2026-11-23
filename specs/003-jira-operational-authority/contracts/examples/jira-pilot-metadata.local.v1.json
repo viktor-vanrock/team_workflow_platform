@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "packageId": "00000000-0000-4000-8000-000000000301",
+  "version": 1,
+  "environment": "LOCAL",
+  "adapter": {
+    "edition": "CLOUD",
+    "family": "jira-cloud-v3",
+    "contractVersion": "1.0.0",
+    "exactBuild": "local-cloud-fixture",
+    "apiFlavor": "CLOUD_REST_V3",
+    "capabilityEvidenceRef": { "id": "local-capabilities", "version": 1, "contentHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111" }
+  },
+  "endpoint": {
+    "baseUrl": "http://127.0.0.1:3010/",
+    "tenantKey": "local-jira",
+    "cloudId": "local-cloud",
+    "tlsPolicyRef": { "id": "local-loopback-policy", "version": 1, "contentHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222" }
+  },
+  "auth": {
+    "kind": "LOCAL_FAKE",
+    "secretRef": "secretref://local/jira/service",
+    "credentialOwner": "local-platform-team",
+    "rotationPolicyRef": { "id": "local-rotation", "version": 1, "contentHash": "sha256:3333333333333333333333333333333333333333333333333333333333333333" },
+    "revocationRunbookRef": { "id": "local-revoke", "version": 1, "contentHash": "sha256:4444444444444444444444444444444444444444444444444444444444444444" },
+    "leastPrivilegeEvidenceRef": { "id": "local-permissions", "version": 1, "contentHash": "sha256:5555555555555555555555555555555555555555555555555555555555555555" }
+  },
+  "centralRequestProfileRef": { "id": "local-central-profile", "version": 1, "contentHash": "sha256:6666666666666666666666666666666666666666666666666666666666666666" },
+  "sourceContextProfileRefs": [
+    { "id": "local-source-profile", "version": 1, "contentHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777" }
+  ],
+  "defectProfileRefs": [
+    { "id": "local-defect-profile", "version": 1, "contentHash": "sha256:8888888888888888888888888888888888888888888888888888888888888888" }
+  ],
+  "webhook": {
+    "registrationKind": "LOCAL_FAKE",
+    "verificationMode": "LOCAL_HMAC",
+    "deliveryIdentityMode": "CLOUD_HEADER",
+    "retryHorizonSeconds": 3600,
+    "dedupeHorizonSeconds": 7200,
+    "evidenceRef": { "id": "local-webhook-evidence", "version": 1, "contentHash": "sha256:9999999999999999999999999999999999999999999999999999999999999999" }
+  },
+  "reconciliation": {
+    "freshnessTargetSeconds": 120,
+    "webhookGraceSeconds": 30,
+    "pollIntervalSeconds": 60,
+    "fullSweepIntervalSeconds": 3600,
+    "overlapSeconds": 120,
+    "pageSize": 50,
+    "maxConcurrency": 4
+  },
+  "rateBudget": {
+    "windowSeconds": 60,
+    "maxRequests": 300,
+    "burst": 25,
+    "maxInFlight": 8,
+    "maxRetryAfterSeconds": 600
+  },
+  "concurrency": {
+    "mode": "COMPARE_AND_VERIFY",
+    "safetyEvidenceRef": { "id": "local-concurrency-evidence", "version": 1, "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    "riskAcceptanceRef": { "id": "local-risk-acceptance", "version": 1, "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }
+  },
+  "networkEvidenceRef": { "id": "local-network-evidence", "version": 1, "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" },
+  "generatedAt": "2026-08-28T00:00:00Z",
+  "contentHash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}

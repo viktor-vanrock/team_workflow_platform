@@ -1,0 +1,862 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:006:queue-entry:v1",
+  "title": "QueueEntry v1",
+  "$comment": "This is one pre-authorized projection row. Source refs are structurally limited to Project-safe public families; composed validation verifies their property-specific type and same Workspace/Project scope, canonical source ordering/inputFingerprint, reducer/comparator output and all state-dependent invariants. Full policy/capacity/authorization records are never embedded. It never stores a final ordinal or opaque total score.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "queueEntryId",
+    "revision",
+    "workspaceId",
+    "projectId",
+    "subject",
+    "stage",
+    "stageDetails",
+    "stageReasonCodes",
+    "operational",
+    "qa",
+    "control",
+    "capacity",
+    "sla",
+    "ordering",
+    "consistencyWarnings",
+    "freshness",
+    "sourceRefs",
+    "sourceSetHash",
+    "policyFacetRef",
+    "derivationRuleRef",
+    "inputFingerprint",
+    "calculatedAt",
+    "semanticHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "queue-entry@1.0.0" },
+    "queueEntryId": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "subject": { "$ref": "#/$defs/subject" },
+    "stage": { "enum": ["CANDIDATE", "BACKLOG", "READY", "ACTIVE", "COMPLETED"] },
+    "stageDetails": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "CANDIDATE_PENDING_CONFIRMATION",
+          "CANDIDATE_SNOOZED",
+          "DRAFT_IN_PROGRESS",
+          "NEEDS_INFO",
+          "OPERATIONAL_PENDING",
+          "SYNC_ERROR",
+          "READINESS_STALE",
+          "COMPLETION_PENDING",
+          "JIRA_READY_WITHOUT_CURRENT_DOR",
+          "QUEUEABLE",
+          "COMMITTED",
+          "MANUAL_RUNNING",
+          "AUTOMATED_RUNNING",
+          "REVIEW_REQUIRED",
+          "BLOCKED",
+          "DONE",
+          "CANCELLED"
+        ]
+      }
+    },
+    "stageReasonCodes": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/reasonCode" }
+    },
+    "operational": { "$ref": "#/$defs/operationalFacet" },
+    "qa": { "$ref": "#/$defs/qaFacet" },
+    "control": { "$ref": "#/$defs/controlFacet" },
+    "capacity": { "$ref": "#/$defs/capacityFacet" },
+    "sla": { "$ref": "#/$defs/slaFacet" },
+    "ordering": { "$ref": "#/$defs/orderingFacet" },
+    "consistencyWarnings": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "JIRA_READY_WITHOUT_CURRENT_DOR",
+          "EXTERNAL_STATE_AHEAD",
+          "SESSION_STATE_AHEAD",
+          "TERMINAL_WITH_OPEN_QA",
+          "OPERATIONAL_PROJECTION_STALE",
+          "QA_FACTS_STALE",
+          "CONTROL_STALE",
+          "CAPACITY_RECONCILIATION_REQUIRED",
+          "SLA_RECONCILIATION_REQUIRED",
+          "ORDER_ANCHOR_NOT_APPLIED"
+        ]
+      }
+    },
+    "freshness": { "$ref": "#/$defs/projectionFreshness" },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/exactSourceRef" }
+    },
+    "sourceSetHash": { "$ref": "#/$defs/hash" },
+    "policyFacetRef": {
+      "description": "Project-scoped public policy facet. Its version/hash cover authorization-neutral Workspace settings plus this Project's applicable allocation only; a hidden-Project-only policy change cannot advance it.",
+      "$ref": "#/$defs/versionedContentRef"
+    },
+    "derivationRuleRef": { "$ref": "#/$defs/algorithmRef" },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "calculatedAt": { "$ref": "#/$defs/timestamp" },
+    "reconciledAt": { "$ref": "#/$defs/timestamp" },
+    "semanticHash": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "subject": {
+            "properties": { "kind": { "enum": ["CANDIDATE", "DRAFT"] } },
+            "required": ["kind"]
+          }
+        },
+        "required": ["subject"]
+      },
+      "then": {
+        "properties": {
+          "stage": { "const": "CANDIDATE" },
+          "operational": {
+            "properties": { "state": { "const": "NOT_APPLICABLE" } },
+            "required": ["state"]
+          },
+          "qa": {
+            "properties": { "state": { "const": "NOT_APPLICABLE" } },
+            "required": ["state"]
+          },
+          "control": {
+            "properties": { "state": { "const": "NOT_APPLICABLE" } },
+            "required": ["state"]
+          },
+          "capacity": {
+            "properties": { "state": { "const": "NOT_CONSUMING" } },
+            "required": ["state"]
+          },
+          "sla": {
+            "properties": { "state": { "const": "NOT_APPLICABLE" } },
+            "required": ["state"]
+          },
+          "ordering": {
+            "properties": { "state": { "const": "CANDIDATE_INBOX" } },
+            "required": ["state"]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "stage": { "enum": ["BACKLOG", "READY", "ACTIVE", "COMPLETED"] },
+          "ordering": {
+            "properties": { "state": { "const": "COMPUTED" } },
+            "required": ["state"]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "format": "uuid" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "reasonCode": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+    },
+    "key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+    },
+    "versionValue": {
+      "oneOf": [
+        { "type": "integer", "minimum": 1 },
+        { "type": "string", "minLength": 1, "maxLength": 128 }
+      ]
+    },
+    "publicSourceType": {
+      "description": "Closed public Project-safe source family. Full queue-policy, capacity-head and authorization-record families are forbidden.",
+      "enum": [
+        "INTAKE_CANDIDATE_REVISION",
+        "INTAKE_DRAFT_REVISION",
+        "WORK_ITEM_REVISION",
+        "JIRA_OPERATIONAL_PROJECTION_REVISION",
+        "JIRA_STATUS_MAPPING_REVISION",
+        "QA_QUEUE_FACT_REVISION",
+        "QA_READINESS_FACT_SET",
+        "QA_TEST_SESSION_REVISION",
+        "QA_AUTOMATED_ACTIVITY_FACT_SET",
+        "QA_TRIAGE_ASSESSMENT_REVISION",
+        "QA_VERDICT_REVISION",
+        "WORK_ITEM_QUEUE_CONTROL_REVISION",
+        "REVIEW_CAPACITY_RESERVATION_REVISION",
+        "HUMAN_WIP_CLAIM_REVISION",
+        "SLA_CLOCK_REVISION"
+      ]
+    },
+    "exactSourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": { "$ref": "#/$defs/publicSourceType" },
+        "sourceId": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "sourceVersion": { "$ref": "#/$defs/versionValue" },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "observedAt": { "$ref": "#/$defs/timestamp" },
+        "confirmedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "versionedContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "semanticHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "algorithmRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "semanticHash"],
+      "properties": {
+        "key": { "$ref": "#/$defs/key" },
+        "version": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "semanticHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "subject": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "version", "semanticHash"],
+          "properties": {
+            "kind": { "const": "CANDIDATE" },
+            "id": { "$ref": "#/$defs/id" },
+            "version": { "$ref": "#/$defs/versionValue" },
+            "semanticHash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "version", "semanticHash"],
+          "properties": {
+            "kind": { "const": "DRAFT" },
+            "id": { "$ref": "#/$defs/id" },
+            "version": { "$ref": "#/$defs/versionValue" },
+            "semanticHash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "version", "semanticHash"],
+          "properties": {
+            "kind": { "const": "WORK_ITEM" },
+            "id": { "$ref": "#/$defs/id" },
+            "version": { "$ref": "#/$defs/versionValue" },
+            "semanticHash": { "$ref": "#/$defs/hash" }
+          }
+        }
+      ]
+    },
+    "freshnessState": { "enum": ["CURRENT", "STALE", "ERROR", "UNKNOWN"] },
+    "operationalFacet": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NOT_APPLICABLE" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reasonCode", "freshness"],
+          "properties": {
+            "state": { "const": "UNKNOWN" },
+            "reasonCode": {
+              "enum": ["NO_CONFIRMED_PROJECTION", "OPERATIONAL_PENDING", "SYNC_ERROR", "SCOPE_UNRESOLVED"]
+            },
+            "freshness": { "$ref": "#/$defs/freshnessState" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "projectionRef",
+            "externalDisplayKey",
+            "rawStatus",
+            "normalizedStatus",
+            "priority",
+            "dueDate",
+            "assignee",
+            "freshness"
+          ],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "projectionRef": { "$ref": "#/$defs/exactSourceRef" },
+            "externalDisplayKey": { "type": "string", "minLength": 1, "maxLength": 255 },
+            "rawStatus": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "name"],
+              "properties": {
+                "id": { "type": "string", "minLength": 1, "maxLength": 255 },
+                "name": { "type": "string", "minLength": 1, "maxLength": 255 }
+              }
+            },
+            "normalizedStatus": {
+              "enum": ["NEW", "NEEDS_INFO", "READY", "PLANNED", "IN_PROGRESS", "REVIEW", "BLOCKED", "DONE", "CANCELLED"]
+            },
+            "priority": { "$ref": "#/$defs/priorityValue" },
+            "dueDate": { "$ref": "#/$defs/dateValue" },
+            "assignee": { "$ref": "#/$defs/assigneeValue" },
+            "freshness": { "$ref": "#/$defs/freshnessState" }
+          }
+        }
+      ]
+    },
+    "priorityValue": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reasonCode"],
+          "properties": {
+            "state": { "const": "UNKNOWN" },
+            "reasonCode": { "enum": ["NOT_SET", "UNMAPPED", "SOURCE_STALE"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "rawId", "rawName", "normalizedKey", "mappingRef"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "rawId": { "type": "string", "minLength": 1, "maxLength": 255 },
+            "rawName": { "type": "string", "minLength": 1, "maxLength": 255 },
+            "normalizedKey": { "type": "string", "minLength": 1, "maxLength": 128 },
+            "mappingRef": { "$ref": "#/$defs/exactSourceRef" }
+          }
+        }
+      ]
+    },
+    "dateValue": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reasonCode"],
+          "properties": {
+            "state": { "const": "UNKNOWN" },
+            "reasonCode": { "enum": ["NOT_SET", "SOURCE_STALE"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "value"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "value": { "type": "string", "format": "date" }
+          }
+        }
+      ]
+    },
+    "assigneeValue": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "UNASSIGNED" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reasonCode"],
+          "properties": {
+            "state": { "const": "UNKNOWN" },
+            "reasonCode": { "enum": ["UNMAPPED", "SOURCE_STALE"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "externalPrincipalId"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "externalPrincipalId": { "type": "string", "minLength": 1, "maxLength": 255 },
+            "canonicalPrincipalId": { "$ref": "#/$defs/id" }
+          }
+        }
+      ]
+    },
+    "qaFacet": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NOT_APPLICABLE" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reasonCode"],
+          "properties": {
+            "state": { "const": "UNKNOWN" },
+            "reasonCode": { "enum": ["NOT_PROJECTED", "SOURCE_STALE", "SOURCE_ERROR"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "factsRef", "readiness", "requiredCapabilities", "activities"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "factsRef": { "$ref": "#/$defs/exactSourceRef" },
+            "readiness": { "enum": ["NOT_ASSESSED", "NEEDS_INFO", "READY", "READY_WITH_WAIVER", "STALE"] },
+            "requiredCapabilities": {
+              "type": "array",
+              "maxItems": 64,
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1, "maxLength": 256 }
+            },
+            "activities": {
+              "type": "array",
+              "maxItems": 256,
+              "items": { "$ref": "#/$defs/activity" }
+            }
+          }
+        }
+      ]
+    },
+    "activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sessionRef", "mode", "state"],
+      "properties": {
+        "sessionRef": { "$ref": "#/$defs/exactSourceRef" },
+        "mode": { "enum": ["MANUAL", "AUTOMATED"] },
+        "state": { "enum": ["PLANNED", "READY", "RUNNING", "REVIEW_REQUIRED", "BLOCKED", "COMPLETED", "CANCELLED"] }
+      }
+    },
+    "controlFacet": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NOT_APPLICABLE" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "resourceVersion", "serviceClass"],
+          "properties": {
+            "state": { "const": "DEFAULT" },
+            "resourceVersion": { "const": 0 },
+            "serviceClass": { "const": "STANDARD" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "resourceVersion", "controlRef", "serviceClass", "acceptedByPrincipalId", "reason"],
+          "properties": {
+            "state": { "const": "ACCEPTED" },
+            "resourceVersion": { "type": "integer", "minimum": 1 },
+            "controlRef": { "$ref": "#/$defs/exactSourceRef" },
+            "serviceClass": { "enum": ["STANDARD", "FIXED_DATE", "EXPEDITE"] },
+            "acceptedRisk": { "$ref": "#/$defs/level" },
+            "acceptedBusinessImpact": { "$ref": "#/$defs/level" },
+            "acceptedDependencyReadiness": { "enum": ["READY", "BLOCKED", "UNKNOWN", "NOT_APPLICABLE"] },
+            "acceptedEffortRange": { "$ref": "#/$defs/effortRange" },
+            "acceptedByPrincipalId": { "$ref": "#/$defs/id" },
+            "reason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+            "reviewAt": { "$ref": "#/$defs/timestamp" },
+            "expiresAt": { "$ref": "#/$defs/timestamp" }
+          }
+        }
+      ]
+    },
+    "capacityFacet": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NOT_CONSUMING" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reservationRef", "reservationCauseSetHash"],
+          "properties": {
+            "state": { "const": "RESERVED_REVIEW" },
+            "reservationRef": { "$ref": "#/$defs/exactSourceRef" },
+            "reservationCauseSetHash": {
+              "description": "Hash of sorted exact cause refs for this Work Item's reservation only. It is never the Workspace-global reservation-set hash.",
+              "$ref": "#/$defs/hash"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "claimRef", "causeSetHash", "causes"],
+          "properties": {
+            "state": { "enum": ["OCCUPIED", "RELEASED_BLOCK", "FORCED_EXTERNAL"] },
+            "claimRef": { "$ref": "#/$defs/exactSourceRef" },
+            "causeSetHash": { "$ref": "#/$defs/hash" },
+            "causes": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "MANUAL_RUNNING",
+                  "MANUAL_REVIEW_REQUIRED",
+                  "AUTOMATED_REVIEW_REQUIRED",
+                  "CONFIRMED_EXTERNAL_ACTIVE",
+                  "HELD_BLOCK",
+                  "FORCED_EXTERNAL"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "slaFacet": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NOT_APPLICABLE" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "goals"],
+          "properties": {
+            "state": { "const": "PROJECTED" },
+            "goals": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 2,
+              "items": { "$ref": "#/$defs/slaGoalFacet" }
+            }
+          }
+        }
+      ]
+    },
+    "slaGoalFacet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goal", "clockState", "targetState"],
+      "properties": {
+        "goal": { "enum": ["READY_TO_FIRST_QA_START", "READY_TO_SIGNED_VERDICT"] },
+        "clockState": { "enum": ["NOT_STARTED", "RUNNING", "PAUSED", "STOPPED"] },
+        "targetState": { "enum": ["NOT_STARTED", "NOT_CONFIGURED", "ON_TRACK", "AT_RISK", "BREACHED", "COMPLETED"] },
+        "clockRef": { "$ref": "#/$defs/exactSourceRef" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["clockState"],
+            "properties": { "clockState": { "const": "NOT_STARTED" } }
+          },
+          "then": {
+            "properties": {
+              "targetState": { "const": "NOT_STARTED" },
+              "clockRef": false
+            }
+          },
+          "else": { "required": ["clockRef"] }
+        },
+        {
+          "if": {
+            "required": ["clockState"],
+            "properties": { "clockState": { "enum": ["RUNNING", "PAUSED"] } }
+          },
+          "then": { "properties": { "targetState": { "enum": ["NOT_CONFIGURED", "ON_TRACK", "AT_RISK", "BREACHED"] } } }
+        },
+        {
+          "if": {
+            "required": ["clockState"],
+            "properties": { "clockState": { "const": "STOPPED" } }
+          },
+          "then": { "properties": { "targetState": { "enum": ["NOT_CONFIGURED", "COMPLETED"] } } }
+        }
+      ]
+    },
+    "orderingFacet": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "const": "NOT_APPLICABLE" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "comparatorRef", "components", "baseRankKey"],
+          "properties": {
+            "state": { "const": "CANDIDATE_INBOX" },
+            "comparatorRef": { "$ref": "#/$defs/algorithmRef" },
+            "components": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["enteredInboxAt", "subjectKind", "subjectId"],
+              "properties": {
+                "enteredInboxAt": { "$ref": "#/$defs/timestamp" },
+                "subjectKind": { "enum": ["CANDIDATE", "DRAFT"] },
+                "subjectId": { "$ref": "#/$defs/id" }
+              }
+            },
+            "baseRankKey": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "comparatorRef", "components", "baseRankKey"],
+          "properties": {
+            "state": { "const": "COMPUTED" },
+            "comparatorRef": { "$ref": "#/$defs/algorithmRef" },
+            "components": { "$ref": "#/$defs/orderComponents" },
+            "baseRankKey": { "$ref": "#/$defs/hash" }
+          }
+        }
+      ]
+    },
+    "orderComponents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "serviceClassBand",
+        "slaState",
+        "urgencyTiming",
+        "jiraPriority",
+        "acceptedRisk",
+        "acceptedBusinessImpact",
+        "dependencyReadiness",
+        "readyAge",
+        "readyAt",
+        "jiraDisplayKey",
+        "workItemId"
+      ],
+      "properties": {
+        "serviceClassBand": { "enum": ["EXPEDITE", "FIXED_DATE", "STANDARD"] },
+        "slaState": { "enum": ["BREACHED", "AT_RISK", "ON_TRACK", "NOT_STARTED", "NOT_CONFIGURED", "COMPLETED", "UNKNOWN"] },
+        "urgencyTiming": { "$ref": "#/$defs/urgencyTiming" },
+        "jiraPriority": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["state"],
+              "properties": { "state": { "const": "UNKNOWN" } }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["state", "normalizedKey", "mappingRef"],
+              "properties": {
+                "state": { "const": "KNOWN" },
+                "normalizedKey": { "type": "string", "minLength": 1, "maxLength": 128 },
+                "mappingRef": { "$ref": "#/$defs/exactSourceRef" }
+              }
+            }
+          ]
+        },
+        "acceptedRisk": { "$ref": "#/$defs/level" },
+        "acceptedBusinessImpact": { "$ref": "#/$defs/level" },
+        "dependencyReadiness": { "enum": ["READY", "BLOCKED", "UNKNOWN", "NOT_APPLICABLE"] },
+        "readyAge": { "$ref": "#/$defs/readyAge" },
+        "readyAt": { "$ref": "#/$defs/optionalInstant" },
+        "jiraDisplayKey": { "$ref": "#/$defs/optionalString" },
+        "workItemId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "urgencyTiming": {
+      "description": "Exact comparator instant selected deterministically from the SLA latest-safe-start, SLA target, or confirmed Jira due-date end. Unknown and inapplicable states occupy closed stable buckets.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": {
+            "state": { "enum": ["NOT_STARTED", "NOT_CONFIGURED", "NOT_APPLICABLE"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reasonCode"],
+          "properties": {
+            "state": { "const": "UNKNOWN" },
+            "reasonCode": { "enum": ["SOURCE_STALE", "SOURCE_ERROR", "MAPPING_UNKNOWN", "CLOCK_REBUILDING"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "basis", "instant", "sourceRef"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "basis": { "enum": ["SLA_LATEST_SAFE_START", "SLA_TARGET_AT", "CONFIRMED_JIRA_DUE_END"] },
+            "instant": { "$ref": "#/$defs/timestamp" },
+            "sourceRef": { "$ref": "#/$defs/exactSourceRef" }
+          }
+        }
+      ]
+    },
+    "level": { "enum": ["LOW", "MEDIUM", "HIGH", "VERY_HIGH", "UNKNOWN"] },
+    "effortRange": {
+      "description": "Accepted planning metadata only; semantic validation requires lower <= upper. It is excluded from business-priority ordering.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": { "kind": { "const": "UNKNOWN" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "lower", "upper", "unit"],
+          "properties": {
+            "kind": { "const": "ESTIMATE" },
+            "lower": { "type": "number", "minimum": 0, "maximum": 100000 },
+            "upper": { "type": "number", "minimum": 0, "maximum": 100000 },
+            "unit": { "enum": ["PERSON_HOURS", "PERSON_DAYS", "SESSION_COUNT"] }
+          }
+        }
+      ]
+    },
+    "readyAge": {
+      "description": "The comparator consumes the versioned agingBandKey; businessSeconds is explanatory elapsed working time sampled at QueueEntry.calculatedAt. A durable transition worker appends a new revision at the next aging-band boundary, so no per-second write is required.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "enum": ["UNKNOWN", "NOT_APPLICABLE"] } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "businessSeconds", "agingBandKey"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "businessSeconds": { "type": "integer", "minimum": 0 },
+            "agingBandKey": { "$ref": "#/$defs/key" }
+          }
+        }
+      ]
+    },
+    "optionalInstant": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "enum": ["UNKNOWN", "NOT_APPLICABLE"] } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "value"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "value": { "$ref": "#/$defs/timestamp" }
+          }
+        }
+      ]
+    },
+    "optionalString": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": { "state": { "enum": ["UNKNOWN", "NOT_APPLICABLE"] } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "value"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "value": { "type": "string", "minLength": 1, "maxLength": 255 }
+          }
+        }
+      ]
+    },
+    "projectionFreshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "sourceStates", "evaluatedAt"],
+      "properties": {
+        "state": { "enum": ["CURRENT", "STALE", "ERROR", "REBUILDING"] },
+        "sourceStates": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["sourceType", "state"],
+            "properties": {
+              "sourceType": { "$ref": "#/$defs/publicSourceType" },
+              "state": { "$ref": "#/$defs/freshnessState" },
+              "reasonCode": { "$ref": "#/$defs/reasonCode" }
+            }
+          }
+        },
+        "evaluatedAt": { "$ref": "#/$defs/timestamp" },
+        "errorCode": { "$ref": "#/$defs/reasonCode" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["state"],
+            "properties": { "state": { "const": "ERROR" } }
+          },
+          "then": { "required": ["errorCode"] },
+          "else": { "properties": { "errorCode": false } }
+        }
+      ]
+    }
+  }
+}

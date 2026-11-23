@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:events:automation-attempt-created:v1",
+  "title": "Automation Attempt Created Event Payload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "automationAttemptId",
+    "testSessionId",
+    "planItemId",
+    "attemptNo",
+    "reason",
+    "targetSnapshotHash",
+    "configurationPinSetHash",
+    "requestHash"
+  ],
+  "properties": {
+    "automationAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "testSessionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "planItemId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "attemptNo": { "type": "integer", "minimum": 1 },
+    "reason": { "enum": ["INITIAL", "AUTO_INFRA_RETRY", "HUMAN_RERUN"] },
+    "predecessorAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "targetSnapshotHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "configurationPinSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "requestHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "reason": { "enum": ["AUTO_INFRA_RETRY", "HUMAN_RERUN"] }
+        },
+        "required": ["reason"]
+      },
+      "then": {
+        "required": ["predecessorAttemptId"],
+        "properties": {
+          "predecessorAttemptId": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "reason": { "const": "INITIAL" } },
+        "required": ["reason"]
+      },
+      "then": {
+        "properties": {
+          "predecessorAttemptId": false
+        }
+      }
+    }
+  ]
+}

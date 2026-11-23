@@ -1,0 +1,473 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:004:triage-assessment:v1.1",
+  "title": "TriageAssessment v1.1",
+  "$comment": "Additive extension of Feature 004 triage-assessment@1.0.0. The base dimensions and recommendations shapes remain unchanged. The qa-triage@1.1 semantic output profile requires and correlates the optional v1.1 evidence fields, checks every factRefs value against facts.length, enforces ESTIMATE lower <= upper, verifies exact input-fingerprint canonicalization and checks ruleVersion/skillVersion against their refs. Fingerprint refs use closed property-specific public source families; composed validation also requires subject ref ID/version/hash equality with subject. No opaque total score is permitted.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "assessmentId",
+    "workspaceId",
+    "projectId",
+    "subject",
+    "revision",
+    "dimensions",
+    "recommendations",
+    "facts",
+    "explanation",
+    "confidence",
+    "inputFingerprint",
+    "rulesRef",
+    "skillRef",
+    "policyRef",
+    "agentRunRef",
+    "actionProvenanceRef",
+    "state",
+    "expiresAt",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "triage-assessment@1.1.0" },
+    "assessmentId": { "$ref": "#/$defs/id" },
+    "workspaceId": { "$ref": "#/$defs/id" },
+    "projectId": { "$ref": "#/$defs/id" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version", "contentHash"],
+      "properties": {
+        "kind": { "enum": ["DRAFT", "CANDIDATE", "WORK_ITEM"] },
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "integer", "minimum": 1 },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "revision": { "type": "integer", "minimum": 1 },
+    "previousAssessmentRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["businessImpact", "urgencySla", "risk", "effortRange", "scopeBreadth", "environmentDataComplexity", "uncertainty", "automationAvailability"],
+      "properties": {
+        "businessImpact": { "$ref": "#/$defs/level" },
+        "urgencySla": { "$ref": "#/$defs/level" },
+        "risk": { "$ref": "#/$defs/level" },
+        "effortRange": { "$ref": "#/$defs/effortRange" },
+        "scopeBreadth": { "$ref": "#/$defs/level" },
+        "environmentDataComplexity": { "$ref": "#/$defs/level" },
+        "uncertainty": { "$ref": "#/$defs/level" },
+        "automationAvailability": { "$ref": "#/$defs/level" }
+      }
+    },
+    "dimensionDetails": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["businessImpact", "urgencySla", "risk", "effortRange", "scopeBreadth", "environmentDataComplexity", "uncertainty", "automationAvailability"],
+      "properties": {
+        "businessImpact": { "$ref": "#/$defs/dimensionEvidence" },
+        "urgencySla": { "$ref": "#/$defs/dimensionEvidence" },
+        "risk": { "$ref": "#/$defs/dimensionEvidence" },
+        "effortRange": { "$ref": "#/$defs/dimensionEvidence" },
+        "scopeBreadth": { "$ref": "#/$defs/dimensionEvidence" },
+        "environmentDataComplexity": { "$ref": "#/$defs/dimensionEvidence" },
+        "uncertainty": { "$ref": "#/$defs/dimensionEvidence" },
+        "automationAvailability": { "$ref": "#/$defs/dimensionEvidence" }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complexity", "priority", "queueBand"],
+      "properties": {
+        "complexity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "rationale", "factRefs"],
+          "properties": {
+            "value": { "enum": ["SMALL", "MEDIUM", "LARGE", "VERY_LARGE", "UNKNOWN"] },
+            "rationale": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "factRefs": { "$ref": "#/$defs/factRefs" }
+          }
+        },
+        "priority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "rationale", "factRefs"],
+          "properties": {
+            "value": { "enum": ["LOW", "MEDIUM", "HIGH", "URGENT", "UNKNOWN"] },
+            "rationale": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "factRefs": { "$ref": "#/$defs/factRefs" }
+          }
+        },
+        "queueBand": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "rationale", "factRefs"],
+          "properties": {
+            "value": { "enum": ["DO_NOW", "NEXT", "SCHEDULED", "BACKLOG", "UNKNOWN"] },
+            "rationale": { "type": "string", "minLength": 1, "maxLength": 1000 },
+            "factRefs": { "$ref": "#/$defs/factRefs" }
+          }
+        }
+      }
+    },
+    "facts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceRef", "sourceVersion", "contentHash", "polarity"],
+        "properties": {
+          "sourceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "sourceVersion": { "type": "string", "minLength": 1, "maxLength": 256 },
+          "contentHash": { "$ref": "#/$defs/hash" },
+          "polarity": { "enum": ["SUPPORTS", "CONTRADICTS", "UNKNOWN"] }
+        }
+      }
+    },
+    "missingInformation": {
+      "type": "array",
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/missingInformationItem" }
+    },
+    "explanation": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "inputFingerprintComponents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject", "jiraOperationalProjection", "qaPlanningFacts", "automationFacts"],
+      "properties": {
+        "subject": { "$ref": "#/$defs/subjectRevisionRef" },
+        "jiraOperationalProjection": { "$ref": "#/$defs/jiraFingerprintComponent" },
+        "qaPlanningFacts": { "$ref": "#/$defs/qaFingerprintComponent" },
+        "automationFacts": { "$ref": "#/$defs/automationFingerprintComponent" }
+      }
+    },
+    "inputFingerprint": { "$ref": "#/$defs/hash" },
+    "ruleVersion": { "$ref": "#/$defs/semver" },
+    "skillVersion": { "$ref": "#/$defs/semver" },
+    "rulesRef": { "$ref": "#/$defs/versionedHashRef" },
+    "skillRef": { "$ref": "#/$defs/versionedHashRef" },
+    "policyRef": {
+      "description": "Feature 004 Project-scoped Hermes/triage execution-policy ref preserved from v1.0. It is not the Feature 006 Workspace QueuePolicy and contains no cross-Project allocation set.",
+      "$ref": "#/$defs/versionedHashRef"
+    },
+    "agentRunRef": { "$ref": "#/$defs/id" },
+    "actionProvenanceRef": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "modelRef": { "$ref": "#/$defs/versionedHashRef" },
+    "state": { "enum": ["CURRENT", "STALE", "SUPERSEDED"] },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "staleAt": { "type": "string", "format": "date-time" },
+    "staleReasonCode": { "enum": ["SOURCE_CHANGED", "SOURCE_REVOKED", "PROFILE_CHANGED", "BINDING_CHANGED", "EXPIRED"] },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["revision"], "properties": { "revision": { "const": 1 } } },
+      "then": { "properties": { "previousAssessmentRef": false } },
+      "else": { "required": ["previousAssessmentRef"], "properties": { "previousAssessmentRef": true } }
+    },
+    {
+      "if": { "required": ["state"], "properties": { "state": { "const": "STALE" } } },
+      "then": {
+        "required": ["staleAt", "staleReasonCode"],
+        "properties": { "staleAt": true, "staleReasonCode": true }
+      },
+      "else": { "properties": { "staleAt": false, "staleReasonCode": false } }
+    },
+    {
+      "if": {
+        "required": ["subject", "inputFingerprintComponents"],
+        "properties": { "subject": { "required": ["kind"], "properties": { "kind": { "const": "CANDIDATE" } } } }
+      },
+      "then": {
+        "properties": {
+          "inputFingerprintComponents": {
+            "properties": {
+              "subject": { "properties": { "sourceType": { "const": "INTAKE_CANDIDATE_REVISION" } } },
+              "jiraOperationalProjection": { "$ref": "#/$defs/notApplicableSubjectComponent" },
+              "qaPlanningFacts": { "$ref": "#/$defs/notApplicableSubjectComponent" },
+              "automationFacts": { "$ref": "#/$defs/notApplicableSubjectComponent" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["subject", "inputFingerprintComponents"],
+        "properties": { "subject": { "required": ["kind"], "properties": { "kind": { "const": "DRAFT" } } } }
+      },
+      "then": {
+        "properties": {
+          "inputFingerprintComponents": {
+            "properties": {
+              "subject": { "properties": { "sourceType": { "const": "INTAKE_DRAFT_REVISION" } } },
+              "jiraOperationalProjection": { "$ref": "#/$defs/notApplicableSubjectComponent" },
+              "qaPlanningFacts": { "$ref": "#/$defs/notApplicableSubjectComponent" },
+              "automationFacts": { "$ref": "#/$defs/notApplicableSubjectComponent" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["subject", "inputFingerprintComponents"],
+        "properties": { "subject": { "required": ["kind"], "properties": { "kind": { "const": "WORK_ITEM" } } } }
+      },
+      "then": {
+        "properties": {
+          "inputFingerprintComponents": {
+            "properties": {
+              "subject": { "properties": { "sourceType": { "const": "WORK_ITEM_REVISION" } } },
+              "jiraOperationalProjection": { "not": { "$ref": "#/$defs/notApplicableSubjectComponent" } },
+              "qaPlanningFacts": { "not": { "$ref": "#/$defs/notApplicableSubjectComponent" } },
+              "automationFacts": {
+                "not": {
+                  "type": "object",
+                  "required": ["state", "reasonCode"],
+                  "properties": {
+                    "state": { "const": "NOT_APPLICABLE" },
+                    "reasonCode": { "const": "SUBJECT_NOT_WORK_ITEM" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "semver": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "typedSourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "sourceId", "sourceVersion", "semanticHash"],
+      "properties": {
+        "sourceType": {
+          "enum": [
+            "INTAKE_CANDIDATE_REVISION",
+            "INTAKE_DRAFT_REVISION",
+            "WORK_ITEM_REVISION",
+            "JIRA_OPERATIONAL_PROJECTION_REVISION",
+            "QA_QUEUE_FACT_REVISION",
+            "QA_AUTOMATED_ACTIVITY_FACT_SET"
+          ]
+        },
+        "sourceId": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "sourceVersion": { "type": "integer", "minimum": 1 },
+        "semanticHash": { "$ref": "#/$defs/hash" },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "confirmedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "subjectRevisionRef": {
+      "allOf": [
+        { "$ref": "#/$defs/typedSourceRef" },
+        {
+          "properties": {
+            "sourceType": {
+              "enum": ["INTAKE_CANDIDATE_REVISION", "INTAKE_DRAFT_REVISION", "WORK_ITEM_REVISION"]
+            },
+            "observedAt": false,
+            "confirmedAt": false
+          }
+        }
+      ]
+    },
+    "jiraOperationalProjectionRef": {
+      "allOf": [
+        { "$ref": "#/$defs/typedSourceRef" },
+        {
+          "required": ["confirmedAt"],
+          "properties": { "sourceType": { "const": "JIRA_OPERATIONAL_PROJECTION_REVISION" } }
+        }
+      ]
+    },
+    "qaPlanningFactsRef": {
+      "allOf": [
+        { "$ref": "#/$defs/typedSourceRef" },
+        {
+          "properties": {
+            "sourceType": { "const": "QA_QUEUE_FACT_REVISION" },
+            "observedAt": false,
+            "confirmedAt": false
+          }
+        }
+      ]
+    },
+    "automationFactsRef": {
+      "allOf": [
+        { "$ref": "#/$defs/typedSourceRef" },
+        {
+          "properties": {
+            "sourceType": { "const": "QA_AUTOMATED_ACTIVITY_FACT_SET" },
+            "observedAt": false,
+            "confirmedAt": false
+          }
+        }
+      ]
+    },
+    "unknownFingerprintComponent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "reasonCode"],
+      "properties": {
+        "state": { "const": "UNKNOWN" },
+        "reasonCode": { "enum": ["NOT_OBSERVED", "NOT_AVAILABLE", "NOT_AUTHORIZED", "SOURCE_STALE", "SOURCE_ERROR"] }
+      }
+    },
+    "notApplicableSubjectComponent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "reasonCode"],
+      "properties": {
+        "state": { "const": "NOT_APPLICABLE" },
+        "reasonCode": { "const": "SUBJECT_NOT_WORK_ITEM" }
+      }
+    },
+    "jiraFingerprintComponent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "sourceRef"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "sourceRef": { "$ref": "#/$defs/jiraOperationalProjectionRef" }
+          }
+        },
+        { "$ref": "#/$defs/unknownFingerprintComponent" },
+        { "$ref": "#/$defs/notApplicableSubjectComponent" }
+      ]
+    },
+    "qaFingerprintComponent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "sourceRef"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "sourceRef": { "$ref": "#/$defs/qaPlanningFactsRef" }
+          }
+        },
+        { "$ref": "#/$defs/unknownFingerprintComponent" },
+        { "$ref": "#/$defs/notApplicableSubjectComponent" }
+      ]
+    },
+    "automationFingerprintComponent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "sourceRef"],
+          "properties": {
+            "state": { "const": "KNOWN" },
+            "sourceRef": { "$ref": "#/$defs/automationFactsRef" }
+          }
+        },
+        { "$ref": "#/$defs/unknownFingerprintComponent" },
+        { "$ref": "#/$defs/notApplicableSubjectComponent" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reasonCode"],
+          "properties": {
+            "state": { "const": "NOT_APPLICABLE" },
+            "reasonCode": { "const": "AUTOMATION_NOT_CONFIGURED" }
+          }
+        }
+      ]
+    },
+    "level": { "enum": ["LOW", "MEDIUM", "HIGH", "VERY_HIGH", "UNKNOWN"] },
+    "effortRange": {
+      "description": "A bounded non-authoritative estimate. Semantic validation requires lower <= upper; UNKNOWN carries no invented numeric estimate.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": { "const": "UNKNOWN" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "lower", "upper", "unit"],
+          "properties": {
+            "kind": { "const": "ESTIMATE" },
+            "lower": { "type": "number", "minimum": 0, "maximum": 100000 },
+            "upper": { "type": "number", "minimum": 0, "maximum": 100000 },
+            "unit": { "enum": ["PERSON_HOURS", "PERSON_DAYS", "SESSION_COUNT"] }
+          }
+        }
+      ]
+    },
+    "factRefs": {
+      "description": "Zero-based indexes into this assessment's facts array. Composed semantic validation rejects any index greater than or equal to facts.length.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 0, "maximum": 99 }
+    },
+    "dimensionEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["confidence", "explanation", "factRefs"],
+      "properties": {
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "explanation": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "factRefs": { "$ref": "#/$defs/factRefs" }
+      }
+    },
+    "missingInformationItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "dimension", "reasonCode", "explanation", "factRefs"],
+      "properties": {
+        "key": {
+          "enum": [
+            "BUSINESS_IMPACT_MISSING",
+            "URGENCY_SLA_MISSING",
+            "RISK_MISSING",
+            "EFFORT_RANGE_MISSING",
+            "SCOPE_BREADTH_MISSING",
+            "ENVIRONMENT_DATA_COMPLEXITY_MISSING",
+            "AUTOMATION_AVAILABILITY_MISSING",
+            "DEPENDENCY_INFORMATION_MISSING"
+          ]
+        },
+        "dimension": {
+          "enum": ["BUSINESS_IMPACT", "URGENCY_SLA", "RISK", "EFFORT_RANGE", "SCOPE_BREADTH", "ENVIRONMENT_DATA_COMPLEXITY", "AUTOMATION_AVAILABILITY", "DEPENDENCY_READINESS"]
+        },
+        "reasonCode": { "enum": ["NOT_PROVIDED", "NOT_OBSERVED", "NOT_AUTHORIZED", "SOURCE_STALE", "SOURCE_UNAVAILABLE"] },
+        "explanation": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "factRefs": { "$ref": "#/$defs/factRefs" }
+      }
+    },
+    "versionedHashRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "version", "hash"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$", "maxLength": 64 },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "args": [
+    "tools/contracts/build-registry.mts",
+    "--check"
+  ],
+  "exitCode": 0,
+  "durationMs": 369,
+  "output": "Contract registry snapshot is current (203 schemas from 8 ordered contributions; 17 YAML documents).\n"
+}

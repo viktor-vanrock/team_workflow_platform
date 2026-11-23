@@ -1,0 +1,105 @@
+openapi: 3.1.0
+info:
+  title: Mock Hub Operational Work Item API
+  version: 1.0.0
+paths:
+  /operational/requests:
+    post:
+      operationId: createOperationalRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [effectIdempotencyKey, correlationId, scope, profileRef, target, payload]
+              properties:
+                effectIdempotencyKey: { type: string, minLength: 1 }
+                correlationId: { type: string, minLength: 1 }
+                scope: { $ref: '../schemas/operational-work-item/operational-scope.v1.schema.json' }
+                profileRef: { $ref: '#/components/schemas/VersionedRef' }
+                target: { $ref: '../schemas/operational-work-item/operational-target.v1.schema.json' }
+                payload: { $ref: '../schemas/operational-work-item/request-create.v1.schema.json' }
+      responses:
+        '200':
+          description: Stable sparse request-create receipt.
+          content:
+            application/json:
+              schema: { $ref: '../schemas/operational-work-item/operational-result.v1.schema.json' }
+        default: { $ref: '#/components/responses/Problem' }
+  /operational/requests/{externalEntityId}:
+    get:
+      operationId: readOperationalRequest
+      parameters:
+        - { $ref: '#/components/parameters/ExternalEntityId' }
+        - { $ref: '#/components/parameters/WorkspaceId' }
+        - { $ref: '#/components/parameters/ProjectId' }
+      responses:
+        '200': { description: Scoped external request state. }
+        default: { $ref: '#/components/responses/Problem' }
+  /operational/requests/{externalEntityId}/transitions:
+    post:
+      operationId: transitionOperationalRequest
+      parameters:
+        - { $ref: '#/components/parameters/ExternalEntityId' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [effectIdempotencyKey, correlationId, scope, profileRef, target, payload]
+              properties:
+                effectIdempotencyKey: { type: string, minLength: 1 }
+                correlationId: { type: string, minLength: 1 }
+                scope: { $ref: '../schemas/operational-work-item/operational-scope.v1.schema.json' }
+                profileRef: { $ref: '#/components/schemas/VersionedRef' }
+                target: { $ref: '../schemas/operational-work-item/operational-target.v1.schema.json' }
+                payload: { $ref: '../schemas/operational-work-item/request-transition.v1.schema.json' }
+      responses:
+        '200':
+          description: Stable expected-version request-transition receipt.
+          content:
+            application/json:
+              schema: { $ref: '../schemas/operational-work-item/operational-result.v1.schema.json' }
+        default: { $ref: '#/components/responses/Problem' }
+  /operational/request-effects/{effectIdempotencyKey}:
+    get:
+      operationId: readOperationalRequestCreateEffect
+      parameters:
+        - { $ref: '#/components/parameters/EffectIdempotencyKey' }
+        - { $ref: '#/components/parameters/WorkspaceId' }
+        - { $ref: '#/components/parameters/ProjectId' }
+      responses:
+        '200': { description: Scoped request-create effect lookup. }
+        default: { $ref: '#/components/responses/Problem' }
+components:
+  parameters:
+    ExternalEntityId: { name: externalEntityId, in: path, required: true, schema: { type: string, minLength: 1 } }
+    EffectIdempotencyKey: { name: effectIdempotencyKey, in: path, required: true, schema: { type: string, minLength: 1 } }
+    WorkspaceId: { name: workspaceId, in: query, required: true, schema: { type: string, format: uuid } }
+    ProjectId: { name: projectId, in: query, required: true, schema: { type: string, format: uuid } }
+  schemas:
+    VersionedRef:
+      type: object
+      additionalProperties: false
+      required: [id, version]
+      properties:
+        id: { type: string, format: uuid }
+        version: { type: integer, minimum: 1 }
+    Problem:
+      type: object
+      required: [type, title, status, code]
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        code: { type: string }
+  responses:
+    Problem:
+      description: RFC 9457 problem details.
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "title": "Validate checkout error handling",
+  "requestKind": "feature-validation",
+  "goal": "Validate checkout error handling manually",
+  "scope": "Checkout API and browser confirmation path",
+  "acceptanceOutcome": "Expected errors are visible and the successful retry completes",
+  "sourceRefs": [
+    {
+      "kind": "work-item",
+      "id": "feature-42",
+      "version": "7",
+      "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "blockers": [],
+  "dependencies": [],
+  "requestedTarget": {
+    "environmentId": "88888888-8888-4888-8888-888888888888",
+    "environmentRevision": 3,
+    "buildRef": {
+      "kind": "build",
+      "id": "checkout-web",
+      "version": "2026.08.27.1",
+      "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "testDataRef": {
+      "kind": "test-data",
+      "id": "checkout-fixtures",
+      "version": "3",
+      "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "accountLeaseRef": {
+      "kind": "account-lease",
+      "id": "qa-checkout-user",
+      "version": "8",
+      "contentHash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    }
+  },
+  "requestRisk": "MEDIUM",
+  "businessImpact": "Checkout failures prevent purchases",
+  "roleMetadataRefs": [
+    {
+      "kind": "role-metadata",
+      "id": "checkout-manual-executor",
+      "version": "2",
+      "contentHash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    }
+  ],
+  "requestedClassificationKey": "INTERNAL"
+}

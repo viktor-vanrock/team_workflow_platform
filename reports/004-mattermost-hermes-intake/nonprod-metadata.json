@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "feature": "004-mattermost-hermes-intake",
+  "gate": "nonprod-metadata",
+  "startedAt": "2026-09-03T10:35:49.362Z",
+  "finishedAt": "2026-09-03T10:35:49.363Z",
+  "status": "SKIPPED_GATED",
+  "reasonCode": "METADATA_NOT_SUPPLIED",
+  "production": "DENIED"
+}

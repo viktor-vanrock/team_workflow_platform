@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:integration:connection:v1",
+  "title": "Immutable Connection Version",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "workspaceId",
+    "key",
+    "connectorRef",
+    "environmentClass",
+    "endpoint",
+    "serviceIdentitySecretRef",
+    "quarantineClassificationKey",
+    "dataClassificationKey",
+    "version",
+    "state",
+    "contentHash",
+    "resourceVersion",
+    "createdAt"
+  ],
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "workspaceId": { "type": "string", "format": "uuid" },
+    "key": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/StableKey" },
+    "connectorRef": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/SemanticVersionRef" },
+    "environmentClass": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/EnvironmentScope" },
+    "endpoint": { "type": "string", "format": "uri", "maxLength": 2048 },
+    "serviceIdentitySecretRef": {
+      "type": "string",
+      "pattern": "^secretref://[A-Za-z0-9._~:/?#@!$&'()*+,;=%-]+$",
+      "maxLength": 1024
+    },
+    "quarantineClassificationKey": {
+      "description": "Conservative classification assigned to every raw webhook receipt before connector parsing and Project resolution.",
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "dataClassificationKey": {
+      "description": "Classification of this configuration resource itself, independent of transported payload ceilings.",
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+    },
+    "tlsPolicyRef": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "networkPolicyRef": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "connectorConfiguration": { "$ref": "../common/schema-bound-value.v1.schema.json" },
+    "state": {
+      "type": "string",
+      "enum": ["DRAFT", "VALIDATED", "PUBLISHED", "RETIRED"]
+    },
+    "version": { "type": "integer", "minimum": 1 },
+    "contentHash": { "$ref": "../common/versioned-ref.v1.schema.json#/$defs/Digest" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "validationReportId": {
+      "description": "Exact successful immutable Validation Report that authorized the transition out of DRAFT; excluded from contentHash to avoid a circular fingerprint.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "validatedAt": { "type": "string", "format": "date-time" },
+    "publishedAt": { "type": "string", "format": "date-time" },
+    "retiredAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "state": { "const": "PUBLISHED" } },
+        "required": ["state"]
+      },
+      "then": { "required": ["validationReportId", "validatedAt", "publishedAt"] }
+    },
+    {
+      "if": {
+        "properties": { "state": { "const": "VALIDATED" } },
+        "required": ["state"]
+      },
+      "then": { "required": ["validationReportId", "validatedAt"] }
+    },
+    {
+      "if": {
+        "properties": { "state": { "const": "RETIRED" } },
+        "required": ["state"]
+      },
+      "then": { "required": ["validationReportId", "validatedAt", "publishedAt", "retiredAt"] }
+    },
+    {
+      "if": { "properties": { "state": { "const": "DRAFT" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["validationReportId"] }, { "required": ["validatedAt"] }, { "required": ["publishedAt"] }, { "required": ["retiredAt"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "VALIDATED" } }, "required": ["state"] },
+      "then": { "not": { "anyOf": [{ "required": ["publishedAt"] }, { "required": ["retiredAt"] }] } }
+    },
+    {
+      "if": { "properties": { "state": { "const": "PUBLISHED" } }, "required": ["state"] },
+      "then": { "not": { "required": ["retiredAt"] } }
+    }
+  ]
+}

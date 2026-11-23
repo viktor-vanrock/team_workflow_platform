@@ -1,0 +1,26 @@
+{
+  "name": "@awp/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@awp/competency-dummy": "workspace:*",
+    "@awp/competency-qa": "workspace:*",
+    "@awp/platform-ui": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "@awp/competency-tech-writing": "workspace:*",
+    "@awp/competency-ui-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.2",
+    "@vitejs/plugin-react": "6.1.0",
+    "jsdom": "30.0.1",
+    "vite": "8.2.2"
+  }
+}

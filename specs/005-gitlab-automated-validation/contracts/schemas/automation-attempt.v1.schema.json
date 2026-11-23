@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:005:automation-attempt:v1",
+  "title": "AutomationAttempt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "automationAttemptId",
+    "workspaceId",
+    "projectId",
+    "workItemId",
+    "testSessionId",
+    "planItemId",
+    "attemptNo",
+    "reason",
+    "rootAttemptId",
+    "launchRequestId",
+    "requestKeyHash",
+    "requestHash",
+    "targetSnapshotRef",
+    "targetSnapshotHash",
+    "scopeSnapshotHash",
+    "suiteBindingRef",
+    "suiteBindingHash",
+    "parameterSetHash",
+    "configurationPins",
+    "configurationPinSetHash",
+    "resultSchemaRef",
+    "artifactPolicyRef",
+    "artifactPolicyHash",
+    "retryPolicyRef",
+    "retryPolicyHash",
+    "quarantinePolicyRef",
+    "quarantinePolicyHash",
+    "connectorCommandId",
+    "effectKeyHash",
+    "initiatingHumanId",
+    "executingServiceId",
+    "authorizationBasisHash",
+    "currentStatusRevisionId",
+    "currentStatusRevisionNo",
+    "currentStatus",
+    "resourceVersion",
+    "createdAt",
+    "correlationId",
+    "causationId",
+    "identityContentHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "automation-attempt@1.0.0" },
+    "automationAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workspaceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "projectId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "workItemId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "testSessionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "planItemId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "attemptNo": { "type": "integer", "minimum": 1 },
+    "reason": { "enum": ["INITIAL", "AUTO_INFRA_RETRY", "HUMAN_RERUN"] },
+    "rootAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "predecessorAttemptId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "launchRequestId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "requestKeyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "requestHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "targetSnapshotRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "targetSnapshotHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "scopeSnapshotHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "suiteBindingRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/versionedRef" },
+    "suiteBindingHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "parameterSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "configurationPins": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/configurationPin" },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "logicalRole": { "const": "SOURCE_CONTEXT" } },
+            "required": ["logicalRole"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "logicalRole": { "const": "TEST_EXECUTION" } },
+            "required": ["logicalRole"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "logicalRole": { "const": "ARTIFACT_SOURCE" } },
+            "required": ["logicalRole"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "configurationPinSetHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "resultSchemaRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/schemaRef" },
+    "artifactPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "artifactPolicyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "retryPolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "retryPolicyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "quarantinePolicyRef": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/nonEmptyRef" },
+    "quarantinePolicyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "connectorCommandId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "effectKeyHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "initiatingHumanId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "executingServiceId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "authorizationBasisHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" },
+    "currentStatusRevisionId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "currentStatusRevisionNo": { "type": "integer", "minimum": 1 },
+    "currentStatus": { "enum": ["CREATED", "TRIGGER_PENDING", "RUNNING", "TERMINAL"] },
+    "terminalResultId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "resourceVersion": { "type": "integer", "minimum": 1 },
+    "createdAt": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/timestamp" },
+    "correlationId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "causationId": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/id" },
+    "identityContentHash": { "$ref": "urn:awp:schemas:005:common:v1#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "reason": { "enum": ["AUTO_INFRA_RETRY", "HUMAN_RERUN"] } },
+        "required": ["reason"]
+      },
+      "then": { "required": ["predecessorAttemptId"] }
+    },
+    {
+      "if": {
+        "properties": { "reason": { "const": "INITIAL" } },
+        "required": ["reason"]
+      },
+      "then": {
+        "properties": { "predecessorAttemptId": false }
+      }
+    },
+    {
+      "if": {
+        "properties": { "currentStatus": { "const": "TERMINAL" } },
+        "required": ["currentStatus"]
+      },
+      "then": { "required": ["terminalResultId"] },
+      "else": { "properties": { "terminalResultId": false } }
+    }
+  ]
+}
