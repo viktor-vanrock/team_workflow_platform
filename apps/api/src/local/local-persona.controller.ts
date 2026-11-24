@@ -138,13 +138,17 @@ export class LocalPersonaSessionService {
         workspace_id: selectedWorkspace?.workspaceId ?? "",
         workspace_key: selectedWorkspace?.workspaceKey ?? "",
       };
-      const [globalRole] = (await manager.query(
-        "SELECT source FROM platform_role_assignments WHERE principal_id=$1 AND role_key='access-administrator' AND revoked_at IS NULL AND source='LOCAL_FIRST_LOGIN'",
-        [principal.id],
-      )) as { source: string }[];
-      const platformPermissions = globalRole
-        ? ["platform.users.read", "platform.workspace-roles.manage"]
-        : [];
+      let platformPermissions: string[] = [];
+      try {
+        await new PlatformAccessService(this.dataSource).authorizeLocal(
+          principal.id,
+          "platform.users.read",
+          manager,
+        );
+        platformPermissions = ["platform.users.read", "platform.workspace-roles.manage"];
+      } catch (error) {
+        if (!(error instanceof Error) || error.message !== "PLATFORM_ACCESS_DENIED") throw error;
+      }
       const repository = new TypeOrmScopedAccessRepository(manager);
       const policy = new DenyByDefaultAuthorizationPolicy();
       const at = new Date();

@@ -17,6 +17,7 @@ export async function runPilotDevelopment(argv = process.argv.slice(2)) {
     AWP_QUEUE_STATIC_CONTOUR: "true",
     AWP_ONBOARDING_STATIC_CONTOUR: "true",
     AWP_PILOT_ADAPTER_MODE: "development",
+    AWP_PILOT_COMPOSE_OVERRIDE: "true",
     AWP_API_HOST_PORT: "5300",
     AWP_WORKER_HOST_PORT: "5310",
     AWP_WEB_HOST_PORT: "55173",

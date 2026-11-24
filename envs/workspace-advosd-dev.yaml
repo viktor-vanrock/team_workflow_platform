@@ -47,6 +47,15 @@ bootstrapPodAnnotations:
     {{- with secret "rndml/team-workflow-platform/migrator" -}}
     {{ .Data.data.DATABASE_URL }}
     {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-workspace_config: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-workspace_config: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.WORKSPACE_CONFIG }}
+    {{- end -}}
+bootstrapSuperadmin:
+  AWP_BOOTSTRAP_SUPERADMIN_SUBJECT: "f:2tJemHfxRMOUO17xFbuElA:avivashkin"
+  AWP_SUPERADMIN_ENVIRONMENT: "dev"
+  AWP_WORKSPACE_CONFIG_PATH: /vault/secrets/workspace_config
 securityContext:
   runAsNonRoot: true
   allowPrivilegeEscalation: false

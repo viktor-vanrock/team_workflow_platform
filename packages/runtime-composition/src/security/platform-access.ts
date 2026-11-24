@@ -60,6 +60,16 @@ export class PlatformAccessService {
     if (!row || (source && source !== row.source)) throw new Error("PLATFORM_ACCESS_DENIED");
     return { principalId, permission, assignmentSource: row.source };
   }
+  async authorizeLocal(
+    principalId: string,
+    permission: PlatformAccessPermission,
+    manager: EntityManager = this.source.manager,
+  ): Promise<PlatformAccessContext> {
+    const result = await this.authorize(principalId, permission, undefined, manager);
+    if (!["LOCAL_FIRST_LOGIN", "LOCAL_BOOTSTRAP"].includes(result.assignmentSource))
+      throw new Error("PLATFORM_ACCESS_DENIED");
+    return result;
+  }
   private check(
     actor: PlatformAccessContext,
     permission: PlatformAccessPermission,
@@ -335,7 +345,11 @@ export class PlatformAccessService {
                 ? ["project.request.create"]
                 : workspaceRoleCatalog.find((r) => r.key === key)!.permissions,
             ),
-            input.classificationCeiling,
+            key === "super-administrator" &&
+            (process.env.AWP_RUNTIME_PROFILE === "local" ||
+              process.env.AWP_SUPERADMIN_ENVIRONMENT === "dev")
+              ? "CONFIDENTIAL"
+              : input.classificationCeiling,
             key === "requester" ? "SELECTED_PROJECTS" : "ALL_PROJECTS",
           ],
         );
@@ -412,7 +426,12 @@ export class PlatformAccessService {
               principalId,
               entitlementId: randomUUID(),
               permissions: projectPermissions,
-              classificationCeilingKey: input.classificationCeiling,
+              classificationCeilingKey:
+                body.roleKeys.includes("super-administrator") &&
+                (process.env.AWP_RUNTIME_PROFILE === "local" ||
+                  process.env.AWP_SUPERADMIN_ENVIRONMENT === "dev")
+                  ? "CONFIDENTIAL"
+                  : input.classificationCeiling,
               validFrom: at,
               operation: "GRANT",
               effect: "ALLOW",
@@ -530,7 +549,7 @@ export class PlatformAccessService {
         [principalId, principal.display_name, principal.subject],
       );
       await manager.query(
-        "INSERT INTO platform_role_assignments(principal_id,role_key,source) VALUES($1,'access-administrator','LOCAL_FIRST_LOGIN')",
+        "INSERT INTO platform_role_assignments(principal_id,role_key,source) VALUES($1,'access-administrator','LOCAL_FIRST_LOGIN') ON CONFLICT(principal_id,role_key) DO NOTHING",
         [principalId],
       );
       return true;
@@ -559,13 +578,13 @@ export class PlatformAccessService {
       const claimed = (await manager.query(
         `INSERT INTO platform_administrator_bootstrap(singleton,principal_id,source)
         SELECT true,$1,'CORPORATE_FIRST_LOGIN'
-        WHERE NOT EXISTS(SELECT 1 FROM platform_role_assignments WHERE source NOT IN ('LOCAL_BOOTSTRAP','LOCAL_FIRST_LOGIN'))
+        WHERE NOT EXISTS(SELECT 1 FROM platform_role_assignments WHERE source NOT IN ('LOCAL_BOOTSTRAP','LOCAL_FIRST_LOGIN','DEV_BOOTSTRAP'))
         ON CONFLICT(singleton) DO NOTHING RETURNING principal_id`,
         [identity.id],
       )) as { principal_id: string }[];
       if (claimed.length) {
         await manager.query(
-          `INSERT INTO platform_role_assignments(principal_id,role_key,source) VALUES($1,'access-administrator','CORPORATE_FIRST_LOGIN')`,
+          `INSERT INTO platform_role_assignments(principal_id,role_key,source) VALUES($1,'access-administrator','CORPORATE_FIRST_LOGIN') ON CONFLICT(principal_id,role_key) DO NOTHING`,
           [identity.id],
         );
         await grantInitialQaAdministrator(manager, identity.id);

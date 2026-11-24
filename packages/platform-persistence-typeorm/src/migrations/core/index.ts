@@ -35,6 +35,7 @@ import { M0220CustomerProjectDialogues1700000000220 } from "./0220-customer-proj
 import { M0225FirstCorporateAdministrator1700000000225 } from "./0225-first-corporate-administrator.ts";
 import { M0230FirstLocalAdministrator1700000000230 } from "./0230-first-local-administrator.ts";
 import { M0235QaWorkspaceBootstrap1700000000235 } from "./0235-qa-workspace-bootstrap.ts";
+import { M0240DevBootstrapSource1700000000240 } from "./0240-dev-bootstrap-source.ts";
 
 export const coreMigrationRegistry = Object.freeze([
   { order: 1, owner: "core", migration: M0001PlatformPrimitives1700000000001 },
@@ -73,6 +74,7 @@ export const coreMigrationRegistry = Object.freeze([
   { order: 225, owner: "core", migration: M0225FirstCorporateAdministrator1700000000225 },
   { order: 230, owner: "core", migration: M0230FirstLocalAdministrator1700000000230 },
   { order: 235, owner: "core", migration: M0235QaWorkspaceBootstrap1700000000235 },
+  { order: 240, owner: "core", migration: M0240DevBootstrapSource1700000000240 },
 ] satisfies readonly OwnedMigration[]);
 
 export {
@@ -118,3 +120,4 @@ export { M0225FirstCorporateAdministrator1700000000225 };
 export { M0230FirstLocalAdministrator1700000000230 };
 
 export { M0235QaWorkspaceBootstrap1700000000235 };
+export { M0240DevBootstrapSource1700000000240 };

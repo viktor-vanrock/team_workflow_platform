@@ -8,5 +8,9 @@ export interface PlatformAccessContext {
   readonly principalId: string;
   readonly permission: PlatformAccessPermission;
   readonly assignmentSource:
-    "LOCAL_BOOTSTRAP" | "LOCAL_FIRST_LOGIN" | "CORPORATE_GROUP" | "CORPORATE_FIRST_LOGIN";
+    | "LOCAL_BOOTSTRAP"
+    | "LOCAL_FIRST_LOGIN"
+    | "CORPORATE_GROUP"
+    | "CORPORATE_FIRST_LOGIN"
+    | "DEV_BOOTSTRAP";
 }

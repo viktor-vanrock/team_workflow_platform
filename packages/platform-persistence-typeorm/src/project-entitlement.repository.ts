@@ -246,7 +246,9 @@ export class ProjectEntitlementRepository {
         JSON.stringify(revision.actor),
         revision.operation,
         revision.correlationId,
-        JSON.stringify(revision.actor.authorizationBasisRef),
+        revision.actor.kind === "HUMAN"
+          ? JSON.stringify(revision.actor.authorizationBasisRef)
+          : null,
         revision.classificationCeilingKey,
         JSON.stringify({
           entitlementId: revision.entitlementId,

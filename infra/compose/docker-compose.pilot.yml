@@ -1,0 +1,7 @@
+services:
+  api:
+    environment:
+      AWP_SUPERADMIN_SELF_APPROVAL: "true"
+  worker:
+    environment:
+      AWP_SUPERADMIN_SELF_APPROVAL: "true"

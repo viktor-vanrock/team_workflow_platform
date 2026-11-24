@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 
 import { afterAll, afterEach, beforeAll, beforeEach, expect, it, vi } from "vitest";
 
+import { LocalAccessController } from "../../../apps/api/src/access/local-access.controller.ts";
 import { LocalPersonaSessionService } from "../../../apps/api/src/local/local-persona.controller.ts";
 import {
   createPlatformDataSource,
@@ -23,6 +24,7 @@ import {
 } from "../../../packages/runtime-composition/src/seed/local-seed.ts";
 import { runPlatformAccessLocalSeed } from "../../../packages/runtime-composition/src/seed/platform-access-seed.ts";
 import { runQaLocalSeed } from "../../../packages/runtime-composition/src/seed/qa-local-seed.ts";
+import { runSuperadminLocalSeed } from "../../../packages/runtime-composition/src/seed/superadmin-local-seed.ts";
 import { runTechWritingLocalSeed } from "../../../packages/runtime-composition/src/seed/tech-writing-local-seed.ts";
 
 let postgres: RunningPostgres,
@@ -81,10 +83,107 @@ async function upgrade() {
   await source.runMigrations({ transaction: "all" });
 }
 
+it("allows both local administrator sources, preserves first-login election and rejects revocation", async () => {
+  await upgrade();
+  vi.stubEnv("AWP_PILOT_ADAPTER_MODE", "development");
+  await runSuperadminLocalSeed(source, issuer);
+  const [seeded] = await source.query(
+    "SELECT id FROM identities WHERE issuer=$1 AND subject='superadmin.local'",
+    [issuer],
+  );
+  expect(
+    (
+      await source.query(
+        "SELECT count(*)::int AS n FROM role_assignments WHERE principal_id=$1 AND role_key='super-administrator' AND classification_ceiling_key='CONFIDENTIAL'",
+        [seeded.id],
+      )
+    )[0].n,
+  ).toBe(3);
+  await source.query(
+    "UPDATE role_assignments SET classification_ceiling_key='RESTRICTED' WHERE principal_id=$1 AND role_key='super-administrator'",
+    [seeded.id],
+  );
+  const [grant] = await source.query(
+    "SELECT id FROM project_entitlements WHERE principal_id=$1 LIMIT 1",
+    [seeded.id],
+  );
+  await source.query(
+    "UPDATE project_entitlements SET classification_ceiling_key='RESTRICTED' WHERE id=$1",
+    [grant.id],
+  );
+  const [other] = await source.query(
+    "SELECT id,classification_ceiling_key FROM project_entitlements WHERE principal_id<>$1 AND effect='ALLOW' LIMIT 1",
+    [seeded.id],
+  );
+  await runSuperadminLocalSeed(source, issuer);
+  await runSuperadminLocalSeed(source, issuer);
+  expect(
+    (
+      await source.query(
+        "SELECT classification_ceiling_key FROM project_entitlements WHERE id=$1",
+        [grant.id],
+      )
+    )[0].classification_ceiling_key,
+  ).toBe("CONFIDENTIAL");
+  expect(
+    (
+      await source.query(
+        "SELECT classification_ceiling_key FROM project_entitlements WHERE id=$1",
+        [other.id],
+      )
+    )[0].classification_ceiling_key,
+  ).toBe(other.classification_ceiling_key);
+  expect(
+    (
+      await source.query(
+        "SELECT count(*)::int AS n FROM audit_events WHERE action='PROJECT_ENTITLEMENT_CHANGED' AND attributes->>'entitlementId'=$1",
+        [grant.id],
+      )
+    )[0].n,
+  ).toBe(1);
+  expect(
+    (
+      await source.query(
+        "SELECT count(*)::int AS n FROM role_assignments WHERE principal_id=$1 AND role_key='super-administrator' AND classification_ceiling_key='CONFIDENTIAL'",
+        [seeded.id],
+      )
+    )[0].n,
+  ).toBe(3);
+  await runPlatformAccessLocalSeed(source, issuer);
+  const first = await sessions().exchange("requester.alpha");
+  expect(first.platformPermissions).toEqual(
+    expect.arrayContaining(["platform.users.read", "platform.workspace-roles.manage"]),
+  );
+  const admin = await sessions().exchange("superadmin.local");
+  expect(admin.platformPermissions).toEqual(
+    expect.arrayContaining(["platform.users.read", "platform.workspace-roles.manage"]),
+  );
+  const guard = { authentication: () => ({ stepUpAt: new Date().toISOString() }) };
+  const controller = new LocalAccessController(source, guard as never);
+  const request = { localPersonaKey: "superadmin.local" } as never;
+  await expect(controller.users(request)).resolves.toHaveProperty("items");
+  const service = new PlatformAccessService(source);
+  await expect(
+    service.authorizeLocal(admin.persona.principalId, "platform.workspace-roles.manage"),
+  ).resolves.toMatchObject({ assignmentSource: "LOCAL_BOOTSTRAP" });
+  await source.query(
+    "UPDATE platform_role_assignments SET revoked_at=clock_timestamp() WHERE principal_id=$1",
+    [admin.persona.principalId],
+  );
+  expect((await sessions().exchange("superadmin.local")).platformPermissions).toEqual([]);
+  await expect(controller.users(request)).rejects.toThrow();
+  await expect(
+    service.authorizeLocal(admin.persona.principalId, "platform.users.read"),
+  ).rejects.toThrow("PLATFORM_ACCESS_DENIED");
+  expect((await sessions().exchange("requester.alpha")).platformPermissions).toContain(
+    "platform.users.read",
+  );
+});
+
 it("seed does not assign administration; the first successful selected human gets the single role and all-area registration", async () => {
   await upgrade();
   await runPlatformAccessLocalSeed(source, issuer);
-  expect(sessions().options()).toHaveLength(9);
+  expect(sessions().options()).toHaveLength(10);
   expect(await source.query("SELECT * FROM platform_role_assignments")).toHaveLength(0);
   await expect(
     sessions(async () => {

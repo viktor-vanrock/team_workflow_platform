@@ -38,7 +38,7 @@ export class LocalAccessController extends AccessController {
           if (!Number.isFinite(step) || step > Date.now() || Date.now() - step > 300_000)
             throw new Error("ACCESS_STEP_UP_REQUIRED");
         }
-        return access.authorize(principalId, permission, "LOCAL_FIRST_LOGIN");
+        return access.authorizeLocal(principalId, permission);
       },
     });
   }

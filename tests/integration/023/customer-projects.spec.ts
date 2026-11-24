@@ -29,6 +29,13 @@ beforeAll(async () => {
   await runPlatformAccessLocalSeed(f.source, "https://fake-idp:4443/oidc");
   access = new PlatformAccessService(f.source);
   await access.claimLocalAdministrator(actor.principalId, "https://fake-idp:4443/oidc");
+  await access.replace(actor, localPersonaIds["executor.qa2"], f.scope.workspaceId, {
+    roleKeys: ["super-administrator"],
+    classificationCeiling: "RESTRICTED",
+    expectedVersion: 0,
+    requestKey: randomUUID(),
+    reason: "Проверка потолка суперадминистратора",
+  });
   await access.replace(actor, other, f.scope.workspaceId, {
     roleKeys: ["requester"],
     requesterProjectIds: [localSeedIds.beta],
@@ -125,6 +132,12 @@ it("creates a private customer project from dialogue, persists it, and replays c
   });
   expect(await f.dialogueRequest(`/${id}/confirm`, confirmation)).toEqual(created);
   const projectId = String(created.body.projectId);
+  expect(
+    await f.source.query(
+      "SELECT classification_ceiling_key FROM project_entitlements WHERE project_id=$1 AND principal_id=$2 AND effect='ALLOW' AND revoked_at IS NULL",
+      [projectId, localPersonaIds["executor.qa2"]],
+    ),
+  ).toEqual([{ classification_ceiling_key: "CONFIDENTIAL" }]);
   const [customerRole] = (await f.source.query(
     "SELECT valid_until FROM role_assignments WHERE project_id=$1 AND principal_id=$2 AND role_key='requester'",
     [projectId, localPersonaIds["requester.alpha"]],

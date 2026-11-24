@@ -17,6 +17,7 @@ import {
 describe("AT-003 local security boundary", () => {
   it("exposes only persona keys while grants remain server-side", () => {
     expect(localPersonaCatalog.publicOptions()).toEqual([
+      { key: "superadmin.local", label: "Суперадминистратор" },
       { key: "owner.local", label: "Администратор · 1" },
       { key: "integration-admin.alpha", label: "Администратор · 2" },
       { key: "requester.alpha", label: "Requester" },

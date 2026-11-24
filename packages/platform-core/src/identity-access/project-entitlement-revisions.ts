@@ -23,7 +23,8 @@ export interface ProjectEntitlementRevision extends ProjectScope {
   readonly validUntil?: string;
   readonly revokedAt?: string;
   readonly previousRevisionRef?: ExactRevisionRef;
-  readonly actor: HumanActorSnapshot;
+  readonly actor:
+    HumanActorSnapshot | Readonly<{ kind: "SERVICE"; principalId: string; serviceKey: string }>;
   readonly reason: string;
   readonly correlationId: string;
   readonly createdAt: string;
