@@ -229,19 +229,24 @@ it("upgrades existing versioned project grants only for an active superadministr
   }
   await bootstrapDevSuperadmins(source, issuer, [`admin-${admin}`]);
   await bootstrapDevSuperadmins(source, issuer, [`admin-${admin}`]);
-  const rows = await source.query(
+  const rows = (await source.query(
     "SELECT id,classification_ceiling_key,revoked_at,current_version FROM project_entitlements WHERE id=ANY($1)",
     [[grantId, otherId, revokedId]],
-  );
-  expect(rows.find((row: { id: string }) => row.id === grantId)).toMatchObject({
+  )) as {
+    id: string;
+    classification_ceiling_key: string;
+    revoked_at: Date | null;
+    current_version: number;
+  }[];
+  expect(rows.find((row) => row.id === grantId)).toMatchObject({
     classification_ceiling_key: "CONFIDENTIAL",
     current_version: 2,
   });
-  expect(rows.find((row: { id: string }) => row.id === otherId)).toMatchObject({
+  expect(rows.find((row) => row.id === otherId)).toMatchObject({
     classification_ceiling_key: "RESTRICTED",
     current_version: 1,
   });
-  expect(rows.find((row: { id: string }) => row.id === revokedId)).toMatchObject({
+  expect(rows.find((row) => row.id === revokedId)).toMatchObject({
     classification_ceiling_key: "RESTRICTED",
     current_version: 1,
     revoked_at: expect.any(Date),

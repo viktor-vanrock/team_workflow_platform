@@ -48,7 +48,7 @@ export async function upgradeSuperadminCeiling(
     if (grant.current_version) {
       if (!grant.revision_id || !grant.content_hash)
         throw new Error("SUPERADMIN_ENTITLEMENT_REVISION_MISSING");
-      await new ProjectEntitlementRepository(manager.connection).appendInTransaction(
+      await new ProjectEntitlementRepository(manager.dataSource).appendInTransaction(
         manager,
         createProjectEntitlementRevision({
           workspaceId,
