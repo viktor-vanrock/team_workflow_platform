@@ -330,6 +330,11 @@ export class QaPackController {
       responseChannels: configuration.responseChannels,
       commandGateway: {
         submit: async (_ctx, intent) => {
+          if (configuration.authorityScopeKey)
+            intent = {
+              ...intent,
+              target: { ...intent.target, authorityScopeKey: configuration.authorityScopeKey },
+            };
           if (this.deliveryMode === "DURABLE_WORKER") {
             const loadStableReplay = async () => {
               const matches = (await this.source.query(
