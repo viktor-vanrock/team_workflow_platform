@@ -16,6 +16,18 @@ interface LocalPersona {
 
 const personas = Object.freeze([
   {
+    key: "superadmin.local",
+    label: "Суперадминистратор",
+    subject: "superadmin.local",
+    kind: "HUMAN",
+    workspaceKey: "local-functional",
+    sharedTeam: true,
+    projectKey: "ALPHA",
+    roles: ["super-administrator"],
+    permissions: workspaceRolePermissions("super-administrator"),
+    classificationCeiling: "RESTRICTED",
+  },
+  {
     key: "owner.local",
     label: "Администратор · 1",
     subject: "owner.local",

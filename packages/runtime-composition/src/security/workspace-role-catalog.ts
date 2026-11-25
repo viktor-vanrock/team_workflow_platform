@@ -41,7 +41,7 @@ const administratorPermissions = [
   "work-item.read",
 ];
 
-export const workspaceRoleCatalog: readonly WorkspaceRoleDefinition[] = Object.freeze([
+const baseWorkspaceRoles: readonly WorkspaceRoleDefinition[] = [
   {
     key: "system-administrator",
     label: "Администратор рабочей области",
@@ -191,6 +191,19 @@ export const workspaceRoleCatalog: readonly WorkspaceRoleDefinition[] = Object.f
     description: "Проверка и согласование документации",
     domain: "DOCS",
     permissions: ["docs.read", "docs.review"],
+  },
+];
+
+export const workspaceRoleCatalog: readonly WorkspaceRoleDefinition[] = Object.freeze([
+  ...baseWorkspaceRoles,
+  {
+    key: "super-administrator",
+    label: "Суперадминистратор",
+    description: "Объединение прав всех рабочих ролей",
+    domain: "COMMON",
+    permissions: Object.freeze(
+      [...new Set(baseWorkspaceRoles.flatMap((role) => role.permissions))].sort(),
+    ),
   },
 ]);
 export function workspaceRolePermissions(key: string): readonly string[] {

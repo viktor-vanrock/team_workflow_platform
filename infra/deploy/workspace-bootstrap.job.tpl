@@ -38,6 +38,20 @@ spec:
               value: disable
             - name: npm_config_verify_deps_before_run
               value: "false"
+            {{- with .Values.bootstrapSuperadmin }}
+            {{- if .AWP_BOOTSTRAP_SUPERADMIN_SUBJECT }}
+            - name: AWP_BOOTSTRAP_SUPERADMIN_SUBJECT
+              value: {{ .AWP_BOOTSTRAP_SUPERADMIN_SUBJECT | quote }}
+            {{- end }}
+            {{- if .AWP_SUPERADMIN_ENVIRONMENT }}
+            - name: AWP_SUPERADMIN_ENVIRONMENT
+              value: {{ .AWP_SUPERADMIN_ENVIRONMENT | quote }}
+            {{- end }}
+            {{- if .AWP_WORKSPACE_CONFIG_PATH }}
+            - name: AWP_WORKSPACE_CONFIG_PATH
+              value: {{ .AWP_WORKSPACE_CONFIG_PATH | quote }}
+            {{- end }}
+            {{- end }}
           volumeMounts:
             - name: tmp
               mountPath: /tmp

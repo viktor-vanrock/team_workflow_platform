@@ -104,7 +104,10 @@ export async function bootstrapApi(
     app.useBodyParser("raw", { type: "application/octet-stream", limit: "10mb" });
     app.useGlobalFilters(new ProblemDetailsFilter());
     app.useGlobalInterceptors(new SafeHttpTelemetryInterceptor());
-    app.enableCors({ origin: process.env.AWP_WEB_ORIGIN ?? "http://localhost:5173" });
+    app.enableCors({
+      origin: process.env.AWP_WEB_ORIGIN ?? "http://localhost:5173",
+      credentials: environment.profile === "local",
+    });
     app.enableShutdownHooks();
     await app.listen(Number(process.env.PORT ?? 3000), "0.0.0.0");
     return app;

@@ -87,7 +87,7 @@ export async function grantInitialQaAdministrator(
     requestKey = randomUUID();
   const role = workspaceRoleCatalog.find((r) => r.key === "system-administrator")!;
   await manager.query(
-    "INSERT INTO workspace_memberships(id,workspace_id,principal_id,state,valid_from) VALUES($1,$2,$3,'ACTIVE',clock_timestamp())",
+    "INSERT INTO workspace_memberships(id,workspace_id,principal_id,state,valid_from) SELECT $1,$2,$3,'ACTIVE',clock_timestamp() WHERE NOT EXISTS(SELECT 1 FROM workspace_memberships WHERE workspace_id=$2 AND principal_id=$3 AND state='ACTIVE' AND revoked_at IS NULL)",
     [randomUUID(), workspace.workspace_id, principalId],
   );
   await manager.query(
@@ -95,7 +95,7 @@ export async function grantInitialQaAdministrator(
     [roleId, workspace.workspace_id, principalId, JSON.stringify(role.permissions)],
   );
   await manager.query(
-    "INSERT INTO workspace_access_heads(workspace_id,principal_id,version) VALUES($1,$2,1)",
+    "INSERT INTO workspace_access_heads(workspace_id,principal_id,version) VALUES($1,$2,1) ON CONFLICT(workspace_id,principal_id) DO UPDATE SET version=workspace_access_heads.version+1",
     [workspace.workspace_id, principalId],
   );
   await manager.query(

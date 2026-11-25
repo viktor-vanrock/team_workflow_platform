@@ -3,6 +3,7 @@ import { createSign, generateKeyPairSync, type KeyObject, randomUUID } from "nod
 import { Body, Controller, Get, Inject, Injectable, Post } from "@nestjs/common";
 
 const allowedSubjects = new Set([
+  "superadmin.local",
   "writer.docs",
   "lead.docs",
   "owner.local",

@@ -46,6 +46,7 @@ import {
   runQaJiraMattermostLocalSeed,
 } from "../seed/qa-jira-mattermost-local-seed.ts";
 import { QA_LOCAL_SEED_KEY, QA_LOCAL_SEED_VERSION, runQaLocalSeed } from "../seed/qa-local-seed.ts";
+import { runSuperadminLocalSeed } from "../seed/superadmin-local-seed.ts";
 import { runTechWritingLocalSeed } from "../seed/tech-writing-local-seed.ts";
 
 const environment = loadEnvironment();
@@ -143,9 +144,11 @@ try {
   await runPlatformAccessLocalSeed(source, environment.identityIssuer);
   await runOwnerProjectRegistrarLocalSeed(source, environment.identityIssuer);
   await runProjectMetadataLocalSeed(source, environment.identityIssuer);
-  if (process.env.AWP_PILOT_ADAPTER_MODE === "development")
+  if (process.env.AWP_PILOT_ADAPTER_MODE === "development") {
     await ensurePilotDevelopmentProjects(source, environment);
-  else await ensureLocalSeedProjectOnboarding(source, environment);
+    await runSuperadminLocalSeed(source, environment.identityIssuer);
+    await runPlatformAccessLocalSeed(source, environment.identityIssuer);
+  } else await ensureLocalSeedProjectOnboarding(source, environment);
 } finally {
   if (source.isInitialized) await source.destroy();
 }

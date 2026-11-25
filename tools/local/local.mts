@@ -33,7 +33,19 @@ function run(executable: string, args: readonly string[]): void {
 }
 
 function compose(args: readonly string[]): void {
-  run("docker", ["compose", "--project-name", projectName, "--file", composeFile, ...args]);
+  const override =
+    process.env.AWP_PILOT_COMPOSE_OVERRIDE === "true"
+      ? ["--file", resolve(workspace, "infra/compose/docker-compose.pilot.yml")]
+      : [];
+  run("docker", [
+    "compose",
+    "--project-name",
+    projectName,
+    "--file",
+    composeFile,
+    ...override,
+    ...args,
+  ]);
 }
 
 function printStatus(): void {
