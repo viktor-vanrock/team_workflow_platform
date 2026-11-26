@@ -25,8 +25,135 @@ API не подключены. У contributions без собственной о
 задаются `AWP_CORPORATE_CA_PATH` и `WORKER_HEALTH_PORT`. Нужны Vault Kubernetes
 auth, mappings read/write/webhook для провайдеров, актуальные опубликованные
 политики и разрешённая сеть к БД, Vault, telemetry, Jira, GitLab и Mattermost.
-Образ и манифест отдельного worker в этой работе не подготовлены. Точные
-значения, роли и маршруты должны быть предоставлены владельцами стенда.
+Манифест dev worker подготовлен в `envs/worker-advosd-dev.yaml`; он использует общий
+образ workspace. Точные значения, роли и маршруты должны быть предоставлены владельцами стенда.
+
+## Развёртывание worker на dev
+
+Шаблоны полей Vault, распределение ответственности и ограничения публикации AWP: [worker-vault-values](worker-vault-values/README.md).
+
+`infra/deploy/workspace.Dockerfile` копирует `apps/` и `packages/` и выполняет
+`pnpm install` для workspace: в образ входят `apps/worker`, `tsx` и его зависимости.
+Отдельный образ не требуется. Job `deploy_dev_worker` запускается вручную после
+`deploy_dev_workspace`, из общего образа; одна реплика, ingress выключен.
+Манифест подготовлен, но запуск на стенде не проверен.
+
+Перед запуском DevOps и владельцы политик должны согласовать и положить в Vault KV
+`rndml/team-workflow-platform/workspace` поля:
+
+| Поле                       | Формат и назначение                                                                                                                                              |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`             | Уже используемый workspace PostgreSQL URL, доступный worker.                                                                                                     |
+| `WORKSPACE_CONFIG`         | Уже используемый workspace JSON. Передаётся тем же файлом, что workspace; сам worker не извлекает из него deployment policy.                                     |
+| `AWP_DEPLOYMENT_CONFIG`    | Полный JSON опубликованной DeploymentPolicy; тот же, что у корпоративного QA API. Это содержимое переменной, а не путь к файлу.                                  |
+| `AWP_IDENTITY_ISSUER`      | HTTPS issuer, точно совпадающий с identity endpoint в DeploymentPolicy.                                                                                          |
+| `AWP_IDENTITY_AUDIENCE`    | Audience корпоративной идентификации.                                                                                                                            |
+| `AWP_RUNTIME_IMAGE_DIGEST` | Фактический подтверждённый digest образа `sha256:<64 hex>`, совпадающий с policy. Доставку и подтверждение digest для каждого релиза обеспечить инфраструктурой. |
+| `CORPORATE_VAULT_CONFIG`   | JSON без значений секретов, по формату [корпоративного Vault](corporate-qa-host-config.md#vault-и-интеграции).                                                   |
+
+Новые имена полей и путь доставки конфигурации — предлагаемые для dev; их наличие
+в Vault и право роли `d-rndml` неизвестны. Vault Agent монтирует файлы, команда
+worker перед запуском читает только эти файлы и передаёт значения ожидаемым env.
+DB URL берётся из одного файла и как `AWP_DATABASE_URL`, и как
+`AWP_WORKSPACE_DATABASE_URL_FILE`: первый нужен non-local проверке, второй —
+DataSource. Сейчас TLS DB повторяет workspace (`disable`); DBA должен подтвердить
+допустимость либо настроить `AWP_WORKSPACE_DATABASE_TLS=verify-full` и CA-файл.
+Не помещать пароли в ConfigMap, deployment policy или журнал CI.
+
+Для каждого проекта `CORPORATE_VAULT_CONFIG` требует три grant: `JIRA`, `GITLAB`,
+`MATTERMOST`, даже если GitLab Suite закрыт. Нужны актуальные опубликованные
+`NETWORK_POLICY`, `SECRET_RESOLVER_POLICY`, `TELEMETRY_POLICY`, connector bindings,
+pilot fence и связанные exact refs. Для каждой credentials mapping нужны `ref`,
+`secretRef`, `mount`, `path`, `field`, `secretVersion`, `maximumLeaseMs` и `use`
+с workspace/project/service principal/purpose и exact refs profile, connection,
+policy; `approvedMappingHash` равен `pilotContentHash(mapping)`. См.
+`packages/runtime-composition/src/security/vault-secret-resolver.ts` и
+`corporate-vault-config.ts`. `secretRef` — согласованный идентификатор вида
+`secret-ref:<имя>` (или `secretref://<имя>`), не Vault URL и не токен; он должен
+совпадать с ссылкой в connection. Mapping задаёт точный KV v2 mount/path/field и
+версию: GET `/v1/<mount>/data/<path>?version=<version>`.
+
+Jira: запросить у владельца путь `<VAULT_PATH_JIRA>`, поля и версии для read/write,
+при необходимости webhook. Формат `JIRA_BASIC` — строка `username:token`,
+`BEARER` — строка токена; выбрать согласно connection. Mattermost: запросить
+`<VAULT_PATH_MATTERMOST>` и поле с токеном бота в виде строки для `BEARER`.
+GitLab: нужны утверждённые отдельные назначения read/trigger/webhook и scope.
+Значения, реальные paths, версии и secret-ref должны определить владельцы;
+комментарии с плейсхолдерами в values намеренно не включают инъекцию токенов.
+Resolver получает токены напрямую через Vault Kubernetes auth (service account
+`vault`, роль из config), а не читает файлы `/vault/secrets/jira_token` или
+`/vault/secrets/mattermost_bot_token`. Vault owner должен выдать разрешения на
+Kubernetes auth и только необходимые версии KV для соответствующих целей.
+
+### Сеть и health
+
+DevOps должен разрешить от worker DNS, PostgreSQL (host/port из `DATABASE_URL`),
+Vault HTTPS (origin и port из утверждённого config), telemetry collector HTTPS,
+Keycloak/identity, Jira HTTPS, GitLab HTTPS и `https://mm.sberdevices.ru:443`.
+Фактические Jira/Vault/GitLab/collector hosts, ports, CIDR, CA и адреса identity
+нужно получить у владельцев. AWP дополнительно использует опубликованную
+`NETWORK_POLICY`, закреплённую в DeploymentPolicy: exact origin, CIDR, routes,
+methods и query keys проверяются `PinnedNetworkTransport`. Отдельно нужны
+scoped routes в connector grants. Замена примеров значениями и публикация с
+точными refs/hash обязательны до запуска; одного Kubernetes egress недостаточно.
+
+Пример фрагмента endpoints для обсуждения, **не готовая policy** (CIDR и Jira
+origin здесь плейсхолдеры; подобрать routes по версии Jira и доступным операциям):
+
+```json
+[
+  {
+    "origin": "https://<JIRA_HOST>",
+    "addressRanges": ["<JIRA_CIDR>"],
+    "routes": [
+      { "path": "/rest/api/3/issue", "match": "EXACT", "methods": ["POST"], "queryKeys": [] },
+      {
+        "path": "/rest/api/3/issue/",
+        "match": "PREFIX",
+        "methods": ["GET"],
+        "queryKeys": ["fields"]
+      },
+      {
+        "path": "/rest/api/3/search/jql",
+        "match": "EXACT",
+        "methods": ["GET"],
+        "queryKeys": ["jql", "fields", "maxResults", "nextPageToken"]
+      }
+    ]
+  },
+  {
+    "origin": "https://mm.sberdevices.ru",
+    "addressRanges": ["<MATTERMOST_CIDR>"],
+    "routes": [{ "path": "/api/v4/posts", "match": "EXACT", "methods": ["POST"], "queryKeys": [] }]
+  }
+]
+```
+
+Список не покрывает probes, startup endpoints и прочие операции: security и
+владельцы интеграций должны утвердить полный минимальный набор, включая Vault
+`POST /v1/auth/<authMount>/login` и KV GET с query `version`. Jira DC использует
+`/rest/api/2`, а Jira Cloud — `/rest/api/3`; используемый dialect и поисковые
+параметры подтвердить по C1. В корпоративной policy разрешён только HTTPS;
+каждый DNS-ответ должен входить в CIDR и не быть запрещённым адресом.
+При корпоративном CA смонтировать его и задать `AWP_CORPORATE_CA_PATH`.
+
+После заполнения входов вручную запустить `deploy_dev_hermes`,
+`deploy_dev_workspace`, затем `deploy_dev_worker` в dev pipeline. Оператору:
+
+```sh
+kubectl -n d-rndml-infra get pods -l app.kubernetes.io/instance=worker
+kubectl -n d-rndml-infra logs deployment/worker --tail=100
+kubectl -n d-rndml-infra port-forward service/worker 3010:3010
+curl -fsS http://127.0.0.1:3010/health/live
+curl -fsS http://127.0.0.1:3010/health/ready
+```
+
+Имена deployment/service и метки зависят от Helm chart: если отличаются,
+уточнить их через `kubectl get deployments,services,pods`. Ready 200 означает,
+что startup gate доступен; он не доказывает создания Jira-задачи или доставки
+уведомления. При 503 изучить безопасные reason codes в ответе и логи. Текущий
+workspace host — отдельная начальная сборка, не корпоративный QA API: сам запуск
+worker не включает полный путь UI → очередь → Jira. GitLab Suite остаётся закрыт.
 
 Подготовлена Jira-обработка `request.create` для `NON_PROD`: worker выбирает команды
 только из проектов deployment, повторно проверяет сохранённый pilot admission и
@@ -64,7 +191,7 @@ pilot admission и hook запуска автоматизации; до их п�
 Vault и telemetry, связывает guard с реально запущенным deployment и принимает
 необязательный publisher. Точка запуска `apps/worker/src/corporate-main.ts` вызывается
 командой `pnpm --filter @awp/worker start:corporate`;
-манифест worker ещё не собран. Код нельзя считать сквозным сценарием
+dev-манифест worker подготовлен. Код нельзя считать сквозным сценарием
 до их подключения и проверки.
 Существующий локальный worker продолжает использовать свои фабрики.
 

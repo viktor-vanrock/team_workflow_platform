@@ -1,0 +1,353 @@
+{
+  "schemaVersion": 1,
+  "deploymentPolicyHash": "<DEPLOYMENT_POLICY_HASH>",
+  "vault": {
+    "vaultOrigin": "<VAULT_HTTPS_ORIGIN>",
+    "namespace": "<VAULT_NAMESPACE>",
+    "authMount": "<KUBERNETES_AUTH_MOUNT>",
+    "role": "<VAULT_AUTH_ROLE>",
+    "serviceAccountTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+    "deadlineMs": 5000,
+    "maximumResponseBytes": 65536
+  },
+  "connectors": [
+    {
+      "grant": {
+        "binding": {
+          "workspaceId": "<WORKSPACE_UUID>",
+          "projectId": "<PROJECT_UUID>",
+          "servicePrincipalId": "<JIRA_SERVICE_PRINCIPAL_ID>",
+          "provider": "JIRA",
+          "ref": {
+            "id": "<JIRA_BINDING_ID>",
+            "version": 1,
+            "contentHash": "<JIRA_BINDING_CONTENT_HASH>"
+          },
+          "profileRef": {
+            "id": "<JIRA_PROFILE_ID>",
+            "version": 1,
+            "contentHash": "<JIRA_PROFILE_CONTENT_HASH>"
+          },
+          "connectionRef": {
+            "id": "<JIRA_CONNECTION_ID>",
+            "version": 1,
+            "contentHash": "<JIRA_CONNECTION_CONTENT_HASH>"
+          },
+          "policyRef": {
+            "id": "<SECRET_RESOLVER_POLICY_ID>",
+            "version": 1,
+            "contentHash": "<SECRET_RESOLVER_POLICY_CONTENT_HASH>"
+          },
+          "mode": "CORPORATE",
+          "endpoint": "<JIRA_HTTPS_ORIGIN>",
+          "expiresAt": "<EXPIRY_RFC3339>",
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/rest/api/3/serverInfo",
+              "match": "EXACT",
+              "purpose": "CONNECTOR_READ"
+            },
+            {
+              "method": "POST",
+              "path": "/rest/api/3/issue",
+              "match": "EXACT",
+              "purpose": "CONNECTOR_WRITE"
+            }
+          ]
+        },
+        "integrationBindingRef": {
+          "id": "<JIRA_BINDING_ID>",
+          "version": 1,
+          "contentHash": "<JIRA_BINDING_CONTENT_HASH>"
+        },
+        "serviceIdentity": {
+          "issuer": "<SERVICE_IDENTITY_ISSUER>",
+          "subject": "<JIRA_SERVICE_SUBJECT>",
+          "serviceKey": "<JIRA_SERVICE_KEY>"
+        },
+        "permissions": {
+          "CONNECTOR_READ": "<JIRA_CONNECTOR_READ_PERMISSION>",
+          "CONNECTOR_WRITE": "<JIRA_CONNECTOR_WRITE_PERMISSION>"
+        }
+      },
+      "credentials": [
+        {
+          "credential": {
+            "authentication": "BEARER",
+            "mapping": {
+              "ref": {
+                "id": "<JIRA_CONNECTOR_READ_MAPPING_ID>",
+                "version": 1,
+                "contentHash": "<JIRA_CONNECTOR_READ_MAPPING_CONTENT_HASH>"
+              },
+              "secretRef": "<JIRA_CONNECTOR_READ_SECRET_REF>",
+              "use": {
+                "workspaceId": "<WORKSPACE_UUID>",
+                "projectId": "<PROJECT_UUID>",
+                "servicePrincipalId": "<JIRA_SERVICE_PRINCIPAL_ID>",
+                "purpose": "CONNECTOR_READ",
+                "profileRef": {
+                  "id": "<JIRA_PROFILE_ID>",
+                  "version": 1,
+                  "contentHash": "<JIRA_PROFILE_CONTENT_HASH>"
+                },
+                "connectionRef": {
+                  "id": "<JIRA_CONNECTION_ID>",
+                  "version": 1,
+                  "contentHash": "<JIRA_CONNECTION_CONTENT_HASH>"
+                },
+                "policyRef": {
+                  "id": "<SECRET_RESOLVER_POLICY_ID>",
+                  "version": 1,
+                  "contentHash": "<SECRET_RESOLVER_POLICY_CONTENT_HASH>"
+                }
+              },
+              "mount": "<JIRA_CONNECTOR_READ_KV_MOUNT>",
+              "path": "<JIRA_CONNECTOR_READ_KV_PATH>",
+              "field": "<JIRA_CONNECTOR_READ_KV_FIELD>",
+              "secretVersion": 1,
+              "maximumLeaseMs": 1000
+            }
+          },
+          "approvedMappingHash": "<JIRA_CONNECTOR_READ_MAPPING_HASH>"
+        },
+        {
+          "credential": {
+            "authentication": "BEARER",
+            "mapping": {
+              "ref": {
+                "id": "<JIRA_CONNECTOR_WRITE_MAPPING_ID>",
+                "version": 1,
+                "contentHash": "<JIRA_CONNECTOR_WRITE_MAPPING_CONTENT_HASH>"
+              },
+              "secretRef": "<JIRA_CONNECTOR_WRITE_SECRET_REF>",
+              "use": {
+                "workspaceId": "<WORKSPACE_UUID>",
+                "projectId": "<PROJECT_UUID>",
+                "servicePrincipalId": "<JIRA_SERVICE_PRINCIPAL_ID>",
+                "purpose": "CONNECTOR_WRITE",
+                "profileRef": {
+                  "id": "<JIRA_PROFILE_ID>",
+                  "version": 1,
+                  "contentHash": "<JIRA_PROFILE_CONTENT_HASH>"
+                },
+                "connectionRef": {
+                  "id": "<JIRA_CONNECTION_ID>",
+                  "version": 1,
+                  "contentHash": "<JIRA_CONNECTION_CONTENT_HASH>"
+                },
+                "policyRef": {
+                  "id": "<SECRET_RESOLVER_POLICY_ID>",
+                  "version": 1,
+                  "contentHash": "<SECRET_RESOLVER_POLICY_CONTENT_HASH>"
+                }
+              },
+              "mount": "<JIRA_CONNECTOR_WRITE_KV_MOUNT>",
+              "path": "<JIRA_CONNECTOR_WRITE_KV_PATH>",
+              "field": "<JIRA_CONNECTOR_WRITE_KV_FIELD>",
+              "secretVersion": 1,
+              "maximumLeaseMs": 1000
+            }
+          },
+          "approvedMappingHash": "<JIRA_CONNECTOR_WRITE_MAPPING_HASH>"
+        }
+      ]
+    },
+    {
+      "grant": {
+        "binding": {
+          "workspaceId": "<WORKSPACE_UUID>",
+          "projectId": "<PROJECT_UUID>",
+          "servicePrincipalId": "<GITLAB_SERVICE_PRINCIPAL_ID>",
+          "provider": "GITLAB",
+          "ref": {
+            "id": "<GITLAB_BINDING_ID>",
+            "version": 1,
+            "contentHash": "<GITLAB_BINDING_CONTENT_HASH>"
+          },
+          "profileRef": {
+            "id": "<GITLAB_PROFILE_ID>",
+            "version": 1,
+            "contentHash": "<GITLAB_PROFILE_CONTENT_HASH>"
+          },
+          "connectionRef": {
+            "id": "<GITLAB_CONNECTION_ID>",
+            "version": 1,
+            "contentHash": "<GITLAB_CONNECTION_CONTENT_HASH>"
+          },
+          "policyRef": {
+            "id": "<SECRET_RESOLVER_POLICY_ID>",
+            "version": 1,
+            "contentHash": "<SECRET_RESOLVER_POLICY_CONTENT_HASH>"
+          },
+          "mode": "CORPORATE",
+          "endpoint": "<GITLAB_HTTPS_ORIGIN>",
+          "expiresAt": "<EXPIRY_RFC3339>",
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/api/v4/version",
+              "match": "EXACT",
+              "purpose": "CONNECTOR_READ"
+            }
+          ],
+          "gitlab": {
+            "numericProjectId": null
+          }
+        },
+        "integrationBindingRef": {
+          "id": "<GITLAB_BINDING_ID>",
+          "version": 1,
+          "contentHash": "<GITLAB_BINDING_CONTENT_HASH>"
+        },
+        "serviceIdentity": {
+          "issuer": "<SERVICE_IDENTITY_ISSUER>",
+          "subject": "<GITLAB_SERVICE_SUBJECT>",
+          "serviceKey": "<GITLAB_SERVICE_KEY>"
+        },
+        "permissions": {
+          "CONNECTOR_READ": "<GITLAB_CONNECTOR_READ_PERMISSION>"
+        }
+      },
+      "credentials": [
+        {
+          "credential": {
+            "authentication": "GITLAB_PRIVATE_TOKEN",
+            "mapping": {
+              "ref": {
+                "id": "<GITLAB_CONNECTOR_READ_MAPPING_ID>",
+                "version": 1,
+                "contentHash": "<GITLAB_CONNECTOR_READ_MAPPING_CONTENT_HASH>"
+              },
+              "secretRef": "<GITLAB_CONNECTOR_READ_SECRET_REF>",
+              "use": {
+                "workspaceId": "<WORKSPACE_UUID>",
+                "projectId": "<PROJECT_UUID>",
+                "servicePrincipalId": "<GITLAB_SERVICE_PRINCIPAL_ID>",
+                "purpose": "CONNECTOR_READ",
+                "profileRef": {
+                  "id": "<GITLAB_PROFILE_ID>",
+                  "version": 1,
+                  "contentHash": "<GITLAB_PROFILE_CONTENT_HASH>"
+                },
+                "connectionRef": {
+                  "id": "<GITLAB_CONNECTION_ID>",
+                  "version": 1,
+                  "contentHash": "<GITLAB_CONNECTION_CONTENT_HASH>"
+                },
+                "policyRef": {
+                  "id": "<SECRET_RESOLVER_POLICY_ID>",
+                  "version": 1,
+                  "contentHash": "<SECRET_RESOLVER_POLICY_CONTENT_HASH>"
+                }
+              },
+              "mount": "<GITLAB_CONNECTOR_READ_KV_MOUNT>",
+              "path": "<GITLAB_CONNECTOR_READ_KV_PATH>",
+              "field": "<GITLAB_CONNECTOR_READ_KV_FIELD>",
+              "secretVersion": 1,
+              "maximumLeaseMs": 1000
+            }
+          },
+          "approvedMappingHash": "<GITLAB_CONNECTOR_READ_MAPPING_HASH>"
+        }
+      ]
+    },
+    {
+      "grant": {
+        "binding": {
+          "workspaceId": "<WORKSPACE_UUID>",
+          "projectId": "<PROJECT_UUID>",
+          "servicePrincipalId": "<MATTERMOST_SERVICE_PRINCIPAL_ID>",
+          "provider": "MATTERMOST",
+          "ref": {
+            "id": "<MATTERMOST_BINDING_ID>",
+            "version": 1,
+            "contentHash": "<MATTERMOST_BINDING_CONTENT_HASH>"
+          },
+          "profileRef": {
+            "id": "<MATTERMOST_PROFILE_ID>",
+            "version": 1,
+            "contentHash": "<MATTERMOST_PROFILE_CONTENT_HASH>"
+          },
+          "connectionRef": {
+            "id": "<MATTERMOST_CONNECTION_ID>",
+            "version": 1,
+            "contentHash": "<MATTERMOST_CONNECTION_CONTENT_HASH>"
+          },
+          "policyRef": {
+            "id": "<SECRET_RESOLVER_POLICY_ID>",
+            "version": 1,
+            "contentHash": "<SECRET_RESOLVER_POLICY_CONTENT_HASH>"
+          },
+          "mode": "CORPORATE",
+          "endpoint": "<MATTERMOST_HTTPS_ORIGIN>",
+          "expiresAt": "<EXPIRY_RFC3339>",
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/api/v4/posts",
+              "match": "EXACT",
+              "purpose": "CONNECTOR_WRITE"
+            }
+          ]
+        },
+        "integrationBindingRef": {
+          "id": "<MATTERMOST_BINDING_ID>",
+          "version": 1,
+          "contentHash": "<MATTERMOST_BINDING_CONTENT_HASH>"
+        },
+        "serviceIdentity": {
+          "issuer": "<SERVICE_IDENTITY_ISSUER>",
+          "subject": "<MATTERMOST_SERVICE_SUBJECT>",
+          "serviceKey": "<MATTERMOST_SERVICE_KEY>"
+        },
+        "permissions": {
+          "CONNECTOR_WRITE": "<MATTERMOST_CONNECTOR_WRITE_PERMISSION>"
+        }
+      },
+      "credentials": [
+        {
+          "credential": {
+            "authentication": "BEARER",
+            "mapping": {
+              "ref": {
+                "id": "<MATTERMOST_CONNECTOR_WRITE_MAPPING_ID>",
+                "version": 1,
+                "contentHash": "<MATTERMOST_CONNECTOR_WRITE_MAPPING_CONTENT_HASH>"
+              },
+              "secretRef": "<MATTERMOST_CONNECTOR_WRITE_SECRET_REF>",
+              "use": {
+                "workspaceId": "<WORKSPACE_UUID>",
+                "projectId": "<PROJECT_UUID>",
+                "servicePrincipalId": "<MATTERMOST_SERVICE_PRINCIPAL_ID>",
+                "purpose": "CONNECTOR_WRITE",
+                "profileRef": {
+                  "id": "<MATTERMOST_PROFILE_ID>",
+                  "version": 1,
+                  "contentHash": "<MATTERMOST_PROFILE_CONTENT_HASH>"
+                },
+                "connectionRef": {
+                  "id": "<MATTERMOST_CONNECTION_ID>",
+                  "version": 1,
+                  "contentHash": "<MATTERMOST_CONNECTION_CONTENT_HASH>"
+                },
+                "policyRef": {
+                  "id": "<SECRET_RESOLVER_POLICY_ID>",
+                  "version": 1,
+                  "contentHash": "<SECRET_RESOLVER_POLICY_CONTENT_HASH>"
+                }
+              },
+              "mount": "<MATTERMOST_CONNECTOR_WRITE_KV_MOUNT>",
+              "path": "<MATTERMOST_CONNECTOR_WRITE_KV_PATH>",
+              "field": "<MATTERMOST_CONNECTOR_WRITE_KV_FIELD>",
+              "secretVersion": 1,
+              "maximumLeaseMs": 1000
+            }
+          },
+          "approvedMappingHash": "<MATTERMOST_CONNECTOR_WRITE_MAPPING_HASH>"
+        }
+      ]
+    }
+  ]
+}
