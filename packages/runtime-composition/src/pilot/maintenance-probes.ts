@@ -4,7 +4,7 @@ import type { DataSource } from "typeorm";
 
 import {
   assessProjectCapabilityMode,
-  qaValidationCapabilityRequirementSetV1,
+  resolveQaCapabilityRequirementSet,
 } from "@awp/competency-qa/node";
 import { type JsonValue, sha256 } from "@awp/platform-contracts";
 import {
@@ -32,6 +32,7 @@ export interface CapabilityProbeMaintenanceOptions {
   readonly validForMs: number;
   readonly deadlineMs: number;
   readonly maximumProjects?: number;
+  readonly deploymentScope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>;
   readonly now?: () => string;
   /** Current service authority and exact configuration, checked again after the observation. */
   readonly authorize?: ((target: Target, signal: AbortSignal) => Promise<boolean>) | undefined;
@@ -58,8 +59,6 @@ interface Plan extends DueItem {
 }
 const parse = <T>(value: unknown): T =>
   typeof value === "string" ? (JSON.parse(value) as T) : (value as T);
-const same = (left: ExactRevisionRef, right: ExactRevisionRef) =>
-  left.id === right.id && left.version === right.version && left.contentHash === right.contentHash;
 const hasEntries = <T>(value: readonly T[] | undefined): value is readonly T[] =>
   Array.isArray(value);
 const issues = new Set([
@@ -141,6 +140,7 @@ async function due(
   now: string,
   refreshAfterMs: number,
   maximumProjects: number,
+  scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
 ): Promise<readonly DueItem[]> {
   const rows = (await source.query(
     `
@@ -156,9 +156,16 @@ LEFT JOIN LATERAL (SELECT evaluated_at FROM capability_mode_assessments a WHERE 
   AND a.binding_ref=jsonb_build_object('id',b.header_id::text,'version',b.version,'contentHash',b.content_hash)
   AND a.qa_project_context_ref=jsonb_build_object('id',c.context_id::text,'version',c.version,'contentHash',c.content_hash)
   ORDER BY evaluated_at DESC LIMIT 1) recent ON true
-WHERE recent.evaluated_at IS NULL OR recent.evaluated_at<=$1::timestamptz-($2::bigint*interval '1 millisecond')
+WHERE (recent.evaluated_at IS NULL OR recent.evaluated_at<=$1::timestamptz-($2::bigint*interval '1 millisecond'))
+  AND ($4::uuid IS NULL OR (b.workspace_id=$4 AND b.project_id=ANY($5::uuid[])))
 ORDER BY recent.evaluated_at NULLS FIRST,b.workspace_id,b.project_id,b.header_id LIMIT $3`,
-    [now, refreshAfterMs, maximumProjects],
+    [
+      now,
+      refreshAfterMs,
+      maximumProjects,
+      scope?.workspaceId ?? null,
+      scope ? [...scope.projectIds] : null,
+    ],
   )) as readonly Record<string, unknown>[];
   return rows.map((row) => {
     const requirement = parse<{ id: string; version: string | number; contentHash: string }>(
@@ -187,7 +194,8 @@ ORDER BY recent.evaluated_at NULLS FIRST,b.workspace_id,b.project_id,b.header_id
 }
 
 async function plan(source: Query, item: DueItem): Promise<Plan | undefined> {
-  if (!same(item.requirementSetRef, qaValidationCapabilityRequirementSetV1.ref)) return undefined;
+  const requirementSet = resolveQaCapabilityRequirementSet(item.requirementSetRef);
+  if (!requirementSet) return undefined;
   [item.bindingRef, item.qaProjectContextRef, item.requirementSetRef].forEach(
     assertExactRevisionRef,
   );
@@ -229,7 +237,7 @@ WHERE b.workspace_id=$1 AND b.project_id=$2 AND b.header_id=$3 AND b.version=$4 
     version: 1,
     contentHash: sha256(parse<JsonValue>(row.report)),
   };
-  for (const requirement of qaValidationCapabilityRequirementSetV1.requirements) {
+  for (const requirement of requirementSet.requirements) {
     const entries = content.entries.filter(
       (entry) =>
         entry.logicalRole === requirement.logicalRole &&
@@ -339,7 +347,9 @@ export function createCapabilityProbeMaintenanceWorker(
     options.deadlineMs > 30_000 ||
     !Number.isSafeInteger(maximumProjects) ||
     maximumProjects < 1 ||
-    maximumProjects > 100
+    maximumProjects > 100 ||
+    (options.deploymentScope !== undefined &&
+      (!options.deploymentScope.workspaceId || !options.deploymentScope.projectIds.length))
   )
     throw new Error("CAPABILITY_PROBE_POLICY_INVALID");
   return Object.freeze({
@@ -351,7 +361,13 @@ export function createCapabilityProbeMaintenanceWorker(
       let count = 0;
       let stale = 0;
       let blocked = 0;
-      for (const item of await due(source, started, options.refreshAfterMs, maximumProjects)) {
+      for (const item of await due(
+        source,
+        started,
+        options.refreshAfterMs,
+        maximumProjects,
+        options.deploymentScope,
+      )) {
         const initial = await plan(source, item);
         if (!initial) {
           blocked++;
@@ -409,12 +425,16 @@ export function createCapabilityProbeMaintenanceWorker(
             }),
           );
         }
-        const requirements = qaValidationCapabilityRequirementSetV1.requirements.flatMap(
-          (requirement) =>
-            requirement.operations.map((operation) => ({
-              ...requirement,
-              requirementKey: `${requirement.requirementKey}:${operation}`,
-            })),
+        const requirementSet = resolveQaCapabilityRequirementSet(item.requirementSetRef);
+        if (!requirementSet) {
+          blocked++;
+          continue;
+        }
+        const requirements = requirementSet.requirements.flatMap((requirement) =>
+          requirement.operations.map((operation) => ({
+            ...requirement,
+            requirementKey: `${requirement.requirementKey}:${operation}`,
+          })),
         );
         const projected = observations.map((observation) => {
           const requirement = requirements.find(

@@ -6,6 +6,7 @@ import { integrationConfigurationHash } from "../onboarding/configuration-hash.t
 import { localSeedIds } from "../seed/local-seed.ts";
 import { qaJiraLocalSeedRefs } from "../seed/qa-jira-local-seed.ts";
 import { qaLocalSeedIds } from "../seed/qa-local-seed.ts";
+import { jiraMappingRuntimeContent } from "./qa-connection-content.ts";
 
 type QuerySource = Pick<DataSource | EntityManager, "query">;
 type Scope = Readonly<{ workspaceId: string; projectId: string }>;
@@ -21,6 +22,11 @@ export async function resolveLocalQaProjectConfiguration(source: QuerySource, sc
       profileRef: qaJiraLocalSeedRefs.profile,
       projectContextId: qaLocalSeedIds.context,
     };
+  return await resolvePublishedQaProjectConfiguration(source, scope);
+}
+
+/** Resolve project-specific published configuration without local fixture fallback. */
+export async function resolvePublishedQaProjectConfiguration(source: QuerySource, scope: Scope) {
   const rows = (await source.query(
     `SELECT h.id,r.version,r.content,r.content_hash FROM project_integration_binding_headers h
      JOIN project_integration_binding_revisions r ON r.workspace_id=h.workspace_id AND r.project_id=h.project_id AND r.header_id=h.id AND r.version=h.current_published_version
@@ -71,7 +77,7 @@ export async function resolveLocalQaProjectConfiguration(source: QuerySource, sc
   )) as { content: Record<string, unknown>; content_hash: string }[];
   const externalScope = entry.externalScope as
     { value?: { authorityScopeKey?: unknown } } | undefined;
-  const authorityScopeKey = mapping?.content.authorityScopeKey;
+  const authorityScopeKey = mapping && jiraMappingRuntimeContent(mapping.content).authorityScopeKey;
   if (
     !mapping ||
     integrationConfigurationHash("connector_mapping", mapping.content) !== mapping.content_hash ||

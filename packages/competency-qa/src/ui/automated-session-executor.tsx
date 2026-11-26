@@ -449,6 +449,15 @@ export function QaAutomatedSessionExecutor(props: Readonly<QaAutomatedSessionExe
                             )}
                           />
                         </Stack>
+                        {props.resultByAttempt[attempt.automationAttemptId]!.outcome ===
+                          "INCOMPLETE" && (
+                          <Typography variant="body2">
+                            {props.resultByAttempt[attempt.automationAttemptId]!
+                              .normalizationKind === "SCHEMA_VALIDATED"
+                              ? "Проверка сообщила о неполном результате; файл результата проверен."
+                              : "Не удалось получить или проверить полный результат проверки."}
+                          </Typography>
+                        )}
                         <Typography variant="body2">
                           Результат:{" "}
                           {shortHash(

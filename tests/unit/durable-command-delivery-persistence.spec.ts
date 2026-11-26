@@ -92,6 +92,39 @@ describe("durable command delivery persistence contracts", () => {
     expect(statements[0]).toContain("FOR UPDATE OF o SKIP LOCKED");
     expect(statements[0]).toContain("c.workspace_id=o.workspace_id AND c.project_id=o.project_id");
   });
+
+  it("limits a scoped claim to approved workspace, projects and operations", async () => {
+    const now = new Date("2026-01-01T00:00:00.000Z");
+    const query = vi.fn(async () => []);
+    const source = { manager: { query } } as unknown as DataSource;
+    const repository = new TypeOrmCommandOutboxRepository(source);
+    await repository.claimInTransaction(
+      { query } as unknown as EntityManager,
+      now,
+      new Date(now.getTime() + 1000),
+      7,
+      ["operational-work-item"],
+      { workspaceId: "workspace", projectIds: ["project"], operations: ["request.create"] },
+    );
+    expect(query).toHaveBeenCalledWith(expect.stringContaining("o.workspace_id=$4"), [
+      now,
+      7,
+      ["operational-work-item"],
+      "workspace",
+      ["project"],
+      ["request.create"],
+    ]);
+    await expect(
+      repository.claimInTransaction(
+        { query } as unknown as EntityManager,
+        now,
+        new Date(now.getTime() + 1000),
+        7,
+        ["operational-work-item"],
+        { workspaceId: "workspace", projectIds: [], operations: ["request.create"] },
+      ),
+    ).rejects.toThrow("COMMAND_OUTBOX_SCOPE_FILTER_INVALID");
+  });
 });
 
 function commandRow(parameters: readonly unknown[]): Record<string, unknown> {

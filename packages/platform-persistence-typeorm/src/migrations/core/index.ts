@@ -36,6 +36,9 @@ import { M0225FirstCorporateAdministrator1700000000225 } from "./0225-first-corp
 import { M0230FirstLocalAdministrator1700000000230 } from "./0230-first-local-administrator.ts";
 import { M0235QaWorkspaceBootstrap1700000000235 } from "./0235-qa-workspace-bootstrap.ts";
 import { M0240DevBootstrapSource1700000000240 } from "./0240-dev-bootstrap-source.ts";
+import { M0245PilotCommandAdmission1700000000245 } from "./0245-pilot-command-admission.ts";
+import { M0250PilotFenceAction1700000000250 } from "./0250-pilot-fence-action.ts";
+import { M0255NotificationTemplateEvidence1700000000255 } from "./0255-notification-template-evidence.ts";
 
 export const coreMigrationRegistry = Object.freeze([
   { order: 1, owner: "core", migration: M0001PlatformPrimitives1700000000001 },
@@ -75,6 +78,9 @@ export const coreMigrationRegistry = Object.freeze([
   { order: 230, owner: "core", migration: M0230FirstLocalAdministrator1700000000230 },
   { order: 235, owner: "core", migration: M0235QaWorkspaceBootstrap1700000000235 },
   { order: 240, owner: "core", migration: M0240DevBootstrapSource1700000000240 },
+  { order: 245, owner: "core", migration: M0245PilotCommandAdmission1700000000245 },
+  { order: 250, owner: "core", migration: M0250PilotFenceAction1700000000250 },
+  { order: 255, owner: "core", migration: M0255NotificationTemplateEvidence1700000000255 },
 ] satisfies readonly OwnedMigration[]);
 
 export {
@@ -121,3 +127,6 @@ export { M0230FirstLocalAdministrator1700000000230 };
 
 export { M0235QaWorkspaceBootstrap1700000000235 };
 export { M0240DevBootstrapSource1700000000240 };
+export { M0245PilotCommandAdmission1700000000245 };
+export { M0250PilotFenceAction1700000000250 };
+export { M0255NotificationTemplateEvidence1700000000255 };

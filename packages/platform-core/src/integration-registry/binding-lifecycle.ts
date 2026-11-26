@@ -122,7 +122,9 @@ export function evaluateCapabilityRequirements(
         entry.capabilityKey === requirement.capabilityKey &&
         entry.logicalRole === requirement.logicalRole &&
         satisfiesVersionRange(entry.exactContractVersion, requirement.versionRange) &&
-        requirement.allowedEnvironmentScopes.includes(entry.environmentScope) &&
+        (requirement.allowedEnvironmentScopes.includes(entry.environmentScope) ||
+          (entry.environmentScope === "NON_PROD" &&
+            requirement.allowedEnvironmentScopes.includes("NON_PRODUCTION"))) &&
         requirement.operations.every((operation) => entry.operations.includes(operation)),
     );
     if (bindingEntry)

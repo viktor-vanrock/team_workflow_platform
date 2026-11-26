@@ -16,17 +16,24 @@ import {
 import {
   createPilotDevelopmentComposition,
   createPilotNonLocalComposition,
+  type CorporateConnectorFactories,
+  type DeploymentStartup,
   loadEnvironment,
   type PilotNonLocalCompositionOptions,
   selectRuntimeComposition,
 } from "@awp/runtime-composition";
 
 import type { PilotNonLocalApiBindings } from "./app.module.ts";
+import type { CorporateQaBindings } from "./extensions/corporate-qa.module.ts";
 
 export interface PilotNonLocalApiEntrypoint {
   readonly source: DataSource;
   readonly composition: Omit<PilotNonLocalCompositionOptions, "component">;
-  readonly api: Omit<PilotNonLocalApiBindings, "source">;
+  readonly api: Omit<PilotNonLocalApiBindings, "source" | "qa">;
+  readonly qa?: (
+    connectors: CorporateConnectorFactories,
+    deployment: DeploymentStartup,
+  ) => CorporateQaBindings;
 }
 
 export async function bootstrapApi(
@@ -76,7 +83,21 @@ export async function bootstrapApi(
     } = await import("./app.module.ts");
     if (corporate) await corporate.deployment.start();
     const module = corporate
-      ? PilotNonLocalApiModule.register({ ...nonLocal!.api, source: nonLocal!.source })
+      ? PilotNonLocalApiModule.register({
+          ...nonLocal!.api,
+          source: nonLocal!.source,
+          ...(nonLocal!.qa && environment.deployment
+            ? {
+                qa: {
+                  bindings: nonLocal!.qa(corporate.connectors, corporate.deployment),
+                  projects: environment.deployment.projectIds.map((projectId) => ({
+                    workspaceId: environment.deployment!.workspaceId,
+                    projectId,
+                  })),
+                },
+              }
+            : {}),
+        })
       : environment.profile === "local"
         ? composition === "qa-jira-gitlab-mattermost-local"
           ? QaJiraGitLabMattermostLocalApiModule

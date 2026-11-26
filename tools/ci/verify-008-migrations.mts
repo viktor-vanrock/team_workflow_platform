@@ -53,6 +53,7 @@ const sourcePaths = Object.freeze([
   "packages/competency-qa/src/persistence/migrations/2095-defect-proposals.ts",
   "packages/competency-qa/src/persistence/migrations/2100-hermes-policy-fence.ts",
   "packages/competency-qa/src/persistence/migrations/2110-resource-publication-heads.ts",
+  "packages/competency-qa/src/persistence/migrations/2115-validated-incomplete-result.ts",
 ]);
 const sourceBinding = sourcePaths.map((path) =>
   Object.freeze({ path, sha256: digest(readFileSync(resolve(workspace, path))) }),
@@ -106,7 +107,7 @@ for (const image of images) {
       failedTransactionRollback: true,
       recoveryAfterRollback: true,
     }),
-    versions: Object.freeze({ core: 200, qa: 2110 }),
+    versions: Object.freeze({ core: 200, qa: 2115 }),
   });
   failed ||= result.status === "FAIL";
   results.push(result);
@@ -141,7 +142,7 @@ const report = Object.freeze({
     failedTransactionRollback: true,
     recoveryAfterRollback: true,
   }),
-  versions: Object.freeze({ core: 200, qa: 2110 }),
+  versions: Object.freeze({ core: 200, qa: 2115 }),
 });
 const reportPath = resolve(
   workspace,

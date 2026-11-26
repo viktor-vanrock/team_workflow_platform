@@ -67,7 +67,7 @@ describe.runIf(runPostgresMatrix)("Feature 008 PostgreSQL 17/18 migration matrix
           ),
         ).toEqual([
           { namespace: "core", version: 220 },
-          { namespace: "pack:qa", version: 2110 },
+          { namespace: "pack:qa", version: 2115 },
         ]);
         await fresh.destroy();
 
@@ -186,7 +186,7 @@ describe.runIf(runPostgresMatrix)("Feature 008 PostgreSQL 17/18 migration matrix
           ),
         ).toEqual([
           { namespace: "core", version: 220 },
-          { namespace: "pack:qa", version: 2110 },
+          { namespace: "pack:qa", version: 2115 },
         ]);
         await recovered.destroy();
       } finally {

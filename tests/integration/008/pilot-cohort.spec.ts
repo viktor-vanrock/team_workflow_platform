@@ -5,6 +5,7 @@ import {
   authorizePilotDispatch,
   createInitialPilotCohort,
   expandPilotCohort,
+  pilotCohortScopeHash,
 } from "../../../packages/runtime-composition/src/pilot/cohort-service.ts";
 
 const hash = (value: unknown) => sha256(value as JsonValue);
@@ -45,6 +46,21 @@ describe("Feature 008 pilot cohort", () => {
     expect(expanded).not.toHaveProperty("entitlements");
     expect(() => createInitialPilotCohort(cohortInput([project("a"), project("b")]))).toThrow(
       "PILOT_INITIAL_COHORT_ONE_PROJECT_REQUIRED",
+    );
+  });
+
+  it("pins reviewed scope independently of later gate results", () => {
+    const initial = cohort();
+    const changedGates = {
+      ...initial,
+      gateRefs: initial.gateRefs.map((gate) => ({ ...gate, contentHash: hash("new-gate") })),
+    };
+    expect(pilotCohortScopeHash(initial)).toBe(pilotCohortScopeHash(changedGates));
+    expect(pilotCohortScopeHash({ ...initial, userIds: ["user-b"] })).not.toBe(
+      pilotCohortScopeHash(initial),
+    );
+    expect(pilotCohortScopeHash({ ...initial, endAt: "2026-09-03T13:00:00Z" })).not.toBe(
+      pilotCohortScopeHash(initial),
     );
   });
 

@@ -624,18 +624,27 @@ RETURNING *`,
     return record(updated[0]);
   }
 
-  async due(now: Date, limit: number): Promise<readonly GitLabEffectReconciliationRecord[]> {
+  async due(
+    now: Date,
+    limit: number,
+    scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
+  ): Promise<readonly GitLabEffectReconciliationRecord[]> {
     if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100)
       throw new Error("GITLAB_EFFECT_PAGE_LIMIT_INVALID");
+    if (scope && (!scope.workspaceId || !scope.projectIds.length))
+      throw new Error("GITLAB_EFFECT_SCOPE_REQUIRED");
     return Object.freeze(
       rows(
         await this.source.query(
           `
-SELECT * FROM gitlab_effect_reconciliations
-WHERE state IN ('NOT_STARTED','EFFECT_STARTED','LOOKUP_REQUIRED','ONE_FOUND')
-  AND (next_retry_at IS NULL OR next_retry_at<=$1) AND (lease_until IS NULL OR lease_until<$1)
-ORDER BY COALESCE(next_retry_at,created_at),effect_reconciliation_id LIMIT $2`,
-          [now, limit],
+SELECT e.* FROM gitlab_effect_reconciliations e
+WHERE e.state IN ('NOT_STARTED','EFFECT_STARTED','LOOKUP_REQUIRED','ONE_FOUND')
+  AND (e.next_retry_at IS NULL OR e.next_retry_at<=$1) AND (e.lease_until IS NULL OR e.lease_until<$1)
+  AND ($3::uuid IS NULL OR (e.workspace_id=$3 AND EXISTS(
+    SELECT 1 FROM connector_commands c WHERE c.id=e.command_id AND c.workspace_id=e.workspace_id
+      AND c.project_id=ANY($4::uuid[]))))
+ORDER BY COALESCE(e.next_retry_at,e.created_at),e.effect_reconciliation_id LIMIT $2`,
+          [now, limit, scope?.workspaceId ?? null, scope ? [...scope.projectIds] : null],
         ),
       ).map(record),
     );

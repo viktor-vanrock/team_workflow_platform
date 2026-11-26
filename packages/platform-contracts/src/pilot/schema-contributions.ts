@@ -10,6 +10,7 @@ export const pilotContractContribution: DesignContractContribution = Object.free
 export const pilotSchemaIds = Object.freeze({
   gateReport: "urn:awp:contracts:pilot:gate-report:v1",
   event: "urn:awp:contracts:pilot:event:v1",
+  fenceAction: "urn:awp:contracts:pilot:fence-action:v1",
 });
 export const pilotEventContributions = Object.freeze(
   [

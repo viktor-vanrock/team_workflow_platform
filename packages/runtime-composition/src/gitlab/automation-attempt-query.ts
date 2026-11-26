@@ -114,19 +114,22 @@ export type GitLabAutomationAttemptQueryOptions = GitLabAutomationLaunchServiceO
 
 export class TypeOrmGitLabAutomationAttemptQuery {
   readonly #attempts: TypeOrmAutomationExecutionRepository;
-  readonly #launches: TypeOrmGitLabAutomationLaunchService;
+  readonly #launches: TypeOrmGitLabAutomationLaunchService | undefined;
   readonly #health: TypeOrmGitLabOperationalHealth;
 
   constructor(
     private readonly source: DataSource,
-    options: GitLabAutomationAttemptQueryOptions,
+    options?: GitLabAutomationAttemptQueryOptions,
   ) {
     this.#attempts = new TypeOrmAutomationExecutionRepository(source);
-    this.#launches = new TypeOrmGitLabAutomationLaunchService(source, options);
+    this.#launches = options
+      ? new TypeOrmGitLabAutomationLaunchService(source, options)
+      : undefined;
     this.#health = new TypeOrmGitLabOperationalHealth(source);
   }
 
   async launchConfirmation(scope: QaScope, sessionId: string) {
+    if (!this.#launches) throw new Error("GITLAB_AUTOMATION_LAUNCH_NOT_CONFIGURED");
     const confirmation = await this.#launches.currentConfirmation(scope, sessionId);
     return Object.freeze({
       confirmation,
@@ -137,6 +140,7 @@ export class TypeOrmGitLabAutomationAttemptQuery {
   async launch(
     input: GitLabAutomationLaunchInput,
   ): Promise<Readonly<{ created: boolean; attempt: QaAutomationAttemptProjection }>> {
+    if (!this.#launches) throw new Error("GITLAB_AUTOMATION_LAUNCH_NOT_CONFIGURED");
     const result = await this.#launches.launch(input);
     return Object.freeze({
       created: !result.replayed,

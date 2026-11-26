@@ -1,6 +1,6 @@
 import type { DataSource, EntityManager } from "typeorm";
 
-import { qaAggregateSnapshotHash, type QaScope } from "@awp/competency-qa/node";
+import type { QaScope } from "@awp/competency-qa/node";
 import {
   assertExactRevisionRef,
   type CompleteOperationalObservation,
@@ -11,6 +11,12 @@ import {
 import { TypeOrmOperationalAuthorityRepository } from "@awp/platform-persistence-typeorm";
 
 import type { QaCompletionConfigurationPort } from "./completion-runtime.ts";
+import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
+import {
+  connectorKey,
+  jiraConnectionRuntimeContent,
+  jiraMappingRuntimeContent,
+} from "../jira/qa-connection-content.ts";
 
 export interface QaCompletionPins extends QaScope {
   readonly bindingRef: ExactRevisionRef;
@@ -101,7 +107,7 @@ export class PublishedQaCompletionConfiguration implements QaCompletionConfigura
       )) as { content: unknown }[];
       if (
         found.length !== 1 ||
-        qaAggregateSnapshotHash(found[0]!.content as never) !== ref.contentHash
+        integrationConfigurationHash(table, record(found[0]!.content)) !== ref.contentHash
       )
         throw denied();
       return record(found[0]!.content);
@@ -125,14 +131,16 @@ export class PublishedQaCompletionConfiguration implements QaCompletionConfigura
     )
       throw denied();
     const profile = await revision("connector_profile", pin.profileRef);
-    const mapping = await revision("connector_mapping", pin.mappingRef);
-    const connection = await revision("connection", pin.connectionRef);
+    const rawMapping = await revision("connector_mapping", pin.mappingRef);
+    const rawConnection = await revision("connection", pin.connectionRef);
+    const mapping = jiraMappingRuntimeContent(rawMapping);
+    const connection = jiraConnectionRuntimeContent(rawConnection);
     if (
       !matches(profile.mappingRef, pin.mappingRef) ||
       !matches(profile.connectionRef, pin.connectionRef) ||
-      !profile.connectorKey ||
-      profile.connectorKey !== mapping.connectorKey ||
-      profile.connectorKey !== connection.connectorKey ||
+      !connectorKey(profile) ||
+      connectorKey(profile) !== connectorKey(rawMapping) ||
+      connectorKey(profile) !== connectorKey(rawConnection) ||
       mapping.authorityScopeKey !== pin.authorityScopeKey ||
       connection.projectId !== pin.externalProjectId
     )

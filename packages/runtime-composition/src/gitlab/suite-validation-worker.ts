@@ -8,7 +8,10 @@ import {
 import type { ConnectorCommand } from "@awp/platform-core";
 import { TypeOrmCommandDeliveryStore } from "@awp/platform-persistence-typeorm";
 
-import { qaAutomationSuiteValidationCapabilityKey } from "./suite-validation.ts";
+import {
+  qaAutomationSuiteValidationCapabilityKey,
+  qaAutomationSuiteValidationOperation,
+} from "./suite-validation.ts";
 
 export interface GitLabSuiteValidationExecution {
   readonly previousVersion: QaAutomationSuiteVersion;
@@ -26,14 +29,26 @@ export class GitLabSuiteValidationWorker {
   constructor(
     source: DataSource,
     private readonly executor: GitLabSuiteValidationExecutor,
+    private readonly deploymentScope?: Readonly<{
+      workspaceId: string;
+      projectIds: readonly string[];
+    }>,
   ) {
+    if (deploymentScope && (!deploymentScope.workspaceId || !deploymentScope.projectIds.length))
+      throw new Error("GITLAB_SUITE_VALIDATION_SCOPE_INVALID");
     this.#delivery = new TypeOrmCommandDeliveryStore(source);
   }
 
   async runOne(now = new Date()): Promise<"IDLE" | "VALID" | "INVALID"> {
-    const claims = await this.#delivery.claim(now, new Date(now.getTime() + 30_000), 1, [
-      qaAutomationSuiteValidationCapabilityKey,
-    ]);
+    const claims = await this.#delivery.claim(
+      now,
+      new Date(now.getTime() + 30_000),
+      1,
+      [qaAutomationSuiteValidationCapabilityKey],
+      this.deploymentScope
+        ? { ...this.deploymentScope, operations: [qaAutomationSuiteValidationOperation] }
+        : undefined,
+    );
     const claim = claims[0];
     if (!claim) return "IDLE";
     const dispatched = await this.#delivery.markDispatched(claim.outbox, now, 30_000);

@@ -20,6 +20,7 @@ export class CorporateQaHttpIdentity implements QaHttpIdentity {
     private readonly sessions: CorporateSessionService,
     private readonly access: ScopedAccessRepositoryPort,
     stepUpPermissions: readonly string[],
+    private readonly projects?: readonly Readonly<{ workspaceId: string; projectId: string }>[],
   ) {
     this.stepUp = new Set(stepUpPermissions);
   }
@@ -46,6 +47,15 @@ export class CorporateQaHttpIdentity implements QaHttpIdentity {
     const handler = context.getHandler();
     await this.sessions.session(request);
     return async (input) => {
+      if (
+        this.projects &&
+        !this.projects.some(
+          (project) =>
+            project.workspaceId === input.scope.workspaceId &&
+            project.projectId === input.scope.projectId,
+        )
+      )
+        throw new Error("QA_SCOPE_DENIED");
       const query = { ...input, requireStepUp: this.stepUp.has(input.permission) };
       const authorized = await this.sessions.authorize(request, query, handler);
       if (

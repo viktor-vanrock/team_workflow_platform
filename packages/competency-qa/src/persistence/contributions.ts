@@ -4,7 +4,7 @@ import { QaDomainError } from "../domain/primitives.ts";
 
 export const qaMigrationOrders = Object.freeze([
   2000, 2005, 2010, 2015, 2020, 2025, 2030, 2040, 2050, 2055, 2060, 2070, 2080, 2085, 2090, 2095,
-  2100, 2110,
+  2100, 2110, 2115,
 ] as const);
 export type QaMigrationOrder = (typeof qaMigrationOrders)[number];
 
@@ -218,6 +218,13 @@ export const qaPersistenceInventory = Object.freeze([
     key: "qa_resource_publication_heads",
     sourcePath:
       "packages/competency-qa/src/persistence/migrations/2110-resource-publication-heads.ts",
+    tables: Object.freeze([]),
+  }),
+  Object.freeze({
+    order: 2115,
+    key: "qa_validated_incomplete_result",
+    sourcePath:
+      "packages/competency-qa/src/persistence/migrations/2115-validated-incomplete-result.ts",
     tables: Object.freeze([]),
   }),
 ] as const satisfies readonly QaPersistenceInventorySlice[]);

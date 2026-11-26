@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "tsx --tsconfig ../../tsconfig.base.json src/main.ts"
+    "start": "tsx --tsconfig ../../tsconfig.base.json src/main.ts",
+    "start:corporate": "tsx --tsconfig ../../tsconfig.base.json src/corporate-main.ts"
   },
   "dependencies": {
     "@awp/platform-persistence-typeorm": "workspace:*",

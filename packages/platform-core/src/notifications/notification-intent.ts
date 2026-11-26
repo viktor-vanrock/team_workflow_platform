@@ -32,6 +32,13 @@ export interface NotificationIntentSnapshot {
   readonly targetHash: string;
   readonly payloadHash: string;
   readonly renderHash: string;
+  readonly templateEvidence?: Readonly<{
+    templateRef: string;
+    templateHash: `sha256:${string}`;
+    variablesSchemaRef: Readonly<{ id: string; version: number; digest: `sha256:${string}` }>;
+    variablesHash: `sha256:${string}`;
+    renderHash: `sha256:${string}`;
+  }>;
   readonly commandId: string;
   readonly state: NotificationIntentState;
   readonly attempts: readonly NotificationDeliveryAttempt[];

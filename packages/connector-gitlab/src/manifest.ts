@@ -78,3 +78,18 @@ export const gitLabConnectorManifest = Object.freeze({
   prohibitedOperations: gitLabProhibitedOperations,
   support: gitLabSupportMetadata,
 });
+
+/** Staged successor; no runtime composition selects it until conformance is verified. */
+export const gitLabConnectorManifestV11 = Object.freeze({
+  ...gitLabConnectorManifest,
+  metadata: Object.freeze({ ...gitLabConnectorManifest.metadata, version: "1.1.0" }),
+  support: Object.freeze({
+    ...gitLabSupportMetadata,
+    pinnedSuiteResultExample: Object.freeze({
+      operation: "suite-result-example.read",
+      method: "GET",
+      path: ".awp/qa/result-example.json",
+      reference: "EXACT_COMMIT_SHA",
+    }),
+  }),
+});

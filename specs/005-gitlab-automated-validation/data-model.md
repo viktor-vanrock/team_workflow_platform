@@ -354,6 +354,13 @@ Exactly one immutable technical result per TERMINAL automated Attempt:
 
 `UNIQUE(attempt_id)`. A deferred constraint requires the Attempt head to be TERMINAL and point to this exact result, and forbids a terminal result whose project/commit/environment/suite differs from the locked Session. Unknown/missing/oversized schema, ambiguous trigger identity or checksum mismatch is `SYNTHETIC_INCOMPLETE`; it never maps to PASS.
 
+The existing result schema also permits `SCHEMA_VALIDATED` with `INCOMPLETE` when
+the validated machine result itself reports an incomplete run. This has a valid
+normalization report and no synthetic reason; it still cannot become PASS or cause
+an automatic retry. Migration 2115 aligns the database constraint with this
+combination without changing existing rows. Mixed-version deployments must update
+consumers before enabling the new writer behavior.
+
 Technical PASS is only an execution fact. It never creates a human Plan Item Result, Session Outcome, QA Verdict or Jira transition.
 
 ### 5.5. `qa_automation_attempt_artifact_memberships`

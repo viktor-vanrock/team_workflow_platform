@@ -30,6 +30,7 @@ const administratorPermissions = [
   "queue.policy.read",
   "queue.calendar.read",
   "project.onboarding.evaluate",
+  "pilot.readiness.read",
   "project.suspend",
   "qa.environment.publish",
   "qa.context.publish",

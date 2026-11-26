@@ -2,7 +2,10 @@ import { randomUUID } from "node:crypto";
 
 import type { DataSource, EntityManager } from "typeorm";
 
-import { qaValidationCapabilityRequirementSetV1 } from "@awp/competency-qa/node";
+import {
+  qaValidationCapabilityRequirementSetV1,
+  resolveQaCapabilityRequirementSet,
+} from "@awp/competency-qa/node";
 import {
   type CapabilityProbeResult,
   createOnboardingRevision,
@@ -398,11 +401,29 @@ export class DurableValidationHttpApplication {
           );
           let probeRequestRef: ExactRevisionRef | undefined;
           if (report.status === "VALID" && probeKeys.length) {
+            let requirementSet: ReturnType<typeof resolveQaCapabilityRequirementSet> =
+              qaValidationCapabilityRequirementSetV1;
+            if (current.qaProjectContextRef) {
+              const context = await contextFact(manager, current);
+              const contexts = (await manager.query(
+                "SELECT policy_refs FROM qa_project_context_revisions_v2 WHERE workspace_id=$1 AND project_id=$2 AND context_id=$3 AND version=$4 AND content_hash=$5 AND state='PUBLISHED'",
+                [
+                  request.workspaceId,
+                  request.projectId,
+                  context.id,
+                  context.version,
+                  context.contentHash,
+                ],
+              )) as readonly { policy_refs: { capabilityRequirementSetRef?: ExactRevisionRef } }[];
+              const requirementRef = contexts[0]?.policy_refs?.capabilityRequirementSetRef;
+              requirementSet = requirementRef && resolveQaCapabilityRequirementSet(requirementRef);
+              if (!requirementSet) return reject("CAPABILITY_REQUIREMENT_SET_UNSUPPORTED", 409);
+            }
             const configuration = await configurationFacts(manager, request, binding),
               entries = documents(binding.content.entries),
               targets: RequestedProbeTarget[] = [];
-            for (const requirement of qaValidationCapabilityRequirementSetV1.requirements.filter(
-              (r) => probeKeys.includes(r.requirementKey),
+            for (const requirement of requirementSet.requirements.filter((r) =>
+              probeKeys.includes(r.requirementKey),
             )) {
               const entry = entries.find(
                 (e) =>

@@ -15,6 +15,8 @@ import {
   createPilotNonLocalComposition,
   loadEnvironment,
   type PilotNonLocalCompositionOptions,
+  type CorporateConnectorFactories,
+  type DeploymentStartup,
   selectRuntimeComposition,
 } from "@awp/runtime-composition";
 
@@ -23,7 +25,14 @@ import type { NamedWorkerLoopContribution } from "./app.module.ts";
 export interface PilotNonLocalWorkerEntrypoint {
   readonly source: DataSource;
   readonly composition: Omit<PilotNonLocalCompositionOptions, "component">;
-  readonly contributions: readonly NamedWorkerLoopContribution[];
+  readonly contributions:
+    | readonly NamedWorkerLoopContribution[]
+    | ((
+        context: Readonly<{
+          connectors: CorporateConnectorFactories;
+          deployment: DeploymentStartup;
+        }>,
+      ) => readonly NamedWorkerLoopContribution[]);
 }
 
 export async function bootstrapWorker(
@@ -75,7 +84,12 @@ export async function bootstrapWorker(
     const module = corporate
       ? PilotNonLocalWorkerAppModule.register(
           nonLocal!.source,
-          nonLocal!.contributions,
+          typeof nonLocal!.contributions === "function"
+            ? nonLocal!.contributions({
+                connectors: corporate.connectors,
+                deployment: corporate.deployment,
+              })
+            : nonLocal!.contributions,
           corporate.workerKeys,
         )
       : environment.profile === "local"

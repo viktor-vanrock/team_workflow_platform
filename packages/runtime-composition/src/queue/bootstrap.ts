@@ -381,7 +381,10 @@ export class PostgresQueueCapacityReconciliationBootstrap {
   }
 }
 
-export function createQueueFoundationWorkerRuntime(source: DataSource) {
+export function createQueueFoundationWorkerRuntime(
+  source: DataSource,
+  deploymentScope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
+) {
   const repositories = createQueueFoundationRepositoryProviders(source);
   const coordinator = createPostgresQueueProjectionCoordinator(source, repositories);
   const rebuild = new QueueProjectionRebuildCoordinator(
@@ -412,55 +415,60 @@ export function createQueueFoundationWorkerRuntime(source: DataSource) {
     },
     slaThresholdNotifications,
   );
-  const temporal = new PostgresQueueTemporalTransitionWorker(source, {
-    evaluateQueueEntry: async ({ workspaceId, projectId, subjectId }) => {
-      const result = await coordinator.evaluateTemporal({ workspaceId, projectId, subjectId });
-      return Object.freeze({ changed: result.changed });
+  const temporal = new PostgresQueueTemporalTransitionWorker(
+    source,
+    {
+      evaluateQueueEntry: async ({ workspaceId, projectId, subjectId }) => {
+        const result = await coordinator.evaluateTemporal({ workspaceId, projectId, subjectId });
+        return Object.freeze({ changed: result.changed });
+      },
+      evaluateSlaClock: async (due) => await slaTemporal.evaluate(due),
+      expireOrderOverride: async (due) => {
+        const result = await repositories.orderInvalidation.appendProjectInvalidation({
+          scope: { kind: "PROJECT", workspaceId: due.workspaceId, projectId: due.projectId },
+          workItemId: due.subjectId,
+          reasonCode: "ORDER_OVERRIDE_EXPIRED",
+          sourceRef: Object.freeze({
+            sourceType: "QUEUE_ORDER_OVERRIDE_REVISION",
+            sourceId: due.overrideId,
+            sourceVersion: due.sourceVersion,
+            semanticHash: due.semanticHash,
+          }),
+          occurredAt: due.dueAt,
+        });
+        return Object.freeze({ changed: result.changed });
+      },
+      expireExpedite: async (due) => {
+        const result = await repositories.control.transitionExpedite({
+          scope: { kind: "PROJECT", workspaceId: due.workspaceId, projectId: due.projectId },
+          workItemId: due.subjectId,
+          controlId: due.controlId,
+          revisionId: deterministicUuid(
+            `queue-control-expedite-expiry:${due.controlRevisionId}:${due.sourceVersion}`,
+          ),
+          command: "EXPIRE",
+          expectedControlVersion: due.expectedControlVersion,
+          acceptedActionRef: Object.freeze({
+            sourceType: "WORK_ITEM_QUEUE_CONTROL_REVISION",
+            sourceId: due.controlRevisionId,
+            sourceVersion: due.sourceVersion,
+            semanticHash: due.semanticHash,
+          }),
+          actorId: due.recordedBy,
+          reason: "EXPEDITE window expired",
+          at: due.dueAt,
+        });
+        return Object.freeze({ changed: result.revisionRef !== undefined });
+      },
     },
-    evaluateSlaClock: async (due) => await slaTemporal.evaluate(due),
-    expireOrderOverride: async (due) => {
-      const result = await repositories.orderInvalidation.appendProjectInvalidation({
-        scope: { kind: "PROJECT", workspaceId: due.workspaceId, projectId: due.projectId },
-        workItemId: due.subjectId,
-        reasonCode: "ORDER_OVERRIDE_EXPIRED",
-        sourceRef: Object.freeze({
-          sourceType: "QUEUE_ORDER_OVERRIDE_REVISION",
-          sourceId: due.overrideId,
-          sourceVersion: due.sourceVersion,
-          semanticHash: due.semanticHash,
-        }),
-        occurredAt: due.dueAt,
-      });
-      return Object.freeze({ changed: result.changed });
-    },
-    expireExpedite: async (due) => {
-      const result = await repositories.control.transitionExpedite({
-        scope: { kind: "PROJECT", workspaceId: due.workspaceId, projectId: due.projectId },
-        workItemId: due.subjectId,
-        controlId: due.controlId,
-        revisionId: deterministicUuid(
-          `queue-control-expedite-expiry:${due.controlRevisionId}:${due.sourceVersion}`,
-        ),
-        command: "EXPIRE",
-        expectedControlVersion: due.expectedControlVersion,
-        acceptedActionRef: Object.freeze({
-          sourceType: "WORK_ITEM_QUEUE_CONTROL_REVISION",
-          sourceId: due.controlRevisionId,
-          sourceVersion: due.sourceVersion,
-          semanticHash: due.semanticHash,
-        }),
-        actorId: due.recordedBy,
-        reason: "EXPEDITE window expired",
-        at: due.dueAt,
-      });
-      return Object.freeze({ changed: result.revisionRef !== undefined });
-    },
-  });
+    undefined,
+    deploymentScope,
+  );
   return Object.freeze({
     repositories,
     coordinator,
     rebuild,
-    projection: new PostgresQueueProjectionWorker(source, coordinator),
+    projection: new PostgresQueueProjectionWorker(source, coordinator, deploymentScope),
     temporal,
     slaTemporal,
     slaThresholdNotifications,

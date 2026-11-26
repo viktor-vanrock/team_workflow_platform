@@ -719,6 +719,8 @@ export interface QueueProjectionInvalidation {
   readonly eventType?: string;
   readonly entityId: string;
   readonly entityVersion: number;
+  /** Distinguishes independent version counters when the projected subject differs from the event entity. */
+  readonly versionSourceId?: string;
   readonly scope: Readonly<{ workspaceId: string; projectId: string }>;
   readonly cause?: QueueProjectionCause;
 }
@@ -741,7 +743,7 @@ export class QueueProjectionCoordinator {
       return Object.freeze({ status: "DUPLICATE" as const });
     }
     // Jira projections, QA revisions and import timestamps have independent counters.
-    const versionKey = `${event.scope.workspaceId}\0${event.scope.projectId}\0${event.entityId}\0${event.eventType ?? ""}`;
+    const versionKey = `${event.scope.workspaceId}\0${event.scope.projectId}\0${event.versionSourceId ?? event.entityId}\0${event.eventType ?? ""}`;
     if (event.entityVersion <= (this.versions.get(versionKey) ?? 0))
       return Object.freeze({ status: "STALE" as const });
     const result = await this.project(
@@ -882,7 +884,14 @@ export class PostgresQueueProjectionWorker {
   constructor(
     private readonly source: DataSource,
     private readonly coordinator?: Pick<QueueProjectionCoordinator, "consume">,
-  ) {}
+    private readonly deploymentScope?: Readonly<{
+      workspaceId: string;
+      projectIds: readonly string[];
+    }>,
+  ) {
+    if (deploymentScope && (!deploymentScope.workspaceId || !deploymentScope.projectIds.length))
+      throw new Error("QUEUE_PROJECTION_SCOPE_INVALID");
+  }
 
   async run(
     batchSize = 100,
@@ -899,12 +908,36 @@ export class PostgresQueueProjectionWorker {
          FROM event_outbox outbox
          LEFT JOIN consumer_inbox inbox ON inbox.consumer_key='queue-projector' AND inbox.message_id=outbox.id::text
         WHERE inbox.message_id IS NULL AND outbox.event_type=ANY($1::text[])
+          AND ($3::uuid IS NULL OR (outbox.workspace_id=$3 AND outbox.project_id=ANY($4::uuid[])))
         ORDER BY outbox.created_at,outbox.id LIMIT $2`,
-      [queueProjectionSourceEventTypes, batchSize],
+      [
+        queueProjectionSourceEventTypes,
+        batchSize,
+        this.deploymentScope?.workspaceId ?? null,
+        this.deploymentScope ? [...this.deploymentScope.projectIds] : null,
+      ],
     )) as InvalidationRow[];
     let processed = 0;
     for (const row of rows) {
-      await this.coordinator.consume(invalidationFrom(row));
+      let invalidation = invalidationFrom(row);
+      if (
+        row.event_type === "qa.automation-attempt.status-observed" ||
+        row.event_type === "qa.automation-attempt.completed"
+      ) {
+        const attempts = (await this.source.query(
+          `SELECT work_item_id FROM qa_automation_attempts
+           WHERE workspace_id=$1 AND project_id=$2 AND attempt_id=$3`,
+          [row.workspace_id, row.project_id, invalidation.entityId],
+        )) as readonly { work_item_id: string }[];
+        if (attempts.length !== 1 || !attempts[0]?.work_item_id)
+          throw new Error("QUEUE_AUTOMATION_ATTEMPT_SUBJECT_MISSING");
+        invalidation = Object.freeze({
+          ...invalidation,
+          versionSourceId: invalidation.entityId,
+          entityId: attempts[0].work_item_id,
+        });
+      }
+      await this.coordinator.consume(invalidation);
       const inserted = (await this.source.query(
         `INSERT INTO consumer_inbox(consumer_key,message_id,message_hash,processed_at)
          VALUES('queue-projector',$1,$2,clock_timestamp()) ON CONFLICT(consumer_key,message_id) DO NOTHING RETURNING message_id`,
@@ -925,10 +958,15 @@ export class PostgresQueueProjectionWorker {
           `SELECT queue_entry_id,workspace_id,project_id,current_revision_id
          FROM queue_entry_heads
         WHERE suppressed_by_work_item_id IS NULL
+          AND ($2::uuid IS NULL OR (workspace_id=$2 AND project_id=ANY($3::uuid[])))
           AND (next_temporal_evaluation_at IS NULL OR next_temporal_evaluation_at<=clock_timestamp())
         ORDER BY next_temporal_evaluation_at NULLS FIRST,workspace_id,project_id,queue_entry_id
         LIMIT $1 FOR UPDATE SKIP LOCKED`,
-          [batchSize],
+          [
+            batchSize,
+            this.deploymentScope?.workspaceId ?? null,
+            this.deploymentScope ? [...this.deploymentScope.projectIds] : null,
+          ],
         )) as readonly Readonly<Record<string, unknown>>[],
     );
   }

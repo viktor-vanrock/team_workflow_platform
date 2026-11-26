@@ -113,8 +113,9 @@ function result(
   attempt: QaAutomationAttemptRecord,
   outcome: "PASS" | "ASSERTION_FAILED" | "INFRA_FAILED" | "TIMEOUT" | "CANCELLED" | "INCOMPLETE",
   infrastructureCode?: string,
+  validIncomplete = false,
 ) {
-  if (outcome === "INCOMPLETE")
+  if (outcome === "INCOMPLETE" && !validIncomplete)
     return createQaAutomationAttemptResult({
       automationAttemptResultId: attempt.terminalResultId!,
       workspaceId: attempt.workspaceId,
@@ -197,6 +198,12 @@ const evaluate = (
   });
 
 describe("QA-owned automation retry policy", () => {
+  it("does not automatically retry a schema-validated INCOMPLETE result", () => {
+    const attempt = terminalAttempt();
+    expect(
+      evaluate(attempt, result(attempt, "INCOMPLETE", undefined, true)).decision,
+    ).toMatchObject({ decision: "NOT_APPLICABLE", reasonCode: "OUTCOME_INELIGIBLE" });
+  });
   it.each(["PASS", "ASSERTION_FAILED", "TIMEOUT", "CANCELLED", "INCOMPLETE"] as const)(
     "never auto-retries %s",
     (outcome) => {

@@ -27,7 +27,7 @@ export class TypeOrmNotificationIntentRepository {
   ) {
     const inserted = rows(
       await manager.query(
-        "INSERT INTO notification_intents(id,workspace_id,project_id,dedupe_key,source_event_ref,target,target_hash,payload_hash,render_hash,command_id,state,expires_at,row_version,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,clock_timestamp()) ON CONFLICT(workspace_id,project_id,dedupe_key) DO NOTHING RETURNING id",
+        "INSERT INTO notification_intents(id,workspace_id,project_id,dedupe_key,source_event_ref,target,target_hash,payload_hash,render_hash,command_id,state,expires_at,row_version,template_evidence,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,clock_timestamp()) ON CONFLICT(workspace_id,project_id,dedupe_key) DO NOTHING RETURNING id",
         [
           value.id,
           value.workspaceId,
@@ -42,6 +42,7 @@ export class TypeOrmNotificationIntentRepository {
           value.state,
           value.expiresAt,
           value.rowVersion,
+          value.templateEvidence ? JSON.stringify(value.templateEvidence) : null,
         ],
       ),
     );
@@ -161,6 +162,15 @@ export class TypeOrmNotificationIntentRepository {
       targetHash: String(row.target_hash),
       payloadHash: String(row.payload_hash),
       renderHash: String(row.render_hash),
+      ...(row.template_evidence
+        ? {
+            templateEvidence: (typeof row.template_evidence === "string"
+              ? JSON.parse(row.template_evidence)
+              : row.template_evidence) as NonNullable<
+              NotificationIntentSnapshot["templateEvidence"]
+            >,
+          }
+        : {}),
       commandId: String(row.command_id),
       state: String(row.state) as NotificationIntentSnapshot["state"],
       attempts: Object.freeze(

@@ -16,6 +16,7 @@ export const PROJECT_ONBOARDING_ACTION_KINDS = Object.freeze([
   "BINDING_RETIRE",
   "PROJECT_RESUME",
   "ONBOARDING_PILOT_ACTIVATE",
+  "PILOT_FENCE_PUBLISH",
 ] as const);
 
 export type ProjectOnboardingActionKind = (typeof PROJECT_ONBOARDING_ACTION_KINDS)[number];

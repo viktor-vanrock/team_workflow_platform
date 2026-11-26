@@ -84,7 +84,7 @@ describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
           });
           expect(composition.expectedVersions).toMatchObject({
             core: 220,
-            "pack:qa": 2110,
+            "pack:qa": 2115,
             "connector:gitlab": 4020,
           });
           await runQaJiraGitLabMattermostQueueLocalSeed(source, environment);

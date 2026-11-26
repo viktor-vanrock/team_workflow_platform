@@ -26,6 +26,9 @@ import type { Sha256Digest } from "@awp/platform-contracts";
 
 import { isGitLabLocalComposition, type RuntimeEnvironment } from "../config/environment.ts";
 import { classifyPilotFailure, decidePilotRetry } from "../pilot/retry-policy.ts";
+import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
+import type { CorporateConnectorFactories } from "../pilot/connector-factories.ts";
+import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import {
   type GitLabAutomationObservability,
   recordGitLabAutomationPhase,
@@ -449,16 +452,30 @@ export class TypeOrmGitLabAuthoritativeReadOutboxWorker {
     private readonly handler: GitLabAuthoritativeReadHandler,
     private readonly clock: Readonly<{ now(): Date }> = Object.freeze({ now: () => new Date() }),
     private readonly observability?: GitLabAutomationObservability,
-  ) {}
+    private readonly deploymentScope?: Readonly<{
+      workspaceId: string;
+      projectIds: readonly string[];
+    }>,
+  ) {
+    if (deploymentScope && (!deploymentScope.workspaceId || !deploymentScope.projectIds.length))
+      throw new Error("GITLAB_RECONCILIATION_SCOPE_INVALID");
+  }
 
   async runOne(): Promise<GitLabAuthoritativeReadOutcome> {
     const outcome = await this.source.transaction("READ COMMITTED", async (manager) => {
-      const rows = (await manager.query(`
+      const rows = (await manager.query(
+        `
 SELECT id,workspace_id,project_id,envelope,created_at
 FROM event_outbox
 WHERE state='READY' AND event_type='gitlab.authoritative-read.requested.v1'
+  AND ($1::uuid IS NULL OR (workspace_id=$1 AND project_id=ANY($2::uuid[])))
 ORDER BY created_at,id
-FOR UPDATE SKIP LOCKED LIMIT 1`)) as readonly Readonly<{
+FOR UPDATE SKIP LOCKED LIMIT 1`,
+        [
+          this.deploymentScope?.workspaceId ?? null,
+          this.deploymentScope ? [...this.deploymentScope.projectIds] : null,
+        ],
+      )) as readonly Readonly<{
         id: string;
         workspace_id: string;
         project_id: string;
@@ -691,7 +708,13 @@ export class TypeOrmGitLabReconciliationPollScheduler {
     private readonly source: DataSource,
     private readonly clock: Readonly<{ now(): Date }> = Object.freeze({ now: () => new Date() }),
     leaseOwner = `gitlab-reconciliation:${process.pid}:${randomUUID()}`,
+    private readonly deploymentScope?: Readonly<{
+      workspaceId: string;
+      projectIds: readonly string[];
+    }>,
   ) {
+    if (deploymentScope && (!deploymentScope.workspaceId || !deploymentScope.projectIds.length))
+      throw new Error("GITLAB_RECONCILIATION_SCOPE_INVALID");
     this.#leaseOwner = leaseOwner;
   }
 
@@ -733,7 +756,9 @@ export class TypeOrmGitLabReconciliationPollScheduler {
         });
       }
 
-      const cursor = (await repository.cursorsDue("ACTIVE_PIPELINES", now, 1))[0];
+      const cursor = (
+        await repository.cursorsDue("ACTIVE_PIPELINES", now, 1, this.deploymentScope)
+      )[0];
       if (cursor === undefined) return "IDLE";
       const claimed = await repository.claimCursor({
         reconciliationCursorId: String(cursor.reconciliation_cursor_id),
@@ -789,6 +814,7 @@ JOIN connector_profile_revisions profile ON profile.workspace_id=effect.workspac
  AND profile.header_id=(effect.profile_ref->>'id')::uuid AND profile.version=(effect.profile_ref->>'version')::integer
  AND profile.content_hash=effect.profile_ref->>'contentHash' AND profile.status='PUBLISHED'
 WHERE effect.workspace_id=$1 AND effect.connection_header_id=$2 AND effect.numeric_project_id=$3
+  AND ($5::uuid IS NULL OR (command.workspace_id=$5 AND command.project_id=ANY($6::uuid[])))
   AND effect.profile_ref=$4::jsonb AND effect.state IN ('ONE_FOUND','CONFIRMED')
   AND effect.external_pipeline_id IS NOT NULL AND attempt.current_status<>'TERMINAL'
 ORDER BY attempt.created_at,attempt.attempt_id`,
@@ -797,6 +823,8 @@ ORDER BY attempt.created_at,attempt.attempt_id`,
           scope.connectionHeaderId,
           scope.numericProjectId,
           JSON.stringify(json(claimed.profile_ref)),
+          this.deploymentScope?.workspaceId ?? null,
+          this.deploymentScope ? [...this.deploymentScope.projectIds] : null,
         ],
       )) as readonly ActiveGitLabPipelineRow[];
       const scheduled: string[] = [];
@@ -895,8 +923,12 @@ JOIN connector_profile_revisions profile ON profile.workspace_id=effect.workspac
  AND profile.content_hash=effect.profile_ref->>'contentHash' AND profile.status='PUBLISHED'
 WHERE effect.state IN ('ONE_FOUND','CONFIRMED') AND effect.external_pipeline_id IS NOT NULL
   AND attempt.current_status<>'TERMINAL'
+  AND ($1::uuid IS NULL OR (command.workspace_id=$1 AND command.project_id=ANY($2::uuid[])))
 ORDER BY effect.workspace_id,effect.connection_header_id,effect.numeric_project_id,effect.created_at`,
-      [],
+      [
+        this.deploymentScope?.workspaceId ?? null,
+        this.deploymentScope ? [...this.deploymentScope.projectIds] : null,
+      ],
     );
   }
 
@@ -944,8 +976,50 @@ export function createLocalGitLabAuthoritativeReadHandler(
   ) {
     throw new Error("GITLAB_RECONCILIATION_LOCAL_ENDPOINT_FORBIDDEN");
   }
+  return createGitLabAuthoritativeReadHandler(source, { endpoint, transport });
+}
+
+export function createCorporateGitLabAuthoritativeReadHandler(
+  input: Readonly<{
+    source: DataSource;
+    environment: RuntimeEnvironment;
+    grants: readonly CorporateConnectorGrant[];
+    factories: CorporateConnectorFactories;
+  }>,
+): GitLabAuthoritativeReadHandler {
+  if (
+    !input.source.isInitialized ||
+    input.environment.profile !== "non-local" ||
+    input.environment.environmentScope !== "NON_PROD" ||
+    !input.environment.deployment
+  )
+    throw new Error("GITLAB_RECONCILIATION_CORPORATE_AUTHORITY_REQUIRED");
+  return createGitLabAuthoritativeReadHandler(input.source, { corporate: input });
+}
+
+function createGitLabAuthoritativeReadHandler(
+  source: DataSource,
+  options:
+    | Readonly<{ endpoint: URL; transport: typeof fetch }>
+    | Readonly<{
+        corporate: Readonly<{
+          environment: RuntimeEnvironment;
+          grants: readonly CorporateConnectorGrant[];
+          factories: CorporateConnectorFactories;
+        }>;
+      }>,
+): GitLabAuthoritativeReadHandler {
   const handler: GitLabAuthoritativeReadHandler = {
     async read(input) {
+      const deployment =
+        "corporate" in options ? options.corporate.environment.deployment : undefined;
+      if (
+        "corporate" in options &&
+        (!deployment ||
+          deployment.workspaceId !== input.workspaceId ||
+          !deployment.projectIds.includes(input.projectId))
+      )
+        throw new Error("GITLAB_RECONCILIATION_PROJECT_SCOPE_MISMATCH");
       const rows = (await source.query(
         `
 SELECT attempt.attempt_id,attempt.authorization_basis_hash,attempt.executing_service_principal_id,
@@ -1017,7 +1091,12 @@ ORDER BY discovery.collected_at DESC LIMIT 1`,
       ) {
         throw new Error("GITLAB_RECONCILIATION_CONFIGURATION_PIN_REVOKED");
       }
-      const connection = validateGitLabConnectionConfiguration(json(row.connection_content));
+      const rawConnection = json<Record<string, unknown>>(row.connection_content);
+      const connectionEnvelope = rawConnection.connectorConfiguration as
+        { value?: unknown } | undefined;
+      const connection = validateGitLabConnectionConfiguration(
+        connectionEnvelope?.value ?? rawConnection,
+      );
       const preflight = preflightGitLabProfile(json(row.profile_content), connection);
       if (preflight.status !== "SAFE_TO_DISCOVER" || preflight.profile === undefined)
         throw new Error("GITLAB_RECONCILIATION_PROFILE_REVOKED");
@@ -1026,38 +1105,77 @@ ORDER BY discovery.collected_at DESC LIMIT 1`,
         throw new Error("GITLAB_RECONCILIATION_PROJECT_SCOPE_MISMATCH");
       const observedAt = new Date(input.observedAt);
       const clock = Object.freeze({ now: () => observedAt });
-      const auth = new GitLabAuth(
-        connection,
-        Object.freeze({
-          async resolve(secretRef: string, allowedUseHash: Sha256Digest, signal: AbortSignal) {
-            if (
-              signal.aborted ||
-              secretRef !== connection.identityReferences.read.reference ||
-              allowedUseHash !== connection.identityReferences.read.referenceFingerprint
-            ) {
-              throw new Error("GITLAB_RECONCILIATION_READ_CREDENTIAL_DENIED");
-            }
-            return Object.freeze({
-              metadata: Object.freeze({ secretRef, allowedUseHash }),
-              async use<T>(_at: Date, consumer: (material: Uint8Array) => Promise<T>): Promise<T> {
-                return await consumer(new TextEncoder().encode("mock-gitlab-read"));
-              },
-            });
-          },
-        }),
-        clock,
-      );
-      const client = new GitLabRestClient({
-        baseUrl: endpoint.origin,
-        numericProjectId: profile.numericGitLabProjectId,
-        environmentClass: "LOCAL",
-        allowedOrigins: Object.freeze([endpoint.origin]),
-        allowedLocalHostnames: Object.freeze([endpoint.hostname]),
-        transport,
-        auth,
-        clock,
-        requestTimeoutMs: Number(profile.ratePolicy.requestTimeoutMs ?? 10_000),
-      });
+      let client: GitLabRestClient;
+      let serviceKey = "worker.gitlab-reconciliation";
+      if ("corporate" in options) {
+        const profileContent = json<Record<string, unknown>>(row.profile_content);
+        if (
+          integrationConfigurationHash("connector_profile", profileContent) !==
+            pin.profileRef.contentHash ||
+          integrationConfigurationHash("connection", rawConnection) !==
+            pin.connectionRef.contentHash
+        )
+          throw new Error("GITLAB_RECONCILIATION_CONFIGURATION_PIN_REVOKED");
+        const grants = options.corporate.grants.filter(
+          ({ binding, integrationBindingRef }) =>
+            binding.provider === "GITLAB" &&
+            binding.workspaceId === input.workspaceId &&
+            binding.projectId === input.projectId &&
+            binding.servicePrincipalId === String(row.executing_service_principal_id) &&
+            binding.profileRef.id === pin.profileRef.id &&
+            binding.profileRef.version === pin.profileRef.version &&
+            binding.profileRef.contentHash === pin.profileRef.contentHash &&
+            binding.connectionRef.id === pin.connectionRef.id &&
+            binding.connectionRef.version === pin.connectionRef.version &&
+            binding.connectionRef.contentHash === pin.connectionRef.contentHash &&
+            integrationBindingRef.id === pin.bindingRef.id &&
+            integrationBindingRef.version === pin.bindingRef.version &&
+            integrationBindingRef.contentHash === pin.bindingRef.contentHash,
+        );
+        if (grants.length !== 1) throw new Error("GITLAB_RECONCILIATION_CORPORATE_GRANT_REQUIRED");
+        client = options.corporate.factories.gitlab(
+          grants[0]!.binding.ref.id,
+          connection,
+          profile.numericGitLabProjectId,
+        ).client;
+        serviceKey = grants[0]!.serviceIdentity.serviceKey;
+      } else {
+        const auth = new GitLabAuth(
+          connection,
+          Object.freeze({
+            async resolve(secretRef: string, allowedUseHash: Sha256Digest, signal: AbortSignal) {
+              if (
+                signal.aborted ||
+                secretRef !== connection.identityReferences.read.reference ||
+                allowedUseHash !== connection.identityReferences.read.referenceFingerprint
+              ) {
+                throw new Error("GITLAB_RECONCILIATION_READ_CREDENTIAL_DENIED");
+              }
+              return Object.freeze({
+                metadata: Object.freeze({ secretRef, allowedUseHash }),
+                async use<T>(
+                  _at: Date,
+                  consumer: (material: Uint8Array) => Promise<T>,
+                ): Promise<T> {
+                  return await consumer(new TextEncoder().encode("mock-gitlab-read"));
+                },
+              });
+            },
+          }),
+          clock,
+        );
+        client = new GitLabRestClient({
+          baseUrl: options.endpoint.origin,
+          numericProjectId: profile.numericGitLabProjectId,
+          environmentClass: "LOCAL",
+          allowedOrigins: Object.freeze([options.endpoint.origin]),
+          allowedLocalHostnames: Object.freeze([options.endpoint.hostname]),
+          transport: options.transport,
+          auth,
+          clock,
+          requestTimeoutMs: Number(profile.ratePolicy.requestTimeoutMs ?? 10_000),
+        });
+      }
       const reader = new GitLabPipelineReader({
         profile,
         authority: () =>
@@ -1093,7 +1211,7 @@ ORDER BY discovery.collected_at DESC LIMIT 1`,
         actor: Object.freeze({
           kind: "SERVICE",
           principalId: String(row.executing_service_principal_id),
-          serviceKey: "worker.gitlab-reconciliation",
+          serviceKey,
         }),
         authorizationBasisHash: String(row.authorization_basis_hash) as Sha256Digest,
         correlationId: String(row.correlation_id),
@@ -1166,9 +1284,16 @@ export function createGitLabReconciliationWorkerSteps(
   source: DataSource,
   handler: GitLabAuthoritativeReadHandler,
   clock?: Readonly<{ now(): Date }>,
+  scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
 ): GitLabReconciliationWorkerSteps {
-  const scheduler = new TypeOrmGitLabReconciliationPollScheduler(source, clock);
-  const reads = new TypeOrmGitLabAuthoritativeReadOutboxWorker(source, handler, clock);
+  const scheduler = new TypeOrmGitLabReconciliationPollScheduler(source, clock, undefined, scope);
+  const reads = new TypeOrmGitLabAuthoritativeReadOutboxWorker(
+    source,
+    handler,
+    clock,
+    undefined,
+    scope,
+  );
   return Object.freeze({
     pollScheduler: Object.freeze({ run: async () => await scheduler.runOne() }),
     authoritativeReads: Object.freeze({ run: async () => await reads.runOne() }),

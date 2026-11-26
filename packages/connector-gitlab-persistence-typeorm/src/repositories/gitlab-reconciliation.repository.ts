@@ -395,16 +395,25 @@ RETURNING *`,
     lane: string,
     now: Date,
     limit: number,
+    scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
   ): Promise<readonly Readonly<Record<string, unknown>>[]> {
     if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100)
       throw new Error("GITLAB_CURSOR_PAGE_LIMIT_INVALID");
+    if (scope && (!scope.workspaceId || !scope.projectIds.length))
+      throw new Error("GITLAB_CURSOR_SCOPE_INVALID");
     return frozenRows(
       await this.source.query(
         `
-SELECT * FROM gitlab_reconciliation_cursors
-WHERE lane=$1 AND next_eligible_at<=$2 AND (lease_until IS NULL OR lease_until<$2)
-ORDER BY next_eligible_at,reconciliation_cursor_id LIMIT $3`,
-        [lane, now, limit],
+SELECT cursor.* FROM gitlab_reconciliation_cursors cursor
+WHERE cursor.lane=$1 AND cursor.next_eligible_at<=$2 AND (cursor.lease_until IS NULL OR cursor.lease_until<$2)
+  AND ($4::uuid IS NULL OR (cursor.workspace_id=$4 AND EXISTS (
+    SELECT 1 FROM gitlab_effect_reconciliations effect JOIN connector_commands command
+      ON command.workspace_id=effect.workspace_id AND command.id=effect.command_id
+    WHERE effect.workspace_id=cursor.workspace_id AND command.project_id=ANY($5::uuid[])
+      AND effect.connection_header_id=cursor.connection_header_id AND effect.numeric_project_id=cursor.numeric_project_id
+      AND effect.profile_ref=cursor.profile_ref)))
+ORDER BY cursor.next_eligible_at,cursor.reconciliation_cursor_id LIMIT $3`,
+        [lane, now, limit, scope?.workspaceId ?? null, scope ? [...scope.projectIds] : null],
       ),
     );
   }

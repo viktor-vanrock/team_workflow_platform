@@ -349,6 +349,15 @@ and audit. Runtime composition is the only layer allowed to assemble the ports.
 
 ## 8. Prohibited operations and data
 
+Connector `1.1.0` defines one scoped exception: `suite-result-example.read`
+may read only `.awp/qa/result-example.json` from a specific GitLab project and
+an exact 40-character commit SHA. It cannot read other repository files, use a
+branch or tag, or write files. Validation of this example establishes only
+schema compatibility; a result artifact from an actual pipeline run must be
+verified separately. Connector `1.0.0` retains the original prohibition.
+The successor is staged and must not be activated until its conformance and
+security checks pass.
+
 Version `1.0.0` intentionally has no typed operation for:
 
 ```text

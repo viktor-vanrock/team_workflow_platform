@@ -38598,6 +38598,31 @@ export const schemaDocuments = [
   {
     "contributionKey": "005-gitlab-automated-validation",
     "contributionOrder": 500,
+    "sourcePath": "specs/005-gitlab-automated-validation/contracts/schemas/automation-parameters-build-ref.v1.schema.json",
+    "id": "urn:awp:schemas:qa:automation-parameters:build-ref:v1",
+    "digest": "sha256:c989e36d3d49642eb82af395f93edc6f67cfe32ebc02b4b9f63b553bf5d75e63",
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "urn:awp:schemas:qa:automation-parameters:build-ref:v1",
+      "title": "Corporate GitLab automation parameters: build reference v1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "BUILD_REF"
+      ],
+      "properties": {
+        "BUILD_REF": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f;&|`$<>]*[^\\s\\u0000-\\u001f\\u007f-\\u009f;&|`$<>][^\\u0000-\\u001f\\u007f-\\u009f;&|`$<>]*$"
+        }
+      }
+    }
+  },
+  {
+    "contributionKey": "005-gitlab-automated-validation",
+    "contributionOrder": 500,
     "sourcePath": "specs/005-gitlab-automated-validation/contracts/schemas/automation-quarantine-revision.v1.schema.json",
     "id": "urn:awp:schemas:005:automation-quarantine-revision:v1",
     "digest": "sha256:cdcb07578bbfca15063b2b30b08dbc607ea5729029b80aa82ff1962fa888b1b3",
@@ -58874,6 +58899,46 @@ export const schemaDocuments = [
         "reasonCode": {
           "type": "string",
           "pattern": "^[A-Z][A-Z0-9_]{0,127}$"
+        }
+      }
+    }
+  },
+  {
+    "contributionKey": "008-pilot-hardening-and-conformance",
+    "contributionOrder": 800,
+    "sourcePath": "specs/008-pilot-hardening-and-conformance/contracts/runtime-schemas/pilot-fence-action.v1.schema.json",
+    "id": "urn:awp:contracts:pilot:fence-action:v1",
+    "digest": "sha256:885d17b9d8d2cfeeabe9b0e7f09205d784318591c9e9007163535943241f97b1",
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "urn:awp:contracts:pilot:fence-action:v1",
+      "title": "Pilot fence publication details",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "fenceId",
+        "cohortId",
+        "fence",
+        "cohort"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "fenceId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "cohortId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "fence": {
+          "type": "object"
+        },
+        "cohort": {
+          "type": "object"
         }
       }
     }

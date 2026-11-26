@@ -16,6 +16,10 @@ import {
 } from "@awp/platform-persistence-typeorm";
 
 import { type DeploymentPolicy, parseDeploymentPolicy } from "./deployment-config.ts";
+import { connectorKey, jiraConnectionRuntimeContent } from "../jira/qa-connection-content.ts";
+import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
+import { resolveCorporateGitLabC1 } from "../gitlab/corporate-c1-metadata.ts";
+import type { RuntimeEnvironment } from "../config/environment.ts";
 import type { PilotInputReadiness, PilotInputReadinessPort } from "./readiness-query.ts";
 import { DeploymentStartup, type DeploymentStartupOptions } from "./startup.ts";
 
@@ -142,6 +146,21 @@ export class PublishedDeploymentReferences implements PilotInputReadinessPort {
         for (const pin of policy.connectorBindings) {
           const value = await read(pin.ref, "CONNECTOR_BINDING");
           await this.connector(manager, pin.provider, value.document, signal);
+          if (pin.provider === "gitlab" && policy.environmentScope === "NON_PROD") {
+            for (const project of array(value.document.projects)) {
+              if (project.gitlabPilotMetadata !== undefined)
+                resolveCorporateGitLabC1(
+                  {
+                    profile: "non-local",
+                    environmentScope: "NON_PROD",
+                    composition: policy.compositionKey,
+                    deployment: policy,
+                  } as RuntimeEnvironment,
+                  publications,
+                  String(project.projectId),
+                );
+            }
+          }
         }
         const validUntil = Math.min(...publications.map((value) => Date.parse(value.validUntil)));
         if (signal.aborted || !Number.isFinite(validUntil) || validUntil <= Date.now()) denied();
@@ -253,7 +272,10 @@ export class PublishedDeploymentReferences implements PilotInputReadinessPort {
             ...(binding ? [value.projectId] : []),
           ],
         )) as { content: unknown }[];
-        if (rows.length !== 1 || pilotContentHash(rows[0]!.content) !== ref.contentHash)
+        if (
+          rows.length !== 1 ||
+          integrationConfigurationHash(table, record(rows[0]!.content)) !== ref.contentHash
+        )
           return denied();
         return record(rows[0]!.content);
       };
@@ -266,8 +288,8 @@ export class PublishedDeploymentReferences implements PilotInputReadinessPort {
       if (
         typeof value.connectorKey !== "string" ||
         !value.connectorKey ||
-        profile.connectorKey !== value.connectorKey ||
-        connection.connectorKey !== value.connectorKey ||
+        connectorKey(profile) !== value.connectorKey ||
+        connectorKey(connection) !== value.connectorKey ||
         !matches(profile.connectionRef, connectionRef) ||
         !entries.length ||
         entries.some((entry) => entry.environmentScope !== this.policy.environmentScope) ||
@@ -282,7 +304,8 @@ export class PublishedDeploymentReferences implements PilotInputReadinessPort {
             ),
         ) ||
         typeof value.endpoint !== "string" ||
-        connection.baseUrl !== value.endpoint ||
+        (connection.baseUrl ?? jiraConnectionRuntimeContent(connection).baseUrl) !==
+          value.endpoint ||
         this.policy.endpoints.find((endpoint) => endpoint.purpose === provider)?.url !==
           value.endpoint
       )

@@ -39,6 +39,7 @@ interface Row {
 export interface RequestedCapabilityProbeOptions {
   readonly deadlineMs: number;
   readonly validForMs: number;
+  readonly deploymentScope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>;
   /** Independent current SERVICE/provider authority; the requester is reauthorized internally. */
   readonly authorize?: (target: RequestedProbeTarget, signal: AbortSignal) => Promise<boolean>;
   /** Safe capability observation only; this port must never run a provider write. */
@@ -268,7 +269,9 @@ export function createRequestedCapabilityProbeWorker(
     options.deadlineMs > 5000 ||
     !Number.isSafeInteger(options.validForMs) ||
     options.validForMs < options.deadlineMs ||
-    options.validForMs > 600_000
+    options.validForMs > 600_000 ||
+    (options.deploymentScope !== undefined &&
+      (!options.deploymentScope.workspaceId || !options.deploymentScope.projectIds.length))
   )
     throw new Error("PROBE_POLICY_INVALID");
   const isCurrent = (row: Row) =>
@@ -287,9 +290,14 @@ export function createRequestedCapabilityProbeWorker(
       const token = randomUUID();
       const claimed = rows<Row>(
         await source.query(
-          `WITH due AS (SELECT request_id FROM capability_probe_requests WHERE state='QUEUED' OR (state='RUNNING' AND lease_until<clock_timestamp()) ORDER BY created_at,request_id FOR UPDATE SKIP LOCKED LIMIT 1)
+          `WITH due AS (SELECT request_id FROM capability_probe_requests WHERE (state='QUEUED' OR (state='RUNNING' AND lease_until<clock_timestamp()))
+          AND ($2::uuid IS NULL OR (workspace_id=$2 AND project_id=ANY($3::uuid[]))) ORDER BY created_at,request_id FOR UPDATE SKIP LOCKED LIMIT 1)
       UPDATE capability_probe_requests r SET state='RUNNING',claim_token=$1,lease_until=clock_timestamp()+interval '5 minutes' FROM due WHERE r.request_id=due.request_id RETURNING r.*`,
-          [token],
+          [
+            token,
+            options.deploymentScope?.workspaceId ?? null,
+            options.deploymentScope ? [...options.deploymentScope.projectIds] : null,
+          ],
         ),
       );
       for (const row of claimed) {

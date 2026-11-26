@@ -78,6 +78,7 @@ function client(
     transport: typeof fetch;
     maximum?: number;
     onResolve?: ReturnType<typeof vi.fn<(...args: unknown[]) => void>>;
+    connectorVersion?: "1.0.0" | "1.1.0";
   }>,
 ): GitLabRestClient {
   return new GitLabRestClient({
@@ -87,6 +88,7 @@ function client(
     allowedOrigins: ["http://127.0.0.1:4010"],
     auth: new GitLabAuth(configuration(), resolver(input.onResolve)),
     transport: input.transport,
+    ...(input.connectorVersion ? { connectorVersion: input.connectorVersion } : {}),
     ...(input.maximum === undefined ? {} : { maxJsonResponseBytes: input.maximum }),
   });
 }
@@ -161,6 +163,44 @@ describe("GitLab connector foundation conformance", () => {
     }
     expect(onResolve).not.toHaveBeenCalled();
     expect(transport).not.toHaveBeenCalled();
+  });
+
+  it("allows only the pinned example file on connector v1.1 with an exact commit", async () => {
+    const transport = vi.fn(async () => new Response("{}"));
+    const old = client({ transport });
+    const next = client({ transport, connectorVersion: "1.1.0" });
+    const prefix = "/api/v4/projects/5001/repository/files/.awp%2Fqa%2Fresult-example.json/raw";
+    const commit = "a".repeat(40);
+    const request = {
+      operation: "suite-result-example.read",
+      authOperation: "buildRead",
+      method: "GET",
+      path: `${prefix}?ref=${commit}`,
+    } as const;
+    await expect(old.request(request)).rejects.toThrow("GITLAB_ROUTE_FORBIDDEN");
+    for (const path of [
+      `${prefix}?ref=main`,
+      `${prefix}?ref=${commit}&other=1`,
+      `${prefix}?ref=${commit}&ref=${commit}`,
+    ])
+      await expect(next.request({ ...request, path })).rejects.toThrow(
+        "GITLAB_EXAMPLE_READ_FORBIDDEN",
+      );
+    await expect(next.request({ ...request, method: "POST" })).rejects.toThrow(
+      "GITLAB_EXAMPLE_READ_FORBIDDEN",
+    );
+    await expect(next.request({ ...request, operation: "other.read" })).rejects.toThrow(
+      "GITLAB_EXAMPLE_READ_FORBIDDEN",
+    );
+    await expect(
+      next.request({ ...request, path: request.path.replace("result-example.json", "other.json") }),
+    ).rejects.toThrow("GITLAB_ROUTE_FORBIDDEN");
+    await expect(
+      next.request({ ...request, path: request.path.replace("projects/5001", "projects/5002") }),
+    ).rejects.toThrow("GITLAB_PROJECT_SCOPE_FORBIDDEN");
+    expect(transport).not.toHaveBeenCalled();
+    await next.request(request);
+    expect(transport).toHaveBeenCalledOnce();
   });
 
   it("routes only an exact pinned REST v4 instance dialect and redacts credential headers", () => {

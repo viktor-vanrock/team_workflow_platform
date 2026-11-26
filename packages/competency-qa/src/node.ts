@@ -145,6 +145,8 @@ export * from "./manifest-v1.1.ts";
 export * from "./manifest-v1.2.ts";
 export * from "./manifest-v1.3.ts";
 export * from "./manifest-v1.4.ts";
+export * from "./manifest-v1.5.ts";
+export * from "./capability-requirements-v2.ts";
 export * from "./persistence/automated-session.uow.ts";
 export * from "./persistence/automation-execution.repository.ts";
 export * from "./persistence/automation-suite.repository.ts";

@@ -41,7 +41,7 @@ describe("008 transitive 001-007 compatibility", () => {
     );
     expect(corporate.expectedVersions).toMatchObject({
       core: 220,
-      "pack:qa": 2110,
+      "pack:qa": 2115,
       "connector:jira": 3050,
       "connector:gitlab": 4020,
     });

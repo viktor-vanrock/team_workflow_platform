@@ -381,7 +381,13 @@ export class PostgresQueueTemporalTransitionWorker {
     private readonly source: DataSource,
     handlers: PostgresQueueTemporalHandlers,
     now: () => string = () => new Date().toISOString(),
+    private readonly deploymentScope?: Readonly<{
+      workspaceId: string;
+      projectIds: readonly string[];
+    }>,
   ) {
+    if (deploymentScope && (!deploymentScope.workspaceId || !deploymentScope.projectIds.length))
+      throw new Error("QUEUE_TEMPORAL_SCOPE_INVALID");
     this.#sweep = new QueueTemporalTransitionSweep(
       {
         claimDue: async (input) => await this.claimDue(input),
@@ -423,6 +429,7 @@ export class PostgresQueueTemporalTransitionWorker {
          SELECT workspace_id,project_id,queue_entry_id,next_temporal_evaluation_at AS due_at
            FROM queue_entry_heads
           WHERE next_temporal_evaluation_at<=$1 AND suppressed_by_work_item_id IS NULL
+            AND ($4::uuid IS NULL OR (workspace_id=$4 AND project_id=ANY($5::uuid[])))
           ORDER BY next_temporal_evaluation_at,workspace_id,project_id,queue_entry_id
           FOR UPDATE SKIP LOCKED LIMIT $2
        ), claimed AS (
@@ -430,7 +437,13 @@ export class PostgresQueueTemporalTransitionWorker {
            FROM due WHERE head.workspace_id=due.workspace_id AND head.project_id=due.project_id AND head.queue_entry_id=due.queue_entry_id
          RETURNING head.workspace_id,head.project_id,head.queue_entry_id,due.due_at
        ) SELECT * FROM claimed ORDER BY due_at,workspace_id,project_id,queue_entry_id`,
-        [input.dueBefore, input.batchSize, leaseUntil],
+        [
+          input.dueBefore,
+          input.batchSize,
+          leaseUntil,
+          this.deploymentScope?.workspaceId ?? null,
+          this.deploymentScope ? [...this.deploymentScope.projectIds] : null,
+        ],
       ),
     );
     const claimed: QueueTemporalDue[] = entries.map((row) =>
@@ -451,6 +464,7 @@ export class PostgresQueueTemporalTransitionWorker {
            FROM queue_order_overrides override
            JOIN queue_order_scope_heads scope ON scope.workspace_id=override.workspace_id AND scope.order_scope_id=override.order_scope_id
           WHERE scope.scope_kind='PROJECT' AND override.expires_at<=$1
+            AND ($3::uuid IS NULL OR (override.workspace_id=$3 AND override.project_id=ANY($4::uuid[])))
             AND NOT EXISTS (
               SELECT 1 FROM queue_order_invalidation_revisions revision
                WHERE revision.workspace_id=override.workspace_id AND revision.project_id=override.project_id
@@ -460,7 +474,12 @@ export class PostgresQueueTemporalTransitionWorker {
             )
           ORDER BY override.expires_at,override.workspace_id,override.project_id,override.override_id
           FOR UPDATE OF override SKIP LOCKED LIMIT $2`,
-          [input.dueBefore, remaining],
+          [
+            input.dueBefore,
+            remaining,
+            this.deploymentScope?.workspaceId ?? null,
+            this.deploymentScope ? [...this.deploymentScope.projectIds] : null,
+          ],
         ),
       );
       claimed.push(
@@ -490,9 +509,15 @@ export class PostgresQueueTemporalTransitionWorker {
              ON revision.workspace_id=head.workspace_id AND revision.project_id=head.project_id
             AND revision.control_revision_id=head.current_revision_id
           WHERE revision.service_class='EXPEDITE' AND revision.expiry_at<=$1
+            AND ($3::uuid IS NULL OR (head.workspace_id=$3 AND head.project_id=ANY($4::uuid[])))
           ORDER BY revision.expiry_at,head.workspace_id,head.project_id,head.control_id
           FOR UPDATE OF head SKIP LOCKED LIMIT $2`,
-          [input.dueBefore, expediteRemaining],
+          [
+            input.dueBefore,
+            expediteRemaining,
+            this.deploymentScope?.workspaceId ?? null,
+            this.deploymentScope ? [...this.deploymentScope.projectIds] : null,
+          ],
         ),
       );
       claimed.push(
@@ -522,6 +547,7 @@ export class PostgresQueueTemporalTransitionWorker {
            SELECT workspace_id,project_id,sla_clock_id,next_temporal_evaluation_at AS due_at
              FROM sla_clock_heads
             WHERE next_temporal_evaluation_at<=$1
+              AND ($5::uuid IS NULL OR (workspace_id=$5 AND project_id=ANY($6::uuid[])))
               AND (temporal_claimed_until IS NULL OR temporal_claimed_until<=$1)
             ORDER BY next_temporal_evaluation_at,workspace_id,project_id,sla_clock_id
             FOR UPDATE SKIP LOCKED LIMIT $2
@@ -533,7 +559,14 @@ export class PostgresQueueTemporalTransitionWorker {
               AND head.sla_clock_id=due.sla_clock_id
            RETURNING head.workspace_id,head.project_id,head.sla_clock_id,due.due_at
          ) SELECT * FROM claimed ORDER BY due_at,workspace_id,project_id,sla_clock_id`,
-          [input.dueBefore, slaRemaining, claimToken, leaseUntil],
+          [
+            input.dueBefore,
+            slaRemaining,
+            claimToken,
+            leaseUntil,
+            this.deploymentScope?.workspaceId ?? null,
+            this.deploymentScope ? [...this.deploymentScope.projectIds] : null,
+          ],
         ),
       );
       claimed.push(

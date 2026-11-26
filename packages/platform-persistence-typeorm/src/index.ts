@@ -64,5 +64,6 @@ export * from "./scoped-repository-base.ts";
 export * from "./sla-clock.repository.ts";
 export * from "./sla-rollout-verification.repository.ts";
 export * from "./unit-of-work.ts";
+export * from "./pilot-command-admission.repository.ts";
 export * from "./webhook-inbox.repository.ts";
 export * from "./work-management.repository.ts";

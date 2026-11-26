@@ -70,6 +70,7 @@ export interface ConnectorCommand extends ConnectorCommandSnapshot {
     intakeCandidateId?: string;
     agentRunId?: string;
     notificationIntentId?: string;
+    causalHumanPrincipalId?: string;
   }>;
   readonly recoveryPolicy?: "SAFE_RETRY" | "LOOKUP_REQUIRED" | "NONE_AMBIGUOUS";
   readonly approvalId?: string;
@@ -81,6 +82,18 @@ export interface ConnectorCommand extends ConnectorCommandSnapshot {
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly rowVersion: number;
+}
+
+/** Service-driven GitLab retries retain the original human as their pilot participant. */
+export function pilotCommandPrincipal(command: ConnectorCommand): string {
+  if (
+    command.actor.kind === "SERVICE" &&
+    command.capability.key === "test-executor.trigger-status" &&
+    command.capability.operation === "pipeline.trigger" &&
+    command.source.causalHumanPrincipalId
+  )
+    return command.source.causalHumanPrincipalId;
+  return command.actor.principalId;
 }
 
 export function validateConnectorCommandSnapshot(

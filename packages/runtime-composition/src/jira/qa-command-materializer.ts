@@ -7,6 +7,7 @@ import {
   type QaConfirmedDraft,
   type QaIntakePayload,
   type QaOperationalRequestCreateResult,
+  type QaResponseChannelResolver,
   QaProjectPolicyRepository,
   QaTypeOrmIntakeConfirmationWriter,
   type QaWorkspaceContext,
@@ -26,9 +27,41 @@ import { TypeOrmOperationalAuthorityRepository } from "@awp/platform-persistence
 import type { RuntimeEnvironment } from "../config/environment.ts";
 import { qaLocalFixtureCatalog } from "../seed/qa-local-seed.ts";
 import { resolveLocalQaProjectConfiguration } from "./qa-local-project-configuration.ts";
+import {
+  connectorKey,
+  jiraConnectionRuntimeContent,
+  jiraMappingRuntimeContent,
+} from "./qa-connection-content.ts";
+
+export { jiraConnectionRuntimeContent } from "./qa-connection-content.ts";
 
 type Row = Readonly<Record<string, unknown>>;
 type VersionedRef = Readonly<{ id: string; version: number }>;
+
+export function assertQaJiraConfiguredEndpoint(
+  environment: RuntimeEnvironment,
+  scope: Readonly<{ workspaceId: string; projectId: string }>,
+  configuredEndpoint: string,
+): void {
+  if (environment.profile === "local" || environment.profile === "test") {
+    if (
+      !environment.mockHubUrl ||
+      new URL(configuredEndpoint).origin !== new URL(environment.mockHubUrl).origin
+    )
+      throw new Error("JIRA_LOCAL_EXACT_ENDPOINT_MISMATCH");
+    return;
+  }
+  const deployment = environment.deployment;
+  const jiraEndpoint = deployment?.endpoints.find((endpoint) => endpoint.purpose === "jira");
+  if (
+    !deployment ||
+    deployment.workspaceId !== scope.workspaceId ||
+    !deployment.projectIds.includes(scope.projectId) ||
+    !jiraEndpoint ||
+    configuredEndpoint !== jiraEndpoint.url
+  )
+    throw new Error("JIRA_CORPORATE_EXACT_ENDPOINT_MISMATCH");
+}
 
 export interface QaJiraResolvedPins {
   readonly pinSet: ConfigurationPinSet;
@@ -61,26 +94,6 @@ export interface QaJiraRequestCreateCommandIdentity {
 
 function json<T>(value: unknown): T {
   return typeof value === "string" ? (JSON.parse(value) as T) : (value as T);
-}
-
-/** Runtime view only: immutable stored content and its hash remain unchanged. */
-export function jiraConnectionRuntimeContent(
-  content: Record<string, unknown>,
-): Record<string, unknown> {
-  const envelope = content.connectorConfiguration;
-  if (envelope === undefined) return { ...content };
-  if (!envelope || typeof envelope !== "object" || Array.isArray(envelope))
-    throw new Error("JIRA_CONNECTION_CONFIGURATION_INVALID");
-  const value = (envelope as Record<string, unknown>).value;
-  if (!value || typeof value !== "object" || Array.isArray(value))
-    throw new Error("JIRA_CONNECTION_CONFIGURATION_INVALID");
-  const config = value as Record<string, unknown>;
-  return {
-    ...content,
-    ...config,
-    endpoint: config.baseUrl ?? content.endpoint,
-    environmentScope: config.environment ?? content.environmentScope ?? content.environmentClass,
-  };
 }
 
 function deterministicUuid(namespace: string): string {
@@ -133,16 +146,6 @@ function assertEmbeddedContentHash(value: unknown, expected: string, code: strin
   if (!value || typeof value !== "object" || Array.isArray(value)) return;
   const embedded = (value as Record<string, unknown>).contentHash;
   if (embedded !== undefined && embedded !== expected) throw new Error(code);
-}
-
-function connectorKey(content: Record<string, unknown>): unknown {
-  const ref = content.connectorRef;
-  return (
-    content.connectorKey ??
-    (ref && typeof ref === "object" && !Array.isArray(ref)
-      ? (ref as Record<string, unknown>).key
-      : undefined)
-  );
 }
 
 function storedPinMatches(
@@ -308,12 +311,7 @@ async function loadQaJiraRequestCreateConfiguration(
     const configuredEndpoint = String(
       runtimeConnection.baseUrl ?? runtimeConnection.endpoint ?? "",
     );
-    if (
-      !environment.mockHubUrl ||
-      new URL(configuredEndpoint).origin !== new URL(environment.mockHubUrl).origin
-    ) {
-      throw new Error("JIRA_LOCAL_EXACT_ENDPOINT_MISMATCH");
-    }
+    assertQaJiraConfiguredEndpoint(environment, scope, configuredEndpoint);
     const adapterFamily = String(runtimeConnection.adapterFamily ?? "");
     const adapterContractVersion = String(runtimeConnection.adapterContractVersion ?? "");
     if (adapterFamily !== "jira-cloud-v3" || adapterContractVersion !== "1.0.0") {
@@ -350,7 +348,7 @@ async function loadQaJiraRequestCreateConfiguration(
       Object.freeze({
         pin,
         profileContent: Object.freeze({ ...profile.content }),
-        mappingContent: Object.freeze({ ...mapping.content }),
+        mappingContent: Object.freeze(jiraMappingRuntimeContent(mapping.content)),
         connectionContent: Object.freeze(runtimeConnection),
       }),
     );
@@ -524,6 +522,8 @@ export async function materializeQaJiraRequestConfirmation(
   command: ConnectorCommand,
   result: QaOperationalRequestCreateResult,
   pins: QaJiraResolvedPins,
+  externalObservation?: CompleteOperationalObservation,
+  corporateResponseChannels?: QaResponseChannelResolver,
 ): Promise<void> {
   if (!command.source.intakeDraftId || command.actor.kind !== "HUMAN")
     throw new Error("QA_JIRA_CONFIRMATION_SOURCE_INVALID");
@@ -567,7 +567,7 @@ export async function materializeQaJiraRequestConfirmation(
     projectContext,
     bindingRef: command.bindingRef,
     evaluatedAt: command.createdAt.toISOString(),
-    responseChannels: {
+    responseChannels: corporateResponseChannels ?? {
       resolve: async ({ requester, evaluatedAt }) => {
         const fixture =
           qaLocalFixtureCatalog.responseChannels[
@@ -645,30 +645,45 @@ export async function materializeQaJiraRequestConfirmation(
       command.actor.principalId,
     ],
   );
-  const observation: CompleteOperationalObservation = Object.freeze({
-    observationId: deterministicUuid(`${command.id}:create-read-back`),
-    source: "CREATE_READ_BACK",
-    externalEntityId: result.externalEntityId,
-    externalDisplayKey: result.externalDisplayKey,
-    externalRevisionToken: result.externalVersion,
-    authorityFieldsHash: sha256(result as unknown as JsonValue),
-    providerUpdatedAt: result.observedAt,
-    observedAt: result.observedAt,
-    rawStatus: { id: "1", name: result.rawExternalState },
-    normalizedStatus: result.normalizedStatus,
-    requester: {
-      externalPrincipalId: `local:${command.actor.principalId}`,
-      canonicalPrincipalId: command.actor.principalId,
-    },
-    assignee: null,
-    priority: null,
-    dueDate: null,
-    profileRef: pins.profileRef,
-    mappingRef: pins.mappingRef,
-    connectionRef: pins.connectionRef,
-    adapterFamily: pins.adapterFamily,
-    adapterContractVersion: pins.adapterContractVersion,
-  });
+  const observation: CompleteOperationalObservation =
+    externalObservation ??
+    Object.freeze({
+      observationId: deterministicUuid(`${command.id}:create-read-back`),
+      source: "CREATE_READ_BACK",
+      externalEntityId: result.externalEntityId,
+      externalDisplayKey: result.externalDisplayKey,
+      externalRevisionToken: result.externalVersion,
+      authorityFieldsHash: sha256(result as unknown as JsonValue),
+      providerUpdatedAt: result.observedAt,
+      observedAt: result.observedAt,
+      rawStatus: { id: "1", name: result.rawExternalState },
+      normalizedStatus: result.normalizedStatus,
+      requester: {
+        externalPrincipalId: `local:${command.actor.principalId}`,
+        canonicalPrincipalId: command.actor.principalId,
+      },
+      assignee: null,
+      priority: null,
+      dueDate: null,
+      profileRef: pins.profileRef,
+      mappingRef: pins.mappingRef,
+      connectionRef: pins.connectionRef,
+      adapterFamily: pins.adapterFamily,
+      adapterContractVersion: pins.adapterContractVersion,
+    });
+  if (
+    externalObservation &&
+    (externalObservation.source !== "CREATE_READ_BACK" ||
+      externalObservation.externalEntityId !== result.externalEntityId ||
+      externalObservation.normalizedStatus !== "NEW" ||
+      externalObservation.profileRef.id !== pins.profileRef.id ||
+      externalObservation.profileRef.version !== pins.profileRef.version ||
+      externalObservation.mappingRef.id !== pins.mappingRef.id ||
+      externalObservation.mappingRef.version !== pins.mappingRef.version ||
+      externalObservation.connectionRef.id !== pins.connectionRef.id ||
+      externalObservation.connectionRef.version !== pins.connectionRef.version)
+  )
+    throw new Error("QA_JIRA_CONFIRMATION_OBSERVATION_MISMATCH");
   await new TypeOrmOperationalAuthorityRepository(source).reduceObservation(
     manager,
     {

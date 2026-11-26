@@ -6,9 +6,12 @@ import {
   type ProjectEffectGuardSnapshot,
   type ProjectScope,
   samePilotRef,
+  pilotCommandPrincipal,
 } from "@awp/platform-core";
 
 import type { DeploymentStartupPort } from "./startup.ts";
+import { PilotCommandAdmissionRepository } from "@awp/platform-persistence-typeorm";
+import type { DataSource } from "typeorm";
 
 /** Intersects deployment/cohort policy with the existing project guard; grants no rights. */
 export class PilotEffectGuard implements ProjectEffectGuardPort {
@@ -93,7 +96,7 @@ export class PilotCommandEffectGuard {
       admission.commandId !== command.id ||
       admission.payloadHash !== command.payloadHash ||
       admission.targetHash !== command.targetHash ||
-      admission.context.principalId !== command.actor.principalId ||
+      admission.context.principalId !== pilotCommandPrincipal(command) ||
       !Number.isSafeInteger(admission.expectedOnboardingVersion) ||
       admission.expectedOnboardingVersion < 1
     )
@@ -104,6 +107,16 @@ export class PilotCommandEffectGuard {
       admission.context,
     );
   }
+}
+
+/** Worker reloads the originally committed admission for every invocation and retry. */
+export function createStoredPilotCommandEffectGuard(
+  source: DataSource,
+  guard: PilotEffectGuard,
+): PilotCommandEffectGuard {
+  if (!source.isInitialized) throw new Error("PILOT_COMMAND_ADMISSION_STORE_REQUIRED");
+  const repository = new PilotCommandAdmissionRepository(source);
+  return new PilotCommandEffectGuard(guard, async (command) => await repository.load(command));
 }
 
 export async function assertPilotWorkerEffect(

@@ -165,6 +165,18 @@ export function QaAutomatedSessionRoute(props: Readonly<AutomatedSessionRoutePro
         request(`${base}/qa/automation/suite-bindings`),
         request(`${base}/qa/backlog`),
       ]);
+      if (availabilityResponse.status === 503) {
+        const body = (await availabilityResponse.json().catch(() => undefined)) as
+          { message?: unknown } | undefined;
+        if (body?.message === "Недоступно: нет подтверждений runner, network и no-deploy") {
+          setAvailability(undefined);
+          setSuites([]);
+          setNotice(
+            "Автоматизация недоступна: нет подтверждений готовности runner, сети и отсутствия deploy.",
+          );
+          return;
+        }
+      }
       if (!availabilityResponse.ok)
         throw new Error(
           `Не удалось проверить доступность автоматизации: ${availabilityResponse.status}`,

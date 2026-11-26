@@ -126,6 +126,11 @@ export class TypeOrmCommandDeliveryStore {
     leaseUntil: Date,
     limit = 50,
     capabilityKeys?: readonly string[],
+    scope?: Readonly<{
+      workspaceId: string;
+      projectIds: readonly string[];
+      operations: readonly string[];
+    }>,
   ): Promise<readonly ClaimedCommandDelivery[]> {
     return await this.source.transaction("SERIALIZABLE", async (manager) => {
       const claims = await this.#outbox.claimInTransaction(
@@ -134,6 +139,7 @@ export class TypeOrmCommandDeliveryStore {
         leaseUntil,
         limit,
         capabilityKeys,
+        scope,
       );
       const deliveries: ClaimedCommandDelivery[] = [];
       for (const outbox of claims) {
@@ -505,9 +511,19 @@ export class TypeOrmCommandDeliveryStore {
     });
   }
 
-  async recoverExpired(now: Date, limit = 50): Promise<readonly CommandDeliveryScope[]> {
+  async recoverExpired(
+    now: Date,
+    limit = 50,
+    scope?: Readonly<{
+      workspaceId: string;
+      projectIds: readonly string[];
+      operations: readonly string[];
+    }>,
+  ): Promise<readonly CommandDeliveryScope[]> {
     assertDate(now, "COMMAND_DELIVERY_TIME_INVALID");
     assertLimit(limit);
+    if (scope && (!scope.workspaceId || !scope.projectIds.length || !scope.operations.length))
+      throw new Error("COMMAND_OUTBOX_SCOPE_FILTER_INVALID");
     return await this.source.transaction("SERIALIZABLE", async (manager) => {
       const rows = (await manager.query(
         `SELECT c.workspace_id,c.project_id,c.id AS command_id,o.id AS outbox_id
@@ -518,13 +534,20 @@ export class TypeOrmCommandDeliveryStore {
             AND o.command_id=c.id
           WHERE c.state='DISPATCHED'
             AND o.state='ACKNOWLEDGED'
+            AND ($3::uuid IS NULL OR (c.workspace_id=$3 AND c.project_id=ANY($4::uuid[]) AND c.operation=ANY($5::text[])))
             AND NULLIF(c.payload #>> '{metadata,executionLeaseExpiresAt}','')::timestamptz<=$1
             AND (NULLIF(c.payload #>> '{metadata,effectInvocationStartedAt}','') IS NULL
               OR COALESCE(c.payload #>> '{metadata,recoveryPolicy}','SAFE_RETRY') NOT IN ('LOOKUP_REQUIRED','NONE_AMBIGUOUS'))
           ORDER BY NULLIF(c.payload #>> '{metadata,executionLeaseExpiresAt}','')::timestamptz,c.id
           FOR UPDATE OF c,o SKIP LOCKED
           LIMIT $2`,
-        [now, limit],
+        [
+          now,
+          limit,
+          scope?.workspaceId ?? null,
+          scope ? [...scope.projectIds] : null,
+          scope ? [...scope.operations] : null,
+        ],
       )) as Row[];
       const recovered: CommandDeliveryScope[] = [];
       for (const row of rows) {
