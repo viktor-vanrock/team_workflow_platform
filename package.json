@@ -247,7 +247,8 @@
     "verify:008:audit": "node tools/verification/feature-008-command-catalog.mts run audit",
     "verify:008:scans": "node tools/verification/feature-008-command-catalog.mts run scans",
     "test:010": "vitest run tests/architecture/010-v1-infrastructure-boundaries.spec.ts tests/contract/010/v1-readiness.spec.ts tests/contract/010/qa-evidence-without-uploads.spec.ts tests/integration/010 tests/integration/durable-command-delivery-postgres.spec.ts --maxWorkers=1",
-    "verify:010": "node tools/verification/feature-010-gate.mts"
+    "verify:010": "node tools/verification/feature-010-gate.mts",
+    "deploy:runtime:bootstrap": "tsx --tsconfig tsconfig.base.json tools/deploy/dev-runtime-bootstrap.mts"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",

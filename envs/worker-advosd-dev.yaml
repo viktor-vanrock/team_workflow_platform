@@ -61,6 +61,20 @@ podAnnotations:
   # vault.hashicorp.com/agent-inject-secret-jira_token: <VAULT_PATH_JIRA>
   # vault.hashicorp.com/agent-inject-secret-mattermost_bot_token: <VAULT_PATH_MATTERMOST>
   # Provider tokens are read by the Vault resolver via scoped mappings, not from injected files.
+runtimeBootstrapPodAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/agent-pre-populate-only: "true"
+  vault.hashicorp.com/role: d-rndml
+  vault.hashicorp.com/agent-inject-secret-database_url: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-database_url: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.DATABASE_URL }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-runtime_bootstrap: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-runtime_bootstrap: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.RUNTIME_BOOTSTRAP_CONFIG }}
+    {{- end -}}
 securityContext:
   runAsNonRoot: true
   allowPrivilegeEscalation: false

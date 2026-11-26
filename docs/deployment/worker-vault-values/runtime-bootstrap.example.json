@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "deploymentPolicy": {
+    "placeholder": "<DEPLOYMENT_POLICY>"
+  },
+  "configurations": [
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "INPUT_PACKAGE",
+        "placeholder": "<PUBLICATION_1>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "IDENTITY_POLICY",
+        "placeholder": "<PUBLICATION_2>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "SECRET_RESOLVER_POLICY",
+        "placeholder": "<PUBLICATION_3>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "SIGNING_POLICY",
+        "placeholder": "<PUBLICATION_4>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "TELEMETRY_POLICY",
+        "placeholder": "<PUBLICATION_5>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "NETWORK_POLICY",
+        "placeholder": "<PUBLICATION_6>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "ARTIFACT_POLICY",
+        "placeholder": "<PUBLICATION_7>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "MODEL_POLICY",
+        "placeholder": "<PUBLICATION_8>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "RECOVERY_POLICY",
+        "placeholder": "<PUBLICATION_9>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "CONNECTOR_BINDING",
+        "placeholder": "<PUBLICATION_10>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "CONNECTOR_BINDING",
+        "placeholder": "<PUBLICATION_11>"
+      }
+    },
+    {
+      "expectedRowVersion": 0,
+      "publication": {
+        "kind": "CONNECTOR_BINDING",
+        "placeholder": "<PUBLICATION_12>"
+      }
+    }
+  ],
+  "deployments": [
+    {
+      "expectedRowVersion": 0,
+      "record": {
+        "kind": "DEPLOYMENT",
+        "placeholder": "<PROJECT_DEPLOYMENT_RECORD>"
+      }
+    }
+  ]
+}

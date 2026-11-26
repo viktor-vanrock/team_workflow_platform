@@ -56,6 +56,16 @@ deploy_dev_worker:
   variables:
     APP_NAME: worker
     VALUES_PATH: envs/worker-advosd-dev.yaml
+  before_script:
+    - !reference [.kube_deploy, before_script]
+    - cp tools/deploy/dev-runtime-bootstrap.job.tpl "$CHART_PATH/templates/dev-runtime-bootstrap.yaml"
+
+deploy_dev_qa_api:
+  extends: .deploy_dev
+  needs: [get_version, verify, verify_deploy, build_workspace, deploy_dev_workspace]
+  variables:
+    APP_NAME: qa-api
+    VALUES_PATH: envs/qa-api-advosd-dev.yaml
 
 deploy_prod_hermes:
   extends: .deploy_prod

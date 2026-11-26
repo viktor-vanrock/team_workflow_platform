@@ -140,3 +140,94 @@ worker исходящий DNS и TCP к PostgreSQL, Vault, Keycloak, Jira, GitLa
 и `mm.sberdevices.ru:443`; реальные адреса и порты уточните у владельцев.
 Сообщите, нужен ли корпоративный CA, и при необходимости предоставьте CA-файл.
 Помогите получить и передавать digest опубликованного образа для каждого релиза.
+
+## Dev bootstrap: подготовка
+
+Шаблон оболочки [runtime-bootstrap.example.json](runtime-bootstrap.example.json)
+сверяется со [схемой](../../../tools/deploy/dev-runtime-bootstrap.schema.json).
+Вместо placeholders нужны реальные полные документы `RuntimeConfigurationPublication`
+и `PilotRecord`, все из одного workspace и согласованного DeploymentPolicy.
+Указывайте ожидаемые row versions для CAS. Bootstrap создаёт или находит
+SERVICE identity `urn:awp:bootstrap` / `dev-runtime-configuration` в одной
+транзакции с публикацией и пишет событие её создания в аудит. `publishedBy` и
+`actorRef` из файла заменяются полученным UUID; hash deployment record считается
+заново. Значения файла не подтверждают полномочия.
+Источник полномочий — защищённая CI-задача и защищённый файл Vault: доступ к их
+изменению и запуску необходимо ограничить. Проверки role grants в AWP и связки
+Kubernetes workload с identity этот вариант не выполняет. SERVICE identity в БД
+нужна как проверяемый идентификатор аудита из-за действующих foreign keys.
+
+Команда `pnpm deploy:runtime:bootstrap` читает файл по
+`AWP_DEV_RUNTIME_BOOTSTRAP_PATH`, требует `AWP_ENVIRONMENT=NON_PROD` и
+`AWP_SUPERADMIN_ENVIRONMENT=dev`. Вся публикация выполняется в одной транзакции;
+несовпадения и устаревшие версии приводят к отказу. Fence и согласования не
+создаются. В dev job `deploy_dev_worker` подключён отдельный Helm pre-install/pre-upgrade
+Job `tools/deploy/dev-runtime-bootstrap.job.tpl`; ingress и шаблоны в infra/deploy
+не изменены. До запуска в Vault `rndml/team-workflow-platform/workspace` нужны
+поле `RUNTIME_BOOTSTRAP_CONFIG` (полный JSON файла). При отсутствии входов
+или ошибке конфигурации worker release не будет установлен.
+
+## Таблица маршрутов для ingress
+
+Предложение не применено. `[^/]+` — отдельный непустой параметр. Регулярные
+выражения ниже привязаны к началу и концу пути, не учитывают query string.
+Точный порядок и поддержка regex зависят от ingress и требуют проверки DevOps.
+
+| Регулярное выражение                                                         | Сервис                       | Причина               |
+| ---------------------------------------------------------------------------- | ---------------------------- | --------------------- |
+| `^/(?:access                                                                 | admin/users                  | projects(?:/new       | /hermes                             | /[^/]+/edit)?)?$`  | workspace                        | UI и существующие страницы |
+| `^/api/v1/auth/(?:login                                                      | callback                     | session               | logout)$`                           | workspace          | Keycloak и сессия                |
+| `^/(?:api/)?v1/workspaces/[^/]+/projects(?:/registration-options             | /[^/]+/metadata)?$`          | workspace             | Каталог, создание и метаданные      |
+| `^/api/v1/workspaces/[^/]+/projects/[^/]+/(?:qa                              | intake-drafts                | pilot                 | operations)(?:/.*)?$`               | qa-api             | QA, intake, pilot и согласования |
+| `^/api/v1/workspaces/[^/]+/projects/[^/]+/work-items/[^/]+(?:/qa(?:/.*)?)?$` | qa-api                       | Чтение work item и QA |
+| `^/api/v1/workspaces/[^/]+/(?:project-search                                 | project-events               | qa/queue(?:/.*)?      | project-dialogues(?:/.*)?)$`        | qa-api             | Поиск, события, очередь, диалог  |
+| `^/v1/workspaces/[^/]+/projects/[^/]+/(?:onboarding                          | entitlements                 | qa                    | bindings                            | binding-candidates | operations                       | evidence)(?:/.*)?$`        | qa-api | Onboarding и evidence |
+| `^/api/v1/(?:pilot/ingress                                                   | hermes/mattermost)(?:/.*)?$` | qa-api                | Входящие события после согласования |
+
+Workspace и QA API объявляют совпадающие каталог и метаданные: первый regex
+для проектов отправляет их в workspace; остальные, более узкие правила — в QA.
+Нельзя направлять весь `/api/v1/workspaces/` в один сервис. Regex для параметров
+нуждаются в поддержке роутером: OpenShift Routes или Helm chart могут не иметь
+нужной семантики, поэтому DevOps должен подтвердить контроллер, тип маршрутов,
+приоритеты, нормализацию и передачу исходного path, cookie и `x-csrf-token`.
+Нужен отдельный полный аудит controller методов и проверка edge cases перед
+включением: эта таблица не доказывает доступность всех маршрутов.
+
+Workspace и QA API используют один `WORKSPACE_CONFIG`, `SESSION_KEYS`,
+`OIDC_CLIENT_SECRET`, БД и namespace сессии. Keycloak callback направляется в
+workspace; cookie `__Host-awp-session` действует на общем HTTPS origin. Сервисы
+читают и расшифровывают одну сессию, а при записи QA API сверяет `x-csrf-token`
+с токеном в общей сессии. Совместимость сессий на стенде ещё не проверялась.
+
+## Fence
+
+После публикации policy и действующей регистрации API и worker уполномоченный
+оператор с MFA и правами готовит `pilot/fence-candidates`, второй человек
+согласует через `operations/approvals`, инициатор публикует через
+`pilot/fence-publications`. Нужны действующие onboarding, gate evidence и
+cohort. После перезапуска worker его instance ID меняется: старый fence не
+разрешает записи; требуется штатная переактивация с новым согласованием и
+проверка действующей регистрации. Поддержку обновления существующего fence
+нужно проверить отдельно: текущая публикация первого fence отклоняет дубликат.
+При одном пользователе этот процесс не выполняется, самосогласование в техдолге.
+
+## Дополнение к заявке DevOps
+
+Нужно защитить ручную CI-задачу `deploy_dev_worker` и положить утверждённый JSON
+в Vault поле `RUNTIME_BOOTSTRAP_CONFIG`; разрешить Vault Agent читать это поле. Ограничить
+изменение задачи, файла и переменных только уполномоченным операторам. До проверки ingress QA API не публиковать.
+
+## Дополнение заявки: QA API
+
+Для `qa-api` из общего образа нужны те же `DATABASE_URL`, `WORKSPACE_CONFIG`,
+`SESSION_KEYS`, `OIDC_CLIENT_SECRET`, что у workspace. В Vault path
+`rndml/team-workflow-platform/workspace` дополнительно разместить подготовленные
+командой JSON-тексты `AWP_DEPLOYMENT_CONFIG`, `CORPORATE_VAULT_CONFIG`,
+`CORPORATE_QA_CONFIG`, `CORPORATE_AGENT_CONFIG`, `CORPORATE_SIGNING_CONFIG`,
+`CORPORATE_REPORT_LOCATORS`, `CORPORATE_REPORT_POLICY`, `QA_ACCOUNT_INVENTORY`,
+а также `AWP_IDENTITY_ISSUER`, `AWP_IDENTITY_AUDIENCE` и подтверждённый
+`AWP_RUNTIME_IMAGE_DIGEST`. Для signing нужен постоянный архив публичных ключей,
+указанный в signing config, и Vault Transit; его volume нужно согласовать.
+Нужны исходящие DNS, БД, Vault, Keycloak, Jira, GitLab, Mattermost и telemetry;
+адреса, порты и CA подтверждают владельцы. Ingress остаётся выключенным, пока
+таблица и механизм маршрутизации не проверены и не утверждены.
