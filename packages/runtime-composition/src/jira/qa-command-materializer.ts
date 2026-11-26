@@ -24,7 +24,8 @@ import {
 import { TypeOrmOperationalAuthorityRepository } from "@awp/platform-persistence-typeorm";
 
 import type { RuntimeEnvironment } from "../config/environment.ts";
-import { qaLocalFixtureCatalog, qaLocalSeedIds } from "../seed/qa-local-seed.ts";
+import { qaLocalFixtureCatalog } from "../seed/qa-local-seed.ts";
+import { resolveLocalQaProjectConfiguration } from "./qa-local-project-configuration.ts";
 
 type Row = Readonly<Record<string, unknown>>;
 type VersionedRef = Readonly<{ id: string; version: number }>;
@@ -60,6 +61,26 @@ export interface QaJiraRequestCreateCommandIdentity {
 
 function json<T>(value: unknown): T {
   return typeof value === "string" ? (JSON.parse(value) as T) : (value as T);
+}
+
+/** Runtime view only: immutable stored content and its hash remain unchanged. */
+export function jiraConnectionRuntimeContent(
+  content: Record<string, unknown>,
+): Record<string, unknown> {
+  const envelope = content.connectorConfiguration;
+  if (envelope === undefined) return { ...content };
+  if (!envelope || typeof envelope !== "object" || Array.isArray(envelope))
+    throw new Error("JIRA_CONNECTION_CONFIGURATION_INVALID");
+  const value = (envelope as Record<string, unknown>).value;
+  if (!value || typeof value !== "object" || Array.isArray(value))
+    throw new Error("JIRA_CONNECTION_CONFIGURATION_INVALID");
+  const config = value as Record<string, unknown>;
+  return {
+    ...content,
+    ...config,
+    endpoint: config.baseUrl ?? content.endpoint,
+    environmentScope: config.environment ?? content.environmentScope ?? content.environmentClass,
+  };
 }
 
 function deterministicUuid(namespace: string): string {
@@ -112,6 +133,16 @@ function assertEmbeddedContentHash(value: unknown, expected: string, code: strin
   if (!value || typeof value !== "object" || Array.isArray(value)) return;
   const embedded = (value as Record<string, unknown>).contentHash;
   if (embedded !== undefined && embedded !== expected) throw new Error(code);
+}
+
+function connectorKey(content: Record<string, unknown>): unknown {
+  const ref = content.connectorRef;
+  return (
+    content.connectorKey ??
+    (ref && typeof ref === "object" && !Array.isArray(ref)
+      ? (ref as Record<string, unknown>).key
+      : undefined)
+  );
 }
 
 function storedPinMatches(
@@ -258,9 +289,9 @@ async function loadQaJiraRequestCreateConfiguration(
       "JIRA_CONNECTION_REF_CONTENT_HASH_MISMATCH",
     );
     if (
-      profile.content.connectorKey !== "jira.operational-authority" ||
-      mapping.content.connectorKey !== "jira.operational-authority" ||
-      connection.content.connectorKey !== "jira.operational-authority"
+      connectorKey(profile.content) !== "jira.operational-authority" ||
+      connectorKey(mapping.content) !== "jira.operational-authority" ||
+      connectorKey(connection.content) !== "jira.operational-authority"
     )
       throw new Error("JIRA_EXACT_CONNECTOR_CHAIN_MISMATCH");
     await assertValidationEvidence(manager, scope, "PROFILE", profileRef, profile.contentHash);
@@ -273,22 +304,25 @@ async function loadQaJiraRequestCreateConfiguration(
       connection.contentHash,
     );
 
-    const configuredEndpoint = String(connection.content.endpoint ?? "");
+    const runtimeConnection = jiraConnectionRuntimeContent(connection.content);
+    const configuredEndpoint = String(
+      runtimeConnection.baseUrl ?? runtimeConnection.endpoint ?? "",
+    );
     if (
       !environment.mockHubUrl ||
       new URL(configuredEndpoint).origin !== new URL(environment.mockHubUrl).origin
     ) {
       throw new Error("JIRA_LOCAL_EXACT_ENDPOINT_MISMATCH");
     }
-    const adapterFamily = String(connection.content.adapterFamily ?? "");
-    const adapterContractVersion = String(connection.content.adapterContractVersion ?? "");
+    const adapterFamily = String(runtimeConnection.adapterFamily ?? "");
+    const adapterContractVersion = String(runtimeConnection.adapterContractVersion ?? "");
     if (adapterFamily !== "jira-cloud-v3" || adapterContractVersion !== "1.0.0") {
       throw new Error("JIRA_ADAPTER_PIN_UNSUPPORTED");
     }
     const authorityNamespaceHash = sha256({
       endpointOrigin: new URL(configuredEndpoint).origin,
       adapterFamily,
-      projectId: String(connection.content.projectId ?? ""),
+      projectId: String(runtimeConnection.projectId ?? ""),
     } as JsonValue);
     const pin: CommandConfigurationPin = Object.freeze({
       sequence,
@@ -317,7 +351,7 @@ async function loadQaJiraRequestCreateConfiguration(
         pin,
         profileContent: Object.freeze({ ...profile.content }),
         mappingContent: Object.freeze({ ...mapping.content }),
-        connectionContent: Object.freeze({ ...connection.content }),
+        connectionContent: Object.freeze(runtimeConnection),
       }),
     );
   }
@@ -514,9 +548,17 @@ export async function materializeQaJiraRequestConfirmation(
       QaWorkspaceContext["authorizationBasis"]
     >,
   });
+  const selected = await resolveLocalQaProjectConfiguration(manager, command);
+  if (
+    selected.bindingRef.id !== command.bindingRef.id ||
+    selected.bindingRef.version !== command.bindingRef.version ||
+    selected.profileRef.id !== command.profileRef.id ||
+    selected.profileRef.version !== command.profileRef.version
+  )
+    throw new Error("QA_PROJECT_JIRA_CONFIGURATION_STALE");
   const projectContext = await new QaProjectPolicyRepository(manager).currentProjectContext(
     { workspaceId: command.workspaceId, projectId: command.projectId },
-    qaLocalSeedIds.context,
+    selected.projectContextId,
   );
   if (!projectContext) throw new Error("QA_PROJECT_CONTEXT_NOT_PUBLISHED");
   const validated = await validateConfirmedQaIntake({

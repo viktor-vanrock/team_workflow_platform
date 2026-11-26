@@ -11,6 +11,7 @@ export interface QaIntakeConfiguration {
       bindingRef: QaVersionedReference;
       profileRef: QaVersionedReference;
       projectContextId: string;
+      authorityScopeKey?: string;
       responseChannels: Parameters<typeof confirmQaIntake>[0]["responseChannels"];
       inlineService?: QaServiceActor;
       commandIdentity(

@@ -5,9 +5,9 @@ import {
   deriveQaJiraRequestCreateCommandIdentity,
   loadEnvironment,
   localPersonaIds,
-  qaJiraLocalSeedRefs,
   qaLocalFixtureCatalog,
   qaLocalSeedIds,
+  resolveLocalQaProjectConfiguration,
   resolveQaJiraRequestCreateConfiguration,
 } from "@awp/runtime-composition";
 
@@ -22,18 +22,21 @@ export function createLocalQaIntakeConfiguration(
   const environment = loadEnvironment();
   return {
     load: async (scope) => {
-      const bindingRef =
+      const resolved =
         mode === "DURABLE_WORKER"
-          ? qaJiraLocalSeedRefs.binding
-          : { id: qaLocalSeedIds.alphaBinding, version: 2 };
-      const profileRef =
-        mode === "DURABLE_WORKER"
-          ? qaJiraLocalSeedRefs.profile
-          : { id: qaLocalSeedIds.profile, version: 2 };
+          ? await resolveLocalQaProjectConfiguration(source, scope)
+          : undefined;
+      const bindingRef = resolved?.bindingRef ?? { id: qaLocalSeedIds.alphaBinding, version: 2 };
+      const profileRef = resolved?.profileRef ?? { id: qaLocalSeedIds.profile, version: 2 };
       return {
         bindingRef,
         profileRef,
-        projectContextId: qaLocalSeedIds.context,
+        projectContextId: resolved?.projectContextId ?? qaLocalSeedIds.context,
+        ...(resolved &&
+        "authorityScopeKey" in resolved &&
+        typeof resolved.authorityScopeKey === "string"
+          ? { authorityScopeKey: resolved.authorityScopeKey }
+          : {}),
         ...(mode === "INLINE_LOCAL"
           ? {
               inlineService: {
