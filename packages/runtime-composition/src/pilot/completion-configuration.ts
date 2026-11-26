@@ -10,13 +10,13 @@ import {
 } from "@awp/platform-core";
 import { TypeOrmOperationalAuthorityRepository } from "@awp/platform-persistence-typeorm";
 
-import type { QaCompletionConfigurationPort } from "./completion-runtime.ts";
-import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import {
   connectorKey,
   jiraConnectionRuntimeContent,
   jiraMappingRuntimeContent,
 } from "../jira/qa-connection-content.ts";
+import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
+import type { QaCompletionConfigurationPort } from "./completion-runtime.ts";
 
 export interface QaCompletionPins extends QaScope {
   readonly bindingRef: ExactRevisionRef;

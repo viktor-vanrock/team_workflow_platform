@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { createCorporateGitLabResultAuthority } from "../../../packages/runtime-composition/src/gitlab/corporate-result-authority.ts";
+
 const mocks = vi.hoisted(() => ({
   loadState: vi.fn(),
   loadTerminal: vi.fn(),
@@ -47,13 +49,12 @@ vi.mock(
 vi.mock("../../../packages/runtime-composition/src/gitlab/corporate-result-collection.ts", () => ({
   collectCorporateGitLabResultArtifacts: mocks.collect,
 }));
-vi.mock("@awp/platform-persistence-typeorm", async (original) => ({
+vi.mock("../../../packages/platform-persistence-typeorm/src/index.ts", async (original) => ({
   ...(await original<typeof import("@awp/platform-persistence-typeorm")>()),
   TypeOrmScopedAccessRepository: class {
     getProject = mocks.getProject;
   },
 }));
-import { createCorporateGitLabResultAuthority } from "../../../packages/runtime-composition/src/gitlab/corporate-result-authority.ts";
 
 const candidate = {
   workspaceId: "w",

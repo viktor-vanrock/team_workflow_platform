@@ -1,5 +1,7 @@
 import type { DataSource } from "typeorm";
+
 import type { QaAutomationAttemptRecord } from "@awp/competency-qa/node";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 
 /** Read current scoped quarantine before deciding whether an automatic retry is eligible. */

@@ -1,17 +1,19 @@
 import type { DataSource } from "typeorm";
+
 import { renderMattermostNotification } from "@awp/connector-mattermost";
 import type { MessagingLogicalTarget } from "@awp/connector-sdk";
 import type { ConnectorCommand } from "@awp/platform-core";
 import {
-  TypeOrmCommandDeliveryStore,
   type CommandDeliveryScope,
   type CommandEffectGateEvidence,
+  TypeOrmCommandDeliveryStore,
 } from "@awp/platform-persistence-typeorm";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
+import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type { CorporateConnectorFactories } from "../pilot/connector-factories.ts";
 import type { CorporateWorkerCommandContext } from "../pilot/worker-command-context.ts";
-import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import { resolveCorporateMattermostChannel } from "./corporate-channel.ts";
 import { DurableMattermostNotificationLifecycle } from "./notification-worker.ts";
 

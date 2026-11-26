@@ -1,15 +1,18 @@
 import { describe, expect, it, vi } from "vitest";
+
+import { TypeOrmGitLabReconciliationRepository } from "../../../packages/connector-gitlab-persistence-typeorm/src/repositories/gitlab-reconciliation.repository.ts";
 import {
   createCorporateGitLabAuthoritativeReadHandler,
   TypeOrmGitLabAuthoritativeReadOutboxWorker,
   TypeOrmGitLabReconciliationPollScheduler,
 } from "../../../packages/runtime-composition/src/gitlab/reconciliation-worker.ts";
-import { TypeOrmGitLabReconciliationRepository } from "../../../packages/connector-gitlab-persistence-typeorm/src/repositories/gitlab-reconciliation.repository.ts";
 
 describe("corporate GitLab reconciliation scope", () => {
   const scope = { workspaceId: "workspace", projectIds: ["project"] };
   it("selects authoritative reads only from the configured projects", async () => {
-    const query = vi.fn(async (_sql: string, _params: readonly unknown[]) => []);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [],
+    );
     const source = {
       transaction: async (_level: string, work: (manager: unknown) => Promise<unknown>) =>
         await work({ query }),
@@ -28,7 +31,9 @@ describe("corporate GitLab reconciliation scope", () => {
     expect(read).not.toHaveBeenCalled();
   });
   it("restricts cursors through matching commands before the limit", async () => {
-    const query = vi.fn(async (_sql: string, _params: readonly unknown[]) => []);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [],
+    );
     const repository = new TypeOrmGitLabReconciliationRepository({ query } as never);
     const now = new Date("2026-01-01T00:00:00.000Z");
     await repository.cursorsDue("ACTIVE_PIPELINES", now, 1, scope);

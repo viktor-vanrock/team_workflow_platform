@@ -11,19 +11,19 @@ import type {
   TrustedConnectorConfigurationPin,
   TrustedConnectorOperationContext,
 } from "@awp/connector-sdk";
-import { defaultClassificationCatalog, type ConnectorCommand } from "@awp/platform-core";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
+import { type ConnectorCommand, defaultClassificationCatalog } from "@awp/platform-core";
 
 import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type { CorporateConnectorFactories } from "../pilot/connector-factories.ts";
 import type { CorporateWorkerCommandContext } from "../pilot/worker-command-context.ts";
 import type { GitLabAutomationWorkerAuthority } from "./automation-worker.ts";
-import { assertCorporatePublishedSuiteParameters } from "./corporate-parameter-schema.ts";
 import {
   assertCorporateGitLabBuildMapping,
   assertCorporateGitLabBuildRef,
 } from "./corporate-build-target.ts";
+import { assertCorporatePublishedSuiteParameters } from "./corporate-parameter-schema.ts";
 
 const json = <T>(value: unknown): T =>
   typeof value === "string" ? (JSON.parse(value) as T) : (value as T);
@@ -108,7 +108,18 @@ export function createCorporateGitLabAutomationWorkerAuthority(
       )
         throw new Error("GITLAB_AUTOMATION_TARGET_SNAPSHOT_STALE");
       assertCorporateGitLabBuildRef(target.target);
-      const pins: TrustedConnectorConfigurationPin[] = target.configurationPins.map((pin) => ({
+      const pins: TrustedConnectorConfigurationPin[] = (
+        target.configurationPins as readonly {
+          logicalRole: string;
+          capabilityKey: string;
+          exactContractVersion: string;
+          projectIntegrationBindingRef: TrustedConnectorConfigurationPin["bindingRef"];
+          profileRef: TrustedConnectorConfigurationPin["profileRef"];
+          connectionRef: TrustedConnectorConfigurationPin["connectionRef"];
+          validationReportRef: TrustedConnectorConfigurationPin["validationReportRef"];
+          operationSetHash: TrustedConnectorConfigurationPin["operationSetHash"];
+        }[]
+      ).map((pin) => ({
         logicalRole: pin.logicalRole,
         capabilityKey: pin.capabilityKey,
         exactContractVersion: pin.exactContractVersion,

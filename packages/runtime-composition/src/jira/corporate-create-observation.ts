@@ -1,12 +1,14 @@
 import { randomUUID } from "node:crypto";
+
 import type { JiraIssueRead } from "@awp/connector-jira";
+
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type { CorporateConnectorFactories } from "../pilot/connector-factories.ts";
-import { jiraMappingRuntimeContent } from "./qa-connection-content.ts";
 import {
   corporateJiraObservationMappings,
   normalizeCorporateJiraObservation,
 } from "./corporate-issue-observation.ts";
+import { jiraMappingRuntimeContent } from "./qa-connection-content.ts";
 import type { CorporateJiraCreateObservationAuthority } from "./qa-corporate-worker-steps.ts";
 
 const object = (value: unknown): Record<string, unknown> => {

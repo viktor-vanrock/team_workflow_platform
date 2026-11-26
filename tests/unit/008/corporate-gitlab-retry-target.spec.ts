@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
 import { verifyCorporateGitLabRetryTarget } from "../../../packages/runtime-composition/src/gitlab/corporate-retry-target.ts";
 

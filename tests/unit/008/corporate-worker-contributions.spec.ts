@@ -54,7 +54,9 @@ describe("corporate worker contributions", () => {
     );
   });
   it("leaves GitLab events pending in the database for a future recipient", async () => {
-    const query = vi.fn(async (_sql: string, _parameters: readonly unknown[]) => [{ pending: 3 }]);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [{ pending: 3 }],
+    );
     const step = createDeferredGitLabEventsStep({ query } as never, {
       workspaceId: "workspace",
       projectIds: ["project"],

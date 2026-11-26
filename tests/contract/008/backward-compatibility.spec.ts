@@ -40,7 +40,7 @@ describe("008 transitive 001-007 compatibility", () => {
       local.migrations.map((Migration) => new Migration().name),
     );
     expect(corporate.expectedVersions).toMatchObject({
-      core: 220,
+      core: 255,
       "pack:qa": 2115,
       "connector:jira": 3050,
       "connector:gitlab": 4020,

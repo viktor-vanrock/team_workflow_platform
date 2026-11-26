@@ -1,24 +1,25 @@
 import type { DataSource, EntityManager } from "typeorm";
+
 import type {
   QaAutomationRetryCommandAdmission,
   QaAutomationRetryCoreCommandRecord,
 } from "@awp/competency-qa/node";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
 import {
-  pilotCommandPrincipal,
+  type ConnectorCommand,
   defaultClassificationCatalog,
   DenyByDefaultAuthorizationPolicy,
-  type ConnectorCommand,
+  pilotCommandPrincipal,
   type PilotEffectContext,
-  type ProjectScope,
-  type ProjectEffectGuardSnapshot,
   type PilotFencePort,
+  type ProjectEffectGuardSnapshot,
+  type ProjectScope,
 } from "@awp/platform-core";
 import {
   PilotCommandAdmissionRepository,
   TypeOrmCommandRepository,
   TypeOrmScopedAccessRepository,
 } from "@awp/platform-persistence-typeorm";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
 
 /** Lock and re-evaluate the causal human's permissions in the retry transaction. */
 export async function assertWorkerRetryHumanAccess(
@@ -114,7 +115,7 @@ export function createPilotTransactionalAdmission(
       const rows = (await manager.query(
         `SELECT current_version,current_operational_state FROM project_onboarding_headers WHERE workspace_id=$1 AND project_id=$2 FOR SHARE`,
         [scope.workspaceId, scope.projectId],
-      )) as readonly { current_version: number; current_operational_state: string }[];
+      )) as readonly { current_version: number | string; current_operational_state: string }[];
       if (
         rows.length !== 1 ||
         Number(rows[0]!.current_version) !== snapshot.onboardingVersion ||

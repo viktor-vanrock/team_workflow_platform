@@ -1,12 +1,15 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createCorporateProjectRecoveryWorker } from "../../../packages/runtime-composition/src/onboarding/corporate-recovery-worker.ts";
 
 describe("corporate project recovery", () => {
   it("limits all reads and updates to the deployment scope", async () => {
-    const query = vi.fn(async (sql: string, _params: readonly unknown[]) => {
-      if (sql.includes("count(*)")) return [{ count: 0 }];
-      return [];
-    });
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async (sql) => {
+        if (sql.includes("count(*)")) return [{ count: 0 }];
+        return [];
+      },
+    );
     const source = { isInitialized: true, query };
     const worker = createCorporateProjectRecoveryWorker(source as never, {
       workspaceId: "workspace",

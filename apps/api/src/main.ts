@@ -14,9 +14,9 @@ import {
   type TelemetryRuntime,
 } from "@awp/platform-runtime-nest";
 import {
+  type CorporateConnectorFactories,
   createPilotDevelopmentComposition,
   createPilotNonLocalComposition,
-  type CorporateConnectorFactories,
   type DeploymentStartup,
   loadEnvironment,
   type PilotNonLocalCompositionOptions,

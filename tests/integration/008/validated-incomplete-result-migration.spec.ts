@@ -1,10 +1,11 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { DataSource } from "typeorm";
-import {
-  startPostgres,
-  type RunningPostgres,
-} from "../../../packages/platform-testkit/src/postgres.ts";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+
 import { QaValidatedIncompleteResult21151700000002115 } from "../../../packages/competency-qa/src/persistence/migrations/2115-validated-incomplete-result.ts";
+import {
+  type RunningPostgres,
+  startPostgres,
+} from "../../../packages/platform-testkit/src/postgres.ts";
 
 describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
   "validated incomplete result migration",

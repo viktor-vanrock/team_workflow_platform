@@ -35,7 +35,7 @@ async function boundedPage(response: Response, signal: AbortSignal): Promise<unk
   }
   if (!Array.isArray(parsed) || parsed.length >= 100)
     throw new Error("GITLAB_SUITE_RUN_SELECTION_TRUNCATED");
-  return parsed;
+  return parsed as unknown[];
 }
 
 /** Select from provider facts, never from a browser-supplied pipeline or job ID. */

@@ -1,4 +1,5 @@
 import type { DataSource } from "typeorm";
+
 import { createProjectEventEnvelope, type ProjectEventEnvelope } from "@awp/platform-core";
 
 /** Processes only the deployment's projects; inbox and acknowledgement commit together. */

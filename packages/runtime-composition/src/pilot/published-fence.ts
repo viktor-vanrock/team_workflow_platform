@@ -3,20 +3,21 @@ import type { DataSource } from "typeorm";
 import {
   assertExactRevisionRef,
   DenyByDefaultAuthorizationPolicy,
+  type ExactRevisionRef,
   freezePilotValue,
   pilotContentHash,
-  samePilotRef,
-  type ExactRevisionRef,
   type PilotEffectContext,
   type PilotFencePort,
   type PilotFenceSnapshot,
   type ProjectScope,
+  samePilotRef,
 } from "@awp/platform-core";
 import { TypeOrmCorporateScopedAccessRepository } from "@awp/platform-persistence-typeorm";
+
 import {
   assertPilotFenceActionDetails,
-  pilotFenceCohortRecord,
   type PilotFenceAction,
+  pilotFenceCohortRecord,
 } from "./fence-action.ts";
 import { matchesPilotOnboardingPin } from "./onboarding-pin.ts";
 
@@ -144,15 +145,17 @@ export class PublishedPilotFence implements PilotFencePort {
       cohort.userIds.some((id) => typeof id !== "string" || !uuid.test(id)) ||
       new Set(cohort.userIds).size !== cohort.userIds.length ||
       cohort.projects.length > 100 ||
-      cohort.projects.some(
+      (cohort.projects as Cohort["projects"]).some(
         (project) =>
           !project ||
           project.workspaceId !== this.workspaceId ||
           !this.projectIds.includes(project.projectId),
       ) ||
-      new Set(cohort.projects.map((project) => project.projectId)).size !==
+      new Set((cohort.projects as Cohort["projects"]).map((project) => project.projectId)).size !==
         cohort.projects.length ||
-      !cohort.projects.some((project) => project.projectId === scope.projectId) ||
+      !(cohort.projects as Cohort["projects"]).some(
+        (project) => project.projectId === scope.projectId,
+      ) ||
       !Number.isFinite(Date.parse(cohort.startAt)) ||
       !Number.isFinite(Date.parse(cohort.endAt))
     )
@@ -212,7 +215,9 @@ export class PublishedPilotFence implements PilotFencePort {
         cohorts[0]!.content_hash
     )
       return undefined;
-    const project = cohort.projects.find((value) => value.projectId === scope.projectId)!;
+    const project = (cohort.projects as Cohort["projects"]).find(
+      (value) => value.projectId === scope.projectId,
+    )!;
     assertExactRevisionRef(project.onboardingRef);
     const heads = (await this.source.query(
       `SELECT h.onboarding_id,h.current_version,r.revision_id,r.content_hash,r.semantic_body
@@ -273,7 +278,7 @@ export class PublishedPilotFence implements PilotFencePort {
       deploymentRef: body.deploymentRef,
       cohortRef: body.cohortRef,
       runtimeInstanceId: body.runtimeInstanceId,
-      projectIds: cohort.projects.map((project) => project.projectId),
+      projectIds: (cohort.projects as Cohort["projects"]).map((project) => project.projectId),
       principalIds: [...cohort.userIds],
       startsAt,
       expiresAt,

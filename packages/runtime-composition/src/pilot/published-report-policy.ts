@@ -1,11 +1,12 @@
 import { readFileSync } from "node:fs";
+
 import type { DataSource } from "typeorm";
 
 import {
-  pilotContentHash,
-  validateInputPackage008,
   type ExactRevisionRef,
+  pilotContentHash,
   type ProjectScope,
+  validateInputPackage008,
 } from "@awp/platform-core";
 import { RuntimeConfigurationRepository } from "@awp/platform-persistence-typeorm";
 
@@ -33,8 +34,12 @@ export class PublishedPilotReportPolicy implements PilotReportPolicyPort {
       if (validateInputPackage008(publication.document, "N2").status !== "PASS") throw new Error();
       const entries = publication.document.entries;
       if (!Array.isArray(entries)) throw new Error();
-      const matches = entries.filter(
-        (item) => item && typeof item === "object" && !Array.isArray(item) && item.id === "IN-07",
+      const matches = (entries as unknown[]).filter(
+        (item) =>
+          item &&
+          typeof item === "object" &&
+          !Array.isArray(item) &&
+          (item as Record<string, unknown>).id === "IN-07",
       );
       if (matches.length !== 1) throw new Error();
       const metadata = (matches[0] as Record<string, unknown>).metadata as

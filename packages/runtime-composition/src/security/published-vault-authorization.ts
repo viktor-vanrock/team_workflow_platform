@@ -2,9 +2,9 @@ import type { DataSource } from "typeorm";
 
 import {
   assertExactRevisionRef,
+  type ExactRevisionRef,
   freezePilotValue,
   pilotContentHash,
-  type ExactRevisionRef,
 } from "@awp/platform-core";
 import { RuntimeConfigurationRepository } from "@awp/platform-persistence-typeorm";
 

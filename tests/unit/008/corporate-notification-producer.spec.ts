@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createCorporateQaNotificationProducer } from "../../../packages/runtime-composition/src/mattermost/corporate-notification-producer.ts";
 
 describe("corporate notification producer", () => {
@@ -17,7 +18,9 @@ describe("corporate notification producer", () => {
     ).toThrow("CORPORATE_NOTIFICATION_PRODUCER_REQUIRED");
   });
   it("scans only deployment projects and does nothing with an empty inbox", async () => {
-    const query = vi.fn(async (_sql: string, _params: readonly unknown[]) => []);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [],
+    );
     const source = {
       isInitialized: true,
       transaction: async (_level: string, work: (manager: unknown) => Promise<unknown>) =>

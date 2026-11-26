@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
 import {
-  createCorporateGitLabResultProvider,
   corporateGitLabResultJobExpiry,
+  createCorporateGitLabResultProvider,
 } from "../../../packages/runtime-composition/src/gitlab/corporate-result-provider.ts";
 
 describe("corporate GitLab result provider", () => {

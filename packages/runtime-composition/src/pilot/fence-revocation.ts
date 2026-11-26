@@ -1,16 +1,17 @@
 import { randomUUID } from "node:crypto";
 
+import type { DataSource } from "typeorm";
+
 import {
+  type ActorReference,
+  type AuthorizationBasisRef,
   defaultClassificationCatalog,
   pilotContentHash,
-  type AuthorizationBasisRef,
-  type ActorReference,
   type PilotRecord,
   type ProjectScope,
   validateAuthorizationBasis,
 } from "@awp/platform-core";
 import { PilotRepository } from "@awp/platform-persistence-typeorm";
-import type { DataSource } from "typeorm";
 
 export interface PilotFenceRevocationAuthority extends ProjectScope {
   authorize(permission: "project.suspend"): Promise<
@@ -83,7 +84,7 @@ export class DurablePilotFenceRevocation {
         pilotContentHash(initial.basis) !== pilotContentHash(current.basis)
       )
         throw new Error("PILOT_FENCE_REVOKE_DENIED");
-      if (row.semantic_body.body.revoked === true) return { ...expected, replayed: true };
+      if (row.semantic_body.body.revoked) return { ...expected, replayed: true };
       const correlationId = randomUUID(),
         causationId = randomUUID();
       const body = {

@@ -1,6 +1,8 @@
 import { Controller, Get, Inject, Param, Req, Res, UseGuards } from "@nestjs/common";
 import type { DataSource } from "typeorm";
+
 import { TypeOrmGitLabAutomationAttemptQuery } from "@awp/runtime-composition";
+
 import { QA_DATA_SOURCE, QaSessionGuard, type QaSessionRequest } from "../qa-api-authorization.ts";
 import { QaAutomationAttemptsController } from "./qa-automation-attempts.controller.ts";
 

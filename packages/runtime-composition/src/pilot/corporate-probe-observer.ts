@@ -1,8 +1,10 @@
 import type { DataSource } from "typeorm";
+
 import { validateGitLabConnectionConfiguration } from "@awp/connector-gitlab";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
-import type { RequestedProbeTarget } from "../onboarding/requested-probe-worker.ts";
 import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
+import type { RequestedProbeTarget } from "../onboarding/requested-probe-worker.ts";
 import type { CorporateConnectorGrant } from "./connector-authority.ts";
 import type { CorporateConnectorFactories } from "./connector-factories.ts";
 

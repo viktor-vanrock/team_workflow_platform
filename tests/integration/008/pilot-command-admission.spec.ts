@@ -3,8 +3,8 @@ import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { InMemoryDurableCommandStore } from "../../../packages/platform-core/src/commanding/connector-command.ts";
-import { pilotContentHash, type PilotRecord } from "../../../packages/platform-core/src/index.ts";
 import { StaticProjectEffectGuard } from "../../../packages/platform-core/src/commanding/project-effect-guard.ts";
+import { pilotContentHash, type PilotRecord } from "../../../packages/platform-core/src/index.ts";
 import {
   createPlatformDataSource,
   PilotCommandAdmissionRepository,
@@ -13,15 +13,15 @@ import {
 import { M0245PilotCommandAdmission1700000000245 } from "../../../packages/platform-persistence-typeorm/src/migrations/core/0245-pilot-command-admission.ts";
 import { M0250PilotFenceAction1700000000250 } from "../../../packages/platform-persistence-typeorm/src/migrations/core/0250-pilot-fence-action.ts";
 import {
-  startPostgres,
   type RunningPostgres,
+  startPostgres,
 } from "../../../packages/platform-testkit/src/postgres.ts";
+import { createInitialPilotCohort } from "../../../packages/runtime-composition/src/pilot/cohort-service.ts";
 import { runtimePersistence } from "../../../packages/runtime-composition/src/pilot/composition.ts";
 import {
   createStoredPilotCommandEffectGuard,
   PilotEffectGuard,
 } from "../../../packages/runtime-composition/src/pilot/effect-guard.ts";
-import { createInitialPilotCohort } from "../../../packages/runtime-composition/src/pilot/cohort-service.ts";
 import { PublishedPilotFence } from "../../../packages/runtime-composition/src/pilot/published-fence.ts";
 
 let postgres: RunningPostgres;
@@ -303,6 +303,7 @@ describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
       const reader = new PublishedPilotFence(source, workspaceId, [projectId]);
       expect(await reader.current({ workspaceId, projectId })).toBeUndefined();
       const { contentHash: _priorHash, ...oldCohort } = cohort;
+      void _priorHash;
       const revokedBody = {
         ...oldCohort,
         version: 2,
@@ -311,6 +312,7 @@ describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
       };
       const revoked = { ...revokedBody, contentHash: pilotContentHash(revokedBody) };
       const { contentHash: _recordHash, ...oldRecord } = cohortRecord;
+      void _recordHash;
       const nextRecord = {
         ...oldRecord,
         version: 2,

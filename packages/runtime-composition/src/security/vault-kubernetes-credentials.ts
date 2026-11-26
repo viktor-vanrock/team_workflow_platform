@@ -87,7 +87,9 @@ export class VaultKubernetesCredentials implements VaultWorkloadCredentials {
           chunks.push(chunk.value);
         }
       } catch (error) {
-        chunks.forEach((chunk) => chunk.fill(0));
+        chunks.forEach((chunk) => {
+          chunk.fill(0);
+        });
         throw error;
       } finally {
         await reader.cancel().catch(() => {});
@@ -99,7 +101,9 @@ export class VaultKubernetesCredentials implements VaultWorkloadCredentials {
         decoded = JSON.parse(bytes.toString("utf8"));
       } finally {
         bytes.fill(0);
-        chunks.forEach((chunk) => chunk.fill(0));
+        chunks.forEach((chunk) => {
+          chunk.fill(0);
+        });
       }
       if (!decoded || typeof decoded !== "object" || Array.isArray(decoded)) throw new Error();
       const auth = (decoded as Record<string, unknown>).auth;

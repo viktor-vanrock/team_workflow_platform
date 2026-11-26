@@ -1,14 +1,16 @@
 import type { DataSource } from "typeorm";
+
 import {
-  TypeOrmAutomationExecutionRepository,
   type QaAutomationAttemptRecord,
+  TypeOrmAutomationExecutionRepository,
 } from "@awp/competency-qa/node";
-import { pilotContentHash } from "@awp/platform-core";
 import { sha256 } from "@awp/platform-contracts";
+import { pilotContentHash } from "@awp/platform-core";
 import { TypeOrmCommandRepository } from "@awp/platform-persistence-typeorm";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
-import { PublishedDeploymentReferences } from "../pilot/published-deployment-references.ts";
 import type { PilotCommandEffectGuard } from "../pilot/effect-guard.ts";
+import { PublishedDeploymentReferences } from "../pilot/published-deployment-references.ts";
 import { corporateGitLabRetryPolicy, resolveCorporateGitLabC1 } from "./corporate-c1-metadata.ts";
 
 /** Recheck the original durable command and its pinned deployment before resolving retry policy. */
@@ -100,8 +102,8 @@ export function createCorporateGitLabRetryPolicyAuthority(
         artifactPolicy: Object.freeze({
           minimumRetentionSeconds: artifact.minimumRetentionSeconds,
           maximumRetentionSeconds: artifact.maximumRetentionSeconds,
-          allowedClassifications: Object.freeze([...artifact.allowedClassifications] as string[]),
-          allowedTypes: Object.freeze([...artifact.allowedTypes] as string[]),
+          allowedClassifications: Object.freeze([...(artifact.allowedClassifications as string[])]),
+          allowedTypes: Object.freeze([...(artifact.allowedTypes as string[])]),
           maxBytes: artifact.maxBytes,
         }),
       });

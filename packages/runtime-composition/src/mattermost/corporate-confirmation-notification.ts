@@ -1,6 +1,7 @@
 import { renderMattermostNotification } from "@awp/connector-mattermost";
 import { designContractRegistry, sha256 } from "@awp/platform-contracts";
 import { NotificationIntentAggregate, type NotificationIntentSnapshot } from "@awp/platform-core";
+
 import { resolveCorporateMattermostChannel } from "./corporate-channel.ts";
 import { qaConfirmedTemplateHash, qaConfirmedTemplateRef } from "./corporate-template-authority.ts";
 
@@ -37,7 +38,7 @@ export function buildCorporateQaConfirmationNotification(
     input.confirmationVersion < 1 ||
     !input.title ||
     input.title.length > 200 ||
-    /[\r\n<>@`\[\]()*_~\\]|https?:\/\//iu.test(input.title) ||
+    /[\r\n<>@`[\]()*_~\\]|https?:\/\//iu.test(input.title) ||
     !Number.isFinite(input.expiresAt.getTime())
   )
     throw new Error("CORPORATE_NOTIFICATION_INPUT_INVALID");

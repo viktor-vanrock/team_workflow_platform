@@ -1,15 +1,16 @@
+import type { DataSource } from "typeorm";
+
 import type { confirmQaIntake } from "@awp/competency-qa/node";
 import {
-  deriveQaJiraRequestCreateCommandIdentity,
   assertCurrentQaOperationalConfiguration,
+  deriveQaJiraRequestCreateCommandIdentity,
   integrationConfigurationHash,
+  type QaReadinessPins,
   resolvePublishedQaProjectConfiguration,
   resolveQaJiraRequestCreateConfiguration,
-  TypeOrmProjectEffectGuard,
-  type QaReadinessPins,
   type RuntimeEnvironment,
+  TypeOrmProjectEffectGuard,
 } from "@awp/runtime-composition";
-import type { DataSource } from "typeorm";
 
 import type { QaIntakeConfiguration } from "./qa-intake-configuration.ts";
 
@@ -37,7 +38,7 @@ export function createCorporateQaIntakeConfiguration(
         throw new Error("QA_SCOPE_DENIED");
       const selected = await resolvePublishedQaProjectConfiguration(source, scope);
       await new TypeOrmProjectEffectGuard(source).assertEffectsAllowed(scope);
-      const pin = projectPins.find(
+      const pin = (projectPins as readonly QaReadinessPins[]).find(
         (value) => value.workspaceId === scope.workspaceId && value.projectId === scope.projectId,
       );
       if (

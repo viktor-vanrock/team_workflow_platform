@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { selectGitLabSuitePipeline } from "../../../packages/connector-gitlab/src/profile/gitlab-suite-pipeline-selection.ts";
 
 const sha = "a".repeat(40);

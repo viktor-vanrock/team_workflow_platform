@@ -1,11 +1,14 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createRequestedCapabilityProbeWorker } from "../../../packages/runtime-composition/src/onboarding/requested-probe-worker.ts";
 import { createCapabilityProbeMaintenanceWorker } from "../../../packages/runtime-composition/src/pilot/maintenance-probes.ts";
 
 describe("corporate capability probes", () => {
   const scope = { workspaceId: "workspace", projectIds: ["project"] };
   it("limits requested and maintenance scans before claiming work", async () => {
-    const query = vi.fn(async (_sql: string, _parameters: readonly unknown[]) => []);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [],
+    );
     const source = { query } as never;
     await createRequestedCapabilityProbeWorker(source, {
       deadlineMs: 100,

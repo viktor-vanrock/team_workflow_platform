@@ -2,10 +2,10 @@ import { readFileSync } from "node:fs";
 
 import {
   assertExactRevisionRef,
+  type ExactRevisionRef,
   freezePilotValue,
   pilotContentHash,
   samePilotRef,
-  type ExactRevisionRef,
 } from "@awp/platform-core";
 import type { RuntimeConfigurationPublication } from "@awp/platform-persistence-typeorm";
 import type { CorporateSigningGrant, RuntimeEnvironment } from "@awp/runtime-composition";

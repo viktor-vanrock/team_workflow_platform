@@ -1,15 +1,16 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { TypeOrmCommandRepository } from "../../../packages/platform-persistence-typeorm/src/command.repository.ts";
-import {
-  createRetryCommandAdmission,
-  createWorkerRetryAdmission,
-  assertWorkerRetryHumanAccess,
-} from "../../../packages/runtime-composition/src/pilot/retry-command-admission.ts";
-import { TypeOrmScopedAccessRepository } from "../../../packages/platform-persistence-typeorm/src/identity-access.repository.ts";
+
 import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
 import { InMemoryDurableCommandStore } from "../../../packages/platform-core/src/commanding/connector-command.ts";
+import { TypeOrmCommandRepository } from "../../../packages/platform-persistence-typeorm/src/command.repository.ts";
+import { TypeOrmScopedAccessRepository } from "../../../packages/platform-persistence-typeorm/src/identity-access.repository.ts";
 import { PilotCommandAdmissionRepository } from "../../../packages/platform-persistence-typeorm/src/pilot-command-admission.repository.ts";
 import { PilotCommandEffectGuard } from "../../../packages/runtime-composition/src/pilot/effect-guard.ts";
+import {
+  assertWorkerRetryHumanAccess,
+  createRetryCommandAdmission,
+  createWorkerRetryAdmission,
+} from "../../../packages/runtime-composition/src/pilot/retry-command-admission.ts";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -121,7 +122,7 @@ describe("corporate retry command admission", () => {
       },
       source: { sourceWorkItemId: "work", causalHumanPrincipalId: "human" },
     };
-    const query = vi.fn(async (_sql: string, _params?: unknown[]) => []);
+    const query = vi.fn<(sql: string, params?: unknown[]) => Promise<unknown[]>>(async () => []);
     const repository = new PilotCommandAdmissionRepository({ query } as never);
     await expect(repository.load(command as never)).rejects.toThrow(
       "PILOT_RETRY_PROVENANCE_INVALID",
@@ -144,6 +145,8 @@ describe("corporate retry command admission", () => {
   it("loads a retry admission only after the stored attempt confirms both identities", async () => {
     const command = {
       ...InMemoryDurableCommandStore.readyFixture().command(),
+      payloadHash: `sha256:${"b".repeat(64)}`,
+      targetHash: `sha256:${"c".repeat(64)}`,
       actor: { kind: "SERVICE" as const, principalId: "service", serviceKey: "gitlab" },
       capability: {
         key: "test-executor.trigger-status",
@@ -154,22 +157,23 @@ describe("corporate retry command admission", () => {
       source: { sourceWorkItemId: "work", causalHumanPrincipalId: "human" },
     };
     const ref = { id: "ref", version: 1, contentHash: `sha256:${"a".repeat(64)}` };
-    const query = vi.fn(async (sql: string, _parameters: readonly unknown[]) =>
-      sql.includes("qa_automation_attempts")
-        ? [{ valid: 1 }]
-        : [
-            {
-              command_id: command.id,
-              principal_id: "human",
-              purpose: "BUSINESS",
-              payload_hash: command.payloadHash,
-              target_hash: command.targetHash,
-              expected_onboarding_version: 1,
-              deployment_ref: ref,
-              cohort_ref: ref,
-              fence_ref: ref,
-            },
-          ],
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async (sql) =>
+        sql.includes("qa_automation_attempts")
+          ? [{ valid: 1 }]
+          : [
+              {
+                command_id: command.id,
+                principal_id: "human",
+                purpose: "BUSINESS",
+                payload_hash: command.payloadHash,
+                target_hash: command.targetHash,
+                expected_onboarding_version: 1,
+                deployment_ref: ref,
+                cohort_ref: ref,
+                fence_ref: ref,
+              },
+            ],
     );
     const repository = new PilotCommandAdmissionRepository({ query } as never);
     expect((await repository.load(command as never))?.context.principalId).toBe("human");

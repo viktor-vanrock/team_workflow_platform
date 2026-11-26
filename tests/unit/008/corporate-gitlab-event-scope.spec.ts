@@ -1,9 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { TypeOrmFeature005AutomationEventOutboxWorker } from "../../../packages/runtime-composition/src/gitlab/result-sync.ts";
 
 describe("corporate GitLab event worker scope", () => {
   it("filters by workspace and projects before claiming an event", async () => {
-    const query = vi.fn(async (_sql: string, _parameters: readonly unknown[]) => []);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [],
+    );
     const source = {
       transaction: async (_isolation: string, work: (manager: unknown) => Promise<unknown>) =>
         await work({ query }),

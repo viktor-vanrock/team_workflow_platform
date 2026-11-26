@@ -1,9 +1,11 @@
+import { createHash } from "node:crypto";
+
 import { describe, expect, it, vi } from "vitest";
+
 import {
   qaCompetencyManifestV15,
   qaValidationWorkTypeDefinitionV15,
 } from "../../../packages/competency-qa/src/manifest-v1.5.ts";
-import { createHash } from "node:crypto";
 import { registerQaNonproductionManifest } from "../../../packages/runtime-composition/src/bootstrap/qa-nonproduction-manifest.ts";
 
 const hash = (value: unknown) =>

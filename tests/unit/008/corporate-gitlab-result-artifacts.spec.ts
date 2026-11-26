@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
 import { corporateGitLabArtifactForQa } from "../../../packages/runtime-composition/src/gitlab/corporate-result-artifacts.ts";
 

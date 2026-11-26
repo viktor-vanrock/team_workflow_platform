@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
+
 import { TypeOrmAutomationExecutionRepository } from "../../../packages/competency-qa/src/node.ts";
+import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
 import { createCorporateGitLabResultState } from "../../../packages/runtime-composition/src/gitlab/corporate-result-state.ts";
 
 describe("corporate GitLab result state", () => {

@@ -1,10 +1,11 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { DataSource } from "typeorm";
-import {
-  startPostgres,
-  type RunningPostgres,
-} from "../../../packages/platform-testkit/src/postgres.ts";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+
 import { M0255NotificationTemplateEvidence1700000000255 } from "../../../packages/platform-persistence-typeorm/src/migrations/core/0255-notification-template-evidence.ts";
+import {
+  type RunningPostgres,
+  startPostgres,
+} from "../../../packages/platform-testkit/src/postgres.ts";
 
 describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
   "notification template evidence migration",

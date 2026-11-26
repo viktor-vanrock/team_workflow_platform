@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { DurablePilotFenceRevocation } from "../../../packages/runtime-composition/src/pilot/fence-revocation.ts";
-import { PilotRepository } from "../../../packages/platform-persistence-typeorm/src/index.ts";
 import { pilotContentHash } from "../../../packages/platform-core/src/index.ts";
+import { PilotRepository } from "../../../packages/platform-persistence-typeorm/src/index.ts";
+import { DurablePilotFenceRevocation } from "../../../packages/runtime-composition/src/pilot/fence-revocation.ts";
 
 afterEach(() => vi.restoreAllMocks());
 

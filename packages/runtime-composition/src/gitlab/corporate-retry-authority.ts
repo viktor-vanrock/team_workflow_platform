@@ -1,10 +1,11 @@
 import type { DataSource } from "typeorm";
+
 import {
-  TypeOrmAutomationExecutionRepository,
   type QaAutomatedTargetSnapshot,
   type QaAutomationAttemptRecord,
+  TypeOrmAutomationExecutionRepository,
 } from "@awp/competency-qa/node";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
 import {
   defaultClassificationCatalog,
   DenyByDefaultAuthorizationPolicy,
@@ -14,6 +15,7 @@ import {
   TypeOrmCommandRepository,
   TypeOrmScopedAccessRepository,
 } from "@awp/platform-persistence-typeorm";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type {

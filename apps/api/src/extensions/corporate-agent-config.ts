@@ -59,7 +59,7 @@ export function loadCorporateAgentConfig(
             (key) => !["issuer", "subject", "serviceKey"].includes(key),
           ) ||
           !Array.isArray(entry.actions) ||
-          entry.actions.some(
+          (entry.actions as CorporateAgentGrantConfiguration["actions"]).some(
             (action) =>
               !action ||
               Object.keys(action).some(

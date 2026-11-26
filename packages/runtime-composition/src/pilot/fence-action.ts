@@ -1,10 +1,10 @@
+import { designContractRegistry, type JsonValue, pilotSchemaIds } from "@awp/platform-contracts";
 import {
   assertExactRevisionRef,
   createProjectActionCandidate,
   pilotContentHash,
   type ProjectActionCandidate,
 } from "@awp/platform-core";
-import { designContractRegistry, pilotSchemaIds, type JsonValue } from "@awp/platform-contracts";
 
 import type { PilotCohortRevision } from "./cohort-service.ts";
 import type { PublishedPilotFenceV1 } from "./published-fence.ts";

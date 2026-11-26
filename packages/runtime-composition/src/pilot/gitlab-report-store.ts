@@ -3,10 +3,10 @@ import { createHash } from "node:crypto";
 import type { GitLabRestClient } from "@awp/connector-gitlab";
 import {
   assertExactRevisionRef,
-  pilotContentHash,
-  samePilotRef,
   type ExactRevisionRef,
+  pilotContentHash,
   type ProjectScope,
+  samePilotRef,
 } from "@awp/platform-core";
 
 import type {

@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { TypeOrmCommandDeliveryStore } from "../../../packages/platform-persistence-typeorm/src/command-delivery.store.ts";
 import { GitLabSuiteValidationWorker } from "../../../packages/runtime-composition/src/gitlab/suite-validation-worker.ts";
 

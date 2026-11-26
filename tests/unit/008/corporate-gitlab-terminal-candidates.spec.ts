@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createCorporateGitLabTerminalCandidateScanner } from "../../../packages/runtime-composition/src/gitlab/corporate-terminal-candidates.ts";
 
 describe("corporate GitLab terminal candidates", () => {
@@ -17,16 +18,18 @@ describe("corporate GitLab terminal candidates", () => {
       ).toThrow("CORPORATE_GITLAB_RESULT_SCOPE_REQUIRED");
   });
   it("selects current matching terminal observations within the deployment", async () => {
-    const query = vi.fn(async (_sql: string, _args: readonly unknown[]) => [
-      {
-        workspace_id: "workspace",
-        project_id: "project",
-        attempt_id: "attempt",
-        connector_command_id: "command",
-        pipeline_observation_id: "observation",
-        observation_hash: "hash",
-      },
-    ]);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [
+        {
+          workspace_id: "workspace",
+          project_id: "project",
+          attempt_id: "attempt",
+          connector_command_id: "command",
+          pipeline_observation_id: "observation",
+          observation_hash: "hash",
+        },
+      ],
+    );
     const scanner = createCorporateGitLabTerminalCandidateScanner(
       { isInitialized: true, query } as never,
       environment as never,
@@ -46,14 +49,16 @@ describe("corporate GitLab terminal candidates", () => {
     await expect(scanner.scan(0)).rejects.toThrow("CORPORATE_GITLAB_RESULT_LIMIT_INVALID");
   });
   it("finds committed results without retry decisions only within the deployment", async () => {
-    const query = vi.fn(async (_sql: string, _args: readonly unknown[]) => [
-      {
-        workspace_id: "workspace",
-        project_id: "project",
-        attempt_id: "attempt",
-        terminal_result_id: "result",
-      },
-    ]);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [
+        {
+          workspace_id: "workspace",
+          project_id: "project",
+          attempt_id: "attempt",
+          terminal_result_id: "result",
+        },
+      ],
+    );
     const scanner = createCorporateGitLabTerminalCandidateScanner(
       { isInitialized: true, query } as never,
       environment as never,
@@ -74,7 +79,9 @@ describe("corporate GitLab terminal candidates", () => {
       observation_hash: "hash",
     });
     const query = vi
-      .fn(async (_sql: string, _args: readonly unknown[]) => [row("unused")])
+      .fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(async () => [
+        row("unused"),
+      ])
       .mockResolvedValueOnce([row("a")])
       .mockResolvedValueOnce([row("b")])
       .mockResolvedValueOnce([])

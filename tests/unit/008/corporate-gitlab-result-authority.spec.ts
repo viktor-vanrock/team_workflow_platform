@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createCorporateGitLabResultAuthority } from "../../../packages/runtime-composition/src/gitlab/corporate-result-authority.ts";
 
 describe("corporate GitLab result authority", () => {

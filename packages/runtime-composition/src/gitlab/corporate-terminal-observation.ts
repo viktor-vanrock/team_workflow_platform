@@ -1,9 +1,11 @@
 import type { DataSource } from "typeorm";
+
+import type { PipelineObservation } from "@awp/connector-sdk";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type { CorporateConnectorRequestAuthority } from "../pilot/connector-factories.ts";
-import type { PipelineObservation } from "@awp/connector-sdk";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
 
 type Ref = Readonly<{ id: string; version: number; contentHash: string }>;
 type Candidate = Readonly<{

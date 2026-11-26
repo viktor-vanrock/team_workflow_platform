@@ -1,9 +1,9 @@
 import type { RuntimeEnvironment } from "../config/environment.ts";
-import type {
-  GitLabAutomationResultSyncRequest,
-  GitLabAutomationResultSyncConsumer,
-} from "./result-sync.ts";
 import type { createCorporateGitLabTerminalCandidateScanner } from "./corporate-terminal-candidates.ts";
+import type {
+  GitLabAutomationResultSyncConsumer,
+  GitLabAutomationResultSyncRequest,
+} from "./result-sync.ts";
 
 type Scanner = ReturnType<typeof createCorporateGitLabTerminalCandidateScanner>;
 type Candidate = Awaited<ReturnType<Scanner["scan"]>>[number];

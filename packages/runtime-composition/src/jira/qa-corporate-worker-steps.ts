@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+
 import type { DataSource } from "typeorm";
 
 import type { QaOperationalRequestCreateResult } from "@awp/competency-qa/node";
@@ -13,13 +14,13 @@ import type {
   OperationalWorkItemTarget,
 } from "@awp/connector-sdk";
 import {
-  defaultClassificationCatalog,
-  type ConnectorCommand,
   type CompleteOperationalObservation,
+  type ConnectorCommand,
+  defaultClassificationCatalog,
 } from "@awp/platform-core";
 import {
-  TypeOrmCommandDeliveryStore,
   type CommandDeliveryScope,
+  TypeOrmCommandDeliveryStore,
 } from "@awp/platform-persistence-typeorm";
 
 import type { RuntimeEnvironment } from "../config/environment.ts";
@@ -27,12 +28,12 @@ import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type { CorporateConnectorFactories } from "../pilot/connector-factories.ts";
 import type { CorporateWorkerCommandContext } from "../pilot/worker-command-context.ts";
 import { qaUs1OperationalRoute } from "../qa/operational-composition.ts";
+import { createUnresolvedCorporateQaResponseChannels } from "./corporate-response-channels.ts";
+import type { QaJiraResolvedPins } from "./qa-command-materializer.ts";
 import {
   materializeQaJiraRequestConfirmation,
   resolveAndPinQaJiraCommand,
 } from "./qa-command-materializer.ts";
-import type { QaJiraResolvedPins } from "./qa-command-materializer.ts";
-import { createUnresolvedCorporateQaResponseChannels } from "./corporate-response-channels.ts";
 import {
   createQaJiraPinnedOperationalBrokerMap,
   createQaJiraPinnedRequestCreatePort,

@@ -1,3 +1,5 @@
+import type { DataSource } from "typeorm";
+
 import {
   type QaResponseChannelResolver,
   QaUs2RetestLineageResolver,
@@ -10,9 +12,9 @@ import {
   DurableQaDodRuntime,
   DurableQaReadinessRuntime,
   DurableQaVerdictRuntime,
-  PublishedQaDodPolicy,
   PublishedQaCompletionConfiguration,
   PublishedQaDefectPublicationConfiguration,
+  PublishedQaDodPolicy,
   PublishedQaReadinessFacts,
   PublishedQaSessionRuntime,
   type QaCompletionPins,
@@ -21,12 +23,11 @@ import {
   type QaReadinessPins,
   type RuntimeEnvironment,
 } from "@awp/runtime-composition";
-import type { DataSource } from "typeorm";
 
 import type { CoreAgentGrantAuthority } from "./core-intake-http-api.ts";
-import { createCorporateQaIntakeConfiguration } from "./corporate-qa-intake-configuration.ts";
-import type { CorporateQaBindings } from "./corporate-qa.module.ts";
 import type { CorporateCommandAdmissionAuthority } from "./corporate-command-admission.ts";
+import type { CorporateQaBindings } from "./corporate-qa.module.ts";
+import { createCorporateQaIntakeConfiguration } from "./corporate-qa-intake-configuration.ts";
 
 /** The host provides approved policies and ports; this composition never invents their contents. */
 export interface CorporateQaCompositionOptions {
@@ -78,10 +79,16 @@ export function createCorporateQaBindings(
     !containsExactProjects(options.completionPins)
   )
     throw new Error("CORPORATE_QA_PROJECT_PINS_INVALID");
-  for (const readiness of options.readinessPins) {
-    const dod = options.dodPins.find((pin) => pin.projectId === readiness.projectId);
-    const defect = options.defectPins.find((pin) => pin.projectId === readiness.projectId);
-    const completion = options.completionPins.find((pin) => pin.projectId === readiness.projectId);
+  for (const readiness of options.readinessPins as readonly QaReadinessPins[]) {
+    const dod = (options.dodPins as readonly QaDodPolicyPins[]).find(
+      (pin) => pin.projectId === readiness.projectId,
+    );
+    const defect = (options.defectPins as readonly QaDefectPublicationPins[]).find(
+      (pin) => pin.projectId === readiness.projectId,
+    );
+    const completion = (options.completionPins as readonly QaCompletionPins[]).find(
+      (pin) => pin.projectId === readiness.projectId,
+    );
     const same = (
       a: { id: string; version: number; contentHash: string },
       b: { id: string; version: number; contentHash: string },

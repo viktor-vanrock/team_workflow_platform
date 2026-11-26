@@ -25,10 +25,10 @@ import type { PipelineReadRequest, TrustedConnectorOperationContext } from "@awp
 import type { Sha256Digest } from "@awp/platform-contracts";
 
 import { isGitLabLocalComposition, type RuntimeEnvironment } from "../config/environment.ts";
-import { classifyPilotFailure, decidePilotRetry } from "../pilot/retry-policy.ts";
+import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type { CorporateConnectorFactories } from "../pilot/connector-factories.ts";
-import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
+import { classifyPilotFailure, decidePilotRetry } from "../pilot/retry-policy.ts";
 import {
   type GitLabAutomationObservability,
   recordGitLabAutomationPhase,

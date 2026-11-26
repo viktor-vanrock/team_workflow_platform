@@ -1,11 +1,13 @@
 import { readFileSync } from "node:fs";
+
 import { describe, expect, it, vi } from "vitest";
-import { designContractRegistry, sha256 } from "../../../packages/platform-contracts/src/index.ts";
-import { readGitLabSuiteResultExample } from "../../../packages/connector-gitlab/src/profile/gitlab-suite-result-example.ts";
+
 import {
   gitLabConnectorManifest,
   gitLabConnectorManifestV11,
 } from "../../../packages/connector-gitlab/src/manifest.ts";
+import { readGitLabSuiteResultExample } from "../../../packages/connector-gitlab/src/profile/gitlab-suite-result-example.ts";
+import { designContractRegistry, sha256 } from "../../../packages/platform-contracts/src/index.ts";
 
 const schemaId = "urn:awp:schemas:005:gitlab-pipeline-result:v1";
 const schemaRef = { id: schemaId, version: 1, digest: designContractRegistry.digest(schemaId) };

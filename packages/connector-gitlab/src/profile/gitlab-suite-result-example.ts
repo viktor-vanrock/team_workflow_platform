@@ -1,9 +1,10 @@
 import {
   designContractRegistry,
-  sha256,
   type JsonValue,
   type SchemaReference,
+  sha256,
 } from "@awp/platform-contracts";
+
 import type { GitLabRestClient } from "../http/gitlab-rest-client.ts";
 
 const schemaId = "urn:awp:schemas:005:gitlab-pipeline-result:v1";

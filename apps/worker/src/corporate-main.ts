@@ -1,6 +1,8 @@
-import { runSafeRuntimeEntrypoint } from "@awp/platform-runtime-nest";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+
+import { runSafeRuntimeEntrypoint } from "@awp/platform-runtime-nest";
+
 import { startCorporateWorkerHost } from "./corporate-host.ts";
 
 if (

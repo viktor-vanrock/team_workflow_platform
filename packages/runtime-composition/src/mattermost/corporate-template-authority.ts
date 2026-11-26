@@ -1,8 +1,10 @@
 import type { DataSource } from "typeorm";
+
 import { renderMattermostNotification } from "@awp/connector-mattermost";
 import type { MessagingLogicalTarget } from "@awp/connector-sdk";
 import { designContractRegistry, type JsonValue, sha256 } from "@awp/platform-contracts";
 import type { ConnectorCommand } from "@awp/platform-core";
+
 import type { CorporateMattermostTemplateAuthority } from "./corporate-worker.ts";
 
 /** Stable digest of the one server-owned renderer supported by this pilot. */

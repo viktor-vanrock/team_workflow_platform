@@ -1,11 +1,13 @@
 import type { DataSource } from "typeorm";
+
 import { type JsonValue, sha256 } from "@awp/platform-contracts";
 import {
+  type ConnectorCommand,
   defaultClassificationCatalog,
   DenyByDefaultAuthorizationPolicy,
-  type ConnectorCommand,
 } from "@awp/platform-core";
 import { TypeOrmScopedAccessRepository } from "@awp/platform-persistence-typeorm";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 import type { CorporateMattermostCommandAuthority } from "./corporate-worker.ts";
 
@@ -46,7 +48,7 @@ export function createCorporateQaConfirmationNotificationAuthority(
         typeof variables.title !== "string" ||
         variables.title.length === 0 ||
         variables.title.length > 200 ||
-        /[\r\n<>@`\[\]()*_~\\]|https?:\/\//iu.test(variables.title)
+        /[\r\n<>@`[\]()*_~\\]|https?:\/\//iu.test(variables.title)
       )
         throw new Error("CORPORATE_NOTIFICATION_TYPE_DENIED");
       const rows = (await source.query(

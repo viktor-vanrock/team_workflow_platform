@@ -4,9 +4,9 @@ import type { QaEvidenceManifestRevisionV2 } from "@awp/competency-qa";
 import {
   defaultClassificationCatalog,
   DenyByDefaultAuthorizationPolicy,
+  type ExactRevisionRef,
   freezePilotValue,
   pilotContentHash,
-  type ExactRevisionRef,
 } from "@awp/platform-core";
 import {
   RuntimeConfigurationRepository,

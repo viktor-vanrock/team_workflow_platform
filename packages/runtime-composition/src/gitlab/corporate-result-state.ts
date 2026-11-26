@@ -1,11 +1,13 @@
 import type { DataSource } from "typeorm";
+
 import {
-  TypeOrmAutomationExecutionRepository,
   type QaAutomatedTargetSnapshot,
   type QaAutomationAttemptRecord,
   type QaAutomationAttemptResult,
+  TypeOrmAutomationExecutionRepository,
 } from "@awp/competency-qa/node";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 
 const parse = <T>(value: unknown): T =>
@@ -46,7 +48,7 @@ export function createCorporateGitLabResultState(
           "SELECT state,resource_version,target_snapshot FROM qa_test_sessions WHERE workspace_id=$1 AND project_id=$2 AND session_id=$3",
           [scope.workspaceId, scope.projectId, attempt.testSessionId],
         ) as Promise<
-          readonly { state: string; resource_version: number; target_snapshot: unknown }[]
+          readonly { state: string; resource_version: number | string; target_snapshot: unknown }[]
         >,
       ]);
       const row = sessions[0];

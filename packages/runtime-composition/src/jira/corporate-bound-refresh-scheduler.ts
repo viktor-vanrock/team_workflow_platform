@@ -1,8 +1,11 @@
 import { randomUUID } from "node:crypto";
+
 import type { DataSource } from "typeorm";
+
 import { sha256 } from "@awp/platform-contracts";
-import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
+import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 
 /** Schedules read-only refreshes exclusively for deployment-pinned Jira connections. */
 export function createCorporateJiraBoundRefreshScheduler(

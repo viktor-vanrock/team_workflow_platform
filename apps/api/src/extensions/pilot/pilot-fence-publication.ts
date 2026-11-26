@@ -1,13 +1,14 @@
 import { randomUUID } from "node:crypto";
+
 import type { DataSource, EntityManager } from "typeorm";
 
 import {
   containsSensitiveValue008,
+  type ExactRevisionRef,
   pilotContentHash,
+  type PilotRecord,
   samePilotRef,
   validateInputPackage008,
-  type ExactRevisionRef,
-  type PilotRecord,
 } from "@awp/platform-core";
 import { PilotRepository, RuntimeConfigurationRepository } from "@awp/platform-persistence-typeorm";
 import {
@@ -15,11 +16,11 @@ import {
   createInitialPilotCohort,
   createPilotFenceAction,
   loadEnvironment,
-  pilotCohortScopeHash,
   matchesPilotOnboardingPin,
-  pilotFenceCohortRecord,
+  pilotCohortScopeHash,
   type PilotFenceAction,
   type PilotFenceActionDetails,
+  pilotFenceCohortRecord,
   type PilotReadinessQuery,
 } from "@awp/runtime-composition";
 
@@ -209,9 +210,12 @@ export class PilotFencePublicationApplication {
       !Array.isArray(input.document.entries)
     )
       return reject("PILOT_COHORT_REVIEW_BINDING_REQUIRED", 409);
-    const matches = input.document.entries.filter(
+    const matches = (input.document.entries as unknown[]).filter(
       (entry) =>
-        entry && typeof entry === "object" && !Array.isArray(entry) && entry.id === "IN-10",
+        entry &&
+        typeof entry === "object" &&
+        !Array.isArray(entry) &&
+        (entry as Record<string, unknown>).id === "IN-10",
     );
     if (
       matches.length !== 1 ||
@@ -220,7 +224,7 @@ export class PilotFencePublicationApplication {
       Array.isArray(matches[0])
     )
       return reject("PILOT_COHORT_REVIEW_BINDING_REQUIRED", 409);
-    const metadata = matches[0].metadata;
+    const metadata = (matches[0] as Record<string, unknown>).metadata;
     if (!matchesReviewedCohort(metadata, cohort))
       return reject("PILOT_COHORT_REVIEW_BINDING_REQUIRED", 409);
     const rows = (await manager.query(

@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { TypeOrmCommandRepository } from "../../../packages/platform-persistence-typeorm/src/index.ts";
 import { createCorporateGitLabRetryAuthority } from "../../../packages/runtime-composition/src/gitlab/corporate-retry-authority.ts";
 

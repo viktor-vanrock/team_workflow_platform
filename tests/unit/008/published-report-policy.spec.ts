@@ -5,8 +5,8 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
-  INPUT_REQUIREMENTS_008,
   canonicalInputHash008,
+  INPUT_REQUIREMENTS_008,
   pilotContentHash,
 } from "../../../packages/platform-core/src/index.ts";
 import { RuntimeConfigurationRepository } from "../../../packages/platform-persistence-typeorm/src/index.ts";

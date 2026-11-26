@@ -15,11 +15,11 @@ import {
   RuntimeConfigurationRepository,
 } from "@awp/platform-persistence-typeorm";
 
-import { type DeploymentPolicy, parseDeploymentPolicy } from "./deployment-config.ts";
+import type { RuntimeEnvironment } from "../config/environment.ts";
+import { resolveCorporateGitLabC1 } from "../gitlab/corporate-c1-metadata.ts";
 import { connectorKey, jiraConnectionRuntimeContent } from "../jira/qa-connection-content.ts";
 import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
-import { resolveCorporateGitLabC1 } from "../gitlab/corporate-c1-metadata.ts";
-import type { RuntimeEnvironment } from "../config/environment.ts";
+import { type DeploymentPolicy, parseDeploymentPolicy } from "./deployment-config.ts";
 import type { PilotInputReadiness, PilotInputReadinessPort } from "./readiness-query.ts";
 import { DeploymentStartup, type DeploymentStartupOptions } from "./startup.ts";
 

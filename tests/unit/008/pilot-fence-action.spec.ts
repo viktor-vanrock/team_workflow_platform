@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 
+import { consumeAuthorizedProjectAction } from "../../../packages/platform-core/src/project-onboarding/operational-actions.ts";
 import { createInitialPilotCohort } from "../../../packages/runtime-composition/src/pilot/cohort-service.ts";
 import {
   assertPilotFenceActionDetails,
   createPilotFenceAction,
   pilotFenceCohortRecord,
 } from "../../../packages/runtime-composition/src/pilot/fence-action.ts";
-import { consumeAuthorizedProjectAction } from "../../../packages/platform-core/src/project-onboarding/operational-actions.ts";
 
 const hash = `sha256:${"a".repeat(64)}` as const;
 const cohortId = "50000000-0000-4000-8000-000000000001";

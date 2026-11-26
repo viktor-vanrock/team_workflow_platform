@@ -6,8 +6,8 @@ import {
 } from "../../../packages/platform-core/src/index.ts";
 import { TypeOrmCorporateScopedAccessRepository } from "../../../packages/platform-persistence-typeorm/src/index.ts";
 import { createInitialPilotCohort } from "../../../packages/runtime-composition/src/pilot/cohort-service.ts";
-import { PublishedPilotFence } from "../../../packages/runtime-composition/src/pilot/published-fence.ts";
 import { createPilotFenceAction } from "../../../packages/runtime-composition/src/pilot/fence-action.ts";
+import { PublishedPilotFence } from "../../../packages/runtime-composition/src/pilot/published-fence.ts";
 
 const workspaceId = "10000000-0000-4000-8000-000000000001";
 const projectId = "20000000-0000-4000-8000-000000000001";

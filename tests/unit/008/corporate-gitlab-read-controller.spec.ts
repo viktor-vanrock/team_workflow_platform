@@ -1,13 +1,15 @@
 import "../../../apps/api/node_modules/reflect-metadata/Reflect.js";
+
 import { describe, expect, it, vi } from "vitest";
+
 import {
   METHOD_METADATA,
   PATH_METADATA,
 } from "../../../apps/api/node_modules/@nestjs/common/constants.js";
 import { RequestMethod } from "../../../apps/api/node_modules/@nestjs/common/index.js";
-import { TypeOrmGitLabAutomationAttemptQuery } from "../../../packages/runtime-composition/src/gitlab/automation-attempt-query.ts";
 import { CorporateAutomationReadController } from "../../../apps/api/src/extensions/gitlab-automation/corporate-automation-read.controller.ts";
 import { QaSessionGuard } from "../../../apps/api/src/extensions/qa-api-authorization.ts";
+import { TypeOrmGitLabAutomationAttemptQuery } from "../../../packages/runtime-composition/src/gitlab/automation-attempt-query.ts";
 
 describe("corporate GitLab automation reads", () => {
   it("exposes only GET routes, without a launch or confirmation endpoint", () => {
@@ -22,7 +24,7 @@ describe("corporate GitLab automation reads", () => {
       "artifacts",
     ]);
     for (const name of handlers) {
-      const handler = prototype[name as keyof typeof prototype];
+      const handler = Object.getOwnPropertyDescriptor(prototype, name)?.value as object;
       expect(Reflect.getMetadata(METHOD_METADATA, handler)).toBe(RequestMethod.GET);
       expect(Reflect.getMetadata(PATH_METADATA, handler)).not.toBe("launch-confirmation");
     }

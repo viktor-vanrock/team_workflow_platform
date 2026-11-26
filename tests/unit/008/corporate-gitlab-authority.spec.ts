@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
 import { InMemoryDurableCommandStore } from "../../../packages/platform-core/src/commanding/connector-command.ts";
 import { createCorporateGitLabAutomationWorkerAuthority } from "../../../packages/runtime-composition/src/gitlab/corporate-automation-authority.ts";
-import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
 
 describe("corporate GitLab automation authority", () => {
   it("rejects a previously queued attempt without a build before calling GitLab", async () => {

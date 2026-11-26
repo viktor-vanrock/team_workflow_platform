@@ -1,4 +1,4 @@
-import { observeJiraIssue, type JiraIssueRead } from "@awp/connector-jira";
+import { type JiraIssueRead, observeJiraIssue } from "@awp/connector-jira";
 import type {
   CompleteOperationalObservation,
   OperationalNormalizedAuthorityStatus,

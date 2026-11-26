@@ -1,9 +1,12 @@
 import { randomUUID } from "node:crypto";
+
 import type { DataSource, EntityManager } from "typeorm";
+
 import {
-  TypeOrmJiraAuthoritativeReadOutboxRepository,
   type JiraAuthoritativeReadOutboxClaim,
+  TypeOrmJiraAuthoritativeReadOutboxRepository,
 } from "@awp/connector-jira-persistence-typeorm";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 
 export interface CorporateJiraAuthoritativeReadHandler {

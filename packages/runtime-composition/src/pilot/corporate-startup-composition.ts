@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
 
-import type { PinnedNetworkTransport } from "./network-policy.ts";
 import type { RuntimeEnvironment } from "../config/environment.ts";
-import type { PilotNonLocalCompositionOptions } from "./composition.ts";
 import { createCorporateVaultConnectorFactories } from "../security/corporate-vault-connectors.ts";
+import type { PilotNonLocalCompositionOptions } from "./composition.ts";
+import type { PinnedNetworkTransport } from "./network-policy.ts";
 
 /** Build API startup from the same published network and connector configuration. */
 export function createCorporateStartupComposition(

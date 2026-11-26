@@ -61,12 +61,12 @@ import {
 } from "@awp/runtime-composition";
 
 import { CorporateAccessModule } from "./access/access.module.ts";
-import { CorporateQaModule, type CorporateQaBindings } from "./extensions/corporate-qa.module.ts";
 import { LocalAccessController } from "./access/local-access.controller.ts";
 import {
   type CoreIntakeHttpApis,
   createCoreIntakeHttpApis,
 } from "./extensions/core-intake-http-api.ts";
+import { type CorporateQaBindings, CorporateQaModule } from "./extensions/corporate-qa.module.ts";
 import {
   GITLAB_WEBHOOK_INGRESS_API,
   GitLabWebhookController,

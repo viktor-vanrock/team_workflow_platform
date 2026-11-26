@@ -1,4 +1,5 @@
 import type { DataSource } from "typeorm";
+
 import { ProjectSuspensionRecoveryWorker } from "./recovery-worker.ts";
 
 /** Maintenance is limited to the immutable deployment scope, including all writes. */

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import {
   PostgresQueueProjectionWorker,
   QueueProjectionCoordinator,
@@ -8,7 +9,9 @@ import { PostgresQueueTemporalTransitionWorker } from "../../../packages/runtime
 describe("corporate queue workers", () => {
   const scope = { workspaceId: "workspace", projectIds: ["project"] };
   it("filters projection source events by deployment before the batch limit", async () => {
-    const query = vi.fn(async (_sql: string, _parameters: readonly unknown[]) => []);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [],
+    );
     const worker = new PostgresQueueProjectionWorker(
       { query } as never,
       { consume: vi.fn() } as never,
@@ -19,22 +22,24 @@ describe("corporate queue workers", () => {
     expect(query.mock.calls[0]?.[1].slice(2)).toEqual(["workspace", ["project"]]);
   });
   it("resolves GitLab attempt events to their work item before projection", async () => {
-    const query = vi.fn(async (sql: string, _parameters: readonly unknown[]) => {
-      if (sql.includes("FROM event_outbox"))
-        return [
-          {
-            id: "event",
-            workspace_id: "workspace",
-            project_id: "project",
-            event_type: "qa.automation-attempt.completed",
-            envelope_hash: "hash",
-            created_at: "2026-01-01T00:00:00Z",
-            envelope: { eventId: "event", entityId: "attempt", entityVersion: 1 },
-          },
-        ];
-      if (sql.includes("FROM qa_automation_attempts")) return [{ work_item_id: "work-item" }];
-      return [{ message_id: "event" }];
-    });
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async (sql) => {
+        if (sql.includes("FROM event_outbox"))
+          return [
+            {
+              id: "event",
+              workspace_id: "workspace",
+              project_id: "project",
+              event_type: "qa.automation-attempt.completed",
+              envelope_hash: "hash",
+              created_at: "2026-01-01T00:00:00Z",
+              envelope: { eventId: "event", entityId: "attempt", entityVersion: 1 },
+            },
+          ];
+        if (sql.includes("FROM qa_automation_attempts")) return [{ work_item_id: "work-item" }];
+        return [{ message_id: "event" }];
+      },
+    );
     const consume = vi.fn(async () => undefined);
     const worker = new PostgresQueueProjectionWorker(
       { query } as never,
@@ -103,7 +108,9 @@ describe("corporate queue workers", () => {
     );
   });
   it("filters each temporal source before claiming due items", async () => {
-    const query = vi.fn(async (_sql: string, _parameters: readonly unknown[]) => []);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [],
+    );
     const worker = new PostgresQueueTemporalTransitionWorker(
       { query } as never,
       {} as never,

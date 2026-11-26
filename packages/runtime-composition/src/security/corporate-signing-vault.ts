@@ -1,7 +1,7 @@
 import type { DataSource } from "typeorm";
 
 import { evidenceContentHash } from "@awp/competency-qa";
-import { freezePilotValue, samePilotRef, type ExactRevisionRef } from "@awp/platform-core";
+import { type ExactRevisionRef, freezePilotValue, samePilotRef } from "@awp/platform-core";
 import { RuntimeConfigurationRepository } from "@awp/platform-persistence-typeorm";
 
 import type { PinnedNetworkTransport } from "../pilot/network-policy.ts";

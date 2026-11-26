@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
+import { createCorporateEvidenceCrypto } from "../../../apps/api/src/extensions/onboarding/corporate-evidence-crypto.ts";
 import {
   buildEvidenceManifestV2,
   canonicalEvidenceBytes,
@@ -16,7 +17,6 @@ import {
 } from "../../../packages/runtime-composition/src/security/corporate-evidence-signing.ts";
 import { VaultHttpClient } from "../../../packages/runtime-composition/src/security/vault-http-client.ts";
 import { manifestInput } from "../../support/007-evidence-fixture.ts";
-import { createCorporateEvidenceCrypto } from "../../../apps/api/src/extensions/onboarding/corporate-evidence-crypto.ts";
 import { startVaultFixture008 } from "../../support/008-vault-fixture.ts";
 
 describe("008 remote evidence signing", () => {

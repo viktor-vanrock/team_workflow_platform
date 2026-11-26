@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createCorporateProbeAuthorization } from "../../../packages/runtime-composition/src/pilot/corporate-probe-authority.ts";
 
 describe("corporate probe authorization", () => {

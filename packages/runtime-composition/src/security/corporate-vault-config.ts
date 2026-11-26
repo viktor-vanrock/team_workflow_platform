@@ -1,9 +1,10 @@
 import { readFileSync } from "node:fs";
 
-import { freezePilotValue, pilotContentHash, type ExactRevisionRef } from "@awp/platform-core";
+import { type ExactRevisionRef, freezePilotValue, pilotContentHash } from "@awp/platform-core";
 import type { RuntimeConfigurationPublication } from "@awp/platform-persistence-typeorm";
-import type { CorporateVaultConnectorConfiguration } from "./corporate-vault-connectors.ts";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
+import type { CorporateVaultConnectorConfiguration } from "./corporate-vault-connectors.ts";
 
 /** The file holds opaque references, public policy and Vault paths, never secret values. */
 export function parseCorporateVaultConfig(

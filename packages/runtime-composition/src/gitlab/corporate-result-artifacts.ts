@@ -3,7 +3,7 @@ import type {
   QaAutomationArtifactDescriptorInput,
 } from "@awp/competency-qa/node";
 import type { CiArtifactDescriptor, PipelineObservation } from "@awp/connector-sdk";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
 
 /** Map a verified GitLab metadata descriptor to the existing QA artifact input. */
 export function corporateGitLabArtifactForQa(

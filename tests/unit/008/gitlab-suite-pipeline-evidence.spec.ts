@@ -1,7 +1,9 @@
 import { readFileSync } from "node:fs";
+
 import { describe, expect, it, vi } from "vitest";
-import { designContractRegistry, sha256 } from "../../../packages/platform-contracts/src/index.ts";
+
 import { readGitLabSuitePipelineEvidence } from "../../../packages/connector-gitlab/src/profile/gitlab-suite-pipeline-evidence.ts";
+import { designContractRegistry, sha256 } from "../../../packages/platform-contracts/src/index.ts";
 
 const schemaId = "urn:awp:schemas:005:gitlab-pipeline-result:v1";
 const raw = readFileSync(

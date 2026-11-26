@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { collectCorporateGitLabResultArtifacts } from "../../../packages/runtime-composition/src/gitlab/corporate-result-collection.ts";
 
 vi.mock("../../../packages/runtime-composition/src/gitlab/corporate-result-artifacts.ts", () => ({

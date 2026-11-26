@@ -1,12 +1,13 @@
+import type { QaAutomationAttemptRecord, QaAutomationRetryPolicy } from "@awp/competency-qa/node";
 import {
-  sha256,
-  validateGitLabPilotMetadataPackage,
   type GitLabPilotMetadataPackage,
   type JsonValue,
+  sha256,
+  validateGitLabPilotMetadataPackage,
 } from "@awp/platform-contracts";
-import { pilotContentHash, samePilotRef, type ExactRevisionRef } from "@awp/platform-core";
+import { type ExactRevisionRef, pilotContentHash, samePilotRef } from "@awp/platform-core";
 import type { RuntimeConfigurationPublication } from "@awp/platform-persistence-typeorm";
-import type { QaAutomationAttemptRecord, QaAutomationRetryPolicy } from "@awp/competency-qa/node";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 
 /** Read C1 only from the exact currently approved GitLab deployment publication. */
@@ -150,6 +151,6 @@ export function corporateGitLabRetryPolicy(
     policyRef: attempt.retryPolicyRef,
     policyHash: attempt.retryPolicyHash,
     automaticRetryBudget: 1,
-    allowedInfrastructureCodes: Object.freeze([...policy.allowedInfrastructureCodes] as string[]),
+    allowedInfrastructureCodes: Object.freeze([...(policy.allowedInfrastructureCodes as string[])]),
   });
 }

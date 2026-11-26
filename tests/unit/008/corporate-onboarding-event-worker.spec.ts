@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createProjectEventEnvelope } from "../../../packages/platform-core/src/project-onboarding/primitives.ts";
 import { createCorporateOnboardingEventWorker } from "../../../packages/runtime-composition/src/onboarding/corporate-event-worker.ts";
 
@@ -24,8 +25,8 @@ const row = {
 
 describe("corporate onboarding event worker", () => {
   it("scopes its lock to deployment and commits inbox and acknowledgement together", async () => {
-    const query = vi.fn(async (sql: string, _params?: readonly unknown[]) =>
-      sql.includes("FROM event_outbox") ? [row] : [],
+    const query = vi.fn<(sql: string, params?: readonly unknown[]) => Promise<unknown[]>>(
+      async (sql) => (sql.includes("FROM event_outbox") ? [row] : []),
     );
     const source = {
       isInitialized: true,

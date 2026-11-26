@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createCorporateGitLabResultWorker } from "../../../packages/runtime-composition/src/gitlab/corporate-result-worker.ts";
 
 describe("corporate GitLab result worker", () => {

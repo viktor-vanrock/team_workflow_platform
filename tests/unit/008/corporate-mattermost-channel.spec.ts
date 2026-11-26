@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { resolveCorporateMattermostChannel } from "../../../packages/runtime-composition/src/mattermost/corporate-channel.ts";
 
 describe("corporate Mattermost channel", () => {

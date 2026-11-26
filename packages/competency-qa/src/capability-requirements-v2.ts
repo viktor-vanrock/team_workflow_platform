@@ -1,4 +1,5 @@
 import { sha256 } from "@awp/platform-contracts";
+
 import { qaValidationCapabilityRequirementSetV1 } from "./manifest-v1.4.ts";
 
 const body = Object.freeze({

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createCorporateGitLabRetryQuarantine } from "../../../packages/runtime-composition/src/gitlab/corporate-retry-quarantine.ts";
 
 describe("corporate GitLab retry quarantine", () => {

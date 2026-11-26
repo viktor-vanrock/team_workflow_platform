@@ -1,4 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+
+import * as admissions from "../../../apps/api/src/extensions/corporate-command-admission.ts";
 import { commitCorporateNotification } from "../../../apps/api/src/extensions/corporate-notification-commit.ts";
 import { InMemoryDurableCommandStore } from "../../../packages/platform-core/src/commanding/connector-command.ts";
 import {
@@ -7,7 +9,6 @@ import {
   TypeOrmNotificationIntentRepository,
   TypeOrmUnitOfWork,
 } from "../../../packages/platform-persistence-typeorm/src/index.ts";
-import * as admissions from "../../../apps/api/src/extensions/corporate-command-admission.ts";
 
 afterEach(() => vi.restoreAllMocks());
 describe("corporate notification commit", () => {

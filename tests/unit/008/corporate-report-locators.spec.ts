@@ -4,8 +4,8 @@ import { join } from "node:path";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { pilotContentHash } from "../../../packages/platform-core/src/index.ts";
 import { createCorporateReportLocators } from "../../../apps/api/src/extensions/corporate-report-locators.ts";
+import { pilotContentHash } from "../../../packages/platform-core/src/index.ts";
 
 describe("corporate GitLab report locators", () => {
   it("limits locator lookup to the deployment and the exact report ref", async () => {

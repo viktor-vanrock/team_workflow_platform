@@ -1,6 +1,9 @@
 import type { DataSource } from "typeorm";
-import { TypeOrmScopedAccessRepository } from "@awp/platform-persistence-typeorm";
+
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
 import { defaultClassificationCatalog } from "@awp/platform-core";
+import { TypeOrmScopedAccessRepository } from "@awp/platform-persistence-typeorm";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type {
@@ -8,20 +11,19 @@ import type {
   CorporateConnectorRequestAuthority,
 } from "../pilot/connector-factories.ts";
 import type { PilotCommandEffectGuard } from "../pilot/effect-guard.ts";
-import type { CorporateGitLabResultAuthority } from "./corporate-result-worker.ts";
-import { createCorporateGitLabTerminalObservation } from "./corporate-terminal-observation.ts";
-import { createCorporateGitLabResultProvider } from "./corporate-result-provider.ts";
+import { createCorporateGitLabResultArtifactProvider } from "./corporate-result-artifact-provider.ts";
+import { collectCorporateGitLabResultArtifacts } from "./corporate-result-collection.ts";
 import {
   corporateGitLabMissingResultForQa,
   corporateGitLabResultForQa,
   normalizeCorporateGitLabResult,
 } from "./corporate-result-normalization.ts";
-import { createCorporateGitLabResultArtifactProvider } from "./corporate-result-artifact-provider.ts";
-import { collectCorporateGitLabResultArtifacts } from "./corporate-result-collection.ts";
+import { createCorporateGitLabResultProvider } from "./corporate-result-provider.ts";
 import { createCorporateGitLabResultState } from "./corporate-result-state.ts";
+import type { CorporateGitLabResultAuthority } from "./corporate-result-worker.ts";
 import { createCorporateGitLabRetryAuthority } from "./corporate-retry-authority.ts";
 import { createCorporateGitLabRetryPolicyAuthority } from "./corporate-retry-policy-authority.ts";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
+import { createCorporateGitLabTerminalObservation } from "./corporate-terminal-observation.ts";
 import type { GitLabAutomationRetrySnapshot } from "./result-sync.ts";
 
 function assertRetryDecisionCurrent(

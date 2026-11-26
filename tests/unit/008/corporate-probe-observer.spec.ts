@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { createCorporateProbeObserver } from "../../../packages/runtime-composition/src/pilot/corporate-probe-observer.ts";
+
 import { integrationConfigurationHash } from "../../../packages/runtime-composition/src/onboarding/configuration-hash.ts";
+import { createCorporateProbeObserver } from "../../../packages/runtime-composition/src/pilot/corporate-probe-observer.ts";
 
 describe("corporate provider probes", () => {
   it("checks the real configured Jira project but never treats read connectivity as proof of writes", async () => {
@@ -22,7 +23,9 @@ describe("corporate provider probes", () => {
         ? [{ content: profile, content_hash: profileRef.contentHash }]
         : [{ content: connection, content_hash: connectionRef.contentHash }],
     );
-    const request = vi.fn(async (_input: unknown) => ({ json: async () => ({ id: "100" }) }));
+    const request = vi.fn<(input: unknown) => Promise<{ json: () => Promise<{ id: string }> }>>(
+      async () => ({ json: async () => ({ id: "100" }) }),
+    );
     const observe = createCorporateProbeObserver({
       source: { isInitialized: true, query },
       environment: {

@@ -38,6 +38,7 @@ export * from "./application/sync-automation-result.ts";
 export * from "./application/target-snapshot-builder-v2.ts";
 export * from "./application/triage-assessment.ts";
 export * from "./application/trigger-automation.ts";
+export * from "./capability-requirements-v2.ts";
 export * from "./domain/automation-attempt.ts";
 export * from "./domain/completion.ts";
 export * from "./domain/dod.ts";
@@ -71,7 +72,6 @@ export * from "./manifest-v1.2.ts";
 export * from "./manifest-v1.3.ts";
 export * from "./manifest-v1.4.ts";
 export * from "./manifest-v1.5.ts";
-export * from "./capability-requirements-v2.ts";
 export type {
   QaAutomationResultPersistenceReceipt,
   QaAutomationRetryCoreCommandRecord,

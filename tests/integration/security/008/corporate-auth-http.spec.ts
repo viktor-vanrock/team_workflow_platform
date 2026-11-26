@@ -18,8 +18,8 @@ import {
 import { NestFactory } from "../../../../apps/api/node_modules/@nestjs/core/index.js";
 import { createCoreIntakeHttpApis } from "../../../../apps/api/src/extensions/core-intake-http-api.ts";
 import {
-  CorporateQaModule,
   type CorporateQaBindings,
+  CorporateQaModule,
 } from "../../../../apps/api/src/extensions/corporate-qa.module.ts";
 import { CorporateQaHttpIdentity } from "../../../../apps/api/src/extensions/corporate-qa-http-identity.ts";
 import {

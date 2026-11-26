@@ -1,19 +1,22 @@
 import { randomUUID } from "node:crypto";
+
 import type { DataSource, EntityManager } from "typeorm";
+
 import type { JiraIssueRead } from "@awp/connector-jira";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
-import { TypeOrmOperationalAuthorityRepository } from "@awp/platform-persistence-typeorm";
 import type { JiraAuthoritativeReadOutboxClaim } from "@awp/connector-jira-persistence-typeorm";
-import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
-import type { CorporateConnectorFactories } from "../pilot/connector-factories.ts";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
+import { TypeOrmOperationalAuthorityRepository } from "@awp/platform-persistence-typeorm";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
-import { jiraMappingRuntimeContent } from "./qa-connection-content.ts";
+import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
+import type { CorporateConnectorFactories } from "../pilot/connector-factories.ts";
+import type { CorporateJiraAuthoritativeReadHandler } from "./corporate-authoritative-read-worker.ts";
 import {
   corporateJiraObservationMappings,
   normalizeCorporateJiraObservation,
 } from "./corporate-issue-observation.ts";
-import type { CorporateJiraAuthoritativeReadHandler } from "./corporate-authoritative-read-worker.ts";
+import { jiraMappingRuntimeContent } from "./qa-connection-content.ts";
 
 type Row = Record<string, unknown>;
 const object = (value: unknown): Row => {
@@ -126,7 +129,7 @@ export function createCorporateJiraAuthoritativeReadHandler(
         grant.integrationBindingRef.contentHash ||
       !equalRef(profile.mappingRef, {
         ...object(row.mapping_ref),
-        contentHash: String(row.mapping_hash),
+        contentHash: row.mapping_hash,
       } as never)
     )
       throw new Error("CORPORATE_JIRA_READ_CONFIGURATION_STALE");
@@ -136,7 +139,7 @@ export function createCorporateJiraAuthoritativeReadHandler(
       row,
       profile: profileValue(profile),
       mapping: jiraMappingRuntimeContent(mapping),
-      mappingHash: String(row.mapping_hash),
+      mappingHash: row.mapping_hash,
     };
   };
   return {

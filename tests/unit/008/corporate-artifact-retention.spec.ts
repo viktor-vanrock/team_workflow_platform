@@ -1,10 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { ArtifactRetentionRepository } from "../../../packages/platform-persistence-typeorm/src/artifact-retention.repository.ts";
 import { createArtifactRetentionMaintenanceWorker } from "../../../packages/runtime-composition/src/pilot/maintenance-workers.ts";
 
 describe("corporate artifact retention scope", () => {
   it("filters the deployment projects in SQL before limiting candidates", async () => {
-    const query = vi.fn(async (_sql: string, _params: readonly unknown[]) => []);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [],
+    );
     const source = { query };
     const worker = createArtifactRetentionMaintenanceWorker(
       source as never,

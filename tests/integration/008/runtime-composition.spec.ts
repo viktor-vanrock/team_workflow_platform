@@ -83,7 +83,7 @@ describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
             expectedVersions: composition.expectedVersions,
           });
           expect(composition.expectedVersions).toMatchObject({
-            core: 220,
+            core: 255,
             "pack:qa": 2115,
             "connector:gitlab": 4020,
           });

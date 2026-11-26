@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+
 import {
   startTelemetry,
   type TelemetryPolicy,
@@ -13,20 +14,20 @@ import {
   createWorkspaceInstallationDataSource,
   loadCorporateVaultConfig,
   loadEnvironment,
-  PinnedNetworkTransport,
+  type OutboundNetworkPolicy,
   PilotCommandEffectGuard,
+  pilotContentHash,
   PilotEffectGuard,
+  PinnedNetworkTransport,
   PublishedDeploymentReferences,
   PublishedPilotFence,
-  TypeOrmProjectEffectGuard,
-  pilotContentHash,
   samePilotRef,
-  type OutboundNetworkPolicy,
+  TypeOrmProjectEffectGuard,
 } from "@awp/runtime-composition";
 
 import {
-  createCorporateWorkerContributions,
   type CorporateWorkerPorts,
+  createCorporateWorkerContributions,
 } from "./corporate-contributions.ts";
 import { bootstrapWorker } from "./main.ts";
 

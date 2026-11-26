@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
+
 import { describe, expect, it } from "vitest";
+
 import {
   gitLabPilotMetadataContentHash,
   type GitLabPilotMetadataPackage,
@@ -28,7 +30,7 @@ const fixture = () => {
   };
   const changed = {
     ...fixture,
-    contourKey: "qa-jira-gitlab-mattermost-test" as const,
+    contourKey: "qa-jira-gitlab-test" as const,
     environmentClass: "TEST" as const,
     qaRetryPolicy: { ...fixture.qaRetryPolicy, policyHash: sha256(policyDocument) },
     server: { ...fixture.server, baseUrl: "https://gitlab.example.test" },

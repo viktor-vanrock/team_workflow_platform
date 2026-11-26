@@ -938,7 +938,9 @@ WHERE workspace_id=$1 AND project_id=$2 AND session_id=$3 AND mode='AUTOMATED'`,
             String(existing.retry_decision_id) !== decision.retryDecisionId ||
             (prepared.attempt &&
               String(existing.successor_attempt_id) !== prepared.attempt.automationAttemptId) ||
-            (!prepared.attempt && existing.successor_attempt_id != null)
+            (!prepared.attempt &&
+              existing.successor_attempt_id !== null &&
+              existing.successor_attempt_id !== undefined)
           ) {
             throw new QaDomainError("QA_AUTOMATION_RETRY_DECISION_CONFLICT");
           }

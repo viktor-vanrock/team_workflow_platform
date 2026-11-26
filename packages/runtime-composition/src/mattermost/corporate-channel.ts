@@ -1,4 +1,4 @@
-import { validateMessagingTarget, type MessagingLogicalTarget } from "@awp/connector-sdk";
+import { type MessagingLogicalTarget, validateMessagingTarget } from "@awp/connector-sdk";
 import { defaultClassificationCatalog } from "@awp/platform-core";
 
 /** Route only through the exact published profile; a browser never supplies a channel id. */

@@ -55,6 +55,11 @@ import {
 } from "@awp/runtime-composition";
 
 import {
+  CorporateAdmissionUnitOfWork,
+  type CorporateCommandAdmissionAuthority,
+  QA_COMMAND_ADMISSION_AUTHORITY,
+} from "./corporate-command-admission.ts";
+import {
   authorizeQaApi,
   QA_DATA_SOURCE,
   type QaApiAuthorization,
@@ -62,11 +67,6 @@ import {
   type QaSessionRequest,
 } from "./qa-api-authorization.ts";
 import { QA_INTAKE_CONFIGURATION, type QaIntakeConfiguration } from "./qa-intake-configuration.ts";
-import {
-  CorporateAdmissionUnitOfWork,
-  QA_COMMAND_ADMISSION_AUTHORITY,
-  type CorporateCommandAdmissionAuthority,
-} from "./corporate-command-admission.ts";
 
 interface ScopeContext {
   readonly workspaceId: string;

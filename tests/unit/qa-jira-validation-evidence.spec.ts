@@ -2,13 +2,13 @@ import type { DataSource } from "typeorm";
 import { describe, expect, it, vi } from "vitest";
 
 import type { ConnectorCommand } from "../../packages/platform-core/src/index.ts";
-import { jiraMappingRuntimeContent } from "../../packages/runtime-composition/src/jira/qa-connection-content.ts";
 import {
   assertQaJiraConfiguredEndpoint,
   resolveAndPinQaJiraCommand,
   resolveQaJiraRequestCreateConfiguration,
   type RuntimeEnvironment,
 } from "../../packages/runtime-composition/src/index.ts";
+import { jiraMappingRuntimeContent } from "../../packages/runtime-composition/src/jira/qa-connection-content.ts";
 
 const workspaceId = "11111111-1111-4111-8111-111111111111";
 const projectId = "22222222-2222-4222-8222-222222222222";

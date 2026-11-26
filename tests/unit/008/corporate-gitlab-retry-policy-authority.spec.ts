@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { createCorporateGitLabRetryPolicyAuthority } from "../../../packages/runtime-composition/src/gitlab/corporate-retry-policy-authority.ts";
 
 describe("corporate GitLab retry policy authority", () => {

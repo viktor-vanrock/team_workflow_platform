@@ -1,5 +1,7 @@
 import "../../../apps/api/node_modules/reflect-metadata/Reflect.js";
+
 import { describe, expect, it, vi } from "vitest";
+
 import { CorporateSuiteClosedController } from "../../../apps/api/src/extensions/gitlab-automation/corporate-suite-closed.controller.ts";
 import { QaSessionGuard } from "../../../apps/api/src/extensions/qa-api-authorization.ts";
 

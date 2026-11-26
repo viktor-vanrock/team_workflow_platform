@@ -1,17 +1,18 @@
+import type { DataSource } from "typeorm";
+
 import {
   type ConnectorCommand,
+  pilotCommandPrincipal,
   type PilotEffectContext,
   type PilotFencePort,
   type ProjectEffectGuardPort,
   type ProjectEffectGuardSnapshot,
   type ProjectScope,
   samePilotRef,
-  pilotCommandPrincipal,
 } from "@awp/platform-core";
+import { PilotCommandAdmissionRepository } from "@awp/platform-persistence-typeorm";
 
 import type { DeploymentStartupPort } from "./startup.ts";
-import { PilotCommandAdmissionRepository } from "@awp/platform-persistence-typeorm";
-import type { DataSource } from "typeorm";
 
 /** Intersects deployment/cohort policy with the existing project guard; grants no rights. */
 export class PilotEffectGuard implements ProjectEffectGuardPort {

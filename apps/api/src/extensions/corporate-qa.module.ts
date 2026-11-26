@@ -1,8 +1,8 @@
 import { type DynamicModule, ForbiddenException, Module } from "@nestjs/common";
 import type { DataSource } from "typeorm";
 
-import { TypeOrmScopedAccessRepository } from "@awp/platform-persistence-typeorm";
 import { defaultClassificationCatalog } from "@awp/platform-core";
+import { TypeOrmScopedAccessRepository } from "@awp/platform-persistence-typeorm";
 import {
   AGENT_RUNS_API,
   AgentRunsController,
@@ -10,6 +10,7 @@ import {
   APPROVALS_V11_HTTP_ACCESS,
   ApprovalsV11Controller,
   ApprovalsV11HttpGuard,
+  type CorporateSessionService,
   INTAKE_CANDIDATES_API,
   INTAKE_DRAFT_HTTP_ACCESS,
   INTAKE_DRAFT_REVISIONS_API,
@@ -18,7 +19,6 @@ import {
   IntakeDraftRevisionsController,
   NOTIFICATION_INTENTS_API,
   NotificationIntentsController,
-  type CorporateSessionService,
 } from "@awp/platform-runtime-nest";
 import {
   CorporateQueueHttpAuthority,
@@ -29,16 +29,18 @@ import {
   type QaDodRuntime,
   type QaReadinessRuntime,
   type QaSessionRuntime,
-  type QaVerdictRuntime,
   qaUs1OperationalRoute,
+  type QaVerdictRuntime,
 } from "@awp/runtime-composition";
 
-import { createCoreIntakeHttpApis, type CoreAgentGrantAuthority } from "./core-intake-http-api.ts";
+import { type CoreAgentGrantAuthority, createCoreIntakeHttpApis } from "./core-intake-http-api.ts";
 import {
-  QA_COMMAND_ADMISSION_AUTHORITY,
   type CorporateCommandAdmissionAuthority,
+  QA_COMMAND_ADMISSION_AUTHORITY,
 } from "./corporate-command-admission.ts";
 import { CorporateQaHttpIdentity } from "./corporate-qa-http-identity.ts";
+import { CorporateAutomationReadController } from "./gitlab-automation/corporate-automation-read.controller.ts";
+import { CorporateSuiteClosedController } from "./gitlab-automation/corporate-suite-closed.controller.ts";
 import { corporateOnboardingStepUpPermissions } from "./onboarding/corporate-onboarding.module.ts";
 import { QA_DATA_SOURCE, QA_HTTP_IDENTITY, QaSessionGuard } from "./qa-api-authorization.ts";
 import {
@@ -68,12 +70,10 @@ import {
   QaVerdictCompletionController,
 } from "./qa-verdict-completion.controller.ts";
 import { createApprovalsV11Api } from "./queue/approval-v11.api.ts";
+import { PortfolioQueueController, QueueController } from "./queue/queue.controller.ts";
 import { QueueControlsController } from "./queue/queue-controls.controller.ts";
 import { QUEUE_HTTP_AUTHORITY } from "./queue/queue-http-authority.ts";
 import { QueuePoliciesController } from "./queue/queue-policies.controller.ts";
-import { PortfolioQueueController, QueueController } from "./queue/queue.controller.ts";
-import { CorporateAutomationReadController } from "./gitlab-automation/corporate-automation-read.controller.ts";
-import { CorporateSuiteClosedController } from "./gitlab-automation/corporate-suite-closed.controller.ts";
 
 /** All ports are supplied by the trusted host, never from an HTTP request. */
 export interface CorporateQaBindings {
@@ -123,7 +123,7 @@ export class CorporateQaModule {
         ...corporateOnboardingStepUpPermissions,
         "queue.control.approve",
         "approval.decide",
-        ...input.stepUpPermissions,
+        ...(input.stepUpPermissions as readonly string[]),
       ]),
     ];
     const identity = new CorporateQaHttpIdentity(

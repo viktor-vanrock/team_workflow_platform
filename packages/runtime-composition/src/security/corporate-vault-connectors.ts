@@ -1,15 +1,15 @@
 import type { DataSource } from "typeorm";
 
-import { freezePilotValue, pilotContentHash, type ExactRevisionRef } from "@awp/platform-core";
+import { type ExactRevisionRef, freezePilotValue, pilotContentHash } from "@awp/platform-core";
 
 import {
-  TypeOrmCorporateConnectorAuthority,
   type CorporateConnectorCommandAdmission,
   type CorporateConnectorGrant,
+  TypeOrmCorporateConnectorAuthority,
 } from "../pilot/connector-authority.ts";
 import {
-  CorporateConnectorFactories,
   type CorporateConnectorCredential,
+  CorporateConnectorFactories,
 } from "../pilot/connector-factories.ts";
 import type { PinnedNetworkTransport } from "../pilot/network-policy.ts";
 import { PublishedVaultSecretAuthorization } from "./published-vault-authorization.ts";

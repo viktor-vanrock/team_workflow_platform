@@ -1,43 +1,45 @@
-import type { NestExpressApplication } from "@nestjs/platform-express";
 import { readFileSync } from "node:fs";
 
+import type { NestExpressApplication } from "@nestjs/platform-express";
+
+import { pilotContentHash, samePilotRef } from "@awp/platform-core";
 import {
   startTelemetry,
   type TelemetryPolicy,
   type TelemetryRuntime,
 } from "@awp/platform-runtime-nest";
-import { pilotContentHash, samePilotRef } from "@awp/platform-core";
 import {
-  createWorkspaceInstallationDataSource,
-  createCorporateVaultConnectorFactories,
   createCorporateSigningAuthority,
   createCorporateSigningVaultClient,
+  createCorporateVaultConnectorFactories,
+  createWorkspaceInstallationDataSource,
   DurablePilotEvidenceImport,
   GitLabPilotReportStore,
   loadEnvironment,
   loadWorkspaceInstallationConfig,
+  type OutboundNetworkPolicy,
+  PilotReadinessQuery,
   PinnedNetworkTransport,
   PublishedDeploymentReferences,
   PublishedPilotFence,
   PublishedPilotReportPolicy,
-  PilotReadinessQuery,
   SignedPilotReportVerifier,
   VerifiedPilotGateEvidence,
-  type OutboundNetworkPolicy,
   workspaceInstallationSessions,
 } from "@awp/runtime-composition";
 
 import { bootstrapCorporateQaApplication } from "./corporate-main.ts";
-import { loadCorporateVaultConfig } from "./extensions/corporate-vault-config.ts";
-import { createCorporateStartupComposition } from "./extensions/corporate-startup-composition.ts";
-import { createCorporateTelemetryTransport } from "./extensions/corporate-telemetry-transport.ts";
 import { loadCorporateAgentConfig } from "./extensions/corporate-agent-config.ts";
 import { createCorporateAgentGrantAuthority } from "./extensions/corporate-agent-grant-authority.ts";
 import { createCorporateCommandAdmissionAuthority } from "./extensions/corporate-command-admission.ts";
 import { createCorporateReportLocators } from "./extensions/corporate-report-locators.ts";
+import { createCorporateStartupComposition } from "./extensions/corporate-startup-composition.ts";
+import { createCorporateTelemetryTransport } from "./extensions/corporate-telemetry-transport.ts";
+import { loadCorporateVaultConfig } from "./extensions/corporate-vault-config.ts";
 import { createCorporateEvidenceCrypto } from "./extensions/onboarding/corporate-evidence-crypto.ts";
 import { loadCorporateSigningHostConfig } from "./extensions/onboarding/corporate-signing-config.ts";
 import { FileAccountInventory } from "./extensions/onboarding/resources.application.ts";
+
 /** Own the source and corporate session lifecycle; fail closed on incomplete configuration. */
 export async function startCorporateQaHost(): Promise<NestExpressApplication> {
   const environment = loadEnvironment();

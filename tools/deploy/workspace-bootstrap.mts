@@ -2,8 +2,8 @@ import {
   bootstrapDevSuperadmins,
   devBootstrapSubjects,
 } from "../../packages/runtime-composition/src/bootstrap/dev-superadmin.ts";
-import { prepareQaWorkspace } from "../../packages/runtime-composition/src/bootstrap/qa-workspace.ts";
 import { registerQaNonproductionManifest } from "../../packages/runtime-composition/src/bootstrap/qa-nonproduction-manifest.ts";
+import { prepareQaWorkspace } from "../../packages/runtime-composition/src/bootstrap/qa-workspace.ts";
 import {
   createWorkspaceInstallationDataSource,
   loadWorkspaceInstallationConfig,

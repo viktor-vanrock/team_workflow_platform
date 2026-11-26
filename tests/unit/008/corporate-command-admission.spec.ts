@@ -5,13 +5,13 @@ import {
   createCorporateCommandAdmissionAuthority,
   createCorporateTransactionalCommandAdmission,
 } from "../../../apps/api/src/extensions/corporate-command-admission.ts";
+import { designContractRegistry, sha256 } from "../../../packages/platform-contracts/src/index.ts";
+import { InMemoryDurableCommandStore } from "../../../packages/platform-core/src/commanding/connector-command.ts";
 import {
   PilotCommandAdmissionRepository,
   TypeOrmUnitOfWork,
 } from "../../../packages/platform-persistence-typeorm/src/index.ts";
-import { InMemoryDurableCommandStore } from "../../../packages/platform-core/src/commanding/connector-command.ts";
 import { PilotEffectGuard } from "../../../packages/runtime-composition/src/pilot/effect-guard.ts";
-import { designContractRegistry, sha256 } from "../../../packages/platform-contracts/src/index.ts";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -355,9 +355,9 @@ describe("corporate command admission transaction", () => {
       cohortRef: ref,
       fenceRef: ref,
     };
-    const query = vi.fn(async (_sql: string, _parameters: readonly unknown[]) => [
-      { instance_id: "worker-instance" },
-    ]);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [{ instance_id: "worker-instance" }],
+    );
     const source = { isInitialized: true, query };
     const startup = {
       instanceId: "api-instance",

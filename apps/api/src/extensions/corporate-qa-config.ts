@@ -2,9 +2,9 @@ import { readFileSync } from "node:fs";
 
 import {
   assertExactRevisionRef,
+  type ExactRevisionRef,
   freezePilotValue,
   pilotContentHash,
-  type ExactRevisionRef,
 } from "@awp/platform-core";
 import type { RuntimeConfigurationPublication } from "@awp/platform-persistence-typeorm";
 import {
@@ -106,7 +106,9 @@ export function parseCorporateQaHostConfig(
       if (projects.has(item.projectId as string))
         throw new Error("CORPORATE_QA_CONFIG_SCOPE_DENIED");
       projects.add(item.projectId as string);
-      refs.forEach((key) => exact(item[key]));
+      refs.forEach((key) => {
+        exact(item[key]);
+      });
     }
   };
   pins(
@@ -155,7 +157,9 @@ export function parseCorporateQaHostConfig(
     const item = raw as Record<string, unknown>;
     for (const key of ["destination", "requestAuthority"]) {
       const chain = object(item[key], ["profileRef", "mappingRef", "connectionRef"]);
-      ["profileRef", "mappingRef", "connectionRef"].forEach((name) => exact(chain[name]));
+      ["profileRef", "mappingRef", "connectionRef"].forEach((name) => {
+        exact(chain[name]);
+      });
     }
   }
   return freezePilotValue(structuredClone(input)) as unknown as CorporateQaHostConfig;
@@ -186,7 +190,7 @@ export function assertCorporateQaDeploymentPins(
   );
   if (jira.length !== 1 || !Array.isArray(jira[0]!.document.projects))
     throw new Error("CORPORATE_QA_DEPLOYMENT_PINS_INVALID");
-  const projects = jira[0]!.document.projects;
+  const projects = jira[0]!.document.projects as unknown[];
   const same = (value: unknown, ref: ExactRevisionRef): boolean => {
     if (!value || typeof value !== "object" || Array.isArray(value)) return false;
     const candidate = value as Record<string, unknown>;
@@ -202,7 +206,7 @@ export function assertCorporateQaDeploymentPins(
         value &&
         typeof value === "object" &&
         !Array.isArray(value) &&
-        value.projectId === pin.projectId,
+        (value as Record<string, unknown>).projectId === pin.projectId,
     );
     if (candidates.length !== 1) throw new Error("CORPORATE_QA_DEPLOYMENT_PINS_INVALID");
     const candidate = candidates[0] as Record<string, unknown>;

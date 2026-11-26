@@ -2,10 +2,10 @@ import type { DataSource, EntityManager } from "typeorm";
 
 import {
   assertExactRevisionRef,
-  freezePilotValue,
-  pilotContentHash,
-  pilotCommandPrincipal,
   type ConnectorCommand,
+  freezePilotValue,
+  pilotCommandPrincipal,
+  pilotContentHash,
   type PilotEffectContext,
 } from "@awp/platform-core";
 

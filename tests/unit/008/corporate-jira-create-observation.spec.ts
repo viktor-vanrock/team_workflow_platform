@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createCorporateJiraCreateObservationAuthority } from "../../../packages/runtime-composition/src/jira/corporate-create-observation.ts";
 
 describe("corporate Jira create observation", () => {

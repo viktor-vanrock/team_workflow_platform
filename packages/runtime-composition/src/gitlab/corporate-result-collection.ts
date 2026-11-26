@@ -1,12 +1,13 @@
-import { defaultClassificationCatalog } from "@awp/platform-core";
 import type {
   QaAutomatedTargetSnapshot,
   QaAutomationMachineArtifactManifestEntry,
 } from "@awp/competency-qa/node";
 import type { GitLabResultNormalization } from "@awp/connector-gitlab";
-import type { createCorporateGitLabResultProvider } from "./corporate-result-provider.ts";
+import { defaultClassificationCatalog } from "@awp/platform-core";
+
 import type { createCorporateGitLabResultArtifactProvider } from "./corporate-result-artifact-provider.ts";
 import { corporateGitLabArtifactForQa } from "./corporate-result-artifacts.ts";
+import type { createCorporateGitLabResultProvider } from "./corporate-result-provider.ts";
 
 type Pipeline = Awaited<ReturnType<typeof createCorporateGitLabResultProvider>>;
 type Artifact = Awaited<ReturnType<typeof createCorporateGitLabResultArtifactProvider>>;

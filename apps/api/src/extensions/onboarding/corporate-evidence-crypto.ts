@@ -1,15 +1,15 @@
 import type { QaEvidenceManifestRevisionV2 } from "@awp/competency-qa";
 import {
   assertExactRevisionRef,
-  freezePilotValue,
-  samePilotRef,
   type ExactRevisionRef,
+  freezePilotValue,
   type ProjectScope,
+  samePilotRef,
 } from "@awp/platform-core";
 import {
   CorporateEvidenceSigner,
-  FilePublicKeyHistory,
   type CorporateSigningConfiguration,
+  FilePublicKeyHistory,
   type VaultHttpClient,
 } from "@awp/runtime-composition";
 

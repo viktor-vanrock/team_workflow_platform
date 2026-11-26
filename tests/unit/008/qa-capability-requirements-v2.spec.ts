@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { mattermostConnectorManifest } from "../../../packages/connector-mattermost/src/manifest.ts";
-import { qaValidationCapabilityRequirementSetV1 } from "../../../packages/competency-qa/src/manifest-v1.4.ts";
+
 import {
   qaValidationCapabilityRequirementSetV2,
   resolveQaCapabilityRequirementSet,
 } from "../../../packages/competency-qa/src/capability-requirements-v2.ts";
+import { qaValidationCapabilityRequirementSetV1 } from "../../../packages/competency-qa/src/manifest-v1.4.ts";
+import { mattermostConnectorManifest } from "../../../packages/connector-mattermost/src/manifest.ts";
 
 describe("versioned QA capability requirements", () => {
   it("matches the actual Mattermost notification capability without changing v1", () => {

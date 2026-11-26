@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { designContractRegistry, sha256 } from "../../../packages/platform-contracts/src/index.ts";
 import { buildCorporateQaConfirmationNotification } from "../../../packages/runtime-composition/src/mattermost/corporate-confirmation-notification.ts";
 import {

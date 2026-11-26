@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { renderMattermostNotification } from "../../../packages/connector-mattermost/src/notifications/mattermost-notification.ts";
 import { designContractRegistry, sha256 } from "../../../packages/platform-contracts/src/index.ts";
 import { InMemoryDurableCommandStore } from "../../../packages/platform-core/src/commanding/connector-command.ts";

@@ -1,4 +1,6 @@
 import type { DataSource } from "typeorm";
+
+import type { QaAutomatedTargetSnapshot, QaAutomationAttemptRecord } from "@awp/competency-qa/node";
 import {
   createGitLabDialect,
   createGitLabRestPipelineReadTransport,
@@ -6,20 +8,20 @@ import {
   preflightGitLabProfile,
   validateGitLabConnectionConfiguration,
 } from "@awp/connector-gitlab";
-import type { QaAutomatedTargetSnapshot, QaAutomationAttemptRecord } from "@awp/competency-qa/node";
 import type { TrustedConnectorOperationContext } from "@awp/connector-sdk";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
 import { defaultClassificationCatalog } from "@awp/platform-core";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
+
 import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
-import {
-  assertCorporateGitLabDiscoveryCurrent,
-  assertCorporateGitLabDiscoveryServer,
-} from "./corporate-discovery-server.ts";
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type {
   CorporateConnectorFactories,
   CorporateConnectorRequestAuthority,
 } from "../pilot/connector-factories.ts";
+import {
+  assertCorporateGitLabDiscoveryCurrent,
+  assertCorporateGitLabDiscoveryServer,
+} from "./corporate-discovery-server.ts";
 import {
   assertCorporateGitLabObservationMatches,
   type createCorporateGitLabTerminalObservation,

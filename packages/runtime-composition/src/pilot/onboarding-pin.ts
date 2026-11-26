@@ -1,9 +1,9 @@
 import {
+  type ExactRevisionRef,
   isSystemAdministratorRole,
   pilotContentHash,
-  samePilotRef,
-  type ExactRevisionRef,
   type ProjectScope,
+  samePilotRef,
 } from "@awp/platform-core";
 
 interface QueryPort {

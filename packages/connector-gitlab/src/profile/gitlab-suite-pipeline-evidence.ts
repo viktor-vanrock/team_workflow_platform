@@ -1,9 +1,10 @@
 import {
   designContractRegistry,
-  sha256,
   type JsonValue,
   type SchemaReference,
+  sha256,
 } from "@awp/platform-contracts";
+
 import type { GitLabRestClient } from "../http/gitlab-rest-client.ts";
 
 const object = (value: unknown): Record<string, unknown> => {

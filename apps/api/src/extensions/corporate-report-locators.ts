@@ -1,20 +1,23 @@
 import { readFileSync } from "node:fs";
+
 import type { DataSource } from "typeorm";
+
 import {
-  pilotContentHash,
-  samePilotRef,
   type ExactRevisionRef,
+  pilotContentHash,
   type ProjectScope,
+  samePilotRef,
 } from "@awp/platform-core";
 import {
-  integrationConfigurationHash,
-  type CorporateVaultConnectorConfiguration,
   type CorporateConnectorFactories,
+  type CorporateVaultConnectorConfiguration,
   type GitLabPilotReportLocator,
   type GitLabPilotReportLocatorAuthority,
+  integrationConfigurationHash,
   type PilotReportReference,
   type RuntimeEnvironment,
 } from "@awp/runtime-composition";
+
 type GitLabConnectionConfiguration = Parameters<CorporateConnectorFactories["gitlab"]>[1];
 
 /** Locator file contains no credentials. Authenticity is verified by the signed report policy. */

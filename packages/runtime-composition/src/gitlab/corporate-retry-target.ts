@@ -4,7 +4,7 @@ import type {
   SourceContextReadRequest,
   TrustedConnectorOperationContext,
 } from "@awp/connector-sdk";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
 
 /** Require a fresh provider read of the original pinned source before authorizing an automatic retry. */
 export async function verifyCorporateGitLabRetryTarget(

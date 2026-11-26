@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import * as runtime from "../../../packages/runtime-composition/src/index.ts";
+
 import { startCorporateWorkerHost } from "../../../apps/worker/src/corporate-host.ts";
+import * as runtime from "../../../packages/runtime-composition/src/index.ts";
 
 describe("corporate worker host", () => {
   it("rejects local, production or incomplete configuration before opening the database", async () => {

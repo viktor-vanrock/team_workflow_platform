@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { TypeOrmJiraAuthoritativeReadOutboxRepository } from "../../../packages/connector-jira-persistence-typeorm/src/jira-authoritative-read-outbox.repository.ts";
 import { createCorporateJiraAuthoritativeReadWorker } from "../../../packages/runtime-composition/src/jira/corporate-authoritative-read-worker.ts";
 import { createCorporateJiraBoundRefreshScheduler } from "../../../packages/runtime-composition/src/jira/corporate-bound-refresh-scheduler.ts";
@@ -61,7 +62,9 @@ describe("corporate Jira authoritative reads", () => {
     ).toThrow("CORPORATE_JIRA_REFRESH_PINS_REQUIRED");
   });
   it("selects refreshes only for the deployed project and its published Jira connection", async () => {
-    const query = vi.fn(async (_sql: string, _parameters: readonly unknown[]) => []);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [],
+    );
     const scheduler = createCorporateJiraBoundRefreshScheduler({
       source: {
         isInitialized: true,

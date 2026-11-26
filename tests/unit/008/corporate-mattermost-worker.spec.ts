@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { InMemoryDurableCommandStore } from "../../../packages/platform-core/src/commanding/connector-command.ts";
 import { TypeOrmCommandDeliveryStore } from "../../../packages/platform-persistence-typeorm/src/command-delivery.store.ts";
 import { createCorporateMattermostWorkerSteps } from "../../../packages/runtime-composition/src/mattermost/corporate-worker.ts";

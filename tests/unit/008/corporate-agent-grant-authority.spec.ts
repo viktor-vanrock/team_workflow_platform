@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { createCorporateAgentGrantAuthority } from "../../../apps/api/src/extensions/corporate-agent-grant-authority.ts";
 import { DenyByDefaultAuthorizationPolicy } from "../../../packages/platform-core/src/index.ts";
 import {
   TypeOrmCorporateScopedAccessRepository,
   TypeOrmIdentityRepository,
 } from "../../../packages/platform-persistence-typeorm/src/index.ts";
-import { createCorporateAgentGrantAuthority } from "../../../apps/api/src/extensions/corporate-agent-grant-authority.ts";
 
 const configuration = {
   workspaceId: "workspace",

@@ -8,7 +8,8 @@ import type {
   GitLabResultNormalizationRequest,
 } from "@awp/connector-gitlab";
 import type { PipelineObservation, TrustedConnectorOperationContext } from "@awp/connector-sdk";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
+
 import { assertCorporateGitLabObservationMatches } from "./corporate-terminal-observation.ts";
 
 /** Normalize only the result artifact selected by a verified terminal pipeline read. */

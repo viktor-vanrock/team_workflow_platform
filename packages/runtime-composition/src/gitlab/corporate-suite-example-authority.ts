@@ -1,4 +1,5 @@
 import type { DataSource } from "typeorm";
+
 import {
   preflightGitLabProfile,
   readGitLabSuitePipelineEvidence,
@@ -7,6 +8,7 @@ import {
   validateGitLabConnectionConfiguration,
 } from "@awp/connector-gitlab";
 import { pilotContentHash } from "@awp/platform-core";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
 import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";

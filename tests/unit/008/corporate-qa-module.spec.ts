@@ -1,32 +1,32 @@
 import "../../../apps/api/node_modules/reflect-metadata/Reflect.js";
 
 import { describe, expect, it, vi } from "vitest";
-import { GUARDS_METADATA } from "../../../apps/api/node_modules/@nestjs/common/constants.js";
 
+import { GUARDS_METADATA } from "../../../apps/api/node_modules/@nestjs/common/constants.js";
+import { startCorporateQaHost } from "../../../apps/api/src/corporate-host.ts";
+import { bootstrapCorporateQaApi } from "../../../apps/api/src/corporate-main.ts";
 import {
-  CorporateQaModule,
   type CorporateQaBindings,
+  CorporateQaModule,
 } from "../../../apps/api/src/extensions/corporate-qa.module.ts";
 import { createCorporateQaBindings } from "../../../apps/api/src/extensions/corporate-qa-composition.ts";
 import {
   assertCorporateQaDeploymentPins,
   parseCorporateQaHostConfig,
 } from "../../../apps/api/src/extensions/corporate-qa-config.ts";
-import { pilotContentHash } from "../../../packages/platform-core/src/index.ts";
 import { CorporateQaHttpIdentity } from "../../../apps/api/src/extensions/corporate-qa-http-identity.ts";
 import { createCorporateQaIntakeConfiguration } from "../../../apps/api/src/extensions/corporate-qa-intake-configuration.ts";
 import { createUnresolvedCorporateQaResponseChannels } from "../../../apps/api/src/extensions/corporate-qa-response-channels.ts";
+import { CorporateAutomationReadController } from "../../../apps/api/src/extensions/gitlab-automation/corporate-automation-read.controller.ts";
+import { QaAutomationAttemptsController } from "../../../apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts";
+import { TypeOrmQaAutomatedSessionsApi } from "../../../apps/api/src/extensions/gitlab-automation/qa-automation-local.adapters.ts";
+import { QaSessionGuard } from "../../../apps/api/src/extensions/qa-api-authorization.ts";
 import {
   QA_API_OPERATIONAL_DELIVERY_MODE,
   QaPackController,
 } from "../../../apps/api/src/extensions/qa-pack.controller.ts";
-import { QaSessionGuard } from "../../../apps/api/src/extensions/qa-api-authorization.ts";
 import { QueueController } from "../../../apps/api/src/extensions/queue/queue.controller.ts";
-import { bootstrapCorporateQaApi } from "../../../apps/api/src/corporate-main.ts";
-import { startCorporateQaHost } from "../../../apps/api/src/corporate-host.ts";
-import { QaAutomationAttemptsController } from "../../../apps/api/src/extensions/gitlab-automation/qa-automation-attempts.controller.ts";
-import { TypeOrmQaAutomatedSessionsApi } from "../../../apps/api/src/extensions/gitlab-automation/qa-automation-local.adapters.ts";
-import { CorporateAutomationReadController } from "../../../apps/api/src/extensions/gitlab-automation/corporate-automation-read.controller.ts";
+import { pilotContentHash } from "../../../packages/platform-core/src/index.ts";
 
 const workspaceId = "10000000-0000-4000-8000-000000000001";
 const projectId = "20000000-0000-4000-8000-000000000001";

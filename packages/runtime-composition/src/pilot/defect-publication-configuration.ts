@@ -8,13 +8,13 @@ import {
   freezePilotValue,
 } from "@awp/platform-core";
 
-import type { QaDefectPublicationConfigurationPort } from "./defect-publication-runtime.ts";
-import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import {
   connectorKey,
   jiraConnectionRuntimeContent,
   jiraMappingRuntimeContent,
 } from "../jira/qa-connection-content.ts";
+import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
+import type { QaDefectPublicationConfigurationPort } from "./defect-publication-runtime.ts";
 
 type Row = Readonly<Record<string, unknown>>;
 interface ChainPins {

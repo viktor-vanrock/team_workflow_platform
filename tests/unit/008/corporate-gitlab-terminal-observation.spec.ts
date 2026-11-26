@@ -1,9 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import {
-  createCorporateGitLabTerminalObservation,
-  assertCorporateGitLabObservationMatches,
-} from "../../../packages/runtime-composition/src/gitlab/corporate-terminal-observation.ts";
+
 import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
+import {
+  assertCorporateGitLabObservationMatches,
+  createCorporateGitLabTerminalObservation,
+} from "../../../packages/runtime-composition/src/gitlab/corporate-terminal-observation.ts";
 
 describe("corporate GitLab terminal observation", () => {
   it("accepts a fresh read with the same provider facts and rejects changed job state", () => {
@@ -59,9 +60,9 @@ describe("corporate GitLab terminal observation", () => {
     connectionRef,
   };
   it("rechecks scoped provider access around the current observation", async () => {
-    const query = vi.fn(async (_sql: string, _parameters: readonly unknown[]) => [
-      { effect_connection_ref: connectionRef, effect_profile_ref: profileRef },
-    ]);
+    const query = vi.fn<(sql: string, params: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [{ effect_connection_ref: connectionRef, effect_profile_ref: profileRef }],
+    );
     const authorize = vi.fn(async () => true);
     const loader = createCorporateGitLabTerminalObservation({
       source: { isInitialized: true, query },

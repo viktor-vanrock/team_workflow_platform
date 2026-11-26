@@ -7,8 +7,8 @@ import {
   type QaConfirmedDraft,
   type QaIntakePayload,
   type QaOperationalRequestCreateResult,
-  type QaResponseChannelResolver,
   QaProjectPolicyRepository,
+  type QaResponseChannelResolver,
   QaTypeOrmIntakeConfirmationWriter,
   type QaWorkspaceContext,
   validateConfirmedQaIntake,
@@ -26,12 +26,12 @@ import { TypeOrmOperationalAuthorityRepository } from "@awp/platform-persistence
 
 import type { RuntimeEnvironment } from "../config/environment.ts";
 import { qaLocalFixtureCatalog } from "../seed/qa-local-seed.ts";
-import { resolveLocalQaProjectConfiguration } from "./qa-local-project-configuration.ts";
 import {
   connectorKey,
   jiraConnectionRuntimeContent,
   jiraMappingRuntimeContent,
 } from "./qa-connection-content.ts";
+import { resolveLocalQaProjectConfiguration } from "./qa-local-project-configuration.ts";
 
 export { jiraConnectionRuntimeContent } from "./qa-connection-content.ts";
 

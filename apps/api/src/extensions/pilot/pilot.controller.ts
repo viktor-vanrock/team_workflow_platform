@@ -28,10 +28,10 @@ import {
 import type {
   DurablePilotEvidenceImport,
   PilotDeadLetterService,
+  PilotFenceActionDetails,
   PilotReadinessQuery,
   ReplayDecisionInput,
 } from "@awp/runtime-composition";
-import type { PilotFenceActionDetails } from "@awp/runtime-composition";
 
 import {
   etag,
@@ -42,14 +42,13 @@ import {
   safeResult,
   text,
 } from "../onboarding/durable-http.ts";
-import { PilotFencePublicationApplication } from "./pilot-fence-publication.ts";
-
 import {
   authorizeQaApi,
   QA_DATA_SOURCE,
   QaSessionGuard,
   type QaSessionRequest,
 } from "../qa-api-authorization.ts";
+import { PilotFencePublicationApplication } from "./pilot-fence-publication.ts";
 
 export const PILOT_EVIDENCE_IMPORT = Symbol("PILOT_EVIDENCE_IMPORT");
 export const PILOT_READINESS_QUERY = Symbol("PILOT_READINESS_QUERY");

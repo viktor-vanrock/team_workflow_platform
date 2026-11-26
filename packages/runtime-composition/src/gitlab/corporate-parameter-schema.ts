@@ -1,9 +1,10 @@
 import type { DataSource, EntityManager } from "typeorm";
+
 import {
   designContractRegistry,
-  sha256,
   type JsonValue,
   type OfflineSchemaRegistry,
+  sha256,
 } from "@awp/platform-contracts";
 
 type Exact = Readonly<{ id: string; version: number; contentHash: string }>;

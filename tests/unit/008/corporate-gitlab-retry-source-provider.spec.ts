@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createCorporateGitLabRetrySourceProvider } from "../../../packages/runtime-composition/src/gitlab/corporate-retry-source-provider.ts";
 
 describe("corporate GitLab retry source provider", () => {

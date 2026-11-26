@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
+
 import type { DataSource } from "typeorm";
-import { sha256, type JsonValue } from "@awp/platform-contracts";
+
+import { type JsonValue, sha256 } from "@awp/platform-contracts";
 import {
   CommandGateway,
   defaultClassificationCatalog,
@@ -14,10 +16,11 @@ import {
   TypeOrmScopedAccessRepository,
   TypeOrmUnitOfWork,
 } from "@awp/platform-persistence-typeorm";
+
 import type { RuntimeEnvironment } from "../config/environment.ts";
+import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import type { CorporateConnectorGrant } from "../pilot/connector-authority.ts";
 import type { PilotCommandEffectGuard } from "../pilot/effect-guard.ts";
-import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import { buildCorporateQaConfirmationNotification } from "./corporate-confirmation-notification.ts";
 
 const uuid = (value: string) => {

@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
+
+import { TypeOrmOperationalAuthorityRepository } from "../../../packages/platform-persistence-typeorm/src/operational-authority.repository.ts";
 import { createCorporateJiraAuthoritativeReadHandler } from "../../../packages/runtime-composition/src/jira/corporate-authoritative-read-handler.ts";
 import { integrationConfigurationHash } from "../../../packages/runtime-composition/src/onboarding/configuration-hash.ts";
-import { TypeOrmOperationalAuthorityRepository } from "../../../packages/platform-persistence-typeorm/src/operational-authority.repository.ts";
 
 describe("corporate Jira read authority", () => {
   const environment = {
@@ -92,7 +93,9 @@ describe("corporate Jira read authority", () => {
       sync_state: "SYNCED",
       freshness_state: "CURRENT",
     };
-    const query = vi.fn(async (_sql: string, _params?: readonly unknown[]) => [row]);
+    const query = vi.fn<(sql: string, params?: readonly unknown[]) => Promise<unknown[]>>(
+      async () => [row],
+    );
     const request = vi.fn(async () => ({
       json: async () => ({
         id: "10",

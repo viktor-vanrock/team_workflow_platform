@@ -1,4 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
+
+import { createCorporateSuiteExampleAuthority } from "../../../packages/runtime-composition/src/gitlab/corporate-suite-example-authority.ts";
 import { integrationConfigurationHash } from "../../../packages/runtime-composition/src/onboarding/configuration-hash.ts";
 
 const mocks = vi.hoisted(() => ({
@@ -29,7 +31,6 @@ vi.mock("../../../packages/connector-gitlab/src/index.ts", async (original) => (
   selectGitLabSuitePipeline: mocks.select,
   readGitLabSuitePipelineEvidence: mocks.evidence,
 }));
-import { createCorporateSuiteExampleAuthority } from "../../../packages/runtime-composition/src/gitlab/corporate-suite-example-authority.ts";
 
 describe("corporate Suite example authority", () => {
   it("loads C1, the current approved discovery and exact binding before reading", async () => {

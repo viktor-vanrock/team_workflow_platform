@@ -1,9 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { sha256 } from "../../../packages/platform-contracts/src/index.ts";
 import {
-  normalizeCorporateGitLabResult,
-  corporateGitLabResultForQa,
   corporateGitLabMissingResultForQa,
+  corporateGitLabResultForQa,
+  normalizeCorporateGitLabResult,
 } from "../../../packages/runtime-composition/src/gitlab/corporate-result-normalization.ts";
 
 describe("corporate GitLab result selection", () => {

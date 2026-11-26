@@ -1,18 +1,19 @@
-import type { NestExpressApplication } from "@nestjs/platform-express";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
+import type { NestExpressApplication } from "@nestjs/platform-express";
+
 import type { TelemetryRuntime } from "@awp/platform-runtime-nest";
 import {
-  loadEnvironment,
-  PublishedDeploymentReferences,
   type CorporateConnectorFactories,
   type DeploymentStartup,
+  loadEnvironment,
+  PublishedDeploymentReferences,
 } from "@awp/runtime-composition";
 
 import {
-  createCorporateQaBindings,
   type CorporateQaCompositionOptions,
+  createCorporateQaBindings,
 } from "./extensions/corporate-qa-composition.ts";
 import {
   assertCorporateQaDeploymentPins,
