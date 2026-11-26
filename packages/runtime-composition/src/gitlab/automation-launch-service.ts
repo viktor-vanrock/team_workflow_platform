@@ -62,6 +62,11 @@ export interface GitLabAutomationLaunchServiceOptions {
     subject: QaAutomationLaunchSubject,
   ) => Promise<void>;
   readonly effectGuard?: ProjectEffectGuardPort;
+  /** Corporate hosts persist and revalidate the original admission in the launch transaction. */
+  readonly commandAdmission?: Readonly<{
+    persist(manager: EntityManager, command: ConnectorCommand): Promise<void>;
+    assertReplay(manager: EntityManager, command: ConnectorCommand): Promise<void>;
+  }>;
 }
 
 export interface GitLabAutomationLaunchInput {
@@ -266,6 +271,16 @@ export class TypeOrmGitLabAutomationLaunchService {
             }
             const attempt = await repository.automationAttempt(input.scope, existing.attemptId);
             if (!attempt) throw new QaDomainError("QA_AUTOMATION_LAUNCH_REPLAY_INCOMPLETE");
+            if (this.options.commandAdmission) {
+              const command = await new TypeOrmCommandRepository(this.source).get(
+                input.scope.workspaceId,
+                input.scope.projectId,
+                attempt.connectorCommandId,
+                manager,
+              );
+              if (!command) throw new QaDomainError("QA_AUTOMATION_LAUNCH_REPLAY_INCOMPLETE");
+              await this.options.commandAdmission.assertReplay(manager, command);
+            }
             return Object.freeze({ replayed: true, attempt });
           }
 
@@ -462,6 +477,7 @@ export class TypeOrmGitLabAutomationLaunchService {
             launchedAt,
           });
           await new TypeOrmCommandRepository(this.source).insert(command, manager);
+          await this.options.commandAdmission?.persist(manager, command);
           await new TypeOrmIdempotencyRepository(this.source).claim(
             {
               workspaceId: input.scope.workspaceId,

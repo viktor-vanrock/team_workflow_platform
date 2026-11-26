@@ -1,18 +1,23 @@
-import type { DataSource } from "typeorm";
+import type { DataSource, EntityManager } from "typeorm";
 
 import {
   decideQaAutomationRetry,
   prepareQaAutomationResultSync,
   type QaAuthorizationBasis,
+  type QaAutomatedTargetSnapshot,
   type QaAutomationAttemptRecord,
+  type QaAutomationAttemptResult,
   type QaAutomationResultPersistenceReceipt,
   type QaAutomationResultSyncPreparation,
   type QaAutomationRetryAuthority,
+  type QaAutomationRetryCommandAdmission,
   type QaAutomationRetryPersistenceInput,
   type QaAutomationRetryPersistenceReceipt,
   type QaAutomationRetryPolicy,
   type QaDomainEventEnvelope,
   type QaServiceActor,
+  type QaWorkspaceContext,
+  TypeOrmAutomationExecutionRepository,
   TypeOrmAutomationResultEvidenceUnitOfWork,
 } from "@awp/competency-qa/node";
 import {
@@ -101,6 +106,14 @@ export class GitLabAutomationResultSyncConsumer {
   constructor(
     private readonly persistence: GitLabAutomationResultPersistence,
     private readonly observability?: GitLabAutomationObservability,
+    private readonly verifyRecovery?: (
+      input: Readonly<{
+        attempt: QaAutomationAttemptRecord;
+        result: QaAutomationAttemptResult;
+        lineage: readonly QaAutomationAttemptRecord[];
+        targetSnapshot: QaAutomatedTargetSnapshot;
+      }>,
+    ) => Promise<boolean>,
   ) {}
 
   async consume(
@@ -155,125 +168,245 @@ export class GitLabAutomationResultSyncConsumer {
     }
     return Object.freeze({ prepared, result, retry });
   }
+
+  /** Resume after result commit when the process stopped before recording the retry decision. */
+  async resumeRetry(
+    input: Readonly<{
+      context: QaWorkspaceContext;
+      attempt: QaAutomationAttemptRecord;
+      result: QaAutomationAttemptResult;
+      lineage: readonly QaAutomationAttemptRecord[];
+      targetSnapshot: QaAutomatedTargetSnapshot;
+      retry: GitLabAutomationRetrySnapshot;
+    }>,
+  ): Promise<QaAutomationRetryPersistenceReceipt> {
+    const { context, attempt, result, targetSnapshot, retry } = input;
+    const { snapshotHash, ...snapshotBody } = targetSnapshot;
+    const { contentHash, ...resultBody } = result;
+    const ordered = [...input.lineage].sort((left, right) => left.attemptNo - right.attemptNo);
+    if (
+      context.scope.kind !== "PROJECT" ||
+      context.scope.workspaceId !== attempt.workspaceId ||
+      context.scope.projectId !== attempt.projectId ||
+      context.actor.kind !== "SERVICE" ||
+      context.actor.principalId !== attempt.executingServiceId ||
+      retry.executingService.principalId !== attempt.executingServiceId ||
+      attempt.currentStatus !== "TERMINAL" ||
+      attempt.terminalResultId !== result.automationAttemptResultId ||
+      result.workspaceId !== attempt.workspaceId ||
+      result.projectId !== attempt.projectId ||
+      result.automationAttemptId !== attempt.automationAttemptId ||
+      targetSnapshot.snapshotHash !== attempt.targetSnapshotHash ||
+      targetSnapshot.testSessionId !== attempt.testSessionId ||
+      sha256(snapshotBody as unknown as JsonValue) !== snapshotHash ||
+      sha256(resultBody as unknown as JsonValue) !== contentHash ||
+      ordered.at(-1)?.automationAttemptId !== attempt.automationAttemptId ||
+      ordered.some(
+        (item, index) =>
+          item.attemptNo !== index + 1 ||
+          item.workspaceId !== attempt.workspaceId ||
+          item.projectId !== attempt.projectId ||
+          item.testSessionId !== attempt.testSessionId ||
+          item.planItemId !== attempt.planItemId,
+      )
+    )
+      throw new Error("GITLAB_RESULT_RETRY_RECOVERY_INVALID");
+    if (
+      !this.verifyRecovery ||
+      !(await this.verifyRecovery({ attempt, result, lineage: ordered, targetSnapshot }))
+    )
+      throw new Error("GITLAB_RESULT_RETRY_RECOVERY_STALE");
+    const evaluation = decideQaAutomationRetry({
+      attempt,
+      result,
+      lineage: ordered,
+      policy: retry.policy,
+      authority: retry.authority,
+      decidedBy: retry.executingService,
+      decidedAt: retry.decidedAt,
+      correlationId: context.correlationId,
+      causationId: context.causationId,
+    });
+    return await this.persistence.persistRetryEvaluation({
+      context,
+      evaluation,
+      predecessor: attempt,
+      previousAttempts: ordered,
+      targetSnapshot,
+      executingService: retry.executingService,
+      causalAuthorizationBasis: retry.causalAuthorizationBasis,
+    });
+  }
+}
+
+/** The result service must still be the executor recorded on this exact attempt. */
+export async function authorizeGitLabResultExecutor(
+  manager: EntityManager,
+  input: Readonly<{
+    workspaceId: string;
+    projectId: string;
+    attemptId: string;
+    principalId: string;
+  }>,
+): Promise<boolean> {
+  return (
+    queryRows(
+      await manager.query(
+        `SELECT 1 FROM qa_automation_attempts attempt
+       WHERE attempt.workspace_id=$1 AND attempt.project_id=$2 AND attempt.attempt_id=$3
+         AND attempt.executing_service_principal_id=$4`,
+        [input.workspaceId, input.projectId, input.attemptId, input.principalId],
+      ),
+    ).length === 1
+  );
 }
 
 export function createTypeOrmGitLabAutomationResultSyncConsumer(
   source: DataSource,
   observability?: GitLabAutomationObservability,
+  retryAdmission?: QaAutomationRetryCommandAdmission,
 ): GitLabAutomationResultSyncConsumer {
-  const persistence = new TypeOrmAutomationResultEvidenceUnitOfWork(source, {
-    apply: async (manager, { prepared, currentAttempt }) => {
-      const capacityRows = queryRows<Readonly<Record<string, unknown>>>(
-        await manager.query(
-          "SELECT capacity_head_id FROM workspace_capacity_heads WHERE workspace_id=$1",
-          [currentAttempt.workspaceId],
-        ),
-      );
-      if (!capacityRows[0]) return;
-      const projection = queryRows<Readonly<Record<string, unknown>>>(
-        await manager.query(
-          `SELECT revision.control_facet,revision.operational_facet,revision.qa_facet,revision.policy_facet_ref,revision.source_set_hash
+  const persistence = new TypeOrmAutomationResultEvidenceUnitOfWork(
+    source,
+    {
+      apply: async (manager, { prepared, currentAttempt }) => {
+        const capacityRows = queryRows<Readonly<Record<string, unknown>>>(
+          await manager.query(
+            "SELECT capacity_head_id FROM workspace_capacity_heads WHERE workspace_id=$1",
+            [currentAttempt.workspaceId],
+          ),
+        );
+        if (!capacityRows[0]) return;
+        const projection = queryRows<Readonly<Record<string, unknown>>>(
+          await manager.query(
+            `SELECT revision.control_facet,revision.operational_facet,revision.qa_facet,revision.policy_facet_ref,revision.source_set_hash
            FROM queue_entry_heads head
            JOIN queue_entry_revisions revision ON revision.workspace_id=head.workspace_id AND revision.project_id=head.project_id AND revision.queue_entry_revision_id=head.current_revision_id
           WHERE head.workspace_id=$1 AND head.project_id=$2 AND head.work_item_id=$3 AND head.suppressed_by_work_item_id IS NULL`,
-          [currentAttempt.workspaceId, currentAttempt.projectId, currentAttempt.workItemId],
-        ),
-      )[0];
-      // Result evidence is authoritative. A missing/rebuilding queue projection
-      // is repaired by reconciliation and must never hold the terminal result.
-      if (!projection) return;
-      const control = json<Readonly<Record<string, JsonValue>>>(projection.control_facet);
-      const operational = json<Readonly<Record<string, JsonValue>>>(projection.operational_facet);
-      const qa = json<Readonly<Record<string, JsonValue>>>(projection.qa_facet);
-      const policyFacetRef = json<
-        Readonly<{ id: string; version: number; semanticHash: `sha256:${string}` }>
-      >(projection.policy_facet_ref);
-      if (operational.state !== "KNOWN" || !operational.projectionRef) return;
-      const session = queryRows<Readonly<Record<string, unknown>>>(
-        await manager.query(
-          "SELECT resource_version,content FROM qa_test_sessions WHERE workspace_id=$1 AND project_id=$2 AND session_id=$3",
-          [currentAttempt.workspaceId, currentAttempt.projectId, currentAttempt.testSessionId],
-        ),
-      )[0];
-      if (!session) return;
-      const sessionContent = json<Readonly<Record<string, JsonValue>>>(session.content);
-      const committedContent = prepared.session.changed
-        ? Object.freeze({
-            ...sessionContent,
-            state: "REVIEW_REQUIRED",
-            resourceVersion: prepared.session.resourceVersion,
-          })
-        : sessionContent;
-      const authorizationScopeWitnessHash = sha256({
-        workspaceId: currentAttempt.workspaceId,
-        projectId: currentAttempt.projectId,
-        requiredPermission: "qa.automation.result.apply",
-        classificationDecision: "AUTHORIZED_SERVICE_ATTEMPT",
-      } as JsonValue);
-      const binder = new PostgresCapacityAdmissionBinder(source, {
-        reauthorize: async (transaction, input) =>
-          queryRows(
-            await transaction.query(
-              `SELECT 1 FROM qa_automation_attempts attempt
-            WHERE attempt.workspace_id=$1 AND attempt.project_id=$2 AND attempt.attempt_id=$3 AND attempt.executing_service_id=$4`,
-              [
-                input.workspaceId,
-                input.projectId,
-                currentAttempt.automationAttemptId,
-                input.principalId,
-              ],
-            ),
-          ).length === 1,
-      });
-      await binder.admitInTransaction(manager, {
-        workspaceId: currentAttempt.workspaceId,
-        projectId: currentAttempt.projectId,
-        workItemId: currentAttempt.workItemId,
-        sessionId: currentAttempt.testSessionId,
-        principalId: currentAttempt.executingServiceId,
-        requestKey: `automation-result:${prepared.result.automationAttemptResultId}`,
-        activityKind: "AUTOMATED_RESULT_APPLY",
-        automatedResultPath: "CONVERT_RESERVATION_TO_REVIEW_CLAIM",
-        actor: Object.freeze({
-          kind: "SERVICE" as const,
-          serviceId: currentAttempt.executingServiceId,
-        }),
-        authorizationScopeWitnessHash,
-        expectedState: Object.freeze({
-          policyFacetRef,
-          expectedQueueControlVersion: Number(control.resourceVersion ?? 0),
-          operationalProjectionRef: operational.projectionRef as Readonly<
-            Record<string, JsonValue>
-          >,
-          qaSourceSetHash: String(
-            (qa.factsRef as Readonly<Record<string, JsonValue>> | undefined)?.semanticHash ??
-              projection.source_set_hash,
-          ) as `sha256:${string}`,
-          sessionRef: Object.freeze({
+            [currentAttempt.workspaceId, currentAttempt.projectId, currentAttempt.workItemId],
+          ),
+        )[0];
+        // Result evidence is authoritative. A missing/rebuilding queue projection
+        // is repaired by reconciliation and must never hold the terminal result.
+        if (!projection) return;
+        const control = json<Readonly<Record<string, JsonValue>>>(projection.control_facet);
+        const operational = json<Readonly<Record<string, JsonValue>>>(projection.operational_facet);
+        const qa = json<Readonly<Record<string, JsonValue>>>(projection.qa_facet);
+        const policyFacetRef = json<
+          Readonly<{ id: string; version: number; semanticHash: `sha256:${string}` }>
+        >(projection.policy_facet_ref);
+        if (operational.state !== "KNOWN" || !operational.projectionRef) return;
+        const session = queryRows<Readonly<Record<string, unknown>>>(
+          await manager.query(
+            "SELECT resource_version,content FROM qa_test_sessions WHERE workspace_id=$1 AND project_id=$2 AND session_id=$3",
+            [currentAttempt.workspaceId, currentAttempt.projectId, currentAttempt.testSessionId],
+          ),
+        )[0];
+        if (!session) return;
+        const sessionContent = json<Readonly<Record<string, JsonValue>>>(session.content);
+        const committedContent = prepared.session.changed
+          ? Object.freeze({
+              ...sessionContent,
+              state: "REVIEW_REQUIRED",
+              resourceVersion: prepared.session.resourceVersion,
+            })
+          : sessionContent;
+        const authorizationScopeWitnessHash = sha256({
+          workspaceId: currentAttempt.workspaceId,
+          projectId: currentAttempt.projectId,
+          requiredPermission: "qa.automation.result.apply",
+          classificationDecision: "AUTHORIZED_SERVICE_ATTEMPT",
+        } as JsonValue);
+        const binder = new PostgresCapacityAdmissionBinder(source, {
+          reauthorize: async (transaction, input) =>
+            await authorizeGitLabResultExecutor(transaction, {
+              workspaceId: input.workspaceId,
+              projectId: input.projectId,
+              attemptId: currentAttempt.automationAttemptId,
+              principalId: input.principalId,
+            }),
+        });
+        await binder.admitInTransaction(manager, {
+          workspaceId: currentAttempt.workspaceId,
+          projectId: currentAttempt.projectId,
+          workItemId: currentAttempt.workItemId,
+          sessionId: currentAttempt.testSessionId,
+          principalId: currentAttempt.executingServiceId,
+          requestKey: `automation-result:${prepared.result.automationAttemptResultId}`,
+          activityKind: "AUTOMATED_RESULT_APPLY",
+          automatedResultPath: "CONVERT_RESERVATION_TO_REVIEW_CLAIM",
+          actor: Object.freeze({
+            kind: "SERVICE" as const,
+            serviceId: currentAttempt.executingServiceId,
+          }),
+          authorizationScopeWitnessHash,
+          expectedState: Object.freeze({
+            policyFacetRef,
+            expectedQueueControlVersion: Number(control.resourceVersion ?? 0),
+            operationalProjectionRef: operational.projectionRef as Readonly<
+              Record<string, JsonValue>
+            >,
+            qaSourceSetHash: String(
+              (qa.factsRef as Readonly<Record<string, JsonValue>> | undefined)?.semanticHash ??
+                projection.source_set_hash,
+            ) as `sha256:${string}`,
+            sessionRef: Object.freeze({
+              sourceType: "QA_TEST_SESSION_REVISION",
+              sourceId: currentAttempt.testSessionId,
+              sourceVersion: Number(session.resource_version),
+              semanticHash: sha256(sessionContent as JsonValue),
+            }),
+          }),
+          committedSessionRef: Object.freeze({
             sourceType: "QA_TEST_SESSION_REVISION",
             sourceId: currentAttempt.testSessionId,
-            sourceVersion: Number(session.resource_version),
-            semanticHash: sha256(sessionContent as JsonValue),
+            sourceVersion: prepared.session.resourceVersion,
+            semanticHash: sha256(committedContent as JsonValue),
           }),
-        }),
-        committedSessionRef: Object.freeze({
-          sourceType: "QA_TEST_SESSION_REVISION",
-          sourceId: currentAttempt.testSessionId,
-          sourceVersion: prepared.session.resourceVersion,
-          semanticHash: sha256(committedContent as JsonValue),
-        }),
-        authorizedScopeSnapshotRef: Object.freeze({
-          id: currentAttempt.automationAttemptId,
-          version: prepared.attempt.resourceVersion,
-          semanticHash: authorizationScopeWitnessHash,
-        }),
-        decidedAt: prepared.result.recordedAt,
-        correlationId: currentAttempt.correlationId,
-        causationId: prepared.result.automationAttemptResultId,
-      });
+          authorizedScopeSnapshotRef: Object.freeze({
+            id: currentAttempt.automationAttemptId,
+            version: prepared.attempt.resourceVersion,
+            semanticHash: authorizationScopeWitnessHash,
+          }),
+          decidedAt: prepared.result.recordedAt,
+          correlationId: currentAttempt.correlationId,
+          causationId: prepared.result.automationAttemptResultId,
+        });
+      },
     },
+    retryAdmission,
+  );
+  const attempts = new TypeOrmAutomationExecutionRepository(source);
+  const digest = (value: unknown) => sha256(JSON.parse(JSON.stringify(value)) as JsonValue);
+  return new GitLabAutomationResultSyncConsumer(persistence, observability, async (input) => {
+    const scope = { workspaceId: input.attempt.workspaceId, projectId: input.attempt.projectId };
+    const [storedAttempt, storedResult, sessionAttempts, sessions] = await Promise.all([
+      attempts.automationAttempt(scope, input.attempt.automationAttemptId),
+      attempts.terminalResult(scope, input.attempt.automationAttemptId),
+      attempts.automationAttempts(scope, input.attempt.testSessionId),
+      source.query(
+        "SELECT target_snapshot FROM qa_test_sessions WHERE workspace_id=$1 AND project_id=$2 AND session_id=$3",
+        [scope.workspaceId, scope.projectId, input.attempt.testSessionId],
+      ) as Promise<readonly { target_snapshot: unknown }[]>,
+    ]);
+    const storedLineage = sessionAttempts
+      .filter(
+        (item) =>
+          item.planItemId === input.attempt.planItemId &&
+          item.rootAttemptId === input.attempt.rootAttemptId &&
+          item.attemptNo <= input.attempt.attemptNo,
+      )
+      .sort((a, b) => a.attemptNo - b.attemptNo);
+    return Boolean(
+      storedAttempt &&
+      storedResult &&
+      sessions.length === 1 &&
+      digest(storedAttempt) === digest(input.attempt) &&
+      digest(storedResult.content) === digest(input.result) &&
+      digest(storedLineage) === digest(input.lineage) &&
+      digest(json(sessions[0]!.target_snapshot)) === digest(input.targetSnapshot),
+    );
   });
-  return new GitLabAutomationResultSyncConsumer(persistence, observability);
 }
 
 export const feature005AutomationEventTypes = Object.freeze([
@@ -333,6 +466,7 @@ function assertFeature005Envelope(
     project_id: string;
     event_type: string;
     envelope: unknown;
+    envelope_hash: string;
   }>,
 ): Feature005AutomationEventEnvelope {
   if (!eventType(row.event_type)) throw new Error("FEATURE_005_EVENT_TYPE_INVALID");
@@ -340,6 +474,7 @@ function assertFeature005Envelope(
   const schemaId = feature005PayloadSchemas[row.event_type];
   const schemaRef = envelope.payloadSchemaRef as SchemaReference;
   if (
+    sha256(envelope as unknown as JsonValue) !== row.envelope_hash ||
     envelope.envelopeVersion !== 1 ||
     envelope.eventId !== row.id ||
     envelope.eventType !== row.event_type ||
@@ -394,7 +529,13 @@ export class TypeOrmFeature005AutomationEventOutboxWorker {
   constructor(
     private readonly source: DataSource,
     private readonly publisher: Feature005AutomationEventPublisher,
-  ) {}
+    private readonly scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
+  ) {
+    if (!publisher || typeof publisher.publish !== "function")
+      throw new Error("FEATURE_005_EVENT_PUBLISHER_REQUIRED");
+    if (scope && (!scope.workspaceId || !scope.projectIds.length))
+      throw new Error("FEATURE_005_EVENT_SCOPE_INVALID");
+  }
 
   async runOne(): Promise<Feature005EventPublishOutcome> {
     return await this.source.transaction("READ COMMITTED", async (manager) => {
@@ -405,17 +546,23 @@ export class TypeOrmFeature005AutomationEventOutboxWorker {
           project_id: string;
           event_type: string;
           envelope: unknown;
+          envelope_hash: string;
         }>
       >(
         await manager.query(
           `
-SELECT id,workspace_id,project_id,event_type,envelope
+SELECT id,workspace_id,project_id,event_type,envelope,envelope_hash
 FROM event_outbox
 WHERE state='READY' AND event_type=ANY($1::text[])
+  AND ($2::uuid IS NULL OR (workspace_id=$2 AND project_id=ANY($3::uuid[])))
 ORDER BY created_at,id
 FOR UPDATE SKIP LOCKED
 LIMIT 1`,
-          [[...feature005AutomationEventTypes]],
+          [
+            [...feature005AutomationEventTypes],
+            this.scope?.workspaceId ?? null,
+            this.scope ? [...this.scope.projectIds] : null,
+          ],
         ),
       );
       const row = rows[0];
@@ -440,7 +587,8 @@ RETURNING id`,
 export function createFeature005AutomationEventWorkerStep(
   source: DataSource,
   publisher: Feature005AutomationEventPublisher,
+  scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
 ): Readonly<{ run(): Promise<Feature005EventPublishOutcome> }> {
-  const worker = new TypeOrmFeature005AutomationEventOutboxWorker(source, publisher);
+  const worker = new TypeOrmFeature005AutomationEventOutboxWorker(source, publisher, scope);
   return Object.freeze({ run: async () => await worker.runOne() });
 }

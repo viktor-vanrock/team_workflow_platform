@@ -69,7 +69,7 @@ describe.runIf(enabled)("008 actual PostgreSQL foundation", () => {
         );
         expect(
           await after.query("SELECT version FROM platform_schema_versions WHERE namespace='core'"),
-        ).toEqual([{ version: 220 }]);
+        ).toEqual([{ version: 255 }]);
         expect(await after.runMigrations({ transaction: "all" })).toEqual([]);
         expect(await after.query("SELECT * FROM projects ORDER BY id")).toEqual(baselineProjects);
         const repo = new PilotRepository(after);

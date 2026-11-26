@@ -2,6 +2,7 @@ import {
   bootstrapDevSuperadmins,
   devBootstrapSubjects,
 } from "../../packages/runtime-composition/src/bootstrap/dev-superadmin.ts";
+import { registerQaNonproductionManifest } from "../../packages/runtime-composition/src/bootstrap/qa-nonproduction-manifest.ts";
 import { prepareQaWorkspace } from "../../packages/runtime-composition/src/bootstrap/qa-workspace.ts";
 import {
   createWorkspaceInstallationDataSource,
@@ -20,6 +21,8 @@ try {
     );
     await source.runMigrations({ transaction: "all" });
     const workspaceId = await prepareQaWorkspace(source);
+    if (process.env.AWP_SUPERADMIN_ENVIRONMENT === "dev")
+      await registerQaNonproductionManifest(source, process.env.AWP_SUPERADMIN_ENVIRONMENT);
     if (process.env.AWP_SUPERADMIN_ENVIRONMENT !== "dev") {
       console.warn("DEV_SUPERADMIN_BOOTSTRAP_SKIPPED: environment is not dev");
     } else if (process.env.AWP_BOOTSTRAP_SUPERADMIN_SUBJECT) {

@@ -211,6 +211,7 @@ function prepare(
   input: Readonly<{
     normalization?: QaAutomationNormalizedResultInput;
     descriptor?: QaAutomationArtifactDescriptorInput;
+    noArtifacts?: boolean;
     sessionState?: "RUNNING" | "REVIEW_REQUIRED";
     previousLineageResults?: readonly Readonly<{
       attemptNo: number;
@@ -246,7 +247,7 @@ function prepare(
       sourceReceiptRef: "gitlab-observation:101:success:1",
     },
     normalization: input.normalization ?? normalization(),
-    artifactDescriptors: [input.descriptor ?? descriptor()],
+    artifactDescriptors: input.noArtifacts ? [] : [input.descriptor ?? descriptor()],
     machineArtifactManifest: [],
     previousLineageResults: input.previousLineageResults ?? [],
     session: { state: input.sessionState ?? "RUNNING", resourceVersion: 3 },
@@ -255,6 +256,46 @@ function prepare(
 }
 
 describe("QA authoritative automation result synchronization", () => {
+  it("preserves a schema-validated INCOMPLETE result with its artifact evidence", () => {
+    const synced = prepare({ normalization: normalization({ outcome: "INCOMPLETE" }) });
+    expect(synced.result).toMatchObject({
+      outcome: "INCOMPLETE",
+      normalizationKind: "SCHEMA_VALIDATED",
+      normalizationReport: { status: "VALID", issueCodes: [] },
+      artifactSyncState: "COMPLETE",
+    });
+    expect(synced.result.syntheticReasonCode).toBeUndefined();
+    expect(synced.artifactMemberships).toHaveLength(1);
+    expect(() =>
+      designContractRegistry.validateById(
+        "urn:awp:schemas:005:automation-attempt-result:v1",
+        synced.result as never,
+      ),
+    ).not.toThrow();
+    for (const event of synced.events)
+      expect(() =>
+        designContractRegistry.validate({
+          schemaRef: event.payloadSchemaRef,
+          value: event.payload as never,
+        }),
+      ).not.toThrow();
+  });
+  it("marks a missing result without artifacts as unavailable", () => {
+    const synced = prepare({
+      noArtifacts: true,
+      normalization: normalization({
+        normalizationKind: "SYNTHETIC_INCOMPLETE",
+        normalizationStatus: "MISSING",
+        issueCodes: ["RESULT_MISSING"],
+        syntheticReasonCode: "RESULT_MISSING",
+        outcome: "INCOMPLETE",
+      }),
+    });
+    expect(synced.result).toMatchObject({
+      outcome: "INCOMPLETE",
+      artifactSyncState: "UNAVAILABLE",
+    });
+  });
   it.each(["PUBLIC", "INTERNAL", "RESTRICTED", "CONFIDENTIAL"] as const)(
     "registers %s artifacts with the canonical Core classification",
     (classificationKey) => {

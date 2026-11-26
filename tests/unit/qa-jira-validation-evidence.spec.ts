@@ -3,10 +3,12 @@ import { describe, expect, it, vi } from "vitest";
 
 import type { ConnectorCommand } from "../../packages/platform-core/src/index.ts";
 import {
+  assertQaJiraConfiguredEndpoint,
   resolveAndPinQaJiraCommand,
   resolveQaJiraRequestCreateConfiguration,
   type RuntimeEnvironment,
 } from "../../packages/runtime-composition/src/index.ts";
+import { jiraMappingRuntimeContent } from "../../packages/runtime-composition/src/jira/qa-connection-content.ts";
 
 const workspaceId = "11111111-1111-4111-8111-111111111111";
 const projectId = "22222222-2222-4222-8222-222222222222";
@@ -26,6 +28,49 @@ const environment: RuntimeEnvironment = Object.freeze({
 } as const);
 
 describe("qa-jira exact-chain validation evidence", () => {
+  it("reads schema-bound Jira mapping fields and preserves local top-level mappings", () => {
+    const local = { authorityScopeKey: "qa.alpha", projectDiscriminator: "ALPHA" };
+    const published = {
+      connectorRef: { key: "jira.operational-authority" },
+      mapping: { schemaRef: { id: "jira-mapping", version: "1" }, value: local },
+    };
+    expect(jiraMappingRuntimeContent(local)).toEqual(local);
+    expect(jiraMappingRuntimeContent(published)).toMatchObject(local);
+    expect(() => jiraMappingRuntimeContent({ mapping: { value: null } })).toThrow(
+      "JIRA_MAPPING_CONFIGURATION_INVALID",
+    );
+  });
+  it("restricts corporate Jira to the exact deployment scope and endpoint while retaining local origin checks", () => {
+    const scope = { workspaceId, projectId };
+    const corporate = {
+      ...environment,
+      profile: "non-local",
+      deployment: {
+        workspaceId,
+        projectIds: [projectId],
+        endpoints: [{ purpose: "jira", url: "https://jira.example.test" }],
+      },
+    } as unknown as RuntimeEnvironment;
+    expect(() =>
+      assertQaJiraConfiguredEndpoint(corporate, scope, "https://jira.example.test"),
+    ).not.toThrow();
+    expect(() =>
+      assertQaJiraConfiguredEndpoint(corporate, scope, "https://other.example.test"),
+    ).toThrow("JIRA_CORPORATE_EXACT_ENDPOINT_MISMATCH");
+    expect(() =>
+      assertQaJiraConfiguredEndpoint(
+        corporate,
+        { ...scope, projectId: "other" },
+        "https://jira.example.test",
+      ),
+    ).toThrow("JIRA_CORPORATE_EXACT_ENDPOINT_MISMATCH");
+    expect(() =>
+      assertQaJiraConfiguredEndpoint(environment, scope, "http://localhost:4010/jira"),
+    ).not.toThrow();
+    expect(() =>
+      assertQaJiraConfiguredEndpoint(environment, scope, "http://localhost:4011/jira"),
+    ).toThrow("JIRA_LOCAL_EXACT_ENDPOINT_MISMATCH");
+  });
   it("rejects a VALID report produced for different revision content", async () => {
     const manager = {
       query: vi.fn(async (sql: string) => {

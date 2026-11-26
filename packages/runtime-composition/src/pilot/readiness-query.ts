@@ -1,6 +1,6 @@
 import type { DataSource, EntityManager } from "typeorm";
 
-import { qaValidationCapabilityRequirementSetV1 } from "@awp/competency-qa/node";
+import { resolveQaCapabilityRequirementSet } from "@awp/competency-qa/node";
 import {
   assertExactRevisionRef,
   type CapabilityProbeResult,
@@ -87,7 +87,8 @@ export class PilotReadinessQuery {
         }>
       > = [];
       for (const plan of plans)
-        for (const requirement of qaValidationCapabilityRequirementSetV1.requirements)
+        for (const requirement of resolveQaCapabilityRequirementSet(plan.requirementSetRef)
+          ?.requirements ?? [])
           for (const operation of requirement.operations) {
             const base = {
               bindingRef: plan.bindingRef,

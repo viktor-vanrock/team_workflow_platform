@@ -117,6 +117,11 @@ export class TypeOrmCommandOutboxRepository {
     leaseUntil: Date,
     limit = 50,
     capabilityKeys?: readonly string[],
+    scope?: Readonly<{
+      workspaceId: string;
+      projectIds: readonly string[];
+      operations: readonly string[];
+    }>,
   ): Promise<readonly ClaimedCommandOutboxRecord[]> {
     assertDate(now, "COMMAND_OUTBOX_CLAIM_TIME_INVALID");
     assertDate(leaseUntil, "COMMAND_OUTBOX_LEASE_INVALID");
@@ -129,6 +134,15 @@ export class TypeOrmCommandOutboxRepository {
     ) {
       throw new Error("COMMAND_OUTBOX_CAPABILITY_FILTER_INVALID");
     }
+    if (
+      scope &&
+      (!scope.workspaceId ||
+        !scope.projectIds.length ||
+        !scope.operations.length ||
+        new Set(scope.projectIds).size !== scope.projectIds.length ||
+        new Set(scope.operations).size !== scope.operations.length)
+    )
+      throw new Error("COMMAND_OUTBOX_SCOPE_FILTER_INVALID");
     const selected = (await manager.query(
       `SELECT o.*
          FROM command_outbox o
@@ -138,6 +152,7 @@ export class TypeOrmCommandOutboxRepository {
            OR (o.state='LEASED' AND o.lease_until IS NOT NULL AND o.lease_until<=$1)
            OR (o.state='ENQUEUED' AND o.next_republish_at IS NOT NULL AND o.next_republish_at<=$1))
           AND ($3::text[] IS NULL OR c.capability_key=ANY($3::text[]))
+          AND ($4::uuid IS NULL OR (o.workspace_id=$4 AND o.project_id=ANY($5::uuid[]) AND c.operation=ANY($6::text[])))
         ORDER BY CASE
           WHEN o.state='READY' THEN o.available_at
           WHEN o.state='LEASED' THEN o.lease_until
@@ -145,7 +160,14 @@ export class TypeOrmCommandOutboxRepository {
         END, o.id
         FOR UPDATE OF o SKIP LOCKED
         LIMIT $2`,
-      [now, limit, capabilityKeys ? [...capabilityKeys] : null],
+      [
+        now,
+        limit,
+        capabilityKeys ? [...capabilityKeys] : null,
+        scope?.workspaceId ?? null,
+        scope ? [...scope.projectIds] : null,
+        scope ? [...scope.operations] : null,
+      ],
     )) as Row[];
     if (selected.length === 0) return Object.freeze([]);
 

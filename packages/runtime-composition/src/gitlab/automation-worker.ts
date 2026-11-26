@@ -222,6 +222,10 @@ export class TypeOrmGitLabAutomationWorker {
     private readonly observability?: GitLabAutomationObservability,
     private readonly pilotGuard?: PilotCommandEffectGuard,
     private readonly pilotGuardRequired = false,
+    private readonly deploymentScope?: Readonly<{
+      workspaceId: string;
+      projectIds: readonly string[];
+    }>,
   ) {
     this.#delivery = new TypeOrmCommandDeliveryStore(source);
     this.#effects = new TypeOrmGitLabEffectRepository(source);
@@ -233,6 +237,9 @@ export class TypeOrmGitLabAutomationWorker {
       new Date(now.getTime() + 15_000),
       20,
       gitLabAutomationWorkerCapabilityKeys,
+      this.deploymentScope
+        ? { ...this.deploymentScope, operations: ["pipeline.trigger"] }
+        : undefined,
     );
     for (const claim of claims) {
       const command = await this.#delivery.acknowledgeEnqueued(
@@ -358,8 +365,14 @@ export class TypeOrmGitLabAutomationWorker {
   }
 
   async recover(now = new Date(), limit = 50): Promise<number> {
-    await this.#delivery.recoverExpired(now, limit);
-    const due = await this.#effects.due(now, Math.min(limit, 100));
+    await this.#delivery.recoverExpired(
+      now,
+      limit,
+      this.deploymentScope
+        ? { ...this.deploymentScope, operations: ["pipeline.trigger"] }
+        : undefined,
+    );
+    const due = await this.#effects.due(now, Math.min(limit, 100), this.deploymentScope);
     let settled = 0;
     for (const effect of due) {
       const rows = (await this.source.query(
@@ -368,6 +381,12 @@ export class TypeOrmGitLabAutomationWorker {
       )) as readonly Readonly<{ project_id: string }>[];
       const row = rows[0];
       if (!row) continue;
+      if (
+        this.deploymentScope &&
+        (effect.workspaceId !== this.deploymentScope.workspaceId ||
+          !this.deploymentScope.projectIds.includes(row.project_id))
+      )
+        continue;
       try {
         const outcome = await this.execute(
           Object.freeze({
@@ -607,6 +626,7 @@ export function createGitLabAutomationWorkerSteps(
   observability?: GitLabAutomationObservability,
   pilotGuard?: PilotCommandEffectGuard,
   pilotGuardRequired = false,
+  deploymentScope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
 ): GitLabAutomationWorkerSteps {
   const runtime = new TypeOrmGitLabAutomationWorker(
     source,
@@ -614,6 +634,7 @@ export function createGitLabAutomationWorkerSteps(
     observability,
     pilotGuard,
     pilotGuardRequired,
+    deploymentScope,
   );
   return Object.freeze({
     recovery: Object.freeze({ run: async () => await runtime.recover() }),

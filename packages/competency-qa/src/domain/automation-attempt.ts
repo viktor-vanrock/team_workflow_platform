@@ -197,7 +197,6 @@ export function createQaAutomationAttemptResult(
     if (
       input.normalizationStatus !== "VALID" ||
       issues.length !== 0 ||
-      input.outcome === "INCOMPLETE" ||
       !input.sourceResultArtifactRef ||
       !input.externalPipelineId ||
       (input.externalJobIds?.length ?? 0) < 1 ||

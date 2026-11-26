@@ -66,8 +66,8 @@ describe.runIf(runPostgresMatrix)("Feature 008 PostgreSQL 17/18 migration matrix
             "SELECT namespace,version FROM platform_schema_versions WHERE namespace IN('core','pack:qa') ORDER BY namespace",
           ),
         ).toEqual([
-          { namespace: "core", version: 220 },
-          { namespace: "pack:qa", version: 2110 },
+          { namespace: "core", version: 255 },
+          { namespace: "pack:qa", version: 2115 },
         ]);
         await fresh.destroy();
 
@@ -118,7 +118,9 @@ describe.runIf(runPostgresMatrix)("Feature 008 PostgreSQL 17/18 migration matrix
           migrations: full,
         });
         await upgraded.initialize();
-        expect(await upgraded.runMigrations({ transaction: "all" })).toHaveLength(14);
+        expect(await upgraded.runMigrations({ transaction: "all" })).toHaveLength(
+          full.length - previous.length,
+        );
         expect(
           await upgraded.query("SELECT id::text,subject_hash FROM approvals WHERE id=$1", [
             approvalId,
@@ -185,8 +187,8 @@ describe.runIf(runPostgresMatrix)("Feature 008 PostgreSQL 17/18 migration matrix
             "SELECT namespace,version FROM platform_schema_versions WHERE namespace IN('core','pack:qa') ORDER BY namespace",
           ),
         ).toEqual([
-          { namespace: "core", version: 220 },
-          { namespace: "pack:qa", version: 2110 },
+          { namespace: "core", version: 255 },
+          { namespace: "pack:qa", version: 2115 },
         ]);
         await recovered.destroy();
       } finally {

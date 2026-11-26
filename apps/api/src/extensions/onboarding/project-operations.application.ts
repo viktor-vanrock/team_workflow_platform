@@ -56,6 +56,7 @@ const permissions = {
   BINDING_PUBLISH: "integration.publish",
   BINDING_RETIRE: "integration.publish",
   ONBOARDING_PILOT_ACTIVATE: "project.onboarding.activate",
+  PILOT_FENCE_PUBLISH: "project.onboarding.activate",
 } as const;
 
 export async function saveOperationalCandidate(

@@ -11,6 +11,44 @@ function visibleStrings(value: unknown): string[] {
 }
 
 describe("Automated Session HUMAN review UI", () => {
+  it.each([
+    ["SCHEMA_VALIDATED", "Проверка сообщила о неполном результате; файл результата проверен."],
+    ["SYNTHETIC_INCOMPLETE", "Не удалось получить или проверить полный результат проверки."],
+  ] as const)("explains %s for an incomplete result", (normalizationKind, expected) => {
+    const id = "attempt-1";
+    const view = QaAutomatedSessionExecutor({
+      attempts: [
+        {
+          automationAttemptId: id,
+          testSessionId: "session",
+          planItemId: "plan",
+          attemptNo: 1,
+          reason: "INITIAL",
+          rootAttemptId: id,
+          currentStatus: "TERMINAL",
+          currentStatusRevisionNo: 1,
+          resourceVersion: 1,
+          createdAt: "2026-01-01T00:00:00Z",
+          execution: { state: "CONFIRMED" },
+        },
+      ],
+      statusByAttempt: {},
+      resultByAttempt: {
+        [id]: {
+          outcome: "INCOMPLETE",
+          normalizationKind,
+          resultHash: "hash",
+          artifactSyncState: "UNAVAILABLE",
+          terminalAt: "2026-01-01T00:00:00Z",
+        },
+      },
+      notice: "",
+      manualHref: "/",
+      onLaunch: () => undefined,
+      onReload: () => undefined,
+    });
+    expect(visibleStrings(view).join(" ")).toContain(expected);
+  });
   it("renders the complete Attempt timeline, artifacts, quarantine, flaky disposition, and blockers", () => {
     const attemptId = "attempt-000000000000000000000001";
     const view = QaAutomatedSessionExecutor({

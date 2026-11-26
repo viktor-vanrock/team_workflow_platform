@@ -233,28 +233,34 @@ export class CorporateConnectorFactories {
       environment: entry.binding.mode === "CORPORATE" ? "NON_PROD" : "LOCAL",
       allowedOrigins: [entry.binding.endpoint],
       maxResponseBytes: this.options.network.policy.maximumResponseBytes,
-      transport: async (input, init = {}) => {
-        const signal = this.signal(init.signal);
-        const url = this.url(input);
-        const headers = new Headers(init.headers);
-        if ([...headers.keys()].some((key) => /authorization|cookie|token|api-key/iu.test(key)))
-          throw denied();
-        const purpose = await this.prepare(entry, url, init.method ?? "GET", signal);
-        return this.withSecret(entry, purpose, signal, async (bytes) => {
-          const auth = entry.credentials.get(purpose)!.authentication;
-          const value = token(bytes);
-          if (auth === "JIRA_BASIC" && !/^[^:]+:.+$/u.test(value)) throw denied();
-          headers.set(
-            "authorization",
-            auth === "JIRA_BASIC"
-              ? `Basic ${Buffer.from(value).toString("base64")}`
-              : `Bearer ${value}`,
-          );
-          headers.set("accept", "application/json");
-          return this.send(entry, url, { ...init, headers, signal }, purpose);
-        });
-      },
+      transport: this.jiraTransport(bindingId),
     });
+  }
+
+  /** Shared by request-create and source validation; enforces the same scoped policy and Vault lease. */
+  jiraTransport(bindingId: string): typeof fetch {
+    const entry = this.entry(bindingId, "JIRA");
+    return async (input, init = {}) => {
+      const signal = this.signal(init.signal);
+      const url = this.url(input);
+      const headers = new Headers(init.headers);
+      if ([...headers.keys()].some((key) => /authorization|cookie|token|api-key/iu.test(key)))
+        throw denied();
+      const purpose = await this.prepare(entry, url, init.method ?? "GET", signal);
+      return this.withSecret(entry, purpose, signal, async (bytes) => {
+        const auth = entry.credentials.get(purpose)!.authentication;
+        const value = token(bytes);
+        if (auth === "JIRA_BASIC" && !/^[^:]+:.+$/u.test(value)) throw denied();
+        headers.set(
+          "authorization",
+          auth === "JIRA_BASIC"
+            ? `Basic ${Buffer.from(value).toString("base64")}`
+            : `Bearer ${value}`,
+        );
+        headers.set("accept", "application/json");
+        return this.send(entry, url, { ...init, headers, signal }, purpose);
+      });
+    };
   }
 
   mattermost(
@@ -277,7 +283,12 @@ export class CorporateConnectorFactories {
     });
   }
 
-  gitlab(bindingId: string, value: GitLabConnectionConfiguration, numericProjectId: number) {
+  gitlab(
+    bindingId: string,
+    value: GitLabConnectionConfiguration,
+    numericProjectId: number,
+    connectorVersion: "1.0.0" | "1.1.0" = "1.0.0",
+  ) {
     const entry = this.entry(bindingId, "GITLAB");
     const connection = validateGitLabConnectionConfiguration(value);
     if (
@@ -341,6 +352,7 @@ export class CorporateConnectorFactories {
           { ...init, signal: this.signal(init.signal) },
           "CONNECTOR_READ",
         ),
+      connectorVersion,
     });
     const triggerTransport = Object.freeze({
       trigger: async (invocation: GitLabPipelineTriggerInvocation): Promise<unknown> => {
@@ -540,6 +552,7 @@ export class CorporateConnectorFactories {
       if (
         signal.aborted ||
         expiresAt <= Date.now() ||
+        !(await this.options.secretAuthorization.authorize(mapping.use, mapping, signal)) ||
         !this.options.secretAuthorization.isCurrent(mapping.use, mapping)
       )
         throw denied();
@@ -554,6 +567,7 @@ export class CorporateConnectorFactories {
       await this.authorize(entry, purpose, signal);
       if (
         expiresAt <= Date.now() ||
+        !(await this.options.secretAuthorization.authorize(mapping.use, mapping, signal)) ||
         !this.options.secretAuthorization.isCurrent(mapping.use, mapping)
       )
         throw denied();

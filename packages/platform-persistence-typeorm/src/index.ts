@@ -48,6 +48,7 @@ export * from "./operational-authority.repository.ts";
 export * from "./operational-authority-unit-of-work.ts";
 export * from "./operational-import.repository.ts";
 export * from "./pilot.repository.ts";
+export * from "./pilot-command-admission.repository.ts";
 export * from "./platform-action.repository.ts";
 export * from "./project-binding.repository.ts";
 export * from "./project-entitlement.repository.ts";

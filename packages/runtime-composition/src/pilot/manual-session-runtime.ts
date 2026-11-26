@@ -48,7 +48,8 @@ export class PublishedQaSessionRuntime implements QaSessionRuntime {
   readonly #pins: readonly QaSessionRuntimePins[];
   constructor(
     pins: readonly QaSessionRuntimePins[],
-    private readonly effects: QaProjectEffectGuardPort,
+    private readonly effects:
+      QaProjectEffectGuardPort | ((context: QaSessionAdmissionContext) => QaProjectEffectGuardPort),
   ) {
     if (
       !pins.length ||
@@ -110,7 +111,8 @@ export class PublishedQaSessionRuntime implements QaSessionRuntime {
           )
         )
           throw denied();
-        await this.effects.assertEffectsAllowed({
+        const effects = typeof this.effects === "function" ? this.effects(context) : this.effects;
+        await effects.assertEffectsAllowed({
           workspaceId: context.workspaceId,
           projectId: context.projectId,
         });

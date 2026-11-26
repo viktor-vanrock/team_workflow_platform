@@ -6,6 +6,7 @@ import {
   ForbiddenException,
   Get,
   Header,
+  Headers,
   HttpException,
   Inject,
   NotFoundException,
@@ -27,21 +28,33 @@ import {
 import type {
   DurablePilotEvidenceImport,
   PilotDeadLetterService,
+  PilotFenceActionDetails,
   PilotReadinessQuery,
   ReplayDecisionInput,
 } from "@awp/runtime-composition";
 
+import {
+  etag,
+  exact,
+  idempotencyKey,
+  object,
+  onboardingRequest,
+  safeResult,
+  text,
+} from "../onboarding/durable-http.ts";
 import {
   authorizeQaApi,
   QA_DATA_SOURCE,
   QaSessionGuard,
   type QaSessionRequest,
 } from "../qa-api-authorization.ts";
+import { PilotFencePublicationApplication } from "./pilot-fence-publication.ts";
 
 export const PILOT_EVIDENCE_IMPORT = Symbol("PILOT_EVIDENCE_IMPORT");
 export const PILOT_READINESS_QUERY = Symbol("PILOT_READINESS_QUERY");
 export const PILOT_DEAD_LETTERS = Symbol("PILOT_DEAD_LETTERS");
 export const PILOT_RUN_SERVICE = Symbol("PILOT_RUN_SERVICE");
+export const PILOT_FENCE_PUBLICATION = Symbol("PILOT_FENCE_PUBLICATION");
 export interface PilotRunApiService {
   run(input: Readonly<{ workspaceId: string; projectId: string; runId: string }>): Promise<unknown>;
   metrics(
@@ -130,7 +143,69 @@ export class PilotController {
     @Inject(PILOT_EVIDENCE_IMPORT) private readonly imports: DurablePilotEvidenceImport,
     @Inject(PILOT_READINESS_QUERY) private readonly queries: PilotReadinessQuery,
     @Optional() @Inject(PILOT_RUN_SERVICE) private readonly pilotRuns?: PilotRunApiService,
+    @Optional()
+    @Inject(PILOT_FENCE_PUBLICATION)
+    private readonly fencePublication?: PilotFencePublicationApplication,
   ) {}
+
+  @Post("fence-candidates")
+  @Header("Cache-Control", "private, no-store")
+  fenceCandidate(
+    @Req() request: QaSessionRequest,
+    @Param("workspaceId") workspaceId: string,
+    @Param("projectId") projectId: string,
+    @Headers("if-match") match: string | undefined,
+    @Headers("idempotency-key") key: string | undefined,
+    @Body() body: unknown,
+  ) {
+    return safeResult(() => {
+      if (!this.fencePublication)
+        throw new ServiceUnavailableException("PILOT_FENCE_PUBLICATION_UNAVAILABLE");
+      const input = object(body, ["reason", "details"]);
+      const details = object(input.details, [
+        "schemaVersion",
+        "fenceId",
+        "cohortId",
+        "fence",
+        "cohort",
+      ]);
+      return this.fencePublication.prepare(
+        onboardingRequest(this.source, request, workspaceId, projectId),
+        {
+          expectedVersion: etag(match),
+          reason: text(input.reason),
+          details: details as unknown as PilotFenceActionDetails,
+        },
+        idempotencyKey(key),
+      );
+    });
+  }
+
+  @Post("fence-publications")
+  @Header("Cache-Control", "private, no-store")
+  publishFence(
+    @Req() request: QaSessionRequest,
+    @Param("workspaceId") workspaceId: string,
+    @Param("projectId") projectId: string,
+    @Headers("if-match") match: string | undefined,
+    @Headers("idempotency-key") key: string | undefined,
+    @Body() body: unknown,
+  ) {
+    return safeResult(() => {
+      if (!this.fencePublication)
+        throw new ServiceUnavailableException("PILOT_FENCE_PUBLICATION_UNAVAILABLE");
+      const input = object(body, ["candidateRef", "approvalRef"]);
+      return this.fencePublication.publish(
+        onboardingRequest(this.source, request, workspaceId, projectId),
+        {
+          expectedVersion: etag(match),
+          candidateRef: exact(input.candidateRef),
+          approvalRef: exact(input.approvalRef),
+        },
+        idempotencyKey(key),
+      );
+    });
+  }
 
   @Get("health")
   @Header("Cache-Control", "private, no-store")

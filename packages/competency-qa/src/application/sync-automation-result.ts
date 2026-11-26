@@ -218,6 +218,7 @@ function coreAvailability(
 function artifactSyncState(
   descriptors: readonly QaAutomationArtifactDescriptorInput[],
 ): QaAutomationArtifactSyncState {
+  if (descriptors.length === 0) return "UNAVAILABLE";
   if (descriptors.some(({ availability }) => availability === "EXPIRED")) return "EXPIRED";
   if (descriptors.every(({ availability }) => availability === "AVAILABLE")) return "COMPLETE";
   if (descriptors.some(({ availability }) => availability === "AVAILABLE")) return "PARTIAL";

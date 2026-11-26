@@ -67,4 +67,5 @@ export const projectActionPermissionByKind = Object.freeze({
   BINDING_RETIRE: "integration.retire",
   PROJECT_RESUME: "project.resume",
   ONBOARDING_PILOT_ACTIVATE: "project.onboarding.activate",
+  PILOT_FENCE_PUBLISH: "project.onboarding.activate",
 } as const);

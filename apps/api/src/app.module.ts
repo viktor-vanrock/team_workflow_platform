@@ -66,6 +66,7 @@ import {
   type CoreIntakeHttpApis,
   createCoreIntakeHttpApis,
 } from "./extensions/core-intake-http-api.ts";
+import { type CorporateQaBindings, CorporateQaModule } from "./extensions/corporate-qa.module.ts";
 import {
   GITLAB_WEBHOOK_INGRESS_API,
   GitLabWebhookController,
@@ -151,11 +152,13 @@ import {
 import { createOperationalAuthorityHttpApi } from "./extensions/operational-authority-http-api.ts";
 import {
   PILOT_EVIDENCE_IMPORT,
+  PILOT_FENCE_PUBLICATION,
   PILOT_READINESS_QUERY,
   PILOT_RUN_SERVICE,
   PilotController,
   type PilotRunApiService,
 } from "./extensions/pilot/pilot.controller.ts";
+import { PilotFencePublicationApplication } from "./extensions/pilot/pilot-fence-publication.ts";
 import {
   QA_DATA_SOURCE,
   QA_HTTP_IDENTITY,
@@ -1048,6 +1051,10 @@ export interface PilotNonLocalApiBindings {
   readonly evidenceImport: DurablePilotEvidenceImport;
   readonly readinessQuery: PilotReadinessQuery;
   readonly pilotRuns?: PilotRunApiService;
+  readonly qa?: Readonly<{
+    bindings: CorporateQaBindings;
+    projects: readonly Readonly<{ workspaceId: string; projectId: string }>[];
+  }>;
 }
 
 /** The non-local API surface contains only guarded corporate routes and explicit ports.
@@ -1063,12 +1070,23 @@ export class PilotNonLocalApiModule {
     )
       throw new Error("PILOT_NON_LOCAL_API_BINDINGS_REQUIRED");
     if (input.onboarding && input.identity) throw new Error("PILOT_NON_LOCAL_IDENTITY_AMBIGUOUS");
+    if (input.qa && !input.onboarding) throw new Error("CORPORATE_QA_SESSION_REQUIRED");
     return {
       module: PilotNonLocalApiModule,
       imports: input.onboarding
         ? [
             CorporateOnboardingModule.register(input.source, input.onboarding),
             CorporateAccessModule.register(input.source, input.onboarding.sessions),
+            ...(input.qa
+              ? [
+                  CorporateQaModule.register(
+                    input.source,
+                    input.onboarding.sessions,
+                    input.qa.projects,
+                    input.qa.bindings,
+                  ),
+                ]
+              : []),
           ]
         : [],
       controllers: [HealthController, PilotController],
@@ -1081,6 +1099,14 @@ export class PilotNonLocalApiModule {
           : []),
         { provide: PILOT_EVIDENCE_IMPORT, useValue: input.evidenceImport },
         { provide: PILOT_READINESS_QUERY, useValue: input.readinessQuery },
+        ...(input.qa
+          ? [
+              {
+                provide: PILOT_FENCE_PUBLICATION,
+                useValue: new PilotFencePublicationApplication(input.source, input.readinessQuery),
+              },
+            ]
+          : []),
         ...(input.pilotRuns ? [{ provide: PILOT_RUN_SERVICE, useValue: input.pilotRuns }] : []),
         QaSessionGuard,
       ],

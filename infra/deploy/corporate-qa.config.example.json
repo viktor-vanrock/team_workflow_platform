@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "deploymentPolicyHash": "REPLACE_WITH_PARSED_DEPLOYMENT_POLICY_HASH",
+  "readinessPins": [
+    {
+      "workspaceId": "REPLACE_WITH_WORKSPACE_ID",
+      "projectId": "REPLACE_WITH_PROJECT_ID",
+      "bindingRef": { "id": "REPLACE_BINDING", "version": 1, "contentHash": "REPLACE_HASH" },
+      "profileRef": { "id": "REPLACE_PROFILE", "version": 1, "contentHash": "REPLACE_HASH" },
+      "connectionRef": { "id": "REPLACE_CONNECTION", "version": 1, "contentHash": "REPLACE_HASH" },
+      "contextRef": { "id": "REPLACE_CONTEXT", "version": 1, "contentHash": "REPLACE_HASH" },
+      "freshnessPolicyRef": {
+        "id": "REPLACE_FRESHNESS",
+        "version": 1,
+        "contentHash": "REPLACE_HASH"
+      },
+      "maximumProjectionAgeMs": 30000,
+      "authorityScopeKey": "REPLACE_AUTHORITY_SCOPE"
+    }
+  ],
+  "dodPins": [
+    {
+      "workspaceId": "REPLACE_WITH_WORKSPACE_ID",
+      "projectId": "REPLACE_WITH_PROJECT_ID",
+      "contextRef": { "id": "REPLACE_CONTEXT", "version": 1, "contentHash": "REPLACE_HASH" },
+      "riskPolicyRef": { "id": "REPLACE_RISK_POLICY", "version": 1, "contentHash": "REPLACE_HASH" }
+    }
+  ],
+  "defectPins": [
+    {
+      "workspaceId": "REPLACE_WITH_WORKSPACE_ID",
+      "projectId": "REPLACE_WITH_PROJECT_ID",
+      "bindingRef": { "id": "REPLACE_BINDING", "version": 1, "contentHash": "REPLACE_HASH" },
+      "destination": {
+        "profileRef": {
+          "id": "REPLACE_DEFECT_PROFILE",
+          "version": 1,
+          "contentHash": "REPLACE_HASH"
+        },
+        "mappingRef": {
+          "id": "REPLACE_DEFECT_MAPPING",
+          "version": 1,
+          "contentHash": "REPLACE_HASH"
+        },
+        "connectionRef": {
+          "id": "REPLACE_DEFECT_CONNECTION",
+          "version": 1,
+          "contentHash": "REPLACE_HASH"
+        }
+      },
+      "requestAuthority": {
+        "profileRef": { "id": "REPLACE_PROFILE", "version": 1, "contentHash": "REPLACE_HASH" },
+        "mappingRef": { "id": "REPLACE_MAPPING", "version": 1, "contentHash": "REPLACE_HASH" },
+        "connectionRef": { "id": "REPLACE_CONNECTION", "version": 1, "contentHash": "REPLACE_HASH" }
+      },
+      "authorityScopeKey": "REPLACE_AUTHORITY_SCOPE",
+      "externalProjectId": "REPLACE_JIRA_PROJECT_ID",
+      "externalIssueTypeId": "REPLACE_DEFECT_ISSUE_TYPE_ID",
+      "maximumClassificationKey": "INTERNAL"
+    }
+  ],
+  "completionPins": [
+    {
+      "workspaceId": "REPLACE_WITH_WORKSPACE_ID",
+      "projectId": "REPLACE_WITH_PROJECT_ID",
+      "bindingRef": { "id": "REPLACE_BINDING", "version": 1, "contentHash": "REPLACE_HASH" },
+      "profileRef": { "id": "REPLACE_PROFILE", "version": 1, "contentHash": "REPLACE_HASH" },
+      "mappingRef": { "id": "REPLACE_MAPPING", "version": 1, "contentHash": "REPLACE_HASH" },
+      "connectionRef": { "id": "REPLACE_CONNECTION", "version": 1, "contentHash": "REPLACE_HASH" },
+      "authorityScopeKey": "REPLACE_AUTHORITY_SCOPE",
+      "externalProjectId": "REPLACE_JIRA_PROJECT_ID",
+      "maximumClassificationKey": "INTERNAL",
+      "maximumProjectionAgeMs": 30000,
+      "allowedFromStates": ["READY"]
+    }
+  ],
+  "stepUpPermissions": ["qa.verdict.sign", "qa.verdict.cosign", "qa.completion.approve"]
+}

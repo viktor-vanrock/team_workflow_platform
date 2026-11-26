@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
+import { createCorporateEvidenceCrypto } from "../../../apps/api/src/extensions/onboarding/corporate-evidence-crypto.ts";
 import {
   buildEvidenceManifestV2,
   canonicalEvidenceBytes,
@@ -90,6 +91,50 @@ describe("008 remote evidence signing", () => {
     expect(envelope.payloadHash).toBe(manifest.contentHash);
     expect(envelope.signature).toMatch(/^[a-zA-Z0-9_-]{86}$/u);
     expect(await signer.verify(manifest, envelope)).toBe("VALID");
+  });
+  it("composes scoped evidence crypto from an explicitly trusted public key", async () => {
+    const publicKeyRef = history.publish("evidence:1", 1, fixture.publicJwk(1));
+    const client = new VaultHttpClient({
+      baseUrl: fixture.origin,
+      namespace: "pilot/",
+      mode: "LOCAL_FIXTURE",
+      deadlineMs: 200,
+      maximumResponseBytes: 8192,
+      authorizeEndpoint: async () => true,
+      credentials: {
+        withToken: async (_use, _signal, consume) =>
+          await consume("fixture-workload-credential", Date.now() + 10000),
+      },
+    });
+    const resolve = createCorporateEvidenceCrypto({
+      source: client,
+      publicKeyHistoryDirectory: directory,
+      signingPolicyRef: policyRef,
+      projects: [
+        {
+          signing: {
+            ...scope,
+            servicePrincipalId: "signer",
+            mount: "transit",
+            keyName: "evidence",
+            keyVersion: 1,
+            kid: "evidence:1",
+            publicKeyRef,
+            signingPolicyRef: policyRef,
+          },
+          redactionPolicyRef: policyRef,
+          exportPolicyRef: policyRef,
+          trustedPublicKeys: [publicKeyRef],
+        },
+      ],
+      authorize: async () => true,
+    });
+    const crypto = resolve(scope);
+    const signed = await crypto.signManifest(manifest);
+    expect(await crypto.verify(manifest, signed)).toBe("VALID");
+    expect(() => resolve({ ...scope, projectId: "foreign" })).toThrow(
+      "CORPORATE_EVIDENCE_SCOPE_DENIED",
+    );
   });
   it("retains old public keys across rotation/restart and verifies during signer outage", async () => {
     const envelope = await signer.signManifest(manifest);

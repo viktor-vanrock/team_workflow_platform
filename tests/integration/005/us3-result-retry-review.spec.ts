@@ -14,7 +14,9 @@ import {
 import { designContractRegistry } from "../../../packages/platform-contracts/src/index.ts";
 import { TypeOrmGitLabAutomationAttemptQuery } from "../../../packages/runtime-composition/src/gitlab/automation-attempt-query.ts";
 import { TypeOrmGitLabAutomationLaunchService } from "../../../packages/runtime-composition/src/gitlab/automation-launch-service.ts";
+import { createCorporateGitLabResultState } from "../../../packages/runtime-composition/src/gitlab/corporate-result-state.ts";
 import {
+  authorizeGitLabResultExecutor,
   createTypeOrmGitLabAutomationResultSyncConsumer,
   type Feature005AutomationEventEnvelope,
   feature005AutomationEventTypes,
@@ -103,6 +105,50 @@ afterAll(async () => {
 }, 120_000);
 
 describe("US3 terminal result, evidence, and atomic retry persistence", () => {
+  it("loads the running result context only inside the selected corporate project", async () => {
+    const state = createCorporateGitLabResultState(fixture!.source, {
+      profile: "non-local",
+      environmentScope: "NON_PROD",
+      deployment: { workspaceId: fixture!.workspaceId, projectIds: [fixture!.projectId] },
+    } as never);
+    const selected = await state.load(
+      { ...scope(), attemptId: runningAttempt.automationAttemptId },
+      "RUNNING",
+    );
+    expect(selected.attempt.automationAttemptId).toBe(runningAttempt.automationAttemptId);
+    expect(selected.targetSnapshot.snapshotHash).toBe(runningAttempt.targetSnapshotHash);
+    expect(selected.previousStatus.status).toBe("RUNNING");
+    await expect(
+      state.load(
+        {
+          ...scope(),
+          projectId: "d6900000-0000-4000-8000-000000000099",
+          attemptId: runningAttempt.automationAttemptId,
+        },
+        "RUNNING",
+      ),
+    ).rejects.toThrow("CORPORATE_GITLAB_RESULT_SCOPE_DENIED");
+  });
+  it("authorizes only the stored result executor in the same project", async () => {
+    const input = {
+      ...scope(),
+      attemptId: runningAttempt.automationAttemptId,
+      principalId: worker.principalId,
+    };
+    expect(await authorizeGitLabResultExecutor(fixture!.source.manager, input)).toBe(true);
+    expect(
+      await authorizeGitLabResultExecutor(fixture!.source.manager, {
+        ...input,
+        principalId: "other-service",
+      }),
+    ).toBe(false);
+    expect(
+      await authorizeGitLabResultExecutor(fixture!.source.manager, {
+        ...input,
+        projectId: "d6900000-0000-4000-8000-000000000099",
+      }),
+    ).toBe(false);
+  });
   it("commits immutable result/status/artifact facts and sticky REVIEW_REQUIRED state exactly once", async () => {
     const repository = new TypeOrmAutomationExecutionRepository(fixture!.source);
     const previousStatus = (
@@ -195,6 +241,18 @@ describe("US3 terminal result, evidence, and atomic retry persistence", () => {
     });
     terminalAttempt = prepared.attempt;
 
+    const resultState = createCorporateGitLabResultState(fixture!.source, {
+      profile: "non-local",
+      environmentScope: "NON_PROD",
+      deployment: { workspaceId: fixture!.workspaceId, projectIds: [fixture!.projectId] },
+    } as never);
+    const recovered = await resultState.load(
+      { ...scope(), attemptId: terminalAttempt.automationAttemptId },
+      "TERMINAL",
+    );
+    expect(recovered.terminalResult?.contentHash).toBe(prepared.result.contentHash);
+    expect(recovered.session.state).toBe("REVIEW_REQUIRED");
+
     const [counts] = (await fixture!.source.query(
       `SELECT
       (SELECT count(*)::int FROM qa_automation_attempt_results WHERE attempt_id=$1) AS results,
@@ -260,6 +318,24 @@ describe("US3 terminal result, evidence, and atomic retry persistence", () => {
       executingService: worker,
       causalAuthorizationBasis: us2AutomationAuthorizationBasis,
     } as const;
+    const deniedAdmission = new TypeOrmAutomationResultEvidenceUnitOfWork(
+      fixture!.source,
+      undefined,
+      {
+        persist: async () => {
+          throw new Error("RETRY_ADMISSION_DENIED");
+        },
+        assertReplay: async () => undefined,
+      },
+    );
+    await expect(deniedAdmission.persistRetryEvaluation(input)).rejects.toThrow(
+      "RETRY_ADMISSION_DENIED",
+    );
+    const [afterDeniedAdmission] = (await fixture!.source.query(
+      "SELECT count(*)::int AS count FROM qa_automation_attempts WHERE attempt_id=$1",
+      [evaluation.successor!.automationAttemptId],
+    )) as readonly { count: number }[];
+    expect(afterDeniedAdmission!.count).toBe(0);
     const persisted = await unitOfWork.persistRetryEvaluation(input);
     expect(persisted).toMatchObject({
       replayed: false,
@@ -270,6 +346,58 @@ describe("US3 terminal result, evidence, and atomic retry persistence", () => {
       replayed: true,
       successorAttemptId: evaluation.successor!.automationAttemptId,
     });
+    const resume = createTypeOrmGitLabAutomationResultSyncConsumer(fixture!.source);
+    const recovery = {
+      context: input.context,
+      attempt: terminalAttempt,
+      result: typedResult,
+      lineage: [terminalAttempt],
+      targetSnapshot: session.planned.targetSnapshot,
+      retry: {
+        policy: {
+          policyRef: terminalAttempt.retryPolicyRef,
+          policyHash: terminalAttempt.retryPolicyHash,
+          automaticRetryBudget: 1,
+          allowedInfrastructureCodes: ["RUNNER_UNAVAILABLE"],
+        },
+        authority: {
+          authorizationAllowed: true,
+          policyAllowed: true,
+          quarantineActive: false,
+          configurationPinsCurrent: true,
+          targetCurrent: true,
+          authorizationRecheckHash: hash("us3-retry-authorization-recheck"),
+        },
+        executingService: worker,
+        causalAuthorizationBasis: us2AutomationAuthorizationBasis,
+        decidedAt: "2026-09-01T09:05:02.000Z",
+      },
+    } as const;
+    await expect(resume.resumeRetry(recovery)).resolves.toMatchObject({
+      replayed: true,
+      successorAttemptId: evaluation.successor!.automationAttemptId,
+    });
+    await expect(
+      resume.resumeRetry({ ...recovery, result: { ...typedResult, outcome: "PASS" } }),
+    ).rejects.toThrow("GITLAB_RESULT_RETRY_RECOVERY_INVALID");
+    const { contentHash: _originalHash, ...resultBody } = typedResult;
+    void _originalHash;
+    const forgedBody = { ...resultBody, outcome: "PASS" as const };
+    await expect(
+      resume.resumeRetry({
+        ...recovery,
+        result: { ...forgedBody, contentHash: qaAggregateSnapshotHash(forgedBody as never) },
+      }),
+    ).rejects.toThrow("GITLAB_RESULT_RETRY_RECOVERY_STALE");
+    const deniedReplay = new TypeOrmAutomationResultEvidenceUnitOfWork(fixture!.source, undefined, {
+      persist: async () => undefined,
+      assertReplay: async () => {
+        throw new Error("RETRY_ADMISSION_REVOKED");
+      },
+    });
+    await expect(deniedReplay.persistRetryEvaluation(input)).rejects.toThrow(
+      "RETRY_ADMISSION_REVOKED",
+    );
 
     const successor = await repository.automationAttempt(
       scope(),
@@ -576,6 +704,49 @@ describe("US3 terminal result, evidence, and atomic retry persistence", () => {
         quarantineEvent.recordedAt,
       ],
     );
+    const [firstReady] = (await fixture!.source.query(
+      `SELECT id,envelope_hash FROM event_outbox WHERE state='READY' AND event_type=ANY($1::text[])
+       ORDER BY created_at,id LIMIT 1`,
+      [[...feature005AutomationEventTypes]],
+    )) as readonly { id: string; envelope_hash: string }[];
+    expect(firstReady).toBeDefined();
+    await fixture!.source.query("UPDATE event_outbox SET envelope_hash=$2 WHERE id=$1", [
+      firstReady!.id,
+      `sha256:${"0".repeat(64)}`,
+    ]);
+    const corruptPublisher = new Feature005InProcessEventPublisher();
+    const corruptDeliveries: Feature005AutomationEventEnvelope[] = [];
+    corruptPublisher.subscribe((event) => {
+      corruptDeliveries.push(event);
+    });
+    await expect(
+      new TypeOrmFeature005AutomationEventOutboxWorker(fixture!.source, corruptPublisher).runOne(),
+    ).rejects.toThrow("FEATURE_005_EVENT_ENVELOPE_INVALID");
+    expect(corruptDeliveries).toHaveLength(0);
+    await fixture!.source.query("UPDATE event_outbox SET envelope_hash=$2 WHERE id=$1", [
+      firstReady!.id,
+      firstReady!.envelope_hash,
+    ]);
+    // A failed delivery must leave the durable event available for a later attempt.
+    const failedEventWorker = new TypeOrmFeature005AutomationEventOutboxWorker(fixture!.source, {
+      publish: async () => {
+        throw new Error("DELIVERY_UNAVAILABLE");
+      },
+    });
+    const [beforeFailure] = (await fixture!.source.query(
+      `SELECT count(*)::int AS ready FROM event_outbox
+       WHERE state='READY' AND event_type=ANY($1::text[])`,
+      [[...feature005AutomationEventTypes]],
+    )) as readonly { ready: number }[];
+    expect(beforeFailure!.ready).toBeGreaterThan(0);
+    await expect(failedEventWorker.runOne()).rejects.toThrow("DELIVERY_UNAVAILABLE");
+    const [afterFailure] = (await fixture!.source.query(
+      `SELECT count(*)::int AS ready FROM event_outbox
+       WHERE state='READY' AND event_type=ANY($1::text[])`,
+      [[...feature005AutomationEventTypes]],
+    )) as readonly { ready: number }[];
+    expect(afterFailure!.ready).toBe(beforeFailure!.ready);
+
     const published: Feature005AutomationEventEnvelope[] = [];
     const publisher = new Feature005InProcessEventPublisher();
     publisher.subscribe((event) => {

@@ -1,6 +1,6 @@
 import type { EntityManager } from "typeorm";
 
-import { qaAggregateSnapshotHash, type QaScope } from "@awp/competency-qa/node";
+import type { QaScope } from "@awp/competency-qa/node";
 import {
   assertExactRevisionRef,
   defaultClassificationCatalog,
@@ -8,6 +8,12 @@ import {
   freezePilotValue,
 } from "@awp/platform-core";
 
+import {
+  connectorKey,
+  jiraConnectionRuntimeContent,
+  jiraMappingRuntimeContent,
+} from "../jira/qa-connection-content.ts";
+import { integrationConfigurationHash } from "../onboarding/configuration-hash.ts";
 import type { QaDefectPublicationConfigurationPort } from "./defect-publication-runtime.ts";
 
 type Row = Readonly<Record<string, unknown>>;
@@ -121,14 +127,16 @@ export class PublishedQaDefectPublicationConfiguration implements QaDefectPublic
       )
         throw denied();
       const profile = await this.revision(manager, scope, "connector_profile", refs.profileRef);
-      const mapping = await this.revision(manager, scope, "connector_mapping", refs.mappingRef);
-      const connection = await this.revision(manager, scope, "connection", refs.connectionRef);
+      const rawMapping = await this.revision(manager, scope, "connector_mapping", refs.mappingRef);
+      const rawConnection = await this.revision(manager, scope, "connection", refs.connectionRef);
+      const mapping = jiraMappingRuntimeContent(rawMapping);
+      const connection = jiraConnectionRuntimeContent(rawConnection);
       if (
         !sameRef(profile.mappingRef, refs.mappingRef) ||
         !sameRef(profile.connectionRef, refs.connectionRef) ||
-        !profile.connectorKey ||
-        profile.connectorKey !== mapping.connectorKey ||
-        profile.connectorKey !== connection.connectorKey ||
+        !connectorKey(profile) ||
+        connectorKey(profile) !== connectorKey(rawMapping) ||
+        connectorKey(profile) !== connectorKey(rawConnection) ||
         mapping.authorityScopeKey !== pins.authorityScopeKey
       )
         throw denied();
@@ -208,7 +216,7 @@ export class PublishedQaDefectPublicationConfiguration implements QaDefectPublic
     )) as readonly { content: unknown }[];
     if (rows.length !== 1) throw denied();
     const content = record(rows[0]!.content);
-    if (qaAggregateSnapshotHash(content as never) !== ref.contentHash) throw denied();
+    if (integrationConfigurationHash(table, content) !== ref.contentHash) throw denied();
     return content;
   }
 }

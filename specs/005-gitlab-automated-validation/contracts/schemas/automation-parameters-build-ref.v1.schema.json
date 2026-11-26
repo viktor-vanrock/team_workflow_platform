@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:schemas:qa:automation-parameters:build-ref:v1",
+  "title": "Corporate GitLab automation parameters: build reference v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["BUILD_REF"],
+  "properties": {
+    "BUILD_REF": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f;&|`$<>]*[^\\s\\u0000-\\u001f\\u007f-\\u009f;&|`$<>][^\\u0000-\\u001f\\u007f-\\u009f;&|`$<>]*$"
+    }
+  }
+}

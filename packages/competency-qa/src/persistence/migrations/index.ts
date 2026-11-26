@@ -17,6 +17,7 @@ import { QaEvidenceUploads20901700000002090 } from "./2090-evidence-uploads.ts";
 import { QaDefectProposals20951700000002095 } from "./2095-defect-proposals.ts";
 import { QaHermesPolicyFence21001700000002100 } from "./2100-hermes-policy-fence.ts";
 import { QaResourcePublicationHeads21101700000002110 } from "./2110-resource-publication-heads.ts";
+import { QaValidatedIncompleteResult21151700000002115 } from "./2115-validated-incomplete-result.ts";
 
 /** Feature 005 reserves the full QA automation range before story activation. */
 export const qaMigrationContributions: readonly QaMigrationContribution[] = Object.freeze([
@@ -205,6 +206,12 @@ export const qaMigrationContributions: readonly QaMigrationContribution[] = Obje
     migration: QaResourcePublicationHeads21101700000002110,
     tables: Object.freeze([]),
   }),
+  Object.freeze({
+    order: 2115,
+    owner: "pack:qa",
+    migration: QaValidatedIncompleteResult21151700000002115,
+    tables: Object.freeze([]),
+  }),
 ]);
 export {
   QaAutomationExecution20551700000002055,
@@ -218,4 +225,5 @@ export {
   QaProjectResources20801700000002080,
   QaQueueFacts20701700000002070,
   QaResourcePublicationHeads21101700000002110,
+  QaValidatedIncompleteResult21151700000002115,
 };

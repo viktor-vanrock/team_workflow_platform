@@ -17,6 +17,10 @@ import {
 } from "../../../../apps/api/node_modules/@nestjs/common/index.js";
 import { NestFactory } from "../../../../apps/api/node_modules/@nestjs/core/index.js";
 import { createCoreIntakeHttpApis } from "../../../../apps/api/src/extensions/core-intake-http-api.ts";
+import {
+  type CorporateQaBindings,
+  CorporateQaModule,
+} from "../../../../apps/api/src/extensions/corporate-qa.module.ts";
 import { CorporateQaHttpIdentity } from "../../../../apps/api/src/extensions/corporate-qa-http-identity.ts";
 import {
   MATTERMOST_PROJECT_SELECTION,
@@ -49,6 +53,7 @@ import {
 import { QUEUE_HTTP_AUTHORITY } from "../../../../apps/api/src/extensions/queue/queue-http-authority.ts";
 import { QueuePoliciesController } from "../../../../apps/api/src/extensions/queue/queue-policies.controller.ts";
 import {
+  publishQaProjectContext,
   qaCompetencyManifestV13,
   qaValidationWorkTypeDefinitionV13,
 } from "../../../../packages/competency-qa/src/node.ts";
@@ -178,6 +183,9 @@ describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
       const project = randomUUID();
       const deniedProject = randomUUID();
       const human = randomUUID();
+      const qaContextId = randomUUID();
+      const qaBindingId = randomUUID();
+      const qaProfileId = randomUUID();
       const ref = {
         id: "identity-policy",
         version: 1,
@@ -266,6 +274,73 @@ describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
         await source.query(
           "INSERT INTO workspace_work_types(id,workspace_id,work_type_key,active_definition_id,intake_state,changed_by,changed_at,reason) VALUES($1,$2,'qa.validation',$3,'ENABLED',$4,now(),'HTTP fixture explicit enablement')",
           [randomUUID(), workspace, definitionId, human],
+        );
+        const actor = {
+          kind: "HUMAN" as const,
+          principalId: human,
+          issuer: idp.origin,
+          subject: "alice",
+        };
+        await source.query(
+          `INSERT INTO project_onboarding_headers
+          (onboarding_id,workspace_id,project_id,current_version,current_stage,current_capability_mode,
+           current_operational_state,intended_capability_mode,created_at,updated_at)
+          VALUES($1,$2,$3,1,'PILOT_ACTIVE','MANUAL_ONLY','ACTIVE','MANUAL_ONLY',clock_timestamp(),clock_timestamp())`,
+          [randomUUID(), workspace, project],
+        );
+        const policyRef = {
+          kind: "fixture",
+          id: "policy",
+          version: "1",
+          contentHash: sha256("policy"),
+        };
+        const semanticRef = { key: "fixture", version: "1.0.0", contentHash: sha256("fixture") };
+        const qaContext = publishQaProjectContext({
+          contextId: qaContextId,
+          version: 1,
+          workspaceId: workspace,
+          projectId: project,
+          allowedEnvironments: [{ environmentId: randomUUID(), revision: 1, scope: "NON_PROD" }],
+          allowedResponseChannelKinds: ["PLATFORM_WEB"],
+          requestAuthorityRequirementKey: "qa-request-authority",
+          defectDestinationRequirementKey: "defect-destination",
+          allowedTargetPolicyRefs: [policyRef],
+          allowedScopePolicyRefs: [policyRef],
+          allowedChecklistPolicyRefs: [policyRef],
+          defaultTargetPolicyRef: policyRef,
+          defaultScopePolicyRef: policyRef,
+          defaultChecklistRefs: [policyRef],
+          projectRisk: "MEDIUM",
+          maximumClassificationKey: "INTERNAL",
+          dorRuleSetRef: semanticRef,
+          dodRuleSetRef: semanticRef,
+          evidencePolicyRef: semanticRef,
+          riskReviewPolicyRef: { id: randomUUID(), version: 1, contentHash: sha256("risk") },
+          createdBy: actor,
+          publishedBy: actor,
+          publishedAt: new Date().toISOString(),
+        });
+        const qaContextVersion = randomUUID();
+        await source.query(
+          "INSERT INTO qa_project_contexts(id,workspace_id,project_id,resource_version) VALUES($1,$2,$3,1)",
+          [qaContextId, workspace, project],
+        );
+        await source.query(
+          "INSERT INTO qa_project_context_versions(id,workspace_id,project_id,header_id,version,content_hash,content,published_by,published_at) VALUES($1,$2,$3,$4,1,$5,$6,$7,$8)",
+          [
+            qaContextVersion,
+            workspace,
+            project,
+            qaContextId,
+            qaContext.contentHash,
+            JSON.stringify(qaContext),
+            JSON.stringify(actor),
+            qaContext.publishedAt,
+          ],
+        );
+        await source.query(
+          "UPDATE qa_project_contexts SET current_published_version_id=$1,current_published_version=1,current_published_content_hash=$2,resource_version=2 WHERE id=$3",
+          [qaContextVersion, qaContext.contentHash, qaContextId],
         );
         const configuration: Parameters<typeof createCorporateSessionBindings>[0] = {
           source,
@@ -397,7 +472,75 @@ describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
           const result = await NestFactory.create(
             {
               module: HttpProofModule,
-              imports: [CorporateAuthenticationModule.configured(bindings.sessions)],
+              imports: [
+                CorporateAuthenticationModule.configured(bindings.sessions),
+                CorporateQaModule.register(
+                  source,
+                  bindings.sessions,
+                  [{ workspaceId: workspace, projectId: project }],
+                  {
+                    intake: {
+                      load: async () => ({
+                        bindingRef: { id: qaBindingId, version: 1 },
+                        profileRef: { id: qaProfileId, version: 1 },
+                        projectContextId: qaContextId,
+                        authorityScopeKey: "fixture.qa",
+                        commandIdentity: async ({ sourceId }: { sourceId: string }) => ({
+                          commandId: sourceId,
+                          effectIdempotencyKey: `awp:effect:${sourceId}`,
+                        }),
+                        responseChannels: {
+                          resolve: async ({
+                            requester,
+                            evaluatedAt,
+                          }: {
+                            requester: typeof actor;
+                            evaluatedAt: string;
+                          }) => ({
+                            state: "MISSING",
+                            requesterPrincipal: requester,
+                            resolutionPolicyRef: semanticRef,
+                            evaluatedAt,
+                            missingReasonCode: "REQUESTER_RESPONSE_CHANNEL_MISSING",
+                          }),
+                        },
+                      }),
+                    },
+                    agentAuthority: {
+                      resolve: async () => {
+                        throw new Error("TEST_AGENT_NOT_CONFIGURED");
+                      },
+                    },
+                    commandAdmission: {
+                      context: async (_scope: unknown, principalId: string) => ({
+                        principalId,
+                        purpose: "BUSINESS",
+                        deploymentRef: {
+                          id: "fixture-deployment",
+                          version: 1,
+                          contentHash: sha256("deployment"),
+                        },
+                        cohortRef: {
+                          id: "fixture-cohort",
+                          version: 1,
+                          contentHash: sha256("cohort"),
+                        },
+                        fenceRef: { id: "fixture-fence", version: 1, contentHash: sha256("fence") },
+                      }),
+                      guard: { assertEffectsAllowed: async () => ({ onboardingVersion: 1 }) },
+                    },
+                    session: {},
+                    readiness: {},
+                    defectPublication: {},
+                    defectApproval: {},
+                    dod: {},
+                    verdict: {},
+                    completion: {},
+                    completionApproval: {},
+                    stepUpPermissions: [],
+                  } as unknown as CorporateQaBindings,
+                ),
+              ],
               controllers: [
                 QaArtifactsController,
                 MattermostProjectSelectionController,
@@ -590,6 +733,159 @@ describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
         ).toBe(201);
         // Exercise product controllers through the same real cookie and current Core rights.
         const qaPath = `/api/v1/workspaces/${workspace}/projects/${project}`;
+        const qaDraftBody = JSON.stringify({
+          schemaVersion: 1,
+          title: "Corporate QA draft",
+          requestKind: "feature-validation",
+          requestedClassificationKey: "INTERNAL",
+        });
+        expect(
+          (
+            await api(`${qaPath}/qa/intake`, {
+              method: "POST",
+              headers: { origin, "content-type": "application/json" },
+              body: qaDraftBody,
+            })
+          ).status,
+        ).toBe(401);
+        expect(
+          (
+            await api(`${qaPath}/qa/intake`, {
+              method: "POST",
+              headers: { cookie, origin, "content-type": "application/json" },
+              body: qaDraftBody,
+            })
+          ).status,
+        ).toBe(403);
+        expect(
+          (
+            await api(`${qaPath}/qa/intake`, {
+              method: "POST",
+              headers: {
+                cookie,
+                origin,
+                "x-csrf-token": session.csrfToken,
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                schemaVersion: 1,
+                title: "Too confidential",
+                requestKind: "feature-validation",
+                requestedClassificationKey: "CONFIDENTIAL",
+              }),
+            })
+          ).status,
+        ).toBe(403);
+        const createdQaDraft = await api(`${qaPath}/qa/intake`, {
+          method: "POST",
+          headers: {
+            cookie,
+            origin,
+            "x-csrf-token": session.csrfToken,
+            "content-type": "application/json",
+          },
+          body: qaDraftBody,
+        });
+        expect(createdQaDraft.status).toBe(201);
+        const createdQaDraftBody = (await createdQaDraft.json()) as { draftId: string };
+        expect(createdQaDraftBody.draftId).toBeTruthy();
+        expect(
+          (
+            await api(`/api/v1/workspaces/${workspace}/projects/${deniedProject}/qa/intake`, {
+              method: "POST",
+              headers: {
+                cookie,
+                origin,
+                "x-csrf-token": session.csrfToken,
+                "content-type": "application/json",
+              },
+              body: qaDraftBody,
+            })
+          ).status,
+        ).toBe(403);
+        expect(
+          (
+            await api(`${qaPath}/qa/intake`, {
+              method: "POST",
+              headers: {
+                cookie,
+                origin,
+                "x-csrf-token": session.csrfToken,
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                schemaVersion: 1,
+                title: "Corporate QA draft",
+                requestKind: "feature-validation",
+                requestedClassificationKey: "INTERNAL",
+                principalId: human,
+              }),
+            })
+          ).status,
+        ).toBe(401);
+        expect(
+          (
+            await api(`${qaPath}/intake-drafts/${createdQaDraftBody.draftId}/qa-confirmation`, {
+              method: "POST",
+              headers: {
+                cookie,
+                origin,
+                "x-csrf-token": session.csrfToken,
+                "idempotency-key": randomUUID(),
+              },
+            })
+          ).status,
+        ).toBe(403);
+        await source.query(
+          "UPDATE role_assignments SET permissions=permissions || '[\"qa.request.confirm\"]'::jsonb WHERE workspace_id=$1 AND project_id=$2 AND principal_id=$3 AND effect='ALLOW'",
+          [workspace, project, human],
+        );
+        await source.query(
+          "UPDATE project_entitlements SET permissions=permissions || '[\"qa.request.confirm\"]'::jsonb WHERE workspace_id=$1 AND project_id=$2 AND principal_id=$3 AND effect='ALLOW'",
+          [workspace, project, human],
+        );
+        const confirmationHeaders = {
+          cookie,
+          origin,
+          "x-csrf-token": session.csrfToken,
+          "idempotency-key": randomUUID(),
+        };
+        const confirmation = await api(
+          `${qaPath}/intake-drafts/${createdQaDraftBody.draftId}/qa-confirmation`,
+          {
+            method: "POST",
+            headers: confirmationHeaders,
+          },
+        );
+        expect(confirmation.status).toBe(202);
+        const command = (await confirmation.json()) as { commandId: string; state: string };
+        expect(command.state).toBe("QUEUED");
+        const replay = await api(
+          `${qaPath}/intake-drafts/${createdQaDraftBody.draftId}/qa-confirmation`,
+          {
+            method: "POST",
+            headers: confirmationHeaders,
+          },
+        );
+        expect(replay.status).toBe(202);
+        expect(await replay.json()).toMatchObject({ commandId: command.commandId, replayed: true });
+        const queued = (await source.query(
+          "SELECT state,count(*)::int AS count FROM connector_commands WHERE workspace_id=$1 AND project_id=$2 AND id=$3 GROUP BY state",
+          [workspace, project, command.commandId],
+        )) as { state: string; count: number }[];
+        expect(queued).toEqual([{ state: "QUEUED", count: 1 }]);
+        expect(
+          await source.query(
+            "SELECT state FROM command_outbox WHERE workspace_id=$1 AND project_id=$2 AND command_id=$3",
+            [workspace, project, command.commandId],
+          ),
+        ).toEqual([{ state: "READY" }]);
+        expect(
+          await source.query(
+            "SELECT principal_id,expected_onboarding_version FROM pilot_command_admissions WHERE workspace_id=$1 AND project_id=$2 AND command_id=$3",
+            [workspace, project, command.commandId],
+          ),
+        ).toEqual([{ principal_id: human, expected_onboarding_version: 1 }]);
         const artifactPath = `${qaPath}/artifacts/${readableArtifactId}`;
         expect((await api(artifactPath)).status).toBe(401);
         response = await api(artifactPath, { headers: { cookie } });
@@ -885,6 +1181,49 @@ describe.runIf(process.env.AWP_RUN_CONTAINER_TESTS === "true")(
           scope: { kind: "PROJECT", authorizedProjectSetHash: authorizedProjectSetHash([project]) },
           items: [],
         });
+        const automationPath = `${qaPath}/qa/automated-sessions/${randomUUID()}`;
+        expect((await api(`${automationPath}/attempts`)).status).toBe(401);
+        expect((await api(`${automationPath}/attempts`, { headers: { cookie } })).status).toBe(403);
+        await source.query(
+          `UPDATE role_assignments SET permissions=permissions || '["qa.automation.read"]'::jsonb
+           WHERE workspace_id=$1 AND project_id=$2 AND principal_id=$3 AND effect='ALLOW'`,
+          [workspace, project, human],
+        );
+        await source.query(
+          `UPDATE project_entitlements SET permissions=permissions || '["qa.automation.read"]'::jsonb
+           WHERE workspace_id=$1 AND project_id=$2 AND principal_id=$3 AND effect='ALLOW'`,
+          [workspace, project, human],
+        );
+        const automationRead = await api(`${automationPath}/attempts`, { headers: { cookie } });
+        expect(automationRead.status).toBe(200);
+        expect(await automationRead.json()).toEqual([]);
+        expect(
+          (
+            await api(`${automationPath.replace(project, deniedProject)}/attempts`, {
+              headers: { cookie },
+            })
+          ).status,
+        ).toBe(403);
+        await source.query(
+          `UPDATE role_assignments SET permissions=permissions - 'qa.automation.read'
+           WHERE workspace_id=$1 AND project_id=$2 AND principal_id=$3 AND effect='ALLOW'`,
+          [workspace, project, human],
+        );
+        await source.query(
+          `UPDATE project_entitlements SET permissions=permissions - 'qa.automation.read'
+           WHERE workspace_id=$1 AND project_id=$2 AND principal_id=$3 AND effect='ALLOW'`,
+          [workspace, project, human],
+        );
+        expect((await api(`${automationPath}/attempts`, { headers: { cookie } })).status).toBe(403);
+        expect(
+          (
+            await api(`${automationPath}/attempts`, {
+              method: "POST",
+              headers: { cookie, origin, "content-type": "application/json" },
+              body: "{}",
+            })
+          ).status,
+        ).toBe(404);
         response = await api(`/api/v1/workspaces/${workspace}/qa/queue`, { headers: { cookie } });
         expect(response.status).toBe(200);
         expect(await response.json()).toMatchObject({

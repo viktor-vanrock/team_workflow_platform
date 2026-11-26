@@ -152,6 +152,11 @@ function confirmation(value: unknown): QaAutomationLaunchConfirmation {
 function mapConflict(error: unknown): never {
   const code = error instanceof Error ? error.message : "QA_AUTOMATION_REQUEST_FAILED";
   if (
+    code === "CORPORATE_GITLAB_BUILD_REF_REQUIRED" ||
+    code === "CORPORATE_GITLAB_BUILD_REF_MAPPING_REQUIRED"
+  )
+    throw new ConflictException(code);
+  if (
     /STALE|MISMATCH|CONFLICT|CAPACITY|LAUNCH_STATE_INVALID|RERUN_STATE_INVALID|FRESH_REQUEST_KEY|EXECUTION_CLOSED|REVIEW_FROZEN/u.test(
       code,
     )

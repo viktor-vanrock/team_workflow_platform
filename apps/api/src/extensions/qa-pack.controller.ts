@@ -10,6 +10,7 @@ import {
   Headers,
   Inject,
   NotFoundException,
+  Optional,
   Param,
   Post,
   Req,
@@ -54,6 +55,11 @@ import {
 } from "@awp/runtime-composition";
 
 import {
+  CorporateAdmissionUnitOfWork,
+  type CorporateCommandAdmissionAuthority,
+  QA_COMMAND_ADMISSION_AUTHORITY,
+} from "./corporate-command-admission.ts";
+import {
   authorizeQaApi,
   QA_DATA_SOURCE,
   type QaApiAuthorization,
@@ -74,6 +80,10 @@ interface ResponseLike {
 }
 export const QA_API_OPERATIONAL_BROKER_MAP = Symbol("QA_API_OPERATIONAL_BROKER_MAP");
 export const QA_API_OPERATIONAL_DELIVERY_MODE = Symbol("QA_API_OPERATIONAL_DELIVERY_MODE");
+export const QA_INTAKE_CLASSIFICATION_POLICY = Symbol("QA_INTAKE_CLASSIFICATION_POLICY");
+export interface QaIntakeClassificationPolicy {
+  assertAllowed(ceiling: string, requested: string, projectMaximum?: string): void;
+}
 export type QaOperationalDeliveryMode = "INLINE_LOCAL" | "DURABLE_WORKER";
 
 function deterministicUuid(namespace: string): string {
@@ -107,6 +117,12 @@ export class QaPackController {
     @Inject(QA_API_OPERATIONAL_DELIVERY_MODE)
     private readonly deliveryMode: QaOperationalDeliveryMode,
     @Inject(QA_INTAKE_CONFIGURATION) private readonly configuration: QaIntakeConfiguration,
+    @Optional()
+    @Inject(QA_INTAKE_CLASSIFICATION_POLICY)
+    private readonly classificationPolicy?: QaIntakeClassificationPolicy,
+    @Optional()
+    @Inject(QA_COMMAND_ADMISSION_AUTHORITY)
+    private readonly commandAdmission?: CorporateCommandAdmissionAuthority,
   ) {}
 
   async #scope(
@@ -176,6 +192,10 @@ export class QaPackController {
       !payload.requestedClassificationKey
     )
       throw new BadRequestException("QA_INTAKE_INVALID");
+    this.classificationPolicy?.assertAllowed(
+      scope.authorization.classificationCeiling,
+      payload.requestedClassificationKey,
+    );
     const created = await new QaIntakeDraftService(this.source).create({
       workspaceId,
       projectId,
@@ -216,7 +236,9 @@ export class QaPackController {
       throw new ForbiddenException("QA_ORIGINAL_REQUESTER_REQUIRED");
     const configuration = await this.configuration.load({ workspaceId, projectId });
     const { bindingRef, profileRef } = configuration;
-    const unitOfWork = new TypeOrmUnitOfWork(this.source);
+    const unitOfWork = this.commandAdmission
+      ? new CorporateAdmissionUnitOfWork(this.source, this.commandAdmission)
+      : new TypeOrmUnitOfWork(this.source);
     const sourceCommands =
       this.deliveryMode === "DURABLE_WORKER"
         ? ((await this.source.query(
@@ -229,6 +251,8 @@ export class QaPackController {
       ? await unitOfWork.command(workspaceId, projectId, sourceCommands[0].id)
       : undefined;
     if (sourceCommands[0] && !sourceCommand) throw new Error("QA_DRAFT_CREATE_COMMAND_NOT_FOUND");
+    if (sourceCommand && unitOfWork instanceof CorporateAdmissionUnitOfWork)
+      await unitOfWork.assertReplay(sourceCommand);
     if (this.deliveryMode === "DURABLE_WORKER" && sourceCommand?.status === "CONFIRMED") {
       const materialized = (await this.source.query(
         "SELECT id FROM work_items WHERE workspace_id=$1 AND project_id=$2 AND source_draft_id=$3 ORDER BY id",
@@ -297,6 +321,11 @@ export class QaPackController {
     );
     if (!projectContext) throw new Error("QA_PROJECT_CONTEXT_NOT_PUBLISHED");
     const payload = json<QaIntakePayload>(row.intake_payload);
+    this.classificationPolicy?.assertAllowed(
+      scope.authorization.classificationCeiling,
+      payload.requestedClassificationKey,
+      projectContext.maximumClassificationKey,
+    );
     const draft: QaConfirmedDraft = {
       id: draftId,
       version: confirmationVersion,
@@ -345,6 +374,8 @@ export class QaPackController {
                 ? await unitOfWork.command(workspaceId, projectId, matches[0].id)
                 : undefined;
               if (!existing) return undefined;
+              if (unitOfWork instanceof CorporateAdmissionUnitOfWork)
+                await unitOfWork.assertReplay(existing);
               if (
                 digest(existing.target) !== digest(intent.target) ||
                 digest(existing.payload) !== digest(intent.payload) ||

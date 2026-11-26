@@ -31,6 +31,14 @@ export interface PilotCohortRevision {
   readonly contentHash: Sha256Digest;
 }
 
+/** The reviewed scope excludes gate results, which are produced after IN-10 approval. */
+export function pilotCohortScopeHash(cohort: PilotCohortRevision): Sha256Digest {
+  const { gateRefs: _gateRefs, contentHash: _contentHash, ...scope } = cohort;
+  void _gateRefs;
+  void _contentHash;
+  return sha256(scope as unknown as JsonValue);
+}
+
 function canonical(values: readonly string[]): readonly string[] {
   const result = [...values].sort();
   if (

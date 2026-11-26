@@ -64,10 +64,15 @@ export class TypeOrmJiraAuthoritativeReadOutboxRepository {
     now: Date,
     leaseUntil: Date,
     leaseOwner: string,
+    scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
   ): Promise<JiraAuthoritativeReadOutboxClaim | undefined> {
     assertDate(now, "JIRA_AUTHORITATIVE_READ_CLAIM_TIME_INVALID");
     assertDate(leaseUntil, "JIRA_AUTHORITATIVE_READ_LEASE_INVALID");
-    if (leaseUntil <= now || leaseOwner.length === 0) {
+    if (
+      leaseUntil <= now ||
+      leaseOwner.length === 0 ||
+      (scope && (!scope.workspaceId || !scope.projectIds.length))
+    ) {
       throw new Error("JIRA_AUTHORITATIVE_READ_LEASE_INVALID");
     }
     return await this.source.transaction("SERIALIZABLE", async (manager) => {
@@ -77,6 +82,7 @@ export class TypeOrmJiraAuthoritativeReadOutboxRepository {
            SELECT id
              FROM event_outbox
             WHERE event_type=$1
+              AND ($5::uuid IS NULL OR (workspace_id=$5 AND project_id=ANY($6::uuid[])))
               AND (
                 (state='READY' AND (lease_until IS NULL OR lease_until<=$2))
                 OR (state='LEASED' AND lease_until IS NOT NULL AND lease_until<=$2)
@@ -96,16 +102,29 @@ export class TypeOrmJiraAuthoritativeReadOutboxRepository {
          RETURNING outbox.id,outbox.workspace_id,outbox.project_id,outbox.envelope,
                    outbox.lease_owner,outbox.lease_token,outbox.lease_until,
                    outbox.attempt_count`,
-          [eventType, now, leaseOwner, leaseUntil],
+          [
+            eventType,
+            now,
+            leaseOwner,
+            leaseUntil,
+            scope?.workspaceId ?? null,
+            scope ? [...scope.projectIds] : null,
+          ],
         ),
       );
       return rows[0] ? this.#claim(rows[0]) : undefined;
     });
   }
 
-  async recoverExpired(now: Date, limit = 50): Promise<number> {
+  async recoverExpired(
+    now: Date,
+    limit = 50,
+    scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
+  ): Promise<number> {
     assertDate(now, "JIRA_AUTHORITATIVE_READ_RECOVERY_TIME_INVALID");
     assertLimit(limit);
+    if (scope && (!scope.workspaceId || !scope.projectIds.length))
+      throw new Error("JIRA_AUTHORITATIVE_READ_SCOPE_INVALID");
     return await this.source.transaction("SERIALIZABLE", async (manager) => {
       const rows = returned(
         await manager.query(
@@ -113,6 +132,7 @@ export class TypeOrmJiraAuthoritativeReadOutboxRepository {
            SELECT id
              FROM event_outbox
             WHERE event_type=$1
+              AND ($4::uuid IS NULL OR (workspace_id=$4 AND project_id=ANY($5::uuid[])))
               AND state='LEASED'
               AND lease_until IS NOT NULL
               AND lease_until<=$2
@@ -125,7 +145,7 @@ export class TypeOrmJiraAuthoritativeReadOutboxRepository {
            FROM expired
           WHERE outbox.id=expired.id
          RETURNING outbox.id`,
-          [eventType, now, limit],
+          [eventType, now, limit, scope?.workspaceId ?? null, scope ? [...scope.projectIds] : null],
         ),
       );
       return rows.length;

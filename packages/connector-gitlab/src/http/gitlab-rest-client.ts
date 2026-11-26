@@ -38,6 +38,8 @@ export interface GitLabRestClientOptions {
   readonly telemetry?: GitLabTelemetry;
   readonly requestTimeoutMs?: number;
   readonly maxJsonResponseBytes?: number;
+  /** Opt-in is reserved for an approved 1.1.0 connector deployment. */
+  readonly connectorVersion?: "1.0.0" | "1.1.0";
 }
 
 export interface GitLabRequest {
@@ -78,6 +80,8 @@ const allowedReadPaths = Object.freeze([
   /^\/api\/v4\/projects\/\d+\/jobs\/[^/]+\/artifacts(?:\/[^/].*)?$/u,
 ]);
 const allowedReadCredentialPostPaths = Object.freeze([/^\/api\/v4\/projects\/\d+\/ci\/lint$/u]);
+const suiteResultExamplePath =
+  /^\/api\/v4\/projects\/\d+\/repository\/files\/\.awp%2Fqa%2Fresult-example\.json\/raw$/u;
 
 function origin(value: string): string {
   const url = new URL(value);
@@ -301,9 +305,22 @@ export class GitLabRestClient {
       if (/^(?:access_token|private_token|token)$/iu.test(key))
         throw new GitLabTransportError("GITLAB_QUERY_CREDENTIAL_FORBIDDEN");
     }
+    const example =
+      this.options.connectorVersion === "1.1.0" && suiteResultExamplePath.test(target.pathname);
+    if (
+      example &&
+      (!Number.isSafeInteger(this.options.numericProjectId) ||
+        (this.options.numericProjectId ?? 0) < 1 ||
+        input.method !== "GET" ||
+        input.operation !== "suite-result-example.read" ||
+        input.authOperation !== "buildRead" ||
+        [...target.searchParams.keys()].length !== 1 ||
+        !/^[a-f0-9]{40}$/u.test(target.searchParams.get("ref") ?? ""))
+    )
+      throw new GitLabTransportError("GITLAB_EXAMPLE_READ_FORBIDDEN");
     const allowed =
       input.method === "GET"
-        ? allowedReadPaths.some((pattern) => pattern.test(target.pathname))
+        ? example || allowedReadPaths.some((pattern) => pattern.test(target.pathname))
         : allowedReadCredentialPostPaths.some((pattern) => pattern.test(target.pathname));
     if (!allowed) throw new GitLabTransportError("GITLAB_ROUTE_FORBIDDEN");
     const projectMatch = /^\/api\/v4\/projects\/(\d+)(?:\/|$)/u.exec(target.pathname);

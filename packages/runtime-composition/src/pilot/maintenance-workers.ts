@@ -6,11 +6,12 @@ import { ArtifactRetentionRepository } from "@awp/platform-persistence-typeorm";
 export function createArtifactRetentionMaintenanceWorker(
   source: DataSource,
   clock: () => string = () => new Date().toISOString(),
+  scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
 ) {
   const repository = new ArtifactRetentionRepository(source);
   return Object.freeze({
     async run(): Promise<Readonly<{ inspected: number; expired: number }>> {
-      const candidates = await repository.dueExpirations(clock());
+      const candidates = await repository.dueExpirations(clock(), 100, scope);
       let expired = 0;
       for (const candidate of candidates)
         if (await repository.expireDue(candidate, clock())) expired++;

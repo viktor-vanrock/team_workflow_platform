@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:awp:contracts:pilot:fence-action:v1",
+  "title": "Pilot fence publication details",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "fenceId", "cohortId", "fence", "cohort"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "fenceId": { "type": "string", "format": "uuid" },
+    "cohortId": { "type": "string", "format": "uuid" },
+    "fence": { "type": "object" },
+    "cohort": { "type": "object" }
+  }
+}

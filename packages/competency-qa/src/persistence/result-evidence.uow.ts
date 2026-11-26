@@ -754,12 +754,19 @@ export interface QaAutomationResultCapacityHook {
   ): Promise<void>;
 }
 
+/** Optional server-owned admission for retry commands, executed inside the creation transaction. */
+export interface QaAutomationRetryCommandAdmission {
+  persist(manager: EntityManager, command: QaAutomationRetryCoreCommandRecord): Promise<void>;
+  assertReplay(manager: EntityManager, command: QaAutomationRetryCoreCommandRecord): Promise<void>;
+}
+
 export class TypeOrmAutomationResultEvidenceUnitOfWork {
   readonly #repository: TypeOrmAutomationExecutionRepository;
 
   constructor(
     source: DataSource,
     private readonly capacity?: QaAutomationResultCapacityHook,
+    private readonly retryAdmission?: QaAutomationRetryCommandAdmission,
   ) {
     this.#repository = new TypeOrmAutomationExecutionRepository(source);
   }
@@ -928,10 +935,17 @@ WHERE workspace_id=$1 AND project_id=$2 AND session_id=$3 AND mode='AUTOMATED'`,
         if (existing !== undefined) {
           if (
             String(existing.content_hash) !== decision.contentHash ||
-            String(existing.retry_decision_id) !== decision.retryDecisionId
+            String(existing.retry_decision_id) !== decision.retryDecisionId ||
+            (prepared.attempt &&
+              String(existing.successor_attempt_id) !== prepared.attempt.automationAttemptId) ||
+            (!prepared.attempt &&
+              existing.successor_attempt_id !== null &&
+              existing.successor_attempt_id !== undefined)
           ) {
             throw new QaDomainError("QA_AUTOMATION_RETRY_DECISION_CONFLICT");
           }
+          if (prepared.command && this.retryAdmission)
+            await this.retryAdmission.assertReplay(manager, prepared.command);
           return Object.freeze({
             replayed: true,
             retryDecisionId: decision.retryDecisionId,
@@ -975,6 +989,7 @@ WHERE workspace_id=$1 AND project_id=$2 AND session_id=$3 AND mode='AUTOMATED'`,
             statuses: prepared.statuses,
             command: prepared.command,
           });
+          if (this.retryAdmission) await this.retryAdmission.persist(manager, prepared.command);
         }
         await insertRetryDecision(manager, input.evaluation);
         for (const event of prepared.events) await appendOutboxEvent(manager, event);

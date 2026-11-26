@@ -112,10 +112,16 @@ export class ArtifactRetentionRepository {
   }
 
   /** Internal scheduler only: every result carries its scope and exact decision. */
-  async dueExpirations(now: string, limit = 100): Promise<readonly DueArtifactExpiration[]> {
+  async dueExpirations(
+    now: string,
+    limit = 100,
+    scope?: Readonly<{ workspaceId: string; projectIds: readonly string[] }>,
+  ): Promise<readonly DueArtifactExpiration[]> {
     validTime(now);
     if (!Number.isSafeInteger(limit) || limit < 1 || limit > 1000)
       throw new Error("RETENTION_QUERY_INVALID");
+    if (scope && (!scope.workspaceId || !scope.projectIds.length))
+      throw new Error("RETENTION_SCOPE_INVALID");
     const rows = (await this.source.query(
       `SELECT a.workspace_id,a.project_id,a.id,d.decision_id,d.content_hash
       FROM artifact_references a
@@ -126,10 +132,11 @@ export class ArtifactRetentionRepository {
         ORDER BY d.created_at DESC,(d.legal_hold_ref IS NOT NULL) DESC,d.decision_id DESC LIMIT 1
       ) d ON true
       WHERE a.availability='AVAILABLE' AND (h.artifact_id IS NULL OR h.current_state='AVAILABLE')
+        AND ($3::uuid IS NULL OR (a.workspace_id=$3 AND a.project_id=ANY($4::uuid[])))
         AND d.decision='EXPIRE' AND d.legal_hold_ref IS NULL AND d.eligible_at<=$1
         AND (d.effective_at IS NULL OR d.effective_at<=$1)
       ORDER BY d.eligible_at,a.workspace_id,a.project_id,a.id LIMIT $2`,
-      [now, limit],
+      [now, limit, scope?.workspaceId ?? null, scope ? [...scope.projectIds] : null],
     )) as {
       workspace_id: string;
       project_id: string;
