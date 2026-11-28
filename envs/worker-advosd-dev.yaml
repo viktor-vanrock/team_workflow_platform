@@ -1,0 +1,131 @@
+replicaCount: 1
+image:
+  repository: registry.sberdevices.ru/rndbtoc/team-workflow-platform/workspace
+  pullPolicy: IfNotPresent
+  command:
+    - /bin/sh
+    - -ec
+    - |
+      export AWP_DATABASE_URL="$(cat /vault/secrets/database_url)"
+      export AWP_DEPLOYMENT_CONFIG="$(cat /vault/secrets/deployment_config)"
+      export AWP_IDENTITY_ISSUER="$(cat /vault/secrets/identity_issuer)"
+      export AWP_IDENTITY_AUDIENCE="$(cat /vault/secrets/identity_audience)"
+      export AWP_RUNTIME_IMAGE_DIGEST="$(cat /vault/secrets/runtime_image_digest)"
+      exec pnpm --filter @awp/worker start:corporate
+imagePullSecrets:
+  - name: gitlab-registry-secret-rndbtoc
+serviceAccount:
+  create: false
+  automount: true
+  name: vault
+podAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/agent-pre-populate-only: "true"
+  vault.hashicorp.com/role: d-rndml
+  vault.hashicorp.com/agent-inject-secret-database_url: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-database_url: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.DATABASE_URL }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-workspace_config: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-workspace_config: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.WORKSPACE_CONFIG }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-deployment_config: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-deployment_config: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.AWP_DEPLOYMENT_CONFIG }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-identity_issuer: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-identity_issuer: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.AWP_IDENTITY_ISSUER }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-identity_audience: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-identity_audience: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.AWP_IDENTITY_AUDIENCE }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-runtime_image_digest: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-runtime_image_digest: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.AWP_RUNTIME_IMAGE_DIGEST }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-corporate_vault_config: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-corporate_vault_config: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.CORPORATE_VAULT_CONFIG }}
+    {{- end -}}
+  # Future provider locations, to be agreed with Vault owner; intentionally not injected.
+  # vault.hashicorp.com/agent-inject-secret-jira_token: <VAULT_PATH_JIRA>
+  # vault.hashicorp.com/agent-inject-secret-mattermost_bot_token: <VAULT_PATH_MATTERMOST>
+  # Provider tokens are read by the Vault resolver via scoped mappings, not from injected files.
+runtimeBootstrapPodAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/agent-pre-populate-only: "true"
+  vault.hashicorp.com/role: d-rndml
+  vault.hashicorp.com/agent-inject-secret-database_url: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-database_url: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.DATABASE_URL }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-secret-runtime_bootstrap: rndml/team-workflow-platform/workspace
+  vault.hashicorp.com/agent-inject-template-runtime_bootstrap: |
+    {{- with secret "rndml/team-workflow-platform/workspace" -}}
+    {{ .Data.data.RUNTIME_BOOTSTRAP_CONFIG }}
+    {{- end -}}
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+service:
+  enabled: true
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 3010
+      targetPort: 3010
+      protocol: TCP
+ingress:
+  enabled: false
+configMap:
+  enabled: true
+  config:
+    npm_config_verify_deps_before_run: "false"
+    WORKER_HEALTH_PORT: "3010"
+    AWP_ENVIRONMENT: NON_PROD
+    AWP_RUNTIME_PROFILE: non-local
+    AWP_COMPOSITION: qa-jira-gitlab-mattermost-test
+    AWP_EXTERNAL_NETWORK_MODE: allowlisted
+    AWP_WORKSPACE_CONFIG_PATH: /vault/secrets/workspace_config
+    AWP_WORKSPACE_DATABASE_URL_FILE: /vault/secrets/database_url
+    AWP_WORKSPACE_DATABASE_TLS: disable
+    AWP_CORPORATE_VAULT_CONFIG_PATH: /vault/secrets/corporate_vault_config
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  initialDelaySeconds: 60
+  timeoutSeconds: 5
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  initialDelaySeconds: 15
+  timeoutSeconds: 5
+volumes:
+  - name: tmp
+    emptyDir: {}
+volumeMounts:
+  - name: tmp
+    mountPath: /tmp
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi

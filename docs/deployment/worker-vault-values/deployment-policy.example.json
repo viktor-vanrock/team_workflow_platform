@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "deploymentId": null,
+  "version": 1,
+  "deploymentProfile": "integration",
+  "runtimeProfile": "non-local",
+  "environmentScope": "NON_PROD",
+  "compositionKey": "qa-jira-gitlab-mattermost-test",
+  "workspaceId": null,
+  "projectIds": [],
+  "imageDigest": null,
+  "artifactMode": "GITLAB_ONLY",
+  "connectorBindings": [
+    {
+      "provider": "jira",
+      "ref": {
+        "id": null,
+        "version": 1,
+        "contentHash": null
+      }
+    },
+    {
+      "provider": "gitlab",
+      "ref": {
+        "id": null,
+        "version": 1,
+        "contentHash": null
+      }
+    },
+    {
+      "provider": "mattermost",
+      "ref": {
+        "id": null,
+        "version": 1,
+        "contentHash": null
+      }
+    }
+  ],
+  "endpoints": [
+    {
+      "purpose": "browser",
+      "url": null,
+      "allowedOrigin": null
+    },
+    {
+      "purpose": "callback",
+      "url": null,
+      "allowedOrigin": null
+    },
+    {
+      "purpose": "identity",
+      "url": null,
+      "allowedOrigin": null
+    },
+    {
+      "purpose": "jira",
+      "url": null,
+      "allowedOrigin": null
+    },
+    {
+      "purpose": "gitlab",
+      "url": null,
+      "allowedOrigin": null
+    },
+    {
+      "purpose": "mattermost",
+      "url": null,
+      "allowedOrigin": null
+    },
+    {
+      "purpose": "vault",
+      "url": null,
+      "allowedOrigin": null
+    },
+    {
+      "purpose": "telemetry",
+      "url": null,
+      "allowedOrigin": null
+    },
+    {
+      "purpose": "model",
+      "url": null,
+      "allowedOrigin": null
+    },
+    {
+      "purpose": "artifact",
+      "url": null,
+      "allowedOrigin": null
+    }
+  ],
+  "inputPackageRef": {
+    "id": null,
+    "version": 1,
+    "contentHash": null
+  },
+  "identityPolicyRef": {
+    "id": null,
+    "version": 1,
+    "contentHash": null
+  },
+  "secretResolverPolicyRef": {
+    "id": null,
+    "version": 1,
+    "contentHash": null
+  },
+  "signingPolicyRef": {
+    "id": null,
+    "version": 1,
+    "contentHash": null
+  },
+  "telemetryPolicyRef": {
+    "id": null,
+    "version": 1,
+    "contentHash": null
+  },
+  "networkPolicyRef": {
+    "id": null,
+    "version": 1,
+    "contentHash": null
+  },
+  "artifactPolicyRef": {
+    "id": null,
+    "version": 1,
+    "contentHash": null
+  },
+  "modelPolicyRef": {
+    "id": null,
+    "version": 1,
+    "contentHash": null
+  },
+  "recoveryPolicyRef": {
+    "id": null,
+    "version": 1,
+    "contentHash": null
+  }
+}

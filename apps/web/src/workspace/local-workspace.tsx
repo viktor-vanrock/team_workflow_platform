@@ -116,6 +116,8 @@ export function LocalWorkspaceApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [navigationWidth, setNavigationWidth] = useState(202);
+  const navigationResize = useRef<{ pointerId: number; startX: number; startWidth: number } | null>(null);
   const [location, setLocation] = useState(locationValue);
   const epoch = useRef(0);
   const mainRef = useRef<HTMLElement | null>(null);
@@ -735,7 +737,7 @@ export function LocalWorkspaceApp() {
         minHeight: "100vh",
         border: "1px solid #51483f",
         display: "grid",
-        gridTemplateColumns: { xs: "minmax(0, 1fr)", md: "172px minmax(0, 1fr)" },
+        gridTemplateColumns: { xs: "minmax(0, 1fr)", md: `${navigationWidth}px minmax(0, 1fr)` },
         gridTemplateRows: { xs: "auto auto 1fr", md: "auto 1fr" },
         gridTemplateAreas: { xs: '"header" "nav" "main"', md: '"nav header" "nav main"' },
       }}
@@ -828,6 +830,40 @@ export function LocalWorkspaceApp() {
           alignSelf: "start",
         }}
       >
+        <Box
+          role="separator"
+          aria-label="Изменить ширину меню"
+          aria-orientation="vertical"
+          aria-valuemin={172}
+          aria-valuemax={400}
+          aria-valuenow={navigationWidth}
+          tabIndex={0}
+          onPointerDown={(event) => {
+            if (event.button !== 0) return;
+            navigationResize.current = { pointerId: event.pointerId, startX: event.clientX, startWidth: navigationWidth };
+            event.currentTarget.setPointerCapture(event.pointerId);
+          }}
+          onPointerMove={(event) => {
+            const resize = navigationResize.current;
+            if (resize?.pointerId === event.pointerId)
+              setNavigationWidth(Math.min(400, Math.max(172, resize.startWidth + event.clientX - resize.startX)));
+          }}
+          onPointerUp={(event) => {
+            if (navigationResize.current?.pointerId === event.pointerId) navigationResize.current = null;
+          }}
+          onPointerCancel={() => { navigationResize.current = null; }}
+          onKeyDown={(event) => {
+            if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+            event.preventDefault();
+            setNavigationWidth((width) => Math.min(400, Math.max(172, width + (event.key === "ArrowRight" ? 10 : -10))));
+          }}
+          sx={{
+            display: { xs: "none", md: "block" },
+            position: "absolute", top: 0, right: 0, width: 10, height: "100%",
+            cursor: "col-resize", touchAction: "none", zIndex: 1,
+            "&:hover, &:focus-visible": { backgroundColor: "rgba(195, 173, 132, 0.3)" },
+          }}
+        />
         <Stack direction="row" spacing={1} sx={{ alignItems: "center", color: blackOrder.navText }}>
           <OrderIcon size={18} />
           <Typography
@@ -1010,6 +1046,9 @@ export function LocalWorkspaceApp() {
           </Button>
           <Typography variant="caption" sx={{ display: "block", color: blackOrder.navMuted }}>
             {session.grants.roles.map(formatRuUiValue).join(", ") || "Без рабочих ролей"}
+          </Typography>
+          <Typography variant="caption" sx={{ display: "block", color: blackOrder.navMuted, mt: 1 }}>
+            v: 0.5
           </Typography>
         </Box>
       </Box>
